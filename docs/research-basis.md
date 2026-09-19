@@ -1,0 +1,145 @@
+# Research basis and architecture selection
+
+This explanation supports the final [technical specification](technical-spec.md). The design baseline is dated 2026-09-19. It synthesizes nine completed research reports and their source ledgers, then rechecks decisive public pages. It is not a product benchmark or a tested deployment.
+
+## Accepted product constraints
+
+The product is a purpose-built communication center, not a Slack bot with a separate job dashboard. Developers need shared rooms, visible agents, conversation-linked work, and reviewable evidence. The center owns the durable record. Every project has a stable main-agent identity and room. The first bounded task runs on its launcher's machine through an outbound worker. Project creation and cloud execution follow in S2 under the same contract.
+
+These constraints supersede historical options for Slack-first intake, a laptop-hosted SQLite authority, desktop-first distribution, hosted execution in the first release, and automatic merge. Those options are not unresolved in the final documents. Current project roles are enforced from S1; observer automation is S3. Named agents are not permission to spawn an open-ended swarm.
+
+## Research coverage
+
+The following complete reports informed this synthesis. Their private storage locations and operational mechanics are deliberately not copied here.
+
+| Report | Contribution retained |
+| --- | --- |
+| Agent-team architecture, 2026-09-18 | Coded control service, bounded worker, leases, outbox, two verification levels, evidence and knowledge lifecycle |
+| Agent-team landscape, 2026-09-18 | Independent precedent comparison, deterministic mechanics around agent judgment, approval before writes |
+| Agent-team product definition, 2026-09-19 | Conversation as the product, fixed agent roles, human ownership, project scope and durable context |
+| Agent chat-center research, 2026-09-19 | Browser-first stack, Linear sessions, Cursor outbound worker, stage-one local execution, next-stage provisioning |
+| Agora architecture deep dive, 2026-09-18 | Typed state, exact-action authority, disposable execution, current-state versus event distinction, operations |
+| Agora pattern audit, source revision dated 2026-09-17 | Identity-bound one-use authority, explicit unknown/unavailable, durable delivery and read-back, fail-closed cleanup |
+| Agora Jev study, 2026-09-18 | Semantic predictions are advisory, not permissions, memory, evidence authenticity, or merge authority |
+| Agora precedent archaeology, 2026-09-18 | Aquifer session/runtime split, Stripe blueprints, Helix checkpoints, human reviewer separation, trust-model limits |
+| Agent-hub follow-up, 2026-09-18 | Threat-dependent isolation, exact-head evidence, unavailable checks fail closed, validity before retrieval |
+
+Directly referenced ledgers were read for the architecture, landscape, chat-center, and precedent reports. The other reports contain their decisive ledgers inline. Vendor narratives supplied patterns, not implementation guarantees. No new broad search pass, private account access, API trial, or application implementation was performed.
+
+## Architecture selection
+
+### Problem and caller experience
+
+A developer must be able to say what they want in a room, review a bounded proposal, and choose a machine or cloud execution without learning a scheduler. Another developer must understand what ran and approve an exact result. A service restart or lost laptop must not erase the conversation or duplicate a push.
+
+The caller experience is:
+
+1. Post a message and receive an ordered, durable receipt.
+2. Choose Ask center for a read-only cited answer, or confirm Run on my machine for bounded work.
+3. See one task card through execution, evidence, approval, and human review.
+4. Recover with a new attempt without losing the old evidence or reusing its authority.
+
+### Structurally distinct candidates
+
+| Candidate | Shape and public interface | What it hides | What callers still coordinate |
+| --- | --- | --- | --- |
+| A. Hosted modular center, selected | Browser and workers call one versioned command API. One Node service commits project/conversation/run state and outbox in PostgreSQL. Execution is external | Transactional ownership, replay, policy, context assembly, evidence, effect reconciliation | Explicit human approvals and placement. Workers implement one fenced RunSpec |
+| B. Chat-host extension with a job sidecar | Mattermost supplies chat/auth/search. A plugin forwards launch/approval actions to a separate run service and mirrors status back | Mature general chat mechanics and deployment | Cross-system identity, two ACL models, message/run revision mapping, plugin cards, external evidence and project lifecycle |
+| C. Actor-based managed runtime | Browser sessions connect to room/run Durable Objects. Workflow instances coordinate external workers. Shared reporting projects into a separate store | Socket lifecycle, actor serialization, managed wake/replay | Cross-actor transactions, membership revocation across actors, consistent approvals and audit, export/rebuild of multiple state stores |
+
+B is an adopt strategy, not a variant of A's framework choice. C changes the authority and transaction topology, not just the host. Each candidate can produce a chat demo. Their difference appears at revocation, crash-after-effect, evidence review, and project creation.
+
+| Criterion | A | B | C |
+| --- | --- | --- | --- |
+| Conversation and task remain one record | Native transaction and projection | Plugin/sidecar synchronization required | Cross-actor consistency required |
+| Visible agent hierarchy and evidence cards | Native domain objects | Host UI extension constrains objects | Native objects, distributed ownership |
+| Human authority bound to current state | One transaction boundary | Identity and version translation | Durable coordination across actors |
+| Local/cloud parity | One external worker contract | Possible through sidecar | Possible through workflow adapter |
+| Small-team operation and recovery | One service/database plus workers | Chat host, plugin, and sidecar | Managed services but provider-specific recovery/export |
+| Interface depth | Small commands hide substantial domain policy | Plugin calls often forward without hiding policy | Actor handles expose topology to cross-scope operations |
+| Growth without changing product semantics | Module extraction at measured trigger | Host plugin boundaries remain | Host/runtime choice remains structural |
+
+A wins because it places the product's actual objects and invariants in one authority. It does not win merely because TypeScript is familiar. B is strongest at general chat, but the differentiating behavior still has to be built and synchronized. C is attractive for many distributed sessions, but the current workload gains little from separating state that approvals must compare atomically.
+
+The selected sketch borrows visible sessions and typed activity from Linear, outbound owner/repository matching from Cursor, and disposable runtime with external durable state from Aquifer. It rejects a shared computer as the project security boundary, free agent peer chat, prompt-only closure, and model-based authorization. The interfaces in R03 group domain knowledge rather than chronological phases. Workers cannot reach storage tables or vendor keys through a pass-through facade.
+
+### Accepted tradeoffs
+
+- One VM is not high availability. Backups, a tested restore, and visible outage states are the first reliability boundary.
+- Local execution depends on the owner's machine and is not a hostile-tenant security boundary. Cloud microVMs are a required next-stage target, not an optional redesign.
+- A small competent chat surface takes real work. Direct messages, reactions, and rich presence are deferred so the shared project conversation can be verified first.
+- A device signature identifies the submitting machine; independent CI still verifies agent-produced changes. Each project needs a separately installed checks-only reporting App from S1, because a generic GitHub Actions producer does not distinguish trusted workflows from attacker-controlled ones.
+- E2B is selected as the first cloud adapter, not declared universally safest or cheapest. Failed conformance disables cloud placement.
+- PostgreSQL and immutable artifacts own knowledge. Repository documents are reviewed inputs/exports, avoiding two competing authorities.
+- No automatic merge or production execution is included. Prior suggestions for low-risk auto-merge do not carry into this baseline.
+
+The next implementation step is U01, a reproducible repository and test/deployment foundation that proves startup, migration, and restore before agent work is enabled.
+
+## Public evidence ledger
+
+Source dates are publication/update dates only when available. All sources below were inspected through the supplied ledgers. The Recheck column distinguishes pages fetched again on 2026-09-19 from ledger-only evidence. Short quoted passages are exact excerpts, not alternate-model summaries.
+
+| ID | Public source and date | Load-bearing evidence | Limit and recheck |
+| --- | --- | --- | --- |
+| E01 | [Linear agent interaction](https://linear.app/developers/agent-interaction), undated; [design rationale](https://linear.app/now/our-approach-to-building-the-agent-interaction-sdk), 2025-08-01 | Sessions have visible states, validated activity types, and an expected activity within 10 seconds. Rationale assigns accountability to humans | Interaction page rechecked. Preview API, not Agora implementation proof. Agora uses status summaries rather than hidden reasoning |
+| E02 | [Cursor My Machines](https://cursor.com/docs/cloud-agent/self-hosted-guides/my-machines), undated | "A worker on your machine opens an outbound connection"; owner, machine name, and registered repository must match; a missing match fails rather than falls back | Rechecked. Cursor's model loop is cloud-hosted. Agora borrows the connection/placement rule, not that topology |
+| E03 | [Shopify, Under the River](https://shopify.engineering/under-the-river), 2026-05-28 | "Append-only event log. Postgres-backed." "The harness lives outside the sandbox" | Rechecked. Company report, no public lease schema or credential-proxy implementation |
+| E04 | [Stripe Minions Part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2), 2026-02-19 | Blueprints mix deterministic code and scoped agent nodes. CI repair is bounded | Full passages in supplied ledger. Fresh extraction returned only a short page, so the ledger supports detail. No throughput claim adopted |
+| E05 | [Git worktree](https://git-scm.com/docs/git-worktree.html), undated | Worktrees share refs/configuration; `lock` protects against pruning/move/removal; dirty removal needs force | Rechecked. This corrects the tempting but false inference that worktree lock is an execution mutex or security boundary |
+| E06 | [Better Auth organization plugin](https://www.better-auth.com/docs/plugins/organization), undated | Invitations and roles exist. "Set `requireEmailVerificationOnInvitation` to `true` for the stricter posture" | Rechecked. Invitation email is application-supplied. Agora custom roles and project authorization are additional work |
+| E07 | [Dev Container metadata](https://containers.dev/implementors/json_reference/), undated; [templates](https://containers.dev/implementors/templates/), undated | `initializeCommand` runs on the host. Image labels can carry metadata. Privilege/mount options exist. Templates are declarative and OCI-distributed | Metadata rechecked to close the earlier report's gap. The standard is not a security policy; Agora rejects unsafe fields |
+| E08 | [E2B snapshots](https://docs.e2b.dev/sandbox/snapshots), undated; [template quickstart](https://docs.e2b.dev/template/quickstart), undated | Templates define known base state; snapshots capture current filesystem/memory. E2B recommends templates for repeatable environments | Rechecked. No Agora cold-start or portability benchmark. Snapshots are disposable caches |
+| E09 | [E2B Template API](https://docs.e2b.dev/sdk-reference/js-sdk/latest/template), undated; [internet access](https://docs.e2b.dev/sandbox/internet-access), undated | `fromImage` starts from a custom Docker image. Internet is enabled by default; allow rules take precedence over deny. Blocked TCP connect can appear successful without application bytes | Rechecked through a narrow follow-up to resolve image/egress integration. Digest import and chosen-region behavior still require live conformance. Raw socket success is not a network-denial test |
+| E10 | [GitHub required checks](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks), undated | Checks require latest SHA; GitHub treats `success`, `skipped`, and `neutral` as successful; expected-App checks are supported | Rechecked. Agora must emit failure for unavailable evidence, not skipped/neutral |
+| E11 | [GitHub App tokens](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app), undated; [App permissions](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/choosing-permissions-for-a-github-app), undated | Installation tokens can narrow repository access. Apps start without permissions | Ledger rechecked. Plan entitlement and actual scopes are onboarding tests, not guaranteed for every repository |
+| E12 | [PromptArmor Slack AI disclosure](https://www.promptarmor.com/resources/data-exfiltration-from-slack-ai-via-indirect-prompt-injection), 2024-08-20 | Demonstrates untrusted public text causing private data to appear in an attacker-controlled link | Rechecked. Historical vendor disclosure, not a claim of a current Slack vulnerability. Supports audience filtering and non-active generated links |
+| E13 | [Mattermost Agents guide](https://docs.mattermost.com/administration-guide/configure/agents-admin-guide.html), undated | Named agents, channel restrictions, allowed tools, and unsafe-links disabled by default | Ledger rechecked. Strong adopt alternative, not proof of Agora-specific run/project support |
+| E14 | [Cloudflare long-running agents](https://developers.cloudflare.com/agents/concepts/agentic-patterns/long-running-agents/), updated 2026-08-20 | "Agents are durable identities, not always-on processes" | Ledger rechecked. Supports candidate C and persistent identity without a permanent process |
+| E15 | [Shopify Helix](https://shopify.engineering/back-to-native), 2026-09-10 | Ordered checkpoints with behavior tests, visual comparison, review, and a headless application CLI | Ledger rechecked. Company report; no published error rate or reusable Helix architecture |
+| E16 | [Shopify River remediation](https://shopify.engineering/river-vulnerability-remediation), 2026-09-02 | Ledger entries are claims to recheck; rebase invalidates old-head CI; closure rules belong in code | Ledger rechecked. Does not establish exactly-once external effects |
+| E17 | [gVisor security model](https://gvisor.dev/docs/architecture_guide/security/), undated; [Firecracker production host guidance](https://github.com/firecracker-microvm/firecracker/blob/HEAD/docs/prod-host-setup.md), undated | Isolation still requires resource/network controls and patched hosts | Ledger rechecked. Boundary guidance, not certification of the chosen provider/account |
+| E18 | [TypeSafe confidence](https://docs.typesafe.ai/confidence), undated; [Jev limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13), reviewed 2026-09-17 | Distribution concentration is not individual correctness; semantic, ordering, and context failures remain | Detailed supplied study and inline ledger read. No Jev API tested or adopted |
+| E19 | [Anthropic memory docs](https://platform.claude.com/docs/en/managed-agents/memory), undated | Versioned memory and read-only scope; writable shared memory can carry prompt injection | Ledger rechecked. Agora uses human activation and invalidation, not an asserted learning guarantee |
+| E20 | [GitHub webhook practices](https://docs.github.com/en/webhooks/using-webhooks/best-practices-for-using-webhooks), undated | Validate signatures, acknowledge promptly, process asynchronously, dedupe delivery IDs | Ledger rechecked. Delivery identity is not authority to change project policy |
+| E21 | [Official Cursor pstack](https://github.com/cursor/plugins/tree/main/pstack), observed revision `032be146865d973682535de75f2287da438550bf` on 2026-09-19 | Installed architecture, writing, decision-trail, verification, and multi-phase planning instructions | Installed and read locally. The lockfile records skill hashes. Moving upstream main may differ later |
+
+The only fresh research beyond decisive page rechecks was the Dev Container metadata gap and E2B custom-image/egress contract. An attempted E2B `/template/from-image` URL returned 404. The linked Template API supplied the contract instead. No claim relies on that failed route.
+
+## Contrary evidence and design consequences
+
+Git worktrees are not a sandbox, and Git's lock is not a write lock. The local worker therefore owns a private mirror, allocates separate task directories, isolates executed commands, and serializes only host Git metadata operations.
+
+E2B defaults do not match Agora's policy. Its network allow rules override deny rules, and blocked connections can look connected. Agora must reject allow rules that intersect forbidden ranges, omit broad wildcards, use an external proxy for stricter method/byte rules, and test application-level responses plus destination-side observations. A provider capability flag is insufficient evidence.
+
+Vendor agent products often retain editable comments, shared sandboxes, or model-based action review. Those are useful UX precedents but weaker authority boundaries than this product needs. Agora stores frozen activity and explicit human commands separately.
+
+GitHub's successful status vocabulary includes skipped and neutral. A check that merely exists can therefore fail to enforce the intended result. Agora's required aggregate check treats missing or unavailable required scenarios as failure.
+
+Jev's bounded outputs do not establish calibrated decisions on Agora data. Memory products likewise do not establish that accumulated records reduce recurrence. The baseline keeps rules/FTS first and requires human activation, validity filters, and measured outcomes.
+
+## Application of pstack
+
+The [installed skills](../.agents/skills/) are the official `cursor/plugins/pstack` source, not a port. The exact requested project-local installer command ran with `--all --copy`. It created 47 unique skills in 55 agent-specific trees, with installer-specific metadata differences. All installer output and `skills-lock.json` are retained unchanged. `setup-pstack` was not run. No unrelated plugin was installed.
+
+The architect process stopped at design selection. The independent reports supplied contrasting perspectives instead of a new model swarm. Greenfield grounding used the product journeys and explicit contracts because no application code existed. No implementation prototype or live product evidence is claimed.
+
+The applied principles changed concrete choices:
+
+- Foundational thinking put shared schemas, migration/restore tests, and capability boundaries before chat features.
+- Modeling the domain separated task, run, session, lease, environment, approval, and publication rather than encoding them as flags.
+- Redesign from first principles made conversation the primary object and the bug-to-draft workflow one conversation action.
+- Experience-first design selected the browser plus worker and a small readable timeline over a desktop shell and terminal panes.
+- Separate shared state gave each attempt its own worktree, process group, fixture namespace, and branch. Only stream counters and ownership need transactional serialization.
+- Idempotent operations added receipts, external reconciliation, and fresh attempts rather than replaying uncertain side effects.
+- Sequencing verifiable units gives every plan unit a user/operator outcome, ten live scenarios, performance evidence, and a review boundary.
+- Proving behavior requires two real accounts and machines, independent project checks, negative cases, and retained evidence.
+
+Technical writing separates this explanation from the normative reference and the execution how-to. The decision trail is append-only. The installed plan checker runs unchanged at its project-local path. Tool-specific execution playbooks describe future implementation only; this delivery starts no agents, schedules, runtime, push, or merge. Cross-model trail review was not performed because this assignment explicitly requires one worker without delegation. Self-review and automated consistency checks are reported as such.
+
+## Limits and implementation risks
+
+No selected stack component, sandbox, model API, email setup, GitHub protection, image build, or backup has been exercised as an Agora deployment. All performance numbers are release budgets. Exact package patches and model IDs must be locked and doctor-validated when U01/U04 initialize their code and deployment configuration. That is ordinary configuration and compatibility verification, not an open product choice.
+
+Current source documents can change, especially preview agent APIs. Agora copies stable interaction patterns rather than depending on those APIs. S2 must prove E2B image fidelity, hard timeouts, selected-region data handling, and egress on a real disposable sandbox. If any required behavior is unavailable, S2 cannot ship by weakening it.
+
+The full official skill installation contains upstream examples, placeholder syntax, long dashes, and links to files outside the installed skill subset. Authored-document checks exclude those upstream bytes and report that scope explicitly. Vendored scripts are tested from the canonical copy; duplicate agent trees are not separate application implementations.

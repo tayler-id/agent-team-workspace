@@ -1,0 +1,5 @@
+PASS authored structure: 7 documents; 20 requirements; 20 live-scenario mappings
+PASS 17 plan units; 51 tasks; acyclic prerequisites; full requirement/criterion/unit coverage
+PASS 47 official pstack skills; 43 decision rows; 119 local links
+PASS authored Markdown headings, fences, placeholders, private-path and no-long-dash checks
+SCOPE vendor skill prose is unchanged and excluded from authored-document style/link checks; external URLs need the recorded source review

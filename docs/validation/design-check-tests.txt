@@ -1,0 +1,10 @@
+PASS accepts baseline
+PASS rejects missing-requirement
+PASS rejects dependency-cycle
+PASS rejects missing-live-scenario
+PASS rejects broken-local-link
+PASS rejects placeholder
+PASS rejects long-dash
+PASS rejects unofficial-skill
+PASS rejects missing-decision-evidence
+PASS 9 design-check cases; fixtures remain under .scratch/design-check-tests
