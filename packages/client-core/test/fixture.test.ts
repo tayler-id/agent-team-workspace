@@ -34,6 +34,17 @@ test('the public boundary command writes its machine report at the documented ar
 	expect(existsSync(report), 'missing lane-8 JSON artifact').toBe(true);
 	expect(JSON.parse(readFileSync(report, 'utf8'))).toMatchObject({ success: true, numFailedTests: 0, numPendingTests: 0 });
 }, 150_000);
+test('the documentation gate rejects a malformed TOML config rather than hanging', () => {
+	const root = path.resolve(import.meta.dirname, '../../..'), dir = mkdtempSync(path.join(tmpdir(), 'agora-docs-config-'));
+	try {
+		const config = path.join(dir, 'invalid.toml');
+		writeFileSync(config, 'a=[1 #');
+		const result = spawnSync(process.execPath, ['node_modules/markdownlint-cli2/markdownlint-cli2-bin.mjs', '--config', config, 'docs/features/client-synchronization.md'], { cwd: root, encoding: 'utf8', timeout: 3_000, killSignal: 'SIGKILL' });
+		expect(result.error, 'documentation config parser must terminate').toBeUndefined();
+		expect(result.status).toBe(2);
+		expect(result.stderr).toContain('Invalid TOML');
+	} finally { rmSync(dir, { recursive: true, force: true }); }
+}, 10_000);
 test('the CLI returns pass only for literal snapshots, and distinguishes assertion failure from usage error', () => {
 	const invoke = (...args: string[]) => spawnSync(process.execPath, ['scripts/drive-client-core.ts', ...args], { cwd: path.resolve(import.meta.dirname, '../../..'), encoding: 'utf8' });
 	const valid = invoke('--json');

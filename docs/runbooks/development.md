@@ -21,6 +21,8 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `pnpm migrate` | Applies pending migrations as the owner in `AGORA_MIGRATION_DATABASE_URL` and prints a JSON report |
 | `pnpm check` | All of the above gates in sequence |
 
+The documentation tool's TOML parser is pinned to `smol-toml` 1.7.1 through a narrow workspace override. Its upstream 1.7.0 pin hangs on a malformed trailing comment (CVE-2026-85730); a bounded public-CLI regression test and full dependency audit cover this repair.
+
 ## Packages
 
 | Package | Root | Owns | Must not import |

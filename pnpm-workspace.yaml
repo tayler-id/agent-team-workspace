@@ -2,3 +2,7 @@ packages:
   - contracts
   - apps/*
   - packages/*
+
+# markdownlint-cli2 pins a vulnerable TOML parser; keep the audited patch exact.
+overrides:
+  markdownlint-cli2>smol-toml: 1.7.1

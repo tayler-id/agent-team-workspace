@@ -4,6 +4,15 @@
 	"task": "agora-s1-isolate-client-core",
 	"features": [
 		{
+			"id": "documentation-config-rejection",
+			"paths": ["pnpm-workspace.yaml", "pnpm-lock.yaml"],
+			"public": ["pnpm docs:check", "markdownlint-cli2 --config"],
+			"scenarios": ["packages/client-core/test/fixture.test.ts"],
+			"fixtures": ["bounded malformed TOML configuration"],
+			"platforms": ["node24"],
+			"owner": "U01a.B03 verification repair"
+		},
+		{
 			"id": "mechanical-boundaries",
 			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/public-types.ts", "packages/client-core/tsconfig.json", "packages/domain/src/index.ts", "packages/domain/src/policy/fixture-scope.ts", "contracts/package.json", "apps/center/package.json", "package.json"],
 			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
