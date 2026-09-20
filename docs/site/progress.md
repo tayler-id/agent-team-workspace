@@ -21,19 +21,37 @@ flowchart TD
   browser["Browser and client core: S1 planned UI; core in progress"]
   center["Center service: Fixture only built"]
   postgres["PostgreSQL 18: Fixture only built"]
+  artifacts["Artifact store: S1 planned"]
+  local["Local worker: S1 planned"]
+  cloud["Cloud execution: S2 planned"]
+  github["GitHub: S1 integration planned"]
+  agents["Center and project-main agents: S1 / S2 planned"]
+  native["Native Swift client: S2 planned"]
   browser -->|HTTPS commands and resumable events| center
+  native -->|Same public protocol| center
   center -->|Transactional durable state| postgres
+  center -->|Verified artifact metadata and bytes| artifacts
+  local -->|Outbound claims and evidence| center
+  cloud -->|Same worker protocol in S2| center
+  local -->|Approved draft; human merges| github
+  agents -->|Authorized context, never raw SQL| center
 ```
 
-- **Browser and client core**: Show shared conversation without owning authority. [Explanation](index.md)
+- **Browser and client core**: Show shared conversation without owning authority. [Explanation](architecture.md)
 - **Center service**: Validate commands; later own policy and ordered events. [Explanation](foundation.md)
 - **PostgreSQL 18**: Commit scoped state and events together. [Explanation](foundation.md)
+- **Artifact store**: Keep immutable proof bytes outside the database. [Explanation](memory.md)
+- **Local worker**: Execute only on the consenting owner's machine. [Explanation](execution.md)
+- **Cloud execution**: Run fresh microVM attempts using the same contract. [Explanation](execution.md)
+- **GitHub**: Own repositories, independent review and human merge. [Explanation](execution.md)
+- **Center and project-main agents**: Answer and propose within explicit audience boundaries. [Explanation](authorization.md)
+- **Native Swift client**: Offer human workflows without worker authority. [Explanation](architecture.md)
 
 ## Landed and active
 
 - **Repository foundation - Built**: Prove real decisions and database isolation before product authority exists. [Scope](foundation.md). [apps/center/src/app.ts](../../apps/center/src/app.ts); [packages/storage/src/fixture.ts](../../packages/storage/src/fixture.ts); [apps/center/test/policy.test.ts](../../apps/center/test/policy.test.ts); [packages/storage/test/fixture.pg.test.ts](../../packages/storage/test/fixture.pg.test.ts); [evidence/U01a/agora-s1-bootstrap-repository/outcome.json](../../evidence/U01a/agora-s1-bootstrap-repository/outcome.json)
 - **Portable wire contracts - Built**: Make the same bytes mean the same thing in TypeScript and Swift. [Scope](contracts.md). [contracts/src/conformance.ts](../../contracts/src/conformance.ts); [contracts/test/conformance.test.ts](../../contracts/test/conformance.test.ts); [evidence/U01a/agora-s1-publish-portable-contracts/outcome.json](../../evidence/U01a/agora-s1-publish-portable-contracts/outcome.json)
-- **Client synchronization isolation - In progress**: Keep replay, ordering and retry decisions independent of the renderer. [Scope](index.md). [docs/task-breakdown.md](../../docs/task-breakdown.md)
+- **Client synchronization isolation - In progress**: Keep replay, ordering and retry decisions independent of the renderer. [Scope](synchronization.md). [docs/task-breakdown.md](../../docs/task-breakdown.md)
 - **Living documentation and progress atlas - In progress**: Make the system explain itself as each verified part lands. [Scope](authoring.md). [docs/implementation-plan.md](../../docs/implementation-plan.md)
 
 ## Release roadmap

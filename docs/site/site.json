@@ -4,15 +4,38 @@
       "title": "Start here",
       "pages": [
         {"id": "index", "title": "Welcome", "kind": "guide"},
-        {"id": "atlas", "title": "Progress atlas", "kind": "guide"}
+        {"id": "atlas", "title": "Progress atlas", "kind": "guide"},
+        {"id": "handoff", "title": "Design Handoff", "kind": "guide"}
       ]
     },
     {
-      "title": "Foundation and contribution",
+      "title": "Use Agora",
       "pages": [
+        {"id": "introduction", "title": "Introduction", "kind": "guide"},
+        {"id": "getting-started", "title": "Installation and first checks", "kind": "guide"},
+        {"id": "concepts", "title": "Mental model and glossary", "kind": "guide"},
+        {"id": "workflows", "title": "Roles and workflows", "kind": "guide"},
+        {"id": "cookbook", "title": "Practical guides", "kind": "guide"},
+        {"id": "cli", "title": "CLI and public drivers", "kind": "guide"},
+        {"id": "configuration", "title": "Configuration", "kind": "guide"},
+        {"id": "faq", "title": "Troubleshooting and FAQ", "kind": "guide"}
+      ]
+    },
+    {
+      "title": "Build and operate",
+      "pages": [
+        {"id": "architecture", "title": "System architecture", "kind": "guide"},
+        {"id": "repository", "title": "Repository and tools", "kind": "guide"},
         {"id": "foundation", "title": "Repository foundation", "kind": "feature"},
         {"id": "contracts", "title": "Portable contracts", "kind": "feature"},
-        {"id": "authoring", "title": "Documentation contract", "kind": "feature"}
+        {"id": "synchronization", "title": "Client synchronization", "kind": "feature"},
+        {"id": "memory", "title": "Data and memory", "kind": "guide"},
+        {"id": "authorization", "title": "Authorization and agents", "kind": "guide"},
+        {"id": "execution", "title": "Workers and cloud", "kind": "guide"},
+        {"id": "operations", "title": "Operations and recovery", "kind": "guide"},
+        {"id": "verification", "title": "Verification and evidence", "kind": "guide"},
+        {"id": "authoring", "title": "Contribute documentation", "kind": "feature"},
+        {"id": "research", "title": "Research and decisions", "kind": "guide"}
       ]
     }
   ],
@@ -21,19 +44,19 @@
     {"path": "contracts", "page": "contracts.md"},
     {"path": "packages/domain", "page": "foundation.md"},
     {"path": "packages/storage", "page": "foundation.md"},
-    {"path": "scripts/probe-center.mjs", "page": "authoring.md"},
-    {"path": "scripts/record-red-green.mjs", "page": "authoring.md"},
-    {"path": "scripts/require-test-postgres.ts", "page": "authoring.md"},
-    {"path": "scripts/test-design-checks.mjs", "page": "authoring.md"},
-    {"path": "scripts/verify-design.mjs", "page": "authoring.md"},
-    {"path": "scripts/with-test-postgres.mjs", "page": "authoring.md"},
+    {"path": "scripts/probe-center.mjs", "page": "cli.md"},
+    {"path": "scripts/record-red-green.mjs", "page": "verification.md"},
+    {"path": "scripts/require-test-postgres.ts", "page": "verification.md"},
+    {"path": "scripts/test-design-checks.mjs", "page": "verification.md"},
+    {"path": "scripts/verify-design.mjs", "page": "verification.md"},
+    {"path": "scripts/with-test-postgres.mjs", "page": "cli.md"},
     {"path": "docs/site/validate.mjs", "page": "authoring.md"},
     {"path": "docs/site/render.mjs", "page": "authoring.md"},
     {"path": "docs/site/diagram.mjs", "page": "authoring.md"},
     {"path": "docs/site/output-links.mjs", "page": "authoring.md"},
     {"path": "docs/site/build.mjs", "page": "authoring.md"},
     {"path": "docs/site/serve.mjs", "page": "authoring.md"},
-    {"path": "scripts/verify-design-handoff.mjs", "page": "authoring.md"},
-    {"path": "scripts/test-design-handoff-checks.mjs", "page": "authoring.md"}
+    {"path": "scripts/verify-design-handoff.mjs", "page": "verification.md"},
+    {"path": "scripts/test-design-handoff-checks.mjs", "page": "verification.md"}
   ]
 }

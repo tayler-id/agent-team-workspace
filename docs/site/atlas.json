@@ -33,7 +33,7 @@
       "title": "Client synchronization isolation",
       "status": "In progress",
       "why": "Keep replay, ordering and retry decisions independent of the renderer.",
-      "page": "index.md",
+      "page": "synchronization.md",
       "proof": [
         "repo:docs/task-breakdown.md"
       ]
@@ -54,7 +54,7 @@
       "id": "browser",
       "title": "Browser and client core",
       "availability": "S1 planned UI; core in progress",
-      "page": "index.md",
+      "page": "architecture.md",
       "why": "Show shared conversation without owning authority."
     },
     {
@@ -70,6 +70,48 @@
       "availability": "Fixture only built",
       "page": "foundation.md",
       "why": "Commit scoped state and events together."
+    },
+    {
+      "id": "artifacts",
+      "title": "Artifact store",
+      "availability": "S1 planned",
+      "page": "memory.md",
+      "why": "Keep immutable proof bytes outside the database."
+    },
+    {
+      "id": "local",
+      "title": "Local worker",
+      "availability": "S1 planned",
+      "page": "execution.md",
+      "why": "Execute only on the consenting owner's machine."
+    },
+    {
+      "id": "cloud",
+      "title": "Cloud execution",
+      "availability": "S2 planned",
+      "page": "execution.md",
+      "why": "Run fresh microVM attempts using the same contract."
+    },
+    {
+      "id": "github",
+      "title": "GitHub",
+      "availability": "S1 integration planned",
+      "page": "execution.md",
+      "why": "Own repositories, independent review and human merge."
+    },
+    {
+      "id": "agents",
+      "title": "Center and project-main agents",
+      "availability": "S1 / S2 planned",
+      "page": "authorization.md",
+      "why": "Answer and propose within explicit audience boundaries."
+    },
+    {
+      "id": "native",
+      "title": "Native Swift client",
+      "availability": "S2 planned",
+      "page": "architecture.md",
+      "why": "Offer human workflows without worker authority."
     }
   ],
   "edges": [
@@ -79,9 +121,39 @@
       "HTTPS commands and resumable events"
     ],
     [
+      "native",
+      "center",
+      "Same public protocol"
+    ],
+    [
       "center",
       "postgres",
       "Transactional durable state"
+    ],
+    [
+      "center",
+      "artifacts",
+      "Verified artifact metadata and bytes"
+    ],
+    [
+      "local",
+      "center",
+      "Outbound claims and evidence"
+    ],
+    [
+      "cloud",
+      "center",
+      "Same worker protocol in S2"
+    ],
+    [
+      "local",
+      "github",
+      "Approved draft; human merges"
+    ],
+    [
+      "agents",
+      "center",
+      "Authorized context, never raw SQL"
     ]
   ],
   "milestones": [
