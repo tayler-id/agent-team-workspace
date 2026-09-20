@@ -42,7 +42,7 @@ try {assert.equal(cli('evidence','--instance',id).outcome,'blocked');assert.equa
 const v=pass('verify','--scenario','policy','--instance',id,'--artifacts',dir); const file=v.artifacts[0].path, bytes=fs.readFileSync(file);
 fs.writeFileSync(file,'{}'); assert.equal(cli('evidence','--instance',id).outcome,'fail');fs.unlinkSync(file);assert.equal(cli('evidence','--instance',id).outcome,'fail');fs.writeFileSync(file,bytes);
 const receipt=path.join('.scratch/project/agora',id,'evidence.json'), saved=fs.readFileSync(receipt);const report=JSON.parse(saved);report.versions.code='a'.repeat(40);fs.writeFileSync(receipt,JSON.stringify(report));assert.equal(cli('evidence','--instance',id).outcome,'fail');fs.writeFileSync(receipt,saved);
-}finally{pass('stop','--instance',id,'--handle',s.instance.cleanup_handle);}}`);
+}finally{pass('stop','--instance',id,'--handle',s.instance.cleanup_handle);}`);
 }, 300_000);
 
 test('project lane 4 invalidates changed instructions and deleted feature coverage', () => {
@@ -50,5 +50,5 @@ test('project lane 4 invalidates changed instructions and deleted feature covera
 try {pass('verify','--scenario','policy','--instance',id,'--artifacts','.scratch/project-tests/'+id);
 fs.appendFileSync(skill,'\\nChanged route instructions.\\n');assert.equal(cli('evidence','--instance',id).outcome,'fail');fs.writeFileSync(skill,instructions);
 const map=JSON.parse(original);map.features=map.features.filter(x=>x.id!=='project-controls');fs.writeFileSync(file,JSON.stringify(map));assert.equal(cli('verify','--scenario','policy','--instance',id,'--artifacts','.scratch/project-tests/'+id+'-drift').outcome,'fail');
-}finally{fs.writeFileSync(file,original);fs.writeFileSync(skill,instructions);pass('stop','--instance',id,'--handle',s.instance.cleanup_handle);}}`);
+}finally{fs.writeFileSync(file,original);fs.writeFileSync(skill,instructions);pass('stop','--instance',id,'--handle',s.instance.cleanup_handle);}`);
 }, 300_000);
