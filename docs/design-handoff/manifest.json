@@ -1,0 +1,25 @@
+{
+	"schema_version": "agora.design-handoff/v1",
+	"title": "Agora design handoff",
+	"packet_version": "2026-09-20.1",
+	"source_base_commit": "606cba2bb9d90fc7c93169a24e72a488cb41b960",
+	"entry": "README.md",
+	"stage_labels": ["S1 prototype", "S1", "S2", "S3", "Deferred"],
+	"status_labels": ["Built", "In progress", "Planned", "Not a goal"],
+	"files": [
+		"README.md",
+		"product-brief.md",
+		"audiences-and-authority.md",
+		"information-architecture.md",
+		"workflows.md",
+		"screens.md",
+		"interaction-and-state.md",
+		"components.md",
+		"visual-theme.md",
+		"accessibility-and-responsive.md",
+		"content-design.md",
+		"visual-maps.md",
+		"design-assignment.md",
+		"source-map.md"
+	]
+}
