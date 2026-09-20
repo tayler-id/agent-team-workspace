@@ -1,0 +1,23 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-20T17:15:41.468Z
+parent: cfd755a902c865c5ac993d9bcff146f0ea8932c9
+head: 5193feb2d5fc0fd5c33b09bf002bd8943fdda177
+subject_revision: 5193feb2d5fc0fd5c33b09bf002bd8943fdda177
+test_patch_applied_to_subject: false
+test_patch_files: packages/verification/test/protocol.test.ts
+test_patch_digest: sha256:71d85fdec43643bd103cdad9cb4cdb8729ef8e606f4eb7617e5d711f4fac403f
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/verification/test/protocol.test.ts -t owned SwiftPM locks","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-dBFfov
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 3 skipped (4)
+   Start at  13:15:37
+   Duration  3.18s (tests 100%)
+

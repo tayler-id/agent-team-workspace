@@ -1,5 +1,5 @@
 {
-  "head": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+  "head": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
   "assertions": [
     {
       "input": null,
@@ -128,7 +128,7 @@
     {
       "input": {
         "id": "red-required",
-        "head": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+        "head": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
         "source": "sha256:2b3f6c3e07e753ff817207ac86368cb0e7f5ddecf7973a2f3cd89a5c6177b003",
         "test": "sha256:604029b1a6663d50d4db5db3d48f492bb36fb12ab67737f26d6d13f09d154388",
         "before": "if (!records.some(record => record.id === id))",
@@ -246,7 +246,7 @@
     {
       "input": {
         "id": "unrelated",
-        "head": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+        "head": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
         "source": "sha256:2b3f6c3e07e753ff817207ac86368cb0e7f5ddecf7973a2f3cd89a5c6177b003",
         "test": "sha256:604029b1a6663d50d4db5db3d48f492bb36fb12ab67737f26d6d13f09d154388",
         "before": "if (!records.some(record => record.id === id))",
@@ -364,7 +364,7 @@
   ],
   "guard": {
     "id": "red-required",
-    "head": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+    "head": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
     "source": "sha256:2b3f6c3e07e753ff817207ac86368cb0e7f5ddecf7973a2f3cd89a5c6177b003",
     "test": "sha256:604029b1a6663d50d4db5db3d48f492bb36fb12ab67737f26d6d13f09d154388",
     "before": "if (!records.some(record => record.id === id))",

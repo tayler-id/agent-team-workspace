@@ -1,0 +1,234 @@
+{
+  "head": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+  "mutation": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+  "archived_artifacts": [
+    {
+      "path": "evidence/U01a/agora-s1-enforce-test-first/map-negative/red.log",
+      "digest": "sha256:7a43babe59c60fd4fe218e35c966f01923ffbe90faf06420b06963be21d05632",
+      "media_type": "text/plain",
+      "byte_length": 22952,
+      "original_path": ".scratch/map-proof/red.log"
+    },
+    {
+      "path": "evidence/U01a/agora-s1-enforce-test-first/map-negative/green.log",
+      "digest": "sha256:97b407c69b16986d74675b62aa6ddfa588a7ade18205790c237abf013fd69775",
+      "media_type": "text/plain",
+      "byte_length": 5000,
+      "original_path": ".scratch/map-proof/green.log"
+    },
+    {
+      "path": "evidence/U01a/agora-s1-enforce-test-first/map-negative/test-patch.diff",
+      "digest": "sha256:f95a74b252c2012bbbe2e6e690065dee8503e8fad0bf9bfd9ac8b506d8a64f23",
+      "media_type": "text/plain",
+      "byte_length": 9301,
+      "original_path": ".scratch/map-proof/test-patch.diff"
+    },
+    {
+      "path": "evidence/U01a/agora-s1-enforce-test-first/map-negative/guard.json",
+      "digest": "sha256:4f3c6f4abf6d74d323ee0acb18ce44d4c6b7b5bb96fd426c7021b42745548620",
+      "media_type": "application/json",
+      "byte_length": 2880,
+      "original_path": ".scratch/map-proof/guard.json"
+    },
+    {
+      "path": "evidence/U01a/agora-s1-enforce-test-first/map-negative/task-checks.json",
+      "digest": "sha256:2c8c2e5ae41d0659a6bb22527e655f227dc017ad26e0f71825c2f4a6bf8ac4fe",
+      "media_type": "application/json",
+      "byte_length": 50215,
+      "original_path": ".scratch/map-proof/task-checks.json"
+    }
+  ],
+  "command": [
+    "node",
+    "scripts/foundation.mjs",
+    "--parent",
+    "fb67e9ce2c6658d672ca6446f524714ec55cbac5",
+    "--head",
+    "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+    "--evidence",
+    ".scratch/map-proof",
+    "--json",
+    "--scope",
+    "task"
+  ],
+  "exit": 1,
+  "report": {
+    "schema_version": "agora.foundation/v1",
+    "authority": "foundation_fixture",
+    "task": "agora-s1-enforce-test-first",
+    "scope": "task",
+    "parent": "fb67e9ce2c6658d672ca6446f524714ec55cbac5",
+    "head": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+    "outcome": "fail",
+    "task_outcome": "fail",
+    "unit_outcome": "blocked",
+    "foundation_outcome": "blocked",
+    "proofs": [
+      {
+        "id": "red",
+        "subject": "agora-s1-enforce-test-first:red",
+        "revision": "fb67e9ce2c6658d672ca6446f524714ec55cbac5",
+        "outcome": "pass",
+        "denials": []
+      },
+      {
+        "id": "green",
+        "subject": "agora-s1-enforce-test-first:green",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "pass",
+        "denials": []
+      },
+      {
+        "id": "guard",
+        "subject": "agora-s1-enforce-test-first:guard",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "pass",
+        "denials": []
+      },
+      {
+        "id": "bootstrap",
+        "subject": "agora-s1-enforce-test-first:bootstrap",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "pass",
+        "denials": []
+      },
+      {
+        "id": "contracts",
+        "subject": "agora-s1-enforce-test-first:contracts",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "pass",
+        "denials": []
+      },
+      {
+        "id": "client",
+        "subject": "agora-s1-enforce-test-first:client",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "pass",
+        "denials": []
+      },
+      {
+        "id": "documentation",
+        "subject": "agora-s1-enforce-test-first:documentation",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "pass",
+        "denials": []
+      },
+      {
+        "id": "static",
+        "subject": "agora-s1-enforce-test-first:static",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "pass",
+        "denials": []
+      },
+      {
+        "id": "FG01",
+        "subject": "agora-s1-enforce-test-first:FG01",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "blocked",
+        "denials": [
+          "U01a_integration_unqualified"
+        ]
+      },
+      {
+        "id": "FG02",
+        "subject": "agora-s1-enforce-test-first:FG02",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "blocked",
+        "denials": [
+          "U01a_integration_unqualified"
+        ]
+      },
+      {
+        "id": "FG03",
+        "subject": "agora-s1-enforce-test-first:FG03",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "blocked",
+        "denials": [
+          "U01a_integration_unqualified"
+        ]
+      },
+      {
+        "id": "FG04",
+        "subject": "agora-s1-enforce-test-first:FG04",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "blocked",
+        "denials": [
+          "FG04_missing"
+        ]
+      },
+      {
+        "id": "FG05",
+        "subject": "agora-s1-enforce-test-first:FG05",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "blocked",
+        "denials": [
+          "FG05_missing"
+        ]
+      },
+      {
+        "id": "FG06",
+        "subject": "agora-s1-enforce-test-first:FG06",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "blocked",
+        "denials": [
+          "FG06_missing"
+        ]
+      },
+      {
+        "id": "FG07",
+        "subject": "agora-s1-enforce-test-first:FG07",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "blocked",
+        "denials": [
+          "FG07_missing"
+        ]
+      },
+      {
+        "id": "FG08",
+        "subject": "agora-s1-enforce-test-first:FG08",
+        "revision": "449d8f8bf81c81ee2a82b1dc9876d996403855be",
+        "outcome": "blocked",
+        "denials": [
+          "FG08_missing"
+        ]
+      }
+    ],
+    "denials": [
+      "feature_map_drift"
+    ],
+    "artifacts": [
+      {
+        "path": ".scratch/map-proof/red.log",
+        "digest": "sha256:7a43babe59c60fd4fe218e35c966f01923ffbe90faf06420b06963be21d05632",
+        "media_type": "text/plain",
+        "byte_length": 22952
+      },
+      {
+        "path": ".scratch/map-proof/green.log",
+        "digest": "sha256:97b407c69b16986d74675b62aa6ddfa588a7ade18205790c237abf013fd69775",
+        "media_type": "text/plain",
+        "byte_length": 5000
+      },
+      {
+        "path": ".scratch/map-proof/test-patch.diff",
+        "digest": "sha256:f95a74b252c2012bbbe2e6e690065dee8503e8fad0bf9bfd9ac8b506d8a64f23",
+        "media_type": "text/plain",
+        "byte_length": 9301
+      },
+      {
+        "path": ".scratch/map-proof/guard.json",
+        "digest": "sha256:4f3c6f4abf6d74d323ee0acb18ce44d4c6b7b5bb96fd426c7021b42745548620",
+        "media_type": "application/json",
+        "byte_length": 2880
+      },
+      {
+        "path": ".scratch/map-proof/task-checks.json",
+        "digest": "sha256:2c8c2e5ae41d0659a6bb22527e655f227dc017ad26e0f71825c2f4a6bf8ac4fe",
+        "media_type": "application/json",
+        "byte_length": 50215
+      }
+    ]
+  },
+  "assertion": "dropping only lane-10 mapping denies task readiness with feature_map_drift",
+  "cleanup": "copy removed; exact primary feature-map hash preserved"
+}

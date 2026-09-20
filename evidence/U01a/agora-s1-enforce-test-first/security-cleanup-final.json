@@ -1,0 +1,24 @@
+{
+  "head": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+  "risk_floor": "R2",
+  "credential_pattern_findings": [],
+  "scan_scope": "changed files and all task evidence; credential token/private-key literal signatures, not an entropy attestation",
+  "dependency_audit": "final-05.log: exit 0, no vulnerabilities",
+  "owned_worktrees_remaining": [],
+  "owned_swiftpm_locks_remaining": [],
+  "loopback_servers": [
+    {
+      "port": 4371,
+      "closed": true
+    },
+    {
+      "port": 4372,
+      "closed": true
+    }
+  ],
+  "browser_session": "agora-enforce-test-first stopped",
+  "artifact_digests_verified": true,
+  "original_performance_failure_unchanged": true,
+  "performance_consumer_inputs_unchanged_since_cfd755a": true,
+  "limit": "local owner-attested proof, not a sandbox, trusted CI or merge authority"
+}

@@ -4,13 +4,17 @@
 
 This is local foundation-fixture proof, not U01a qualification, product readiness, trusted CI, or permission to merge. The behavioral baseline is the test-only parent `fb67e9ce2c6658d672ca6446f524714ec55cbac5`. The implementation first passed at `cfd755a`; each retained receipt and report names its exact full tested revision. Later evidence-only commits do not pretend to have tested themselves. Independent reviewers must run the driver at their chosen committed candidate.
 
+The R11 scope exceeds the preferred 200-line/eight-file target because one public protocol needs its schema, both consumers, driver, tests, feature map and same-change documentation. It remains below the hard limits: 21 implementation/documentation source files plus two authored evidence Markdown files, and fewer than 600 changed authored lines. Generated consumers, logs, JSON reports and rendered screenshots remain visible as artifacts, not hidden source work.
+
 ## Behavioral results
 
 `red.log` contains a working baseline operation and the literal failure `AssertionError: expected [] to include 'red_missing'` for `FG01.red-required`. `green.log` passes the same ten subjects. `test-patch.diff` is applied at the exact parent by the existing recorder. The initial native result is also retained in `initial-red.json`. The first attempt through the system launcher could not load Rolldown and was not accepted as red; firstmate supplied the approved local Node PATH, without changing dependencies or signatures.
 
 `guard.json` names the exact source/test digests and one mutation: omit only the red-required check. Normal assertions pass. The weakened copy fails exactly `FG01.red-required`. Lane 9 rejects missing/malformed, stale, unrelated and always-red guard claims against fresh execution. Lane 10 rejects missing and forged red and premature feature admission with specific proof IDs. `task-report.json` records the composed task pass. `foundation-report.json` remains blocked with FG04-FG08 missing and U01a integration unqualified.
 
-`validation.json` records exact argv, revision, times, exits and artifact digests for the literal project checks. The numbered logs include a zero-vulnerability dependency audit, lint/typecheck/docs/site gates, contract drift, independent TypeScript/Swift conformance, client replay, boundaries, all unit and real PostgreSQL tests, HTTP probes, repeat migrations, design negatives and the informational upstream plan checker. The task and foundation check artifacts retain fresh native assertion identities and owner command output, rather than reinterpreting historical owners' claims.
+`map-negative.json` additionally records an isolated committed fixture that removes only lane 10 from the feature map. Actual task admission returns only `feature_map_drift`; archived raw receipts survive the copy's cleanup. The lane screenshots are labelled read-only renderings of retained CLI output, not invented product UI.
+
+`validation.json` and `validation-final.json` record exact argv, revision, times, exits and artifact digests for the literal project checks. The numbered logs include a zero-vulnerability dependency audit, lint/typecheck/docs/site gates, contract drift, independent TypeScript/Swift conformance, client replay, boundaries, all unit and real PostgreSQL tests, HTTP probes, repeat migrations, design negatives and the informational upstream plan checker. The task and foundation check artifacts retain fresh native assertion identities and owner command output, rather than reinterpreting historical owners' claims.
 
 ## Performance finding and bounded diagnosis
 

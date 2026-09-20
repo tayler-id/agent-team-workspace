@@ -4,7 +4,7 @@
   "task": "agora-s1-enforce-test-first",
   "scope": "lane-9",
   "parent": "fb67e9ce2c6658d672ca6446f524714ec55cbac5",
-  "head": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+  "head": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
   "outcome": "pass",
   "task_outcome": "blocked",
   "unit_outcome": "blocked",
@@ -13,14 +13,14 @@
     {
       "id": "lane-9",
       "subject": "agora-s1-enforce-test-first:lane-9",
-      "revision": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
       "outcome": "pass",
       "denials": []
     },
     {
       "id": "FG01",
       "subject": "agora-s1-enforce-test-first:FG01",
-      "revision": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
       "outcome": "blocked",
       "denials": [
         "U01a_integration_unqualified"
@@ -29,7 +29,7 @@
     {
       "id": "FG02",
       "subject": "agora-s1-enforce-test-first:FG02",
-      "revision": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
       "outcome": "blocked",
       "denials": [
         "U01a_integration_unqualified"
@@ -38,7 +38,7 @@
     {
       "id": "FG03",
       "subject": "agora-s1-enforce-test-first:FG03",
-      "revision": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
       "outcome": "blocked",
       "denials": [
         "U01a_integration_unqualified"
@@ -47,7 +47,7 @@
     {
       "id": "FG04",
       "subject": "agora-s1-enforce-test-first:FG04",
-      "revision": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
       "outcome": "blocked",
       "denials": [
         "FG04_missing"
@@ -56,7 +56,7 @@
     {
       "id": "FG05",
       "subject": "agora-s1-enforce-test-first:FG05",
-      "revision": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
       "outcome": "blocked",
       "denials": [
         "FG05_missing"
@@ -65,7 +65,7 @@
     {
       "id": "FG06",
       "subject": "agora-s1-enforce-test-first:FG06",
-      "revision": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
       "outcome": "blocked",
       "denials": [
         "FG06_missing"
@@ -74,7 +74,7 @@
     {
       "id": "FG07",
       "subject": "agora-s1-enforce-test-first:FG07",
-      "revision": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
       "outcome": "blocked",
       "denials": [
         "FG07_missing"
@@ -83,7 +83,7 @@
     {
       "id": "FG08",
       "subject": "agora-s1-enforce-test-first:FG08",
-      "revision": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
       "outcome": "blocked",
       "denials": [
         "FG08_missing"
@@ -94,31 +94,31 @@
   "artifacts": [
     {
       "path": "evidence/U01a/agora-s1-enforce-test-first/red.log",
-      "digest": "sha256:90b484099cb5b96fe83b5d3bd4c4797154fb057d47a8ab6317d0bdf127cb7a59",
+      "digest": "sha256:3f0038f7cd6e2fa8c062091965f9707c2e8842ac68f6b22147ebd14636ba7724",
       "media_type": "text/plain",
-      "byte_length": 22935
+      "byte_length": 22962
     },
     {
       "path": "evidence/U01a/agora-s1-enforce-test-first/green.log",
-      "digest": "sha256:366f2f9631e79119f827914258217aa990ac18668d519e3a19586282568234ba",
+      "digest": "sha256:95c748e75989be56ce9fefeacaaadf7eb66cb862e2c28c37f387e45177e1f6e6",
       "media_type": "text/plain",
-      "byte_length": 4963
+      "byte_length": 4980
     },
     {
       "path": "evidence/U01a/agora-s1-enforce-test-first/test-patch.diff",
-      "digest": "sha256:25b47ecd57d2760f5dc51c813fc121b54ba4d4028fd0ca4555343d536cf8fecb",
+      "digest": "sha256:f95a74b252c2012bbbe2e6e690065dee8503e8fad0bf9bfd9ac8b506d8a64f23",
       "media_type": "text/plain",
-      "byte_length": 8627
+      "byte_length": 9301
     },
     {
       "path": "evidence/U01a/agora-s1-enforce-test-first/guard.json",
-      "digest": "sha256:f1488fdcf599c3a489d9306d6c7e8e5a1132d8f3f8bfc3575172b4a88c602355",
+      "digest": "sha256:65e2c0e19d288189edcec853a16d66c0f6bb4dfdee441e550160294b424a418c",
       "media_type": "application/json",
       "byte_length": 2880
     },
     {
       "path": "evidence/U01a/agora-s1-enforce-test-first/lane-9.json",
-      "digest": "sha256:c855f40f3187c3fb9497b9bd8d87bf716cfcffbcd189fb7f753bab161229692d",
+      "digest": "sha256:6e93ed1164a46ba96dc10adca90fdbaa8ce54b853ffe2aea573ef2b4b9bfd866",
       "media_type": "application/json",
       "byte_length": 14352
     }

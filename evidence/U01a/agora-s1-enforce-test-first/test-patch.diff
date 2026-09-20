@@ -95,10 +95,10 @@ index 0000000..a1153e0
 +});
 diff --git a/packages/verification/test/protocol.test.ts b/packages/verification/test/protocol.test.ts
 new file mode 100644
-index 0000000..0909c0c
+index 0000000..380ddb1
 --- /dev/null
 +++ b/packages/verification/test/protocol.test.ts
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,32 @@
 +import { spawnSync } from 'node:child_process';
 +import { expect, test } from 'vitest';
 +
@@ -120,6 +120,12 @@ index 0000000..0909c0c
 +	assert.equal(r.behavior([{subject:'FG01.red-required',status:'failed',cause:'SyntaxError: missing module'}],true),false);
 +	assert.equal(r.behavior([{subject:'baseline admission driver accepts a complete task',status:'passed',cause:''},{subject:'FG01.red-required',status:'pending',cause:''}],false),false);`);
 +});
++test('owned SwiftPM locks are removed without deleting adjacent files', () => {
++	probe(`const fs=await import('node:fs');const os=await import('node:os');const path=await import('node:path');let lock,other;
++	try { r.withCopy(r.git('rev-parse','HEAD'),copy=>{lock=path.join(os.tmpdir(),copy.replaceAll('/','_')+'_contracts_swift_.build.lock');other=lock+'.unrelated';fs.writeFileSync(lock,'owned');fs.writeFileSync(other,'preserve');});
++	assert.equal(fs.existsSync(lock),false,'owned SwiftPM lock removed');assert.equal(fs.readFileSync(other,'utf8'),'preserve'); }
++	finally {if(lock)fs.rmSync(lock,{force:true});if(other)fs.rmSync(other,{force:true});}`);
++}, 120_000);
 +test('public usage failures have structured output and exit 64', () => {
 +	const result = spawnSync(process.execPath, ['scripts/foundation.mjs', '--scope', 'unknown'], { encoding: 'utf8' });
 +	expect(result.status).toBe(64);
