@@ -12,9 +12,8 @@ let probe: Database;
 
 beforeAll(async () => {
 	await admin.query(`create database ${probeName}`);
-	const url = new URL(ownerUrl);
-	url.pathname = `/${probeName}`;
-	probe = openDatabase(url.toString());
+	// Replace the database segment; the URL may name a Unix socket dir in its query and no host.
+	probe = openDatabase(ownerUrl.replace(/\/[^/?]*(\?.*)?$/, (_match, query: string | undefined) => `/${probeName}${query ?? ''}`));
 });
 
 afterAll(async () => {

@@ -1,8 +1,8 @@
 // Runs one command against a throwaway PostgreSQL cluster, then removes the cluster.
+// The cluster listens only on a Unix socket inside a private temp directory; no TCP port is opened.
 // Set AGORA_TEST_DATABASE_URL and AGORA_TEST_OWNER_DATABASE_URL yourself to reuse an existing server instead.
 import { spawn, spawnSync } from 'node:child_process';
 import { mkdtempSync, rmSync } from 'node:fs';
-import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -14,15 +14,6 @@ if (command.length === 0) {
 	console.error('usage: node scripts/with-test-postgres.mjs <command> [args...]');
 	process.exit(64);
 }
-
-const freePort = () => new Promise((resolve, reject) => {
-	const server = net.createServer();
-	server.once('error', reject);
-	server.listen(0, '127.0.0.1', () => {
-		const { port } = server.address();
-		server.close(() => resolve(port));
-	});
-});
 
 const run = (file, args, extraEnv = {}) => spawnSync(file, args, { encoding: 'utf8', env: { ...process.env, ...extraEnv } });
 const fail = (code, message, detail) => {
@@ -48,7 +39,6 @@ if (run(bin('pg_ctl'), ['--version']).error) fail(3, 'PostgreSQL server binaries
 
 const root = mkdtempSync(path.join(os.tmpdir(), 'agora-pg-'));
 const dataDir = path.join(root, 'data');
-const port = await freePort();
 const cleanup = () => {
 	run(bin('pg_ctl'), ['-D', dataDir, '-m', 'fast', '-w', 'stop']);
 	rmSync(root, { recursive: true, force: true });
@@ -59,7 +49,7 @@ if (initdb.status !== 0) {
 	rmSync(root, { recursive: true, force: true });
 	fail(70, 'initdb failed', initdb.stderr);
 }
-const start = run(bin('pg_ctl'), ['-D', dataDir, '-l', path.join(root, 'postgres.log'), '-o', `-p ${port} -k ${root} -c listen_addresses=127.0.0.1 -c fsync=off`, '-w', 'start']);
+const start = run(bin('pg_ctl'), ['-D', dataDir, '-l', path.join(root, 'postgres.log'), '-o', `-k ${root} -c listen_addresses='' -c fsync=off`, '-w', 'start']);
 if (start.status !== 0) {
 	rmSync(root, { recursive: true, force: true });
 	fail(70, 'pg_ctl start failed', start.stderr + start.stdout);
@@ -70,21 +60,23 @@ const bootstrap = [
 	`CREATE DATABASE ${DATABASE} OWNER ${OWNER}`,
 ];
 for (const sql of bootstrap) {
-	const result = run(bin('psql'), ['-v', 'ON_ERROR_STOP=1', '-h', '127.0.0.1', '-p', String(port), '-U', OWNER, '-d', 'postgres', '-c', sql]);
+	const result = run(bin('psql'), ['-v', 'ON_ERROR_STOP=1', '-h', root, '-U', OWNER, '-d', 'postgres', '-c', sql]);
 	if (result.status !== 0) {
 		cleanup();
 		fail(70, `bootstrap statement failed: ${sql}`, result.stderr);
 	}
 }
 
-const url = (user) => `postgresql://${user}@127.0.0.1:${port}/${DATABASE}`;
+const url = (user) => `postgresql://${user}@/${DATABASE}?host=${encodeURIComponent(root)}`;
 const env = {
 	...process.env,
 	AGORA_TEST_DATABASE_URL: url(APP),
 	AGORA_TEST_OWNER_DATABASE_URL: url(OWNER),
-	AGORA_DATABASE_URL: process.env.AGORA_DATABASE_URL ?? url(OWNER),
+	// The service runs as the non-owner role; only migrations use the owner.
+	AGORA_DATABASE_URL: process.env.AGORA_DATABASE_URL ?? url(APP),
+	AGORA_MIGRATION_DATABASE_URL: process.env.AGORA_MIGRATION_DATABASE_URL ?? url(OWNER),
 };
-console.error(JSON.stringify({ schema_version: 'agora.test-postgres/v1', outcome: 'started', port, database: DATABASE, owner_role: OWNER, app_role: APP }));
+console.error(JSON.stringify({ schema_version: 'agora.test-postgres/v1', outcome: 'started', socket_dir: root, database: DATABASE, owner_role: OWNER, app_role: APP }));
 let exitCode;
 try {
 	for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => { cleanup(); process.exit(130); });
