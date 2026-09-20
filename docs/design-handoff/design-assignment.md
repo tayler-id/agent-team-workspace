@@ -12,7 +12,7 @@ Produce these, in this order:
 4. A component and state matrix for every row in the [component inventory](components.md): one column per state named there, including empty, loading, error, revoked, offline, historical, and unknown. Mark cells that are intentionally identical.
 5. Clickable prototype paths for the two-person story: one path as the task owner, one as the approving maintainer, and one where the other reviewer is absent so the waiting state is visible.
 6. Accessibility annotations on every frame: landmark roles, focus order, focus return target, live region text for each update, announced text for every badge and card, contrast values for any new color, and the reduced-motion variant of any motion.
-7. The comprehension test from spec R23: script a proposed task, a failed check, a stale approval, and a recovery card. Two people who did not design them must name the owner, placement, current authority, missing proof, and safe next action without coaching. Record mistaken readings, not just completion.
+7. The comprehension test from spec R23: script a proposed task, a failed check, a stale approval, and a recovery card. Two people who did not design them must name the owner, placement, current authority, missing proof, and safe next action without coaching. Record mistaken readings as well as completion time.
 8. Content review of every label against [content design](content-design.md). Flag any place the design needed a word the packet does not define.
 
 ## Unresolved decisions to flag

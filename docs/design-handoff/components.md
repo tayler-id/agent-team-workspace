@@ -32,7 +32,7 @@ Behavior and variants for the parts the [screens](screens.md) share. No producti
 | Countdown | Deadline for questions, approvals, queue wait, capability expiry | Running, expired |
 | Scope preview list | Selected records with author, time, audience, trust class, omissions | Complete, partial coverage, audience restricted |
 | Offline and resync banner | Connection state and required action | Offline with unsent drafts, resync required, revoked |
-| Diff viewer | Read-only diff opened last in evidence review; every hunk mappable to a claim | Mapped, unmapped hunk highlighted by label |
+| Diff viewer | Read-only diff opened last in evidence review; every hunk mappable to a claim | Mapped, unmapped hunk marked by label |
 
 ## Rendering constraints
 

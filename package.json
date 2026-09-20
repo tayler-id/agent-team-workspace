@@ -10,7 +10,7 @@
 	"scripts": {
 		"lint": "eslint .",
 		"typecheck": "tsc -p tsconfig.json",
-		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs",
+		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs && node scripts/verify-design-handoff.mjs",
 		"contracts:generate": "node contracts/tools/generate.mjs",
 		"contracts:check": "node contracts/tools/generate.mjs --check",
 		"contracts:conform": "node contracts/src/conform-cli.ts",

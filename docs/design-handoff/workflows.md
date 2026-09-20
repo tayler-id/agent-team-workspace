@@ -2,7 +2,7 @@
 
 Each flow lists actors, entry condition, steps, system feedback, denials, failure and recovery states, and completion. Sources: spec [R02](../technical-spec.md#r02-browser-experience-and-user-journeys) required journeys, [R06](../technical-spec.md#r06-state-machines-and-invariants) states, [R07](../technical-spec.md#r07-ordered-api-event-and-retry-contracts) receipts, [R11](../technical-spec.md#r11-git-evidence-publication-review-and-merge) publication, [R15](../technical-spec.md#r15-failure-recovery) recovery. Screens for each step are in the [screen inventory](screens.md).
 
-A rule that applies to every flow: a mutation returns a receipt with a revision, and the interface shows the committed state from that receipt, not the optimistic guess. A lost network response is retried with the same command ID and can never duplicate a message, run, or push.
+One rule applies to every flow. A mutation returns a receipt with a revision, and the interface shows the committed state from that receipt, not the optimistic guess. A lost network response is retried with the same command ID and can never duplicate a message, run, or push.
 
 ## Invitation and sign-in
 

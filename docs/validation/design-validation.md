@@ -33,6 +33,8 @@ node scripts/verify-design.mjs
 node scripts/test-design-checks.mjs
 node --check scripts/verify-design.mjs
 node --check scripts/test-design-checks.mjs
+node scripts/verify-design-handoff.mjs
+node scripts/test-design-handoff-checks.mjs
 node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md
 npx -y markdownlint-cli2@0.23.2 'AGENTS.md' 'docs/**/*.md'
 git diff --check

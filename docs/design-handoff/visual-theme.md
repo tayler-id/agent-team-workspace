@@ -4,7 +4,7 @@ One recommended direction, stated so the design team can accept it, adjust it, o
 
 ## Recommended direction
 
-Call it the ledger room. An agora was a place where a town did its business in public: people talked, decisions were spoken aloud, and records were kept where anyone could read them. Take the public-record part, not the marble. The interface should feel like a well-kept shared ledger in a quiet room: paper-toned surfaces, ink-dark type, hairline rules, and one signal color that lights up only when something is happening right now.
+Call it the ledger room. An agora was where a town did its business in public. People talked, decisions were spoken aloud, and the records stayed where anyone could read them. Take the public-record part, not the marble. The interface should feel like a well-kept shared ledger in a quiet room, with paper-toned surfaces, ink-dark type, hairline rules, and one signal color that lights up only while something is happening.
 
 What that means in practice:
 
@@ -58,7 +58,7 @@ Starting values, checked for AA contrast against their intended surfaces. Every 
 | Diff added | `#E6F4EA` | `#17321F` | Added line background, with a `+` gutter glyph |
 | Diff removed | `#FBE9E7` | `#3A1B18` | Removed line background, with a `-` gutter glyph |
 
-Semantics: a state is carried by its word and glyph. Color reinforces at most one of them. A success box and an error box differ by glyph and word, and still work in greyscale. Never tint a fill and border it in the same color. Never cycle a color per item.
+A state is carried by its word and glyph. Color reinforces at most one of them. A success box and an error box differ by glyph and word, and still work in greyscale. Never tint a fill and border it in the same color. Never cycle a color per item.
 
 ## Data visualization
 
