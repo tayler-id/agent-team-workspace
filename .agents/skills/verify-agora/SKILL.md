@@ -9,7 +9,7 @@ Every step is a literal command run from the repository root. Record outputs und
 
 ## Doctor
 
-Read-only. Expected: Node 24.x, pnpm 10.x, PostgreSQL 18.x server binaries, a Swift 6 toolchain, install and static gates exit 0. A missing Swift toolchain blocks the contract steps; it never downgrades them to a pass.
+Toolchain and static checks only. Expected: Node 24.x, pnpm 10.x, PostgreSQL 18.x server binaries, a Swift 6 toolchain, install and static gates exit 0. A missing Swift toolchain blocks the contract steps; it never downgrades them to a pass.
 
 ```sh
 node --version
@@ -17,6 +17,7 @@ pnpm --version
 pg_ctl --version
 swift --version
 pnpm install --frozen-lockfile
+pnpm audit --json
 pnpm typecheck
 pnpm lint
 pnpm docs:check
