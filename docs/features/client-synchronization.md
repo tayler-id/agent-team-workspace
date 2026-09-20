@@ -50,6 +50,6 @@ pnpm boundaries
 pnpm check
 ```
 
-The first command compares six literal TypeScript and Swift snapshots and records each TypeScript transition. The boundary command injects forbidden import forms, transitive public-type leaks, private-path imports and ambient browser types, including controlled disabled-guard cases. Neither command needs a browser.
+The first command compares six literal TypeScript and Swift snapshots and records each TypeScript transition. The boundary command writes `.scratch/boundaries.json` and injects forbidden import forms, transitive public-type leaks, private-path imports and ambient browser types, including controlled disabled-guard cases. Neither command needs a browser.
 
 Exact subjects, assertions, performance samples and cleanup are retained in the [contract-slice evidence](../../evidence/U01a/agora-s1-isolate-client-core/1-contracts/review.md), [core and lane-7 evidence](../../evidence/U01a/agora-s1-isolate-client-core/2-core/review.md), and [boundary and lane-8 evidence](../../evidence/U01a/agora-s1-isolate-client-core/3-boundaries/review.md). See the [development runbook](../runbooks/development.md) for package contracts and the [technical specification](../technical-spec.md#r07-ordered-api-event-and-retry-contracts) for protocol authority.
