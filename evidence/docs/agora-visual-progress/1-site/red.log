@@ -1,7 +1,7 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-20T15:23:13.336Z
+recorded_at: 2026-09-20T15:36:55.705Z
 parent: 755b779c5f7eabe79078951f9119291debcb192c
-head: 7c06520500c2eb90cc3641fbd7623ecb960ffda6
+head: b87dad02dae2e7620a9366999d480f65089cc5a4
 subject_revision: 755b779c5f7eabe79078951f9119291debcb192c
 test_patch_applied_to_subject: true
 test_patch_files: docs/site/test/guard-weakening.test.ts, docs/site/test/guards.test.ts, docs/site/test/output.test.ts
@@ -12,15 +12,15 @@ toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 1
 expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
 observed_exit: 1
 
-✔ public documentation guard accepts the complete valid fixture (0.445375ms)
-✖ broken internal page and anchor links fail (0.227958ms)
-✖ feature explanations and visual flows are mandatory (0.051167ms)
-✖ progress statuses are closed and Built requires source test and evidence (0.044041ms)
-✖ all milestones must occur exactly once with an outcome and release stage (0.053375ms)
-✖ milestone outcomes mirror the authoritative plan instead of drifting (0.039375ms)
-✖ every executable and package must have a documentation home (0.037667ms)
-✖ every feature-map entry requires a validated feature page (0.036792ms)
-✖ private absolute paths and unsafe links never enter the site (0.050792ms)
+✔ public documentation guard accepts the complete valid fixture (0.475167ms)
+✖ broken internal page and anchor links fail (0.245666ms)
+✖ feature explanations and visual flows are mandatory (0.055917ms)
+✖ progress statuses are closed and Built requires source test and evidence (0.046458ms)
+✖ all milestones must occur exactly once with an outcome and release stage (0.047625ms)
+✖ milestone outcomes mirror the authoritative plan instead of drifting (0.039709ms)
+✖ every executable and package must have a documentation home (0.04025ms)
+✖ every feature-map entry requires a validated feature page (0.038708ms)
+✖ private absolute paths and unsafe links never enter the site (0.049416ms)
 ℹ tests 9
 ℹ suites 0
 ℹ pass 1
@@ -28,15 +28,15 @@ observed_exit: 1
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 51.534917
+ℹ duration_ms 52.98825
 
 ✖ failing tests:
 
 test at docs/site/test/guards.test.ts:19:1
-✖ broken internal page and anchor links fail (0.227958ms)
+✖ broken internal page and anchor links fail (0.245666ms)
   AssertionError [ERR_ASSERTION]: must reject link
-      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:15:9)
-      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:20:2)
+      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:15:9)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:20:2)
       at Test.runInAsyncScope (node:async_hooks:227:14)
       at Test.run (node:internal/test_runner/test:1306:25)
       at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
@@ -52,10 +52,10 @@ test at docs/site/test/guards.test.ts:19:1
   }
 
 test at docs/site/test/guards.test.ts:24:1
-✖ feature explanations and visual flows are mandatory (0.051167ms)
+✖ feature explanations and visual flows are mandatory (0.055917ms)
   AssertionError [ERR_ASSERTION]: must reject section
-      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:15:9)
-      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:25:2)
+      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:15:9)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:25:2)
       at Test.runInAsyncScope (node:async_hooks:227:14)
       at Test.run (node:internal/test_runner/test:1306:25)
       at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
@@ -71,10 +71,10 @@ test at docs/site/test/guards.test.ts:24:1
   }
 
 test at docs/site/test/guards.test.ts:28:1
-✖ progress statuses are closed and Built requires source test and evidence (0.044041ms)
+✖ progress statuses are closed and Built requires source test and evidence (0.046458ms)
   AssertionError [ERR_ASSERTION]: must reject status
-      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:15:9)
-      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:29:2)
+      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:15:9)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:29:2)
       at Test.runInAsyncScope (node:async_hooks:227:14)
       at Test.run (node:internal/test_runner/test:1306:25)
       at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
@@ -90,10 +90,10 @@ test at docs/site/test/guards.test.ts:28:1
   }
 
 test at docs/site/test/guards.test.ts:33:1
-✖ all milestones must occur exactly once with an outcome and release stage (0.053375ms)
+✖ all milestones must occur exactly once with an outcome and release stage (0.047625ms)
   AssertionError [ERR_ASSERTION]: must reject coverage
-      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:15:9)
-      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:34:2)
+      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:15:9)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:34:2)
       at Test.runInAsyncScope (node:async_hooks:227:14)
       at Test.run (node:internal/test_runner/test:1306:25)
       at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
@@ -109,10 +109,10 @@ test at docs/site/test/guards.test.ts:33:1
   }
 
 test at docs/site/test/guards.test.ts:39:1
-✖ milestone outcomes mirror the authoritative plan instead of drifting (0.039375ms)
+✖ milestone outcomes mirror the authoritative plan instead of drifting (0.039709ms)
   AssertionError [ERR_ASSERTION]: must reject milestone outcome drift
-      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:15:9)
-      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:39:84)
+      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:15:9)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:39:84)
       at Test.runInAsyncScope (node:async_hooks:227:14)
       at Test.run (node:internal/test_runner/test:1306:25)
       at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
@@ -128,10 +128,10 @@ test at docs/site/test/guards.test.ts:39:1
   }
 
 test at docs/site/test/guards.test.ts:40:1
-✖ every executable and package must have a documentation home (0.037667ms)
+✖ every executable and package must have a documentation home (0.04025ms)
   AssertionError [ERR_ASSERTION]: must reject inventory
-      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:15:9)
-      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:40:75)
+      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:15:9)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:40:75)
       at Test.runInAsyncScope (node:async_hooks:227:14)
       at Test.run (node:internal/test_runner/test:1306:25)
       at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
@@ -147,10 +147,10 @@ test at docs/site/test/guards.test.ts:40:1
   }
 
 test at docs/site/test/guards.test.ts:41:1
-✖ every feature-map entry requires a validated feature page (0.036792ms)
+✖ every feature-map entry requires a validated feature page (0.038708ms)
   AssertionError [ERR_ASSERTION]: must reject feature documentation
-      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:15:9)
-      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:41:73)
+      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:15:9)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:41:73)
       at Test.runInAsyncScope (node:async_hooks:227:14)
       at Test.run (node:internal/test_runner/test:1306:25)
       at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
@@ -166,10 +166,10 @@ test at docs/site/test/guards.test.ts:41:1
   }
 
 test at docs/site/test/guards.test.ts:42:1
-✖ private absolute paths and unsafe links never enter the site (0.050792ms)
+✖ private absolute paths and unsafe links never enter the site (0.049416ms)
   AssertionError [ERR_ASSERTION]: must reject private
-      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:15:9)
-      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-dgGIkZ/docs/site/test/guards.test.ts:43:2)
+      at rejects (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:15:9)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-eStCvo/docs/site/test/guards.test.ts:43:2)
       at Test.runInAsyncScope (node:async_hooks:227:14)
       at Test.run (node:internal/test_runner/test:1306:25)
       at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
