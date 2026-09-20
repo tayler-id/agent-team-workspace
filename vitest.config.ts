@@ -9,7 +9,7 @@ export default defineConfig({
 			{
 				test: {
 					name: 'pg',
-					include: ['packages/*/test/**/*.pg.test.ts'],
+					include: ['apps/*/test/**/*.pg.test.ts', 'packages/*/test/**/*.pg.test.ts'],
 					globalSetup: ['./scripts/require-test-postgres.ts'],
 					fileParallelism: false,
 					testTimeout: 30_000,

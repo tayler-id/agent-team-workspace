@@ -10,7 +10,12 @@
 		"start": "node src/main.ts"
 	},
 	"dependencies": {
+		"@agora/contracts": "workspace:*",
+		"@agora/domain": "workspace:*",
+		"@agora/storage": "workspace:*",
 		"@hono/node-server": "2.1.1",
+		"ajv": "8.20.0",
+		"ajv-formats": "3.0.1",
 		"hono": "4.13.8"
 	}
 }
