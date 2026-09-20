@@ -1,0 +1,12 @@
+# migration-prerequisite.log: pnpm migrate blocks when the service role is missing (agora.lane/v1)
+head: 84a9243c435909a8c15c4d4a89b1e6ace9d22107
+recorded_at: 2026-09-20T02:45:57Z
+node: v24.16.0  pnpm: 10.34.1  postgres: pg_ctl (PostgreSQL) 18.4 (Homebrew)  host: Darwin 25.5.0 arm64
+method: in the throwaway cluster, rename agora_app away as the bootstrap superuser, run the migration CLI as the non-superuser owner against a fresh database, then restore the role and run again
+pass predicate: first run exits 2 with outcome blocked naming agora_app; second run exits 0 with applied 1
+
+## command: node scripts/with-test-postgres.mjs bash -c '<rename role, migrate, restore role, migrate>'
+{"schema_version":"agora.migration-report/v1","outcome":"blocked","message":"blocked prerequisite: role agora_app does not exist; create it before migrating (see docs/runbooks/development.md)"}
+first_exit: 2 (expected 2)
+{"schema_version":"agora.migration-report/v1","applied":1,"total":1,"schema_digest":"sha256:fbc2fbff28382282c51cd6e84c763c3cb7481a8011581e98fac09788fc3c39f1","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}
+second_exit: 0 (expected 0)

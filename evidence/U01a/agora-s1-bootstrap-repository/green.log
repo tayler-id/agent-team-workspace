@@ -1,0 +1,24 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-20T02:44:56.263Z
+parent: 84d29c9adb0249fcbdf7193bef73e625c4e336a3
+head: 84a9243c435909a8c15c4d4a89b1e6ace9d22107
+subject_revision: 84a9243c435909a8c15c4d4a89b1e6ace9d22107
+test_patch_applied_to_subject: false
+test_patch_files: apps/center/test/health.test.ts, apps/center/test/policy.test.ts, apps/center/test/readiness.pg.test.ts, packages/domain/test/fixture-scope.test.ts, packages/storage/test/fixture.pg.test.ts, packages/storage/test/migrate.pg.test.ts
+test_patch_digest: sha256:32ce24cc3e00912b3461ffb2c625b62a26b97101fc8f85b8ecfa3c4ce9c96939
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[{"file":"packages/storage/drizzle/0000_foundation_fixture.sql","digest":"sha256:46198912f0d2916b6b8df2f8abb790571d7ab776799f680ef18229eafaf12898"}],"contract_schemas":[{"file":"contracts/package.json","digest":"sha256:37d68127598e7bf2d25335ec22bbd5c8b9b05604788366058fadbd47aebca97f"},{"file":"contracts/schemas/fixture-policy-command.schema.json","digest":"sha256:1eff10dd12fc20045a9fa851f3ccaae7c685ef0799be7359adce141887be60ac"}]}
+configuration: {"command":"pnpm -s test","vitest_config":"sha256:ac635e593c66b06bf153c55d9d5acd0ac764223536b519a137ea0515299fcb99","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:803467c6035ec59dc589b6f9b817fe451e593764f089ad765370285a7d22d87f"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-wzsdfe
+
+
+ Test Files  7 passed (7)
+      Tests  30 passed (30)
+   Start at  22:44:54
+   Duration  1.01s (import 64%, tests 28%, transform 7%, worker 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-zAXKun","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}

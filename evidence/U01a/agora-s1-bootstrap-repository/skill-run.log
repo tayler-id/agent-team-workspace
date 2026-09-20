@@ -1,0 +1,26 @@
+# verify-agora skill run at 84a9243c435909a8c15c4d4a89b1e6ace9d22107 (2026-09-20T02:45:39Z)
+Literal run of .agents/skills/verify-agora/SKILL.md sections at the code head with the evidence and docs of the follow-up commit present in the working tree.
+
+## Doctor
+node: v24.16.0  pnpm: 10.34.1  postgres: pg_ctl (PostgreSQL) 18.4 (Homebrew)  host: Darwin 25.5.0 arm64
+Done in 168ms using pnpm v10.34.1
+install_exit: 0 (expected 0)
+typecheck_exit: 0 (expected 0)
+lint_exit: 0 (expected 0)
+docs_check_exit: 0 (expected 0)
+
+## Drive
+ Test Files  7 passed (7)
+      Tests  30 passed (30)
+test_exit: 0 (expected 0)
+probe_outcome: fail exit: 70 ids: ['infrastructure=fail']
+migrate_applied: [1, 0] same_digest: True sha256:fbc2fbff28382282c51cd6e84c763c3cb7481a8011581e98fac09788fc3c39f1
+cluster_tcp_listeners: 0 (expected 0)
+service_role|super|bypass: agora_app|f|f (expected agora_app|f|f)
+migration_role|super|bypass: agora_owner|f|f (expected agora_owner|f|f)
+
+## Cleanup
+0
+worktrees: clean
+tmp: clean
+evidence retained after cleanup: 16 entries: feature-map.json gate-negatives.log green.log lane-1 lane-2 lane-3 migration-prerequisite.log outcome.json performance.md red.log regenerate.sh review-fixes review.md security.md skill-run.log test-patch.diff

@@ -1,0 +1,237 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-20T02:45:06.702Z
+parent: 3f9aee932063f23470167ce609e3b54ef02e1d4a
+head: 84a9243c435909a8c15c4d4a89b1e6ace9d22107
+subject_revision: 3f9aee932063f23470167ce609e3b54ef02e1d4a
+test_patch_applied_to_subject: true
+test_patch_files: apps/center/test/policy.test.ts, packages/domain/test/fixture-scope.test.ts, packages/storage/test/fixture.pg.test.ts, packages/storage/test/migrate.pg.test.ts
+test_patch_digest: sha256:18583218fc963f3ee8a2d8405607c40c8d9bf38108a1f5d9ac4e5c990b9e6ff7
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[{"file":"packages/storage/drizzle/0000_foundation_fixture.sql","digest":"sha256:46198912f0d2916b6b8df2f8abb790571d7ab776799f680ef18229eafaf12898"}],"contract_schemas":[{"file":"contracts/schemas/fixture-policy-command.schema.json","digest":"sha256:1eff10dd12fc20045a9fa851f3ccaae7c685ef0799be7359adce141887be60ac"}]}
+configuration: {"command":"pnpm -s test","vitest_config":"sha256:ac635e593c66b06bf153c55d9d5acd0ac764223536b519a137ea0515299fcb99","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:803467c6035ec59dc589b6f9b817fe451e593764f089ad765370285a7d22d87f"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-Hw5lRl
+
+ ❯ |unit| packages/domain/test/fixture-scope.test.ts (3 tests | 1 failed) 2ms
+   × asScopeId normalizes case and rejects non-UUID text 1ms
+ ❯ |unit| apps/center/test/policy.test.ts (6 tests | 2 failed) 16ms
+   × a non-UUID scope and a non-JSON body are both 400 malformed_command 3ms
+   × every RFC 9562 UUID shape the schema accepts is also accepted by the decision, never a 500 1ms
+ ❯ |pg| packages/storage/test/fixture.pg.test.ts (11 tests | 5 failed) 58ms
+   ❯ race (3)
+     × twelve appended events read back in numeric sequence order, not text order 5ms
+   ❯ row-level security (7)
+     × another scope cannot attach an event to the owning scope's stream through the foreign key 1ms
+     × identifiers are scoped: another scope gets its own stream and claim under the same ids without learning they exist elsewhere 1ms
+     × row security is forced, so even the table owner is confined to the bound scope 1ms
+     × guard negative: a BYPASSRLS role sees every scope, so the denials above depend on the policies, not on the data 7ms
+ ❯ |pg| packages/storage/test/migrate.pg.test.ts (3 tests | 2 failed) 107ms
+   × the app role and the schema owner are neither superusers nor BYPASSRLS, so forced row security binds both 7ms
+   × a missing agora_app role blocks the migration with a prerequisite error and applies nothing 8ms
+
+ Test Files  4 failed | 3 passed (7)
+      Tests  10 failed | 20 passed (30)
+   Start at  22:44:59
+   Duration  982ms (import 68%, tests 23%, transform 8%, worker 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","port":65371,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app"}
+stderr | apps/center/test/policy.test.ts > every RFC 9562 UUID shape the schema accepts is also accepted by the decision, never a 500
+TypeError: ScopeId must be an RFC 9562 UUID
+    at asScopeId (/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-Hw5lRl/packages/domain/src/policy/fixture-scope.ts:8:31)
+    at Array.<anonymous> (/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-Hw5lRl/apps/center/src/app.ts:63:56)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-Hw5lRl/apps/center/test/policy.test.ts:37:14
+    at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-Hw5lRl/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/run.C5UmxDPh.js:2783:20
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| apps/center/test/policy.test.ts > a non-UUID scope and a non-JSON body are both 400 malformed_command
+AssertionError: expected { …(3) } to match object { Object (details) }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "details": [
+-     "/actor/scope_id must match pattern \"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$\"",
++     "/actor/scope_id must match format \"uuid\"",
+    ],
+  }
+
+ ❯ apps/center/test/policy.test.ts:31:32
+     29|  const badScope = await decide({ schema_version: 'agora.fixture-policy…
+     30|  expect(badScope.status).toBe(400);
+     31|  expect(await badScope.json()).toMatchObject({ details: ['/actor/scope…
+       |                                ^
+     32|  const notJson = await app.request('/api/v1/fixture/policy/decisions',…
+     33|  expect(notJson.status).toBe(400);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  |unit| apps/center/test/policy.test.ts > every RFC 9562 UUID shape the schema accepts is also accepted by the decision, never a 500
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ apps/center/test/policy.test.ts:38:21
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+ FAIL  |unit| packages/domain/test/fixture-scope.test.ts > asScopeId normalizes case and rejects non-UUID text
+TypeError: ScopeId must be an RFC 9562 UUID
+ ❯ asScopeId packages/domain/src/policy/fixture-scope.ts:8:31
+      6|
+      7| export function asScopeId(value: string): ScopeId {
+      8|  if (!UUID.test(value)) throw new TypeError('ScopeId must be an RFC 95…
+       |                               ^
+      9|  return value.toLowerCase() as ScopeId;
+     10| }
+ ❯ packages/domain/test/fixture-scope.test.ts:17:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯
+
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > race > twelve appended events read back in numeric sequence order, not text order
+AssertionError: expected [ '1:0', '10:9', '11:10', …(9) ] to deeply equal [ '1:0', '2:1', '3:2', '4:3', …(8) ]
+
+- Expected
++ Received
+
+  [
+    "1:0",
++   "10:9",
++   "11:10",
++   "12:11",
+    "2:1",
+    "3:2",
+    "4:3",
+    "5:4",
+    "6:5",
+    "7:6",
+    "8:7",
+    "9:8",
+-   "10:9",
+-   "11:10",
+-   "12:11",
+  ]
+
+ ❯ packages/storage/test/fixture.pg.test.ts:81:20
+     79|    return (await tx.readEvents(streamId)).map((e) => `${e.seq}:${(e.pa…
+     80|   });
+     81|   expect(observed).toEqual(['1:0', '2:1', '3:2', '4:3', '5:4', '6:5', …
+       |                    ^
+     82|  });
+     83|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯
+
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > another scope cannot attach an event to the owning scope's stream through the foreign key
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ packages/storage/test/fixture.pg.test.ts:120:176
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯
+
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > identifiers are scoped: another scope gets its own stream and claim under the same ids without learning they exist elsewhere
+Error: stream_not_visible
+ ❯ Object.appendEvent packages/storage/src/fixture.ts:45:33
+
+ ❯ packages/storage/test/fixture.pg.test.ts:128:16
+ ❯ Object.withScope packages/storage/src/database.ts:34:20
+ ❯ packages/storage/test/fixture.pg.test.ts:126:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯
+
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > row security is forced, so even the table owner is confined to the bound scope
+AssertionError: expected [ { owner: 'A' }, {} ] to deeply equal [ { owner: 'B' } ]
+
+- Expected
++ Received
+
+  [
+    {
+-     "owner": "B",
++     "owner": "A",
+    },
++   {},
+  ]
+
+ ❯ packages/storage/test/fixture.pg.test.ts:144:20
+    142|  test('row security is forced, so even the table owner is confined to …
+    143|   const observed = await owner.withScope(scopeB, async (tx) => (await …
+    144|   expect(observed).toEqual([{ owner: 'B' }]);
+       |                    ^
+    145|  });
+    146|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯
+
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > guard negative: a BYPASSRLS role sees every scope, so the denials above depend on the policies, not on the data
+error: database "taylerramsay" does not exist
+ ❯ node_modules/.pnpm/pg-pool@3.14.0_pg@8.23.0/node_modules/pg-pool/index.js:45:11
+ ❯ Object.withScope packages/storage/src/database.ts:30:19
+     28|   schemaDigest: () => schemaDigest(pool),
+     29|   async withScope(scopeId, work) {
+     30|    const client = await pool.connect();
+       |                   ^
+     31|    try {
+     32|     await client.query('begin');
+ ❯ packages/storage/test/fixture.pg.test.ts:148:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯
+
+ FAIL  |pg| packages/storage/test/migrate.pg.test.ts > the app role and the schema owner are neither superusers nor BYPASSRLS, so forced row security binds both
+AssertionError: expected { name: 'agora_owner', …(2) } to deeply equal { name: 'agora_owner', …(2) }
+
+- Expected
++ Received
+
+  {
+-   "bypass": false,
++   "bypass": true,
+    "name": "agora_owner",
+-   "superuser": false,
++   "superuser": true,
+  }
+
+ ❯ packages/storage/test/migrate.pg.test.ts:33:33
+     31|  };
+     32|  expect(await roleOf(appUrl)).toEqual({ name: 'agora_app', superuser: …
+     33|  expect(await roleOf(ownerUrl)).toEqual({ name: 'agora_owner', superus…
+       |                                 ^
+     34| });
+     35|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯
+
+ FAIL  |pg| packages/storage/test/migrate.pg.test.ts > a missing agora_app role blocks the migration with a prerequisite error and applies nothing
+error: database "taylerramsay" does not exist
+ ❯ node_modules/.pnpm/pg-pool@3.14.0_pg@8.23.0/node_modules/pg-pool/index.js:45:11
+ ❯ packages/storage/test/migrate.pg.test.ts:56:3
+     54|  try {
+     55|   // Repair a rename left behind by an aborted earlier run before hidi…
+     56|   await superuser.query("do $$ begin if exists (select 1 from pg_roles…
+       |   ^
+     57|   await admin.query(`create database ${blockedName}`);
+     58|   blocked = openDatabase(withDatabase(ownerUrl, blockedName));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/10]⎯
+

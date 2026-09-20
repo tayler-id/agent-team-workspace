@@ -1,6 +1,6 @@
 # Agora contributor guide
 
-This repository currently contains the design baseline and official project-local pstack skills, not an application.
+This repository holds the design baseline, official project-local pstack skills, and the executable test-first foundation started by `agora-s1-bootstrap-repository` (U01a.B01). No product feature exists yet.
 
 - Read `docs/technical-spec.md` for authoritative behavior and boundaries.
 - Use `docs/implementation-plan.md` for delivery units and `docs/task-breakdown.md` for dependency-aware tasks. Only S1 belongs in the first-release queue.
@@ -8,6 +8,8 @@ This repository currently contains the design baseline and official project-loca
 - R21 owns language-neutral contracts and import boundaries. R22 owns mandatory test-first, guard-negative, feature-map and foundation gates. No product feature or write-enabled agent precedes the executable foundation; each task closes on its own proof, not its unfinished milestone.
 - Use the official skills under `.agents/skills/`. R22 overrides the bundled TDD skill's optional-test fallback and model-specific lane assumptions. Preserve all installer bytes and metadata; do not run setup-pstack implicitly.
 - Run `node scripts/verify-design.mjs` and `node scripts/test-design-checks.mjs` for authoritative design checks. Run the unchanged pstack plan checker as an informational format check. `docs/validation/design-validation.md` records commands and limits; design validation is not runtime foundation readiness.
+- Code gates: `pnpm check` runs lint, typecheck, docs and tests. `pnpm test` boots a throwaway PostgreSQL 18 cluster; the pg tests block rather than skip without one. `docs/runbooks/development.md` explains commands, package boundaries, the PostgreSQL test path and migrations.
+- Every behavior change lands with its test, a feature-map entry in `agora/feature-map.json`, and `red.log`/`green.log` from `node scripts/record-red-green.mjs` under `evidence/<unit>/<task>/`. `.agents/skills/verify-agora/SKILL.md` holds the literal Doctor, Launch, Drive, Evidence and Cleanup commands.
 
 ## Maintaining this file
 

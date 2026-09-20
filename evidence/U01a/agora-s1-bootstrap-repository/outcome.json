@@ -1,0 +1,161 @@
+{
+	"schema_version": "agora.task-outcome/v1",
+	"task": "agora-s1-bootstrap-repository",
+	"unit": "U01a",
+	"build_box": "U01a.B01",
+	"stage": "S1",
+	"code_head": "84a9243c435909a8c15c4d4a89b1e6ace9d22107",
+	"harness_parent": "84d29c9adb0249fcbdf7193bef73e625c4e336a3",
+	"design_parent": "9369a01",
+	"outcome": "Created the repository/package boundaries, strict compiler, lint/type/docs gates, and minimal public health/policy fixture with a behavioral red-before-green test.",
+	"toolchain": {
+		"node": "v24.16.0",
+		"pnpm": "10.34.1",
+		"postgres": "pg_ctl (PostgreSQL) 18.4 (Homebrew)",
+		"typescript": "5.9.3",
+		"host": "Darwin 25.5.0 arm64",
+		"spec_dated_pins": {
+			"node": "24.21.0",
+			"postgresql": "18.6"
+		},
+		"note": "verified minors are inside the pinned majors; later minors not exercised on this host"
+	},
+	"proofs": [
+		{
+			"id": "red-before-green",
+			"status": "pass",
+			"subject": "fixture round: parent 84d29c9 (harness), head 84a9243; six literal 404-versus-expected HTTP assertions fail at the parent, 30 tests pass at head",
+			"artifacts": [
+				"red.log",
+				"green.log",
+				"test-patch.diff"
+			]
+		},
+		{
+			"id": "red-before-green-review-rounds",
+			"status": "pass",
+			"subject": "parent 3f9aee9, head 84a9243; the review findings (500 on nil UUID, FK forge, unscoped ids, text sort order, owner not confined) fail on values at the parent",
+			"artifacts": [
+				"review-fixes/red.log",
+				"review-fixes/green.log",
+				"review-fixes/test-patch.diff"
+			]
+		},
+		{
+			"id": "guard-disabled-negatives",
+			"status": "pass",
+			"subject": "typecheck, lint, unit, docs and eight pg/contract guards each disabled in turn; every named assertion turns red and the tree is restored byte for byte",
+			"artifacts": [
+				"gate-negatives.log"
+			]
+		},
+		{
+			"id": "lane-1-regression",
+			"status": "pass",
+			"subject": "public HTTP probe at head as the service role; parent assertions quoted",
+			"artifacts": [
+				"lane-1/transcript.log"
+			],
+			"screenshot": "unavailable: CLI-driven HTTP surface, no browser ran"
+		},
+		{
+			"id": "lane-2-postgres-rollback-race-rls",
+			"status": "pass",
+			"subject": "16 pg tests: rollback leaves no event and no counter advance; one of eight claims wins; contiguous sequences under a latch; twelve-event numeric order; forced RLS confines owner and foreign scopes; FK forge rejected; BYPASSRLS guard negative",
+			"artifacts": [
+				"lane-2/transcript.log"
+			],
+			"screenshot": "unavailable: CLI test runner"
+		},
+		{
+			"id": "lane-3-clean-install-migrate-twice",
+			"status": "pass",
+			"subject": "fresh worktree and empty store install exit 0; migrate applied 1 then 0 with identical schema digest on PostgreSQL 18.4",
+			"artifacts": [
+				"lane-3/transcript.log"
+			],
+			"screenshot": "unavailable: CLI"
+		},
+		{
+			"id": "migration-prerequisite",
+			"status": "pass",
+			"subject": "migration exits 2 blocked when agora_app is missing, 0 with applied 1 once restored",
+			"artifacts": [
+				"migration-prerequisite.log"
+			]
+		},
+		{
+			"id": "feature-map",
+			"status": "pass",
+			"subject": "agora/feature-map.json maps every created path to its scenarios",
+			"artifacts": [
+				"feature-map.json"
+			]
+		},
+		{
+			"id": "verification-skill",
+			"status": "pass",
+			"subject": ".agents/skills/verify-agora/SKILL.md Doctor, Launch, Drive, Evidence and Cleanup run literally at head",
+			"artifacts": [
+				"skill-run.log"
+			]
+		},
+		{
+			"id": "security",
+			"status": "pass",
+			"subject": "findings S1-S10 recorded with dispositions; S3, S6, S7 and S10 were fixed during review",
+			"artifacts": [
+				"security.md"
+			]
+		},
+		{
+			"id": "performance",
+			"status": "pass",
+			"subject": "schema validation p95 far under 5 ms; full suite under the five-minute fixture budget; parent behavior absent",
+			"artifacts": [
+				"performance.md"
+			]
+		},
+		{
+			"id": "independent-exact-head-review",
+			"status": "recorded",
+			"subject": "six rounds by a separate reviewer agent; rounds 1 and 2 FAIL with real defects fixed test-first, rounds 3 to 5 pass with findings fixed, round 6 at 84a9243 recorded in review.md",
+			"artifacts": [
+				"review.md"
+			]
+		},
+		{
+			"id": "contract-drift",
+			"status": "not-applicable",
+			"subject": "generated consumers and drift checks belong to U01a.B02; this task ships one hand-reviewed JSON Schema"
+		},
+		{
+			"id": "forbidden-import-compile-negatives",
+			"status": "not-applicable",
+			"subject": "mechanical import lint belongs to U01a.B03; boundaries are documented and enforced by export maps only"
+		},
+		{
+			"id": "r11-size",
+			"status": "blocked",
+			"subject": "code diff exceeds the 1,000-added-line block threshold after review fixes; non-author size exception or split required (decisions D65, D67)"
+		}
+	],
+	"not_created": [
+		"portable contract generation",
+		"client core",
+		"generalized guard or foundation runner",
+		"React UI",
+		"authentication",
+		"chat",
+		"model calls",
+		"workers"
+	],
+	"digests": {
+		"migration_sql": "sha256:46198912f0d2916b6b8df2f8abb790571d7ab776799f680ef18229eafaf12898",
+		"migration_journal": "sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb",
+		"contract_schema": "sha256:1eff10dd12fc20045a9fa851f3ccaae7c685ef0799be7359adce141887be60ac",
+		"feature_map": "sha256:6c891c9495ffa8145c4608b4ab2b762b16b3f5359097434ca8ad63a81530e512",
+		"lockfile": "sha256:803467c6035ec59dc589b6f9b817fe451e593764f089ad765370285a7d22d87f"
+	},
+	"regenerate": "bash evidence/U01a/agora-s1-bootstrap-repository/regenerate.sh"
+}

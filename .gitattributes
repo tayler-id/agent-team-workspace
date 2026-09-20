@@ -1,0 +1,2 @@
+# Captured verification artifacts are verbatim; red/green logs digest the test patch bytes.
+evidence/** -whitespace

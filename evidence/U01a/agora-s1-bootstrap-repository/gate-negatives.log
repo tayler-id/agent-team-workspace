@@ -1,0 +1,143 @@
+# gate-negatives.log (agora.gate-negatives/v1)
+head: 84a9243c435909a8c15c4d4a89b1e6ace9d22107
+recorded_at: 2026-09-20T02:45:17Z
+node: v24.16.0  pnpm: 10.34.1  postgres: pg_ctl (PostgreSQL) 18.4 (Homebrew)  host: Darwin 25.5.0 arm64
+method: break one thing, run the named gate, observe it fail, restore byte for byte (git checkout --), confirm green at the end. Guard-disabled cases follow R22: the normally denied input is repeated with precisely that guard removed and the assertion must turn red. Unit gates run 14 tests; pg gates run 16; the full suite runs 30.
+
+## typecheck negative: HealthReport.status set to a string outside its literal type
+command: pnpm -s typecheck
+expectation: nonzero
+apps/center/src/app.ts(51,93): error TS2769: No overload matches this call.
+observed_exit: 2
+restored: byte-identical
+
+## lint negative: unused explicit-any binding
+command: pnpm -s lint
+expectation: nonzero
+  4:7   error  'leak' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  4:13  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+✖ 2 problems (2 errors, 0 warnings)
+observed_exit: 1
+restored: byte-identical
+
+## unit negative: expected liveness status changed to degraded
+command: pnpm -s test:unit
+expectation: nonzero, health assertion red
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |unit| apps/center/test/health.test.ts > GET /api/v1/health reports liveness without touching any dependency
+      Tests  1 failed | 13 passed (14)
+observed_exit: 1
+restored: byte-identical
+
+## pg negative 1: expect the second migration run to apply one entry
+command: pnpm -s test:pg
+expectation: nonzero, migrate assertion red
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |pg| packages/storage/test/migrate.pg.test.ts > a fresh database applies every journal entry once and a second run is a no-op with the same schema digest
+-   "applied": 1,
++   "applied": 0,
+      Tests  1 failed | 15 passed (16)
+observed_exit: 1
+restored: byte-identical
+
+## pg negative 2 (guard disabled): stream policy WITH CHECK replaced by true
+command: pnpm -s test:pg
+expectation: nonzero, the forge assertion (42501) turns red
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > another scope sees no rows, cannot append, and cannot forge a row into the owning scope
+      Tests  1 failed | 15 passed (16)
+observed_exit: 1
+restored: byte-identical
+
+## pg negative 3 (guard disabled): event policy USING replaced by true
+command: pnpm -s test:pg
+expectation: nonzero, the another-scope-sees-no-rows assertion turns red
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > another scope sees no rows, cannot append, and cannot forge a row into the owning scope
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > identifiers are scoped: another scope gets its own stream and claim under the same ids without learning they exist elsewhere
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > a connection without a bound scope sees nothing
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > row security is forced, so even the table owner is confined to the bound scope
+      Tests  4 failed | 12 passed (16)
+observed_exit: 1
+restored: byte-identical
+
+## pg negative 4 (guard disabled): FORCE ROW LEVEL SECURITY removed from event
+command: pnpm -s test:pg
+expectation: nonzero, the owner-confined assertion turns red
+ 1 file changed, 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security > row security is forced, so even the table owner is confined to the bound scope
+      Tests  1 failed | 15 passed (16)
+observed_exit: 1
+restored: byte-identical
+
+## pg negative 5 (guard disabled): counter read without lock or advance
+command: pnpm -s test:pg
+expectation: nonzero, the race assertion turns red (duplicate key)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > race > concurrent appends to one stream receive contiguous distinct sequences
+error: duplicate key value violates unique constraint "event_pkey"
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > race > twelve appended events read back in numeric sequence order, not text order
+error: duplicate key value violates unique constraint "event_pkey"
+observed_exit: 1
+restored: byte-identical
+
+## pg negative 6 (guard disabled): counter advanced on a separate autocommit connection
+command: pnpm -s test:pg
+expectation: nonzero, the rollback assertion turns red on nextSeq
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > row-level security
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > rollback > a failed transaction leaves no event and does not advance the stream counter
+AssertionError: expected { events: [], nextSeq: '2' } to deeply equal { events: [], nextSeq: '1' }
+-   "nextSeq": "1",
++   "nextSeq": "2",
+observed_exit: 1
+restored: byte-identical
+
+## pg negative 7 (guard disabled): sort column left unqualified
+command: pnpm -s test:pg
+expectation: nonzero, the twelve-event order assertion turns red
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |pg| packages/storage/test/fixture.pg.test.ts > race > twelve appended events read back in numeric sequence order, not text order
+      Tests  1 failed | 15 passed (16)
+observed_exit: 1
+restored: byte-identical
+
+## contract negative (guard disabled): unknown fields allowed inside the scoped object
+command: pnpm -s test:unit
+expectation: nonzero, the unknown-field assertion turns red
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |unit| apps/center/test/policy.test.ts > an unknown field is a 400 malformed_command with the offending path, never silently removed
+      Tests  1 failed | 13 passed (14)
+observed_exit: 1
+restored: byte-identical
+
+## pg negative 8 (guard disabled): migration preflight for the agora_app role deleted
+command: pnpm -s test:pg
+expectation: nonzero, the missing-role assertion turns red
+ 1 file changed, 2 deletions(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |pg| packages/storage/test/migrate.pg.test.ts > a missing agora_app role blocks the migration with a prerequisite error and applies nothing
+      Tests  1 failed | 15 passed (16)
+observed_exit: 1
+restored: byte-identical
+
+## docs negative: long dash in a governed document
+command: pnpm -s docs:check
+expectation: nonzero
+AssertionError [ERR_ASSERTION]: docs/technical-spec.md: long dash
+observed_exit: 1
+restored: byte-identical
+
+## restored: every code gate green again
+command: pnpm -s typecheck && pnpm -s lint && pnpm -s test
+ Test Files  7 passed (7)
+      Tests  30 passed (30)
+observed_exit: 0 (expected 0)
+working tree: no tracked code modifications

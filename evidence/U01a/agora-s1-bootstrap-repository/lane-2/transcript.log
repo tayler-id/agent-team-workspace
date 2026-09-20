@@ -1,0 +1,36 @@
+# lane-2 transcript: concurrent real PostgreSQL clients with rollback and RLS (agora.lane/v1)
+head: 84a9243c435909a8c15c4d4a89b1e6ace9d22107
+recorded_at: 2026-09-20T02:45:07Z
+node: v24.16.0  pnpm: 10.34.1  postgres: pg_ctl (PostgreSQL) 18.4 (Homebrew)  host: Darwin 25.5.0 arm64
+pass predicate: one of eight claims wins; rollback leaves no event and no counter advance; twelve events replay in numeric order; another scope sees no rows, cannot append, cannot forge a row or attach an event through the foreign key; forced row security confines the owner; only the BYPASSRLS guard-negative role reads across scopes
+
+## command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg --reporter=verbose
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-vHYLck","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ✓ |pg| packages/storage/test/migrate.pg.test.ts > the app role and the schema owner are neither superusers nor BYPASSRLS, so forced row security binds both 5ms
+ ✓ |pg| packages/storage/test/migrate.pg.test.ts > a fresh database applies every journal entry once and a second run is a no-op with the same schema digest 19ms
+ ✓ |pg| packages/storage/test/migrate.pg.test.ts > a missing agora_app role blocks the migration with a prerequisite error and applies nothing 114ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > rollback > a failed transaction leaves no event and does not advance the stream counter 4ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > race > concurrent appends to one stream receive contiguous distinct sequences 7ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > race > twelve appended events read back in numeric sequence order, not text order 2ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > race > exactly one of eight concurrent claims wins and the losers see claimed: false 1ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > the owning scope reads its own rows 0ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > another scope sees no rows, cannot append, and cannot forge a row into the owning scope 3ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > another scope cannot attach an event to the owning scope's stream through the foreign key 1ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > identifiers are scoped: another scope gets its own stream and claim under the same ids without learning they exist elsewhere 1ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > a connection without a bound scope sees nothing 0ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > row security is forced, so even the table owner is confined to the bound scope 0ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > guard negative: a BYPASSRLS role sees every scope, so the denials above depend on the policies, not on the data 6ms
+ ✓ |pg| apps/center/test/readiness.pg.test.ts > GET /api/v1/health/ready is 200 ready against the real test database 11ms
+ ✓ |pg| apps/center/test/readiness.pg.test.ts > GET /api/v1/health/ready is 503 not_ready when the database port refuses connections 1ms
+
+ Test Files  3 passed (3)
+      Tests  16 passed (16)
+   Start at  22:45:08
+   Duration  882ms (import 64%, tests 32%, transform 4%, worker 1%)
+
+observed_exit: 0 (expected 0)
+
+scenario.png: unavailable. This lane drives a CLI test runner, not a browser; no screenshot tool ran. The transcript above is the retained artifact.
