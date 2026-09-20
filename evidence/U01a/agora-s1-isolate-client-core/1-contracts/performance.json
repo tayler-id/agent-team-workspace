@@ -1,0 +1,69 @@
+{
+  "parent": "606cba2bb9d90fc7c93169a24e72a488cb41b960",
+  "head": "0dbcbb64f33315aa4b33f6388e5e307b395e7e3b",
+  "node": "v24.16.0",
+  "host": "darwin-arm64",
+  "fixture": "CliReport, 32 equal diagnostics; not a production command",
+  "bytes": 133458,
+  "samples_per_revision": 100000,
+  "warmup_per_batch": 2000,
+  "parent_clean_install_ms": 865.2702919999999,
+  "p95_ms": {
+    "parent": 0.14949999999998909,
+    "head": 0.15258299999982228
+  },
+  "ratio": 1.0206220735774811,
+  "outcome": "pass",
+  "batches": [
+    {
+      "batch": 1,
+      "label": "parent",
+      "p95_ms": 0.1490840000000162
+    },
+    {
+      "batch": 1,
+      "label": "head",
+      "p95_ms": 0.1512920000000122
+    },
+    {
+      "batch": 2,
+      "label": "parent",
+      "p95_ms": 0.13341700000000856
+    },
+    {
+      "batch": 2,
+      "label": "head",
+      "p95_ms": 0.14937499999996362
+    },
+    {
+      "batch": 3,
+      "label": "parent",
+      "p95_ms": 0.1474580000003698
+    },
+    {
+      "batch": 3,
+      "label": "head",
+      "p95_ms": 0.156833000000006
+    },
+    {
+      "batch": 4,
+      "label": "parent",
+      "p95_ms": 0.13333399999999074
+    },
+    {
+      "batch": 4,
+      "label": "head",
+      "p95_ms": 0.1496249999999577
+    },
+    {
+      "batch": 5,
+      "label": "parent",
+      "p95_ms": 0.1682499999999436
+    },
+    {
+      "batch": 5,
+      "label": "head",
+      "p95_ms": 0.1565419999999449
+    }
+  ]
+}
