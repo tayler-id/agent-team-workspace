@@ -11,12 +11,15 @@
 		"lint": "eslint .",
 		"typecheck": "tsc -p tsconfig.json",
 		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs",
+		"contracts:generate": "node contracts/tools/generate.mjs",
+		"contracts:check": "node contracts/tools/generate.mjs --check",
+		"contracts:conform": "node contracts/src/conform-cli.ts",
 		"test": "node scripts/with-test-postgres.mjs vitest run",
 		"test:unit": "vitest run --project unit",
 		"test:pg": "node scripts/with-test-postgres.mjs vitest run --project pg",
 		"migrate": "node packages/storage/src/migrate-cli.ts",
 		"migrate:ephemeral": "node scripts/with-test-postgres.mjs node packages/storage/src/migrate-cli.ts",
-		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm test"
+		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test"
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",

@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-	{ ignores: ['node_modules/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs'] },
+	{ ignores: ['node_modules/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/generated/', 'contracts/swift/'] },
 	js.configs.recommended,
 	...tseslint.configs.strictTypeChecked,
 	...tseslint.configs.stylisticTypeChecked,

@@ -1,0 +1,5 @@
+# swift-openapi-generator configuration; consumed by contracts/tools/generate.mjs in CLI mode.
+generate:
+  - types
+  - client
+accessModifier: public

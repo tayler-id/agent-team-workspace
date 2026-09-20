@@ -25,7 +25,8 @@ const git = (...argv) => {
 };
 const sha256 = (text) => `sha256:${createHash('sha256').update(text).digest('hex')}`;
 const version = (file, argv) => spawnSync(file, argv, { encoding: 'utf8' }).stdout.trim();
-const isTestPath = (file) => /(^|\/)test\/.*\.test\.ts$/.test(file) || /(^|\/)test\/.*\.pg\.test\.ts$/.test(file);
+// Golden contract vectors are test inputs, so they travel with the test patch.
+const isTestPath = (file) => /(^|\/)test\/.*\.test\.ts$/.test(file) || /(^|\/)test\/.*\.pg\.test\.ts$/.test(file) || /^contracts\/fixtures\//.test(file);
 
 const parentSha = git('rev-parse', '--verify', `${parent}^{commit}`).trim();
 const headSha = git('rev-parse', '--verify', `${head}^{commit}`).trim();

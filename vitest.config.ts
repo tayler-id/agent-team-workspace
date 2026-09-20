@@ -4,7 +4,7 @@ export default defineConfig({
 	test: {
 		projects: [
 			{
-				test: { name: 'unit', include: ['apps/*/test/**/*.test.ts', 'packages/*/test/**/*.test.ts'], exclude: ['**/*.pg.test.ts'] },
+				test: { name: 'unit', include: ['apps/*/test/**/*.test.ts', 'packages/*/test/**/*.test.ts', 'contracts/test/**/*.test.ts'], exclude: ['**/*.pg.test.ts'], testTimeout: 600_000 },
 			},
 			{
 				test: {

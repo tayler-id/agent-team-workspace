@@ -1,4 +1,4 @@
-import { digestCanonical, type Digest } from '../canonical.ts';
+import { digestCanonical, type Digest } from '@agora/contracts';
 
 export type ScopeId = string & { readonly ScopeId: unique symbol };
 
