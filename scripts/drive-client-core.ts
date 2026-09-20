@@ -24,6 +24,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 	let vectorFile = 'contracts/fixtures/replay.json';
 	let useSwift = false;
 	const args = process.argv.slice(2);
+	if (args[0] === '--') args.shift();
 	while (args.length) {
 		const flag = args.shift();
 		if (flag === '--json') continue;
