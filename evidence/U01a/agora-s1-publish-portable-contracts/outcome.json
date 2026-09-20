@@ -1,0 +1,178 @@
+{
+	"schema_version": "agora.task-outcome/v1",
+	"task": "agora-s1-publish-portable-contracts",
+	"unit": "U01a",
+	"build_box": "U01a.B02",
+	"stage": "S1",
+	"design_parent": "aaedd8d",
+	"delivery": "three stacked fast-forward branches (decision D73); each branch closes on its own checks at its own head",
+	"branches": [
+		{
+			"order": 1,
+			"branch": "fm/agora-s1-publish-portable-contracts-1-harness",
+			"code_head": "bc7fc034f8d70c6d20a8b0613c9702bce143fc37",
+			"head": "f3de1119f1291f1b71ef662b72ae920ffb90bfea",
+			"parent": "aaedd8dac0fb71f3b239ef8f16fc4757b1357a04",
+			"scope": "contracts package wiring, pinned Swift generator and runtime, canonical JSON moved into contracts, recorder carries golden fixtures, skips files deleted at head and removes SwiftPM lock residue, stub drivers that start and report unavailable",
+			"size": {
+				"meaningful_added_lines": 245,
+				"source_files": 22,
+				"generated_files": 0,
+				"generated_added_lines": 0,
+				"fixture_files": 0,
+				"fixture_added_lines": 0,
+				"excluded_visible": {
+					"pnpm-lock.yaml": 217,
+					"contracts/swift/Package.resolved": 78
+				}
+			},
+			"evidence": "evidence/U01a/agora-s1-publish-portable-contracts/1-harness/",
+			"red_green": "not applicable: R22 test-only harness revision; green.log and gates.log retained, applicability.md explains; the behavioral red lands in branch 2"
+		},
+		{
+			"order": 2,
+			"branch": "fm/agora-s1-publish-portable-contracts-2-contracts",
+			"code_head": "6753b28ab72c1f4728ab1b9c03759dbd3a9a26cd",
+			"head": "e1250b5c269f1685f006e1a9678dbf38a609becc",
+			"parent": "f3de1119f1291f1b71ef662b72ae920ffb90bfea",
+			"scope": "five JSON Schema 2020-12 families, OpenAPI 3.1.1 operations, bundler with the tested-subset gate, openapi-typescript 7.13.0 and swift-openapi-generator 1.13.1 outputs with a digest manifest, drift check in pnpm check, shared Ajv wire validator, center report types from the generated consumer, R12 CLI-operability clarification, decisions D69 to D72, contract tests in their own serial vitest project because one SwiftPM build directory cannot serve concurrent runs",
+			"size": {
+				"meaningful_added_lines": 721,
+				"source_files": 15,
+				"docs_files": 5,
+				"docs_added_lines": 24,
+				"generated_files": 12,
+				"generated_added_lines": 2686,
+				"fixture_files": 0,
+				"fixture_added_lines": 0,
+				"excluded_visible": {
+					"pnpm-lock.yaml": 0
+				}
+			},
+			"evidence": "evidence/U01a/agora-s1-publish-portable-contracts/2-contracts/",
+			"red_green": "pass: four value-level assertion failures against the harness head (unavailable versus pass, no drift verdict, weakenings not refused), 36 green at head; seven guard negatives red then restored"
+		},
+		{
+			"order": 3,
+			"branch": "fm/agora-s1-publish-portable-contracts-3-conformance",
+			"code_head": "ef0f00178077b34c5a52e7149abac629b8856e3d",
+			"head": "the evidence commit that carries this file, directly on top of code_head",
+			"parent": "e1250b5c269f1685f006e1a9678dbf38a609becc",
+			"scope": "66 golden vectors, TypeScript vector runner, Swift conformance consumer (generated types, runtime subset validator, CryptoKit), joint conformance CLI and tests, harness smoke test retired, decisions D71 evidence and D73",
+			"size": {
+				"meaningful_added_lines": 338,
+				"source_files": 8,
+				"docs_files": 4,
+				"docs_added_lines": 9,
+				"generated_files": 0,
+				"generated_added_lines": 0,
+				"fixture_files": 1,
+				"fixture_added_lines": 508
+			},
+			"evidence": "evidence/U01a/agora-s1-publish-portable-contracts/3-conformance/",
+			"red_green": "pass: five value-level assertion failures against the contracts head (unavailable versus golden accept and reject, no signature verdict, 25 accept vectors missing, all 66 joint results failing), 40 green at head; seven guard negatives red then restored"
+		}
+	],
+	"size_policy": "R11 default target (200 lines, eight files) is crossed by all three branches with the scope rationale recorded in decision D73; no branch crosses the 1,000-line or 25-file block; no size exception requested",
+	"toolchain": {
+		"node": "v24.16.0",
+		"pnpm": "10.34.1",
+		"typescript": "5.9.3",
+		"openapi-typescript": "7.13.0",
+		"swift": "Apple Swift 6.3.3 (Xcode 26.6)",
+		"swift-openapi-generator": "1.13.1",
+		"swift-openapi-runtime": "1.12.1",
+		"ajv": "8.20.0",
+		"postgres": "pg_ctl (PostgreSQL) 18.4 (Homebrew)",
+		"host": "Darwin 25.5.0 arm64"
+	},
+	"proofs": [
+		{
+			"id": "red-before-green",
+			"status": "pass",
+			"subject": "branch 2: four value-level failures against the harness head, 36 green; branch 3: five value-level failures against the contracts head (unavailable versus golden accept, no signature verdict, all 66 joint results failing), 40 green; branch 1 is the R22 harness revision with an applicability record",
+			"artifacts": [
+				"1-harness/green.log",
+				"1-harness/applicability.md",
+				"2-contracts/red.log",
+				"2-contracts/green.log",
+				"3-conformance/red.log",
+				"3-conformance/green.log"
+			]
+		},
+		{
+			"id": "authoritative-schema-drift-rejection",
+			"status": "pass",
+			"subject": "clean regeneration byte-identical to the committed consumers at branches 2 and 3; a hand edit to the TypeScript or Swift output, or to the manifest, fails contracts:check naming the file; any keyword outside the tested subset blocks generation and the subset guard disabled turns its test red",
+			"artifacts": [
+				"2-contracts/generation.log",
+				"2-contracts/gate-negatives.log",
+				"3-conformance/lane-6/transcript.log"
+			]
+		},
+		{
+			"id": "typescript-swift-conformance",
+			"status": "pass",
+			"subject": "66 golden vectors: both consumers agree with the golden acceptance, canonical bytes, digests and Ed25519 verdicts and with each other; a widened enum, an altered golden digest, a disabled Ajv guard, a disabled Swift pattern check, an uppercase canonical escape, a disabled unavailable rule and a removed generated-type guard each turn the gate red",
+			"artifacts": [
+				"3-conformance/lane-4/transcript.log",
+				"3-conformance/lane-5/transcript.log",
+				"3-conformance/gate-negatives.log"
+			]
+		},
+		{
+			"id": "unknown-state-refusal",
+			"status": "pass",
+			"subject": "unknown status, decision, outcome and cleanup variants are refused by the Swift generated type on its own and by both runtime validators; no WebSocket event family exists yet (U01a.B03), recorded as a limit",
+			"artifacts": [
+				"3-conformance/lane-6/transcript.log"
+			]
+		},
+		{
+			"id": "cli-envelopes",
+			"status": "pass",
+			"subject": "CliCommand, CliReport, CliOutcome, ExitCode, Diagnostic, ArtifactReference and CleanupReceipt published with vectors for integer limits, timestamps, closed outcomes, exit codes and command-text refusal; R12 clarified append-only (D72)",
+			"artifacts": [
+				"3-conformance/lane-4/transcript.log"
+			]
+		},
+		{
+			"id": "feature-map-and-skill",
+			"status": "pass",
+			"subject": "wire-contracts, contract-conformance and canonical-json entries added, fixture-policy-decision and center-health entries updated; verify-agora Doctor, Drive and Cleanup run literally at each branch head",
+			"artifacts": [
+				"2-contracts/skill-run.log",
+				"3-conformance/skill-run.log",
+				"3-conformance/feature-map.json"
+			]
+		},
+		{
+			"id": "performance",
+			"status": "pass",
+			"subject": "Ajv p95 for a 128 KiB CliReport well under the 5 ms budget; drift check and joint conformance run in seconds on a warm cache; fresh-worktree red/green runs under one minute each",
+			"artifacts": [
+				"3-conformance/performance.md"
+			]
+		},
+		{
+			"id": "r11-size",
+			"status": "pass",
+			"subject": "no branch above 1,000 meaningful lines or 25 source files; default target crossed with rationale (D73); generated, lockfile and fixture counts visible per branch"
+		},
+		{
+			"id": "independent-review",
+			"status": "pending",
+			"subject": "exact-head review by the merge authority; author security notes in 3-conformance/security.md"
+		}
+	],
+	"not_created": [
+		"framework-independent client core, replay/dedupe/receipts and forbidden-import compile negatives (U01a.B03)",
+		"task-level red-green, guard-negative and foundation report machinery, agora project CLI (U01a.B04, U01b)",
+		"WebSocket event family and unknown-event pause/resync behavior (U01a.B03, U03)",
+		"React product UI, authentication, chat, model calls, workers",
+		"conversion of pre-envelope CLI outputs (migration report, probe report, center start line, red-green line) to agora.cli-report/v1",
+		"Python managed fixture with an independent JSON Schema validator (U01b)",
+		"independent exact-head review (merge authority)"
+	],
+	"recorded_at": "2026-09-20"
+}

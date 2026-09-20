@@ -1,0 +1,55 @@
+# lane-6 transcript: alter generated output and send an unknown state-changing variant (agora.lane/v1)
+head: ef0f00178077b34c5a52e7149abac629b8856e3d
+recorded_at: 2026-09-20T11:55:05Z
+node: v24.16.0  pnpm: 10.34.1  swift: swift-driver version: 1.148.6 Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)  postgres: pg_ctl (PostgreSQL) 18.4 (Homebrew)  host: Darwin 25.5.0 arm64
+pass predicate: a hand edit to a generated consumer fails the drift check naming the file; an unknown state variant is refused by both consumers, by the Swift generated type on its own and by the runtime validator, never acknowledged
+limit: no state-changing event family exists on the foundation surface yet; the unknown-state vectors are the closed status, decision and outcome enums (U01a.B03 adds the client-core pause-and-resync behavior)
+
+## command: append one line to contracts/generated/typescript/openapi.d.ts, then pnpm -s contracts:check
+{
+  "outcome": "fail",
+  "exit": 1,
+  "reason_code": "generated_drift",
+  "drift": [
+    {
+      "file": "contracts/generated/typescript/openapi.d.ts",
+      "expected": "sha256:b3b9d6845aa26df66144f227af54d12cb4c9ad357d4cc839dc7aad2f98d9b517",
+      "observed": "sha256:b5db076983830dd06836729905772af0abf2a9e384c9dbfb7e3baf42e3401175"
+    }
+  ]
+}
+observed_exit: 1 (expected 1)
+restored: byte-identical (contracts/generated/typescript/openapi.d.ts)
+
+## command: remove the HealthReport unknown-key guard from the generated Swift types, then pnpm -s contracts:check
+{
+  "outcome": "fail",
+  "exit": 1,
+  "drift": [
+    "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift"
+  ]
+}
+observed_exit: 1 (expected 1)
+restored: byte-identical (contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift)
+
+## unknown state variants at head (from pnpm -s contracts:conform -- --json)
+- health-unknown-status-variant [golden reject] -> pass
+    typescript: rejected (/status must be equal to one of the allowed values)
+    swift:      rejected ($/status must be equal to one of the allowed values) generated_decode=refused
+- readiness-unknown-state-variant [golden reject] -> pass
+    typescript: rejected (/status must be equal to one of the allowed values)
+    swift:      rejected ($/status must be equal to one of the allowed values) generated_decode=refused
+- decision-unknown-variant [golden reject] -> pass
+    typescript: rejected (/decision must be equal to one of the allowed values)
+    swift:      rejected ($/decision must be equal to one of the allowed values) generated_decode=refused
+- cli-report-unknown-outcome [golden reject] -> pass
+    typescript: rejected (/outcome must be equal to one of the allowed values)
+    swift:      rejected ($/outcome must be equal to one of the allowed values) generated_decode=refused
+- outcome-uppercase [golden reject] -> pass
+    typescript: rejected ($ must be equal to one of the allowed values)
+    swift:      rejected ($ must be equal to one of the allowed values) generated_decode=refused
+- cleanup-unknown-outcome [golden reject] -> pass
+    typescript: rejected (/outcome must be equal to one of the allowed values)
+    swift:      rejected ($/outcome must be equal to one of the allowed values) generated_decode=refused
+
+scenario.png: unavailable. CLI-driven; the transcript above is the retained artifact.

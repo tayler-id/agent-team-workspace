@@ -1,0 +1,226 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-20T11:54:54.695Z
+parent: e1250b5c269f1685f006e1a9678dbf38a609becc
+head: ef0f00178077b34c5a52e7149abac629b8856e3d
+subject_revision: e1250b5c269f1685f006e1a9678dbf38a609becc
+test_patch_applied_to_subject: true
+test_patch_files: contracts/fixtures/vectors.json, contracts/test/conformance.test.ts, contracts/test/harness.test.ts
+test_patch_digest: sha256:215f28fc5a80a53efff46b40256ad5a945874e80b33f2bbd7720c2df5b54d278
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:56d2f9d7e67562393817fa473e9676f72ce69e32784b519e90132751f3b63be7"},{"file":"contracts/src/conformance.ts","digest":"sha256:70f09ef67cb283546a01eb2ef58015bce6193328ce28f477f1b0dd52f1a000f6"},{"file":"contracts/swift/Sources/AgoraContractsConform/Canonical.swift","digest":"sha256:48c1461694e9673697193d96cf5d8cb6aef69bc2d5e9504da94a472c8bb28aaa"},{"file":"contracts/swift/Sources/AgoraContractsConform/SchemaValidator.swift","digest":"sha256:83036cefd14cace06e8b7b2f13f215beb65fb7f709b0663bbeefc435240ab5cb"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:7882da26eb1cdd10455ab58597530da0bc3da9260e06fa7babee8bd99cfd730e"},{"file":"contracts/test/conformance.test.ts","digest":"sha256:62dc7451963e7edb23ba0921b41f0b54fa0b9a60a69a4c3274b9155a2a8af9f4"}]}
+configuration: {"command":"pnpm -s test","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:25fad3cbf767d3cdcd29001dda769e1806e3946fa5dd462a64a922a768ff38d1"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-Ejah98
+
+ ❯ |contracts| contracts/test/conformance.test.ts (6 tests | 5 failed) 5967ms
+   × TypeScript reproduces the golden canonical bytes and digests for accepted vectors 3ms
+   × TypeScript rejects each malformed vector at its offending path without coercion, defaults or removal 0ms
+   × detached Ed25519 signatures verify over the canonical bytes, and a tampered payload fails 0ms
+   × every vector meets its golden expectation in TypeScript and every published component has a direct vector 0ms
+   × the Swift consumer reaches the same acceptance, canonical bytes, digests and signature verdicts 5962ms
+
+ Test Files  1 failed | 9 passed (10)
+      Tests  5 failed | 37 passed (42)
+   Start at  07:53:50
+   Duration  31.80s (tests 97%, import 2%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-AiiUwA","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| contracts/test/conformance.test.ts > TypeScript reproduces the golden canonical bytes and digests for accepted vectors
+AssertionError: expected { id: 'health-ok', …(2) } to deeply equal { id: 'health-ok', …(3) }
+
+- Expected
++ Received
+
+  {
+-   "accepted": true,
+-   "canonical": "{\"schema_version\":\"agora.health/v1\",\"service\":\"agora-center\",\"status\":\"ok\"}",
+-   "digest": "sha256:a5581901fd5f5f6d8a3ce3bbc91927ad71d2a4cee0151f2b45c47eb27dffcea8",
++   "accepted": false,
+    "id": "health-ok",
++   "rejection": "unavailable: no published contract",
+  }
+
+ ❯ contracts/test/conformance.test.ts:21:26
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  |contracts| contracts/test/conformance.test.ts > TypeScript rejects each malformed vector at its offending path without coercion, defaults or removal
+AssertionError: expected { id: 'health-unknown-field', …(2) } to deeply equal { id: 'health-unknown-field', …(2) }
+
+- Expected
++ Received
+
+  {
+    "accepted": false,
+    "id": "health-unknown-field",
+-   "rejection": "$ must NOT have additional properties",
++   "rejection": "unavailable: no published contract",
+  }
+
+ ❯ contracts/test/conformance.test.ts:32:37
+     30| test('TypeScript rejects each malformed vector at its offending path w…
+     31|  expect(ts('health-unknown-field')).toEqual({ id: 'health-unknown-fiel…
+     32|  expect(ts('decision-allow-reason-null').rejection).toBe('/reason_code…
+       |                                     ^
+     33|  expect(ts('cli-report-byte-length-over-safe').rejection).toBe('/artif…
+     34|  expect(ts('cli-report-byte-length-string').rejection).toBe('/artifact…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  |contracts| contracts/test/conformance.test.ts > detached Ed25519 signatures verify over the canonical bytes, and a tampered payload fails
+AssertionError: expected undefined to be 'valid' // Object.is equality
+
+- Expected:
+"valid"
+
++ Received:
+undefined
+
+ ❯ contracts/test/conformance.test.ts:42:48
+     40| test('detached Ed25519 signatures verify over the canonical bytes, and…
+     41|  expect(ts('decision-allow-signed').signature).toBe('valid');
+     42|  expect(ts('decision-allow-tampered-signature').signature).toBe('inval…
+       |                                                ^
+     43| });
+     44|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  |contracts| contracts/test/conformance.test.ts > every vector meets its golden expectation in TypeScript and every published component has a direct vector
+AssertionError: expected [ 'health-ok', …(24) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "health-ok",
++   "readiness-not-ready",
++   "policy-command",
++   "policy-command-uppercase-uuid",
++   "decision-allow-signed",
++   "decision-allow-tampered-signature",
++   "decision-deny",
++   "error-unicode-details",
++   "revision-zero",
++   "revision-max",
++   "timestamp-utc",
++   "timestamp-fractional",
++   "digest-ok",
++   "uuid-nil",
++   "cli-report-full",
++   "cli-report-byte-length-whole-float",
++   "cli-report-without-cleanup",
++   "cli-command-verify",
++   "exit-code-blocked",
++   "outcome-usage-error",
++   "command-name-doctor",
++   "reason-code-scope-mismatch",
++   "diagnostic-blocked",
++   "artifact-zero-bytes",
++   "scope-reference",
++ ]
+
+ ❯ contracts/test/conformance.test.ts:48:17
+     46|  const misses = file.vectors.filter((v) => ts(v.id).accepted !== (v.ex…
+     47|  expect(misses).toEqual([]);
+     48|  const covered = new Set(file.vectors.map((v) => v.component));
+       |                 ^
+     49|  expect(createWireValidator().components.filter((c) => !covered.has(c)…
+     50|  expect(file.vectors.length).toBeGreaterThanOrEqual(60);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  |contracts| contracts/test/conformance.test.ts > the Swift consumer reaches the same acceptance, canonical bytes, digests and signature verdicts
+AssertionError: expected [ …(66) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "health-ok: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:a5581901fd5f5f6d8a3ce3bbc91927ad71d2a4cee0151f2b45c47eb27dffcea8 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:a5581901fd5f5f6d8a3ce3bbc91927ad71d2a4cee0151f2b45c47eb27dffcea8",
++   "health-unknown-status-variant: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "health-unknown-field: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "health-missing-service: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "readiness-not-ready: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:716cbb5c20ac032361a6cf6634a9b45a3a85f2810019c5d78415e2714832b465 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:716cbb5c20ac032361a6cf6634a9b45a3a85f2810019c5d78415e2714832b465",
++   "readiness-status-null: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "readiness-unknown-state-variant: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "readiness-unknown-check: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "policy-command: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:d32c78092fcab68c7d727543b4662fe49980ea41755328e36120914bb89dd7c3 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:d32c78092fcab68c7d727543b4662fe49980ea41755328e36120914bb89dd7c3",
++   "policy-command-uppercase-uuid: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:d32c78092fcab68c7d727543b4662fe49980ea41755328e36120914bb89dd7c3 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:d32c78092fcab68c7d727543b4662fe49980ea41755328e36120914bb89dd7c3",
++   "policy-command-urn-uuid: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "policy-command-unknown-field: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "policy-command-wrong-version: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "policy-command-scope-number: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "decision-allow-signed: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:94d6e8f7e7a07a4e22dca40cb471ec00ad1914471189f8088e2ff38714ca6697 | typescript: signature unverified, golden valid | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:94d6e8f7e7a07a4e22dca40cb471ec00ad1914471189f8088e2ff38714ca6697 | swift: signature unverified, golden valid",
++   "decision-allow-tampered-signature: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:d6b6726d240c6e6bcd465170e923e92bfe01b1d1e0e7bb206cbcab62ca73db6a | typescript: signature unverified, golden invalid | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:d6b6726d240c6e6bcd465170e923e92bfe01b1d1e0e7bb206cbcab62ca73db6a | swift: signature unverified, golden invalid",
++   "decision-allow-reason-null: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "decision-deny: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:d6b6726d240c6e6bcd465170e923e92bfe01b1d1e0e7bb206cbcab62ca73db6a | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:d6b6726d240c6e6bcd465170e923e92bfe01b1d1e0e7bb206cbcab62ca73db6a",
++   "decision-unknown-variant: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "decision-digest-uppercase: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "error-unicode-details: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:014097577cac6ba67bc322ccd2e4798968555c02078005e71e9590086afd9597 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:014097577cac6ba67bc322ccd2e4798968555c02078005e71e9590086afd9597",
++   "error-unknown-reason-code: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "error-details-too-long: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "error-details-not-strings: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "revision-zero: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:98089e6d36f78e9766c9ea34d5acb3611f3a92cd81c5eb102095d924ffc7d08b | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:98089e6d36f78e9766c9ea34d5acb3611f3a92cd81c5eb102095d924ffc7d08b",
++   "revision-max: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:a225c7d25b96a9e259add02e192895f03cbbfafbf27b3a95ea2f0624912acecd | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:a225c7d25b96a9e259add02e192895f03cbbfafbf27b3a95ea2f0624912acecd",
++   "revision-over-max: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "revision-negative: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "revision-leading-zero: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "revision-number-not-string: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "revision-unicode-digits: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "timestamp-utc: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:d1880ce898ce01e0a14c216c4e69c9ecc5e1cb2e08223f30a606ca774cde357e | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:d1880ce898ce01e0a14c216c4e69c9ecc5e1cb2e08223f30a606ca774cde357e",
++   "timestamp-fractional: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:d10923ae3ec8ebcbb52159228f8352013e88bfc811ea33d9d1aa6c16e291bde1 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:d10923ae3ec8ebcbb52159228f8352013e88bfc811ea33d9d1aa6c16e291bde1",
++   "timestamp-offset-not-utc: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "timestamp-missing-zone: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "timestamp-month-13: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "timestamp-trailing-newline: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "digest-ok: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:3d9b67a8d0d3dde5b68a528f67b9bca8bb5dc2406793ea7935b9c4fcd6a50484 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:3d9b67a8d0d3dde5b68a528f67b9bca8bb5dc2406793ea7935b9c4fcd6a50484",
++   "digest-untagged: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "uuid-nil: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:36b6647187901ac4413731fb4bfcc0acaf826e0443d5fdbcfae119480fc63216 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:36b6647187901ac4413731fb4bfcc0acaf826e0443d5fdbcfae119480fc63216",
++   "uuid-braces: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "gitsha-short: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "cli-report-full: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:5b0bb5e63f116b0c6cba0133152a75cce622391aaee9ab21505ca9e934e460ac | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:5b0bb5e63f116b0c6cba0133152a75cce622391aaee9ab21505ca9e934e460ac",
++   "cli-report-byte-length-over-safe: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "cli-report-byte-length-negative: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "cli-report-byte-length-fraction: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "cli-report-byte-length-string: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "cli-report-byte-length-whole-float: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:ea8016a1a7caebecbb5a735ce0c20c9532c19ddc8e1d65422ceceee2d3d3d7de | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:ea8016a1a7caebecbb5a735ce0c20c9532c19ddc8e1d65422ceceee2d3d3d7de",
++   "cli-report-unknown-outcome: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "cli-report-cleanup-null: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "cli-report-without-cleanup: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:d3ccae3bf2b78bba93d7fb1f8d57059b78508481ee175d3b0de4decd77db9ac3 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:d3ccae3bf2b78bba93d7fb1f8d57059b78508481ee175d3b0de4decd77db9ac3",
++   "cli-report-missing-diagnostics: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "cli-command-verify: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:99e860a606c29081387a84fde3baae55ff57828f1f7cff85404b4e450d301bc2 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:99e860a606c29081387a84fde3baae55ff57828f1f7cff85404b4e450d301bc2",
++   "cli-command-unknown-verb: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "cli-command-shell-text: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "exit-code-blocked: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
++   "exit-code-unregistered: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "exit-code-string: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "outcome-usage-error: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:44238d261f119ffe076ebcd75a97e8ea4382dbb01d54b2b641a7f3f91d03d664 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:44238d261f119ffe076ebcd75a97e8ea4382dbb01d54b2b641a7f3f91d03d664",
++   "outcome-uppercase: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "command-name-doctor: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:5102dd18448d3288cd993f6a1c9630b639e05a59e75fd968a92061abdf9d4406 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:5102dd18448d3288cd993f6a1c9630b639e05a59e75fd968a92061abdf9d4406",
++   "reason-code-scope-mismatch: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:46be166c88d822e8ef8638496c132efb8f39f12082f4a285605efc2067cceec6 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:46be166c88d822e8ef8638496c132efb8f39f12082f4a285605efc2067cceec6",
++   "diagnostic-blocked: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:8911c7846b023645c5f722d4aaa4967be4413f818e2454eea2c49676a45e925b | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:8911c7846b023645c5f722d4aaa4967be4413f818e2454eea2c49676a45e925b",
++   "artifact-zero-bytes: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:d66669149524bbbbe5dce448f18e450836d197d3eeade6c1c1f63f82e71a7124 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:d66669149524bbbbe5dce448f18e450836d197d3eeade6c1c1f63f82e71a7124",
++   "cleanup-unknown-outcome: typescript: unavailable: no published contract; an unavailable consumer is never a pass | swift: unavailable: no generated contract; an unavailable consumer is never a pass",
++   "scope-reference: typescript: unavailable: no published contract; an unavailable consumer is never a pass | typescript: canonical bytes differ from golden | typescript: digest absent, golden sha256:f1282bf1e4bd715fba027e438062d7fcc486e51d16a91de5b09ff5275a771e44 | swift: unavailable: no generated contract; an unavailable consumer is never a pass | swift: canonical bytes differ from golden | swift: digest absent, golden sha256:f1282bf1e4bd715fba027e438062d7fcc486e51d16a91de5b09ff5275a771e44",
++ ]
+
+ ❯ contracts/test/conformance.test.ts:67:106
+     65|  const joint = compareConsumers(file, typescript, swift.report);
+     66|  expect(joint.filter((r) => r.outcome !== 'pass').map((r) => `${r.id}:…
+     67|  const swiftResult = (id: string) => swift.report?.vectors.find((v) =>…
+       |                                                                                                          ^
+     68|  expect(swiftResult('health-ok').canonical).toBe(ts('health-ok').canon…
+     69|  expect(swiftResult('decision-allow-tampered-signature').signature).to…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+

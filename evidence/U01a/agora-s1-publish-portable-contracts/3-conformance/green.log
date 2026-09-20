@@ -1,0 +1,24 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-20T11:54:54.696Z
+parent: e1250b5c269f1685f006e1a9678dbf38a609becc
+head: ef0f00178077b34c5a52e7149abac629b8856e3d
+subject_revision: ef0f00178077b34c5a52e7149abac629b8856e3d
+test_patch_applied_to_subject: false
+test_patch_files: contracts/fixtures/vectors.json, contracts/test/conformance.test.ts, contracts/test/harness.test.ts
+test_patch_digest: sha256:215f28fc5a80a53efff46b40256ad5a945874e80b33f2bbd7720c2df5b54d278
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:56d2f9d7e67562393817fa473e9676f72ce69e32784b519e90132751f3b63be7"},{"file":"contracts/src/conformance.ts","digest":"sha256:70f09ef67cb283546a01eb2ef58015bce6193328ce28f477f1b0dd52f1a000f6"},{"file":"contracts/swift/Sources/AgoraContractsConform/Canonical.swift","digest":"sha256:48c1461694e9673697193d96cf5d8cb6aef69bc2d5e9504da94a472c8bb28aaa"},{"file":"contracts/swift/Sources/AgoraContractsConform/SchemaValidator.swift","digest":"sha256:83036cefd14cace06e8b7b2f13f215beb65fb7f709b0663bbeefc435240ab5cb"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:7882da26eb1cdd10455ab58597530da0bc3da9260e06fa7babee8bd99cfd730e"},{"file":"contracts/test/conformance.test.ts","digest":"sha256:62dc7451963e7edb23ba0921b41f0b54fa0b9a60a69a4c3274b9155a2a8af9f4"}]}
+configuration: {"command":"pnpm -s test","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:25fad3cbf767d3cdcd29001dda769e1806e3946fa5dd462a64a922a768ff38d1"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-zrq9J2
+
+
+ Test Files  9 passed (9)
+      Tests  40 passed (40)
+   Start at  07:54:26
+   Duration  26.21s (tests 97%, import 3%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-J44FTb","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}

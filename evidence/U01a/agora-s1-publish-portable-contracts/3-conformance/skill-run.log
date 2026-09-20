@@ -1,0 +1,25 @@
+# verify-agora skill run at ef0f00178077b34c5a52e7149abac629b8856e3d (2026-09-20T11:56:07Z)
+Literal run of .agents/skills/verify-agora/SKILL.md sections at the code head of branch 3.
+
+## Doctor
+node: v24.16.0  pnpm: 10.34.1  swift: swift-driver version: 1.148.6 Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)  postgres: pg_ctl (PostgreSQL) 18.4 (Homebrew)  host: Darwin 25.5.0 arm64
+Done in 179ms using pnpm v10.34.1
+install_exit: 0 (expected 0)
+typecheck_exit: 0 (expected 0)
+lint_exit: 0 (expected 0)
+docs_check_exit: 0 (expected 0)
+
+## Drive
+contracts_check: pass drift: []
+contracts_conform: pass swift: pass pass: 66 / 66
+ Test Files  9 passed (9)
+      Tests  40 passed (40)
+test_exit: 0 (expected 0)
+probe_outcome: pass exit: 0 ids: ['health-liveness=pass', 'health-readiness=pass', 'policy-allow=pass', 'policy-deny=pass', 'policy-unknown-field=pass', 'unknown-route=pass']
+migrate_applied: [1, 0] same_digest: True
+
+## Cleanup
+0
+worktrees: clean
+tmp: clean
+evidence retained after cleanup: 9 entries: gate-negatives.log green.log lane-4 lane-5 lane-6 red.log security.md skill-run.log test-patch.diff
