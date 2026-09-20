@@ -28,6 +28,7 @@ typealias Schemas = Components.Schemas
 let generated: [String: (Data) throws -> Data] = [
 	"ArtifactReference": roundTrip(Schemas.ArtifactReference.self),
 	"CleanupReceipt": roundTrip(Schemas.CleanupReceipt.self),
+	"CommandReceipt": roundTrip(Schemas.CommandReceipt.self),
 	"CliCommand": roundTrip(Schemas.CliCommand.self),
 	"CliCommandName": roundTrip(Schemas.CliCommandName.self),
 	"CliOutcome": roundTrip(Schemas.CliOutcome.self),
@@ -38,6 +39,14 @@ let generated: [String: (Data) throws -> Data] = [
 	"ExitCode": roundTrip(Schemas.ExitCode.self),
 	"FixturePolicyCommand": roundTrip(Schemas.FixturePolicyCommand.self),
 	"FixturePolicyDecisionReport": roundTrip(Schemas.FixturePolicyDecisionReport.self),
+	"FixtureSyncMessage": roundTrip(Schemas.FixtureSyncMessage.self),
+	"FixtureSyncTombstone": roundTrip(Schemas.FixtureSyncTombstone.self),
+	"FixtureSyncRunCard": roundTrip(Schemas.FixtureSyncRunCard.self),
+	"FixtureSyncState": roundTrip(Schemas.FixtureSyncState.self),
+	"FixtureSyncSnapshot": roundTrip(Schemas.FixtureSyncSnapshot.self),
+	"FixtureSyncMessageEvent": roundTrip(Schemas.FixtureSyncMessageEvent.self),
+	"FixtureSyncTombstoneEvent": roundTrip(Schemas.FixtureSyncTombstoneEvent.self),
+	"FixtureSyncRunCardEvent": roundTrip(Schemas.FixtureSyncRunCardEvent.self),
 	"GitSha": roundTrip(Schemas.GitSha.self),
 	"HealthReport": roundTrip(Schemas.HealthReport.self),
 	"ReadinessReport": roundTrip(Schemas.ReadinessReport.self),
@@ -45,6 +54,7 @@ let generated: [String: (Data) throws -> Data] = [
 	"Revision": roundTrip(Schemas.Revision.self),
 	"ScopeReference": roundTrip(Schemas.ScopeReference.self),
 	"Timestamp": roundTrip(Schemas.Timestamp.self),
+	"StreamCursor": roundTrip(Schemas.StreamCursor.self),
 	"Uuid": roundTrip(Schemas.Uuid.self),
 ]
 

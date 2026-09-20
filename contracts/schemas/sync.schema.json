@@ -1,0 +1,29 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://agora.invalid/schemas/sync.schema.json",
+	"title": "agora.sync-values/v1",
+	"description": "R07 reusable synchronization values. These components add no HTTP operation, transport or authorization authority.",
+	"$defs": {
+		"StreamCursor": {
+			"description": "Last committed and applied sequence for one stream. Streams have no global order.",
+			"type": "object", "additionalProperties": false,
+			"required": ["stream_id", "committed_seq"],
+			"properties": {
+				"stream_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"committed_seq": { "$ref": "primitives.schema.json#/$defs/Revision" }
+			}
+		},
+		"CommandReceipt": {
+			"description": "R07 committed mutation receipt. It confirms a command, not that its events have been applied by a client. Duplicate actor/command/request digests return the original receipt.",
+			"type": "object", "additionalProperties": false,
+			"required": ["command_id", "aggregate_id", "revision", "event_cursors", "receipt_id"],
+			"properties": {
+				"command_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"aggregate_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"revision": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"event_cursors": { "type": "array", "maxItems": 64, "items": { "$ref": "#/$defs/StreamCursor" } },
+				"receipt_id": { "$ref": "primitives.schema.json#/$defs/Uuid" }
+			}
+		}
+	}
+}

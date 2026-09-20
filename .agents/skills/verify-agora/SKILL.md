@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture and its portable contracts from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, contracts or agora/feature-map.json. Scope U01a.B01 and U01a.B02; later tasks extend it.
+description: Project-owned instructions that prove the Agora foundation fixture and its portable contracts from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, contracts or agora/feature-map.json. Scope U01a.B01, U01a.B02 and the U01a.B03 synchronization-contract slice; later slices extend it.
 ---
 
 # Verify Agora
@@ -43,7 +43,9 @@ node scripts/with-test-postgres.mjs bash -c 'node packages/storage/src/migrate-c
 Pass predicates:
 
 - `pnpm contracts:check` prints `"outcome": "pass"` with an empty `drift` list; `"outcome": "unavailable"` (exit 3) means the Swift generator could not run and the step is blocked, not passed.
-- `pnpm contracts:conform` prints `"outcome": "pass"` with `"swift": "pass"` and every result `pass`; a `fail` result names the vector and each consumer's disagreement.
+- `pnpm contracts:conform` prints `"outcome": "pass"` with `"swift": "pass"` and every result `pass`; a `fail` result names the vector and each consumer's disagreement. This includes the `sync-*` fixture snapshot, event and reusable cursor/receipt vectors. Fixture payloads are not production HTTP operations.
+- `contracts/test/sync.test.ts` rejects unsupported event kinds/fields and proves each denial assertion turns red with its guard removed from an isolated schema copy. This is wire rejection, not yet core replay or acknowledgement proof.
+- `packages/client-core/test/harness.test.ts` proves only the empty R22 test-only baseline. Lanes 7 and 8 remain unqualified until the core and boundary slices land.
 - `pnpm test` exits 0 with every unit and pg test passing. The pg project refuses to run without a database; the contract tests fail, never skip, without Swift.
 - The probe report has `"outcome": "pass"` for `health-liveness` (200), `health-readiness` (200), `policy-allow` (200, `decision: allow`), `policy-deny` (200, `reason_code: scope_mismatch`), `policy-unknown-field` (400, `malformed_command`) and `unknown-route` (404, `not_found`).
 - The first migration report has `applied: 1`; the second has `applied: 0` and the same `schema_digest`.

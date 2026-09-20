@@ -296,6 +296,39 @@
 					}
 				}
 			},
+			"CommandReceipt": {
+				"description": "R07 committed mutation receipt. It confirms a command, not that its events have been applied by a client. Duplicate actor/command/request digests return the original receipt.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"command_id",
+					"aggregate_id",
+					"revision",
+					"event_cursors",
+					"receipt_id"
+				],
+				"properties": {
+					"command_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"aggregate_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"revision": {
+						"$ref": "#/components/schemas/Revision"
+					},
+					"event_cursors": {
+						"type": "array",
+						"maxItems": 64,
+						"items": {
+							"$ref": "#/components/schemas/StreamCursor"
+						}
+					},
+					"receipt_id": {
+						"$ref": "#/components/schemas/Uuid"
+					}
+				}
+			},
 			"Diagnostic": {
 				"type": "object",
 				"additionalProperties": false,
@@ -420,6 +453,282 @@
 					}
 				}
 			},
+			"FixtureSyncMessage": {
+				"description": "Visible fixture message position. created_seq is the first visible revision's room-stream sequence and never changes on an edit. The fixture body is limited to 4096 Unicode scalars, at most 16 KiB UTF-8; this is not a production composer contract.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"message_id",
+					"created_seq",
+					"revision",
+					"body"
+				],
+				"properties": {
+					"message_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"created_seq": {
+						"$ref": "#/components/schemas/Revision"
+					},
+					"revision": {
+						"$ref": "#/components/schemas/Revision"
+					},
+					"body": {
+						"type": "string",
+						"maxLength": 4096
+					}
+				}
+			},
+			"FixtureSyncMessageEvent": {
+				"description": "R07 envelope with one closed, non-production fixture message-revision payload. actor is a historical principal ID, not caller authority.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"schema_version",
+					"stream_id",
+					"seq",
+					"event_id",
+					"kind",
+					"actor",
+					"occurred_at",
+					"payload"
+				],
+				"properties": {
+					"schema_version": {
+						"type": "string",
+						"enum": [
+							"agora.foundation-fixture.sync-event/v1"
+						]
+					},
+					"stream_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"seq": {
+						"$ref": "#/components/schemas/Revision"
+					},
+					"event_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"kind": {
+						"type": "string",
+						"enum": [
+							"fixture.message_revision"
+						]
+					},
+					"actor": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"occurred_at": {
+						"$ref": "#/components/schemas/Timestamp"
+					},
+					"payload": {
+						"$ref": "#/components/schemas/FixtureSyncMessage"
+					}
+				}
+			},
+			"FixtureSyncRunCard": {
+				"description": "Display-only revisioned fixture card, not a run state machine. An older run_revision cannot overwrite a newer card.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"run_id",
+					"run_revision",
+					"state"
+				],
+				"properties": {
+					"run_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"run_revision": {
+						"$ref": "#/components/schemas/Revision"
+					},
+					"state": {
+						"type": "string",
+						"enum": [
+							"queued",
+							"running",
+							"succeeded",
+							"failed"
+						]
+					}
+				}
+			},
+			"FixtureSyncRunCardEvent": {
+				"description": "Closed fixture card event. Event seq orders delivery; run_revision orders projection replacement.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"schema_version",
+					"stream_id",
+					"seq",
+					"event_id",
+					"kind",
+					"actor",
+					"occurred_at",
+					"payload"
+				],
+				"properties": {
+					"schema_version": {
+						"type": "string",
+						"enum": [
+							"agora.foundation-fixture.sync-event/v1"
+						]
+					},
+					"stream_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"seq": {
+						"$ref": "#/components/schemas/Revision"
+					},
+					"event_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"kind": {
+						"type": "string",
+						"enum": [
+							"fixture.run_card"
+						]
+					},
+					"actor": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"occurred_at": {
+						"$ref": "#/components/schemas/Timestamp"
+					},
+					"payload": {
+						"$ref": "#/components/schemas/FixtureSyncRunCard"
+					}
+				}
+			},
+			"FixtureSyncSnapshot": {
+				"description": "Authorized non-production fixture state and cursor from one observation. last_seen_room_seq is explicit reading state, not advanced by event delivery. Unread counts only visible message positions created after it, not stream-sequence distance.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"schema_version",
+					"cursor",
+					"last_seen_room_seq",
+					"state"
+				],
+				"properties": {
+					"schema_version": {
+						"type": "string",
+						"enum": [
+							"agora.foundation-fixture.sync-snapshot/v1"
+						]
+					},
+					"cursor": {
+						"$ref": "#/components/schemas/StreamCursor"
+					},
+					"last_seen_room_seq": {
+						"$ref": "#/components/schemas/Revision"
+					},
+					"state": {
+						"$ref": "#/components/schemas/FixtureSyncState"
+					}
+				}
+			},
+			"FixtureSyncState": {
+				"description": "Complete fixture projection at its snapshot cursor. A message ID occurs in messages or tombstones, never both; adapters enforce cross-record consistency after schema validation.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"messages",
+					"tombstones",
+					"run_cards"
+				],
+				"properties": {
+					"messages": {
+						"type": "array",
+						"maxItems": 50000,
+						"items": {
+							"$ref": "#/components/schemas/FixtureSyncMessage"
+						}
+					},
+					"tombstones": {
+						"type": "array",
+						"maxItems": 50000,
+						"items": {
+							"$ref": "#/components/schemas/FixtureSyncTombstone"
+						}
+					},
+					"run_cards": {
+						"type": "array",
+						"maxItems": 1000,
+						"items": {
+							"$ref": "#/components/schemas/FixtureSyncRunCard"
+						}
+					}
+				}
+			},
+			"FixtureSyncTombstone": {
+				"description": "A deleted fixture position carries no body and creates no unread position.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"message_id",
+					"created_seq",
+					"revision"
+				],
+				"properties": {
+					"message_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"created_seq": {
+						"$ref": "#/components/schemas/Revision"
+					},
+					"revision": {
+						"$ref": "#/components/schemas/Revision"
+					}
+				}
+			},
+			"FixtureSyncTombstoneEvent": {
+				"description": "Closed fixture tombstone event; deleted content is not carried on the wire.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"schema_version",
+					"stream_id",
+					"seq",
+					"event_id",
+					"kind",
+					"actor",
+					"occurred_at",
+					"payload"
+				],
+				"properties": {
+					"schema_version": {
+						"type": "string",
+						"enum": [
+							"agora.foundation-fixture.sync-event/v1"
+						]
+					},
+					"stream_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"seq": {
+						"$ref": "#/components/schemas/Revision"
+					},
+					"event_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"kind": {
+						"type": "string",
+						"enum": [
+							"fixture.message_tombstone"
+						]
+					},
+					"actor": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"occurred_at": {
+						"$ref": "#/components/schemas/Timestamp"
+					},
+					"payload": {
+						"$ref": "#/components/schemas/FixtureSyncTombstone"
+					}
+				}
+			},
 			"GitSha": {
 				"description": "Exact 40-hexadecimal Git object name.",
 				"type": "string",
@@ -523,6 +832,23 @@
 				"properties": {
 					"scope_id": {
 						"$ref": "#/components/schemas/Uuid"
+					}
+				}
+			},
+			"StreamCursor": {
+				"description": "Last committed and applied sequence for one stream. Streams have no global order.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"stream_id",
+					"committed_seq"
+				],
+				"properties": {
+					"stream_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"committed_seq": {
+						"$ref": "#/components/schemas/Revision"
 					}
 				}
 			},

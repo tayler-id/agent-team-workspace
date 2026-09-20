@@ -503,6 +503,204 @@
 			"expect": "accept",
 			"canonical": "{\"scope_id\":\"11111111-1111-4111-8111-111111111111\"}",
 			"digest": "sha256:f1282bf1e4bd715fba027e438062d7fcc486e51d16a91de5b09ff5275a771e44"
+		},
+		{
+			"id": "sync-cursor-large",
+			"component": "StreamCursor",
+			"wire": "{\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"committed_seq\":\"9007199254740993\"}",
+			"expect": "accept",
+			"canonical": "{\"committed_seq\":\"9007199254740993\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"}",
+			"digest": "sha256:ff3142778ce511a87d056e7d4f8a270c2b3859dac9871f1cf3b5808b3ce6cdeb"
+		},
+		{
+			"id": "sync-cursor-overflow",
+			"component": "StreamCursor",
+			"wire": "{\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"committed_seq\":\"18446744073709551616\"}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-cursor-number",
+			"component": "StreamCursor",
+			"wire": "{\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"committed_seq\":1}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-cursor-unknown",
+			"component": "StreamCursor",
+			"wire": "{\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"committed_seq\":\"9007199254740993\",\"global\":true}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-receipt",
+			"component": "CommandReceipt",
+			"wire": "{\"command_id\":\"11111111-1111-4111-8111-111111111111\",\"aggregate_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"9007199254740993\",\"event_cursors\":[{\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"committed_seq\":\"9007199254740993\"}],\"receipt_id\":\"11111111-1111-4111-8111-111111111111\"}",
+			"expect": "accept",
+			"canonical": "{\"aggregate_id\":\"11111111-1111-4111-8111-111111111111\",\"command_id\":\"11111111-1111-4111-8111-111111111111\",\"event_cursors\":[{\"committed_seq\":\"9007199254740993\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"}],\"receipt_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"9007199254740993\"}",
+			"digest": "sha256:0ddbffa989bb48c9fd502125cc2bbd3047e53361ce9986e688bcaf4ae81243dc"
+		},
+		{
+			"id": "sync-receipt-duplicate",
+			"component": "CommandReceipt",
+			"wire": "{\"command_id\":\"11111111-1111-4111-8111-111111111111\",\"aggregate_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"9007199254740993\",\"event_cursors\":[{\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"committed_seq\":\"9007199254740993\"}],\"receipt_id\":\"11111111-1111-4111-8111-111111111111\"}",
+			"expect": "accept",
+			"canonical": "{\"aggregate_id\":\"11111111-1111-4111-8111-111111111111\",\"command_id\":\"11111111-1111-4111-8111-111111111111\",\"event_cursors\":[{\"committed_seq\":\"9007199254740993\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"}],\"receipt_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"9007199254740993\"}",
+			"digest": "sha256:0ddbffa989bb48c9fd502125cc2bbd3047e53361ce9986e688bcaf4ae81243dc"
+		},
+		{
+			"id": "sync-receipt-missing-id",
+			"component": "CommandReceipt",
+			"wire": "{\"command_id\":\"11111111-1111-4111-8111-111111111111\",\"aggregate_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"9007199254740993\",\"event_cursors\":[{\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"committed_seq\":\"9007199254740993\"}]}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-receipt-null",
+			"component": "CommandReceipt",
+			"wire": "{\"command_id\":\"11111111-1111-4111-8111-111111111111\",\"aggregate_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"9007199254740993\",\"event_cursors\":null,\"receipt_id\":\"11111111-1111-4111-8111-111111111111\"}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-message",
+			"component": "FixtureSyncMessage",
+			"wire": "{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"}",
+			"expect": "accept",
+			"canonical": "{\"body\":\"Hello café\",\"created_seq\":\"1\",\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"1\"}",
+			"digest": "sha256:b989dca64e5502f35f1cdef1829a9416c5fb3fda5c0b7374b05f055569a90c2e"
+		},
+		{
+			"id": "sync-message-empty",
+			"component": "FixtureSyncMessage",
+			"wire": "{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"\"}",
+			"expect": "accept",
+			"canonical": "{\"body\":\"\",\"created_seq\":\"1\",\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"1\"}",
+			"digest": "sha256:a4a8f71cd33caadf9cac8e8f287fdec0ef12dd09d9c8c7ddb698b75a66baafdb"
+		},
+		{
+			"id": "sync-message-null",
+			"component": "FixtureSyncMessage",
+			"wire": "{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":null}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-message-missing-revision",
+			"component": "FixtureSyncMessage",
+			"wire": "{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"body\":\"Hello café\"}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-tombstone",
+			"component": "FixtureSyncTombstone",
+			"wire": "{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"2\"}",
+			"expect": "accept",
+			"canonical": "{\"created_seq\":\"1\",\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\"}",
+			"digest": "sha256:f052cfdded1f670bc00d5672c2341e86f0dd158724e4a24c60ba6776e374976c"
+		},
+		{
+			"id": "sync-tombstone-body",
+			"component": "FixtureSyncTombstone",
+			"wire": "{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"2\",\"body\":\"leak\"}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-run-card",
+			"component": "FixtureSyncRunCard",
+			"wire": "{\"run_id\":\"11111111-1111-4111-8111-111111111111\",\"run_revision\":\"9007199254740993\",\"state\":\"running\"}",
+			"expect": "accept",
+			"canonical": "{\"run_id\":\"11111111-1111-4111-8111-111111111111\",\"run_revision\":\"9007199254740993\",\"state\":\"running\"}",
+			"digest": "sha256:d00dd9f0c8b6cd300c2f8e69dc951b1f1206076cb0adf92416196a4a5f2b75e1"
+		},
+		{
+			"id": "sync-run-card-unknown",
+			"component": "FixtureSyncRunCard",
+			"wire": "{\"run_id\":\"11111111-1111-4111-8111-111111111111\",\"run_revision\":\"9007199254740993\",\"state\":\"unknown\"}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-state",
+			"component": "FixtureSyncState",
+			"wire": "{\"messages\":[{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"}],\"tombstones\":[],\"run_cards\":[]}",
+			"expect": "accept",
+			"canonical": "{\"messages\":[{\"body\":\"Hello café\",\"created_seq\":\"1\",\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"1\"}],\"run_cards\":[],\"tombstones\":[]}",
+			"digest": "sha256:f26a01007ef48a7395ac2ddf6876265917c7bb450f531e6323f64665528e84f9"
+		},
+		{
+			"id": "sync-state-null-tombstones",
+			"component": "FixtureSyncState",
+			"wire": "{\"messages\":[{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"}],\"tombstones\":null,\"run_cards\":[]}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-snapshot",
+			"component": "FixtureSyncSnapshot",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-snapshot/v1\",\"cursor\":{\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"committed_seq\":\"2\"},\"last_seen_room_seq\":\"0\",\"state\":{\"messages\":[{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"}],\"tombstones\":[],\"run_cards\":[]}}",
+			"expect": "accept",
+			"canonical": "{\"cursor\":{\"committed_seq\":\"2\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"},\"last_seen_room_seq\":\"0\",\"schema_version\":\"agora.foundation-fixture.sync-snapshot/v1\",\"state\":{\"messages\":[{\"body\":\"Hello café\",\"created_seq\":\"1\",\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"1\"}],\"run_cards\":[],\"tombstones\":[]}}",
+			"digest": "sha256:5234a2ed2c52c11dfc957b63458125b0eef20cc958f9de94ab2ca2950b333bda"
+		},
+		{
+			"id": "sync-snapshot-missing-cursor",
+			"component": "FixtureSyncSnapshot",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-snapshot/v1\",\"last_seen_room_seq\":\"0\",\"state\":{\"messages\":[{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"}],\"tombstones\":[],\"run_cards\":[]}}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-snapshot-production-namespace",
+			"component": "FixtureSyncSnapshot",
+			"wire": "{\"schema_version\":\"agora.sync-snapshot/v1\",\"cursor\":{\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"committed_seq\":\"2\"},\"last_seen_room_seq\":\"0\",\"state\":{\"messages\":[{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"}],\"tombstones\":[],\"run_cards\":[]}}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-event-message",
+			"component": "FixtureSyncMessageEvent",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.message_revision\",\"actor\":\"11111111-1111-4111-8111-111111111111\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"}}",
+			"expect": "accept",
+			"canonical": "{\"actor\":\"11111111-1111-4111-8111-111111111111\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.message_revision\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"body\":\"Hello café\",\"created_seq\":\"1\",\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"1\"},\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"seq\":\"2\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"}",
+			"digest": "sha256:15043011ce0db5f487e6a0d6c6c31a2dac80d72732db2b3ada12ecd320af5ad3"
+		},
+		{
+			"id": "sync-event-unknown-kind",
+			"component": "FixtureSyncMessageEvent",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.future_state\",\"actor\":\"11111111-1111-4111-8111-111111111111\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"}}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-event-unknown-field",
+			"component": "FixtureSyncMessageEvent",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.message_revision\",\"actor\":\"11111111-1111-4111-8111-111111111111\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"},\"authority\":true}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-event-unknown-payload",
+			"component": "FixtureSyncMessageEvent",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.message_revision\",\"actor\":\"11111111-1111-4111-8111-111111111111\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\",\"authority\":true}}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-event-missing-seq",
+			"component": "FixtureSyncMessageEvent",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.message_revision\",\"actor\":\"11111111-1111-4111-8111-111111111111\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"1\",\"body\":\"Hello café\"}}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-event-wrong-payload",
+			"component": "FixtureSyncMessageEvent",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.message_revision\",\"actor\":\"11111111-1111-4111-8111-111111111111\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"2\"}}",
+			"expect": "reject"
+		},
+		{
+			"id": "sync-event-tombstone",
+			"component": "FixtureSyncTombstoneEvent",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.message_tombstone\",\"actor\":\"11111111-1111-4111-8111-111111111111\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"created_seq\":\"1\",\"revision\":\"2\"}}",
+			"expect": "accept",
+			"canonical": "{\"actor\":\"11111111-1111-4111-8111-111111111111\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.message_tombstone\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"created_seq\":\"1\",\"message_id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\"},\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"seq\":\"2\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"}",
+			"digest": "sha256:c9775ac7800e66cdbb67335386879d57b0104c6e245e02d918bf5577ca9948c2"
+		},
+		{
+			"id": "sync-event-run-card",
+			"component": "FixtureSyncRunCardEvent",
+			"wire": "{\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.run_card\",\"actor\":\"11111111-1111-4111-8111-111111111111\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"run_id\":\"11111111-1111-4111-8111-111111111111\",\"run_revision\":\"9007199254740993\",\"state\":\"running\"}}",
+			"expect": "accept",
+			"canonical": "{\"actor\":\"11111111-1111-4111-8111-111111111111\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.run_card\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"run_id\":\"11111111-1111-4111-8111-111111111111\",\"run_revision\":\"9007199254740993\",\"state\":\"running\"},\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"seq\":\"2\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"}",
+			"digest": "sha256:ff1bb6afd466f9458a96d65765a60f044a4a7a275ba071893930525f396aac4c"
 		}
 	]
 }

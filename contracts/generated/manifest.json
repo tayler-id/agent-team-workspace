@@ -18,12 +18,20 @@
 			"digest": "sha256:705287e6d6322bf21c3c8f3ba117537eb70cacf6b56345053121d0c70ec7dac5"
 		},
 		{
+			"file": "contracts/schemas/fixture-sync.schema.json",
+			"digest": "sha256:20312ec4331ed2ccf4954ee94a5785ad991fc6974553583d7eb68c083cf1a891"
+		},
+		{
 			"file": "contracts/schemas/health.schema.json",
 			"digest": "sha256:a95577283729805c5bab8f0a390b134a5939d593b058648a88f2dc6dac95b1a3"
 		},
 		{
 			"file": "contracts/schemas/primitives.schema.json",
 			"digest": "sha256:49ce96b833daec5fd30c3c5a79babac3cc8e046dd4b9af5bdb753e93c35b9c77"
+		},
+		{
+			"file": "contracts/schemas/sync.schema.json",
+			"digest": "sha256:3f6951402ce564dd8a43088af6fa4a70ec6ea87aedeb5c2f1836228db58ba85d"
 		}
 	],
 	"components": [
@@ -33,18 +41,28 @@
 		"CliCommandName",
 		"CliOutcome",
 		"CliReport",
+		"CommandReceipt",
 		"Diagnostic",
 		"Digest",
 		"ErrorReport",
 		"ExitCode",
 		"FixturePolicyCommand",
 		"FixturePolicyDecisionReport",
+		"FixtureSyncMessage",
+		"FixtureSyncMessageEvent",
+		"FixtureSyncRunCard",
+		"FixtureSyncRunCardEvent",
+		"FixtureSyncSnapshot",
+		"FixtureSyncState",
+		"FixtureSyncTombstone",
+		"FixtureSyncTombstoneEvent",
 		"GitSha",
 		"HealthReport",
 		"ReadinessReport",
 		"ReasonCode",
 		"Revision",
 		"ScopeReference",
+		"StreamCursor",
 		"Timestamp",
 		"Uuid"
 	],
@@ -55,11 +73,11 @@
 	"outputs": [
 		{
 			"file": "contracts/generated/openapi.bundled.json",
-			"digest": "sha256:c3521a95bcd8a0aa0cb7a3d968ad139cbb1cae71297fad030f83d1b62378556a"
+			"digest": "sha256:423244be27be7412281064a81c5cb0b1d28929f22dc3a352a616acab89cd6781"
 		},
 		{
 			"file": "contracts/generated/typescript/openapi.d.ts",
-			"digest": "sha256:b3b9d6845aa26df66144f227af54d12cb4c9ad357d4cc839dc7aad2f98d9b517"
+			"digest": "sha256:25744d3a2ec005b93ee642e495f78fdd845c2ce44af9f07ca22407c2903ff7ad"
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Client.swift",
@@ -83,7 +101,7 @@
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift",
-			"digest": "sha256:2e73a614ee76814db4a3b0455ad976a3fb3b4f144e2b21c731ecd334430d45ab"
+			"digest": "sha256:b30386ef6cb26efe79872911050f0a1214571be59d32b654c14dcfa8ea729cba"
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components.swift",

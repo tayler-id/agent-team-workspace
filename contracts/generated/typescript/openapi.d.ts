@@ -104,6 +104,14 @@ export interface components {
             finished_at: components["schemas"]["Timestamp"];
             cleanup?: components["schemas"]["CleanupReceipt"];
         };
+        /** @description R07 committed mutation receipt. It confirms a command, not that its events have been applied by a client. Duplicate actor/command/request digests return the original receipt. */
+        CommandReceipt: {
+            command_id: components["schemas"]["Uuid"];
+            aggregate_id: components["schemas"]["Uuid"];
+            revision: components["schemas"]["Revision"];
+            event_cursors: components["schemas"]["StreamCursor"][];
+            receipt_id: components["schemas"]["Uuid"];
+        };
         Diagnostic: {
             reason_code: components["schemas"]["ReasonCode"];
             message: string;
@@ -140,6 +148,79 @@ export interface components {
             policy_version: "agora.fixture-policy/v1";
             policy_digest: components["schemas"]["Digest"];
         };
+        /** @description Visible fixture message position. created_seq is the first visible revision's room-stream sequence and never changes on an edit. The fixture body is limited to 4096 Unicode scalars, at most 16 KiB UTF-8; this is not a production composer contract. */
+        FixtureSyncMessage: {
+            message_id: components["schemas"]["Uuid"];
+            created_seq: components["schemas"]["Revision"];
+            revision: components["schemas"]["Revision"];
+            body: string;
+        };
+        /** @description R07 envelope with one closed, non-production fixture message-revision payload. actor is a historical principal ID, not caller authority. */
+        FixtureSyncMessageEvent: {
+            /** @enum {string} */
+            schema_version: "agora.foundation-fixture.sync-event/v1";
+            stream_id: components["schemas"]["Uuid"];
+            seq: components["schemas"]["Revision"];
+            event_id: components["schemas"]["Uuid"];
+            /** @enum {string} */
+            kind: "fixture.message_revision";
+            actor: components["schemas"]["Uuid"];
+            occurred_at: components["schemas"]["Timestamp"];
+            payload: components["schemas"]["FixtureSyncMessage"];
+        };
+        /** @description Display-only revisioned fixture card, not a run state machine. An older run_revision cannot overwrite a newer card. */
+        FixtureSyncRunCard: {
+            run_id: components["schemas"]["Uuid"];
+            run_revision: components["schemas"]["Revision"];
+            /** @enum {string} */
+            state: "queued" | "running" | "succeeded" | "failed";
+        };
+        /** @description Closed fixture card event. Event seq orders delivery; run_revision orders projection replacement. */
+        FixtureSyncRunCardEvent: {
+            /** @enum {string} */
+            schema_version: "agora.foundation-fixture.sync-event/v1";
+            stream_id: components["schemas"]["Uuid"];
+            seq: components["schemas"]["Revision"];
+            event_id: components["schemas"]["Uuid"];
+            /** @enum {string} */
+            kind: "fixture.run_card";
+            actor: components["schemas"]["Uuid"];
+            occurred_at: components["schemas"]["Timestamp"];
+            payload: components["schemas"]["FixtureSyncRunCard"];
+        };
+        /** @description Authorized non-production fixture state and cursor from one observation. last_seen_room_seq is explicit reading state, not advanced by event delivery. Unread counts only visible message positions created after it, not stream-sequence distance. */
+        FixtureSyncSnapshot: {
+            /** @enum {string} */
+            schema_version: "agora.foundation-fixture.sync-snapshot/v1";
+            cursor: components["schemas"]["StreamCursor"];
+            last_seen_room_seq: components["schemas"]["Revision"];
+            state: components["schemas"]["FixtureSyncState"];
+        };
+        /** @description Complete fixture projection at its snapshot cursor. A message ID occurs in messages or tombstones, never both; adapters enforce cross-record consistency after schema validation. */
+        FixtureSyncState: {
+            messages: components["schemas"]["FixtureSyncMessage"][];
+            tombstones: components["schemas"]["FixtureSyncTombstone"][];
+            run_cards: components["schemas"]["FixtureSyncRunCard"][];
+        };
+        /** @description A deleted fixture position carries no body and creates no unread position. */
+        FixtureSyncTombstone: {
+            message_id: components["schemas"]["Uuid"];
+            created_seq: components["schemas"]["Revision"];
+            revision: components["schemas"]["Revision"];
+        };
+        /** @description Closed fixture tombstone event; deleted content is not carried on the wire. */
+        FixtureSyncTombstoneEvent: {
+            /** @enum {string} */
+            schema_version: "agora.foundation-fixture.sync-event/v1";
+            stream_id: components["schemas"]["Uuid"];
+            seq: components["schemas"]["Revision"];
+            event_id: components["schemas"]["Uuid"];
+            /** @enum {string} */
+            kind: "fixture.message_tombstone";
+            actor: components["schemas"]["Uuid"];
+            occurred_at: components["schemas"]["Timestamp"];
+            payload: components["schemas"]["FixtureSyncTombstone"];
+        };
         /** @description Exact 40-hexadecimal Git object name. */
         GitSha: string;
         /** @description Answer of GET /api/v1/health. Touches no dependency. */
@@ -171,6 +252,11 @@ export interface components {
         Revision: string;
         ScopeReference: {
             scope_id: components["schemas"]["Uuid"];
+        };
+        /** @description Last committed and applied sequence for one stream. Streams have no global order. */
+        StreamCursor: {
+            stream_id: components["schemas"]["Uuid"];
+            committed_seq: components["schemas"]["Revision"];
         };
         /** @description UTC RFC 3339 date-time with the literal Z designator and up to nine fractional digits; numeric offsets are rejected. */
         Timestamp: string;
