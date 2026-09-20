@@ -1,0 +1,99 @@
+✔ the same public build driver produces a valid baseline before corpus assertions (0.283417ms)
+✖ the complete corpus has 23 pages and both audience tracks (0.336417ms)
+✖ the atlas explains all nine system nodes and eight connections (0.186083ms)
+✖ the committed design packet is readable as linked documentation, not a source-code dump (0.174958ms)
+✖ current commands and planned product availability have separate references (0.075584ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 1
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 183.131709
+
+✖ failing tests:
+
+test at docs/site/test/corpus.test.ts:11:1
+✖ the complete corpus has 23 pages and both audience tracks (0.336417ms)
+  AssertionError [ERR_ASSERTION]: complete audience corpus
+  
+  5 !== 23
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/docs/site/test/corpus.test.ts:12:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 5,
+    expected: 23,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at docs/site/test/corpus.test.ts:16:1
+✖ the atlas explains all nine system nodes and eight connections (0.186083ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  3 !== 9
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/docs/site/test/corpus.test.ts:17:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 3,
+    expected: 9,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at docs/site/test/corpus.test.ts:21:1
+✖ the committed design packet is readable as linked documentation, not a source-code dump (0.174958ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Committed design packet/. Input:
+  
+  ''
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/docs/site/test/corpus.test.ts:22:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: /Committed design packet/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at docs/site/test/corpus.test.ts:26:1
+✖ current commands and planned product availability have separate references (0.075584ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /There is no installed/. Input:
+  
+  ''
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/docs/site/test/corpus.test.ts:27:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: /There is no installed/,
+    operator: 'match',
+    diff: 'simple'
+  }

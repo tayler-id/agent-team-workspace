@@ -1,0 +1,111 @@
+result: "{\"url\":\"/index.html\",\"title\":\"Welcome · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Welcome\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/atlas.html\",\"title\":\"Progress atlas · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Progress atlas\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/introduction.html\",\"title\":\"Introduction · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Introduction\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/getting-started.html\",\"title\":\"Installation and first checks · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Installation and first checks\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/concepts.html\",\"title\":\"Mental model and glossary · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Mental model and glossary\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/workflows.html\",\"title\":\"Roles and workflows · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Roles and workflows\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/cookbook.html\",\"title\":\"Practical guides · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Practical guides\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/cli.html\",\"title\":\"CLI and public drivers · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"CLI and public drivers\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/configuration.html\",\"title\":\"Configuration · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Configuration\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/faq.html\",\"title\":\"Troubleshooting and FAQ · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Troubleshooting and FAQ\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/architecture.html\",\"title\":\"System architecture · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"System architecture\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/repository.html\",\"title\":\"Repository and tools · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Repository and tools\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/foundation.html\",\"title\":\"Repository foundation · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Repository foundation\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/contracts.html\",\"title\":\"Portable contracts · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Portable contracts\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/synchronization.html\",\"title\":\"Client synchronization · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Client synchronization\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/memory.html\",\"title\":\"Data and memory · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Data and memory\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/authorization.html\",\"title\":\"Authorization and agents · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Authorization and agents\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/execution.html\",\"title\":\"Workers and cloud · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Workers and cloud\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/operations.html\",\"title\":\"Operations and recovery · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Operations and recovery\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/verification.html\",\"title\":\"Verification and evidence · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Verification and evidence\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/authoring.html\",\"title\":\"Contribute documentation · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Contribute documentation\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/research.html\",\"title\":\"Research and decisions · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Research and decisions\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/handoff.html\",\"title\":\"Design Handoff · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/README.md.html\",\"title\":\"docs/design-handoff/README.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/product-brief.md.html\",\"title\":\"docs/design-handoff/product-brief.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/audiences-and-authority.md.html\",\"title\":\"docs/design-handoff/audiences-and-authority.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/information-architecture.md.html\",\"title\":\"docs/design-handoff/information-architecture.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/workflows.md.html\",\"title\":\"docs/design-handoff/workflows.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/screens.md.html\",\"title\":\"docs/design-handoff/screens.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/interaction-and-state.md.html\",\"title\":\"docs/design-handoff/interaction-and-state.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/components.md.html\",\"title\":\"docs/design-handoff/components.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/visual-theme.md.html\",\"title\":\"docs/design-handoff/visual-theme.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/accessibility-and-responsive.md.html\",\"title\":\"docs/design-handoff/accessibility-and-responsive.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/content-design.md.html\",\"title\":\"docs/design-handoff/content-design.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/visual-maps.md.html\",\"title\":\"docs/design-handoff/visual-maps.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/design-assignment.md.html\",\"title\":\"docs/design-handoff/design-assignment.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/source/docs/design-handoff/source-map.md.html\",\"title\":\"docs/design-handoff/source-map.md · Agora\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Design Handoff\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state

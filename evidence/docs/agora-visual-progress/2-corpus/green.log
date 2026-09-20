@@ -1,0 +1,27 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-20T15:45:03.944Z
+parent: 931cdfe7e153da9b582fde79a75557d1af64ca5b
+head: cef2a19beccd804656db20ec10c1ef3773992f32
+subject_revision: cef2a19beccd804656db20ec10c1ef3773992f32
+test_patch_applied_to_subject: false
+test_patch_files: docs/site/test/corpus.test.ts
+test_patch_digest: sha256:bad265ef396b91d95530e871f26b75fabbfb0bc459a818d1b0df49ec94813676
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node --test docs/site/test/corpus.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:7911ad512a7bfd4fd19dd7bd8ac2d0cf32a7767da02923297fa3a278de3355d9"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+✔ the same public build driver produces a valid baseline before corpus assertions (0.285958ms)
+✔ the complete corpus has 23 pages and both audience tracks (0.178167ms)
+✔ the atlas explains all nine system nodes and eight connections (0.722041ms)
+✔ the committed design packet is readable as linked documentation, not a source-code dump (0.16475ms)
+✔ current commands and planned product availability have separate references (0.131042ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 172.385375

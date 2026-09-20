@@ -1,0 +1,29 @@
+{
+  "task": "agora-visual-progress",
+  "change": "2-corpus",
+  "code_head": "cef2a19beccd804656db20ec10c1ef3773992f32",
+  "parent": "931cdfe7e153da9b582fde79a75557d1af64ca5b",
+  "scope": "23-page two-track corpus, full atlas graph, 14 rendered source-owned handoff pages",
+  "checks": {
+    "docs_tests": 31,
+    "existing_tests": 40,
+    "red": "Valid parent baseline passes; four intended corpus assertions fail",
+    "green": "All five corpus assertions pass",
+    "browser": "All 37 authored pages at 390x844 and 1440x900, no horizontal overflow, one main H1, no scripts/animations; packet and source-directory navigation clicks pass",
+    "accessibility": "Mobile and desktop Lighthouse 100; mobile skip/menu keyboard checks and semantic tree reviewed",
+    "skill": "Literal verification skill, design/handoff negatives, privacy scan and production build pass"
+  },
+  "size": {
+    "meaningful_added": 711,
+    "authored_files": 24,
+    "rationale": "Complete two-audience explanations are one coherent dependent corpus, below hard 1000-line/25-source-file limits. Generated companion and retained evidence counted separately; no exception."
+  },
+  "limits": [
+    "Not Agora runtime foundation/product qualification",
+    "No native screen-reader session or product comprehension trial claimed",
+    "Independent exact-head documentation review remains the landing authority responsibility",
+    "Batch browser failures preserved in browser-driver-errors.log; final sweep uses approved sequential CLI commands",
+    "Standard installed Node 24.16.0 used to avoid signed-wrapper native-binding incompatibility",
+    "These initial receipts predate rebase onto the newly advanced main; refreshed receipts will identify the new source subjects"
+  ]
+}
