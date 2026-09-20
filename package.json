@@ -1,0 +1,30 @@
+{
+	"name": "agora",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@10.34.1",
+	"engines": {
+		"node": ">=24.16.0 <25",
+		"pnpm": ">=10.34.1 <11"
+	},
+	"scripts": {
+		"lint": "eslint .",
+		"typecheck": "tsc -p tsconfig.json",
+		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs",
+		"test": "node scripts/with-test-postgres.mjs vitest run",
+		"test:unit": "vitest run --project unit",
+		"test:pg": "node scripts/with-test-postgres.mjs vitest run --project pg",
+		"migrate": "node packages/storage/src/migrate-cli.ts",
+		"migrate:ephemeral": "node scripts/with-test-postgres.mjs node packages/storage/src/migrate-cli.ts",
+		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm test"
+	},
+	"devDependencies": {
+		"@eslint/js": "10.0.1",
+		"@types/node": "24.10.1",
+		"eslint": "10.11.0",
+		"markdownlint-cli2": "0.23.2",
+		"typescript": "5.9.3",
+		"typescript-eslint": "8.70.0",
+		"vitest": "5.0.1"
+	}
+}
