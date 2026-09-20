@@ -28,6 +28,7 @@ function mapped() {
 	if (new Set(features.map(feature => feature.id)).size !== features.length) return false;
 	if (!before.features.every(old => features.some(feature => feature.id === old.id && old.scenarios.every(id => feature.scenarios.includes(id))))) return false;
 	if (features.some(feature => feature.id !== 'foundation-admission' && !before.features.some(old => old.id === feature.id))) return false;
+	if (features.flatMap(feature => feature.scenarios).filter(file => file.endsWith('.test.ts')).some(file => run(['git', 'cat-file', '-e', `${head}:${file}`]).exit !== 0)) return false;
 	return git('diff', '--name-only', parent, head).split('\n').filter(file => /^(scripts|packages|apps|contracts)\//.test(file)).every(file => features.some(feature => [...feature.paths, ...feature.scenarios].some(entry => file === entry || file.startsWith(`${entry}/`))));
 }
 function owners() {
@@ -42,7 +43,8 @@ function owners() {
 		};
 		const tests = probe(['node', 'scripts/with-test-postgres.mjs', 'pnpm', 'exec', 'vitest', 'run', '--reporter=json', '--outputFile=.scratch/owners.json']);
 		const native = JSON.parse(readFileSync(path.join(copy, '.scratch/owners.json'), 'utf8'));
-		const passed = tests && assertions(native).every(row => row.status === 'passed');
+		const expected = JSON.parse(git('show', `${head}:agora/feature-map.json`)).features.flatMap(feature => feature.scenarios).filter(file => /^(apps|packages|contracts)\//.test(file) && file.endsWith('.test.ts'));
+		const passed = tests && assertions(native).every(row => row.status === 'passed') && expected.every(file => native.testResults.some(suite => suite.name.endsWith(file) && suite.assertionResults.length > 0));
 		const suites = names => passed && names.every(name => native.testResults.some(suite => suite.name.endsWith(name) && suite.assertionResults.length > 0));
 		const bootstrap = suites(['apps/center/test/policy.test.ts', 'packages/storage/test/fixture.pg.test.ts', 'packages/storage/test/migrate.pg.test.ts']);
 		const contracts = probe(['node', 'contracts/tools/generate.mjs', '--check'], jsonPass) && suites(['contracts/test/generation.test.ts', 'contracts/test/conformance.test.ts']);
