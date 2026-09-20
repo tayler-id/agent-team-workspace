@@ -3,7 +3,7 @@
 // Usage: node scripts/record-red-green.mjs --parent SHA --head SHA --out DIR [-- test command...]
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -33,10 +33,11 @@ const headSha = git('rev-parse', '--verify', `${head}^{commit}`).trim();
 const changedFiles = git('diff', '--name-only', parentSha, headSha).split('\n').filter(Boolean);
 const testFiles = changedFiles.filter(isTestPath);
 const testPatch = git('diff', parentSha, headSha, '--', ...testFiles);
+const atHead = (file) => spawnSync('git', ['cat-file', '-e', `${headSha}:${file}`]).status === 0;
 const fixtureIdentity = {
 	migration_journal: sha256(git('show', `${headSha}:packages/storage/drizzle/meta/_journal.json`)),
-	migration_sql: changedFiles.filter((f) => f.endsWith('.sql')).map((f) => ({ file: f, digest: sha256(git('show', `${headSha}:${f}`)) })),
-	contract_schemas: changedFiles.filter((f) => f.startsWith('contracts/')).map((f) => ({ file: f, digest: sha256(git('show', `${headSha}:${f}`)) })),
+	migration_sql: changedFiles.filter((f) => f.endsWith('.sql') && atHead(f)).map((f) => ({ file: f, digest: sha256(git('show', `${headSha}:${f}`)) })),
+	contract_schemas: changedFiles.filter((f) => f.startsWith('contracts/') && !f.startsWith('contracts/generated/') && !f.includes('/Generated/') && atHead(f)).map((f) => ({ file: f, digest: sha256(git('show', `${headSha}:${f}`)) })),
 };
 const toolchain = {
 	node: version('node', ['--version']),
@@ -70,6 +71,8 @@ function runAt(sha, label, applyPatch) {
 	} finally {
 		git('worktree', 'remove', '--force', dir);
 		rmSync(dir, { recursive: true, force: true });
+		// SwiftPM keeps its build-directory lock files under the temp root, named after the build path; they belong to this worktree.
+		for (const entry of readdirSync(os.tmpdir())) if (entry.includes(path.basename(dir)) && entry.endsWith('.lock')) rmSync(path.join(os.tmpdir(), entry), { force: true });
 	}
 }
 
