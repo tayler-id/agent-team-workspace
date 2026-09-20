@@ -35,19 +35,25 @@ CREATE TABLE foundation_fixture.claim (
 --> statement-breakpoint
 ALTER TABLE foundation_fixture.stream ENABLE ROW LEVEL SECURITY;
 --> statement-breakpoint
+ALTER TABLE foundation_fixture.stream FORCE ROW LEVEL SECURITY;
+--> statement-breakpoint
 ALTER TABLE foundation_fixture.event ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
+ALTER TABLE foundation_fixture.event FORCE ROW LEVEL SECURITY;
 --> statement-breakpoint
 ALTER TABLE foundation_fixture.claim ENABLE ROW LEVEL SECURITY;
 --> statement-breakpoint
-CREATE POLICY scope_isolation ON foundation_fixture.stream FOR ALL TO agora_app
+ALTER TABLE foundation_fixture.claim FORCE ROW LEVEL SECURITY;
+--> statement-breakpoint
+CREATE POLICY scope_isolation ON foundation_fixture.stream FOR ALL
 	USING (scope_id = nullif(current_setting('agora.scope_id', true), '')::uuid)
 	WITH CHECK (scope_id = nullif(current_setting('agora.scope_id', true), '')::uuid);
 --> statement-breakpoint
-CREATE POLICY scope_isolation ON foundation_fixture.event FOR ALL TO agora_app
+CREATE POLICY scope_isolation ON foundation_fixture.event FOR ALL
 	USING (scope_id = nullif(current_setting('agora.scope_id', true), '')::uuid)
 	WITH CHECK (scope_id = nullif(current_setting('agora.scope_id', true), '')::uuid);
 --> statement-breakpoint
-CREATE POLICY scope_isolation ON foundation_fixture.claim FOR ALL TO agora_app
+CREATE POLICY scope_isolation ON foundation_fixture.claim FOR ALL
 	USING (scope_id = nullif(current_setting('agora.scope_id', true), '')::uuid)
 	WITH CHECK (scope_id = nullif(current_setting('agora.scope_id', true), '')::uuid);
 --> statement-breakpoint

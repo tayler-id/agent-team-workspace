@@ -48,7 +48,8 @@ export function bindFixtureTransaction(client: PoolClient): FixtureTransaction {
 			return seq;
 		},
 		async readEvents(streamId) {
-			const result = await client.query<FixtureEvent>('select stream_id, seq::text as seq, kind, payload from foundation_fixture.event where stream_id = $1 order by seq', [streamId]);
+			// Qualify the sort column: a bare "order by seq" would bind to the text alias and sort lexically.
+			const result = await client.query<FixtureEvent>('select e.stream_id, e.seq::text as seq, e.kind, e.payload from foundation_fixture.event e where e.stream_id = $1 order by e.seq', [streamId]);
 			return result.rows;
 		},
 		async readNextSeq(streamId) {

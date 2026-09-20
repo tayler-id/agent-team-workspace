@@ -22,11 +22,15 @@ afterAll(async () => {
 	await admin.end();
 });
 
-test('the app role connects as a non-owner without superuser or BYPASSRLS', async () => {
-	const app = new Pool({ connectionString: appUrl });
-	const role = await app.query<{ name: string; superuser: boolean; bypass: boolean }>('select current_user as name, rolsuper as superuser, rolbypassrls as bypass from pg_roles where rolname = current_user');
-	await app.end();
-	expect(role.rows[0]).toEqual({ name: 'agora_app', superuser: false, bypass: false });
+test('the app role and the schema owner are neither superusers nor BYPASSRLS, so forced row security binds both', async () => {
+	const roleOf = async (url: string) => {
+		const pool = new Pool({ connectionString: url });
+		const role = await pool.query<{ name: string; superuser: boolean; bypass: boolean }>('select current_user as name, rolsuper as superuser, rolbypassrls as bypass from pg_roles where rolname = current_user');
+		await pool.end();
+		return role.rows[0];
+	};
+	expect(await roleOf(appUrl)).toEqual({ name: 'agora_app', superuser: false, bypass: false });
+	expect(await roleOf(ownerUrl)).toEqual({ name: 'agora_owner', superuser: false, bypass: false });
 });
 
 test('a fresh database applies every journal entry once and a second run is a no-op with the same schema digest', async () => {

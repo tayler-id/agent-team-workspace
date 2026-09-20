@@ -6,8 +6,10 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+const SUPERUSER = 'postgres';
 const OWNER = 'agora_owner';
 const APP = 'agora_app';
+const BYPASS = 'agora_bypass';
 const DATABASE = 'agora_test';
 const command = process.argv.slice(2);
 if (command.length === 0) {
@@ -30,7 +32,7 @@ const runChild = (env) => new Promise((resolve) => {
 	});
 });
 
-if (process.env.AGORA_TEST_DATABASE_URL && process.env.AGORA_TEST_OWNER_DATABASE_URL) {
+if (process.env.AGORA_TEST_DATABASE_URL && process.env.AGORA_TEST_OWNER_DATABASE_URL && process.env.AGORA_TEST_BYPASS_DATABASE_URL) {
 	process.exit(await runChild(process.env));
 }
 
@@ -44,7 +46,7 @@ const cleanup = () => {
 	rmSync(root, { recursive: true, force: true });
 };
 
-const initdb = run(bin('initdb'), ['-D', dataDir, '-U', OWNER, '--auth=trust', '-E', 'UTF8', '--no-locale']);
+const initdb = run(bin('initdb'), ['-D', dataDir, '-U', SUPERUSER, '--auth=trust', '-E', 'UTF8', '--no-locale']);
 if (initdb.status !== 0) {
 	rmSync(root, { recursive: true, force: true });
 	fail(70, 'initdb failed', initdb.stderr);
@@ -54,13 +56,15 @@ if (start.status !== 0) {
 	rmSync(root, { recursive: true, force: true });
 	fail(70, 'pg_ctl start failed', start.stderr + start.stdout);
 }
+// The schema owner is deliberately not the bootstrap superuser: superusers bypass row-level security unconditionally.
 const bootstrap = [
 	`CREATE ROLE ${APP} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS`,
-	`ALTER ROLE ${OWNER} CREATEDB`,
+	`CREATE ROLE ${OWNER} LOGIN NOSUPERUSER CREATEDB NOCREATEROLE NOBYPASSRLS`,
+	`CREATE ROLE ${BYPASS} LOGIN NOSUPERUSER BYPASSRLS IN ROLE ${APP}`,
 	`CREATE DATABASE ${DATABASE} OWNER ${OWNER}`,
 ];
 for (const sql of bootstrap) {
-	const result = run(bin('psql'), ['-v', 'ON_ERROR_STOP=1', '-h', root, '-U', OWNER, '-d', 'postgres', '-c', sql]);
+	const result = run(bin('psql'), ['-v', 'ON_ERROR_STOP=1', '-h', root, '-U', SUPERUSER, '-d', 'postgres', '-c', sql]);
 	if (result.status !== 0) {
 		cleanup();
 		fail(70, `bootstrap statement failed: ${sql}`, result.stderr);
@@ -72,11 +76,12 @@ const env = {
 	...process.env,
 	AGORA_TEST_DATABASE_URL: url(APP),
 	AGORA_TEST_OWNER_DATABASE_URL: url(OWNER),
+	AGORA_TEST_BYPASS_DATABASE_URL: url(BYPASS),
 	// The service runs as the non-owner role; only migrations use the owner.
 	AGORA_DATABASE_URL: process.env.AGORA_DATABASE_URL ?? url(APP),
 	AGORA_MIGRATION_DATABASE_URL: process.env.AGORA_MIGRATION_DATABASE_URL ?? url(OWNER),
 };
-console.error(JSON.stringify({ schema_version: 'agora.test-postgres/v1', outcome: 'started', socket_dir: root, database: DATABASE, owner_role: OWNER, app_role: APP }));
+console.error(JSON.stringify({ schema_version: 'agora.test-postgres/v1', outcome: 'started', socket_dir: root, database: DATABASE, owner_role: OWNER, app_role: APP, bypass_role: BYPASS }));
 let exitCode;
 try {
 	for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => { cleanup(); process.exit(130); });

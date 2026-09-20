@@ -28,22 +28,23 @@ export function openDatabase(connectionString: string): Database {
 		schemaDigest: () => schemaDigest(pool),
 		async withScope(scopeId, work) {
 			const client = await pool.connect();
+			let discard: Error | undefined;
 			try {
 				await client.query('begin');
 				await client.query('select set_config($1, $2, true)', ['agora.scope_id', scopeId]);
 				const result = await work(bindFixtureTransaction(client));
 				await client.query('commit');
-				client.release();
 				return result;
 			} catch (error) {
-				// A failed rollback must not hand a client with an open transaction and bound scope back to the pool.
 				try {
 					await client.query('rollback');
-					client.release();
 				} catch (rollbackError) {
-					client.release(rollbackError instanceof Error ? rollbackError : new Error(String(rollbackError)));
+					// The connection may still hold an open transaction and bound scope; releasing with an error makes pg discard it.
+					discard = rollbackError instanceof Error ? rollbackError : new Error(String(rollbackError));
 				}
 				throw error;
+			} finally {
+				client.release(discard);
 			}
 		},
 		close: () => pool.end(),

@@ -54,6 +54,8 @@ for (const test of cases) {
 	fs.cpSync(path.join(root, 'scripts'), path.join(fixture, 'scripts'), { recursive: true });
 	for (const file of ['AGENTS.md', 'CLAUDE.md', 'skills-lock.json']) fs.copyFileSync(path.join(root, file), path.join(fixture, file));
 	fs.symlinkSync(path.join(root, '.agents'), path.join(fixture, '.agents'), 'dir');
+	// Decision rows cite evidence receipts and reviewed migration files; copy them so a mutation can never reach the real tree.
+	for (const cited of ['evidence', 'packages']) fs.cpSync(path.join(root, cited), path.join(fixture, cited), { recursive: true, filter: source => !source.includes('node_modules') });
 	for (const { file, mutate } of test.changes) {
 		const target = path.join(fixture, file);
 		const before = fs.readFileSync(target, 'utf8');

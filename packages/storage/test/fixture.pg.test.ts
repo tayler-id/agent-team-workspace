@@ -6,6 +6,7 @@ import { FixtureError, openDatabase } from '@agora/storage';
 
 const owner = openDatabase(process.env['AGORA_TEST_OWNER_DATABASE_URL'] ?? '');
 const app = openDatabase(process.env['AGORA_TEST_DATABASE_URL'] ?? '');
+const bypass = openDatabase(process.env['AGORA_TEST_BYPASS_DATABASE_URL'] ?? '');
 const raw = new Pool({ connectionString: process.env['AGORA_TEST_DATABASE_URL'] });
 const scopeA = asScopeId(randomUUID());
 const scopeB = asScopeId(randomUUID());
@@ -33,6 +34,7 @@ beforeAll(async () => {
 afterAll(async () => {
 	await raw.end();
 	await app.close();
+	await bypass.close();
 	await owner.close();
 });
 
@@ -55,6 +57,7 @@ describe('race', () => {
 	test('concurrent appends to one stream receive contiguous distinct sequences', async () => {
 		const streamId = randomUUID();
 		await app.withScope(scopeA, (tx) => tx.ensureStream(streamId));
+		// Eight stays below pg's default pool size of ten, so every transaction can hold a client while the latch is closed.
 		let begun = 0;
 		let release = (): void => undefined;
 		const everyTransactionOpen = new Promise<void>((resolve) => { release = resolve; });
@@ -66,6 +69,16 @@ describe('race', () => {
 		expect([...seqs].sort((x, y) => Number(x) - Number(y))).toEqual(['1', '2', '3', '4', '5', '6', '7', '8']);
 		const observed = await app.withScope(scopeA, async (tx) => ({ kinds: (await tx.readEvents(streamId)).map((e) => `${e.seq}:${e.kind}`), nextSeq: await tx.readNextSeq(streamId) }));
 		expect(observed).toEqual({ kinds: ['1:status', '2:status', '3:status', '4:status', '5:status', '6:status', '7:status', '8:status'], nextSeq: '9' });
+	});
+
+	test('twelve appended events read back in numeric sequence order, not text order', async () => {
+		const streamId = randomUUID();
+		const observed = await app.withScope(scopeA, async (tx) => {
+			await tx.ensureStream(streamId);
+			for (let i = 0; i < 12; i++) await tx.appendEvent(streamId, 'status', { i });
+			return (await tx.readEvents(streamId)).map((e) => `${e.seq}:${(e.payload as { i: number }).i}`);
+		});
+		expect(observed).toEqual(['1:0', '2:1', '3:2', '4:3', '5:4', '6:5', '7:6', '8:7', '9:8', '10:9', '11:10', '12:11']);
 	});
 
 	test('exactly one of eight concurrent claims wins and the losers see claimed: false', async () => {
@@ -126,8 +139,13 @@ describe('row-level security', () => {
 		expect(result.rows[0]).toEqual({ count: '0' });
 	});
 
-	test('guard negative: the table owner bypasses the policy, so the denial above depends on the non-owner role', async () => {
-		const observed = await owner.withScope(scopeB, (tx) => tx.readEvents(streamId));
+	test('row security is forced, so even the table owner is confined to the bound scope', async () => {
+		const observed = await owner.withScope(scopeB, async (tx) => (await tx.readEvents(streamId)).map((e) => e.payload));
+		expect(observed).toEqual([{ owner: 'B' }]);
+	});
+
+	test('guard negative: a BYPASSRLS role sees every scope, so the denials above depend on the policies, not on the data', async () => {
+		const observed = await bypass.withScope(scopeB, (tx) => tx.readEvents(streamId));
 		expect(observed.map((e) => e.payload as { owner: string }).sort((x, y) => x.owner.localeCompare(y.owner))).toEqual([{ owner: 'A' }, { owner: 'B' }]);
 	});
 });
