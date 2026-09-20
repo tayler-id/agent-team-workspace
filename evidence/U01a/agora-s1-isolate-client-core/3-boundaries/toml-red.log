@@ -1,0 +1,40 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ❯ |unit| packages/client-core/test/fixture.test.ts (5 tests | 1 failed | 4 skipped) 3007ms
+   × the documentation gate rejects a malformed TOML config rather than hanging 3007ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/fixture.test.ts > the documentation gate rejects a malformed TOML config rather than hanging
+AssertionError: documentation config parser must terminate: expected Error: spawnSync /Users/taylerramsay/.loc… { …(5) } to be undefined
+
+- Expected:
+undefined
+
++ Received:
+Error {
+  "message": "spawnSync /Users/taylerramsay/.local/node/bin/node ETIMEDOUT",
+  "errno": -60,
+  "code": "ETIMEDOUT",
+  "syscall": "spawnSync /Users/taylerramsay/.local/node/bin/node",
+  "path": "/Users/taylerramsay/.local/node/bin/node",
+  "spawnargs": [
+    "node_modules/markdownlint-cli2/markdownlint-cli2-bin.mjs",
+    "--config",
+    "/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-docs-config-e46P7I/invalid.toml",
+    "docs/features/client-synchronization.md",
+  ],
+}
+
+ ❯ packages/client-core/test/fixture.test.ts:43:70
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 skipped (5)
+   Start at  11:12:01
+   Duration  3.14s (tests 97%, import 2%, transform 1%)
+

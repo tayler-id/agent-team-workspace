@@ -1,0 +1,59 @@
+{
+  "actions": [],
+  "advisories": {
+    "1193945": {
+      "findings": [
+        {
+          "version": "1.7.0",
+          "paths": [
+            ".>markdownlint-cli2>smol-toml"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/squirrelchat/smol-toml/security/advisories/GHSA-7w5x-hrqm-74c2\n- https://nvd.nist.gov/vuln/detail/CVE-2026-85730\n- https://github.com/squirrelchat/smol-toml/commit/30f5c367d946b695f379b5d4f0946b2f0a0a8c2f\n- https://github.com/squirrelchat/smol-toml/releases/tag/v1.7.1\n- https://medium.com/@ravindu.lakmina1/seven-bytes-that-freeze-a-node-js-server-forever-the-story-of-cve-2026-85730-3213328b38f0\n- https://github.com/advisories/GHSA-7w5x-hrqm-74c2",
+      "created": "2026-09-09T18:07:11.000Z",
+      "id": 1193945,
+      "npm_advisory_id": null,
+      "overview": "### Summary\n`parse()` can be forced into an infinite loop when a value inside an array or inline table is followed by a comment that has no trailing newline (i.e. the comment \"ends\" the document).\n\nThe library fails to exit an internal loop when attempting to find the end of the structure, resetting its cursor to the beginning of the string instead. This causes the parser to indefinitely hang, compromising the availability of the service.\n\n### Proof of concept\n\n```js\nimport { parse } from 'smol-toml'\nparse('a=[1 #')   // never returns; CPU pinned at 100%\n```\n\n### Impact\n\nApplications which parse arbitrary TOML documents can suffer major availability issues if they receive malicious input. This issue is particularly severe for these use-cases, and it is **strongly advised** to upgrade to an up-to-date version of the library as soon as possible.\n\nIf your use-case does not involve parsing arbitrary TOML documents from untrusted sources, the impact is much lower in practice, although it's still advisable to update to version 1.7.1.\n\n### Patches\n\nVersion 1.7.1 properly breaks out of the loop in these situations and throws the expected `TomlError`.\n\n### Workarounds\n\nNone that don't involve refactors. Update the library **as soon as possible** if your use-case involves parsing arbitrary TOML documents from untrusted sources.\n\n\nReported By : [Ravindu Lakmina Munaweera](https://www.linkedin.com/in/ravindulakmina/)",
+      "reported_by": null,
+      "title": "smol-toml: Denial of Service via malformed TOML documents",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-85730"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "smol-toml",
+      "vulnerable_versions": "<=1.7.0",
+      "github_advisory_id": "GHSA-7w5x-hrqm-74c2",
+      "recommendation": "Upgrade to version 1.7.1 or later",
+      "patched_versions": ">=1.7.1",
+      "updated": "2026-09-09T18:07:14.000Z",
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      },
+      "cwe": [
+        "CWE-606",
+        "CWE-835"
+      ],
+      "url": "https://github.com/advisories/GHSA-7w5x-hrqm-74c2"
+    }
+  },
+  "muted": [],
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 1,
+      "critical": 0
+    },
+    "dependencies": 291,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 291
+  }
+}
