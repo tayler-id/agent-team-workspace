@@ -1,0 +1,15 @@
+
+> agora@ test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> node scripts/with-test-postgres.mjs vitest run
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-1jjuXy","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+
+ Test Files  19 passed (19)
+      Tests  93 passed (93)
+   Start at  16:23:37
+   Duration  30.56s (tests 96%, import 3%, transform 1%)
+
+exit:0

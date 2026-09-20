@@ -1,14 +1,19 @@
 {
-  "revision": "606cba2",
+  "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
   "date": "2026-09-20",
   "features": [
     {
       "id": "task-proof",
       "title": "Task proof admission",
-      "status": "In progress",
+      "status": "Built",
       "why": "Reject missing or forged proof before a task can claim readiness.",
       "page": "test-first.md",
-      "proof": ["repo:docs/task-breakdown.md"]
+      "proof": [
+        "repo:contracts/src/index.ts",
+        "repo:packages/verification/test/admission.test.ts",
+        "repo:packages/verification/test/protocol.test.ts",
+        "repo:evidence/U01a/agora-s1-enforce-test-first/task-report.json"
+      ]
     },
     {
       "id": "bootstrap",
@@ -39,11 +44,14 @@
     {
       "id": "client-core",
       "title": "Client synchronization isolation",
-      "status": "In progress",
+      "status": "Built",
       "why": "Keep replay, ordering and retry decisions independent of the renderer.",
       "page": "synchronization.md",
       "proof": [
-        "repo:docs/task-breakdown.md"
+        "repo:packages/client-core/src/index.ts",
+        "repo:packages/client-core/test/sync.test.ts",
+        "repo:packages/client-core/test/boundaries.test.ts",
+        "repo:evidence/U01a/agora-s1-isolate-client-core/2-core/green.log"
       ]
     },
     {
@@ -169,8 +177,18 @@
       "id": "U01a",
       "title": "Establish repository contracts and test-first gates",
       "stage": "S1",
-      "status": "In progress",
-      "outcome": "An engineer can build a small contract fixture, observe a real red/green test, reject a forbidden import, and compile the same wire values in TypeScript and Swift."
+      "status": "Built",
+      "outcome": "An engineer can build a small contract fixture, observe a real red/green test, reject a forbidden import, and compile the same wire values in TypeScript and Swift.",
+      "proof": [
+        "repo:apps/center/src/app.ts",
+        "repo:contracts/src/conformance.ts",
+        "repo:packages/client-core/src/index.ts",
+        "repo:packages/storage/test/fixture.pg.test.ts",
+        "repo:contracts/test/conformance.test.ts",
+        "repo:packages/client-core/test/sync.test.ts",
+        "repo:packages/verification/test/admission.test.ts",
+        "repo:evidence/U01a/outcome.json"
+      ]
     },
     {
       "id": "U01b",

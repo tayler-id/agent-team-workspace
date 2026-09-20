@@ -1,0 +1,113 @@
+{
+  "id": "red-required",
+  "head": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+  "source": "sha256:2b3f6c3e07e753ff817207ac86368cb0e7f5ddecf7973a2f3cd89a5c6177b003",
+  "test": "sha256:604029b1a6663d50d4db5db3d48f492bb36fb12ab67737f26d6d13f09d154388",
+  "before": "if (!records.some(record => record.id === id))",
+  "after": "if (id !== 'red' && !records.some(record => record.id === id))",
+  "normal": [
+    {
+      "subject": "applicability cannot waive behavioral tests",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "baseline admission driver accepts a complete task",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "FG01.red-required",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "forged or stale proof cannot pass",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "missing client denies with client_missing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "missing green denies with green_missing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "missing guard denies with guard_missing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "semantic prerequisite and feature mapping are required",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "task success is not foundation or feature admission",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "unknown proof and duplicate subjects deny",
+      "status": "passed",
+      "cause": ""
+    }
+  ],
+  "weakened": [
+    {
+      "subject": "applicability cannot waive behavioral tests",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "baseline admission driver accepts a complete task",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "FG01.red-required",
+      "status": "failed",
+      "cause": "AssertionError: expected [] to include 'red_missing'"
+    },
+    {
+      "subject": "forged or stale proof cannot pass",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "missing client denies with client_missing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "missing green denies with green_missing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "missing guard denies with guard_missing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "semantic prerequisite and feature mapping are required",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "task success is not foundation or feature admission",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "unknown proof and duplicate subjects deny",
+      "status": "passed",
+      "cause": ""
+    }
+  ],
+  "cleanup": "removed"
+}

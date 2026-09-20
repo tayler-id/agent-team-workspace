@@ -1,0 +1,25 @@
+# lane-3 transcript: clean install and migrate twice (agora.lane/v1)
+head: b9c65c4487b9c08237d22cb4be4ae92999308bc4
+recorded_at: 2026-09-20T20:26:56Z
+toolchain: node v24.16.0 pnpm 10.34.1 pg_ctl (PostgreSQL) 18.4 (Homebrew) Darwin 25.5.0 arm64
+method: fresh git worktree at head, fresh empty pnpm store, pnpm install --frozen-lockfile, then two migration runs as the owner against one throwaway socket-only cluster
+
+## command: pnpm install --frozen-lockfile --store-dir <fresh>
+install_exit: 0 (expected 0)
++ markdownlint-cli2 0.23.2
++ typescript 5.9.3
++ typescript-eslint 8.70.0
++ vitest 5.0.1
+
+Done in 2s using pnpm v10.34.1
+
+## command: pnpm typecheck && pnpm lint (clean worktree)
+typecheck+lint_exit: 0 (expected 0)
+
+## command: node scripts/with-test-postgres.mjs bash -c 'migrate; migrate'
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-xW9wjG","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.migration-report/v1","applied":1,"total":1,"schema_digest":"sha256:fbc2fbff28382282c51cd6e84c763c3cb7481a8011581e98fac09788fc3c39f1","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}
+first_exit: 0
+{"schema_version":"agora.migration-report/v1","applied":0,"total":1,"schema_digest":"sha256:fbc2fbff28382282c51cd6e84c763c3cb7481a8011581e98fac09788fc3c39f1","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}
+second_exit: 0
+pass predicate: applied 1 then applied 0, identical schema_digest, database_version PostgreSQL 18.x

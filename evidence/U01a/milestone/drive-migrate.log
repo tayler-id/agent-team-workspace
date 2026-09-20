@@ -1,0 +1,5 @@
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-T1Jkp3","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.migration-report/v1","applied":1,"total":1,"schema_digest":"sha256:fbc2fbff28382282c51cd6e84c763c3cb7481a8011581e98fac09788fc3c39f1","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}
+---second---
+{"schema_version":"agora.migration-report/v1","applied":0,"total":1,"schema_digest":"sha256:fbc2fbff28382282c51cd6e84c763c3cb7481a8011581e98fac09788fc3c39f1","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}
+exit:0

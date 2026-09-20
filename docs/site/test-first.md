@@ -19,7 +19,7 @@ Declared subject | Resolve exact parent and head commits. Reject a stale driver 
 Behavioral replay | Apply the head test patch at the parent. Compare native assertion identities and causes with the retained receipts, then require those assertions to pass at the head.
 Guard counterexample | Run the unchanged assertions, disable only the red-required check in an isolated copy, and require exactly its named assertion to fail.
 Admission or denial | Require preserved feature mappings and fresh prerequisite behavior. Return stable missing-proof IDs instead of accepting files or a claimed status.
-Separate authority | Task success stays local. FG01 through FG03 still lack milestone qualification; FG04 through FG08 are not implemented here. Human review remains required.
+Separate authority | Task success stays local; this driver cannot grant milestone qualification by itself. FG01 through FG03 were qualified separately, at the operator level, by rerunning all ten plan-defined lanes fresh at the milestone head. FG04 through FG08 are not implemented here. Human review remains required.
 ```
 
 The recorder checks tracked source integrity before and after execution. The guard driver restores the mutated file before removing its owned worktree. Receipts bind the command, test patch, configuration, toolchain and revisions. Timestamps describe runs but do not prove chronology. Fresh replay establishes reproducibility; independent review still judges test adequacy and chronology.
@@ -29,6 +29,8 @@ Applicability is explicitly behavioral for this one task. There is no self-decla
 ## Implementation status
 
 In progress at this task snapshot. The bounded driver and tests implement U01a.B04 only. The full `agora project doctor|scenarios|start|verify|evidence|stop` runner, general evidence storage, trusted CI, reviewer authentication and production authorization belong to later tasks. Local candidate code runs with the developer's permissions, not in a security sandbox. Do not use this tool on an untrusted repository with secrets present.
+
+The U01a milestone that this task's proof feeds into is separately **qualified**, at revision `b9c65c4`; see the [milestone qualification receipt](repo:evidence/U01a/outcome.json). This one task's own admission is still local and does not, by itself, grant that qualification.
 
 ## Verification and proof
 

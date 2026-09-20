@@ -34,7 +34,9 @@ The policy HTTP route is pure and does not persist a product command. The storag
 
 ## Implementation status
 
-**Built at the atlas revision, fixture only.** This task does not implement authentication, invitations, rooms, WebSockets, a run scheduler, backup recovery or a worker. It does not qualify U01a or the full R22 foundation. Never treat caller-supplied fixture actor IDs as real authentication.
+**Built at the atlas revision, fixture only.** This task does not implement authentication, invitations, rooms, WebSockets, a run scheduler, backup recovery or a worker. On its own it did not qualify U01a; the milestone required all four U01a tasks plus fresh integration proof. Never treat caller-supplied fixture actor IDs as real authentication.
+
+U01a milestone qualification followed at revision `b9c65c4`: all ten plan-defined integration lanes were rerun fresh at that exact head, independent of any task's own evidence. The [milestone qualification receipt](repo:evidence/U01a/outcome.json) records the result. FG04 through FG08 remain correctly unqualified; they belong to U01b, U01c and U01d.
 
 After the seeded `606cba2` snapshot, U01a.B03 landed a deeply immutable client state machine and portable import/public-type guards. It turns validated snapshots and events into replay, acknowledgement and command decisions without a renderer or network transport. The [source-owned synchronization explanation](repo:docs/features/client-synchronization.md) covers its state flow and fixture-only limits. `scripts/client-fixture.ts` translates fixtures outside the core; `scripts/drive-client-core.ts` compares TypeScript and Swift through `pnpm client:replay -- --json --swift`. `scripts/boundary-policy.ts` and `scripts/public-types.ts` enforce dependency and public-port boundaries through `pnpm boundaries`.
 

@@ -1,0 +1,133 @@
+{
+	"schema_version": "agora.milestone-outcome/v1",
+	"unit": "U01a",
+	"title": "Establish repository contracts and test-first gates",
+	"stage": "S1",
+	"outcome": "qualified",
+	"qualified_at": "2026-09-20",
+	"head": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+	"toolchain": {
+		"node": "v24.16.0",
+		"pnpm": "10.34.1",
+		"postgres": "pg_ctl (PostgreSQL) 18.4 (Homebrew)",
+		"swift": "swift-driver 1.148.6, Apple Swift 6.3.3",
+		"host": "Darwin 25.5.0 arm64"
+	},
+	"method": "This is a separate milestone-level qualification, not a restatement of any single task's own admission. All ten plan-defined U01a integration lanes (docs/implementation-plan.md, 'Establish repository contracts and test-first gates') were rerun fresh at the exact head above, using real PostgreSQL, real Swift toolchain compilation and a real browser, independent of each task's own earlier evidence at earlier revisions. Retained artifacts were independently read and cross-checked against their own claims, not only re-executed.",
+	"tasks": [
+		{ "task": "agora-s1-bootstrap-repository", "build_box": "U01a.B01", "outcome": "repo:evidence/U01a/agora-s1-bootstrap-repository/outcome.json" },
+		{ "task": "agora-s1-publish-portable-contracts", "build_box": "U01a.B02", "outcome": "repo:evidence/U01a/agora-s1-publish-portable-contracts/outcome.json" },
+		{ "task": "agora-s1-isolate-client-core", "build_box": "U01a.B03", "outcome": "no top-level outcome.json existed before this qualification; see evidence/U01a/agora-s1-isolate-client-core/{1-contracts,2-core,3-boundaries}/ and the fresh milestone-level lane-4..lane-8 reruns below" },
+		{ "task": "agora-s1-enforce-test-first", "build_box": "U01a.B04", "outcome": "repo:evidence/U01a/agora-s1-enforce-test-first/README.md", "fresh_task_scope_rerun_at_this_head": "repo:evidence/U01a/milestone/foundation-task.json" }
+	],
+	"foundation_proofs": [
+		{
+			"id": "FG01",
+			"description": "Behavioral red then green, guard disabled then red, strict build/lint, real transaction rollback/race/RLS and migration repeatability",
+			"outcome": "pass",
+			"evidence": ["repo:evidence/U01a/lane-1/transcript.log", "repo:evidence/U01a/lane-2/transcript.log", "repo:evidence/U01a/lane-3/transcript.log", "repo:evidence/U01a/milestone/foundation-record.json", "repo:evidence/U01a/milestone/doctor-typecheck.log", "repo:evidence/U01a/milestone/doctor-lint.log"]
+		},
+		{
+			"id": "FG02",
+			"description": "Authoritative schema drift rejection and TypeScript/Swift canonical and protocol conformance",
+			"outcome": "pass",
+			"evidence": ["repo:evidence/U01a/lane-4/transcript.log", "repo:evidence/U01a/lane-5/transcript.log", "repo:evidence/U01a/lane-6/transcript.log", "repo:evidence/U01a/milestone/drive-contracts-conform.log"]
+		},
+		{
+			"id": "FG03",
+			"description": "Forbidden imports rejected and framework-free core replay tested without DOM",
+			"outcome": "pass",
+			"evidence": ["repo:evidence/U01a/lane-7/transcript.log", "repo:evidence/U01a/lane-8/transcript.log", "repo:evidence/U01a/milestone/drive-boundaries.json"]
+		}
+	],
+	"lanes": [
+		{ "id": 1, "name": "Regression lane against trunk", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-1/transcript.log" },
+		{ "id": 2, "name": "Concurrent real PostgreSQL clients with rollback and RLS", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-2/transcript.log", "tests": 16 },
+		{ "id": 3, "name": "Install clean and migrate twice on Node 24/PostgreSQL 18", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-3/transcript.log" },
+		{ "id": 4, "name": "Generate and compile TypeScript and Swift from schemas", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-4/transcript.log" },
+		{ "id": 5, "name": "Unicode, decimal, null/absent and canonical signature vectors", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-5/transcript.log" },
+		{ "id": 6, "name": "Alter generated output and send an unknown state-changing event", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-6/transcript.log", "note": "drift was live-induced and confirmed detected, then restored byte-identical" },
+		{ "id": 7, "name": "Drive replay/gap/duplicate vectors without DOM", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-7/transcript.log" },
+		{ "id": 8, "name": "Inject forbidden type-only, dynamic and re-export imports", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-8/transcript.log" },
+		{ "id": 9, "name": "Disable one guard in an isolated test copy", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-9/transcript.log", "foundation_report": "repo:evidence/U01a/lane-9/foundation-report.json" },
+		{ "id": 10, "name": "Supply missing red evidence and try premature feature admission", "outcome": "pass", "transcript": "repo:evidence/U01a/lane-10/transcript.log", "foundation_report": "repo:evidence/U01a/lane-10/foundation-report.json" }
+	],
+	"doctor": {
+		"install": "repo:evidence/U01a/milestone/doctor-install.log",
+		"audit": "repo:evidence/U01a/milestone/doctor-audit.json",
+		"typecheck": "repo:evidence/U01a/milestone/doctor-typecheck.log",
+		"lint": "repo:evidence/U01a/milestone/doctor-lint.log",
+		"docs_check": "repo:evidence/U01a/milestone/doctor-docs-check.log",
+		"vulnerabilities": 0
+	},
+	"drive": {
+		"contracts_check": "repo:evidence/U01a/milestone/drive-contracts-check.log",
+		"contracts_conform": "repo:evidence/U01a/milestone/drive-contracts-conform.log",
+		"contracts_conform_vectors": 97,
+		"contracts_conform_disagreements": 0,
+		"client_replay": "repo:evidence/U01a/milestone/drive-client-replay.log",
+		"boundaries": "repo:evidence/U01a/milestone/drive-boundaries.json",
+		"boundaries_assertions": 8,
+		"test": "repo:evidence/U01a/milestone/drive-test.log",
+		"test_files": 19,
+		"tests": 93,
+		"probe_center": "repo:evidence/U01a/milestone/drive-probe-center.log",
+		"migrate_twice": "repo:evidence/U01a/milestone/drive-migrate.log"
+	},
+	"foundation_admission_task_scope_rerun": {
+		"description": "B04's own task.mjs mechanized proof, rerun fresh at this exact head (not reused from an earlier revision)",
+		"parent": "fb67e9ce2c6658d672ca6446f524714ec55cbac5",
+		"outcome": "pass",
+		"task_outcome": "pass",
+		"denials": [],
+		"report": "repo:evidence/U01a/milestone/foundation-task.json"
+	},
+	"deferred_foundation_gates": {
+		"FG04": { "outcome": "blocked", "reason": "belongs to U01b, not implemented here" },
+		"FG05": { "outcome": "blocked", "reason": "belongs to U01b, not implemented here" },
+		"FG06": { "outcome": "blocked", "reason": "belongs to U01b, not implemented here" },
+		"FG07": { "outcome": "blocked", "reason": "belongs to U01c, not implemented here" },
+		"FG08": { "outcome": "blocked", "reason": "belongs to U01d, not implemented here" },
+		"note": "R22 assigns FG04-FG08 to U01b/U01c/U01d (docs/technical-spec.md). The plan's own U01a row (docs/implementation-plan.md, line 89) requires only FG01-FG03. These remain correctly blocked and are not a defect in this qualification."
+	},
+	"browser": {
+		"tool": "chrome-devtools-axi against a local docs/site/serve.mjs instance",
+		"viewports": ["390x844 (CDP device-metrics emulation)", "1440x900"],
+		"horizontal_overflow": false,
+		"skip_link_keyboard_reachable": true,
+		"skip_link_enter_focuses_main": true,
+		"page_animations": 0,
+		"transcript": "repo:evidence/U01a/milestone/browser.log",
+		"screenshots": ["repo:evidence/U01a/milestone/docs-desktop.png", "repo:evidence/U01a/milestone/docs-mobile.png"]
+	},
+	"security": "repo:evidence/U01a/milestone/security.md",
+	"performance": {
+		"report": "repo:evidence/U01a/milestone/performance.md",
+		"clean_build_and_test_within_budget": true,
+		"schema_validation_p95_within_budget": true,
+		"retained_swiftpm_aggregate_anomaly": "preserved unedited at evidence/U01a/agora-s1-enforce-test-first/performance.json (standalone SwiftPM-backed conformance ratio 1.3372, over the 10% budget); its bounded diagnostic (performance-diagnostic.json, plan digest independently verified) disconfirms a repeatable regression (product-work ratio 1.0666, launch-overhead ratio 1.0074) without identifying the original single sample's root host process. Not waived, not hidden, not re-labelled as passing."
+	},
+	"independent_inspection_notes": [
+		"performance-diagnostic-plan.md sha256 matches the plan_digest field recorded live inside performance-diagnostic.json: 917b514c1c1c6633c4239aa26ab042f01e131e67bebf7e53eaeadf2737f88e1d.",
+		"performance-diagnostic.json's metrics object was read directly, not only the task README's prose summary of it, and the ratios match.",
+		"contracts:conform's 97-vector output was grepped directly for non-pass outcomes and non-empty disagreements; zero of either were found, not merely trusted from a printed summary line.",
+		"the drift negative in lane 6 was a live break-then-restore against a real generated file, verified byte-identical afterward with git diff --quiet, not an assumption that contracts:check would catch drift.",
+		"agora/feature-map.json's owner fields were cross-checked against docs/task-breakdown.md's Build boxes, and every listed scenario file was confirmed present at this head."
+	],
+	"cleanup": {
+		"worktrees": "clean (git worktree prune; no agora-red-/agora-green-/agora-clean- entries remain)",
+		"tmp": "clean (no agora- entries under $TMPDIR)",
+		"tracked_tree": "no unexpected tracked modifications outside evidence/ and this qualification's documentation changes"
+	},
+	"r11": {
+		"non_evidence_files_changed": ["docs/site/foundation.md", "docs/site/synchronization.md", "docs/site/test-first.md", "docs/site/introduction.md", "docs/site/atlas.json"],
+		"note": "5 documentation/config source files changed, well under the 25-source-file limit; total added prose and JSON proof-array lines are well under 1,000. No exception requested or needed. Evidence logs/JSON/screenshots under evidence/ are retained artifacts, not source, consistent with the convention already used by evidence/U01a/agora-s1-bootstrap-repository/outcome.json's own R11 accounting."
+	},
+	"not_created": [
+		"U01b general evidence validator or trusted CI",
+		"U01c backup/restore",
+		"U01d React production client",
+		"any product feature, room, authentication or model call"
+	],
+	"regenerate": "See .agents/skills/verify-agora/SKILL.md Doctor and Drive sections, and the lane-by-lane commands recorded in each evidence/U01a/lane-N/transcript.log."
+}

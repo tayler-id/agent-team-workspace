@@ -1,0 +1,2 @@
+{"schema_version":"agora.red-green/v1","outcome":"pass","parent":"84d29c9adb0249fcbdf7193bef73e625c4e336a3","head":"b9c65c4487b9c08237d22cb4be4ae92999308bc4","red_exit":1,"green_exit":0,"test_patch_digest":"sha256:6c9b8060d47444b772de4697137877f2ab590ae66236edcb5997e0d2c3fe8d11","out":"evidence/U01a/milestone"}
+exit:0

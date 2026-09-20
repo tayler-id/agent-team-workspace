@@ -1,0 +1,126 @@
+{
+  "schema_version": "agora.foundation/v1",
+  "authority": "foundation_fixture",
+  "task": "agora-s1-enforce-test-first",
+  "scope": "lane-9",
+  "parent": "fb67e9ce2c6658d672ca6446f524714ec55cbac5",
+  "head": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+  "outcome": "pass",
+  "task_outcome": "blocked",
+  "unit_outcome": "blocked",
+  "foundation_outcome": "blocked",
+  "proofs": [
+    {
+      "id": "lane-9",
+      "subject": "agora-s1-enforce-test-first:lane-9",
+      "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+      "outcome": "pass",
+      "denials": []
+    },
+    {
+      "id": "FG01",
+      "subject": "agora-s1-enforce-test-first:FG01",
+      "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+      "outcome": "blocked",
+      "denials": [
+        "U01a_integration_unqualified"
+      ]
+    },
+    {
+      "id": "FG02",
+      "subject": "agora-s1-enforce-test-first:FG02",
+      "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+      "outcome": "blocked",
+      "denials": [
+        "U01a_integration_unqualified"
+      ]
+    },
+    {
+      "id": "FG03",
+      "subject": "agora-s1-enforce-test-first:FG03",
+      "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+      "outcome": "blocked",
+      "denials": [
+        "U01a_integration_unqualified"
+      ]
+    },
+    {
+      "id": "FG04",
+      "subject": "agora-s1-enforce-test-first:FG04",
+      "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+      "outcome": "blocked",
+      "denials": [
+        "FG04_missing"
+      ]
+    },
+    {
+      "id": "FG05",
+      "subject": "agora-s1-enforce-test-first:FG05",
+      "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+      "outcome": "blocked",
+      "denials": [
+        "FG05_missing"
+      ]
+    },
+    {
+      "id": "FG06",
+      "subject": "agora-s1-enforce-test-first:FG06",
+      "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+      "outcome": "blocked",
+      "denials": [
+        "FG06_missing"
+      ]
+    },
+    {
+      "id": "FG07",
+      "subject": "agora-s1-enforce-test-first:FG07",
+      "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+      "outcome": "blocked",
+      "denials": [
+        "FG07_missing"
+      ]
+    },
+    {
+      "id": "FG08",
+      "subject": "agora-s1-enforce-test-first:FG08",
+      "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+      "outcome": "blocked",
+      "denials": [
+        "FG08_missing"
+      ]
+    }
+  ],
+  "denials": [],
+  "artifacts": [
+    {
+      "path": "evidence/U01a/milestone/red.log",
+      "digest": "sha256:96aa6dec9002bb1dc2f20685d9d09f3ca3a942920486ca3c092f17da46491a6b",
+      "media_type": "text/plain",
+      "byte_length": 22943
+    },
+    {
+      "path": "evidence/U01a/milestone/green.log",
+      "digest": "sha256:01dff290e73dfd8a3c372aee21e3e5139c7f08ff12a3d1e0ed3c8a3aff1568d6",
+      "media_type": "text/plain",
+      "byte_length": 5012
+    },
+    {
+      "path": "evidence/U01a/milestone/test-patch.diff",
+      "digest": "sha256:f95a74b252c2012bbbe2e6e690065dee8503e8fad0bf9bfd9ac8b506d8a64f23",
+      "media_type": "text/plain",
+      "byte_length": 9301
+    },
+    {
+      "path": "evidence/U01a/milestone/guard.json",
+      "digest": "sha256:eb4ca32b790c55e3cab998a68bec888f43090b9489101cbbc0a146ec1def79c7",
+      "media_type": "application/json",
+      "byte_length": 2880
+    },
+    {
+      "path": "evidence/U01a/milestone/lane-9.json",
+      "digest": "sha256:7c35a1e5ee7a4ac78c0efc6e4aa03c14d42cf9296866a3e6304eb0bad10134ea",
+      "media_type": "application/json",
+      "byte_length": 14352
+    }
+  ]
+}

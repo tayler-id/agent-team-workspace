@@ -1,0 +1,19 @@
+# lane: browser inspection of docs at 390x844 and 1440x900 (agora.lane/v1)
+head: b9c65c4487b9c08237d22cb4be4ae92999308bc4
+recorded_at: 2026-09-20T20:36:38Z
+tool: chrome-devtools-axi against a local docs/site/serve.mjs instance (port 4381)
+pass predicate (per docs:check and the plan's living-documentation entry): no horizontal overflow at either viewport, visible skip link reachable by Tab, Enter on the skip link focuses the main landmark, zero page animations/scripted motion
+
+## 1440x900 desktop
+eval: {"innerWidth":1440,"scrollWidth":1440,"overflow":false}
+screenshot: evidence/U01a/milestone/docs-desktop.png
+
+## 390x844 mobile (proper CDP device-metrics emulation, not window resize, which floors at Chrome's ~500px minimum window width)
+eval: {"innerWidth":390,"innerHeight":844,"scrollWidth":390,"overflow":false}
+screenshot: evidence/U01a/milestone/docs-mobile.png
+
+## keyboard: Tab then Enter
+Tab -> {"activeText":"Skip to content","outline":"solid"}
+Enter -> {"hash":"#main","activeTag":"MAIN","activeId":"main","landmarkRole":"main","animations":0}
+
+note: this is an accessibility-tree and CDP inspection of the real rendered page, not an OS screen-reader session.

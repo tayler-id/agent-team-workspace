@@ -1,0 +1,27 @@
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-6Y8NCG","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ✓ |pg| packages/storage/test/migrate.pg.test.ts > the app role and the schema owner are neither superusers nor BYPASSRLS, so forced row security binds both 9ms
+ ✓ |pg| packages/storage/test/migrate.pg.test.ts > a fresh database applies every journal entry once and a second run is a no-op with the same schema digest 20ms
+ ✓ |pg| packages/storage/test/migrate.pg.test.ts > a missing agora_app role blocks the migration with a prerequisite error and applies nothing 116ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > rollback > a failed transaction leaves no event and does not advance the stream counter 5ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > race > concurrent appends to one stream receive contiguous distinct sequences 9ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > race > twelve appended events read back in numeric sequence order, not text order 2ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > race > exactly one of eight concurrent claims wins and the losers see claimed: false 1ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > the owning scope reads its own rows 0ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > another scope sees no rows, cannot append, and cannot forge a row into the owning scope 3ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > another scope cannot attach an event to the owning scope's stream through the foreign key 1ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > identifiers are scoped: another scope gets its own stream and claim under the same ids without learning they exist elsewhere 1ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > a connection without a bound scope sees nothing 0ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > row security is forced, so even the table owner is confined to the bound scope 1ms
+ ✓ |pg| packages/storage/test/fixture.pg.test.ts > row-level security > guard negative: a BYPASSRLS role sees every scope, so the denials above depend on the policies, not on the data 7ms
+ ✓ |pg| apps/center/test/readiness.pg.test.ts > GET /api/v1/health/ready is 200 ready against the real test database 12ms
+ ✓ |pg| apps/center/test/readiness.pg.test.ts > GET /api/v1/health/ready is 503 not_ready when the database port refuses connections 1ms
+
+ Test Files  3 passed (3)
+      Tests  16 passed (16)
+   Start at  16:26:42
+   Duration  1.17s (import 60%, tests 35%, transform 4%)
+
+exit:0

@@ -28,7 +28,7 @@ A command receipt settles a known command without advancing the timeline. Retry 
 
 ## Implementation status
 
-**Built after the atlas snapshot, fixture only.** The atlas deliberately retains its requested task-base status of In progress. The newer committed core and TypeScript/Swift replay proof are linked below, separately from that historical snapshot. Import/public-type guards and a no-DOM/no-Node compilation lane enforce current package boundaries. There is no browser transport, React UI, production room schema, authentication or core service route. U01a and the full foundation remain unqualified.
+**Built after the atlas snapshot, fixture only.** The atlas deliberately retains its requested task-base status of In progress. The newer committed core and TypeScript/Swift replay proof are linked below, separately from that historical snapshot. Import/public-type guards and a no-DOM/no-Node compilation lane enforce current package boundaries. There is no browser transport, React UI, production room schema, authentication or core service route. U01a is milestone-qualified as of revision `b9c65c4` (see the [milestone receipt](repo:evidence/U01a/outcome.json)); the full R22 foundation (FG04 through FG08) remains unqualified until U01b, U01c and U01d close.
 
 ## Verification and proof
 

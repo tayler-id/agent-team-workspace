@@ -1,0 +1,20 @@
+# lane-8 transcript: inject forbidden type-only, dynamic and re-export imports (agora.lane/v1)
+head: b9c65c4487b9c08237d22cb4be4ae92999308bc4
+recorded_at: 2026-09-20T20:28:10Z
+pass predicate: mechanical boundaries reject each attempted crossing
+
+## command: pnpm boundaries (isolated virtual-fixture negatives inside boundaries.test.ts and export-maps.test.ts)
+
+> agora@ boundaries /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> vitest run --project unit packages/client-core/test/boundaries.test.ts packages/client-core/test/export-maps.test.ts --reporter=json --outputFile=.scratch/boundaries.json
+
+JSON report written to /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/.scratch/boundaries.json
+exit:0
+passed - packages/client-core/src/model.ts rejects framework, provider, storage and transport imports in every syntax
+passed - packages/domain/src/index.ts rejects framework, provider, storage and transport imports in every syntax
+passed - contracts/src/index.ts rejects framework, provider, storage and transport imports in every syntax
+passed - private relative paths, unknown dynamic targets and facade values cannot enter core
+passed - a private storage adapter may import pg but cannot leak its types through the public port
+passed - removing either boundary rule makes its denial assertion turn red
+passed - export maps reject existing private files and the portable compile lane has no DOM or Node globals
+passed - the live export-map reader permits only the exact schema wildcard and closed, contained code entries

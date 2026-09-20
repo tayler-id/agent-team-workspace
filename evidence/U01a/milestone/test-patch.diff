@@ -1,0 +1,133 @@
+diff --git a/contracts/fixtures/vectors.json b/contracts/fixtures/vectors.json
+index 90a36db..86f77f1 100644
+--- a/contracts/fixtures/vectors.json
++++ b/contracts/fixtures/vectors.json
+@@ -3,6 +3,21 @@
+ 	"description": "Golden wire vectors for the foundation contract surface. wire holds the exact bytes a consumer parses; canonical, digest and signature are the values both consumers must reproduce. The Ed25519 key is a fixture-only key derived from a public seed and authorizes nothing.",
+ 	"signing_key_seed": "sha256(\"agora fixture signing key; non-production; contracts/fixtures/vectors.json\")",
+ 	"vectors": [
++		{
++			"id": "foundation-blocked",
++			"component": "FoundationReport",
++			"wire": "{\"artifacts\":[],\"authority\":\"foundation_fixture\",\"denials\":[\"FG04_missing\"],\"foundation_outcome\":\"blocked\",\"head\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outcome\":\"blocked\",\"parent\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"proofs\":[{\"denials\":[\"FG04_missing\"],\"id\":\"FG04\",\"outcome\":\"blocked\",\"revision\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"subject\":\"foundation\"}],\"schema_version\":\"agora.foundation/v1\",\"scope\":\"foundation\",\"task\":\"agora-s1-enforce-test-first\",\"task_outcome\":\"pass\",\"unit_outcome\":\"blocked\"}",
++			"expect": "accept",
++			"canonical": "{\"artifacts\":[],\"authority\":\"foundation_fixture\",\"denials\":[\"FG04_missing\"],\"foundation_outcome\":\"blocked\",\"head\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outcome\":\"blocked\",\"parent\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"proofs\":[{\"denials\":[\"FG04_missing\"],\"id\":\"FG04\",\"outcome\":\"blocked\",\"revision\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"subject\":\"foundation\"}],\"schema_version\":\"agora.foundation/v1\",\"scope\":\"foundation\",\"task\":\"agora-s1-enforce-test-first\",\"task_outcome\":\"pass\",\"unit_outcome\":\"blocked\"}",
++			"digest": "sha256:6b3c0210bf6e099adb930f63f4def760d85505eb30f3fe07cff74cd6cda84d8d"
++		},
++		{
++			"id": "foundation-proof-unknown-field",
++			"component": "FoundationProof",
++			"wire": "{\"id\":\"FG04\",\"subject\":\"foundation\",\"revision\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"outcome\":\"blocked\",\"denials\":[],\"override\":true}",
++			"expect": "reject",
++			"reason": "unknown authority field"
++		},
+ 		{
+ 			"id": "health-ok",
+ 			"component": "HealthReport",
+diff --git a/docs/site/test/corpus.test.ts b/docs/site/test/corpus.test.ts
+index 0957e0d..45ef683 100644
+--- a/docs/site/test/corpus.test.ts
++++ b/docs/site/test/corpus.test.ts
+@@ -8,8 +8,10 @@ const result = build();
+ const root = path.resolve(import.meta.dirname, '../../../.docs-dist');
+ const html = file => existsSync(path.join(root, file)) ? readFileSync(path.join(root, file), 'utf8') : '';
+ test('the same public build driver produces a valid baseline before corpus assertions', () => assert.equal(result.outcome, 'pass'));
+-test('the complete corpus has 23 pages and both audience tracks', () => {
+-	assert.equal(result.pages, 23, 'complete audience corpus');
++test('the complete corpus has 24 pages and both audience tracks', () => {
++	assert.equal(result.pages, 24, 'complete audience corpus');
++	assert.match(html('test-first.html'), /FG01.red-required/);
++	assert.match(html('test-first.html'), /foundation_fixture/);
+ 	assert.match(html('index.html'), /Use Agora/);
+ 	assert.match(html('index.html'), /Build and operate/);
+ });
+diff --git a/packages/verification/test/admission.test.ts b/packages/verification/test/admission.test.ts
+new file mode 100644
+index 0000000..a1153e0
+--- /dev/null
++++ b/packages/verification/test/admission.test.ts
+@@ -0,0 +1,46 @@
++import { spawnSync } from 'node:child_process';
++import { expect, test } from 'vitest';
++
++const run = (value: unknown): string[] => {
++	const script = `import {assess} from './scripts/foundation-policy.mjs'; console.log(JSON.stringify(assess(${JSON.stringify(value)})))`;
++	const result = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8' });
++	expect(result.status, result.stderr).toBe(0);
++	return JSON.parse(result.stdout) as string[];
++};
++const valid = () => ({
++	parent: 'a'.repeat(40), head: 'b'.repeat(40), scope: 'task', applicability: 'behavior',
++	records: ['red', 'green', 'guard', 'bootstrap', 'contracts', 'client', 'documentation', 'static'].map(id => ({ id, subject: id, revision: id === 'red' ? 'a'.repeat(40) : 'b'.repeat(40), verified: true })),
++	mapped: true, prerequisites: true,
++});
++
++test('baseline admission driver accepts a complete task', () => { expect(run(valid())).toEqual([]); });
++test('FG01.red-required', () => {
++	const value = valid(); value.records = value.records.filter(record => record.id !== 'red');
++	expect(run(value)).toContain('red_missing');
++});
++test.each([
++	['green', 'green_missing'], ['guard', 'guard_missing'], ['client', 'client_missing'],
++])('missing %s denies with %s', (id, code) => {
++	const value = valid(); value.records = value.records.filter(record => record.id !== id);
++	expect(run(value)).toContain(code);
++});
++test('forged or stale proof cannot pass', () => {
++	const value = valid(); value.records[0] = { id: 'red', subject: 'red', revision: value.head, verified: false };
++	expect(run(value)).toEqual(expect.arrayContaining(['red_revision', 'red_unverified']));
++});
++test('unknown proof and duplicate subjects deny', () => {
++	const value = valid(); value.records.push({ id: 'FG99', subject: 'red', revision: value.head, verified: true });
++	expect(run(value)).toEqual(expect.arrayContaining(['proof_unknown', 'subject_duplicate']));
++});
++test('applicability cannot waive behavioral tests', () => {
++	const value = valid(); value.applicability = 'prose';
++	expect(run(value)).toContain('applicability_invalid');
++});
++test('semantic prerequisite and feature mapping are required', () => {
++	const value = valid(); value.mapped = false; value.prerequisites = false;
++	expect(run(value)).toEqual(expect.arrayContaining(['feature_map_drift', 'prerequisite_unmet']));
++});
++test('task success is not foundation or feature admission', () => {
++	const value = valid(); value.scope = 'feature';
++	expect(run(value)).toEqual(expect.arrayContaining(['FG04_missing', 'FG05_missing', 'FG06_missing', 'FG07_missing', 'FG08_missing', 'feature_premature']));
++});
+diff --git a/packages/verification/test/protocol.test.ts b/packages/verification/test/protocol.test.ts
+new file mode 100644
+index 0000000..380ddb1
+--- /dev/null
++++ b/packages/verification/test/protocol.test.ts
+@@ -0,0 +1,32 @@
++import { spawnSync } from 'node:child_process';
++import { expect, test } from 'vitest';
++
++function probe(body: string): void {
++	const result = spawnSync(process.execPath, ['--input-type=module', '-e', `import assert from 'node:assert/strict'; import * as r from './scripts/foundation-replay.mjs'; ${body}`], { encoding: 'utf8', timeout: 120_000 });
++	expect(result.status, result.stderr).toBe(0);
++}
++test('lane 9 disables a real guard, detects always-red and stale negatives, and preserves source', () => {
++	probe(`const source=r.git('hash-object','scripts/foundation-policy.mjs'); const g=r.guard(r.git('rev-parse','HEAD'));
++	assert.deepEqual(r.compareGuard(JSON.stringify(g),g),[]);
++	assert.deepEqual(r.compareGuard(JSON.stringify({...g,normal:g.weakened}),g),['guard_invalid']);
++	assert.deepEqual(r.compareGuard(JSON.stringify({...g,head:'a'.repeat(40)}),g),['guard_replay_mismatch']);
++	assert.deepEqual(r.compareGuard('missing',g),['guard_missing_or_malformed']);
++	assert.equal(r.git('hash-object','scripts/foundation-policy.mjs'),source);`);
++}, 120_000);
++test('receipts reject infrastructure reds, duplicate subjects, skipped green and arbitrary exit prose', () => {
++	probe(`assert.throws(()=>r.receipt('observed_exit: 1\\n\\n{"success":false}','red'));
++	assert.throws(()=>r.assertions({numTotalTests:2,testResults:[{assertionResults:[{fullName:'x'},{fullName:'x'}]}]}));
++	assert.equal(r.behavior([{subject:'FG01.red-required',status:'failed',cause:'SyntaxError: missing module'}],true),false);
++	assert.equal(r.behavior([{subject:'baseline admission driver accepts a complete task',status:'passed',cause:''},{subject:'FG01.red-required',status:'pending',cause:''}],false),false);`);
++});
++test('owned SwiftPM locks are removed without deleting adjacent files', () => {
++	probe(`const fs=await import('node:fs');const os=await import('node:os');const path=await import('node:path');let lock,other;
++	try { r.withCopy(r.git('rev-parse','HEAD'),copy=>{lock=path.join(os.tmpdir(),copy.replaceAll('/','_')+'_contracts_swift_.build.lock');other=lock+'.unrelated';fs.writeFileSync(lock,'owned');fs.writeFileSync(other,'preserve');});
++	assert.equal(fs.existsSync(lock),false,'owned SwiftPM lock removed');assert.equal(fs.readFileSync(other,'utf8'),'preserve'); }
++	finally {if(lock)fs.rmSync(lock,{force:true});if(other)fs.rmSync(other,{force:true});}`);
++}, 120_000);
++test('public usage failures have structured output and exit 64', () => {
++	const result = spawnSync(process.execPath, ['scripts/foundation.mjs', '--scope', 'unknown'], { encoding: 'utf8' });
++	expect(result.status).toBe(64);
++	expect(JSON.parse(result.stdout)).toMatchObject({ outcome: 'usage_error', denials: ['usage_error'] });
++});

@@ -1,0 +1,34 @@
+# lane-5 transcript: Unicode, decimal, null/absent and canonical signature vectors (agora.lane/v1)
+head: b9c65c4487b9c08237d22cb4be4ae92999308bc4
+recorded_at: 2026-09-20T20:27:54Z
+pass predicate: both languages agree on literal values and digests
+
+## selected vectors from the 97-vector contracts:conform run (full log: evidence/U01a/milestone/drive-contracts-conform.log)
+--- revision-unicode-digits ---
+{"id":"revision-unicode-digits","expect":"reject","outcome":"pass","typescript":{"id":"revision-unicode-digits","accepted":false,"rejection":"$ must match pattern \"^(0|[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}
+--- revision-max ---
+{"id":"revision-max","expect":"accept","outcome":"pass","typescript":{"id":"revision-max","accepted":true,"canonical":"\"18446744073709551615\"","digest":"sha256:a225c7d25b96a9e259add02e192895f03cbbfafbf27b3a95ea2f0624912acecd"},"swift":{"accepted":true,"canonical":"\"18446744073709551615\"","digest":"sha256:a225c7d25b96a9e259add02e192895f03cbbfafbf27b3a95ea2f0624912acecd","generated_decode":"ok","id":"revision-max"},"disagreements":[]}
+--- revision-over-max ---
+{"id":"revision-over-max","expect":"reject","outcome":"pass","typescript":{"id":"revision-over-max","accepted":false,"rejection":"$ must match pattern \"^(0|[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}
+--- revision-negative ---
+{"id":"revision-negative","expect":"reject","outcome":"pass","typescript":{"id":"revision-negative","accepted":false,"rejection":"$ must match pattern \"^(0|[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}
+--- revision-leading-zero ---
+{"id":"revision-leading-zero","expect":"reject","outcome":"pass","typescript":{"id":"revision-leading-zero","accepted":false,"rejection":"$ must match pattern \"^(0|[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}
+--- timestamp-fractional ---
+{"id":"timestamp-fractional","expect":"accept","outcome":"pass","typescript":{"id":"timestamp-fractional","accepted":true,"canonical":"\"2026-09-20T12:34:56.123456789Z\"","digest":"sha256:d10923ae3ec8ebcbb52159228f8352013e88bfc811ea33d9d1aa6c16e291bde1"},"swift":{"accepted":true,"canonical":"\"2026-09-20T12:34:56.123456789Z\"","digest":"sha256:d10923ae3ec8ebcbb52159228f8352013e88bfc811ea33d9d1aa6c16e291bde1","generated_decode":"ok","id":"timestamp-fractional"},"disagreements":[]}
+--- timestamp-trailing-newline ---
+{"id":"timestamp-trailing-newline","expect":"reject","outcome":"pass","typescript":{"id":"timestamp-trailing-newline","accepted":false,"rejection":"$ must match pattern \"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?Z$\""}
+--- uuid-nil ---
+{"id":"uuid-nil","expect":"accept","outcome":"pass","typescript":{"id":"uuid-nil","accepted":true,"canonical":"\"00000000-0000-0000-0000-000000000000\"","digest":"sha256:36b6647187901ac4413731fb4bfcc0acaf826e0443d5fdbcfae119480fc63216"},"swift":{"accepted":true,"canonical":"\"00000000-0000-0000-0000-000000000000\"","digest":"sha256:36b6647187901ac4413731fb4bfcc0acaf826e0443d5fdbcfae119480fc63216","generated_decode":"ok","id":"uuid-nil"},"disagreements":[]}
+--- uuid-braces ---
+{"id":"uuid-braces","expect":"reject","outcome":"pass","typescript":{"id":"uuid-braces","accepted":false,"rejection":"$ must match pattern \"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}
+--- decision-digest-uppercase ---
+{"id":"decision-digest-uppercase","expect":"reject","outcome":"pass","typescript":{"id":"decision-digest-uppercase","accepted":false,"rejection":"/policy_digest must match pattern \"^sha256:[0-9a-f]{64}$\""},"swift":{"accepted":false,"generated_decode":"ok","id":"decision-digest-uppercase","rejection":"$/policy_digest must match pattern \"^sha256:[0-9a-f]{64}
+--- decision-allow-tampered-signature ---
+{"id":"decision-allow-tampered-signature","expect":"accept","outcome":"pass","typescript":{"id":"decision-allow-tampered-signature","accepted":true,"canonical":"{\"decision\":\"deny\",\"policy_digest\":\"sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4\",\"policy_version\":\"agora.fixture-policy/v1\",\"reason_code\":\"scope_mismatch\",\"schema_version\":\"agora.fixture-policy-decision/v1\"}","digest":"sha256:d6b6726d240c6e6bcd465170e923e92bfe01b1d1e0e7bb206cbcab62ca73db6a","signature":"invalid"},"swift":{"accepted":true,"canonical":"{\"decision\":\"deny\",\"policy_digest\":\"sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4\",\"policy_version\":\"agora.fixture-policy/v1\",\"reason_code\":\"scope_mismatch\",\"schema_version\":\"agora.fixture-policy-decision/v1\"}
+--- sync-cursor-large ---
+{"id":"sync-cursor-large","expect":"accept","outcome":"pass","typescript":{"id":"sync-cursor-large","accepted":true,"canonical":"{\"committed_seq\":\"9007199254740993\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"}","digest":"sha256:ff3142778ce511a87d056e7d4f8a270c2b3859dac9871f1cf3b5808b3ce6cdeb"},"swift":{"accepted":true,"canonical":"{\"committed_seq\":\"9007199254740993\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"}
+--- sync-cursor-overflow ---
+{"id":"sync-cursor-overflow","expect":"reject","outcome":"pass","typescript":{"id":"sync-cursor-overflow","accepted":false,"rejection":"/committed_seq must match pattern \"^(0|[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}
+--- error-unicode-details ---
+{"id":"error-unicode-details","expect":"accept","outcome":"pass","typescript":{"id":"error-unicode-details","accepted":true,"canonical":"{\"correlation_id\":\"11111111-1111-4111-8111-111111111111\",\"details\":[\"café\",\"café\",\"😀 emoji\",\"tab\\tand\\u0000nul\",\" line sep\",\" del\",\"\\\"quoted\\\" \\\\ slash /\",\"esc\\u001b\"],\"reason_code\":\"malformed_command\"}","digest":"sha256:014097577cac6ba67bc322ccd2e4798968555c02078005e71e9590086afd9597"},"swift":{"accepted":true,"canonical":"{\"correlation_id\":\"11111111-1111-4111-8111-111111111111\",\"details\":[\"café\",\"café\",\"😀 emoji\",\"tab\\tand\\u0000nul\",\" line sep\",\" del\",\"\\\"quoted\\\" \\\\ slash /\",\"esc\\u001b\"],\"reason_code\":\"malformed_command\"}
