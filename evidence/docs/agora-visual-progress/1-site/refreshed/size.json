@@ -1,0 +1,153 @@
+{
+  "base": "a2641fd4241833a9a9af6c5be30d5124919b769a",
+  "subject": "43b86bfbf3e66674213e2b8526fa73ac08251515",
+  "authored_files": 22,
+  "meaningful_added": 903,
+  "meaningful_deleted": 8,
+  "files": [
+    {
+      "path": ".gitignore",
+      "meaningful_added": 3,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "AGENTS.md",
+      "meaningful_added": 1,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "agora/feature-map.json",
+      "meaningful_added": 24,
+      "meaningful_deleted": 5,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/atlas.json",
+      "meaningful_added": 243,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/atlas.md",
+      "meaningful_added": 17,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/authoring.md",
+      "meaningful_added": 53,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/build.mjs",
+      "meaningful_added": 63,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/contracts.md",
+      "meaningful_added": 28,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/diagram.mjs",
+      "meaningful_added": 22,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/foundation.md",
+      "meaningful_added": 30,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/index.md",
+      "meaningful_added": 22,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/output-links.mjs",
+      "meaningful_added": 15,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/progress.md",
+      "meaningful_added": 59,
+      "meaningful_deleted": 0,
+      "kind": "generated"
+    },
+    {
+      "path": "docs/site/render.mjs",
+      "meaningful_added": 46,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/serve.mjs",
+      "meaningful_added": 22,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/site.json",
+      "meaningful_added": 44,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/style.css",
+      "meaningful_added": 98,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/test/guard-weakening.test.ts",
+      "meaningful_added": 28,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/test/guards.test.ts",
+      "meaningful_added": 43,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/test/output.test.ts",
+      "meaningful_added": 28,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/validate.mjs",
+      "meaningful_added": 59,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "eslint.config.js",
+      "meaningful_added": 7,
+      "meaningful_deleted": 2,
+      "kind": "authored"
+    },
+    {
+      "path": "package.json",
+      "meaningful_added": 7,
+      "meaningful_deleted": 1,
+      "kind": "authored"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "meaningful_added": 3,
+      "meaningful_deleted": 0,
+      "kind": "lockfile"
+    }
+  ]
+}

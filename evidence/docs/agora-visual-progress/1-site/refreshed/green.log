@@ -1,0 +1,31 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-20T16:01:53.202Z
+parent: 8978fa9bab56a648ad77919df15e0ff548d7813d
+head: 43b86bfbf3e66674213e2b8526fa73ac08251515
+subject_revision: 43b86bfbf3e66674213e2b8526fa73ac08251515
+test_patch_applied_to_subject: false
+test_patch_files: docs/site/test/guard-weakening.test.ts, docs/site/test/guards.test.ts, docs/site/test/output.test.ts
+test_patch_digest: sha256:9c31c7759041055813351723f9379081c2794fa5b4a82818853c46ded600ac05
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node --test docs/site/test/guards.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+✔ public documentation guard accepts the complete valid fixture (2.386333ms)
+✔ broken internal page and anchor links fail (0.925917ms)
+✔ feature explanations and visual flows are mandatory (0.23625ms)
+✔ progress statuses are closed and Built requires source test and evidence (0.250666ms)
+✔ all milestones must occur exactly once with an outcome and release stage (0.269875ms)
+✔ milestone outcomes mirror the authoritative plan instead of drifting (0.084041ms)
+✔ every executable and package must have a documentation home (0.067459ms)
+✔ every feature-map entry requires a validated feature page (0.077584ms)
+✔ private absolute paths and unsafe links never enter the site (0.134917ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 74.86775

@@ -1,0 +1,33 @@
+{
+  "task": "agora-visual-progress",
+  "change": "1-site",
+  "code_head": "43b86bfbf3e66674213e2b8526fa73ac08251515",
+  "base": "a2641fd",
+  "scope": "Independently runnable static engine, five-page truthful shell, 22 milestones, documentation completion rule and negative guards. Rebased onto the landed core stack without weakening its type/import guards.",
+  "snapshot": "The requested 606cba2 atlas seed remains historical. Current fixture-only core work has separate explanatory and source/proof links, inventory homes and feature-map documentation mappings.",
+  "checks": {
+    "documentation_tests": 26,
+    "runtime_and_contract_tests": 79,
+    "red_green": "refreshed recorder: eight intended guard assertions fail at runnable 8978fa9 harness, nine pass at code_head",
+    "integration": "Current-main inventory and missing documentation homes reproduced through the public build, then corrected. Both receipts retained.",
+    "verification": "All literal Doctor, Drive and Cleanup commands pass, including both language consumers, core replay, boundary negatives, real PostgreSQL probes and migration idempotence.",
+    "design_negatives": 23,
+    "handoff_negatives": 20,
+    "browser": "Fresh sequential checks of all five pages at 390x844 and 1440x900; screenshot inspection passes. No scripts or animations. Earlier keyboard/audit receipts remain applicable to unchanged renderer/style.",
+    "build": "Self-contained production build and generated link validation pass"
+  },
+  "size": {
+    "authored_files": 22,
+    "meaningful_added": 903,
+    "meaningful_deleted": 8,
+    "receipt": "size.json",
+    "rationale": "The default target is exceeded to keep one runnable build with meaningful guards and a truthful minimal corpus. Below both hard limits even counting additions plus deletions. Lockfile, generated companion and evidence are explicitly separate; no exception."
+  },
+  "performance": "Five local build samples in performance.json; 70.9-76.0ms. No comparable pre-site build exists, and no product performance qualification is claimed.",
+  "limits": [
+    "Independent exact-head documentation review is still a landing-authority requirement, not self-claimed here",
+    "No native screen-reader session or product comprehension trial",
+    "Not full Agora runtime foundation or product qualification",
+    "Original signed Node wrapper failed native-binding Team-ID checks; standard installed Node 24.16.0 used without bypassing guards"
+  ]
+}

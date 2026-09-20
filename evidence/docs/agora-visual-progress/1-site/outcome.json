@@ -1,5 +1,6 @@
 {
   "task": "agora-visual-progress",
+  "superseded_by": "refreshed/outcome.json",
   "change": "1-site",
   "branch": "fm/agora-visual-progress-1-site",
   "code_head": "b87dad02dae2e7620a9366999d480f65089cc5a4",

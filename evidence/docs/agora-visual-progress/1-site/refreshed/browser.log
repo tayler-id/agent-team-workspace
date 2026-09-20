@@ -1,0 +1,30 @@
+result: "{\"url\":\"/index.html\",\"width\":390,\"height\":844,\"overflow\":false,\"h1\":1,\"scripts\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/atlas.html\",\"width\":390,\"height\":844,\"overflow\":false,\"h1\":1,\"scripts\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/foundation.html\",\"width\":390,\"height\":844,\"overflow\":false,\"h1\":1,\"scripts\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/contracts.html\",\"width\":390,\"height\":844,\"overflow\":false,\"h1\":1,\"scripts\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/authoring.html\",\"width\":390,\"height\":844,\"overflow\":false,\"h1\":1,\"scripts\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/index.html\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Welcome\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/atlas.html\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Progress atlas\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/foundation.html\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Repository foundation\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/contracts.html\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Portable contracts\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"url\":\"/authoring.html\",\"width\":1440,\"height\":900,\"overflow\":false,\"h1\":1,\"current\":\"Documentation contract\",\"scripts\":0,\"animations\":0,\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state

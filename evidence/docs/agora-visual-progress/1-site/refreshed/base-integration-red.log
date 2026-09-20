@@ -1,0 +1,14 @@
+
+> agora@ docs:build /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> node docs/site/build.mjs
+
+inventory missing: packages/client-core
+inventory missing: scripts/boundary-policy.ts
+inventory missing: scripts/client-fixture.ts
+inventory missing: scripts/drive-client-core.ts
+inventory missing: scripts/public-types.ts
+feature documentation missing: undefined
+feature documentation missing: undefined
+feature documentation missing: undefined
+feature documentation missing: undefined
+ ELIFECYCLE  Command failed with exit code 1.
