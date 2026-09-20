@@ -1,12 +1,12 @@
 # Research basis and architecture selection
 
-This explanation supports the final [technical specification](technical-spec.md). The design baseline is dated 2026-09-19. It synthesizes nine completed research reports and their source ledgers, then rechecks decisive public pages. It is not a product benchmark or a tested deployment.
+This explanation supports the final [technical specification](technical-spec.md). The revised design baseline is dated 2026-09-20. It synthesizes the original nine reports, two later independent specification reviews, and decisive public-source rechecks. It is not a product benchmark or a tested deployment.
 
 ## Accepted product constraints
 
 The product is a purpose-built communication center, not a Slack bot with a separate job dashboard. Developers need shared rooms, visible agents, conversation-linked work, and reviewable evidence. The center owns the durable record. Every project has a stable main-agent identity and room. The first bounded task runs on its launcher's machine through an outbound worker. Project creation and cloud execution follow in S2 under the same contract.
 
-These constraints supersede historical options for Slack-first intake, a laptop-hosted SQLite authority, desktop-first distribution, hosted execution in the first release, and automatic merge. Those options are not unresolved in the final documents. Current project roles are enforced from S1; observer automation is S3. Named agents are not permission to spawn an open-ended swarm.
+These constraints supersede historical options for Slack-first intake, a laptop-hosted SQLite authority, desktop-first distribution, hosted execution in the first release, and automatic merge. Those options are not unresolved in the final documents. Current project roles are enforced from S1; observer automation is S3. Native client boundaries and multilingual contracts are S1 foundation work, with a native Swift client and one external coding-agent adapter explicitly in S2. Native macOS application execution is a separate capability, not implied by a Mac-hosted Linux container. Named agents are not permission to spawn an open-ended swarm.
 
 ## Research coverage
 
@@ -24,7 +24,7 @@ The following complete reports informed this synthesis. Their private storage lo
 | Agora precedent archaeology, 2026-09-18 | Aquifer session/runtime split, Stripe blueprints, Helix checkpoints, human reviewer separation, trust-model limits |
 | Agent-hub follow-up, 2026-09-18 | Threat-dependent isolation, exact-head evidence, unavailable checks fail closed, validity before retrieval |
 
-Directly referenced ledgers were read for the architecture, landscape, chat-center, and precedent reports. The other reports contain their decisive ledgers inline. Vendor narratives supplied patterns, not implementation guarantees. No new broad search pass, private account access, API trial, or application implementation was performed.
+Directly referenced ledgers were read for the architecture, landscape, chat-center, and precedent reports. The other reports contain their decisive ledgers inline. Vendor narratives supplied patterns, not implementation guarantees. The Fable review dated 2026-09-19 and the Astra review dated 2026-09-20 were also read in full. They independently reviewed the earlier committed package and agreed on the transactional core, stronger portability boundaries and an executable verification foundation. Their framework scores are judgment, not benchmarks. No new review agent was launched for this revision. A narrow two-query version check and official documentation/registry reads checked the new contract/auth/version decisions; there was no broad new research, private account access, application implementation or runtime compatibility trial.
 
 ## Architecture selection
 
@@ -73,7 +73,46 @@ The selected sketch borrows visible sessions and typed activity from Linear, out
 - PostgreSQL and immutable artifacts own knowledge. Repository documents are reviewed inputs/exports, avoiding two competing authorities.
 - No automatic merge or production execution is included. Prior suggestions for low-risk auto-merge do not carry into this baseline.
 
-The next implementation step is U01, a reproducible repository and test/deployment foundation that proves startup, migration, and restore before agent work is enabled.
+The next implementation step is U01a. U01a-U01d separate contracts/test gates, real fixture/trusted evidence, restore and selected-client qualification. Product features wait for the complete foundation, and model writes additionally wait for a scripted real-worker canary. The task closes on its own outcome and proof; the containing milestone closes later. This corrects the earlier circular completion rule.
+
+### Client, language and contract review
+
+React originally entered through the accepted stack defaults, not a comparative framework trial. The earlier AI SDK/Chat SDK argument did not establish React-only compatibility and no longer described the chosen product. The independent reviews corrected that rationale without establishing a benchmark winner.
+
+Fable considered React, Vue, Svelte, Solid, HTMX, Lit and SwiftUI; its backend comparison covered Node/Hono, Bun, Go, Rust and Elixir. Astra considered React, Vue, Svelte, Node/Hono, Fastify, Go and Elixir, plus schema-first, Zod-export, Protobuf and TypeScript-only contracts. Both retained the modular monolith. Their client scores are shown to expose the disagreement, not to average it away.
+
+| Browser option | Fable score, out of 5 | Astra score, out of 100 | Design consequence |
+| --- | --- | --- | --- |
+| React with framework-free state | 4.3 | 84 | Selected renderer; ordinary production/accessibility tests remain required |
+| Vue | 3.8 | 84 | Credible peer, no evidence of a decisive React runtime advantage |
+| Svelte | 3.6 | 83 | Considered explicitly; fine-grained updates do not solve authorization or replay |
+| Solid | 3.3 | Not scored | Credible fine-grained renderer; less compelling interaction/tooling fit in the review |
+| HTMX/server rendering | 3.3 | Not scored | Still needs substantial client state for replay, virtualized cards and native API parity |
+| Lit | 3.0 | Not scored | Framework-independent components, but application-state/routing work remains |
+| SwiftUI as the first client | 2.5 | Later native option | Does not replace the cross-platform browser release; explicit S2 client instead |
+
+Fable weighted delivery 30%, correctness/accessibility 20%, architecture 20%, runtime 10%, operations 10%, and ecosystem 10%. Its React lead depended partly on an unmeasured belief about agent fluency. Astra weighted correctness 30%, runtime 25%, independence 20%, interaction 15%, delivery 5%, and ecosystem 5%, yielding an effective tie. We give development cost little weight. React fits the required accessible cards and immutable snapshot renderer, while R21 confines that choice to rendering. R23 tests that implementation, not its popularity. A comparative React/Vue prototype gate was considered and withdrawn before implementation. No competing framework prototype is required or claimed.
+
+| Service or worker option | Fable score, out of 5 | Astra score, out of 100 | Decision |
+| --- | --- | --- | --- |
+| Node/TypeScript/Hono | 4.3 | 92 | Keep; bounded I/O and closed domain states fit the selected authority |
+| Node/Fastify | Not scored | 92 | Credible transport alternative; schema defaults still need strict configuration |
+| Go | 4.1 | 90 | Viable standalone worker or measured hot component behind the protocol |
+| Rust | 3.9 | Not scored | Viable isolated/runtime-sensitive component when concrete requirements justify it |
+| Bun service | 4.1 | Not scored | Not selected for the transactional service; bundled pstack tooling still uses Bun |
+| Elixir/Phoenix | 3.5 | 74 | Strong live-session model, not a reason to introduce another state authority |
+
+Astra's service weights favored correctness and contract independence; shifting weight toward runtime made Go lead. These scores do not measure Agora throughput. PostgreSQL transactions and a coded authority remain the decisive design, not the service language. C was raised as another-language possibility after the reviews. It is not an efficient first fit for this browser-first, I/O-heavy system: it would still need a browser rendering client, while adding manual memory ownership and protocol/security integration to authority-bearing code. That is a fit/risk judgment, not a C benchmark. A narrow measured CPU requirement could justify a different-language component later without rewriting public contracts.
+
+Fable preferred restricted Zod authoring with checked exports. Astra preferred authoritative OpenAPI/JSON Schema. The latter wins for the stated native/multilingual direction because an internal TypeScript validator must not decide the external contract. Unrepresentable transforms or refinements cannot silently become an unconstrained schema. Swift generation establishes an HTTP path, not replay or authentication; separate vectors and native-session tests cover those.
+
+### Dated foundation compatibility check
+
+On 2026-09-20, Node's official release table identified 24.21.0 as LTS and 26.9.0 as Current. PostgreSQL listed 18.6 as supported through November 2030. Its September 25, 2025 date is the first release of major 18, not the release date of minor 18.6. We selected Node 24 LTS and PostgreSQL 18, not the earlier defaults. Node 22 and PostgreSQL 16 are still supported; they were not rejected as already EOL.
+
+Registry metadata directly checked Hono 4.13.8, Node adapter 2.1.1, pg 8.23.0, Drizzle 0.45.2, Better Auth/OAuth Provider 1.7.5, Zod 4.6.5, React 19.3.0, Vite 8.3.0, Ajv 8.20.0 and openapi-typescript 7.13.0. The declared Node ranges accept 24. Better Auth's declared Drizzle/pg peers match these candidates. openapi-typescript declares TypeScript 5.x, so the foundation selects checked 5.9.3 rather than copying the TypeScript 7 used by unrelated bundled tooling. Swift OpenAPI Generator's current release was 1.13.1, published 2026-09-01. Its release was verified; a Package.swift CLI extraction failed, so no claim of checking its compiler minimum is made.
+
+These are dated support and declared-dependency checks, not an executed compatibility matrix. U01a must resolve and lock the remaining compiler/generator/test packages and OCI digests, then compile both consumers and run real PostgreSQL 18 integration tests. Only a reproduced incompatibility may supersede the chosen majors. No package or application prototype was installed for this check.
 
 ## Public evidence ledger
 
@@ -102,8 +141,16 @@ Source dates are publication/update dates only when available. All sources below
 | E19 | [Anthropic memory docs](https://platform.claude.com/docs/en/managed-agents/memory), undated | Versioned memory and read-only scope; writable shared memory can carry prompt injection | Ledger rechecked. Agora uses human activation and invalidation, not an asserted learning guarantee |
 | E20 | [GitHub webhook practices](https://docs.github.com/en/webhooks/using-webhooks/best-practices-for-using-webhooks), undated | Validate signatures, acknowledge promptly, process asynchronously, dedupe delivery IDs | Ledger rechecked. Delivery identity is not authority to change project policy |
 | E21 | [Official Cursor pstack](https://github.com/cursor/plugins/tree/main/pstack), observed revision `032be146865d973682535de75f2287da438550bf` on 2026-09-19 | Installed architecture, writing, decision-trail, verification, and multi-phase planning instructions | Installed and read locally. The lockfile records skill hashes. Moving upstream main may differ later |
+| E22 | [Node release table](https://nodejs.org/en/about/previous-releases), current table read 2026-09-20 | Production uses Active or Maintenance LTS; 24.21.0 listed LTS, 26 Current | Fresh direct page. Search index also returned an older latest-directory result; direct release table takes precedence. No application compatibility trial |
+| E23 | [PostgreSQL versioning](https://www.postgresql.org/support/versioning/), read 2026-09-20 | 18.6 supported, major 18 final support November 14, 2030; current minor recommended | Fresh page. First-release column is for the major, not the current minor |
+| E24 | [OpenAPI 3.1.1](https://spec.openapis.org/oas/v3.1.1.html), [JSON Schema 2020-12](https://json-schema.org/draft/2020-12), schema publication 2022-06-16 | OAS Schema Objects use 2020-12; format defaults to annotation rather than assertion | Fresh relevant specification passages. R21 requires explicit format validation and generator-subset conformance |
+| E25 | [Swift OpenAPI 1.0](https://www.swift.org/blog/swift-openapi-generator-1.0/), 2024-01-31; [generator 1.13.1](https://github.com/apple/swift-openapi-generator/releases/tag/1.13.1), 2026-09-01 | OpenAPI 3.0/3.1 support, streaming bodies and HTTP-framework-independent generated clients | Announcement read and current release checked 2026-09-20. Does not generate replay, native UI or prove current compiler compatibility |
+| E26 | [Better Auth device authorization](https://www.better-auth.com/docs/plugins/device-authorization), undated | Distinguishes bare session-token polling from OAuth Provider access tokens with audience/scopes; requires explicit secure approval and client validation | Fresh security/token passages read 2026-09-20. R04 selects OAuth integration and adds Agora role, device and recent-auth enforcement |
+| E27 | [Hono registry](https://registry.npmjs.org/hono/latest), [Node adapter](https://registry.npmjs.org/@hono/node-server/latest), [pg](https://registry.npmjs.org/pg/latest), [Drizzle](https://registry.npmjs.org/drizzle-orm/latest), [Better Auth](https://registry.npmjs.org/better-auth/latest), [OpenAPI TypeScript](https://registry.npmjs.org/openapi-typescript/latest) | Dated engines/peer metadata recorded above; openapi-typescript requires TypeScript 5.x | Read 2026-09-20. Metadata compatibility, not runtime proof. Moving latest URLs require new dated locks at implementation |
+| E28 | [React external store](https://react.dev/reference/react/useSyncExternalStore), [Vue performance](https://vuejs.org/guide/best-practices/performance), [Svelte practices](https://svelte.dev/docs/svelte/best-practices), undated | Immutable external snapshots, shallow/large-list state and fine-grained update caveats respectively | Inspected in Astra's supplied source-backed review, not fetched again here. No comparative performance measurement |
+| E29 | [Zod JSON Schema](https://zod.dev/json-schema), undated | Some conversions are unrepresentable; permissive conversion can yield an unconstrained schema | Both reviews used this evidence. Supports schema-first authority, not an alleged Agora bug |
 
-The only fresh research beyond decisive page rechecks was the Dev Container metadata gap and E2B custom-image/egress contract. An attempted E2B `/template/from-image` URL returned 404. The linked Template API supplied the contract instead. No claim relies on that failed route.
+The initial fresh research beyond decisive rechecks covered Dev Container metadata and E2B custom-image/egress. This revision additionally checked the official Node/PostgreSQL support tables, public package metadata, Swift generation, OpenAPI/JSON Schema and native-device authentication. An attempted E2B `/template/from-image` URL returned 404. The linked Template API supplied the contract instead. No claim relies on that failed route.
 
 ## Contrary evidence and design consequences
 
@@ -134,11 +181,11 @@ The applied principles changed concrete choices:
 - Sequencing verifiable units gives every plan unit a user/operator outcome, ten live scenarios, performance evidence, and a review boundary.
 - Proving behavior requires two real accounts and machines, independent project checks, negative cases, and retained evidence.
 
-Technical writing separates this explanation from the normative reference and the execution how-to. The decision trail is append-only. The installed plan checker runs unchanged at its project-local path. Tool-specific execution playbooks describe future implementation only; this delivery starts no agents, schedules, runtime, push, or merge. Cross-model trail review was not performed because this assignment explicitly requires one worker without delegation. Self-review and automated consistency checks are reported as such.
+Technical writing separates this explanation from the normative reference and the execution how-to. The decision trail is append-only. The installed plan checker runs unchanged at its project-local path. Tool-specific execution playbooks describe future implementation only; this delivery starts no agents, schedules, runtime, push, or merge. The earlier package had only self-review and automated checks. This revision incorporates the supplied independent Fable and Astra reviews without launching more agents. Their contrary recommendations, particularly contract authority and framework ranking, are resolved above. The current author still works without delegation.
 
 ## Limits and implementation risks
 
-No selected stack component, sandbox, model API, email setup, GitHub protection, image build, or backup has been exercised as an Agora deployment. All performance numbers are release budgets. Exact package patches and model IDs must be locked and doctor-validated when U01/U04 initialize their code and deployment configuration. That is ordinary configuration and compatibility verification, not an open product choice.
+No selected stack component, sandbox, model API, email setup, GitHub protection, image build, or backup has been exercised as an Agora deployment. All performance numbers are release budgets. R17/R21 record dated candidate versions. Full package/image/toolchain locks and selected model IDs must be doctor-validated when U01a/U04 initialize code and configuration. That is ordinary configuration and compatibility verification, not an open product choice.
 
 Current source documents can change, especially preview agent APIs. Agora copies stable interaction patterns rather than depending on those APIs. S2 must prove E2B image fidelity, hard timeouts, selected-region data handling, and egress on a real disposable sandbox. If any required behavior is unavailable, S2 cannot ship by weakening it.
 

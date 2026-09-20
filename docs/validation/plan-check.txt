@@ -1,18 +1,23 @@
-Establish reproducible development and restore (U01)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Invite developers into scoped project rooms (U02)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Deliver durable conversation and ordered reconnection (U03)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Answer questions with visible read-only agent sessions (U04)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Create owned tasks with fenced runs and approvals (U05)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Connect owner-bound workers and prepare clean worktrees (U06)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Execute bounded local work and collect behavior evidence (U07)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Publish approved drafts and enforce independent review (U08)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Prove the first release across two accounts and machines (U09)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Provision a private project from a conversation (U10)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Build and qualify declarative project images (U11)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Execute and recover one isolated cloud attempt (U12)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Activate persistent project agents and reviewed knowledge (U13)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Prove local and cloud execution parity (U14)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Capture observer proposals and promote reviewed knowledge (U15)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Harden operations and prove governed deletion (U16)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Add an opt-in notification-only Slack bridge (U17)  boxes=29  files=1 build=5 you-see=1 verify-unit=2 verify-live=10 verify-perf=4 review-gate=3 merge=3
-17 PR sections, 0 problems
+Establish repository contracts and test-first gates (U01a)  boxes=29  files=1 build=4 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Qualify isolated verification and trusted evidence (U01b)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Prove independently recoverable backup and restore (U01c)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Qualify the selected React production client (U01d)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Invite developers into scoped project rooms (U02)  boxes=30  files=1 build=5 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Deliver durable conversation and ordered reconnection (U03)  boxes=29  files=1 build=4 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Answer questions with visible read-only agent sessions (U04)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Create owned tasks with fenced runs and approvals (U05)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Connect owner-bound workers and prepare clean worktrees (U06)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Execute bounded local work and collect behavior evidence (U07)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Publish approved drafts and enforce independent review (U08)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Prove the first release across two accounts and machines (U09)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Provision a private project from a conversation (U10)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Build and qualify declarative project images (U11)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Execute and recover one isolated cloud attempt (U12)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Activate persistent project agents and reviewed knowledge (U13)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Prove local and cloud execution parity (U14)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Qualify a real external coding-agent adapter (U18)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Deliver the native Swift client without worker authority (U19)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Capture observer proposals and promote reviewed knowledge (U15)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Harden operations and prove governed deletion (U16)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Add an opt-in notification-only Slack bridge (U17)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+22 PR sections, 0 problems

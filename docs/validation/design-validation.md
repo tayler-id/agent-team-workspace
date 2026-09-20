@@ -1,22 +1,28 @@
 # Design validation
 
-Validated on 2026-09-19. This is a specification-only package. These results validate the documents and installed planning tools, not an Agora application.
+Revalidated on 2026-09-20 after two independent specification reviews. The package remains specification-only. Static design readiness passed; runtime foundation readiness and all product acceptance criteria remain unexecuted.
 
 ## Observed results
 
 | Check | Result | Retained evidence |
 | --- | --- | --- |
-| Official pstack plan checker, unchanged | 17 delivery sections, zero problems; ten live lanes specified per section | [Plan check](plan-check.txt) |
-| Authored-document consistency | 20 requirements, 20 live-scenario mappings, 17 plan units, 51 unique task slugs; complete requirement/criterion/unit coverage and acyclic prerequisites | [Design check](design-check.txt) |
-| Validator negative tests | Baseline accepted; eight broken fixtures rejected, including a dependency cycle, unknown requirement, missing live scenario, broken link, placeholder, long dash, unofficial skill metadata, and missing decision evidence | [Validator tests](design-check-tests.txt) |
-| Markdown lint | Six authored Markdown files, zero issues after the documented code-block rule correction | [Markdown check](markdown-check.txt) |
-| Bundled pstack script tests | 52 passed, zero failed, 206 assertions across four files | [Bundled tests](pstack-tests.txt) |
-| Bundled pstack strict typecheck | Exit zero, no diagnostics | [Bundled typecheck](pstack-typecheck.txt) |
-| Installer inventory | 47 official skills, 55 retained installer trees, 122 files in the canonical tree; source and hashes recorded | [Skills inventory](skills-inventory.txt) |
-| Authored diff whitespace, local links, headings, fences, private paths, placeholders, and long dashes | Passed; canonical `CLAUDE.md` pointer verified | Design check and authored staged-diff inspection |
-| Complete installer-inclusive diff whitespace | 55 upstream warnings, one extra blank line at EOF in each copied `automate-me/SKILL.md`; no authored warning | Upstream bytes retained rather than normalized |
+| Project-owned semantic design gate | 24 requirements, 26 live-scenario mappings, 22 milestones, 66 tasks and 66 exactly owned Build outcomes; combined task/milestone graph acyclic | [Design check](design-check.txt) |
+| Foundation sequencing | Eight proofs owned by foundation units; all features depend on the full foundation; evidence/trusted checks/scripted canary precede model writes | Design check |
+| Later-stage independence | Knowledge, observer, external-agent and native-client tracks have no unjustified cloud dependency | Design check |
+| Behavioral validator suite | 23 cases pass, including two valid inputs and 21 rejected mutations | [Validator tests](design-check-tests.txt) |
+| Red-before-green regression | Old checker accepted an unrelated task Outcome; repaired checker rejects it. A second regression moved a foundation proof into dependent feature work; the missing ownership guard was observed red, then fixed | [Red/green record](validator-red-green.txt) |
+| Unchanged pstack format checker | 22 sections, zero problems. Informational only; the semantic gate also accepts a plan with the literal model name removed | [Plan check](plan-check.txt) |
+| Markdown lint | Six authored Markdown files, zero issues | [Markdown check](markdown-check.txt) |
+| Bundled pstack script tests | 52 passed, zero failed, 206 assertions | [Bundled tests](pstack-tests.txt) |
+| Bundled strict typecheck | Exit zero, no diagnostics | [Bundled typecheck](pstack-typecheck.txt) |
+| Upstream preservation | 47 skills, 55 installer trees and canonical 122-file inventory retained; no installer or lockfile diff | [Original inventory](skills-inventory.txt) |
+| Append-only trail | Original 43 decision rows remain byte-identical; all later choices append | [Baseline digest](decision-baseline.sha256) |
+| Authored checks | Local links/anchors, heading/fence structure, private paths, placeholders, long dashes, canonical contributor pointer, JavaScript syntax and incremental diff whitespace pass | Design check and diff review |
+| Dated version evidence | Current supported majors and direct registry engine/peer metadata checked; no application compatibility trial claimed | [Research basis](../research-basis.md#dated-foundation-compatibility-check) |
 
-The first Markdown pass flagged tabs in the specification's TypeScript examples. The installed writing/code convention uses tabs there. `.markdownlint.json` therefore exempts code blocks from the hard-tab rule, disables the line-length rule for contract tables, and allows repeated subheadings under different parent sections. Authored prose remains checked. No upstream skill file was changed to satisfy a style check.
+The 23 validator cases preserve the original style/link/requirement/cycle tests and add missing/unowned/duplicate Build ownership, Outcome mismatch, task self-milestone deadlock, wrong close gate, missing/misplaced foundation proof, missing live coverage, premature model writes, foundation bypass, cloud-coupled memory, and historical decision rewriting. The positive model-neutral case proves the project gate does not depend on the pstack model literal. Each rejection asserts the intended diagnostic, not merely any nonzero exit.
+
+A fixture setup failure after adding script citations to the decision trail was not counted as behavioral red. The test fixture was corrected to include those source files, then the foundation-owner regression failed for the intended acceptance bug. The retained red/green record distinguishes the valid behavior failures from setup errors.
 
 ## Reproduction
 
@@ -25,36 +31,43 @@ Run from the repository root:
 ```sh
 node scripts/verify-design.mjs
 node scripts/test-design-checks.mjs
+node --check scripts/verify-design.mjs
+node --check scripts/test-design-checks.mjs
 node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md
 npx -y markdownlint-cli2@0.23.2 'AGENTS.md' 'docs/**/*.md'
-git diff --cached --check -- AGENTS.md CLAUDE.md .gitignore .markdownlint.json docs scripts skills-lock.json
+git diff --check
+git diff --cached --check
 ```
 
-The design validator checks authored documents only. It checks local links and anchors, not remote page uptime or the truth of a vendor claim. The negative tests create disposable copies under ignored `.scratch/design-check-tests`; they do not modify source documents or installed metadata.
+The project gate is authoritative for document semantics only. It cannot infer whether prose is true, a screenshot shows success, or a runtime exists. R22 specifies the future executable foundation runner and its trusted evidence checks. The pstack checker remains unchanged and informational. Its annotations do not require ten model sessions or authorize unavailable tooling.
 
-The upstream script checks ran in a copy so dependency installation could not alter the committed installer output:
+Negative tests create isolated document/source fixtures under ignored `.scratch/design-check-tests`. They never alter installed metadata or source documents. They preserve the same original decision-prefix digest and deliberately corrupt copies to prove refusal.
+
+The existing upstream tests ran again in a fresh ignored copy:
 
 ```sh
-mkdir -p .scratch
-cp -R .agents/skills/poteto-mode/scripts .scratch/pstack-tools
-cd .scratch/pstack-tools
+mkdir -p .scratch/revision-review
+cp -R .agents/skills/poteto-mode/scripts .scratch/revision-review/pstack-tools
+cd .scratch/revision-review/pstack-tools
 BUN_INSTALL_CACHE_DIR=../bun-cache bun install --frozen-lockfile --ignore-scripts
 bun run test
 bun run typecheck
 ```
 
-Use a fresh ignored copy directory on repetition. A byte comparison verified all 20 original script files remained identical in the tested copy. The observed toolchain was Node 24.16.0, Bun 1.3.14, TypeScript 7.0.2, and markdownlint-cli2 0.23.2. This does not claim Node 22 application compatibility; the application and its lockfiles do not exist yet.
+Use a new ignored destination on repetition. All 20 original bundled script files remained byte-identical in the tested copy. The validation host used Node 24.16.0, Bun 1.3.14, bundled TypeScript 7.0.2 and markdownlint-cli2 0.23.2. These are validation-tool versions, not proof of the future application pins Node 24.21.0, PostgreSQL 18.6 and TypeScript 5.9.3. No runtime or schema-generation matrix was executed here.
 
 ## Cross-document review
 
-The review checked the local-first boundary in every document, inactive S1 project-main identities, separate project grants, all consequential human approvals, exact-head evidence, lost-lease recovery, current-base review, knowledge activation, and later-stage separation.
+The revision preserves the local-owner-first task, single PostgreSQL authority, human publication/review/merge boundaries, exact-head evidence, stale-lease recovery and no silent fallback. It adds schema-first multilingual contracts, framework-free synchronization, native human authentication, execution-target distinctions, standalone worker distribution and neutral provider/agent adapters.
 
-It caught and resolved authority ambiguities. Required remote CI now gates review-ready and merge after the draft push, rather than deadlocking that push. A separately approved publication now receives a new short-lived effect capability rather than attempting to reuse a terminated execution lease. A project-dedicated checks-only App, not the shared GitHub Actions identity, now authenticates required check publication. U01 also owns the real managed-project fixture and protected repository prerequisites, preventing early worker verification from depending on the later publication broker. These corrections are recorded in the [decision trail](../decisions.tsv).
+The former U01 is split into U01a-U01d. Tasks close independently, with separate milestone integration gates. Every task Outcome exactly matches its single owned Build box. The lease task now owns leases rather than launch UI; launch UI belongs to task ownership. Human decisions and registered-project lifecycle precede their consumers. Generic evidence validation and trusted reporting precede a deterministic real-worker canary, which precedes write-enabled model work. Memory no longer waits for cloud execution.
 
-The reviewed diff contains design documents, validation helpers/evidence, contributor pointers, installer metadata, and the complete official skills. It contains no Agora server, client, worker, deployment, or application dependency implementation. Upstream copies were inspected through their inventory/provenance and the canonical tooling tests, not mistaken for separately implemented products.
+The selected React client receives ordinary production fitness/accessibility checks, not a comparative Vue bake-off. The research basis records Svelte and the broader alternatives covered by both independent reviews, their contrary conclusions, and why C is not the chosen first implementation. Native Swift and external-agent work now have durable tasks and release criteria. Native macOS managed execution remains unavailable until its distinct runner is qualified.
+
+The revised diff contains documents, validation helpers/evidence and contributor pointers only. No server, browser application, worker implementation, application dependency installation or competing framework prototype was created. The decision trail preserves the original rows, including superseded choices, and appends the revision rationale.
 
 ## Coverage limits
 
-No live product, browser, model, local worker, sandbox, email, GitHub publication, backup, or performance acceptance scenario ran. No screenshot or video of Agora exists. The plan's unchecked evidence paths are future deliverables. Source rechecks and their limits are recorded in the [research basis](../research-basis.md#public-evidence-ledger).
+No live Agora product, model adapter, external coding agent, native app, cloud sandbox, email flow, GitHub publication, backup restore or performance acceptance scenario ran. Future evidence paths remain unfulfilled. Neither framework performance nor package compatibility was benchmarked. Source checks and the one failed source-extraction route are disclosed in the research basis.
 
-Upstream skill examples include long dashes, placeholder syntax, and links to files outside the installed subset. They remain unchanged and outside authored style/link checks. No cross-model review or delegated lane ran. No push, pull request, deployment, merge, or application CI pipeline ran. The specification's limits and all AC release gates remain mandatory for future implementation.
+The official installer output remains unchanged. Its 55 existing extra-EOF warnings from the initial installation are retained, not newly introduced or normalized. Upstream examples still contain placeholder syntax, long dashes and links outside the installed subset; authored style/link checks exclude them. No new review agent, push, pull request, merge, deployment or application pipeline ran in this revision.

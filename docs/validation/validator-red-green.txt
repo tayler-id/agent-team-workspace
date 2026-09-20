@@ -1,0 +1,20 @@
+Design-validator behavioral regression record, 2026-09-20
+
+1. Outcome-to-Build ownership
+Before changing scripts/verify-design.mjs, ran a regression against the original b64a724 package through the public Node CLI. The fixture replaced the first task Outcome with "Publish an unrelated unverified result." and kept the rest of the package valid.
+Observed validator exit: 0.
+Regression expected: 1.
+Regression process exited 1 with "outcome-to-Build mismatch must reject" and 0 !== 1.
+After repair, the same Outcome mutation against the revised package exits 1 with "Outcome-to-Build mismatch". The regression process exits 0. The revised baseline exits 0.
+The document inventory changed during the design revision. This records the unchanged behavioral mutation, not an assertion that every surrounding fixture byte stayed identical.
+
+2. Foundation proof must not depend on a feature
+Added a public-CLI negative that moved FG05 from U01b into U07 in both the specification and plan, leaving their cross-reference consistent.
+Baseline and the preceding 17 cases passed. The new negative observed validator exit 0 when 1 was expected, so its regression process exited 1.
+Added the foundation-owner guard. The same negative now exits 1 with "foundation proof requires a foundation owner". All 23 cases pass, including the baseline and model-neutral positive case.
+An earlier setup-only attempt failed because copied fixtures lacked newly cited scripts. That was corrected and was not accepted as behavioral red.
+
+Final reproducible regression suite:
+node scripts/test-design-checks.mjs
+
+These are real document-validator behavior tests. They are not application tests, runtime foundation proof, or evidence of a live Agora deployment.

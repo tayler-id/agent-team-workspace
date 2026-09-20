@@ -1,5 +1,5 @@
-PASS authored structure: 7 documents; 20 requirements; 20 live-scenario mappings
-PASS 17 plan units; 51 tasks; acyclic prerequisites; full requirement/criterion/unit coverage
-PASS 47 official pstack skills; 43 decision rows; 119 local links
-PASS authored Markdown headings, fences, placeholders, private-path and no-long-dash checks
-SCOPE vendor skill prose is unchanged and excluded from authored-document style/link checks; external URLs need the recorded source review
+PASS authored structure: 7 documents; 24 requirements; 26 live-scenario mappings
+PASS semantic readiness: 22 milestones; 66 independently gated tasks; 66 exactly owned Build outcomes
+PASS combined dependency graph; 8 foundation proofs; evidence/canary before model writes; cloud-independent later tracks
+PASS 47 official skills; 61 append-only decisions; 159 local links; authored style/privacy checks
+SCOPE static design readiness only; no runtime foundation or product acceptance has run; upstream format/model literals are not semantic authority

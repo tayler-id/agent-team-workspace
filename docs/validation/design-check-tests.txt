@@ -1,4 +1,5 @@
 PASS accepts baseline
+PASS accepts independent-reviewer-without-model-literal
 PASS rejects missing-requirement
 PASS rejects dependency-cycle
 PASS rejects missing-live-scenario
@@ -7,4 +8,17 @@ PASS rejects placeholder
 PASS rejects long-dash
 PASS rejects unofficial-skill
 PASS rejects missing-decision-evidence
-PASS 9 design-check cases; fixtures remain under .scratch/design-check-tests
+PASS rejects historical-decision-rewrite
+PASS rejects outcome-build-mismatch
+PASS rejects deleted-build-outcome
+PASS rejects unowned-build-outcome
+PASS rejects duplicate-build-owner
+PASS rejects own-milestone-deadlock
+PASS rejects milestone-close-gate
+PASS rejects missing-foundation-proof
+PASS rejects foundation-proof-in-dependent-feature
+PASS rejects missing-integration-scenario
+PASS rejects model-write-before-canary
+PASS rejects feature-bypasses-foundation
+PASS rejects memory-unnecessarily-needs-cloud
+PASS 23 behavioral design-check cases; no application acceptance implied
