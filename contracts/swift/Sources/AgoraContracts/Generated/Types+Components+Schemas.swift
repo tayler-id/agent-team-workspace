@@ -1384,6 +1384,279 @@ extension Components {
                 ])
             }
         }
+        /// - Remark: Generated from `#/components/schemas/FoundationProof`.
+        public struct FoundationProof: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FoundationProof/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/FoundationProof/subject`.
+            public var subject: Swift.String
+            /// - Remark: Generated from `#/components/schemas/FoundationProof/revision`.
+            public var revision: Components.Schemas.GitSha
+            /// - Remark: Generated from `#/components/schemas/FoundationProof/outcome`.
+            @frozen public enum outcomePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case pass = "pass"
+                case fail = "fail"
+                case blocked = "blocked"
+                case unavailable = "unavailable"
+            }
+            /// - Remark: Generated from `#/components/schemas/FoundationProof/outcome`.
+            public var outcome: Components.Schemas.FoundationProof.outcomePayload
+            /// - Remark: Generated from `#/components/schemas/FoundationProof/denials`.
+            public var denials: [Swift.String]
+            /// Creates a new `FoundationProof`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - subject:
+            ///   - revision:
+            ///   - outcome:
+            ///   - denials:
+            public init(
+                id: Swift.String,
+                subject: Swift.String,
+                revision: Components.Schemas.GitSha,
+                outcome: Components.Schemas.FoundationProof.outcomePayload,
+                denials: [Swift.String]
+            ) {
+                self.id = id
+                self.subject = subject
+                self.revision = revision
+                self.outcome = outcome
+                self.denials = denials
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case subject
+                case revision
+                case outcome
+                case denials
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.id = try container.decode(
+                    Swift.String.self,
+                    forKey: .id
+                )
+                self.subject = try container.decode(
+                    Swift.String.self,
+                    forKey: .subject
+                )
+                self.revision = try container.decode(
+                    Components.Schemas.GitSha.self,
+                    forKey: .revision
+                )
+                self.outcome = try container.decode(
+                    Components.Schemas.FoundationProof.outcomePayload.self,
+                    forKey: .outcome
+                )
+                self.denials = try container.decode(
+                    [Swift.String].self,
+                    forKey: .denials
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "id",
+                    "subject",
+                    "revision",
+                    "outcome",
+                    "denials"
+                ])
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/FoundationReport`.
+        public struct FoundationReport: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_foundation_sol_v1 = "agora.foundation/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/schema_version`.
+            public var schema_version: Components.Schemas.FoundationReport.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/authority`.
+            @frozen public enum authorityPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case foundation_fixture = "foundation_fixture"
+            }
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/authority`.
+            public var authority: Components.Schemas.FoundationReport.authorityPayload
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/task`.
+            @frozen public enum taskPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_hyphen_s1_hyphen_enforce_hyphen_test_hyphen_first = "agora-s1-enforce-test-first"
+            }
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/task`.
+            public var task: Components.Schemas.FoundationReport.taskPayload
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/scope`.
+            @frozen public enum scopePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case record = "record"
+                case task = "task"
+                case foundation = "foundation"
+                case feature = "feature"
+                case lane_hyphen_9 = "lane-9"
+                case lane_hyphen_10 = "lane-10"
+                case invalid = "invalid"
+            }
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/scope`.
+            public var scope: Components.Schemas.FoundationReport.scopePayload
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/parent`.
+            public var parent: Components.Schemas.GitSha?
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/head`.
+            public var head: Components.Schemas.GitSha?
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/outcome`.
+            public var outcome: Components.Schemas.CliOutcome
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/task_outcome`.
+            @frozen public enum task_outcomePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case pass = "pass"
+                case fail = "fail"
+                case blocked = "blocked"
+            }
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/task_outcome`.
+            public var task_outcome: Components.Schemas.FoundationReport.task_outcomePayload
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/unit_outcome`.
+            @frozen public enum unit_outcomePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case blocked = "blocked"
+            }
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/unit_outcome`.
+            public var unit_outcome: Components.Schemas.FoundationReport.unit_outcomePayload
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/foundation_outcome`.
+            @frozen public enum foundation_outcomePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case blocked = "blocked"
+            }
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/foundation_outcome`.
+            public var foundation_outcome: Components.Schemas.FoundationReport.foundation_outcomePayload
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/proofs`.
+            public var proofs: [Components.Schemas.FoundationProof]
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/denials`.
+            public var denials: [Swift.String]
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/artifacts`.
+            public var artifacts: [Components.Schemas.ArtifactReference]
+            /// Creates a new `FoundationReport`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - authority:
+            ///   - task:
+            ///   - scope:
+            ///   - parent:
+            ///   - head:
+            ///   - outcome:
+            ///   - task_outcome:
+            ///   - unit_outcome:
+            ///   - foundation_outcome:
+            ///   - proofs:
+            ///   - denials:
+            ///   - artifacts:
+            public init(
+                schema_version: Components.Schemas.FoundationReport.schema_versionPayload,
+                authority: Components.Schemas.FoundationReport.authorityPayload,
+                task: Components.Schemas.FoundationReport.taskPayload,
+                scope: Components.Schemas.FoundationReport.scopePayload,
+                parent: Components.Schemas.GitSha? = nil,
+                head: Components.Schemas.GitSha? = nil,
+                outcome: Components.Schemas.CliOutcome,
+                task_outcome: Components.Schemas.FoundationReport.task_outcomePayload,
+                unit_outcome: Components.Schemas.FoundationReport.unit_outcomePayload,
+                foundation_outcome: Components.Schemas.FoundationReport.foundation_outcomePayload,
+                proofs: [Components.Schemas.FoundationProof],
+                denials: [Swift.String],
+                artifacts: [Components.Schemas.ArtifactReference]
+            ) {
+                self.schema_version = schema_version
+                self.authority = authority
+                self.task = task
+                self.scope = scope
+                self.parent = parent
+                self.head = head
+                self.outcome = outcome
+                self.task_outcome = task_outcome
+                self.unit_outcome = unit_outcome
+                self.foundation_outcome = foundation_outcome
+                self.proofs = proofs
+                self.denials = denials
+                self.artifacts = artifacts
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case authority
+                case task
+                case scope
+                case parent
+                case head
+                case outcome
+                case task_outcome
+                case unit_outcome
+                case foundation_outcome
+                case proofs
+                case denials
+                case artifacts
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.FoundationReport.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.authority = try container.decode(
+                    Components.Schemas.FoundationReport.authorityPayload.self,
+                    forKey: .authority
+                )
+                self.task = try container.decode(
+                    Components.Schemas.FoundationReport.taskPayload.self,
+                    forKey: .task
+                )
+                self.scope = try container.decode(
+                    Components.Schemas.FoundationReport.scopePayload.self,
+                    forKey: .scope
+                )
+                self.parent = try container.decodeIfPresent(
+                    Components.Schemas.GitSha.self,
+                    forKey: .parent
+                )
+                self.head = try container.decodeIfPresent(
+                    Components.Schemas.GitSha.self,
+                    forKey: .head
+                )
+                self.outcome = try container.decode(
+                    Components.Schemas.CliOutcome.self,
+                    forKey: .outcome
+                )
+                self.task_outcome = try container.decode(
+                    Components.Schemas.FoundationReport.task_outcomePayload.self,
+                    forKey: .task_outcome
+                )
+                self.unit_outcome = try container.decode(
+                    Components.Schemas.FoundationReport.unit_outcomePayload.self,
+                    forKey: .unit_outcome
+                )
+                self.foundation_outcome = try container.decode(
+                    Components.Schemas.FoundationReport.foundation_outcomePayload.self,
+                    forKey: .foundation_outcome
+                )
+                self.proofs = try container.decode(
+                    [Components.Schemas.FoundationProof].self,
+                    forKey: .proofs
+                )
+                self.denials = try container.decode(
+                    [Swift.String].self,
+                    forKey: .denials
+                )
+                self.artifacts = try container.decode(
+                    [Components.Schemas.ArtifactReference].self,
+                    forKey: .artifacts
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "authority",
+                    "task",
+                    "scope",
+                    "parent",
+                    "head",
+                    "outcome",
+                    "task_outcome",
+                    "unit_outcome",
+                    "foundation_outcome",
+                    "proofs",
+                    "denials",
+                    "artifacts"
+                ])
+            }
+        }
         /// Exact 40-hexadecimal Git object name.
         ///
         /// - Remark: Generated from `#/components/schemas/GitSha`.

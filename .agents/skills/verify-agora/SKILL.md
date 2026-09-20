@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture and its portable contracts from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B03; later tasks extend it.
+description: Project-owned instructions that prove the Agora foundation fixture and its portable contracts from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04; later tasks extend it.
 ---
 
 # Verify Agora
@@ -71,6 +71,18 @@ node scripts/record-red-green.mjs --parent <slice-1-head> --head <core-head> --o
 For the U01a.B03 boundary slice, run `packages/client-core/test/boundaries.test.ts` through the same recorder. The parent already has ESLint, TypeScript and a valid core public import. Red is a missing forbidden-edge/public-port diagnostic, not a missing SDK or runner. The dedicated no-platform compiler is also part of `pnpm typecheck`; it includes only ES2024, with neither DOM nor Node globals.
 
 `red.log` must show the intended assertions failing (for example `expected 404 to be 200`), not a missing runner, syntax error or dependency failure. `green.log` must exit 0. Copy probe and migration outputs beside them.
+
+For U01a.B04, use full committed parent/head SHAs and the task evidence directory. The public driver invokes the same recorder with the fixed native-assertion command, then captures the isolated guard mutation. Run both lanes and task admission. The final foundation command must exit 2 with FG04-FG08 missing and U01a integration unqualified; that expected denial is not task failure.
+
+```sh
+node scripts/foundation.mjs --scope record --parent PARENT --head HEAD --evidence DIR --json
+node scripts/foundation.mjs --scope lane-9 --parent PARENT --head HEAD --evidence DIR --json
+node scripts/foundation.mjs --scope lane-10 --parent PARENT --head HEAD --evidence DIR --json
+node scripts/foundation.mjs --scope task --parent PARENT --head HEAD --evidence DIR --json
+pnpm verify:foundation -- --parent PARENT --head HEAD --evidence DIR --json
+```
+
+The first four commands require exit 0. `task_outcome: pass` never qualifies the unit or authorizes features. Inspect exact `FG01.red-required` red cause, baseline pass, same-subject green, guard normal/disabled assertions, and retained artifact hashes. No receipt is accepted without fresh replay. The [driver reference](../../../docs/site/test-first.md) documents scope and trust limits.
 
 ## Cleanup
 

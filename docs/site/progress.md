@@ -49,6 +49,7 @@ flowchart TD
 
 ## Landed and active
 
+- **Task proof admission - In progress**: Reject missing or forged proof before a task can claim readiness. [Scope](test-first.md). [docs/task-breakdown.md](../../docs/task-breakdown.md)
 - **Repository foundation - Built**: Prove real decisions and database isolation before product authority exists. [Scope](foundation.md). [apps/center/src/app.ts](../../apps/center/src/app.ts); [packages/storage/src/fixture.ts](../../packages/storage/src/fixture.ts); [apps/center/test/policy.test.ts](../../apps/center/test/policy.test.ts); [packages/storage/test/fixture.pg.test.ts](../../packages/storage/test/fixture.pg.test.ts); [evidence/U01a/agora-s1-bootstrap-repository/outcome.json](../../evidence/U01a/agora-s1-bootstrap-repository/outcome.json)
 - **Portable wire contracts - Built**: Make the same bytes mean the same thing in TypeScript and Swift. [Scope](contracts.md). [contracts/src/conformance.ts](../../contracts/src/conformance.ts); [contracts/test/conformance.test.ts](../../contracts/test/conformance.test.ts); [evidence/U01a/agora-s1-publish-portable-contracts/outcome.json](../../evidence/U01a/agora-s1-publish-portable-contracts/outcome.json)
 - **Client synchronization isolation - In progress**: Keep replay, ordering and retry decisions independent of the renderer. [Scope](synchronization.md). [docs/task-breakdown.md](../../docs/task-breakdown.md)

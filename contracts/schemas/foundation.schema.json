@@ -1,0 +1,38 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://agora.invalid/schemas/foundation.schema.json",
+	"title": "agora.foundation/v1",
+	"description": "Deterministic local U01a admission decisions. Foundation fixture only, never publication or human review authority. Timing belongs to referenced probe transcripts.",
+	"$defs": {
+		"FoundationProof": {
+			"type": "object", "additionalProperties": false,
+			"required": ["id", "subject", "revision", "outcome", "denials"],
+			"properties": {
+				"id": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,64}$"},
+				"subject": {"type": "string", "minLength": 1, "maxLength": 256},
+				"revision": {"$ref": "primitives.schema.json#/$defs/GitSha"},
+				"outcome": {"type": "string", "enum": ["pass", "fail", "blocked", "unavailable"]},
+				"denials": {"type": "array", "maxItems": 64, "items": {"type": "string", "maxLength": 128}}
+			}
+		},
+		"FoundationReport": {
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "authority", "task", "scope", "outcome", "task_outcome", "unit_outcome", "foundation_outcome", "proofs", "denials", "artifacts"],
+			"properties": {
+				"schema_version": {"type": "string", "enum": ["agora.foundation/v1"]},
+				"authority": {"type": "string", "enum": ["foundation_fixture"]},
+				"task": {"type": "string", "enum": ["agora-s1-enforce-test-first"]},
+				"scope": {"type": "string", "enum": ["record", "task", "foundation", "feature", "lane-9", "lane-10", "invalid"]},
+				"parent": {"$ref": "primitives.schema.json#/$defs/GitSha"},
+				"head": {"$ref": "primitives.schema.json#/$defs/GitSha"},
+				"outcome": {"$ref": "cli.schema.json#/$defs/CliOutcome"},
+				"task_outcome": {"type": "string", "enum": ["pass", "fail", "blocked"]},
+				"unit_outcome": {"type": "string", "enum": ["blocked"]},
+				"foundation_outcome": {"type": "string", "enum": ["blocked"]},
+				"proofs": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/FoundationProof"}},
+				"denials": {"type": "array", "maxItems": 128, "items": {"type": "string", "maxLength": 128}},
+				"artifacts": {"type": "array", "maxItems": 128, "items": {"$ref": "cli.schema.json#/$defs/ArtifactReference"}}
+			}
+		}
+	}
+}

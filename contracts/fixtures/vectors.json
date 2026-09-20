@@ -4,6 +4,21 @@
 	"signing_key_seed": "sha256(\"agora fixture signing key; non-production; contracts/fixtures/vectors.json\")",
 	"vectors": [
 		{
+			"id": "foundation-blocked",
+			"component": "FoundationReport",
+			"wire": "{\"artifacts\":[],\"authority\":\"foundation_fixture\",\"denials\":[\"FG04_missing\"],\"foundation_outcome\":\"blocked\",\"head\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outcome\":\"blocked\",\"parent\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"proofs\":[{\"denials\":[\"FG04_missing\"],\"id\":\"FG04\",\"outcome\":\"blocked\",\"revision\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"subject\":\"foundation\"}],\"schema_version\":\"agora.foundation/v1\",\"scope\":\"foundation\",\"task\":\"agora-s1-enforce-test-first\",\"task_outcome\":\"pass\",\"unit_outcome\":\"blocked\"}",
+			"expect": "accept",
+			"canonical": "{\"artifacts\":[],\"authority\":\"foundation_fixture\",\"denials\":[\"FG04_missing\"],\"foundation_outcome\":\"blocked\",\"head\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outcome\":\"blocked\",\"parent\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"proofs\":[{\"denials\":[\"FG04_missing\"],\"id\":\"FG04\",\"outcome\":\"blocked\",\"revision\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"subject\":\"foundation\"}],\"schema_version\":\"agora.foundation/v1\",\"scope\":\"foundation\",\"task\":\"agora-s1-enforce-test-first\",\"task_outcome\":\"pass\",\"unit_outcome\":\"blocked\"}",
+			"digest": "sha256:6b3c0210bf6e099adb930f63f4def760d85505eb30f3fe07cff74cd6cda84d8d"
+		},
+		{
+			"id": "foundation-proof-unknown-field",
+			"component": "FoundationProof",
+			"wire": "{\"id\":\"FG04\",\"subject\":\"foundation\",\"revision\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"outcome\":\"blocked\",\"denials\":[],\"override\":true}",
+			"expect": "reject",
+			"reason": "unknown authority field"
+		},
+		{
 			"id": "health-ok",
 			"component": "HealthReport",
 			"wire": "{\"status\":\"ok\",\"service\":\"agora-center\",\"schema_version\":\"agora.health/v1\"}",

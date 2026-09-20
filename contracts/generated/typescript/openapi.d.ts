@@ -221,6 +221,36 @@ export interface components {
             occurred_at: components["schemas"]["Timestamp"];
             payload: components["schemas"]["FixtureSyncTombstone"];
         };
+        FoundationProof: {
+            id: string;
+            subject: string;
+            revision: components["schemas"]["GitSha"];
+            /** @enum {string} */
+            outcome: "pass" | "fail" | "blocked" | "unavailable";
+            denials: string[];
+        };
+        FoundationReport: {
+            /** @enum {string} */
+            schema_version: "agora.foundation/v1";
+            /** @enum {string} */
+            authority: "foundation_fixture";
+            /** @enum {string} */
+            task: "agora-s1-enforce-test-first";
+            /** @enum {string} */
+            scope: "record" | "task" | "foundation" | "feature" | "lane-9" | "lane-10" | "invalid";
+            parent?: components["schemas"]["GitSha"];
+            head?: components["schemas"]["GitSha"];
+            outcome: components["schemas"]["CliOutcome"];
+            /** @enum {string} */
+            task_outcome: "pass" | "fail" | "blocked";
+            /** @enum {string} */
+            unit_outcome: "blocked";
+            /** @enum {string} */
+            foundation_outcome: "blocked";
+            proofs: components["schemas"]["FoundationProof"][];
+            denials: string[];
+            artifacts: components["schemas"]["ArtifactReference"][];
+        };
         /** @description Exact 40-hexadecimal Git object name. */
         GitSha: string;
         /** @description Answer of GET /api/v1/health. Touches no dependency. */

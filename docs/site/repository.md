@@ -11,6 +11,8 @@ The site inventory is `docs/site/site.json`. Build validation discovers current 
 
 `packages/client-core` and its fixture/boundary drivers landed after the atlas seed. They appear in the current inventory above; [synchronization](synchronization.md) separates their committed proof from the historical snapshot.
 
+`packages/verification/test` now holds [task admission tests](test-first.md). The bounded public driver lives under `scripts/foundation*.mjs`; this is not the general U01b runner.
+
 ## Planned ownership roots
 
 | Root | Why it exists | Documentation home |
@@ -19,7 +21,7 @@ The site inventory is `docs/site/site.json`. Build validation discovers current 
 | `packages/adapters` | Keep artifact, email, model and GitHub SDK details private | [Architecture](architecture.md), S1/S2 |
 | `apps/worker` | Standalone protocol client and isolated execution | [Workers](execution.md), S1/S2 |
 | `apps/macos` | SwiftUI human client, not an execution agent | [Architecture](architecture.md), S2 |
-| `packages/verification`, `tests`, `agora/project.json` | Registered CLI/scenario runners and evidence validation | [Verification](verification.md), S1 |
+| `tests`, `agora/project.json` | General registered CLI/scenario runners and evidence validation | [Verification](verification.md), S1 |
 | `infra` | Compose, TLS, backup and recovery | [Operations](operations.md), S1 |
 
 ## Planned domain modules

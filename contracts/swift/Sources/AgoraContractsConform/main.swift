@@ -47,6 +47,8 @@ let generated: [String: (Data) throws -> Data] = [
 	"FixtureSyncMessageEvent": roundTrip(Schemas.FixtureSyncMessageEvent.self),
 	"FixtureSyncTombstoneEvent": roundTrip(Schemas.FixtureSyncTombstoneEvent.self),
 	"FixtureSyncRunCardEvent": roundTrip(Schemas.FixtureSyncRunCardEvent.self),
+	"FoundationProof": roundTrip(Schemas.FoundationProof.self),
+	"FoundationReport": roundTrip(Schemas.FoundationReport.self),
 	"GitSha": roundTrip(Schemas.GitSha.self),
 	"HealthReport": roundTrip(Schemas.HealthReport.self),
 	"ReadinessReport": roundTrip(Schemas.ReadinessReport.self),

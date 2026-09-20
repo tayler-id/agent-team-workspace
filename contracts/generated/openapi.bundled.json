@@ -729,6 +729,148 @@
 					}
 				}
 			},
+			"FoundationProof": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"id",
+					"subject",
+					"revision",
+					"outcome",
+					"denials"
+				],
+				"properties": {
+					"id": {
+						"type": "string",
+						"pattern": "^[A-Za-z0-9_-]{1,64}$"
+					},
+					"subject": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 256
+					},
+					"revision": {
+						"$ref": "#/components/schemas/GitSha"
+					},
+					"outcome": {
+						"type": "string",
+						"enum": [
+							"pass",
+							"fail",
+							"blocked",
+							"unavailable"
+						]
+					},
+					"denials": {
+						"type": "array",
+						"maxItems": 64,
+						"items": {
+							"type": "string",
+							"maxLength": 128
+						}
+					}
+				}
+			},
+			"FoundationReport": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"schema_version",
+					"authority",
+					"task",
+					"scope",
+					"outcome",
+					"task_outcome",
+					"unit_outcome",
+					"foundation_outcome",
+					"proofs",
+					"denials",
+					"artifacts"
+				],
+				"properties": {
+					"schema_version": {
+						"type": "string",
+						"enum": [
+							"agora.foundation/v1"
+						]
+					},
+					"authority": {
+						"type": "string",
+						"enum": [
+							"foundation_fixture"
+						]
+					},
+					"task": {
+						"type": "string",
+						"enum": [
+							"agora-s1-enforce-test-first"
+						]
+					},
+					"scope": {
+						"type": "string",
+						"enum": [
+							"record",
+							"task",
+							"foundation",
+							"feature",
+							"lane-9",
+							"lane-10",
+							"invalid"
+						]
+					},
+					"parent": {
+						"$ref": "#/components/schemas/GitSha"
+					},
+					"head": {
+						"$ref": "#/components/schemas/GitSha"
+					},
+					"outcome": {
+						"$ref": "#/components/schemas/CliOutcome"
+					},
+					"task_outcome": {
+						"type": "string",
+						"enum": [
+							"pass",
+							"fail",
+							"blocked"
+						]
+					},
+					"unit_outcome": {
+						"type": "string",
+						"enum": [
+							"blocked"
+						]
+					},
+					"foundation_outcome": {
+						"type": "string",
+						"enum": [
+							"blocked"
+						]
+					},
+					"proofs": {
+						"type": "array",
+						"maxItems": 64,
+						"items": {
+							"$ref": "#/components/schemas/FoundationProof"
+						}
+					},
+					"denials": {
+						"type": "array",
+						"maxItems": 128,
+						"items": {
+							"type": "string",
+							"maxLength": 128
+						}
+					},
+					"artifacts": {
+						"type": "array",
+						"maxItems": 128,
+						"items": {
+							"$ref": "#/components/schemas/ArtifactReference"
+						}
+					}
+				}
+			},
 			"GitSha": {
 				"description": "Exact 40-hexadecimal Git object name.",
 				"type": "string",

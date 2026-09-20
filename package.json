@@ -21,6 +21,7 @@
 		"contracts:check": "node contracts/tools/generate.mjs --check",
 		"contracts:conform": "node contracts/src/conform-cli.ts",
 		"client:replay": "node scripts/drive-client-core.ts",
+		"verify:foundation": "node scripts/foundation.mjs",
 		"test": "node scripts/with-test-postgres.mjs vitest run",
 		"test:unit": "vitest run --project unit --project contracts",
 		"test:pg": "node scripts/with-test-postgres.mjs vitest run --project pg",

@@ -3,6 +3,14 @@
   "date": "2026-09-20",
   "features": [
     {
+      "id": "task-proof",
+      "title": "Task proof admission",
+      "status": "In progress",
+      "why": "Reject missing or forged proof before a task can claim readiness.",
+      "page": "test-first.md",
+      "proof": ["repo:docs/task-breakdown.md"]
+    },
+    {
       "id": "bootstrap",
       "title": "Repository foundation",
       "status": "Built",

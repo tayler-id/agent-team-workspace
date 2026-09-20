@@ -6,9 +6,9 @@
 		{
 			"id": "foundation-admission",
 			"documentation": "docs/site/test-first.md",
-			"paths": ["scripts/foundation-policy.mjs", "scripts/foundation-replay.mjs", "scripts/foundation.mjs", "packages/verification/test", "contracts/schemas/foundation.schema.json"],
+			"paths": ["scripts/foundation-policy.mjs", "scripts/foundation-replay.mjs", "scripts/foundation.mjs", "scripts/record-red-green.mjs", "packages/verification/test", "contracts/schemas/foundation.schema.json"],
 			"public": ["pnpm verify:foundation", "node scripts/foundation.mjs"],
-			"scenarios": ["packages/verification/test/admission.test.ts", "lane-9", "lane-10"],
+			"scenarios": ["packages/verification/test/admission.test.ts", "packages/verification/test/protocol.test.ts", "lane-9", "lane-10"],
 			"fixtures": ["foundation-only task proof, no product authority"],
 			"platforms": ["node24", "postgresql18", "swift6-macos"],
 			"owner": "U01a.B04"

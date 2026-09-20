@@ -62,6 +62,10 @@ Migrate exits 0 pass, 2 blocked prerequisite, 64 usage error, or 70 infrastructu
 
 See [the runnable recipe](cookbook.md) and [configuration](configuration.md). Do not invent production authorization from fixture actor input.
 
+## Task proof admission
+
+`pnpm verify:foundation -- --parent PARENT --head HEAD --evidence DIR --json` runs the bounded U01a.B04 driver and emits `agora.foundation/v1`. Foundation admission remains blocked. Use the explicit `--scope task` for task-local readiness, `record` for receipt capture, and `lane-9` or `lane-10` for guard and admission negatives. The [task proof reference](test-first.md#public-command-reference) lists all flags, pass predicates, exit semantics and trust limits.
+
 ## Evidence and design tools
 
 `node scripts/record-red-green.mjs --parent SHA --head SHA --out DIR -- COMMAND ARGS...` creates disposable worktrees, carries head test files onto the parent, installs locked dependencies and records both results and digests. Nonzero red alone is not adequate: inspect that it is the intended assertion, not a missing tool. It removes its worktrees and preserves receipts.
