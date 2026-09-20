@@ -36,10 +36,14 @@ The policy HTTP route is pure and does not persist a product command. The storag
 
 **Built at the atlas revision, fixture only.** This task does not implement authentication, invitations, rooms, WebSockets, a run scheduler, backup recovery or a worker. It does not qualify U01a or the full R22 foundation. Never treat caller-supplied fixture actor IDs as real authentication.
 
+After the seeded `606cba2` snapshot, U01a.B03 landed a deeply immutable client state machine and portable import/public-type guards. It turns validated snapshots and events into replay, acknowledgement and command decisions without a renderer or network transport. The [source-owned synchronization explanation](repo:docs/features/client-synchronization.md) covers its state flow and fixture-only limits. `scripts/client-fixture.ts` translates fixtures outside the core; `scripts/drive-client-core.ts` compares TypeScript and Swift through `pnpm client:replay -- --json --swift`. `scripts/boundary-policy.ts` and `scripts/public-types.ts` enforce dependency and public-port boundaries through `pnpm boundaries`.
+
 ## Verification and proof
 
 Inspected committed [center implementation](repo:apps/center/src/app.ts), [scope decision](repo:packages/domain/src/policy/fixture-scope.ts), [storage implementation](repo:packages/storage/src/fixture.ts), [public policy tests](repo:apps/center/test/policy.test.ts), and [real database tests](repo:packages/storage/test/fixture.pg.test.ts).
 
 The retained [task outcome](repo:evidence/U01a/agora-s1-bootstrap-repository/outcome.json) and [review history](repo:evidence/U01a/agora-s1-bootstrap-repository/review.md) delimit the claim. Run the current [verification instructions](repo:.agents/skills/verify-agora/SKILL.md) rather than reusing old logs as fresh proof.
+
+The later core's [implementation](repo:packages/client-core/src/index.ts), [public tests](repo:packages/client-core/test/sync.test.ts) and [review receipt](repo:evidence/U01a/agora-s1-isolate-client-core/3-boundaries/review.md) describe that newer fixture work, not a retroactive change to the atlas snapshot or a product qualification.
 
 Next: [portable contracts](contracts.md), [public drivers](repo:docs/runbooks/development.md), or [all planned components](repo:docs/implementation-plan.md).

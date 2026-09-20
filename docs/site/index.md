@@ -4,6 +4,8 @@ Agora is a planned invitation-only communication center for small developer team
 
 > No usable communication center exists yet. Only the non-production repository fixture and portable contracts have landed at the atlas snapshot. Client synchronization is In progress. No milestone is qualified.
 
+The atlas deliberately preserves task-base revision `606cba2`. Newer fixture-only client-core and boundary work landed during this documentation change; [the foundation page](foundation.md#implementation-status) links its implementation, tests and receipts separately. It still does not deliver a usable communication center.
+
 ## Two tracks, one growing site
 
 - **Use Agora:** the complete installation, concepts, role workflows, CLI/configuration, cookbook and FAQ track follows in the independently gated documentation-corpus change. Today, only contributor fixture commands work.

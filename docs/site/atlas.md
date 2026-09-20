@@ -22,6 +22,6 @@ Native macOS coding runners, private direct messages, browser IDEs, embeddings, 
 
 ## How to read the sources
 
-The specification and plan retain their original design-baseline language, including historical statements that implementation had not started. This atlas reports the cited later code snapshot. Historical task receipts may still say review pending; they are linked as evidence of scope, not rewritten as milestone approval. Client isolation is marked active from task steering; its code is not present at this base revision.
+The specification and plan retain their original design-baseline language, including historical statements that implementation had not started. This atlas reports the cited later code snapshot. Historical task receipts may still say review pending; they are linked as evidence of scope, not rewritten as milestone approval. Client isolation is marked active from task steering; its code is not present at this base revision. It subsequently landed as fixture-only work while this site was being built; [the foundation explanation](foundation.md#implementation-status) links that newer source and proof without silently rewriting the historical snapshot.
 
 The documentation task itself is **In progress** here because this artifact deliberately describes its own build snapshot. A later committed update can advance it after independent review. [Status update instructions](authoring.md) explain how to change the data and regenerate both views.

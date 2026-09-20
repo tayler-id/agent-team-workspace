@@ -31,6 +31,8 @@ Parallel means the documentation reviewer can inspect a committed candidate whil
 
 Run `pnpm docs:test`, `pnpm docs:check`, and `pnpm docs:build`. Review browser output at 390x844 and 1440x900, keyboard focus, meaningful link labels, semantic headings, readable diagrams and reduced motion. Record screenshots, observed assertions and limits under `evidence/docs/<task>/`. No script can prove that prose matches behavior; independent source review is mandatory.
 
+The rebased foundation also rejects malformed documentation configuration within a bounded timeout. Its [CLI regression](repo:packages/client-core/test/fixture.test.ts) checks this parser repair; it is tooling robustness, not an application feature. Current core additions are linked separately from the seeded atlas snapshot.
+
 ## Add a feature
 
 1. Create `docs/site/<feature>.md`, register it in `site.json` under the appropriate track with `kind: feature`, and link it from related pages.

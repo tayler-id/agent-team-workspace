@@ -2,11 +2,11 @@
 
 ## What it is
 
-U01a.B02 makes authored JSON Schema and OpenAPI the shared wire authority. TypeScript and Swift consumers are generated from the same source. The current surface has 20 components across five families: primitives, health, fixture policy, errors and CLI envelopes.
+U01a.B02 makes authored JSON Schema and OpenAPI the shared wire authority. TypeScript and Swift consumers are generated from the same source. At the seeded atlas revision, the surface has 20 components across five families: primitives, health, fixture policy, errors and CLI envelopes.
 
 ## What it does
 
-The generator bundles schema families, rejects unsupported constructs, produces both consumers and records source/output digests. The conformance driver sends 66 golden vectors through both implementations, comparing acceptance, canonical bytes, SHA-256 digests and detached Ed25519 signature verdicts.
+The generator bundles schema families, rejects unsupported constructs, produces both consumers and records source/output digests. At that revision the conformance driver sends 66 golden vectors through both implementations, comparing acceptance, canonical bytes, SHA-256 digests and detached Ed25519 signature verdicts.
 
 A compiled generated type is not sufficient validation. For example, a generated Swift type can collapse null into absence or ignore a pattern. The Swift runtime subset validator enforces those restrictions too.
 
@@ -27,6 +27,8 @@ Reject drift | Regenerate into a clean temporary tree and compare every output b
 ## Implementation status
 
 **Built at the atlas revision.** These are foundation contracts, not the complete production API. There is no implemented RunSpec, room-event family, native login, Swift UI, or worker protocol at this base. A CLI report schema does not mean the `agora project` executable exists.
+
+The later U01a.B03 slice adds [neutral synchronization values](repo:contracts/schemas/sync.schema.json) and [namespaced fixture envelopes](repo:contracts/schemas/fixture-sync.schema.json), with [wire guard-negative tests](repo:contracts/test/sync.test.ts) and [retained review proof](repo:evidence/U01a/agora-s1-isolate-client-core/1-contracts/review.md). They support client replay without inventing production room schemas or HTTP operations. Follow the current runbook for the expanded vector corpus.
 
 The tested subset supports closed objects, explicit required fields, arrays, bounded integers, string/integer enums and restricted anchored ASCII patterns. It rejects unsupported keywords rather than generating unconstrained types. Schema extension must preserve cross-language proof; do not edit generated files.
 

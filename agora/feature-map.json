@@ -5,6 +5,7 @@
 	"features": [
 		{
 			"id": "documentation-config-rejection",
+			"documentation": "docs/site/authoring.md",
 			"paths": ["pnpm-workspace.yaml", "pnpm-lock.yaml"],
 			"public": ["pnpm docs:check", "markdownlint-cli2 --config"],
 			"scenarios": ["packages/client-core/test/fixture.test.ts"],
@@ -14,6 +15,7 @@
 		},
 		{
 			"id": "mechanical-boundaries",
+			"documentation": "docs/site/foundation.md",
 			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/public-types.ts", "packages/client-core/tsconfig.json", "packages/domain/src/index.ts", "packages/domain/src/policy/fixture-scope.ts", "contracts/package.json", "apps/center/package.json", "package.json"],
 			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
 			"scenarios": ["packages/client-core/test/boundaries.test.ts", "packages/client-core/test/export-maps.test.ts", "packages/client-core/test/fixture.test.ts"],
@@ -23,6 +25,7 @@
 		},
 		{
 			"id": "client-synchronization",
+			"documentation": "docs/site/foundation.md",
 			"paths": ["docs/features/client-synchronization.md", "packages/client-core/src/index.ts", "packages/client-core/src/model.ts", "packages/client-core/package.json", "contracts/package.json", "scripts/client-fixture.ts", "scripts/drive-client-core.ts", "contracts/fixtures/replay.json", "contracts/swift/Sources/AgoraContractsConform/Replay.swift"],
 			"public": ["@agora/client-core initialState", "@agora/client-core synchronize", "pnpm client:replay"],
 			"scenarios": ["packages/client-core/test/harness.test.ts", "packages/client-core/test/sync.test.ts", "packages/client-core/test/fixture.test.ts", "packages/client-core/test/guards.test.ts", "contracts/test/replay.test.ts", "scripts/drive-client-core.ts"],
@@ -32,6 +35,7 @@
 		},
 		{
 			"id": "fixture-sync-contracts",
+			"documentation": "docs/site/contracts.md",
 			"paths": ["contracts/schemas/sync.schema.json", "contracts/schemas/fixture-sync.schema.json", "contracts/src/index.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift"],
 			"public": ["pnpm contracts:check", "pnpm contracts:conform"],
 			"contracts": ["contracts/schemas/sync.schema.json", "contracts/schemas/fixture-sync.schema.json"],
