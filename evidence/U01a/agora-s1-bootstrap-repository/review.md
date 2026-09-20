@@ -88,3 +88,7 @@ Verdict: PASS. Exit codes observed by the reviewer: typecheck 0, lint 0, docs:ch
 | 2. If closing the blocked database handle throws, the database drop and superuser pool end are skipped | Suggestion | Accepted, not fixed here. |
 
 Closing statement. The task closes on its own declared checks at code head 84a9243 with an independent exact-head PASS. The operator's human verdict and the R11 size decision (D65, D67) remain open for the merge authority.
+
+## Size exception, 2026-09-20
+
+Firstmate, acting as the non-author maintainer, granted a one-time R11 size exception for this bootstrap change instead of a split (decisions D68). Basis as recorded: the meaningful code addition is 1,209 lines, 209 above the hard threshold; the source-file count stays below 25; the change is one declared repository bootstrap outcome; six independent review rounds found and corrected real defects and the final exact-head review passes; splitting the corrected fixture would add a history and evidence boundary without reducing its authority or migration risk. The exception does not lower the risk class, waive any check, or set precedent for later tasks. The r11-size proof in outcome.json is pass on this basis. The rounds above are unchanged; the operator's human verdict remains separate.

@@ -136,8 +136,14 @@
 		},
 		{
 			"id": "r11-size",
-			"status": "blocked",
-			"subject": "code diff exceeds the 1,000-added-line block threshold after review fixes; non-author size exception or split required (decisions D65, D67)"
+			"status": "pass",
+			"subject": "code diff of 1,209 added lines (209 above the 1,000-line block threshold) in fewer than 25 source files; one-time size exception granted by Firstmate as non-author maintainer on 2026-09-20 (decisions D68), risk class unchanged, no check waived, no precedent",
+			"exception": {
+				"granted_by": "firstmate (non-author maintainer)",
+				"granted_at": "2026-09-20",
+				"decision": "D68",
+				"scope": "this bootstrap change only"
+			}
 		}
 	],
 	"not_created": [
