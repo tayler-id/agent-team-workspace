@@ -1,0 +1,383 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ❯ |unit| packages/client-core/test/sync.test.ts (11 tests | 11 failed) 7ms
+   × baseline idle driver works before accepting an immutable snapshot and requesting strict-after replay 3ms
+   × ordered replay, gaps and duplicate suppression converge to a literal snapshot 0ms
+   × snapshots race replay without dropping buffered events or rolling back a newer cursor 0ms
+   × decimal cursor and message/run revisions compare beyond Number precision 0ms
+   × unread uses visible created positions, not edits, tombstones or run events; seen is explicit and monotone 0ms
+   × unknown state changes pause with no projection mutation or ack and require supported resync 0ms
+   × streams have independent cursors and a missing snapshot cannot be invented from an event 1ms
+   × gaps are bounded and invalid snapshot or changed message positions resync instead of acknowledging 0ms
+   × receipts dedupe commands but never fast-forward a timeline; offline sends are not queued 0ms
+   × retry decisions preserve the original id/digest, refresh stale state and respect denial/rate delay 0ms
+   × drafts stay explicitly unsent through route/snapshot changes; logout and revoke erase private state 0ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > baseline idle driver works before accepting an immutable snapshot and requesting strict-after replay
+AssertionError: expected { state: { rooms: [], …(2) }, …(2) } to deeply equal { state: { …(3) }, …(2) }
+
+- Expected
++ Received
+
+  {
+    "acknowledgements": [],
+-   "requests": [
+-     {
+-       "after": "1",
+-       "streamId": "11111111-1111-4111-8111-111111111111",
+-       "type": "replay",
+-     },
+-   ],
++   "requests": [],
+    "state": {
+      "commands": [],
+      "drafts": [],
+-     "rooms": [
+-       {
+-         "cursor": "1",
+-         "lastSeen": "0",
+-         "messages": [
+-           {
+-             "content": {
+-               "body": "hello",
+-               "tag": "visible",
+-             },
+-             "createdSeq": "1",
+-             "id": "m",
+-             "revision": "1",
+-           },
+-         ],
+-         "mode": "live",
+-         "pending": [],
+-         "runs": [],
+-         "streamId": "11111111-1111-4111-8111-111111111111",
+-         "unread": 1,
+-       },
+-     ],
++     "rooms": [],
+    },
+  }
+
+ ❯ packages/client-core/test/sync.test.ts:14:17
+     12|  expect(synchronize(initialState(), { type: 'idle' })).toEqual({ state…
+     13|  const result = synchronize(initialState(), snapshot());
+     14|  expect(result).toEqual({ state: { rooms: [expected], drafts: [], comm…
+       |                 ^
+     15|  const input = snapshot();
+     16|  const isolated = synchronize(initialState(), input).state;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > ordered replay, gaps and duplicate suppression converge to a literal snapshot
+AssertionError: expected [] to deeply equal [ { type: 'replay', …(2) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "after": "1",
+-     "streamId": "11111111-1111-4111-8111-111111111111",
+-     "type": "replay",
+-   },
+- ]
++ []
+
+ ❯ packages/client-core/test/sync.test.ts:26:23
+     24|  const gap = synchronize(initial, event('3'));
+     25|  expect(gap.acknowledgements).toEqual([]);
+     26|  expect(gap.requests).toEqual([{ type: 'replay', streamId: room, after…
+       |                       ^
+     27|  expect(gap.state.rooms[0]).toEqual({ ...expected, mode: 'gap', pendin…
+     28|  const filled = synchronize(gap.state, event('2'));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > snapshots race replay without dropping buffered events or rolling back a newer cursor
+AssertionError: expected [] to deeply equal [ { …(8) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "cursor": "3",
+-     "lastSeen": "0",
+-     "messages": [
+-       {
+-         "content": {
+-           "body": "edit 3",
+-           "tag": "visible",
+-         },
+-         "createdSeq": "1",
+-         "id": "m",
+-         "revision": "3",
+-       },
+-     ],
+-     "mode": "live",
+-     "pending": [],
+-     "runs": [],
+-     "streamId": "11111111-1111-4111-8111-111111111111",
+-     "unread": 1,
+-   },
+- ]
++ []
+
+ ❯ packages/client-core/test/sync.test.ts:37:23
+     35| test('snapshots race replay without dropping buffered events or rollin…
+     36|  const result = drive(snapshot(), event('3'), snapshot('2'));
+     37|  expect(result.rooms).toEqual([{ ...expected, cursor: '3', messages: […
+       |                       ^
+     38|  expect(synchronize(result, snapshot()).state).toBe(result);
+     39| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > decimal cursor and message/run revisions compare beyond Number precision
+AssertionError: expected undefined to deeply equal { …(8) }
+
+- Expected:
+{
+  "cursor": "9007199254740994",
+  "lastSeen": "0",
+  "messages": [
+    {
+      "content": {
+        "body": "hello",
+        "tag": "visible",
+      },
+      "createdSeq": "1",
+      "id": "m",
+      "revision": "9007199254740993",
+    },
+  ],
+  "mode": "live",
+  "pending": [],
+  "runs": [
+    {
+      "id": "r",
+      "revision": "9007199254740993",
+      "state": "running",
+    },
+  ],
+  "streamId": "11111111-1111-4111-8111-111111111111",
+  "unread": 1,
+}
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:45:32
+     43|  const edited = synchronize(base, event('9007199254740993', '900719925…
+     44|  const result = synchronize(edited, { type: 'event', streamId: room, s…
+     45|  expect(result.state.rooms[0]).toEqual({ ...expected, cursor: '9007199…
+       |                                ^
+     46|  expect(result.acknowledgements).toEqual([{ streamId: room, seq: '9007…
+     47| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > unread uses visible created positions, not edits, tombstones or run events; seen is explicit and monotone
+AssertionError: expected undefined to be 1 // Object.is equality
+
+- Expected:
+1
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:52:36
+     50|  const first = drive(snapshot(), event('2'));
+     51|  const withCard = synchronize(first, { type: 'event', streamId: room, …
+     52|  expect(withCard.rooms[0]?.unread).toBe(1);
+       |                                    ^
+     53|  const read = synchronize(withCard, { type: 'seen', streamId: room, se…
+     54|  const second = synchronize(read, { type: 'event', streamId: room, seq…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > unknown state changes pause with no projection mutation or ack and require supported resync
+AssertionError: expected undefined to deeply equal { …(8) }
+
+- Expected:
+{
+  "cursor": "1",
+  "lastSeen": "0",
+  "messages": [
+    {
+      "content": {
+        "body": "hello",
+        "tag": "visible",
+      },
+      "createdSeq": "1",
+      "id": "m",
+      "revision": "1",
+    },
+  ],
+  "mode": "upgrade",
+  "pending": [],
+  "runs": [],
+  "streamId": "11111111-1111-4111-8111-111111111111",
+  "unread": 1,
+}
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:66:33
+     64|  const before = drive(snapshot());
+     65|  const unknown = synchronize(before, { type: 'unsupported', streamId: …
+     66|  expect(unknown.state.rooms[0]).toEqual({ ...expected, mode: 'upgrade'…
+       |                                 ^
+     67|  expect(unknown.acknowledgements).toEqual([]);
+     68|  expect(unknown.requests).toEqual([{ type: 'upgrade', streamId: room }…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > streams have independent cursors and a missing snapshot cannot be invented from an event
+AssertionError: expected { state: { rooms: [], …(2) }, …(2) } to deeply equal { state: { rooms: [], …(2) }, …(2) }
+
+- Expected
++ Received
+
+@@ -1,13 +1,8 @@
+  {
+    "acknowledgements": [],
+-   "requests": [
+-     {
+-       "streamId": "11111111-1111-4111-8111-111111111111",
+-       "type": "snapshot",
+-     },
+-   ],
++   "requests": [],
+    "state": {
+      "commands": [],
+      "drafts": [],
+      "rooms": [],
+    },
+
+ ❯ packages/client-core/test/sync.test.ts:74:50
+     72|
+     73| test('streams have independent cursors and a missing snapshot cannot b…
+     74|  expect(synchronize(initialState(), event('2'))).toEqual({ state: init…
+       |                                                  ^
+     75|  const two = drive(snapshot(), { ...snapshot(), type: 'snapshot', stre…
+     76|  expect(two.rooms.map((r) => [r.streamId, r.cursor])).toEqual([[room, …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > gaps are bounded and invalid snapshot or changed message positions resync instead of acknowledging
+AssertionError: expected undefined to deeply equal { …(8) }
+
+- Expected:
+{
+  "cursor": "1",
+  "lastSeen": "0",
+  "messages": [
+    {
+      "content": {
+        "body": "hello",
+        "tag": "visible",
+      },
+      "createdSeq": "1",
+      "id": "m",
+      "revision": "1",
+    },
+  ],
+  "mode": "resync",
+  "pending": [],
+  "runs": [],
+  "streamId": "11111111-1111-4111-8111-111111111111",
+  "unread": 1,
+}
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:82:27
+     80|  const full = Array.from({ length: 1001 }, (_, i) => event(String(i + …
+     81|  const bounded = drive(snapshot(), ...full);
+     82|  expect(bounded.rooms[0]).toEqual({ ...expected, mode: 'resync' });
+       |                           ^
+     83|  const invalid: ClientInput = { type: 'snapshot', streamId: room, curs…
+     84|  expect(synchronize(initialState(), invalid)).toEqual({ state: initial…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > receipts dedupe commands but never fast-forward a timeline; offline sends are not queued
+AssertionError: expected [] to deeply equal [ { type: 'send', commandId: 'c' } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "commandId": "c",
+-     "type": "send",
+-   },
+- ]
++ []
+
+ ❯ packages/client-core/test/sync.test.ts:96:27
+     94|  expect(synchronize(base, { ...submit, type: 'submit', commandId: 'c',…
+     95|  const pending = synchronize(base, submit);
+     96|  expect(pending.requests).toEqual([{ type: 'send', commandId: 'c' }]);
+       |                           ^
+     97|  expect(synchronize(pending.state, submit).requests).toEqual([]);
+     98|  expect(synchronize(pending.state, { ...submit, type: 'submit', comman…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > retry decisions preserve the original id/digest, refresh stale state and respect denial/rate delay
+AssertionError: expected undefined to be 'resend_same_command' // Object.is equality
+
+- Expected:
+"resend_same_command"
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:117:36
+    115|  ] as const) {
+    116|   const result = synchronize(pending, { type: 'retry', commandId: 'c',…
+    117|   expect(result.requests[0]?.type).toBe(type);
+       |                                    ^
+    118|   expect(result.state).toBe(pending);
+    119|  }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/11]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > drafts stay explicitly unsent through route/snapshot changes; logout and revoke erase private state
+AssertionError: expected [] to deeply equal [ { …(3) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "streamId": "11111111-1111-4111-8111-111111111111",
+-     "tag": "unsent",
+-     "text": "offline idea",
+-   },
+- ]
++ []
+
+ ❯ packages/client-core/test/sync.test.ts:126:23
+    124|  const draft = { streamId: room, text: 'offline idea', tag: 'unsent' };
+    125|  const state = drive(snapshot(), { type: 'draft', streamId: room, text…
+    126|  expect(state.drafts).toEqual([draft]);
+       |                       ^
+    127|  for (const reason of ['logout', 'revoked'] as const) expect(synchroni…
+    128| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/11]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  11 failed (11)
+   Start at  09:42:46
+   Duration  84ms (transform 50%, tests 28%, import 17%, worker 5%)
+

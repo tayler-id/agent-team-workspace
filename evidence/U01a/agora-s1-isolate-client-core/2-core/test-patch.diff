@@ -1,0 +1,997 @@
+diff --git a/contracts/fixtures/replay.json b/contracts/fixtures/replay.json
+new file mode 100644
+index 0000000..e6eb5cc
+--- /dev/null
++++ b/contracts/fixtures/replay.json
+@@ -0,0 +1,729 @@
++{
++	"schema_version": "agora.contract-vectors/v1",
++	"vectors": [],
++	"replays": [
++		{
++			"id": "ordered",
++			"snapshot": {
++				"schema_version": "agora.foundation-fixture.sync-snapshot/v1",
++				"cursor": {
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"committed_seq": "1"
++				},
++				"last_seen_room_seq": "0",
++				"state": {
++					"messages": [
++						{
++							"message_id": "11111111-1111-4111-8111-111111111111",
++							"created_seq": "1",
++							"revision": "1",
++							"body": "hello"
++						}
++					],
++					"tombstones": [],
++					"run_cards": []
++				}
++			},
++			"events": [
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "2",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "2",
++						"body": "edited"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "3",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.run_card",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"run_id": "11111111-1111-4111-8111-111111111111",
++						"run_revision": "2",
++						"state": "running"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "4",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "22222222-2222-4222-8222-222222222222",
++						"created_seq": "4",
++						"revision": "1",
++						"body": "second"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "5",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_tombstone",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "3"
++					}
++				}
++			],
++			"expected": {
++				"rooms": [
++					{
++						"streamId": "11111111-1111-4111-8111-111111111111",
++						"cursor": "5",
++						"lastSeen": "0",
++						"mode": "live",
++						"unread": 1,
++						"messages": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"createdSeq": "1",
++								"revision": "3",
++								"content": {
++									"tag": "tombstone"
++								}
++							},
++							{
++								"id": "22222222-2222-4222-8222-222222222222",
++								"createdSeq": "4",
++								"revision": "1",
++								"content": {
++									"tag": "visible",
++									"body": "second"
++								}
++							}
++						],
++						"runs": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"revision": "2",
++								"state": "running"
++							}
++						],
++						"pending": []
++					}
++				],
++				"commands": [],
++				"drafts": []
++			}
++		},
++		{
++			"id": "gap",
++			"snapshot": {
++				"schema_version": "agora.foundation-fixture.sync-snapshot/v1",
++				"cursor": {
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"committed_seq": "1"
++				},
++				"last_seen_room_seq": "0",
++				"state": {
++					"messages": [
++						{
++							"message_id": "11111111-1111-4111-8111-111111111111",
++							"created_seq": "1",
++							"revision": "1",
++							"body": "hello"
++						}
++					],
++					"tombstones": [],
++					"run_cards": []
++				}
++			},
++			"events": [
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "4",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "22222222-2222-4222-8222-222222222222",
++						"created_seq": "4",
++						"revision": "1",
++						"body": "second"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "2",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "2",
++						"body": "edited"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "5",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_tombstone",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "3"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "3",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.run_card",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"run_id": "11111111-1111-4111-8111-111111111111",
++						"run_revision": "2",
++						"state": "running"
++					}
++				}
++			],
++			"expected": {
++				"rooms": [
++					{
++						"streamId": "11111111-1111-4111-8111-111111111111",
++						"cursor": "5",
++						"lastSeen": "0",
++						"mode": "live",
++						"unread": 1,
++						"messages": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"createdSeq": "1",
++								"revision": "3",
++								"content": {
++									"tag": "tombstone"
++								}
++							},
++							{
++								"id": "22222222-2222-4222-8222-222222222222",
++								"createdSeq": "4",
++								"revision": "1",
++								"content": {
++									"tag": "visible",
++									"body": "second"
++								}
++							}
++						],
++						"runs": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"revision": "2",
++								"state": "running"
++							}
++						],
++						"pending": []
++					}
++				],
++				"commands": [],
++				"drafts": []
++			}
++		},
++		{
++			"id": "duplicates",
++			"snapshot": {
++				"schema_version": "agora.foundation-fixture.sync-snapshot/v1",
++				"cursor": {
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"committed_seq": "1"
++				},
++				"last_seen_room_seq": "0",
++				"state": {
++					"messages": [
++						{
++							"message_id": "11111111-1111-4111-8111-111111111111",
++							"created_seq": "1",
++							"revision": "1",
++							"body": "hello"
++						}
++					],
++					"tombstones": [],
++					"run_cards": []
++				}
++			},
++			"events": [
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "2",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "2",
++						"body": "edited"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "2",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "2",
++						"body": "edited"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "4",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "22222222-2222-4222-8222-222222222222",
++						"created_seq": "4",
++						"revision": "1",
++						"body": "second"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "3",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.run_card",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"run_id": "11111111-1111-4111-8111-111111111111",
++						"run_revision": "2",
++						"state": "running"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "3",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.run_card",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"run_id": "11111111-1111-4111-8111-111111111111",
++						"run_revision": "2",
++						"state": "running"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "5",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_tombstone",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "3"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "5",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_tombstone",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "3"
++					}
++				}
++			],
++			"expected": {
++				"rooms": [
++					{
++						"streamId": "11111111-1111-4111-8111-111111111111",
++						"cursor": "5",
++						"lastSeen": "0",
++						"mode": "live",
++						"unread": 1,
++						"messages": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"createdSeq": "1",
++								"revision": "3",
++								"content": {
++									"tag": "tombstone"
++								}
++							},
++							{
++								"id": "22222222-2222-4222-8222-222222222222",
++								"createdSeq": "4",
++								"revision": "1",
++								"content": {
++									"tag": "visible",
++									"body": "second"
++								}
++							}
++						],
++						"runs": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"revision": "2",
++								"state": "running"
++							}
++						],
++						"pending": []
++					}
++				],
++				"commands": [],
++				"drafts": []
++			}
++		},
++		{
++			"id": "unknown-state",
++			"snapshot": {
++				"schema_version": "agora.foundation-fixture.sync-snapshot/v1",
++				"cursor": {
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"committed_seq": "1"
++				},
++				"last_seen_room_seq": "0",
++				"state": {
++					"messages": [
++						{
++							"message_id": "11111111-1111-4111-8111-111111111111",
++							"created_seq": "1",
++							"revision": "1",
++							"body": "hello"
++						}
++					],
++					"tombstones": [],
++					"run_cards": []
++				}
++			},
++			"events": [
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "2",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "2",
++						"body": "edited"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "3",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.future_state",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"run_id": "11111111-1111-4111-8111-111111111111",
++						"run_revision": "2",
++						"state": "running"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "4",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "22222222-2222-4222-8222-222222222222",
++						"created_seq": "4",
++						"revision": "1",
++						"body": "second"
++					}
++				}
++			],
++			"expected": {
++				"rooms": [
++					{
++						"streamId": "11111111-1111-4111-8111-111111111111",
++						"cursor": "2",
++						"lastSeen": "0",
++						"mode": "upgrade",
++						"unread": 1,
++						"messages": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"createdSeq": "1",
++								"revision": "2",
++								"content": {
++									"tag": "visible",
++									"body": "edited"
++								}
++							}
++						],
++						"runs": [],
++						"pending": []
++					}
++				],
++				"commands": [],
++				"drafts": []
++			}
++		},
++		{
++			"id": "unfilled-gap",
++			"snapshot": {
++				"schema_version": "agora.foundation-fixture.sync-snapshot/v1",
++				"cursor": {
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"committed_seq": "1"
++				},
++				"last_seen_room_seq": "0",
++				"state": {
++					"messages": [
++						{
++							"message_id": "11111111-1111-4111-8111-111111111111",
++							"created_seq": "1",
++							"revision": "1",
++							"body": "hello"
++						}
++					],
++					"tombstones": [],
++					"run_cards": []
++				}
++			},
++			"events": [
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "3",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.run_card",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"run_id": "11111111-1111-4111-8111-111111111111",
++						"run_revision": "2",
++						"state": "running"
++					}
++				}
++			],
++			"expected": {
++				"rooms": [
++					{
++						"streamId": "11111111-1111-4111-8111-111111111111",
++						"cursor": "1",
++						"lastSeen": "0",
++						"mode": "gap",
++						"unread": 1,
++						"messages": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"createdSeq": "1",
++								"revision": "1",
++								"content": {
++									"tag": "visible",
++									"body": "hello"
++								}
++							}
++						],
++						"runs": [],
++						"pending": [
++							{
++								"type": "event",
++								"streamId": "11111111-1111-4111-8111-111111111111",
++								"seq": "3",
++								"change": {
++									"type": "run",
++									"run": {
++										"id": "11111111-1111-4111-8111-111111111111",
++										"revision": "2",
++										"state": "running"
++									}
++								}
++							}
++						]
++					}
++				],
++				"commands": [],
++				"drafts": []
++			}
++		},
++		{
++			"id": "stale-run-revision",
++			"snapshot": {
++				"schema_version": "agora.foundation-fixture.sync-snapshot/v1",
++				"cursor": {
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"committed_seq": "1"
++				},
++				"last_seen_room_seq": "0",
++				"state": {
++					"messages": [
++						{
++							"message_id": "11111111-1111-4111-8111-111111111111",
++							"created_seq": "1",
++							"revision": "1",
++							"body": "hello"
++						}
++					],
++					"tombstones": [],
++					"run_cards": []
++				}
++			},
++			"events": [
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "2",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "2",
++						"body": "edited"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "3",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.run_card",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"run_id": "11111111-1111-4111-8111-111111111111",
++						"run_revision": "2",
++						"state": "running"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "4",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_revision",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "22222222-2222-4222-8222-222222222222",
++						"created_seq": "4",
++						"revision": "1",
++						"body": "second"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "5",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.message_tombstone",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"message_id": "11111111-1111-4111-8111-111111111111",
++						"created_seq": "1",
++						"revision": "3"
++					}
++				},
++				{
++					"schema_version": "agora.foundation-fixture.sync-event/v1",
++					"stream_id": "11111111-1111-4111-8111-111111111111",
++					"seq": "6",
++					"event_id": "11111111-1111-4111-8111-111111111111",
++					"kind": "fixture.run_card",
++					"actor": "11111111-1111-4111-8111-111111111111",
++					"occurred_at": "2026-09-20T00:00:00Z",
++					"payload": {
++						"run_id": "11111111-1111-4111-8111-111111111111",
++						"run_revision": "1",
++						"state": "queued"
++					}
++				}
++			],
++			"expected": {
++				"rooms": [
++					{
++						"streamId": "11111111-1111-4111-8111-111111111111",
++						"cursor": "6",
++						"lastSeen": "0",
++						"mode": "live",
++						"unread": 1,
++						"messages": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"createdSeq": "1",
++								"revision": "3",
++								"content": {
++									"tag": "tombstone"
++								}
++							},
++							{
++								"id": "22222222-2222-4222-8222-222222222222",
++								"createdSeq": "4",
++								"revision": "1",
++								"content": {
++									"tag": "visible",
++									"body": "second"
++								}
++							}
++						],
++						"runs": [
++							{
++								"id": "11111111-1111-4111-8111-111111111111",
++								"revision": "2",
++								"state": "running"
++							}
++						],
++						"pending": []
++					}
++				],
++				"commands": [],
++				"drafts": []
++			}
++		}
++	]
++}
+diff --git a/contracts/test/replay.test.ts b/contracts/test/replay.test.ts
+new file mode 100644
+index 0000000..e250041
+--- /dev/null
++++ b/contracts/test/replay.test.ts
+@@ -0,0 +1,16 @@
++import { spawnSync } from 'node:child_process';
++import { readFileSync } from 'node:fs';
++import { expect, test } from 'vitest';
++import { runSwiftConsumer } from '../src/conform-cli.ts';
++
++test('the existing Swift conformance driver independently reproduces each golden replay projection', () => {
++	const path = new URL('../fixtures/replay.json', import.meta.url).pathname;
++	const file = JSON.parse(readFileSync(path, 'utf8')) as { replays: { id: string; expected: unknown }[] };
++	const run = runSwiftConsumer(path);
++	expect(run.message ?? run.outcome).toBe('pass');
++	const report = run.report as { replays?: { id: string; outcome: string; state: unknown }[] } | undefined;
++	expect(report?.replays).toEqual(file.replays.map((v) => ({ id: v.id, outcome: 'pass', state: v.expected })));
++	const cli = spawnSync(process.execPath, ['scripts/drive-client-core.ts', '--json', '--swift'], { encoding: 'utf8' });
++	expect(cli.status, cli.stderr).toBe(0);
++	expect(JSON.parse(cli.stdout)).toMatchObject({ outcome: 'pass', swift: { outcome: 'pass' } });
++});
+diff --git a/packages/client-core/test/fixture.test.ts b/packages/client-core/test/fixture.test.ts
+new file mode 100644
+index 0000000..08f1523
+--- /dev/null
++++ b/packages/client-core/test/fixture.test.ts
+@@ -0,0 +1,50 @@
++import { spawnSync } from 'node:child_process';
++import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
++import { tmpdir } from 'node:os';
++import path from 'node:path';
++import { expect, test } from 'vitest';
++import { fixtureEvent, fixtureReceipt, fixtureSnapshot } from '../../../scripts/client-fixture.ts';
++import { replay, type ReplayFile } from '../../../scripts/drive-client-core.ts';
++
++const file = JSON.parse(readFileSync(new URL('../../../contracts/fixtures/replay.json', import.meta.url), 'utf8')) as ReplayFile;
++test('the public fixture driver converges every literal replay and refuses unknown state without cursor acknowledgement', () => {
++	const results = file.replays.map(replay);
++	expect(results.map((r) => [r.id, r.outcome])).toEqual([['ordered', 'pass'], ['gap', 'pass'], ['duplicates', 'pass'], ['unknown-state', 'pass'], ['unfilled-gap', 'pass'], ['stale-run-revision', 'pass']]);
++	for (const result of results) expect(result.state).toEqual(file.replays.find((v) => v.id === result.id)?.expected);
++	const unknown = results[3];
++	expect(unknown?.transcript[2]?.acknowledgements).toEqual([]);
++	expect(unknown?.transcript[2]?.state.rooms[0]?.cursor).toBe('2');
++});
++test('the fixture adapter rejects malformed snapshots, cross-stream delivery and malformed receipts', () => {
++	const first = file.replays[0];
++	if (!first) throw new Error('missing fixture');
++	expect(fixtureSnapshot(first.snapshot)?.cursor).toBe('1');
++	expect(fixtureSnapshot({ ...first.snapshot as object, authority: true })).toBeUndefined();
++	expect(fixtureEvent('other', first.events[0])).toEqual({ type: 'unsupported', streamId: 'other' });
++	const id = 'AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA';
++	const receipt = { command_id: id, aggregate_id: id, revision: '1', receipt_id: id, event_cursors: [{ stream_id: id, committed_seq: '2' }] };
++	expect(fixtureReceipt(receipt)).toEqual({ ...receipt, command_id: id.toLowerCase(), aggregate_id: id.toLowerCase(), receipt_id: id.toLowerCase(), event_cursors: [{ stream_id: id.toLowerCase(), committed_seq: '2' }] });
++	expect(fixtureReceipt({ ...receipt, actor_id: id })).toBeUndefined();
++});
++test('the CLI returns pass only for literal snapshots, and distinguishes assertion failure from usage error', () => {
++	const invoke = (...args: string[]) => spawnSync(process.execPath, ['scripts/drive-client-core.ts', ...args], { cwd: path.resolve(import.meta.dirname, '../../..'), encoding: 'utf8' });
++	const valid = invoke('--json');
++	expect(valid.status, valid.stderr).toBe(0);
++	expect(JSON.parse(valid.stdout)).toMatchObject({ outcome: 'pass' });
++	expect(invoke('--unknown').status).toBe(64);
++	expect(invoke('--', '--json').status).toBe(0);
++	const dir = mkdtempSync(path.join(tmpdir(), 'agora-replay-cli-'));
++	try {
++		const target = path.join(dir, 'fixture.json');
++		for (const malformed of ['{', 'null', '{}', '{"schema_version":"agora.contract-vectors/v1","replays":[null]}']) {
++			writeFileSync(target, malformed);
++			expect(invoke('--file', target).status).toBe(64);
++		}
++		const altered = structuredClone(file);
++		for (const vector of altered.replays) vector.expected = { rooms: [], commands: [], drafts: [] };
++		writeFileSync(target, JSON.stringify(altered));
++		const wrong = invoke('--file', target);
++		expect(wrong.status).toBe(1);
++		expect(JSON.parse(wrong.stdout)).toMatchObject({ outcome: 'fail' });
++	} finally { rmSync(dir, { recursive: true, force: true }); }
++});
+diff --git a/packages/client-core/test/guards.test.ts b/packages/client-core/test/guards.test.ts
+new file mode 100644
+index 0000000..eb7f8c3
+--- /dev/null
++++ b/packages/client-core/test/guards.test.ts
+@@ -0,0 +1,37 @@
++import { spawnSync } from 'node:child_process';
++import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
++import { tmpdir } from 'node:os';
++import path from 'node:path';
++import { pathToFileURL } from 'node:url';
++import { expect, test } from 'vitest';
++
++const source = readFileSync(new URL('../src/index.ts', import.meta.url), 'utf8');
++const setup = `const s={type:'snapshot',streamId:'room',cursor:'1',lastSeen:'0',messages:[{id:'m',createdSeq:'1',revision:'1',content:{tag:'visible',body:'hello'}}],runs:[]};
++const e=n=>({type:'event',streamId:'room',seq:String(n),change:{type:'message',message:{id:'m',createdSeq:'1',revision:String(n),content:{tag:'visible',body:'edit'}}}});
++const base=synchronize(initialState(),s).state;`;
++const cases = [
++	['revision', 'compare(message.revision, previous.revision) <= 0', 'false', `const old=e(2);old.change.message.revision='0';assert.equal(synchronize(base,old).state.rooms[0].messages[0].content.body,'hello','guard revision');`],
++	['duplicate', 'compare(input.seq, room.cursor) <= 0', 'false', `const applied=synchronize(base,e(2)).state;assert.equal(synchronize(applied,e(2)).state,applied,'guard duplicate');`],
++	['gap-ack', 'compare(next.cursor, room.cursor) > 0', 'true', `assert.deepEqual(synchronize(base,e(3)).acknowledgements,[],'guard gap-ack');`],
++	['unknown', "putRoom(state, { ...room, mode: 'upgrade' })", "putRoom(state, { ...room, mode: 'live' })", `const paused=synchronize(base,{type:'unsupported',streamId:'room'}).state;assert.equal(synchronize(paused,e(2)).state.rooms[0].cursor,'1','guard unknown');`],
++	['snapshot-order', 'compare(input.cursor, room.cursor) < 0', 'false', `const applied=synchronize(base,e(2)).state;assert.equal(synchronize(applied,s).state.rooms[0].cursor,'2','guard snapshot-order');`],
++	['buffer-bound', 'room.pending.length >= 1000', 'false', `let state=base;for(let i=3;i<1004;i++)state=synchronize(state,e(i)).state;assert.equal(state.rooms[0].mode,'resync','guard buffer-bound');`],
++	['command-digest', 'previous.requestDigest !== input.requestDigest', 'false', `const submit={type:'submit',commandId:'c',streamId:'room',requestDigest:'first',online:true};const pending=synchronize(base,submit).state;assert.deepEqual(synchronize(pending,{...submit,requestDigest:'changed'}).requests,[{type:'conflict',commandId:'c'}],'guard command-digest');`],
++	['input-ownership', 'const input = copy(value);', 'const input = value;', `assert.doesNotThrow(()=>{s.messages[0].content.body='caller edit'},'guard input-ownership');assert.equal(base.rooms[0].messages[0].content.body,'hello','guard input-ownership');`],
++] as const;
++
++test.each(cases)('%s guard is necessary: disabling it in an isolated copy turns its public assertion red', (name, before, after, probe) => {
++	expect(source.split(before).length, `${name} mutation is unique`).toBe(2);
++	const dir = mkdtempSync(path.join(tmpdir(), 'agora-core-guard-'));
++	try {
++		const file = path.join(dir, 'core.mts');
++		const script = `import assert from 'node:assert/strict';import {initialState,synchronize} from ${JSON.stringify(pathToFileURL(file).href)};${setup}${probe}`;
++		writeFileSync(file, source);
++		const guarded = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8' });
++		expect(guarded.status, guarded.stderr).toBe(0);
++		writeFileSync(file, source.replace(before, after));
++		const weakened = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8' });
++		expect(weakened.status).toBe(1);
++		expect(weakened.stderr).toContain(`guard ${name}`);
++	} finally { rmSync(dir, { recursive: true, force: true }); }
++});
+diff --git a/packages/client-core/test/sync.test.ts b/packages/client-core/test/sync.test.ts
+new file mode 100644
+index 0000000..28aba32
+--- /dev/null
++++ b/packages/client-core/test/sync.test.ts
+@@ -0,0 +1,135 @@
++import { expect, test } from 'vitest';
++import { initialState, synchronize, type ClientInput, type ClientState } from '@agora/client-core';
++
++const room = '11111111-1111-4111-8111-111111111111';
++const message = (id = 'm', revision = '1', body = 'hello', createdSeq = '1') => ({ id, revision, createdSeq, content: { tag: 'visible' as const, body } });
++const event = (seq: string, revision = seq, body = `edit ${seq}`): ClientInput => ({ type: 'event', streamId: room, seq, change: { type: 'message', message: message('m', revision, body) } });
++const snapshot = (cursor = '1'): ClientInput => ({ type: 'snapshot', streamId: room, cursor, lastSeen: '0', messages: [message()], runs: [] });
++const drive = (...inputs: ClientInput[]): ClientState => inputs.reduce((s, input) => synchronize(s, input).state, initialState());
++const expected = { streamId: room, cursor: '1', lastSeen: '0', mode: 'live', unread: 1, messages: [message()], runs: [], pending: [] };
++
++test('baseline idle driver works before accepting an immutable snapshot and requesting strict-after replay', () => {
++	expect(synchronize(initialState(), { type: 'idle' })).toEqual({ state: { rooms: [], drafts: [], commands: [] }, acknowledgements: [], requests: [] });
++	const result = synchronize(initialState(), snapshot());
++	expect(result).toEqual({ state: { rooms: [expected], drafts: [], commands: [] }, acknowledgements: [], requests: [{ type: 'replay', streamId: room, after: '1' }] });
++	const input = snapshot();
++	const isolated = synchronize(initialState(), input).state;
++	if (input.type === 'snapshot' && input.messages[0]) input.messages[0].content = { tag: 'visible', body: 'caller mutation' };
++	expect(isolated.rooms[0]?.messages[0]?.content).toEqual({ tag: 'visible', body: 'hello' });
++	expect(Object.isFrozen(isolated.rooms[0]?.messages[0]?.content)).toBe(true);
++});
++
++test('ordered replay, gaps and duplicate suppression converge to a literal snapshot', () => {
++	const initial = drive(snapshot());
++	const gap = synchronize(initial, event('3'));
++	expect(gap.acknowledgements).toEqual([]);
++	expect(gap.requests).toEqual([{ type: 'replay', streamId: room, after: '1' }]);
++	expect(gap.state.rooms[0]).toEqual({ ...expected, mode: 'gap', pending: [event('3')] });
++	const filled = synchronize(gap.state, event('2'));
++	expect(filled).toEqual({ state: { rooms: [{ ...expected, cursor: '3', messages: [message('m', '3', 'edit 3')] }], commands: [], drafts: [] }, acknowledgements: [{ streamId: room, seq: '3' }], requests: [] });
++	expect(drive(snapshot(), event('2'), event('3'), event('2'), event('3'))).toEqual(filled.state);
++	expect(synchronize(filled.state, event('3')).acknowledgements).toEqual([]);
++	expect(initial.rooms).toEqual([expected]);
++});
++
++test('snapshots race replay without dropping buffered events or rolling back a newer cursor', () => {
++	const result = drive(snapshot(), event('3'), snapshot('2'));
++	expect(result.rooms).toEqual([{ ...expected, cursor: '3', messages: [message('m', '3', 'edit 3')] }]);
++	expect(synchronize(result, snapshot()).state).toBe(result);
++});
++
++test('decimal cursor and message/run revisions compare beyond Number precision', () => {
++	const base = drive({ ...snapshot(), type: 'snapshot', streamId: room, cursor: '9007199254740992', lastSeen: '0', messages: [message('m', '9007199254740993')], runs: [{ id: 'r', revision: '9007199254740993', state: 'running' }] });
++	const edited = synchronize(base, event('9007199254740993', '9007199254740992', 'old')).state;
++	const result = synchronize(edited, { type: 'event', streamId: room, seq: '9007199254740994', change: { type: 'run', run: { id: 'r', revision: '9007199254740992', state: 'queued' } } });
++	expect(result.state.rooms[0]).toEqual({ ...expected, cursor: '9007199254740994', messages: [message('m', '9007199254740993')], runs: [{ id: 'r', revision: '9007199254740993', state: 'running' }] });
++	expect(result.acknowledgements).toEqual([{ streamId: room, seq: '9007199254740994' }]);
++});
++
++test('unread uses visible created positions, not edits, tombstones or run events; seen is explicit and monotone', () => {
++	const first = drive(snapshot(), event('2'));
++	const withCard = synchronize(first, { type: 'event', streamId: room, seq: '3', change: { type: 'run', run: { id: 'r', revision: '1', state: 'running' } } }).state;
++	expect(withCard.rooms[0]?.unread).toBe(1);
++	const read = synchronize(withCard, { type: 'seen', streamId: room, seq: '3' }).state;
++	const second = synchronize(read, { type: 'event', streamId: room, seq: '4', change: { type: 'message', message: message('new', '1', 'new', '4') } }).state;
++	expect(second.rooms[0]?.unread).toBe(1);
++	expect(second.rooms[0]?.lastSeen).toBe('3');
++	const deleted = synchronize(second, { type: 'event', streamId: room, seq: '5', change: { type: 'message', message: { id: 'new', revision: '2', createdSeq: '4', content: { tag: 'tombstone' } } } }).state;
++	expect(deleted.rooms[0]?.unread).toBe(0);
++	expect(synchronize(deleted, { type: 'seen', streamId: room, seq: '1' }).state.rooms[0]?.lastSeen).toBe('3');
++	expect(synchronize(deleted, { type: 'seen', streamId: room, seq: '99' }).state.rooms[0]?.lastSeen).toBe('5');
++});
++
++test('unknown state changes pause with no projection mutation or ack and require supported resync', () => {
++	const before = drive(snapshot());
++	const unknown = synchronize(before, { type: 'unsupported', streamId: room });
++	expect(unknown.state.rooms[0]).toEqual({ ...expected, mode: 'upgrade' });
++	expect(unknown.acknowledgements).toEqual([]);
++	expect(unknown.requests).toEqual([{ type: 'upgrade', streamId: room }]);
++	expect(synchronize(unknown.state, event('2')).state).toBe(unknown.state);
++	expect(drive(snapshot(), { type: 'resync', streamId: room }, snapshot('2')).rooms[0]?.cursor).toBe('2');
++});
++
++test('streams have independent cursors and a missing snapshot cannot be invented from an event', () => {
++	expect(synchronize(initialState(), event('2'))).toEqual({ state: initialState(), acknowledgements: [], requests: [{ type: 'snapshot', streamId: room }] });
++	const two = drive(snapshot(), { ...snapshot(), type: 'snapshot', streamId: 'other', cursor: '7', lastSeen: '0', messages: [], runs: [] }, event('2'));
++	expect(two.rooms.map((r) => [r.streamId, r.cursor])).toEqual([[room, '2'], ['other', '7']]);
++});
++
++test('gaps are bounded and invalid snapshot or changed message positions resync instead of acknowledging', () => {
++	const full = Array.from({ length: 1001 }, (_, i) => event(String(i + 3)));
++	const bounded = drive(snapshot(), ...full);
++	expect(bounded.rooms[0]).toEqual({ ...expected, mode: 'resync' });
++	const invalid: ClientInput = { type: 'snapshot', streamId: room, cursor: '1', lastSeen: '2', messages: [message()], runs: [] };
++	expect(synchronize(initialState(), invalid)).toEqual({ state: initialState(), acknowledgements: [], requests: [{ type: 'snapshot', streamId: room }] });
++	const changed = synchronize(drive(snapshot()), { type: 'event', streamId: room, seq: '2', change: { type: 'message', message: message('m', '2', 'changed', '2') } });
++	expect(changed.state.rooms[0]).toEqual({ ...expected, mode: 'resync' });
++	expect(changed.acknowledgements).toEqual([]);
++});
++
++const submit: ClientInput = { type: 'submit', commandId: 'c', streamId: room, requestDigest: 'hash', online: true };
++const receipt = { command_id: 'c', aggregate_id: 'm', revision: '2', event_cursors: [{ stream_id: room, committed_seq: '2' }], receipt_id: 'receipt' };
++test('receipts dedupe commands but never fast-forward a timeline; offline sends are not queued', () => {
++	const base = drive(snapshot());
++	expect(synchronize(base, { ...submit, type: 'submit', commandId: 'c', streamId: room, requestDigest: 'hash', online: false }).state).toBe(base);
++	const pending = synchronize(base, submit);
++	expect(pending.requests).toEqual([{ type: 'send', commandId: 'c' }]);
++	expect(synchronize(pending.state, submit).requests).toEqual([]);
++	expect(synchronize(pending.state, { ...submit, type: 'submit', commandId: 'c', streamId: room, online: true, requestDigest: 'changed' }).requests).toEqual([{ type: 'conflict', commandId: 'c' }]);
++	const result = synchronize(pending.state, { type: 'receipt', receipt });
++	expect(result.state.commands).toEqual([{ commandId: 'c', streamId: room, requestDigest: 'hash', tag: 'received', receipt }]);
++	expect(result.state.rooms).toEqual([expected]);
++	expect(result.acknowledgements).toEqual([]);
++	expect(synchronize(result.state, { type: 'receipt', receipt }).state).toBe(result.state);
++});
++
++test('retry decisions preserve the original id/digest, refresh stale state and respect denial/rate delay', () => {
++	const pending = drive(snapshot(), submit);
++	for (const [failure, online, digest, type] of [
++		[{ tag: 'timeout' }, true, 'hash', 'resend_same_command'],
++		[{ tag: 'timeout' }, false, 'hash', 'wait_connection'],
++		[{ tag: 'timeout' }, true, 'changed', 'conflict'],
++		[{ tag: 'stale_revision' }, true, 'hash', 'refresh_snapshot'],
++		[{ tag: 'denied' }, true, 'hash', 'stop'],
++		[{ tag: 'rate_limited', retryAfterSeconds: 30 }, true, 'hash', 'wait_retry_after'],
++	] as const) {
++		const result = synchronize(pending, { type: 'retry', commandId: 'c', requestDigest: digest, online, failure });
++		expect(result.requests[0]?.type).toBe(type);
++		expect(result.state).toBe(pending);
++	}
++	expect(synchronize(drive(snapshot(), submit, { type: 'receipt', receipt }), { type: 'retry', commandId: 'c', requestDigest: 'hash', online: true, failure: { tag: 'timeout' } }).requests).toEqual([{ type: 'receipt_known', commandId: 'c' }]);
++});
++
++test('a full gap can still drain, and newer snapshot cursors cannot resurrect older message revisions', () => {
++	const buffered = drive(snapshot(), ...Array.from({ length: 1000 }, (_, i) => event(String(i + 3))));
++	expect(synchronize(buffered, event('2')).state.rooms[0]?.cursor).toBe('1002');
++	const current = drive(snapshot(), event('2', '3', 'newest'));
++	expect(synchronize(current, snapshot('3')).state.rooms[0]?.messages).toEqual([message('m', '3', 'newest')]);
++});
++
++test('drafts stay explicitly unsent through route/snapshot changes; logout and revoke erase private state', () => {
++	const draft = { streamId: room, text: 'offline idea', tag: 'unsent' };
++	const state = drive(snapshot(), { type: 'draft', streamId: room, text: draft.text }, snapshot('2'), submit);
++	expect(state.drafts).toEqual([draft]);
++	for (const reason of ['logout', 'revoked'] as const) expect(synchronize(state, { type: 'clear', reason }).state).toEqual({ rooms: [], commands: [], drafts: [] });
++});
