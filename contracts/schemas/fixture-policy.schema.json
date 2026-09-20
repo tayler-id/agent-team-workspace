@@ -1,0 +1,38 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://agora.invalid/schemas/fixture-policy.schema.json",
+	"title": "agora.fixture-policy/v1",
+	"description": "Non-production foundation fixture. Asks the pure policy fixture whether an actor scope may touch a subject scope. Nothing here can authorize a production operation.",
+	"$defs": {
+		"ScopeReference": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["scope_id"],
+			"properties": { "scope_id": { "$ref": "primitives.schema.json#/$defs/Uuid" } }
+		},
+		"FixturePolicyCommand": {
+			"description": "Body of POST /api/v1/fixture/policy/decisions.",
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["schema_version", "actor", "subject"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.fixture-policy-command/v1"] },
+				"actor": { "$ref": "#/$defs/ScopeReference" },
+				"subject": { "$ref": "#/$defs/ScopeReference" }
+			}
+		},
+		"FixturePolicyDecisionReport": {
+			"description": "200 answer of POST /api/v1/fixture/policy/decisions. reason_code is present only for deny and is never null.",
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["schema_version", "decision", "policy_version", "policy_digest"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.fixture-policy-decision/v1"] },
+				"decision": { "type": "string", "enum": ["allow", "deny"] },
+				"reason_code": { "type": "string", "enum": ["scope_mismatch"] },
+				"policy_version": { "type": "string", "enum": ["agora.fixture-policy/v1"] },
+				"policy_digest": { "$ref": "primitives.schema.json#/$defs/Digest" }
+			}
+		}
+	}
+}

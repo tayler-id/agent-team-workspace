@@ -1,0 +1,94 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://agora.invalid/schemas/cli.schema.json",
+	"title": "agora.cli/v1",
+	"description": "R12 verification CLI envelopes: the registered command, its JSON report, closed outcomes and exit semantics. Every project capability is driven and proven through these shapes; a browser or native UI invokes the same authority and is never the only path.",
+	"$defs": {
+		"CliOutcome": {
+			"description": "Closed outcome set. Process exit follows the outcome exactly: pass 0, fail 1, blocked 2, unavailable 3, usage_error 64, infrastructure_failure 70. A report whose exit disagrees with its outcome is invalid evidence.",
+			"type": "string",
+			"enum": ["pass", "fail", "blocked", "unavailable", "usage_error", "infrastructure_failure"]
+		},
+		"ExitCode": {
+			"description": "The only process exit codes a verification command may return; see CliOutcome for their meaning.",
+			"type": "integer",
+			"enum": [0, 1, 2, 3, 64, 70]
+		},
+		"CliCommandName": {
+			"type": "string",
+			"enum": ["doctor", "scenarios", "start", "verify", "evidence", "stop", "lanes"]
+		},
+		"CliCommand": {
+			"description": "Structured form of one registered project command (R12). The runner builds argv from this object; it never evaluates command text received from chat.",
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["schema_version", "command"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.cli-command/v1"] },
+				"command": { "$ref": "#/$defs/CliCommandName" },
+				"profile": { "type": "string", "enum": ["verify"] },
+				"instance": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"scenario": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+				"unit": { "type": "string", "pattern": "^U[0-9]{2}[a-d]?$" },
+				"artifacts": { "type": "string", "minLength": 1, "maxLength": 4096 }
+			}
+		},
+		"Diagnostic": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["reason_code", "message"],
+			"properties": {
+				"reason_code": { "$ref": "errors.schema.json#/$defs/ReasonCode" },
+				"message": { "type": "string", "maxLength": 4096 }
+			}
+		},
+		"ArtifactReference": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["path", "digest", "media_type", "byte_length"],
+			"properties": {
+				"path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+				"digest": { "$ref": "primitives.schema.json#/$defs/Digest" },
+				"media_type": { "type": "string", "pattern": "^[a-z0-9.+-]+/[a-z0-9.+-]+$" },
+				"byte_length": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+			}
+		},
+		"CleanupReceipt": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["outcome", "handle"],
+			"properties": {
+				"outcome": { "type": "string", "enum": ["removed", "retained", "failed"] },
+				"handle": { "type": "string", "minLength": 1, "maxLength": 256 }
+			}
+		},
+		"CliReport": {
+			"description": "JSON report of every R12 command: versions, outcome, diagnostics, artifacts, timestamps and the cleanup receipt. run_id is the instance identity for start, verify, evidence and stop.",
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["schema_version", "command", "versions", "outcome", "diagnostics", "artifacts", "started_at", "finished_at"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.cli-report/v1"] },
+				"command": { "$ref": "#/$defs/CliCommandName" },
+				"run_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"scenario_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+				"versions": {
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["code", "config", "fixture"],
+					"properties": {
+						"code": { "$ref": "primitives.schema.json#/$defs/GitSha" },
+						"config": { "$ref": "primitives.schema.json#/$defs/Digest" },
+						"fixture": { "$ref": "primitives.schema.json#/$defs/Digest" }
+					}
+				},
+				"outcome": { "$ref": "#/$defs/CliOutcome" },
+				"diagnostics": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/Diagnostic" } },
+				"artifacts": { "type": "array", "maxItems": 1024, "items": { "$ref": "#/$defs/ArtifactReference" } },
+				"started_at": { "$ref": "primitives.schema.json#/$defs/Timestamp" },
+				"finished_at": { "$ref": "primitives.schema.json#/$defs/Timestamp" },
+				"cleanup": { "$ref": "#/$defs/CleanupReceipt" }
+			}
+		}
+	}
+}

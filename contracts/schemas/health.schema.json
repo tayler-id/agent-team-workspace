@@ -1,0 +1,35 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://agora.invalid/schemas/health.schema.json",
+	"title": "agora.health/v1",
+	"description": "Liveness and readiness reports of the center service.",
+	"$defs": {
+		"HealthReport": {
+			"description": "Answer of GET /api/v1/health. Touches no dependency.",
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["schema_version", "status", "service"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.health/v1"] },
+				"status": { "type": "string", "enum": ["ok"] },
+				"service": { "type": "string", "enum": ["agora-center"] }
+			}
+		},
+		"ReadinessReport": {
+			"description": "Answer of GET /api/v1/health/ready. 200 when ready, 503 when not_ready.",
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["schema_version", "status", "checks"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.readiness/v1"] },
+				"status": { "type": "string", "enum": ["ready", "not_ready"] },
+				"checks": {
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["database"],
+					"properties": { "database": { "type": "string", "enum": ["ok", "unavailable"] } }
+				}
+			}
+		}
+	}
+}

@@ -10,6 +10,8 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `pnpm typecheck` | `tsc` over every package, test and script under the strict base config |
 | `pnpm lint` | typescript-eslint strict type-checked rules |
 | `pnpm docs:check` | markdownlint over authored Markdown, then the semantic design gate |
+| `pnpm contracts:generate` | Bundles the schema families with the OpenAPI operations and regenerates the TypeScript and Swift consumers |
+| `pnpm contracts:check` | Regenerates into a clean directory and fails on any byte of drift or any schema keyword outside the tested subset |
 | `pnpm test` | Unit and PostgreSQL tests against a throwaway cluster |
 | `pnpm test:unit` | Unit tests only, no database |
 | `pnpm test:pg` | PostgreSQL tests only, throwaway cluster |
@@ -20,12 +22,16 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 
 | Package | Root | Owns | Must not import |
 | --- | --- | --- | --- |
-| `@agora/contracts` | `contracts` | JSON Schema sources | Anything |
-| `@agora/domain` | `packages/domain` | Pure decisions, canonical JSON, branded identifiers | Hono, Drizzle, pg, React |
+| `@agora/contracts` | `contracts` | JSON Schema families, OpenAPI operations, generated consumers, canonical JSON, the pinned Ajv wire validator | Anything but schema tooling; never domain, storage, Hono, React or transport code |
+| `@agora/domain` | `packages/domain` | Pure decisions, branded identifiers | Hono, Drizzle, pg, React |
 | `@agora/storage` | `packages/storage` | Migrations, explicit SQL, the `Database` handle | Hono, React; it never exports pg types |
 | `@agora/center` | `apps/center` | Hono routes and composition | Raw SQL |
 
 Import boundaries are documented here and enforced by package export maps. The mechanical import lint and compile negatives belong to `U01a.B03`.
+
+## Contracts
+
+`contracts/schemas/*.schema.json` (one JSON Schema 2020-12 file per wire family, every component a `$defs` entry) and `contracts/openapi.json` (OpenAPI 3.1.1 operations only) are the authoritative wire sources. There is no handwritten TypeScript, Zod or Swift wire type; the center takes its report types from the generated consumer. `contracts/tools/generate.mjs` rewrites the family `$ref`s into `#/components/schemas/Name`, rejects any keyword outside the subset both generators represent faithfully (closed objects, string and integer enums, anchored ASCII patterns, bounded integers, arrays with items; no `oneOf`, `null`, `number`, `const`, `$defs` inside a component or shorthand regex classes), validates every family with Ajv, then writes `contracts/generated/openapi.bundled.json`, `contracts/generated/typescript/openapi.d.ts` (openapi-typescript 7.13.0), the Swift files under `contracts/swift/Sources/AgoraContracts/Generated/` (swift-openapi-generator 1.13.1, run through SwiftPM from `contracts/swift/Package.swift`) and `contracts/generated/manifest.json` with source and output digests. Generated files are regenerated, never edited; `pnpm check` runs the drift check.
 
 ## PostgreSQL test path
 
@@ -49,6 +55,6 @@ The foundation fixture schema `foundation_fixture` is a non-production namespace
 | --- | --- |
 | `GET /api/v1/health` | Liveness, never touches a dependency |
 | `GET /api/v1/health/ready` | 200 when the database answers `select 1`, else 503 |
-| `POST /api/v1/fixture/policy/decisions` | Validates `agora.fixture-policy-command/v1` with Ajv 2020-12 (no coercion, defaults or removal), answers the pure scope decision |
+| `POST /api/v1/fixture/policy/decisions` | Validates `FixturePolicyCommand` through the shared wire validator (Ajv 2020-12, no coercion, defaults or removal), answers the pure scope decision |
 
 Unknown routes and malformed commands answer JSON with a stable `reason_code` and a `correlation_id`.

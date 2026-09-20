@@ -490,6 +490,8 @@ Agora uses Vitest for pure reducers and policy, PostgreSQL integration tests, co
 
 UI changes require keyboard-only navigation, screen-reader inspection, contrast/accessibility checks, 390x844 and 1440x900 screenshots, and a 30-60 second video. Reviewers inspect alignment, wrapping, focus order, loading/error/empty states, and reduced motion. A pixel-diff alone does not establish visual quality.
 
+Every public or operator capability, in Agora and in each managed project, has a stable scriptable driver: a registered CLI command or a public API operation, with structured JSON wherever a machine reads the result, and a feature-map entry. A browser or native UI renders and invokes the same authority and is never the only way to execute or verify a capability. The CLI passes the same authentication, authorization and state transitions as the UI and derives actor from credentials exactly as R07 requires; it is not a bypass. Presentation behavior may still need Playwright or a qualified native driver, but setup, doctor, drive, evidence capture and cleanup stay CLI-operable.
+
 ## R13. Durable decisions, knowledge, and observer lifecycle
 
 S1 supports human decision records and immutable task evidence. Agent answers cite those records, but there is no autonomous memory activation. S2 adds reviewed knowledge and persistent project-main context. The durable record is PostgreSQL plus immutable evidence, not a model context window or sandbox disk. Reviewed repository docs may be imported as knowledge candidates with commit provenance. An approved export back to repository documentation uses the normal contribution workflow; it does not create a competing source of authority.

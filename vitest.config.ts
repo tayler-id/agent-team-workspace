@@ -4,7 +4,11 @@ export default defineConfig({
 	test: {
 		projects: [
 			{
-				test: { name: 'unit', include: ['apps/*/test/**/*.test.ts', 'packages/*/test/**/*.test.ts', 'contracts/test/**/*.test.ts'], exclude: ['**/*.pg.test.ts'], testTimeout: 600_000 },
+				test: { name: 'unit', include: ['apps/*/test/**/*.test.ts', 'packages/*/test/**/*.test.ts'], exclude: ['**/*.pg.test.ts'] },
+			},
+			{
+				// Contract tests drive SwiftPM; one build directory cannot serve two concurrent runs, so files run one at a time.
+				test: { name: 'contracts', include: ['contracts/test/**/*.test.ts'], fileParallelism: false, testTimeout: 600_000 },
 			},
 			{
 				test: {

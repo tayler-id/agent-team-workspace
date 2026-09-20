@@ -1,0 +1,24 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://agora.invalid/schemas/errors.schema.json",
+	"title": "agora.errors/v1",
+	"description": "Stable reason codes and the JSON error body of every non-2xx HTTP answer (R07).",
+	"$defs": {
+		"ReasonCode": {
+			"description": "Closed set of stable reason codes in use on the foundation surface. A new code is a contract change.",
+			"type": "string",
+			"enum": ["malformed_command", "not_found", "scope_mismatch", "blocked_prerequisite", "unavailable_capability", "usage_error", "infrastructure_failure"]
+		},
+		"ErrorReport": {
+			"description": "Error body. Carries a reason code and a correlation id, never a secret value. details lists validator paths and messages for malformed_command.",
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["reason_code", "correlation_id"],
+			"properties": {
+				"reason_code": { "$ref": "#/$defs/ReasonCode" },
+				"correlation_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"details": { "type": "array", "maxItems": 64, "items": { "type": "string", "maxLength": 1024 } }
+			}
+		}
+	}
+}

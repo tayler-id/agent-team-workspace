@@ -1,0 +1,43 @@
+{
+	"openapi": "3.1.1",
+	"jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+	"info": {
+		"title": "Agora center foundation surface",
+		"version": "1.0.0",
+		"description": "Authoritative HTTP operations of the foundation fixture. components.schemas is populated from contracts/schemas/*.schema.json by scripts/generate-contracts.mjs; this file authors only operations."
+	},
+	"servers": [{ "url": "http://127.0.0.1:3000" }],
+	"paths": {
+		"/api/v1/health": {
+			"get": {
+				"operationId": "getHealth",
+				"summary": "Liveness; never touches a dependency",
+				"responses": {
+					"200": { "description": "Alive", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthReport" } } } }
+				}
+			}
+		},
+		"/api/v1/health/ready": {
+			"get": {
+				"operationId": "getReadiness",
+				"summary": "Readiness; 200 when the database answers, else 503",
+				"responses": {
+					"200": { "description": "Ready", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ReadinessReport" } } } },
+					"503": { "description": "Not ready", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ReadinessReport" } } } }
+				}
+			}
+		},
+		"/api/v1/fixture/policy/decisions": {
+			"post": {
+				"operationId": "decideFixturePolicy",
+				"summary": "Pure scope decision of the non-production policy fixture",
+				"requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FixturePolicyCommand" } } } },
+				"responses": {
+					"200": { "description": "Decision", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FixturePolicyDecisionReport" } } } },
+					"400": { "description": "Malformed command; details name the offending paths", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } }
+				}
+			}
+		}
+	},
+	"components": { "schemas": {} }
+}

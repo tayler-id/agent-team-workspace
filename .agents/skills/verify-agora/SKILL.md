@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, contracts or agora/feature-map.json. Bootstrap scope only (U01a.B01); later tasks extend it.
+description: Project-owned instructions that prove the Agora foundation fixture and its generated contracts from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, contracts or agora/feature-map.json. Scope U01a.B01 and U01a.B02; later tasks extend it.
 ---
 
 # Verify Agora
@@ -9,12 +9,13 @@ Every step is a literal command run from the repository root. Record outputs und
 
 ## Doctor
 
-Read-only. Expected: Node 24.x, pnpm 10.x, PostgreSQL 18.x server binaries, install and static gates exit 0.
+Read-only. Expected: Node 24.x, pnpm 10.x, PostgreSQL 18.x server binaries, a Swift 6 toolchain, install and static gates exit 0. A missing Swift toolchain blocks the contract steps; it never downgrades them to a pass.
 
 ```sh
 node --version
 pnpm --version
 pg_ctl --version
+swift --version
 pnpm install --frozen-lockfile
 pnpm typecheck
 pnpm lint
@@ -32,6 +33,7 @@ node scripts/with-test-postgres.mjs <command>
 ## Drive
 
 ```sh
+pnpm contracts:check
 pnpm test
 node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
 node scripts/with-test-postgres.mjs bash -c 'node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts'
@@ -39,7 +41,8 @@ node scripts/with-test-postgres.mjs bash -c 'node packages/storage/src/migrate-c
 
 Pass predicates:
 
-- `pnpm test` exits 0 with every unit and pg test passing. The pg project refuses to run without a database.
+- `pnpm contracts:check` prints `"outcome": "pass"` with an empty `drift` list; `"outcome": "unavailable"` (exit 3) means the Swift generator could not run and the step is blocked, not passed.
+- `pnpm test` exits 0 with every unit and pg test passing. The pg project refuses to run without a database; the contract tests fail, never skip, without Swift.
 - The probe report has `"outcome": "pass"` for `health-liveness` (200), `health-readiness` (200), `policy-allow` (200, `decision: allow`), `policy-deny` (200, `reason_code: scope_mismatch`), `policy-unknown-field` (400, `malformed_command`) and `unknown-route` (404, `not_found`).
 - The first migration report has `applied: 1`; the second has `applied: 0` and the same `schema_digest`.
 
@@ -55,7 +58,7 @@ node scripts/record-red-green.mjs --parent <parent-sha> --head <head-sha> --out 
 
 ## Cleanup
 
-`with-test-postgres.mjs` stops and deletes its cluster on exit, including on SIGINT. `record-red-green.mjs` removes its worktrees. Confirm nothing is left behind:
+`with-test-postgres.mjs` stops and deletes its cluster on exit, including on SIGINT. `record-red-green.mjs` removes its worktrees. `generate.mjs --check` and the contract tests remove their temporary trees. `contracts/swift/.build/` is an ignored build cache and may stay. Confirm nothing else is left behind:
 
 ```sh
 git worktree prune

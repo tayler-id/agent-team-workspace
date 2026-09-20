@@ -1,0 +1,106 @@
+import { spawnSync } from 'node:child_process';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { afterAll, expect, test } from 'vitest';
+
+const root = path.resolve(import.meta.dirname, '..', '..');
+const temps: string[] = [];
+const temp = (label: string) => {
+	const dir = mkdtempSync(path.join(os.tmpdir(), `agora-${label}-`));
+	temps.push(dir);
+	return dir;
+};
+afterAll(() => {
+	for (const dir of temps) rmSync(dir, { recursive: true, force: true });
+});
+
+interface Run { outcome: string; exit: number; message?: string; drift?: { file: string; expected: string; observed: string }[]; outputs?: { file: string }[]; components?: string[] }
+const generate = (args: string[], env: NodeJS.ProcessEnv = process.env): Run => {
+	const run = spawnSync(process.execPath, ['contracts/tools/generate.mjs', ...args], { cwd: root, encoding: 'utf8', env });
+	const last = run.stdout.trim().split('\n').at(-1) ?? '';
+	if (!last.startsWith('{')) throw new Error(`no report: ${run.stderr}`);
+	return { ...(JSON.parse(last) as Run), exit: run.status ?? -1 };
+};
+
+// A missing manifest is reported by the assertions below as absent outputs, never as a setup error.
+const manifestPath = path.join(root, 'contracts/generated/manifest.json');
+const manifest = existsSync(manifestPath) ? (JSON.parse(readFileSync(manifestPath, 'utf8')) as { tools: Record<string, string>; outputs: { file: string }[] }) : { tools: {}, outputs: [] };
+
+test('the committed consumers are byte-identical to a clean regeneration from the authoritative sources', () => {
+	const tmp = temp('check-tmp');
+	const run = generate(['--check'], { ...process.env, TMPDIR: tmp });
+	expect(run.message ?? run.outcome).toBe('pass');
+	expect(run.drift).toEqual([]);
+	expect(run.outputs?.map((o) => o.file)).toEqual(['contracts/generated/openapi.bundled.json', 'contracts/generated/typescript/openapi.d.ts', ...manifest.outputs.map((o) => o.file).filter((f) => f.endsWith('.swift'))]);
+	expect(manifest.tools).toEqual({ 'openapi-typescript': '7.13.0', 'swift-openapi-generator': '1.13.1' });
+	// The check regenerates into a temporary tree and must remove it on every exit path (SwiftPM's own temp items are not ours).
+	expect(readdirSync(tmp).filter((name) => name.startsWith('agora-contracts-check-'))).toEqual([]);
+});
+
+test('a hand edit to a generated consumer is drift that names the file', () => {
+	const tree = temp('drift');
+	for (const file of [...manifest.outputs.map((o) => o.file), 'contracts/generated/manifest.json']) {
+		mkdirSync(path.dirname(path.join(tree, file)), { recursive: true });
+		if (existsSync(path.join(root, file))) cpSync(path.join(root, file), path.join(tree, file));
+	}
+	const edited = path.join(tree, 'contracts/generated/typescript/openapi.d.ts');
+	mkdirSync(path.dirname(edited), { recursive: true });
+	writeFileSync(edited, `${existsSync(edited) ? readFileSync(edited, 'utf8') : ''}// widened by hand\n`);
+	const run = generate(['--check', '--against', tree]);
+	expect(run).toMatchObject({ outcome: 'fail', exit: 1 });
+	expect(run.drift?.map((d) => d.file)).toEqual(['contracts/generated/typescript/openapi.d.ts']);
+});
+
+const weaken = (label: string, file: string, mutate: (document: Record<string, unknown>) => void) => {
+	const dir = temp(label);
+	cpSync(path.join(root, 'contracts/schemas'), dir, { recursive: true });
+	const target = path.join(dir, file);
+	if (!existsSync(target)) return { outcome: 'unavailable', exit: -1, message: `family ${file} is not published` };
+	const document = JSON.parse(readFileSync(target, 'utf8')) as Record<string, unknown>;
+	mutate(document);
+	writeFileSync(target, JSON.stringify(document));
+	return generate(['--subset-only', '--schemas', dir]);
+};
+const defs = (document: Record<string, unknown>) => document['$defs'] as Record<string, Record<string, unknown>>;
+const def = (document: Record<string, unknown>, name: string) => {
+	const schema = defs(document)[name];
+	if (!schema) throw new Error(`no component ${name}`);
+	return schema;
+};
+const props = (document: Record<string, unknown>, name: string) => def(document, name)['properties'] as Record<string, unknown>;
+
+test('the subset gate rejects every weakening before a consumer is generated', () => {
+	const cases: [string, string, (d: Record<string, unknown>) => void, string][] = [
+		['open-object', 'health.schema.json', (d) => { def(d, 'HealthReport')['additionalProperties'] = true; }, 'objects must declare additionalProperties: false'],
+		['nullable', 'fixture-policy.schema.json', (d) => { props(d, 'FixturePolicyDecisionReport')['reason_code'] = { type: ['string', 'null'] }; }, 'null, number and type arrays are outside the subset'],
+		['float', 'cli.schema.json', (d) => { props(d, 'ArtifactReference')['byte_length'] = { type: 'number' }; }, 'null, number and type arrays are outside the subset'],
+		['unbounded-integer', 'cli.schema.json', (d) => { props(d, 'ArtifactReference')['byte_length'] = { type: 'integer' }; }, 'integer needs safe minimum and maximum'],
+		['union', 'errors.schema.json', (d) => { def(d, 'ErrorReport')['oneOf'] = [{ type: 'object' }]; }, 'keyword oneOf is outside the subset for type object'],
+		['shorthand-class', 'primitives.schema.json', (d) => { def(d, 'GitSha')['pattern'] = '^\\d{40}$'; }, 'pattern escape \\d is outside the subset'],
+		['unanchored', 'primitives.schema.json', (d) => { def(d, 'GitSha')['pattern'] = '[0-9a-f]{40}'; }, 'pattern must be anchored'],
+		['dangling-ref', 'fixture-policy.schema.json', (d) => { props(d, 'ScopeReference')['scope_id'] = { $ref: 'primitives.schema.json#/$defs/Ulid' }; }, '$ref to unknown component'],
+		['duplicate-component', 'health.schema.json', (d) => { defs(d)['Uuid'] = { type: 'string' }; }, 'component Uuid also defined in'],
+		['phantom-required', 'health.schema.json', (d) => { def(d, 'HealthReport')['required'] = ['schema_version', 'region']; }, 'required region is not a property'],
+		['const-instead-of-enum', 'health.schema.json', (d) => { props(d, 'HealthReport')['status'] = { const: 'ok' }; }, 'type must be one of'],
+	];
+	const observed = cases.map(([label, file, mutate, expected]) => {
+		const run = weaken(label, file, mutate);
+		return `${label}: exit ${run.exit} ${run.message?.includes(expected) ? 'names the weakening' : `unexpected message ${run.message ?? run.outcome}`}`;
+	});
+	expect(observed).toEqual(cases.map(([label]) => `${label}: exit 1 names the weakening`));
+});
+
+test('operations reference published components only; inline schemas are refused', () => {
+	const dir = temp('operations');
+	interface Operations { paths: Record<string, { get?: { responses: Record<string, { content: Record<string, { schema: unknown }> }> } }> }
+	const source = path.join(root, 'contracts/openapi.json');
+	const document = existsSync(source) ? (JSON.parse(readFileSync(source, 'utf8')) as Operations) : { paths: {} };
+	const health = document.paths['/api/v1/health']?.get?.responses['200']?.content['application/json'];
+	if (health) health.schema = { type: 'object' };
+	const file = path.join(dir, 'openapi.json');
+	writeFileSync(file, JSON.stringify(document));
+	const run = generate(['--subset-only', '--operations', file]);
+	expect(run).toMatchObject({ outcome: 'fail', exit: 1 });
+	expect(run.message).toContain('inline schemas are not authored here');
+});
