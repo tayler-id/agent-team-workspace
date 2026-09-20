@@ -87,13 +87,14 @@ try {
 				for (const value of [null, { ...freshGuard, head: parent }, { ...freshGuard, normal: freshGuard.weakened }, { ...freshGuard, id: 'unrelated' }]) trials.push({ input: value, denials: compareGuard(JSON.stringify(value), freshGuard) });
 			} else {
 				const forged = path.join(temporary, 'forged'); mkdirSync(forged);
+				for (const file of ['green.log', 'test-patch.diff']) writeFileSync(path.join(forged, file), readFileSync(path.join(temporary, file)));
 				trials.push({ input: 'missing red', denials: compareReceipts(forged, temporary, parent, head) });
 				writeFileSync(path.join(forged, 'red.log'), 'observed_exit: 1\n\n{"success":false}');
 				trials.push({ input: 'forged red', denials: compareReceipts(forged, temporary, parent, head) });
 				trials.push({ input: 'premature feature', denials: assess({ parent, head, scope: 'feature', applicability: 'behavior', records: [], mapped: mapped(), prerequisites: false }) });
 			}
 			save(`${scope}.json`, { head, assertions: trials, guard: freshGuard, cleanup: 'removed', primary_source: hash(readFileSync('scripts/foundation-policy.mjs')) });
-			const valid = scope === 'lane-9' ? trials.every(trial => trial.denials.length > 0) : trials[0].denials.includes('red_missing') && trials[1].denials.includes('red_malformed') && trials[2].denials.includes('FG04_missing') && trials[2].denials.includes('feature_premature');
+			const valid = scope === 'lane-9' ? trials.every(trial => trial.denials.length > 0) : JSON.stringify(trials[0].denials) === '["red_missing"]' && JSON.stringify(trials[1].denials) === '["red_malformed"]' && trials[2].denials.includes('FG04_missing') && trials[2].denials.includes('feature_premature');
 			report.denials = [...receiptDenials, ...guardDenial, ...(valid ? [] : ['lane_assertion_failed'])];
 			report.outcome = report.denials.length ? 'fail' : 'pass';
 			report.proofs.push(proof(scope, report.outcome, report.denials));
