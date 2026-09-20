@@ -4,8 +4,17 @@
 	"task": "agora-s1-isolate-client-core",
 	"features": [
 		{
+			"id": "mechanical-boundaries",
+			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/public-types.ts", "packages/client-core/tsconfig.json", "packages/domain/src/index.ts", "packages/domain/src/policy/fixture-scope.ts", "contracts/package.json", "apps/center/package.json", "package.json"],
+			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
+			"scenarios": ["packages/client-core/test/boundaries.test.ts", "packages/client-core/test/export-maps.test.ts"],
+			"fixtures": ["ESLint typed stdin fixtures", "virtual TypeScript private-import and no-DOM fixtures", "isolated disabled-rule configurations"],
+			"platforms": ["node24"],
+			"owner": "U01a.B03"
+		},
+		{
 			"id": "client-synchronization",
-			"paths": ["packages/client-core/src/index.ts", "packages/client-core/src/model.ts", "packages/client-core/package.json", "contracts/package.json", "scripts/client-fixture.ts", "scripts/drive-client-core.ts", "contracts/fixtures/replay.json", "contracts/swift/Sources/AgoraContractsConform/Replay.swift"],
+			"paths": ["docs/features/client-synchronization.md", "packages/client-core/src/index.ts", "packages/client-core/src/model.ts", "packages/client-core/package.json", "contracts/package.json", "scripts/client-fixture.ts", "scripts/drive-client-core.ts", "contracts/fixtures/replay.json", "contracts/swift/Sources/AgoraContractsConform/Replay.swift"],
 			"public": ["@agora/client-core initialState", "@agora/client-core synchronize", "pnpm client:replay"],
 			"scenarios": ["packages/client-core/test/harness.test.ts", "packages/client-core/test/sync.test.ts", "packages/client-core/test/fixture.test.ts", "packages/client-core/test/guards.test.ts", "contracts/test/replay.test.ts", "scripts/drive-client-core.ts"],
 			"fixtures": ["agora.foundation-fixture.sync-event/v1", "agora.foundation-fixture.sync-snapshot/v1"],

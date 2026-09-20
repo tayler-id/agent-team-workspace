@@ -7,8 +7,9 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | Command | What it does |
 | --- | --- |
 | `pnpm install --frozen-lockfile` | Installs the locked dependency set for all workspace packages |
-| `pnpm typecheck` | `tsc` over every package, test and script under the strict base config |
-| `pnpm lint` | typescript-eslint strict type-checked rules |
+| `pnpm typecheck` | Strict workspace compilation, then a separate ES2024-only client-core compile with no Node or DOM globals |
+| `pnpm lint` | Strict typed lint plus import and transitive public-type boundaries |
+| `pnpm boundaries` | Lane 8: forbidden import forms, public SDK/DOM leaks, private-path exports and no-platform compile negatives |
 | `pnpm docs:check` | markdownlint over authored Markdown, then the semantic design gate |
 | `pnpm contracts:generate` | Bundles the schema families with the OpenAPI operations and regenerates the TypeScript and Swift consumers |
 | `pnpm contracts:check` | Regenerates into a clean directory and fails on any byte of drift or any schema keyword outside the tested subset |
@@ -30,7 +31,9 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `@agora/storage` | `packages/storage` | Migrations, explicit SQL, the `Database` handle | Hono, React; it never exports pg types |
 | `@agora/center` | `apps/center` | Hono routes and composition | Raw SQL |
 
-Import boundaries are documented here and enforced by package export maps. The mechanical import lint and compile negatives belong to `U01a.B03`.
+Import boundaries are enforced by package export maps and the `agora/import-boundary` and `agora/public-types` ESLint rules. The first checks value/type-only imports, dynamic imports, import types, re-exports, CommonJS import syntax, owning-package paths and ambient DOM references. It rejects unprovable dynamic targets. The second follows public export types through aliases, generics, inheritance, callbacks and nested fields, so a private SDK type cannot hide behind a domain port. The exact contract-schema wildcard is the only permitted wildcard export; private code paths remain closed.
+
+The core imports only its own utilities and generated types through `@agora/contracts/values`. Domain canonicalization uses the narrow `@agora/contracts/canonical` export, not the validator facade. The center has an empty export map: its Hono factory is private composition, while its HTTP fixture remains public. Tests of the factory live inside that package. Generated TypeScript receives boundary checks without rewriting installer/generator bytes; its index-signature formatting is exempt only from the conflicting style rule.
 
 ## Contracts
 
@@ -52,7 +55,7 @@ A transition returns a deeply immutable state plus explicit requests and acknowl
 
 Reading is explicit and monotone. Drafts remain `unsent` across snapshot/route changes; `clear` for logout or revocation erases all private state. Browser session-storage integration is not implemented here. A receipt settles its known pending command but never advances a stream cursor. Retry decisions keep the original command ID and request digest, honor offline/rate waits, stop on denial, and request refreshed state after stale revisions. These are retries of idempotent Agora commands, never direct provider calls or a billable-call retry policy. No privileged offline queue is created.
 
-`contracts/fixtures/replay.json` contains test vectors, not production API payload definitions. `pnpm client:replay -- --json --swift` drives six literal ordered/gap/duplicate/unknown/stale-revision snapshots independently through TypeScript and Swift. Remove `--swift` for the pure Node driver; absence of Swift with that flag exits 3, not pass. `--file` selects a reviewed local vector file. `packages/client-core/test/guards.test.ts` disables guards only in disposable source copies and requires their public assertions to fail. Lanes 8 and foundation readiness are still separate gates.
+`contracts/fixtures/replay.json` contains test vectors, not production API payload definitions. `pnpm client:replay -- --json --swift` drives six literal ordered/gap/duplicate/unknown/stale-revision snapshots independently through TypeScript and Swift. Remove `--swift` for the pure Node driver; absence of Swift with that flag exits 3, not pass. `--file` selects a reviewed local vector file. `packages/client-core/test/guards.test.ts` disables guards only in disposable source copies and requires their public assertions to fail. Lane 8 is `pnpm boundaries`; foundation readiness remains a separate, unqualified gate. The [client synchronization feature page](../features/client-synchronization.md) explains the behavior and includes a state visual.
 
 ## PostgreSQL test path
 

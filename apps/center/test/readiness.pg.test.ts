@@ -1,5 +1,5 @@
 import { afterAll, expect, test } from 'vitest';
-import { createApp } from '@agora/center';
+import { createApp } from '../src/app.ts';
 import { openDatabase } from '@agora/storage';
 
 const live = openDatabase(process.env['AGORA_TEST_DATABASE_URL'] ?? '');

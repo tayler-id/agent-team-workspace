@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { createApp } from '@agora/center';
+import { createApp } from '../src/app.ts';
 
 const app = createApp({ probeDatabase: () => Promise.resolve(true) });
 const decide = (body: unknown) => app.request('/api/v1/fixture/policy/decisions', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
