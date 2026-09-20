@@ -2,58 +2,79 @@
 
 ## What it is
 
-A project-owned static field guide with two explicit audience tracks and one progress-data owner. The first change supplies this engine, guards and truthful shell; the next supplies the complete user and production-internals corpus.
+A living two-track field guide: product/user documentation and build/production internals. This static site and its atlas grow with the code, not in a later catch-up project.
 
 ## What it does
 
-Build ordinary HTML with local CSS, validate links and feature explanations/visuals, require feature-map documentation homes, and reject invalid statuses, missing milestone outcomes or a drifting Markdown atlas mirror.
+The build renders authored Markdown to ordinary HTML, checks internal links and required feature structure, and rejects stale atlas mirrors, invalid statuses, undocumented package/script roots or incomplete milestone coverage. Every current and future public capability needs a discoverable explanation and driver reference.
 
 ## Why it exists
 
-Parallel implementation must remain understandable. A status badge or task summary cannot replace an explanation of what exists, why it exists, how it works and which committed evidence proves it.
+Agents can parallelize implementation only when people can understand what landed, its purpose, its boundaries and its proof. A generated status badge is not enough. Keeping explanation with the change prevents documentation from promising behavior that the code does not support.
 
 ## How it works
 
 ```flow
-Implementation worker | Write the test and feature mapping first; implement, document and visualize in the same change.
-Committed candidate | Link exact code, tests and receipts. Do not qualify an unfinished milestone.
-Independent documentation worker | Inspect committed code and evidence; review both tracks, navigation, factual scope and explanatory quality.
-Landing review | Require that independent review and affected runtime/docs gates before landing, never a later catch-up promise.
+Implementation worker | Add the test and feature-map entry, then implement, explain and visualize the feature in the same change.
+Committed candidate | Link exact code, tests and red/green evidence; update availability without claiming a milestone early.
+Independent documentation worker | Read the actual committed implementation and receipts, then check clarity, navigation, diagrams and both audience tracks.
+Landing review | Require that independent assessment and applicable runtime/documentation gates. No later backfill promise.
 ```
+
+Parallel means the documentation reviewer can inspect a committed candidate while other bounded tasks progress. It does not mean a reviewer invents status from an uncommitted summary. The implementer remains responsible for the same-change page and visual. The independent worker returns factual or explanatory defects before landing.
 
 ## Implementation status
 
-In progress at this artifact's snapshot. Documentation checks are not full Agora verification. The initial corpus backfills only the two already-landed foundation tasks; every future feature documents itself alongside implementation.
+**In progress at this build snapshot.** The initial site backfills only repository bootstrap and portable contracts, once. It records client-core work as active, not complete. Future work must extend this site alongside implementation. This documentation surface is not an Agora runtime feature or foundation qualification.
 
 ## Verification and proof
 
-`pnpm docs:test` proves intended guard failures, including precise isolated guard weakening. `pnpm docs:validate` checks sources; `pnpm docs:build` also validates generated links. Inspect browser output at 390x844 and 1440x900, keyboard focus, accessible labels and reduced motion. Keep receipts under `evidence/docs/<task>/`; an independent reviewer must judge Built claims against actual source and tests.
+Run `pnpm docs:test`, `pnpm docs:check`, and `pnpm docs:build`. Review browser output at 390x844 and 1440x900, keyboard focus, meaningful link labels, semantic headings, readable diagrams and reduced motion. Record screenshots, observed assertions and limits under `evidence/docs/<task>/`. No script can prove that prose matches behavior; independent source review is mandatory.
 
-## Authoring contract
+## Add a feature
 
-Register a page in `docs/site/site.json` with `kind: feature`. Include these literal substantive sections: **What it is**, **What it does**, **Why it exists**, **How it works**, **Implementation status**, **Verification and proof**. Add a fence labelled `flow` with at least two lines of `Title | Explanation`. It becomes an ordered accessible visual, not a decorative badge.
+1. Create `docs/site/<feature>.md`, register it in `site.json` under the appropriate track with `kind: feature`, and link it from related pages.
+2. Use all six literal headings below, each followed by a substantive paragraph. “TBD” is not an explanation. Keep status scope narrower than product release status when needed.
+3. Add a `flow` fenced block with at least two `Title | Explanation` lines. This becomes an ordered, screen-reader-readable visual. Explain forks and authority boundaries in prose; do not hide semantics in color.
+4. Document new public tools and flags in `cli.md` or a dedicated reference linked there. Extend package/script inventory and `agora/feature-map.json` with the same change.
+5. Add literal tests and retained red/green proof before claiming implementation. Link source with `repo:path/to/file` and site pages with `page.md#heading`.
 
-Every feature-map entry must name its page in `documentation`. Every current package/root script needs a home in `site.json`. Register new public drivers and their flags, output, availability and authority in the reference as they land. Site links use `page.md#heading`; repository links use `repo:path/to/file`.
+Required headings:
 
-## One status owner
-
-Edit only `docs/site/atlas.json` for snapshot date/revision, statuses, proof links, diagram nodes/edges and milestones. Run `pnpm docs:atlas` to regenerate `progress.md`; never edit that generated file. Built requires code, tests and evidence committed at the stated snapshot; independent review checks their meaning. Use only Built, In progress, Planned, Deferred and Not started. All 22 outcomes and stages must match the authoritative plan, while qualification stays separate from task completion.
-
-## Commands and ownership
-
-| Command | Purpose |
-| --- | --- |
-| `pnpm docs:dev` | Loopback development server; `DOCS_PORT` defaults to 4173; Ctrl+C cleanup |
-| `pnpm docs:build` | Validated self-contained `.docs-dist/`; deploy only that directory under any static-host subpath |
-| `pnpm docs:validate` / `pnpm docs:test` | Source consistency / assertion and guard-weakening proofs |
-| `pnpm docs:atlas` | Regenerate the companion from its owner |
-| `pnpm docs:check` | Markdown, design, handoff and site gates |
-
-`site.json` owns navigation/inventory, Markdown owns prose, `style.css` owns presentation. `build.mjs`, `render.mjs`, `diagram.mjs`, `output-links.mjs` and `validate.mjs` own the build; `serve.mjs` is development convenience. Page edits rebuild on requests; restart the dev server after editing its JavaScript modules. There are no browser scripts, external fonts or hosted dependencies. Explicit source views are published with the site: never link private reports or secrets. Machine-specific home paths are redacted, not a substitute for disclosure review.
-
-## Current tool homes
-
-```inventory
+```text
+## What it is
+## What it does
+## Why it exists
+## How it works
+## Implementation status
+## Verification and proof
 ```
 
-The PostgreSQL wrapper launches only a disposable socket-only cluster. `probe-center.mjs` checks public responses; `require-test-postgres.ts` blocks missing prerequisites. The recorder captures red/green at exact revisions. Design and handoff validators check document structure, their test scripts prove rejection, and none qualify runtime readiness. [Development](repo:docs/runbooks/development.md) and [verify-agora](repo:.agents/skills/verify-agora/SKILL.md) supply literal current fixture and contract instructions. The future `agora project` and worker CLIs are not implemented.
+Example visual source:
+
+```text
+Input | Describe the real caller and selected data.
+Decision | Explain the enforced boundary, not model confidence.
+Result | State the observable effect and proof.
+```
+
+Place those lines inside a fence labelled `flow`. Prefer a diagram of real mechanics over a decorative icon.
+
+## Update status once
+
+`docs/site/atlas.json` is the **only progress-data owner**. It owns snapshot date/revision, feature statuses and proof links, system nodes/edges, and all 22 milestone outcomes. `atlas.md` owns explanatory framing. The site render and generated `progress.md` companion derive from the same JSON. Never edit the generated companion manually.
+
+1. Inspect the committed code, tests and receipts first. Set the snapshot revision to the commit actually inspected.
+2. Change a feature status only at its documented scope. Built requires committed code, test and evidence links at that snapshot; independent review must judge their content.
+3. Keep milestones unqualified until all tasks and integration proof pass. The initial “In progress” docs status intentionally describes the artifact's own build snapshot.
+4. Run `pnpm docs:atlas`, then `pnpm docs:build`. The build rejects divergent mirrors and missing/duplicate milestones.
+
+Built, In progress, Planned, Deferred and Not started are the closed status vocabulary. Adding a stage or milestone starts with the authoritative plan, not a silent atlas-only entry.
+
+## Content and deployment ownership
+
+`site.json` owns sidebar groups and inventory homes. Markdown owns prose. `style.css` owns project-local presentation; system fonts and no browser runtime keep output portable. `build.mjs`, `render.mjs` and `validate.mjs` own the pipeline. `serve.mjs` is a local convenience only.
+
+The Design Handoff integration reads the independently owned `docs/design-handoff/` packet; the complete linked landing page follows the initial site shell. Review shareability before adding source links: explicit repository source views are included in production output. Never publish raw private research, credentials, or machine-specific archive locations.
+
+Current fixture/public tools and role prerequisites live in [the development runbook](repo:docs/runbooks/development.md); [verify-agora](repo:.agents/skills/verify-agora/SKILL.md) owns literal Doctor, Drive and Cleanup. Design/handoff validators check document structure, their companion test scripts prove rejection, and the red-green recorder preserves exact revisions. None qualify production readiness. Restart the development server after changing its JavaScript modules; content-only edits rebuild on page requests.
