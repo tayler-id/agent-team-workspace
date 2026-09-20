@@ -7,7 +7,7 @@ Task: `agora-s1-isolate-client-core`, U01a.B03 slice 3. This is author review an
 - Parent: `24f271fb26d3b92ddf7fdb9e9f291b3a8fb492d4`.
 - Verified code: `5d437329f089e956962d4238015de14d491a9348`.
 - Verified tree: `53aa0dbdf15efc365a98b1a821430e6bd8e4ba2b`.
-- These receipts precede the required refresh onto advanced default `57b9db6`. The final refresh will be recorded here, without relabeling these original runs.
+- Those original receipts precede the refresh onto advanced default `57b9db6`. They remain unchanged. The refreshed subjects and runs are recorded below.
 
 ## Behavior and verification
 
@@ -35,4 +35,32 @@ The [feature page](../../../../docs/features/client-synchronization.md) explains
 
 Observed host: macOS arm64, Node 24.16.0, pnpm 10.34.1, PostgreSQL 18.4 and Swift 6.3.3. This does not qualify other host/toolchain pins. Independent non-author review belongs to Firstmate. The U01a milestone and foundation gate remain unqualified.
 
-`verify.sh` is the task-local reproduction recipe. Its performance probe is embedded to keep the final approved slice below the source-file limit; retained metrics are unchanged.
+`verify.sh` is the task-local reproduction recipe. Its performance probe is embedded to keep the final approved slice below the source-file limit. The recipe now writes to `refreshed/`, preserving the original metrics above.
+
+## Refreshed stack on current main
+
+All three approved slices are rebased onto `57b9db6892861b98e5d1edede90ef8621a807dec`. There was no synchronization, schema, generated-output or boundary-policy change during refresh. The rebased stack retains the design-handoff documentation gate from main. Original receipts are historical, not relabeled as these subjects.
+
+| Slice | Exact parent | Refreshed subject | Behavioral receipt |
+| --- | --- | --- | --- |
+| Contracts | `57b9db6892861b98e5d1edede90ef8621a807dec` | `66013ee2d15a346d716339d3b7717e1734b74e83` | [red](refreshed/contracts/red.log), [green](refreshed/contracts/green.log): three intended assertion failures, then four passes |
+| Core | `66013ee2d15a346d716339d3b7717e1734b74e83` | `6151f40f8378cc16fc90684dbf74a3f82ae0b9fb` | [red](refreshed/core/red.log), [green](refreshed/core/green.log): thirteen literal projection/decision failures, then thirteen passes |
+| Boundaries | `6151f40f8378cc16fc90684dbf74a3f82ae0b9fb` | `7136c4b0c667838dc9293ae7982b488dda4e3806` | [red](refreshed/red.log), [green](refreshed/green.log): seven missing-denial assertions, then seven passes |
+
+`verify.sh` produced the combined refreshed receipts at the boundary subject; [subject.log](refreshed/subject.log) records its tree and toolchain. The earlier two subjects were re-proved with these commands, from the final worktree:
+
+```sh
+out=evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed
+node scripts/record-red-green.mjs --parent 57b9db6 --head 66013ee --out "$out/contracts" -- pnpm exec vitest run --project contracts contracts/test/sync.test.ts
+node scripts/record-red-green.mjs --parent 66013ee --head 6151f40 --out "$out/core" -- pnpm exec vitest run --project unit packages/client-core/test/sync.test.ts --project contracts contracts/test/replay.test.ts
+```
+
+- [gates.log](refreshed/gates.log): frozen install, lint, both compile lanes, docs, drift and all 79 tests including real PostgreSQL pass. Both authoritative design validators, 23 design negatives, 20 handoff negatives and the unchanged informational plan checker pass.
+- [lane-7.json](refreshed/lane-7.json) and [lane-8.json](refreshed/lane-8.json): six independent TS/Swift literal projections agree, and all eight mechanical boundary tests pass. These are headless transcripts, not screenshots or UI qualification.
+- [skill-run.log](refreshed/skill-run.log): portable conformance, all six HTTP probes, and migration repeatability pass. No verification-skill or feature-map drift was found in this refresh. Source and live coverage were performed serially, without delegated agents.
+- [performance.json](refreshed/performance.json): five interleaved parent/head batches, identical core source digest, pooled input p95 2.226 ms, ratio 0.990. Every large replay remains below two seconds. Boundary gate 9.299 seconds; clean full check 56.354 seconds. [clean-install-build.log](refreshed/clean-install-build.log) is the clean exact-subject build.
+- [audit.json](refreshed/audit.json) and [audit-all.json](refreshed/audit-all.json): zero production or development advisories. [cleanup.log](refreshed/cleanup.log) records no owned fixture process, temporary verification worktree, cluster or Swift lock. All receipts remain after cleanup.
+
+R11 counts include executable evidence recipes as authored source. Slice 1: 344 additions/5 deletions across 15 authored files, plus 198 fixture lines, 1,176 generated additions/3 deletions and two lockfile lines. Slice 2: 621 additions/25 deletions across 18 authored files, plus 729 fixture lines and 11 lockfile additions/1 deletion. Slice 3: 515 additions/20 deletions across 23 authored files, plus 10 lockfile additions/4 deletions; no generated or golden-fixture change. These conservative counts include blank lines; execution receipts and their review notes are counted separately in [size-counts.json](refreshed/size-counts.json). Each slice exceeds the target for the already-approved coupled contract/core/guard scope but remains below both blocking thresholds. The final receipt commit changes evidence only.
+
+Limitations remain the same: tested host/toolchains only, no browser or screenshot claim, no independent author review, and no U01a/foundation readiness verdict. Firstmate owns independent review and landing of the three slices. No remote publication or merge was performed.

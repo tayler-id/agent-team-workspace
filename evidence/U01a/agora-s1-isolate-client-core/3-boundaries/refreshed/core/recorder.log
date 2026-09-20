@@ -1,0 +1,1 @@
+{"schema_version":"agora.red-green/v1","outcome":"pass","parent":"66013ee2d15a346d716339d3b7717e1734b74e83","head":"6151f40f8378cc16fc90684dbf74a3f82ae0b9fb","red_exit":1,"green_exit":0,"test_patch_digest":"sha256:cd39cf549cceffd84e59cfc3b278acf6abab869cd174f95d088321d5a9d39f7e","out":"evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/core"}

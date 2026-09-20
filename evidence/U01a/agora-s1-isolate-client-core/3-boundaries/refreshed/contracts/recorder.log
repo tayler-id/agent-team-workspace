@@ -1,0 +1,1 @@
+{"schema_version":"agora.red-green/v1","outcome":"pass","parent":"57b9db6892861b98e5d1edede90ef8621a807dec","head":"66013ee2d15a346d716339d3b7717e1734b74e83","red_exit":1,"green_exit":0,"test_patch_digest":"sha256:9d300fa113710d7b5bf04bcb6b0822ea70cc0993697d062a6300924e85d8adf8","out":"evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/contracts"}

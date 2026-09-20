@@ -1,0 +1,152 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-20T15:36:53.636Z
+parent: 6151f40f8378cc16fc90684dbf74a3f82ae0b9fb
+head: 7136c4b0c667838dc9293ae7982b488dda4e3806
+subject_revision: 6151f40f8378cc16fc90684dbf74a3f82ae0b9fb
+test_patch_applied_to_subject: true
+test_patch_files: apps/center/test/health.test.ts, apps/center/test/policy.test.ts, apps/center/test/readiness.pg.test.ts, packages/client-core/test/boundaries.test.ts, packages/client-core/test/export-maps.test.ts, packages/client-core/test/fixture.test.ts
+test_patch_digest: sha256:25c50ea08d930e89afe01826952a69f422a337d16bff2d16153b1206d0a75d90
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/package.json","digest":"sha256:2a0a2fd7d224f457b806665eae38ff72ea3f8bc9e4d4b120f1ddd2d6636e8982"}]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/boundaries.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:43bbdcf3e5d7d82c0435bef27efb755a78fae2daee8c051f92d096640df3d5d8"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-21tQ2Q
+
+ ❯ |unit| packages/client-core/test/boundaries.test.ts (7 tests | 7 failed) 1434ms
+   × packages/client-core/src/model.ts rejects framework, provider, storage and transport imports in every syntax 979ms
+   × packages/domain/src/index.ts rejects framework, provider, storage and transport imports in every syntax 66ms
+   × contracts/src/index.ts rejects framework, provider, storage and transport imports in every syntax 59ms
+   × private relative paths, unknown dynamic targets and facade values cannot enter core 33ms
+   × a private storage adapter may import pg but cannot leak its types through the public port 52ms
+   × removing either boundary rule makes its denial assertion turn red 34ms
+   × export maps reject existing private files and the portable compile lane has no DOM or Node globals 210ms
+
+ Test Files  1 failed (1)
+      Tests  7 failed (7)
+   Start at  11:36:36
+   Duration  1.67s (tests 89%, import 9%, transform 2%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > packages/client-core/src/model.ts rejects framework, provider, storage and transport imports in every syntax
+AssertionError: packages/client-core/src/model.ts: import { forbidden } from 'react'; export const leak: unknown = forbidden;: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:29:98
+     27|  for (const module of forbidden) for (const form of forms) {
+     28|   const messages = await boundary(form(module), file);
+     29|   expect(messages.some((m) => m.ruleId === 'agora/import-boundary'), `…
+       |                                                                                                  ^
+     30|  }
+     31| }, 120_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > packages/domain/src/index.ts rejects framework, provider, storage and transport imports in every syntax
+AssertionError: packages/domain/src/index.ts: import { forbidden } from 'react'; export const leak: unknown = forbidden;: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:29:98
+     27|  for (const module of forbidden) for (const form of forms) {
+     28|   const messages = await boundary(form(module), file);
+     29|   expect(messages.some((m) => m.ruleId === 'agora/import-boundary'), `…
+       |                                                                                                  ^
+     30|  }
+     31| }, 120_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > contracts/src/index.ts rejects framework, provider, storage and transport imports in every syntax
+AssertionError: contracts/src/index.ts: import { forbidden } from 'react'; export const leak: unknown = forbidden;: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:29:98
+     27|  for (const module of forbidden) for (const form of forms) {
+     28|   const messages = await boundary(form(module), file);
+     29|   expect(messages.some((m) => m.ruleId === 'agora/import-boundary'), `…
+       |                                                                                                  ^
+     30|  }
+     31| }, 120_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > private relative paths, unknown dynamic targets and facade values cannot enter core
+AssertionError: ../../storage/src/index.ts: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:36:132
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > a private storage adapter may import pg but cannot leak its types through the public port
+AssertionError: import { Pool } from 'pg'; interface Hidden { nested: { client: Pool } } export function openDatabase(): Hidden { return { nested: { client: new Pool() } }; }: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:55:95
+     53|   "/// <reference lib=\"dom\" />\nexport function openDatabase(): Docu…
+     54|   "/// <reference lib=\"dom\" />\nexport function openDatabase(): CSSS…
+     55|  ]) expect((await boundary(leak, file)).some((m) => m.ruleId === 'agor…
+       |                                                                                               ^
+     56| }, 120_000);
+     57|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > removing either boundary rule makes its denial assertion turn red
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:63:71
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > export maps reject existing private files and the portable compile lane has no DOM or Node globals
+AssertionError: @agora/center: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:90:195
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+

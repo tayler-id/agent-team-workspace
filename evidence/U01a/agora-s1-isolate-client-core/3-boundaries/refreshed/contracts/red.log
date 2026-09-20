@@ -1,0 +1,120 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-20T15:40:26.010Z
+parent: 57b9db6892861b98e5d1edede90ef8621a807dec
+head: 66013ee2d15a346d716339d3b7717e1734b74e83
+subject_revision: 57b9db6892861b98e5d1edede90ef8621a807dec
+test_patch_applied_to_subject: true
+test_patch_files: contracts/fixtures/vectors.json, contracts/test/sync.test.ts, packages/client-core/test/harness.test.ts
+test_patch_digest: sha256:9d300fa113710d7b5bf04bcb6b0822ea70cc0993697d062a6300924e85d8adf8
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:eb163b7f2da7878272399a1169104d48f1d3a1e95fb144f0b56f4da8ae23e3a8"},{"file":"contracts/schemas/fixture-sync.schema.json","digest":"sha256:20312ec4331ed2ccf4954ee94a5785ad991fc6974553583d7eb68c083cf1a891"},{"file":"contracts/schemas/sync.schema.json","digest":"sha256:3f6951402ce564dd8a43088af6fa4a70ec6ea87aedeb5c2f1836228db58ba85d"},{"file":"contracts/src/index.ts","digest":"sha256:de7329077ec9963cfe351587bbbebeb48a6d2fd6a87e444fdcddad69f284ad35"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:2c7637e4177f6de2bb726f1ae98eae51a1c4428731ee0cb6b70f550d3c167523"},{"file":"contracts/test/sync.test.ts","digest":"sha256:1b630575f38a985179e9a1b904b0bba897273501487f1c71cf4332ccd73a1879"}]}
+configuration: {"command":"pnpm exec vitest run --project contracts contracts/test/sync.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:b64df9910eb9fddea7c0e0b42af62bdf1fe1bd2b133c16137346f04e6f2d07ad"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-k8rSoD
+
+ ❯ |contracts| contracts/test/sync.test.ts (4 tests | 3 failed) 9503ms
+   × the live wire driver accepts baseline health and the literal synchronization values 3ms
+   × Swift and TypeScript agree on closed synchronization values and decimal precision 9499ms
+   × removing the event-kind and unknown-field guards makes the denial assertions turn red 0ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 1 passed (4)
+   Start at  11:40:01
+   Duration  9.64s (tests 99%, import 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| contracts/test/sync.test.ts > the live wire driver accepts baseline health and the literal synchronization values
+AssertionError: expected { id: 'sync-cursor-large', …(1) } to deeply equal { id: 'sync-cursor-large', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "accepted": true,
++   "accepted": false,
+    "id": "sync-cursor-large",
+  }
+
+ ❯ contracts/test/sync.test.ts:15:109
+     13| test('the live wire driver accepts baseline health and the literal syn…
+     14|  expect(validator.validate('HealthReport', { schema_version: 'agora.he…
+     15|  for (const vector of vectors) expect({ id: vector.id, accepted: accep…
+       |                                                                                                             ^
+     16|  expect(vectors.length).toBeGreaterThanOrEqual(20);
+     17| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  |contracts| contracts/test/sync.test.ts > Swift and TypeScript agree on closed synchronization values and decimal precision
+AssertionError: expected [ 'sync-cursor-large', …(28) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "sync-cursor-large",
++   "sync-cursor-overflow",
++   "sync-cursor-number",
++   "sync-cursor-unknown",
++   "sync-receipt",
++   "sync-receipt-duplicate",
++   "sync-receipt-missing-id",
++   "sync-receipt-null",
++   "sync-message",
++   "sync-message-empty",
++   "sync-message-null",
++   "sync-message-missing-revision",
++   "sync-tombstone",
++   "sync-tombstone-body",
++   "sync-run-card",
++   "sync-run-card-unknown",
++   "sync-state",
++   "sync-state-null-tombstones",
++   "sync-snapshot",
++   "sync-snapshot-missing-cursor",
++   "sync-snapshot-production-namespace",
++   "sync-event-message",
++   "sync-event-unknown-kind",
++   "sync-event-unknown-field",
++   "sync-event-unknown-payload",
++   "sync-event-missing-seq",
++   "sync-event-wrong-payload",
++   "sync-event-tombstone",
++   "sync-event-run-card",
++ ]
+
+ ❯ contracts/test/sync.test.ts:26:69
+     24|  const available = { ...file, vectors: file.vectors.filter((v) => vali…
+     25|  const joint = compareConsumers({ ...file, vectors }, runTypeScriptCon…
+     26|  expect(joint.filter((r) => r.outcome !== 'pass').map((r) => r.id)).to…
+       |                                                                     ^
+     27|  const result = swift.report.vectors.find((v) => v.id === 'sync-cursor…
+     28|  expect(result?.canonical).toBe('{"committed_seq":"9007199254740993","…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  |contracts| contracts/test/sync.test.ts > removing the event-kind and unknown-field guards makes the denial assertions turn red
+AssertionError: expected undefined to be 'https://agora.invalid/schemas/fixture…' // Object.is equality
+
+- Expected:
+"https://agora.invalid/schemas/fixture-sync.schema.json"
+
++ Received:
+undefined
+
+ ❯ contracts/test/sync.test.ts:39:22
+     37| test('removing the event-kind and unknown-field guards makes the denia…
+     38|  const family = wireSchemaFamilies.find((f) => f.$id.endsWith('/fixtur…
+     39|  expect(family?.$id).toBe('https://agora.invalid/schemas/fixture-sync.…
+       |                      ^
+     40|  if (!family) return;
+     41|  interface MutableFamily { $id: string; $defs: Record<string, { additi…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

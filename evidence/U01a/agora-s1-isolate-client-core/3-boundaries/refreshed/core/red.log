@@ -1,0 +1,685 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-20T15:40:56.794Z
+parent: 66013ee2d15a346d716339d3b7717e1734b74e83
+head: 6151f40f8378cc16fc90684dbf74a3f82ae0b9fb
+subject_revision: 66013ee2d15a346d716339d3b7717e1734b74e83
+test_patch_applied_to_subject: true
+test_patch_files: contracts/fixtures/replay.json, contracts/test/replay.test.ts, packages/client-core/test/fixture.test.ts, packages/client-core/test/guards.test.ts, packages/client-core/test/sync.test.ts
+test_patch_digest: sha256:cd39cf549cceffd84e59cfc3b278acf6abab869cd174f95d088321d5a9d39f7e
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/replay.json","digest":"sha256:3aa772e653f13c3ccb3dbe456e1eb902856e61db8706d3f792218c443904b38d"},{"file":"contracts/package.json","digest":"sha256:0d17aafe0e42e6eb5f2bee30bbb6a2829b21f5c976d25a1ac0fd51c8406308b0"},{"file":"contracts/swift/Sources/AgoraContractsConform/Replay.swift","digest":"sha256:c812323c6e2f458e721c283c0b09f29f11d0fc28045812333145e64cebb0ef29"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:0bfc2423c294545bb4cdb6646719004ad3c69be1d26f68ec9eecc3c7a0d1c7fe"},{"file":"contracts/test/replay.test.ts","digest":"sha256:ff27332b9780499edc0a01f0b9111d82ea35dd5993b3e5d53a997cade162d122"}]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/sync.test.ts --project contracts contracts/test/replay.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:63e28fa680f03c82f9080b98b312e1d7489a26fa8244778ec23061a8860acc51"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-oAHgd8
+
+ ❯ |unit| packages/client-core/test/sync.test.ts (12 tests | 12 failed) 8ms
+   × baseline idle driver works before accepting an immutable snapshot and requesting strict-after replay 4ms
+   × ordered replay, gaps and duplicate suppression converge to a literal snapshot 1ms
+   × snapshots race replay without dropping buffered events or rolling back a newer cursor 0ms
+   × decimal cursor and message/run revisions compare beyond Number precision 0ms
+   × unread uses visible created positions, not edits, tombstones or run events; seen is explicit and monotone 0ms
+   × unknown state changes pause with no projection mutation or ack and require supported resync 1ms
+   × streams have independent cursors and a missing snapshot cannot be invented from an event 0ms
+   × gaps are bounded and invalid snapshot or changed message positions resync instead of acknowledging 0ms
+   × receipts dedupe commands but never fast-forward a timeline; offline sends are not queued 0ms
+   × retry decisions preserve the original id/digest, refresh stale state and respect denial/rate delay 0ms
+   × a full gap can still drain, and newer snapshot cursors cannot resurrect older message revisions 0ms
+   × drafts stay explicitly unsent through route/snapshot changes; logout and revoke erase private state 0ms
+ ❯ |contracts| contracts/test/replay.test.ts (1 test | 1 failed) 9931ms
+   × the existing Swift conformance driver independently reproduces each golden replay projection 9931ms
+
+ Test Files  2 failed (2)
+      Tests  13 failed (13)
+   Start at  11:40:29
+   Duration  10.14s (tests 99%)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| contracts/test/replay.test.ts > the existing Swift conformance driver independently reproduces each golden replay projection
+AssertionError: expected undefined to deeply equal [ { id: 'ordered', …(2) }, …(5) ]
+
+- Expected:
+[
+  {
+    "id": "ordered",
+    "outcome": "pass",
+    "state": {
+      "commands": [],
+      "drafts": [],
+      "rooms": [
+        {
+          "cursor": "5",
+          "lastSeen": "0",
+          "messages": [
+            {
+              "content": {
+                "tag": "tombstone",
+              },
+              "createdSeq": "1",
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "3",
+            },
+            {
+              "content": {
+                "body": "second",
+                "tag": "visible",
+              },
+              "createdSeq": "4",
+              "id": "22222222-2222-4222-8222-222222222222",
+              "revision": "1",
+            },
+          ],
+          "mode": "live",
+          "pending": [],
+          "runs": [
+            {
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "2",
+              "state": "running",
+            },
+          ],
+          "streamId": "11111111-1111-4111-8111-111111111111",
+          "unread": 1,
+        },
+      ],
+    },
+  },
+  {
+    "id": "gap",
+    "outcome": "pass",
+    "state": {
+      "commands": [],
+      "drafts": [],
+      "rooms": [
+        {
+          "cursor": "5",
+          "lastSeen": "0",
+          "messages": [
+            {
+              "content": {
+                "tag": "tombstone",
+              },
+              "createdSeq": "1",
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "3",
+            },
+            {
+              "content": {
+                "body": "second",
+                "tag": "visible",
+              },
+              "createdSeq": "4",
+              "id": "22222222-2222-4222-8222-222222222222",
+              "revision": "1",
+            },
+          ],
+          "mode": "live",
+          "pending": [],
+          "runs": [
+            {
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "2",
+              "state": "running",
+            },
+          ],
+          "streamId": "11111111-1111-4111-8111-111111111111",
+          "unread": 1,
+        },
+      ],
+    },
+  },
+  {
+    "id": "duplicates",
+    "outcome": "pass",
+    "state": {
+      "commands": [],
+      "drafts": [],
+      "rooms": [
+        {
+          "cursor": "5",
+          "lastSeen": "0",
+          "messages": [
+            {
+              "content": {
+                "tag": "tombstone",
+              },
+              "createdSeq": "1",
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "3",
+            },
+            {
+              "content": {
+                "body": "second",
+                "tag": "visible",
+              },
+              "createdSeq": "4",
+              "id": "22222222-2222-4222-8222-222222222222",
+              "revision": "1",
+            },
+          ],
+          "mode": "live",
+          "pending": [],
+          "runs": [
+            {
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "2",
+              "state": "running",
+            },
+          ],
+          "streamId": "11111111-1111-4111-8111-111111111111",
+          "unread": 1,
+        },
+      ],
+    },
+  },
+  {
+    "id": "unknown-state",
+    "outcome": "pass",
+    "state": {
+      "commands": [],
+      "drafts": [],
+      "rooms": [
+        {
+          "cursor": "2",
+          "lastSeen": "0",
+          "messages": [
+            {
+              "content": {
+                "body": "edited",
+                "tag": "visible",
+              },
+              "createdSeq": "1",
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "2",
+            },
+          ],
+          "mode": "upgrade",
+          "pending": [],
+          "runs": [],
+          "streamId": "11111111-1111-4111-8111-111111111111",
+          "unread": 1,
+        },
+      ],
+    },
+  },
+  {
+    "id": "unfilled-gap",
+    "outcome": "pass",
+    "state": {
+      "commands": [],
+      "drafts": [],
+      "rooms": [
+        {
+          "cursor": "1",
+          "lastSeen": "0",
+          "messages": [
+            {
+              "content": {
+                "body": "hello",
+                "tag": "visible",
+              },
+              "createdSeq": "1",
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "1",
+            },
+          ],
+          "mode": "gap",
+          "pending": [
+            {
+              "change": {
+                "run": [Object],
+                "type": "run",
+              },
+              "seq": "3",
+              "streamId": "11111111-1111-4111-8111-111111111111",
+              "type": "event",
+            },
+          ],
+          "runs": [],
+          "streamId": "11111111-1111-4111-8111-111111111111",
+          "unread": 1,
+        },
+      ],
+    },
+  },
+  {
+    "id": "stale-run-revision",
+    "outcome": "pass",
+    "state": {
+      "commands": [],
+      "drafts": [],
+      "rooms": [
+        {
+          "cursor": "6",
+          "lastSeen": "0",
+          "messages": [
+            {
+              "content": {
+                "tag": "tombstone",
+              },
+              "createdSeq": "1",
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "3",
+            },
+            {
+              "content": {
+                "body": "second",
+                "tag": "visible",
+              },
+              "createdSeq": "4",
+              "id": "22222222-2222-4222-8222-222222222222",
+              "revision": "1",
+            },
+          ],
+          "mode": "live",
+          "pending": [],
+          "runs": [
+            {
+              "id": "11111111-1111-4111-8111-111111111111",
+              "revision": "2",
+              "state": "running",
+            },
+          ],
+          "streamId": "11111111-1111-4111-8111-111111111111",
+          "unread": 1,
+        },
+      ],
+    },
+  },
+]
+
++ Received:
+undefined
+
+ ❯ contracts/test/replay.test.ts:12:26
+     10|  expect(run.message ?? run.outcome).toBe('pass');
+     11|  const report = run.report as { replays?: { id: string; outcome: strin…
+     12|  expect(report?.replays).toEqual(file.replays.map((v) => ({ id: v.id, …
+       |                          ^
+     13|  const cli = spawnSync(process.execPath, ['scripts/drive-client-core.t…
+     14|  expect(cli.status, cli.stderr).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > baseline idle driver works before accepting an immutable snapshot and requesting strict-after replay
+AssertionError: expected { state: { rooms: [], …(2) }, …(2) } to deeply equal { state: { …(3) }, …(2) }
+
+- Expected
++ Received
+
+  {
+    "acknowledgements": [],
+-   "requests": [
+-     {
+-       "after": "1",
+-       "streamId": "11111111-1111-4111-8111-111111111111",
+-       "type": "replay",
+-     },
+-   ],
++   "requests": [],
+    "state": {
+      "commands": [],
+      "drafts": [],
+-     "rooms": [
+-       {
+-         "cursor": "1",
+-         "lastSeen": "0",
+-         "messages": [
+-           {
+-             "content": {
+-               "body": "hello",
+-               "tag": "visible",
+-             },
+-             "createdSeq": "1",
+-             "id": "m",
+-             "revision": "1",
+-           },
+-         ],
+-         "mode": "live",
+-         "pending": [],
+-         "runs": [],
+-         "streamId": "11111111-1111-4111-8111-111111111111",
+-         "unread": 1,
+-       },
+-     ],
++     "rooms": [],
+    },
+  }
+
+ ❯ packages/client-core/test/sync.test.ts:14:17
+     12|  expect(synchronize(initialState(), { type: 'idle' })).toEqual({ state…
+     13|  const result = synchronize(initialState(), snapshot());
+     14|  expect(result).toEqual({ state: { rooms: [expected], drafts: [], comm…
+       |                 ^
+     15|  const input = snapshot();
+     16|  const isolated = synchronize(initialState(), input).state;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > ordered replay, gaps and duplicate suppression converge to a literal snapshot
+AssertionError: expected [] to deeply equal [ { type: 'replay', …(2) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "after": "1",
+-     "streamId": "11111111-1111-4111-8111-111111111111",
+-     "type": "replay",
+-   },
+- ]
++ []
+
+ ❯ packages/client-core/test/sync.test.ts:26:23
+     24|  const gap = synchronize(initial, event('3'));
+     25|  expect(gap.acknowledgements).toEqual([]);
+     26|  expect(gap.requests).toEqual([{ type: 'replay', streamId: room, after…
+       |                       ^
+     27|  expect(gap.state.rooms[0]).toEqual({ ...expected, mode: 'gap', pendin…
+     28|  const filled = synchronize(gap.state, event('2'));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > snapshots race replay without dropping buffered events or rolling back a newer cursor
+AssertionError: expected [] to deeply equal [ { …(8) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "cursor": "3",
+-     "lastSeen": "0",
+-     "messages": [
+-       {
+-         "content": {
+-           "body": "edit 3",
+-           "tag": "visible",
+-         },
+-         "createdSeq": "1",
+-         "id": "m",
+-         "revision": "3",
+-       },
+-     ],
+-     "mode": "live",
+-     "pending": [],
+-     "runs": [],
+-     "streamId": "11111111-1111-4111-8111-111111111111",
+-     "unread": 1,
+-   },
+- ]
++ []
+
+ ❯ packages/client-core/test/sync.test.ts:37:23
+     35| test('snapshots race replay without dropping buffered events or rollin…
+     36|  const result = drive(snapshot(), event('3'), snapshot('2'));
+     37|  expect(result.rooms).toEqual([{ ...expected, cursor: '3', messages: […
+       |                       ^
+     38|  expect(synchronize(result, snapshot()).state).toBe(result);
+     39| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > decimal cursor and message/run revisions compare beyond Number precision
+AssertionError: expected undefined to deeply equal { …(8) }
+
+- Expected:
+{
+  "cursor": "9007199254740994",
+  "lastSeen": "0",
+  "messages": [
+    {
+      "content": {
+        "body": "hello",
+        "tag": "visible",
+      },
+      "createdSeq": "1",
+      "id": "m",
+      "revision": "9007199254740993",
+    },
+  ],
+  "mode": "live",
+  "pending": [],
+  "runs": [
+    {
+      "id": "r",
+      "revision": "9007199254740993",
+      "state": "running",
+    },
+  ],
+  "streamId": "11111111-1111-4111-8111-111111111111",
+  "unread": 1,
+}
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:45:32
+     43|  const edited = synchronize(base, event('9007199254740993', '900719925…
+     44|  const result = synchronize(edited, { type: 'event', streamId: room, s…
+     45|  expect(result.state.rooms[0]).toEqual({ ...expected, cursor: '9007199…
+       |                                ^
+     46|  expect(result.acknowledgements).toEqual([{ streamId: room, seq: '9007…
+     47| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > unread uses visible created positions, not edits, tombstones or run events; seen is explicit and monotone
+AssertionError: expected undefined to be 1 // Object.is equality
+
+- Expected:
+1
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:52:36
+     50|  const first = drive(snapshot(), event('2'));
+     51|  const withCard = synchronize(first, { type: 'event', streamId: room, …
+     52|  expect(withCard.rooms[0]?.unread).toBe(1);
+       |                                    ^
+     53|  const read = synchronize(withCard, { type: 'seen', streamId: room, se…
+     54|  const second = synchronize(read, { type: 'event', streamId: room, seq…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > unknown state changes pause with no projection mutation or ack and require supported resync
+AssertionError: expected undefined to deeply equal { …(8) }
+
+- Expected:
+{
+  "cursor": "1",
+  "lastSeen": "0",
+  "messages": [
+    {
+      "content": {
+        "body": "hello",
+        "tag": "visible",
+      },
+      "createdSeq": "1",
+      "id": "m",
+      "revision": "1",
+    },
+  ],
+  "mode": "upgrade",
+  "pending": [],
+  "runs": [],
+  "streamId": "11111111-1111-4111-8111-111111111111",
+  "unread": 1,
+}
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:66:33
+     64|  const before = drive(snapshot());
+     65|  const unknown = synchronize(before, { type: 'unsupported', streamId: …
+     66|  expect(unknown.state.rooms[0]).toEqual({ ...expected, mode: 'upgrade'…
+       |                                 ^
+     67|  expect(unknown.acknowledgements).toEqual([]);
+     68|  expect(unknown.requests).toEqual([{ type: 'upgrade', streamId: room }…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > streams have independent cursors and a missing snapshot cannot be invented from an event
+AssertionError: expected { state: { rooms: [], …(2) }, …(2) } to deeply equal { state: { rooms: [], …(2) }, …(2) }
+
+- Expected
++ Received
+
+@@ -1,13 +1,8 @@
+  {
+    "acknowledgements": [],
+-   "requests": [
+-     {
+-       "streamId": "11111111-1111-4111-8111-111111111111",
+-       "type": "snapshot",
+-     },
+-   ],
++   "requests": [],
+    "state": {
+      "commands": [],
+      "drafts": [],
+      "rooms": [],
+    },
+
+ ❯ packages/client-core/test/sync.test.ts:74:50
+     72|
+     73| test('streams have independent cursors and a missing snapshot cannot b…
+     74|  expect(synchronize(initialState(), event('2'))).toEqual({ state: init…
+       |                                                  ^
+     75|  const two = drive(snapshot(), { ...snapshot(), type: 'snapshot', stre…
+     76|  expect(two.rooms.map((r) => [r.streamId, r.cursor])).toEqual([[room, …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > gaps are bounded and invalid snapshot or changed message positions resync instead of acknowledging
+AssertionError: expected undefined to deeply equal { …(8) }
+
+- Expected:
+{
+  "cursor": "1",
+  "lastSeen": "0",
+  "messages": [
+    {
+      "content": {
+        "body": "hello",
+        "tag": "visible",
+      },
+      "createdSeq": "1",
+      "id": "m",
+      "revision": "1",
+    },
+  ],
+  "mode": "resync",
+  "pending": [],
+  "runs": [],
+  "streamId": "11111111-1111-4111-8111-111111111111",
+  "unread": 1,
+}
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:82:27
+     80|  const full = Array.from({ length: 1001 }, (_, i) => event(String(i + …
+     81|  const bounded = drive(snapshot(), ...full);
+     82|  expect(bounded.rooms[0]).toEqual({ ...expected, mode: 'resync' });
+       |                           ^
+     83|  const invalid: ClientInput = { type: 'snapshot', streamId: room, curs…
+     84|  expect(synchronize(initialState(), invalid)).toEqual({ state: initial…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > receipts dedupe commands but never fast-forward a timeline; offline sends are not queued
+AssertionError: expected [] to deeply equal [ { type: 'send', commandId: 'c' } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "commandId": "c",
+-     "type": "send",
+-   },
+- ]
++ []
+
+ ❯ packages/client-core/test/sync.test.ts:96:27
+     94|  expect(synchronize(base, { ...submit, type: 'submit', commandId: 'c',…
+     95|  const pending = synchronize(base, submit);
+     96|  expect(pending.requests).toEqual([{ type: 'send', commandId: 'c' }]);
+       |                           ^
+     97|  expect(synchronize(pending.state, submit).requests).toEqual([]);
+     98|  expect(synchronize(pending.state, { ...submit, type: 'submit', comman…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > retry decisions preserve the original id/digest, refresh stale state and respect denial/rate delay
+AssertionError: expected undefined to be 'resend_same_command' // Object.is equality
+
+- Expected:
+"resend_same_command"
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:117:36
+    115|  ] as const) {
+    116|   const result = synchronize(pending, { type: 'retry', commandId: 'c',…
+    117|   expect(result.requests[0]?.type).toBe(type);
+       |                                    ^
+    118|   expect(result.state).toBe(pending);
+    119|  }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > a full gap can still drain, and newer snapshot cursors cannot resurrect older message revisions
+AssertionError: expected undefined to be '1002' // Object.is equality
+
+- Expected:
+"1002"
+
++ Received:
+undefined
+
+ ❯ packages/client-core/test/sync.test.ts:125:67
+    123| test('a full gap can still drain, and newer snapshot cursors cannot re…
+    124|  const buffered = drive(snapshot(), ...Array.from({ length: 1000 }, (_…
+    125|  expect(synchronize(buffered, event('2')).state.rooms[0]?.cursor).toBe…
+       |                                                                   ^
+    126|  const current = drive(snapshot(), event('2', '3', 'newest'));
+    127|  expect(synchronize(current, snapshot('3')).state.rooms[0]?.messages).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/13]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > drafts stay explicitly unsent through route/snapshot changes; logout and revoke erase private state
+AssertionError: expected [] to deeply equal [ { …(3) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "streamId": "11111111-1111-4111-8111-111111111111",
+-     "tag": "unsent",
+-     "text": "offline idea",
+-   },
+- ]
++ []
+
+ ❯ packages/client-core/test/sync.test.ts:133:23
+    131|  const draft = { streamId: room, text: 'offline idea', tag: 'unsent' };
+    132|  const state = drive(snapshot(), { type: 'draft', streamId: room, text…
+    133|  expect(state.drafts).toEqual([draft]);
+       |                       ^
+    134|  for (const reason of ['logout', 'revoked'] as const) expect(synchroni…
+    135| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/13]⎯
+

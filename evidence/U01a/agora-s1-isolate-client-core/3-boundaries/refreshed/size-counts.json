@@ -1,0 +1,266 @@
+{
+  "method": "git diff --numstat, additions/deletions include blank lines; evidence review/log/JSON/patch files are receipts; executable recipes are authored source",
+  "receipt_inventory": "staged files before this size-counts.json artifact",
+  "slices": [
+    {
+      "slice": "1-contracts",
+      "parent": "57b9db6892861b98e5d1edede90ef8621a807dec",
+      "head": "66013ee",
+      "groups": {
+        "authored": {
+          "additions": 344,
+          "deletions": 5,
+          "files": [
+            ".agents/skills/verify-agora/SKILL.md",
+            "agora/feature-map.json",
+            "contracts/schemas/fixture-sync.schema.json",
+            "contracts/schemas/sync.schema.json",
+            "contracts/src/index.ts",
+            "contracts/swift/Sources/AgoraContractsConform/main.swift",
+            "contracts/test/sync.test.ts",
+            "docs/decisions.tsv",
+            "docs/runbooks/development.md",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/perf.mjs",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/verify.sh",
+            "packages/client-core/package.json",
+            "packages/client-core/src/index.ts",
+            "packages/client-core/test/harness.test.ts",
+            "scripts/test-design-checks.mjs"
+          ]
+        },
+        "fixture": {
+          "additions": 198,
+          "deletions": 0,
+          "files": [
+            "contracts/fixtures/vectors.json"
+          ]
+        },
+        "generated": {
+          "additions": 1176,
+          "deletions": 3,
+          "files": [
+            "contracts/generated/manifest.json",
+            "contracts/generated/openapi.bundled.json",
+            "contracts/generated/typescript/openapi.d.ts",
+            "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift"
+          ]
+        },
+        "receipts": {
+          "additions": 1261,
+          "deletions": 0,
+          "files": [
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/audit.json",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/cleanup.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/design-green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/design-initial-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/diff-check.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/gates.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/generation.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/initial-green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/initial-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/install.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/performance.json",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/red-green-report.json",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/reinstall.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/review.md",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/skill-run.log",
+            "evidence/U01a/agora-s1-isolate-client-core/1-contracts/test-patch.diff"
+          ]
+        },
+        "lockfile": {
+          "additions": 2,
+          "deletions": 0,
+          "files": [
+            "pnpm-lock.yaml"
+          ]
+        }
+      }
+    },
+    {
+      "slice": "2-core",
+      "parent": "66013ee2d15a346d716339d3b7717e1734b74e83",
+      "head": "6151f40",
+      "groups": {
+        "authored": {
+          "additions": 621,
+          "deletions": 25,
+          "files": [
+            ".agents/skills/verify-agora/SKILL.md",
+            "agora/feature-map.json",
+            "contracts/package.json",
+            "contracts/swift/Sources/AgoraContractsConform/Replay.swift",
+            "contracts/swift/Sources/AgoraContractsConform/main.swift",
+            "contracts/test/replay.test.ts",
+            "docs/runbooks/development.md",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/perf.mjs",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/verify.sh",
+            "package.json",
+            "packages/client-core/package.json",
+            "packages/client-core/src/index.ts",
+            "packages/client-core/src/model.ts",
+            "packages/client-core/test/fixture.test.ts",
+            "packages/client-core/test/guards.test.ts",
+            "packages/client-core/test/sync.test.ts",
+            "scripts/client-fixture.ts",
+            "scripts/drive-client-core.ts"
+          ]
+        },
+        "fixture": {
+          "additions": 729,
+          "deletions": 0,
+          "files": [
+            "contracts/fixtures/replay.json"
+          ]
+        },
+        "receipts": {
+          "additions": 2949,
+          "deletions": 0,
+          "files": [
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/audit.json",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/cleanup.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/design.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/driver-usage-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/dual-driver-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/gates.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/guard-negatives.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/initial-green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/initial-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/lane-7.json",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/perf-run.json",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/performance.json",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/red-green-report.json",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/replay-performance-red.json",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/review.md",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/separator-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/skill-run.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/snapshot-revision-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/swift-initial-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/2-core/test-patch.diff"
+          ]
+        },
+        "lockfile": {
+          "additions": 11,
+          "deletions": 1,
+          "files": [
+            "pnpm-lock.yaml"
+          ]
+        }
+      }
+    },
+    {
+      "slice": "3-boundaries",
+      "parent": "6151f40f8378cc16fc90684dbf74a3f82ae0b9fb",
+      "head": "7136c4b plus evidence-only staged refresh",
+      "groups": {
+        "authored": {
+          "additions": 515,
+          "deletions": 20,
+          "files": [
+            ".agents/skills/verify-agora/SKILL.md",
+            "AGENTS.md",
+            "agora/feature-map.json",
+            "apps/center/package.json",
+            "apps/center/test/health.test.ts",
+            "apps/center/test/policy.test.ts",
+            "apps/center/test/readiness.pg.test.ts",
+            "contracts/package.json",
+            "docs/decisions.tsv",
+            "docs/features/client-synchronization.md",
+            "docs/runbooks/development.md",
+            "eslint.config.js",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/verify.sh",
+            "package.json",
+            "packages/client-core/test/boundaries.test.ts",
+            "packages/client-core/test/export-maps.test.ts",
+            "packages/client-core/test/fixture.test.ts",
+            "packages/client-core/tsconfig.json",
+            "packages/domain/src/index.ts",
+            "packages/domain/src/policy/fixture-scope.ts",
+            "pnpm-workspace.yaml",
+            "scripts/boundary-policy.ts",
+            "scripts/public-types.ts"
+          ]
+        },
+        "receipts": {
+          "additions": 4491,
+          "deletions": 0,
+          "files": [
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/ambient-port-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/audit-all-before.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/audit-all.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/audit.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/clean-install-build.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/cleanup.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/decision-link-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/design.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/export-map-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/feature-map.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/gates.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/guard-strengthening.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/initial-green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/initial-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/input-digests.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/lane-7.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/lane-7.stderr.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/lane-8.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/lane-8.stderr.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/lane-8.stdout.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/lint-initial.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/perf.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/performance.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/recorder.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/audit-all.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/audit.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/clean-install-build.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/cleanup.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/contracts/green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/contracts/recorder.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/contracts/red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/contracts/test-patch.diff",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/core/green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/core/recorder.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/core/red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/core/test-patch.diff",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/feature-map.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/gates.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/input-digests.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/lane-7.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/lane-7.stderr.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/lane-8.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/lane-8.stderr.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/lane-8.stdout.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/perf.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/performance.json",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/recorder.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/skill-run.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/subject.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/refreshed/test-patch.diff",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/report-path-green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/report-path-red.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/review.md",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/skill-run.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/subject.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/test-patch.diff",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/toml-green.log",
+            "evidence/U01a/agora-s1-isolate-client-core/3-boundaries/toml-red.log"
+          ]
+        },
+        "lockfile": {
+          "additions": 10,
+          "deletions": 4,
+          "files": [
+            "pnpm-lock.yaml"
+          ]
+        }
+      }
+    }
+  ]
+}

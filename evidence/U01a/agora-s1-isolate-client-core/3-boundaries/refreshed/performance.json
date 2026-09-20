@@ -1,0 +1,82 @@
+{
+  "parent": "6151f40f8378cc16fc90684dbf74a3f82ae0b9fb",
+  "head": "7136c4b0c667838dc9293ae7982b488dda4e3806",
+  "node": "v24.16.0",
+  "host": "darwin-arm64",
+  "fixture": "same 50000 positions plus 1000 events in five interleaved batches",
+  "core_source_sha256": {
+    "parent": "4ae16b6c3efcb00179fc975f0124b3a16617b5a96ae6bf4759cd740565170df7",
+    "head": "4ae16b6c3efcb00179fc975f0124b3a16617b5a96ae6bf4759cd740565170df7"
+  },
+  "input_p95_ms": {
+    "parent": 2.247875000000022,
+    "head": 2.225832999999966
+  },
+  "ratio": 0.9901942946115528,
+  "new_boundary_gate_ms": 9298.819333,
+  "clean_install_ms": 936.3342499999999,
+  "clean_full_check_ms": 56353.999667,
+  "outcome": "pass",
+  "batches": [
+    {
+      "batch": 1,
+      "label": "parent",
+      "replay_ms": 1574.503084,
+      "input_p95_ms": 1.7183749999999236
+    },
+    {
+      "batch": 1,
+      "label": "head",
+      "replay_ms": 1624.046666,
+      "input_p95_ms": 1.7862499999999955
+    },
+    {
+      "batch": 2,
+      "label": "parent",
+      "replay_ms": 1699.8360839999998,
+      "input_p95_ms": 2.523291999999998
+    },
+    {
+      "batch": 2,
+      "label": "head",
+      "replay_ms": 1799.9007499999998,
+      "input_p95_ms": 2.782416000000012
+    },
+    {
+      "batch": 3,
+      "label": "parent",
+      "replay_ms": 1647.3737500000002,
+      "input_p95_ms": 2.079334000000017
+    },
+    {
+      "batch": 3,
+      "label": "head",
+      "replay_ms": 1576.512375,
+      "input_p95_ms": 1.7342499999999745
+    },
+    {
+      "batch": 4,
+      "label": "parent",
+      "replay_ms": 1591.4845839999998,
+      "input_p95_ms": 1.742166999999995
+    },
+    {
+      "batch": 4,
+      "label": "head",
+      "replay_ms": 1625.52325,
+      "input_p95_ms": 1.8500830000000406
+    },
+    {
+      "batch": 5,
+      "label": "parent",
+      "replay_ms": 1633.8665,
+      "input_p95_ms": 2.253332999999998
+    },
+    {
+      "batch": 5,
+      "label": "head",
+      "replay_ms": 1652.753,
+      "input_p95_ms": 2.085916999999995
+    }
+  ]
+}
