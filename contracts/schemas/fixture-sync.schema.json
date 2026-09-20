@@ -1,0 +1,105 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://agora.invalid/schemas/fixture-sync.schema.json",
+	"title": "agora.foundation-fixture.sync/v1",
+	"description": "Non-production synchronization fixture only. No service route, production conversation contract, human authorization or execution authority. Separate closed payload components avoid inventing a permissive union outside the tested generator subset.",
+	"$defs": {
+		"FixtureSyncMessage": {
+			"description": "Visible fixture message position. created_seq is the first visible revision's room-stream sequence and never changes on an edit. The fixture body is limited to 4096 Unicode scalars, at most 16 KiB UTF-8; this is not a production composer contract.",
+			"type": "object", "additionalProperties": false,
+			"required": ["message_id", "created_seq", "revision", "body"],
+			"properties": {
+				"message_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"created_seq": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"revision": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"body": { "type": "string", "maxLength": 4096 }
+			}
+		},
+		"FixtureSyncTombstone": {
+			"description": "A deleted fixture position carries no body and creates no unread position.",
+			"type": "object", "additionalProperties": false,
+			"required": ["message_id", "created_seq", "revision"],
+			"properties": {
+				"message_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"created_seq": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"revision": { "$ref": "primitives.schema.json#/$defs/Revision" }
+			}
+		},
+		"FixtureSyncRunCard": {
+			"description": "Display-only revisioned fixture card, not a run state machine. An older run_revision cannot overwrite a newer card.",
+			"type": "object", "additionalProperties": false,
+			"required": ["run_id", "run_revision", "state"],
+			"properties": {
+				"run_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"run_revision": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"state": { "type": "string", "enum": ["queued", "running", "succeeded", "failed"] }
+			}
+		},
+		"FixtureSyncState": {
+			"description": "Complete fixture projection at its snapshot cursor. A message ID occurs in messages or tombstones, never both; adapters enforce cross-record consistency after schema validation.",
+			"type": "object", "additionalProperties": false,
+			"required": ["messages", "tombstones", "run_cards"],
+			"properties": {
+				"messages": { "type": "array", "maxItems": 50000, "items": { "$ref": "#/$defs/FixtureSyncMessage" } },
+				"tombstones": { "type": "array", "maxItems": 50000, "items": { "$ref": "#/$defs/FixtureSyncTombstone" } },
+				"run_cards": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/FixtureSyncRunCard" } }
+			}
+		},
+		"FixtureSyncSnapshot": {
+			"description": "Authorized non-production fixture state and cursor from one observation. last_seen_room_seq is explicit reading state, not advanced by event delivery. Unread counts only visible message positions created after it, not stream-sequence distance.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "cursor", "last_seen_room_seq", "state"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.foundation-fixture.sync-snapshot/v1"] },
+				"cursor": { "$ref": "sync.schema.json#/$defs/StreamCursor" },
+				"last_seen_room_seq": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"state": { "$ref": "#/$defs/FixtureSyncState" }
+			}
+		},
+		"FixtureSyncMessageEvent": {
+			"description": "R07 envelope with one closed, non-production fixture message-revision payload. actor is a historical principal ID, not caller authority.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "stream_id", "seq", "event_id", "kind", "actor", "occurred_at", "payload"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.foundation-fixture.sync-event/v1"] },
+				"stream_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"seq": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"event_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"kind": { "type": "string", "enum": ["fixture.message_revision"] },
+				"actor": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"occurred_at": { "$ref": "primitives.schema.json#/$defs/Timestamp" },
+				"payload": { "$ref": "#/$defs/FixtureSyncMessage" }
+			}
+		},
+		"FixtureSyncTombstoneEvent": {
+			"description": "Closed fixture tombstone event; deleted content is not carried on the wire.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "stream_id", "seq", "event_id", "kind", "actor", "occurred_at", "payload"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.foundation-fixture.sync-event/v1"] },
+				"stream_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"seq": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"event_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"kind": { "type": "string", "enum": ["fixture.message_tombstone"] },
+				"actor": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"occurred_at": { "$ref": "primitives.schema.json#/$defs/Timestamp" },
+				"payload": { "$ref": "#/$defs/FixtureSyncTombstone" }
+			}
+		},
+		"FixtureSyncRunCardEvent": {
+			"description": "Closed fixture card event. Event seq orders delivery; run_revision orders projection replacement.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "stream_id", "seq", "event_id", "kind", "actor", "occurred_at", "payload"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.foundation-fixture.sync-event/v1"] },
+				"stream_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"seq": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"event_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"kind": { "type": "string", "enum": ["fixture.run_card"] },
+				"actor": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"occurred_at": { "$ref": "primitives.schema.json#/$defs/Timestamp" },
+				"payload": { "$ref": "#/$defs/FixtureSyncRunCard" }
+			}
+		}
+	}
+}

@@ -1,8 +1,27 @@
 {
 	"schema_version": "agora.feature-map/v1",
 	"unit": "U01a",
-	"task": "agora-s1-publish-portable-contracts",
+	"task": "agora-s1-isolate-client-core",
 	"features": [
+		{
+			"id": "client-core-test-harness",
+			"paths": ["packages/client-core/src/index.ts", "packages/client-core/package.json"],
+			"public": ["@agora/client-core initialState", "@agora/client-core synchronize"],
+			"scenarios": ["packages/client-core/test/harness.test.ts"],
+			"fixtures": ["R22 test-only empty baseline, not synchronization behavior"],
+			"platforms": ["node24"],
+			"owner": "U01a.B03"
+		},
+		{
+			"id": "fixture-sync-contracts",
+			"paths": ["contracts/schemas/sync.schema.json", "contracts/schemas/fixture-sync.schema.json", "contracts/src/index.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift"],
+			"public": ["pnpm contracts:check", "pnpm contracts:conform"],
+			"contracts": ["contracts/schemas/sync.schema.json", "contracts/schemas/fixture-sync.schema.json"],
+			"fixtures": ["agora.foundation-fixture.sync-snapshot/v1", "agora.foundation-fixture.sync-event/v1"],
+			"scenarios": ["contracts/test/sync.test.ts", "contracts/test/conformance.test.ts", "contracts/test/generation.test.ts"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "U01a.B03"
+		},
 		{
 			"id": "center-health",
 			"paths": ["apps/center/src/app.ts", "apps/center/src/main.ts", "packages/storage/src/database.ts"],

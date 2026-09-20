@@ -4,8 +4,10 @@ import type { components } from '../generated/typescript/openapi.d.ts';
 import cli from '../schemas/cli.schema.json' with { type: 'json' };
 import errors from '../schemas/errors.schema.json' with { type: 'json' };
 import fixturePolicy from '../schemas/fixture-policy.schema.json' with { type: 'json' };
+import fixtureSync from '../schemas/fixture-sync.schema.json' with { type: 'json' };
 import health from '../schemas/health.schema.json' with { type: 'json' };
 import primitives from '../schemas/primitives.schema.json' with { type: 'json' };
+import sync from '../schemas/sync.schema.json' with { type: 'json' };
 
 export { canonicalJson, digestCanonical, type Digest } from './canonical.ts';
 export type { components, operations, paths } from '../generated/typescript/openapi.d.ts';
@@ -14,7 +16,7 @@ export type ComponentName = keyof components['schemas'];
 export type Schema<Name extends ComponentName> = components['schemas'][Name];
 
 // The authoritative JSON Schema 2020-12 families. Generated consumers derive from these same bytes.
-export const wireSchemaFamilies = [primitives, health, fixturePolicy, errors, cli] as const;
+export const wireSchemaFamilies = [primitives, health, fixturePolicy, errors, cli, sync, fixtureSync] as const;
 
 export type Validation<Name extends ComponentName> = { ok: true; value: Schema<Name> } | { ok: false; details: string[] };
 

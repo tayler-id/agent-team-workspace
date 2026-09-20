@@ -64,6 +64,8 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
 
+  packages/client-core: {}
+
   packages/domain:
     dependencies:
       '@agora/contracts':

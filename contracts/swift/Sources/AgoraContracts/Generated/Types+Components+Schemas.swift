@@ -432,6 +432,79 @@ extension Components {
                 ])
             }
         }
+        /// R07 committed mutation receipt. It confirms a command, not that its events have been applied by a client. Duplicate actor/command/request digests return the original receipt.
+        ///
+        /// - Remark: Generated from `#/components/schemas/CommandReceipt`.
+        public struct CommandReceipt: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/CommandReceipt/command_id`.
+            public var command_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/CommandReceipt/aggregate_id`.
+            public var aggregate_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/CommandReceipt/revision`.
+            public var revision: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/CommandReceipt/event_cursors`.
+            public var event_cursors: [Components.Schemas.StreamCursor]
+            /// - Remark: Generated from `#/components/schemas/CommandReceipt/receipt_id`.
+            public var receipt_id: Components.Schemas.Uuid
+            /// Creates a new `CommandReceipt`.
+            ///
+            /// - Parameters:
+            ///   - command_id:
+            ///   - aggregate_id:
+            ///   - revision:
+            ///   - event_cursors:
+            ///   - receipt_id:
+            public init(
+                command_id: Components.Schemas.Uuid,
+                aggregate_id: Components.Schemas.Uuid,
+                revision: Components.Schemas.Revision,
+                event_cursors: [Components.Schemas.StreamCursor],
+                receipt_id: Components.Schemas.Uuid
+            ) {
+                self.command_id = command_id
+                self.aggregate_id = aggregate_id
+                self.revision = revision
+                self.event_cursors = event_cursors
+                self.receipt_id = receipt_id
+            }
+            public enum CodingKeys: String, CodingKey {
+                case command_id
+                case aggregate_id
+                case revision
+                case event_cursors
+                case receipt_id
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.command_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .command_id
+                )
+                self.aggregate_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .aggregate_id
+                )
+                self.revision = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .revision
+                )
+                self.event_cursors = try container.decode(
+                    [Components.Schemas.StreamCursor].self,
+                    forKey: .event_cursors
+                )
+                self.receipt_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .receipt_id
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "command_id",
+                    "aggregate_id",
+                    "revision",
+                    "event_cursors",
+                    "receipt_id"
+                ])
+            }
+        }
         /// - Remark: Generated from `#/components/schemas/Diagnostic`.
         public struct Diagnostic: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/Diagnostic/reason_code`.
@@ -681,6 +754,636 @@ extension Components {
                 ])
             }
         }
+        /// Visible fixture message position. created_seq is the first visible revision's room-stream sequence and never changes on an edit. The fixture body is limited to 4096 Unicode scalars, at most 16 KiB UTF-8; this is not a production composer contract.
+        ///
+        /// - Remark: Generated from `#/components/schemas/FixtureSyncMessage`.
+        public struct FixtureSyncMessage: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessage/message_id`.
+            public var message_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessage/created_seq`.
+            public var created_seq: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessage/revision`.
+            public var revision: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessage/body`.
+            public var body: Swift.String
+            /// Creates a new `FixtureSyncMessage`.
+            ///
+            /// - Parameters:
+            ///   - message_id:
+            ///   - created_seq:
+            ///   - revision:
+            ///   - body:
+            public init(
+                message_id: Components.Schemas.Uuid,
+                created_seq: Components.Schemas.Revision,
+                revision: Components.Schemas.Revision,
+                body: Swift.String
+            ) {
+                self.message_id = message_id
+                self.created_seq = created_seq
+                self.revision = revision
+                self.body = body
+            }
+            public enum CodingKeys: String, CodingKey {
+                case message_id
+                case created_seq
+                case revision
+                case body
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.message_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .message_id
+                )
+                self.created_seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .created_seq
+                )
+                self.revision = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .revision
+                )
+                self.body = try container.decode(
+                    Swift.String.self,
+                    forKey: .body
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "message_id",
+                    "created_seq",
+                    "revision",
+                    "body"
+                ])
+            }
+        }
+        /// R07 envelope with one closed, non-production fixture message-revision payload. actor is a historical principal ID, not caller authority.
+        ///
+        /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent`.
+        public struct FixtureSyncMessageEvent: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_foundation_hyphen_fixture_period_sync_hyphen_event_sol_v1 = "agora.foundation-fixture.sync-event/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/schema_version`.
+            public var schema_version: Components.Schemas.FixtureSyncMessageEvent.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/stream_id`.
+            public var stream_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/seq`.
+            public var seq: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/event_id`.
+            public var event_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/kind`.
+            @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case fixture_period_message_revision = "fixture.message_revision"
+            }
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/kind`.
+            public var kind: Components.Schemas.FixtureSyncMessageEvent.kindPayload
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/actor`.
+            public var actor: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/occurred_at`.
+            public var occurred_at: Components.Schemas.Timestamp
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncMessageEvent/payload`.
+            public var payload: Components.Schemas.FixtureSyncMessage
+            /// Creates a new `FixtureSyncMessageEvent`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - stream_id:
+            ///   - seq:
+            ///   - event_id:
+            ///   - kind:
+            ///   - actor:
+            ///   - occurred_at:
+            ///   - payload:
+            public init(
+                schema_version: Components.Schemas.FixtureSyncMessageEvent.schema_versionPayload,
+                stream_id: Components.Schemas.Uuid,
+                seq: Components.Schemas.Revision,
+                event_id: Components.Schemas.Uuid,
+                kind: Components.Schemas.FixtureSyncMessageEvent.kindPayload,
+                actor: Components.Schemas.Uuid,
+                occurred_at: Components.Schemas.Timestamp,
+                payload: Components.Schemas.FixtureSyncMessage
+            ) {
+                self.schema_version = schema_version
+                self.stream_id = stream_id
+                self.seq = seq
+                self.event_id = event_id
+                self.kind = kind
+                self.actor = actor
+                self.occurred_at = occurred_at
+                self.payload = payload
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case stream_id
+                case seq
+                case event_id
+                case kind
+                case actor
+                case occurred_at
+                case payload
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.FixtureSyncMessageEvent.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.stream_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .stream_id
+                )
+                self.seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .seq
+                )
+                self.event_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .event_id
+                )
+                self.kind = try container.decode(
+                    Components.Schemas.FixtureSyncMessageEvent.kindPayload.self,
+                    forKey: .kind
+                )
+                self.actor = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .actor
+                )
+                self.occurred_at = try container.decode(
+                    Components.Schemas.Timestamp.self,
+                    forKey: .occurred_at
+                )
+                self.payload = try container.decode(
+                    Components.Schemas.FixtureSyncMessage.self,
+                    forKey: .payload
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "stream_id",
+                    "seq",
+                    "event_id",
+                    "kind",
+                    "actor",
+                    "occurred_at",
+                    "payload"
+                ])
+            }
+        }
+        /// Display-only revisioned fixture card, not a run state machine. An older run_revision cannot overwrite a newer card.
+        ///
+        /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCard`.
+        public struct FixtureSyncRunCard: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCard/run_id`.
+            public var run_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCard/run_revision`.
+            public var run_revision: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCard/state`.
+            @frozen public enum statePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case queued = "queued"
+                case running = "running"
+                case succeeded = "succeeded"
+                case failed = "failed"
+            }
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCard/state`.
+            public var state: Components.Schemas.FixtureSyncRunCard.statePayload
+            /// Creates a new `FixtureSyncRunCard`.
+            ///
+            /// - Parameters:
+            ///   - run_id:
+            ///   - run_revision:
+            ///   - state:
+            public init(
+                run_id: Components.Schemas.Uuid,
+                run_revision: Components.Schemas.Revision,
+                state: Components.Schemas.FixtureSyncRunCard.statePayload
+            ) {
+                self.run_id = run_id
+                self.run_revision = run_revision
+                self.state = state
+            }
+            public enum CodingKeys: String, CodingKey {
+                case run_id
+                case run_revision
+                case state
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.run_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .run_id
+                )
+                self.run_revision = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .run_revision
+                )
+                self.state = try container.decode(
+                    Components.Schemas.FixtureSyncRunCard.statePayload.self,
+                    forKey: .state
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "run_id",
+                    "run_revision",
+                    "state"
+                ])
+            }
+        }
+        /// Closed fixture card event. Event seq orders delivery; run_revision orders projection replacement.
+        ///
+        /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent`.
+        public struct FixtureSyncRunCardEvent: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_foundation_hyphen_fixture_period_sync_hyphen_event_sol_v1 = "agora.foundation-fixture.sync-event/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/schema_version`.
+            public var schema_version: Components.Schemas.FixtureSyncRunCardEvent.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/stream_id`.
+            public var stream_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/seq`.
+            public var seq: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/event_id`.
+            public var event_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/kind`.
+            @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case fixture_period_run_card = "fixture.run_card"
+            }
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/kind`.
+            public var kind: Components.Schemas.FixtureSyncRunCardEvent.kindPayload
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/actor`.
+            public var actor: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/occurred_at`.
+            public var occurred_at: Components.Schemas.Timestamp
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncRunCardEvent/payload`.
+            public var payload: Components.Schemas.FixtureSyncRunCard
+            /// Creates a new `FixtureSyncRunCardEvent`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - stream_id:
+            ///   - seq:
+            ///   - event_id:
+            ///   - kind:
+            ///   - actor:
+            ///   - occurred_at:
+            ///   - payload:
+            public init(
+                schema_version: Components.Schemas.FixtureSyncRunCardEvent.schema_versionPayload,
+                stream_id: Components.Schemas.Uuid,
+                seq: Components.Schemas.Revision,
+                event_id: Components.Schemas.Uuid,
+                kind: Components.Schemas.FixtureSyncRunCardEvent.kindPayload,
+                actor: Components.Schemas.Uuid,
+                occurred_at: Components.Schemas.Timestamp,
+                payload: Components.Schemas.FixtureSyncRunCard
+            ) {
+                self.schema_version = schema_version
+                self.stream_id = stream_id
+                self.seq = seq
+                self.event_id = event_id
+                self.kind = kind
+                self.actor = actor
+                self.occurred_at = occurred_at
+                self.payload = payload
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case stream_id
+                case seq
+                case event_id
+                case kind
+                case actor
+                case occurred_at
+                case payload
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.FixtureSyncRunCardEvent.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.stream_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .stream_id
+                )
+                self.seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .seq
+                )
+                self.event_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .event_id
+                )
+                self.kind = try container.decode(
+                    Components.Schemas.FixtureSyncRunCardEvent.kindPayload.self,
+                    forKey: .kind
+                )
+                self.actor = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .actor
+                )
+                self.occurred_at = try container.decode(
+                    Components.Schemas.Timestamp.self,
+                    forKey: .occurred_at
+                )
+                self.payload = try container.decode(
+                    Components.Schemas.FixtureSyncRunCard.self,
+                    forKey: .payload
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "stream_id",
+                    "seq",
+                    "event_id",
+                    "kind",
+                    "actor",
+                    "occurred_at",
+                    "payload"
+                ])
+            }
+        }
+        /// Authorized non-production fixture state and cursor from one observation. last_seen_room_seq is explicit reading state, not advanced by event delivery. Unread counts only visible message positions created after it, not stream-sequence distance.
+        ///
+        /// - Remark: Generated from `#/components/schemas/FixtureSyncSnapshot`.
+        public struct FixtureSyncSnapshot: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncSnapshot/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_foundation_hyphen_fixture_period_sync_hyphen_snapshot_sol_v1 = "agora.foundation-fixture.sync-snapshot/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncSnapshot/schema_version`.
+            public var schema_version: Components.Schemas.FixtureSyncSnapshot.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncSnapshot/cursor`.
+            public var cursor: Components.Schemas.StreamCursor
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncSnapshot/last_seen_room_seq`.
+            public var last_seen_room_seq: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncSnapshot/state`.
+            public var state: Components.Schemas.FixtureSyncState
+            /// Creates a new `FixtureSyncSnapshot`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - cursor:
+            ///   - last_seen_room_seq:
+            ///   - state:
+            public init(
+                schema_version: Components.Schemas.FixtureSyncSnapshot.schema_versionPayload,
+                cursor: Components.Schemas.StreamCursor,
+                last_seen_room_seq: Components.Schemas.Revision,
+                state: Components.Schemas.FixtureSyncState
+            ) {
+                self.schema_version = schema_version
+                self.cursor = cursor
+                self.last_seen_room_seq = last_seen_room_seq
+                self.state = state
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case cursor
+                case last_seen_room_seq
+                case state
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.FixtureSyncSnapshot.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.cursor = try container.decode(
+                    Components.Schemas.StreamCursor.self,
+                    forKey: .cursor
+                )
+                self.last_seen_room_seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .last_seen_room_seq
+                )
+                self.state = try container.decode(
+                    Components.Schemas.FixtureSyncState.self,
+                    forKey: .state
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "cursor",
+                    "last_seen_room_seq",
+                    "state"
+                ])
+            }
+        }
+        /// Complete fixture projection at its snapshot cursor. A message ID occurs in messages or tombstones, never both; adapters enforce cross-record consistency after schema validation.
+        ///
+        /// - Remark: Generated from `#/components/schemas/FixtureSyncState`.
+        public struct FixtureSyncState: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncState/messages`.
+            public var messages: [Components.Schemas.FixtureSyncMessage]
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncState/tombstones`.
+            public var tombstones: [Components.Schemas.FixtureSyncTombstone]
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncState/run_cards`.
+            public var run_cards: [Components.Schemas.FixtureSyncRunCard]
+            /// Creates a new `FixtureSyncState`.
+            ///
+            /// - Parameters:
+            ///   - messages:
+            ///   - tombstones:
+            ///   - run_cards:
+            public init(
+                messages: [Components.Schemas.FixtureSyncMessage],
+                tombstones: [Components.Schemas.FixtureSyncTombstone],
+                run_cards: [Components.Schemas.FixtureSyncRunCard]
+            ) {
+                self.messages = messages
+                self.tombstones = tombstones
+                self.run_cards = run_cards
+            }
+            public enum CodingKeys: String, CodingKey {
+                case messages
+                case tombstones
+                case run_cards
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.messages = try container.decode(
+                    [Components.Schemas.FixtureSyncMessage].self,
+                    forKey: .messages
+                )
+                self.tombstones = try container.decode(
+                    [Components.Schemas.FixtureSyncTombstone].self,
+                    forKey: .tombstones
+                )
+                self.run_cards = try container.decode(
+                    [Components.Schemas.FixtureSyncRunCard].self,
+                    forKey: .run_cards
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "messages",
+                    "tombstones",
+                    "run_cards"
+                ])
+            }
+        }
+        /// A deleted fixture position carries no body and creates no unread position.
+        ///
+        /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstone`.
+        public struct FixtureSyncTombstone: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstone/message_id`.
+            public var message_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstone/created_seq`.
+            public var created_seq: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstone/revision`.
+            public var revision: Components.Schemas.Revision
+            /// Creates a new `FixtureSyncTombstone`.
+            ///
+            /// - Parameters:
+            ///   - message_id:
+            ///   - created_seq:
+            ///   - revision:
+            public init(
+                message_id: Components.Schemas.Uuid,
+                created_seq: Components.Schemas.Revision,
+                revision: Components.Schemas.Revision
+            ) {
+                self.message_id = message_id
+                self.created_seq = created_seq
+                self.revision = revision
+            }
+            public enum CodingKeys: String, CodingKey {
+                case message_id
+                case created_seq
+                case revision
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.message_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .message_id
+                )
+                self.created_seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .created_seq
+                )
+                self.revision = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .revision
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "message_id",
+                    "created_seq",
+                    "revision"
+                ])
+            }
+        }
+        /// Closed fixture tombstone event; deleted content is not carried on the wire.
+        ///
+        /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent`.
+        public struct FixtureSyncTombstoneEvent: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_foundation_hyphen_fixture_period_sync_hyphen_event_sol_v1 = "agora.foundation-fixture.sync-event/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/schema_version`.
+            public var schema_version: Components.Schemas.FixtureSyncTombstoneEvent.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/stream_id`.
+            public var stream_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/seq`.
+            public var seq: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/event_id`.
+            public var event_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/kind`.
+            @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case fixture_period_message_tombstone = "fixture.message_tombstone"
+            }
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/kind`.
+            public var kind: Components.Schemas.FixtureSyncTombstoneEvent.kindPayload
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/actor`.
+            public var actor: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/occurred_at`.
+            public var occurred_at: Components.Schemas.Timestamp
+            /// - Remark: Generated from `#/components/schemas/FixtureSyncTombstoneEvent/payload`.
+            public var payload: Components.Schemas.FixtureSyncTombstone
+            /// Creates a new `FixtureSyncTombstoneEvent`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - stream_id:
+            ///   - seq:
+            ///   - event_id:
+            ///   - kind:
+            ///   - actor:
+            ///   - occurred_at:
+            ///   - payload:
+            public init(
+                schema_version: Components.Schemas.FixtureSyncTombstoneEvent.schema_versionPayload,
+                stream_id: Components.Schemas.Uuid,
+                seq: Components.Schemas.Revision,
+                event_id: Components.Schemas.Uuid,
+                kind: Components.Schemas.FixtureSyncTombstoneEvent.kindPayload,
+                actor: Components.Schemas.Uuid,
+                occurred_at: Components.Schemas.Timestamp,
+                payload: Components.Schemas.FixtureSyncTombstone
+            ) {
+                self.schema_version = schema_version
+                self.stream_id = stream_id
+                self.seq = seq
+                self.event_id = event_id
+                self.kind = kind
+                self.actor = actor
+                self.occurred_at = occurred_at
+                self.payload = payload
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case stream_id
+                case seq
+                case event_id
+                case kind
+                case actor
+                case occurred_at
+                case payload
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.FixtureSyncTombstoneEvent.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.stream_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .stream_id
+                )
+                self.seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .seq
+                )
+                self.event_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .event_id
+                )
+                self.kind = try container.decode(
+                    Components.Schemas.FixtureSyncTombstoneEvent.kindPayload.self,
+                    forKey: .kind
+                )
+                self.actor = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .actor
+                )
+                self.occurred_at = try container.decode(
+                    Components.Schemas.Timestamp.self,
+                    forKey: .occurred_at
+                )
+                self.payload = try container.decode(
+                    Components.Schemas.FixtureSyncTombstone.self,
+                    forKey: .payload
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "stream_id",
+                    "seq",
+                    "event_id",
+                    "kind",
+                    "actor",
+                    "occurred_at",
+                    "payload"
+                ])
+            }
+        }
         /// Exact 40-hexadecimal Git object name.
         ///
         /// - Remark: Generated from `#/components/schemas/GitSha`.
@@ -876,6 +1579,46 @@ extension Components {
                 )
                 try decoder.ensureNoAdditionalProperties(knownKeys: [
                     "scope_id"
+                ])
+            }
+        }
+        /// Last committed and applied sequence for one stream. Streams have no global order.
+        ///
+        /// - Remark: Generated from `#/components/schemas/StreamCursor`.
+        public struct StreamCursor: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/StreamCursor/stream_id`.
+            public var stream_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/StreamCursor/committed_seq`.
+            public var committed_seq: Components.Schemas.Revision
+            /// Creates a new `StreamCursor`.
+            ///
+            /// - Parameters:
+            ///   - stream_id:
+            ///   - committed_seq:
+            public init(
+                stream_id: Components.Schemas.Uuid,
+                committed_seq: Components.Schemas.Revision
+            ) {
+                self.stream_id = stream_id
+                self.committed_seq = committed_seq
+            }
+            public enum CodingKeys: String, CodingKey {
+                case stream_id
+                case committed_seq
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.stream_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .stream_id
+                )
+                self.committed_seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .committed_seq
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "stream_id",
+                    "committed_seq"
                 ])
             }
         }
