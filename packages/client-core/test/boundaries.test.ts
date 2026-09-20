@@ -1,12 +1,13 @@
 import { ESLint } from 'eslint';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
 import { expect, test } from 'vitest';
 
 const root = path.resolve(import.meta.dirname, '../../..');
 const engine = new ESLint({ cwd: root, ignore: false });
-const boundary = async (code: string, file: string, lint = engine) => (await lint.lintText(code, { filePath: path.join(root, file) })).flatMap((r) => r.messages).filter((m) => m.ruleId?.startsWith('agora/'));
+const lintMessages = async (code: string, file: string, lint = engine) => (await lint.lintText(code, { filePath: path.join(root, file) })).flatMap((r) => r.messages);
+const boundary = async (code: string, file: string, lint = engine) => (await lintMessages(code, file, lint)).filter((m) => m.ruleId?.startsWith('agora/'));
 const pure = 'export const identity = (value: string): string => value;';
 const consumers = ['packages/client-core/src/model.ts', 'packages/domain/src/index.ts', 'contracts/src/index.ts'];
 const forbidden = ['react', 'react-dom', '@tanstack/react-query', 'hono', 'drizzle-orm', 'pg', '@agora/storage', '@agora/center', 'ws', 'node:http', 'node:https', 'undici', 'axios', 'openai', '@anthropic-ai/sdk', '@ai-sdk/google', '@types/react', '@types/node'];
@@ -44,7 +45,7 @@ test('private relative paths, unknown dynamic targets and facade values cannot e
 test('a private storage adapter may import pg but cannot leak its types through the public port', async () => {
 	const file = 'packages/storage/src/database.ts';
 	const privateSdk = "import { Pool } from 'pg'; export function openDatabase(): Promise<boolean> { const pool = new Pool(); return pool.end().then(() => true); }";
-	expect(await boundary(privateSdk, file)).toEqual([]);
+	expect((await lintMessages(privateSdk, file)).filter((m) => m.severity === 2)).toEqual([]);
 	for (const leak of [
 		"import { Pool } from 'pg'; interface Hidden { nested: { client: Pool } } export function openDatabase(): Hidden { return { nested: { client: new Pool() } }; }",
 		"import { Pool } from 'pg'; export function openDatabase(): Promise<ReadonlyArray<{ make: () => Pool }>> { throw new Error('fixture'); }",
@@ -56,12 +57,13 @@ test('a private storage adapter may import pg but cannot leak its types through 
 
 test('removing either boundary rule makes its denial assertion turn red', async () => {
 	for (const [rule, file, code] of [
-		['agora/import-boundary', 'packages/client-core/src/model.ts', "export type Leak = import('hono').Hono;"],
-		['agora/public-types', 'packages/storage/src/database.ts', "import { Pool } from 'pg'; export function openDatabase(): Pool { return new Pool(); }"],
+		['agora/import-boundary', 'packages/client-core/src/model.ts', readFileSync(path.join(root, 'packages/client-core/src/model.ts'), 'utf8') + "\nimport type { Database } from '@agora/storage'; export type Leak = keyof Database;"],
+		['agora/public-types', 'packages/storage/src/database.ts', readFileSync(path.join(root, 'packages/storage/src/database.ts'), 'utf8').replace('export interface Database {', 'export interface Database { readonly leakedPool?: Pool;')],
 	] as const) {
 		expect((await boundary(code, file)).some((m) => m.ruleId === rule)).toBe(true);
 		const disabled = new ESLint({ cwd: root, ignore: false, overrideConfig: [{ rules: { [rule]: 'off' } }] });
-		const messages = await boundary(code, file, disabled);
+		const messages = await lintMessages(code, file, disabled);
+		expect(messages.filter((m) => m.severity === 2)).toEqual([]);
 		expect(() => { expect(messages.some((m) => m.ruleId === rule)).toBe(true); }).toThrow('expected false to be true');
 	}
 }, 120_000);
