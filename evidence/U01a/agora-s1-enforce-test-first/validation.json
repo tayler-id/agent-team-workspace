@@ -1,0 +1,223 @@
+{
+  "head": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+  "results": [
+    {
+      "command": [
+        "node",
+        "--version"
+      ],
+      "started_at": "2026-09-20T16:55:00.977864+00:00",
+      "finished_at": "2026-09-20T16:55:00.991865+00:00",
+      "elapsed_ms": 13.869,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-00.log",
+      "digest": "sha256:a8f8f7ba69d43285857a0ea34017ef8dadd3ba012404bb7dd188fc773cf63ee2"
+    },
+    {
+      "command": [
+        "pnpm",
+        "--version"
+      ],
+      "started_at": "2026-09-20T16:55:00.991956+00:00",
+      "finished_at": "2026-09-20T16:55:01.119700+00:00",
+      "elapsed_ms": 127.764,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-01.log",
+      "digest": "sha256:da0893892ade29329f7a2d34ebc8dd462d153d05243001f6522f08da56cdc8a0"
+    },
+    {
+      "command": [
+        "pg_ctl",
+        "--version"
+      ],
+      "started_at": "2026-09-20T16:55:01.119780+00:00",
+      "finished_at": "2026-09-20T16:55:01.129633+00:00",
+      "elapsed_ms": 9.871,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-02.log",
+      "digest": "sha256:789cd8d3e16f720942bbe195df7fc8a372e57704934973549c45b8182f2e7b63"
+    },
+    {
+      "command": [
+        "swift",
+        "--version"
+      ],
+      "started_at": "2026-09-20T16:55:01.129692+00:00",
+      "finished_at": "2026-09-20T16:55:01.483457+00:00",
+      "elapsed_ms": 353.784,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-03.log",
+      "digest": "sha256:5fa4b669e41b23b9ad0760253d062493487f93cf5d8ad8c44f0d4fd635137499"
+    },
+    {
+      "command": [
+        "pnpm",
+        "install",
+        "--frozen-lockfile"
+      ],
+      "started_at": "2026-09-20T16:55:01.483528+00:00",
+      "finished_at": "2026-09-20T16:55:01.702185+00:00",
+      "elapsed_ms": 218.679,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-04.log",
+      "digest": "sha256:fe7a05b5dfa1aea5960f4edfca6010a18883abce62bf49d3137eba86776ffa7f"
+    },
+    {
+      "command": [
+        "pnpm",
+        "audit",
+        "--json"
+      ],
+      "started_at": "2026-09-20T16:55:01.702255+00:00",
+      "finished_at": "2026-09-20T16:55:02.239704+00:00",
+      "elapsed_ms": 537.492,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-05.log",
+      "digest": "sha256:53fffac9d1f4c670d03248d227edd0f8963297eced25ee4d32d6e29d5d5b7c09"
+    },
+    {
+      "command": [
+        "pnpm",
+        "check"
+      ],
+      "started_at": "2026-09-20T16:55:02.239830+00:00",
+      "finished_at": "2026-09-20T16:55:46.272403+00:00",
+      "elapsed_ms": 44032.69,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-06.log",
+      "digest": "sha256:a244cbd5f00293e3413bda3d27c39b7e1c35cb58de2233b8a61c1a9f454758ef"
+    },
+    {
+      "command": [
+        "pnpm",
+        "docs:build"
+      ],
+      "started_at": "2026-09-20T16:55:46.272535+00:00",
+      "finished_at": "2026-09-20T16:55:46.607367+00:00",
+      "elapsed_ms": 334.863,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-07.log",
+      "digest": "sha256:27cd62a25479999baa18964e365c47a0eea2a5acc852b156a8d4544c6b620240"
+    },
+    {
+      "command": [
+        "pnpm",
+        "contracts:conform",
+        "--",
+        "--json"
+      ],
+      "started_at": "2026-09-20T16:55:46.607456+00:00",
+      "finished_at": "2026-09-20T16:55:49.863900+00:00",
+      "elapsed_ms": 3256.473,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-08.log",
+      "digest": "sha256:31e0267debe283563c428ada6277d8f26e8e477cadd091500dadeaaa2c67c7f1"
+    },
+    {
+      "command": [
+        "pnpm",
+        "client:replay",
+        "--",
+        "--json",
+        "--swift"
+      ],
+      "started_at": "2026-09-20T16:55:49.863984+00:00",
+      "finished_at": "2026-09-20T16:55:53.032047+00:00",
+      "elapsed_ms": 3168.091,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-09.log",
+      "digest": "sha256:4983fd7bbb65f7ea237b832b2f6060b56fe537facf15e1a01496771a54619c06"
+    },
+    {
+      "command": [
+        "pnpm",
+        "boundaries"
+      ],
+      "started_at": "2026-09-20T16:55:53.032120+00:00",
+      "finished_at": "2026-09-20T16:56:02.470115+00:00",
+      "elapsed_ms": 9438.04,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-10.log",
+      "digest": "sha256:332e35970fe338b5f8806250c756ab75c60d936b47659b592276abec8f126b93"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/with-test-postgres.mjs",
+        "node",
+        "scripts/probe-center.mjs"
+      ],
+      "started_at": "2026-09-20T16:56:02.470205+00:00",
+      "finished_at": "2026-09-20T16:56:03.622286+00:00",
+      "elapsed_ms": 1152.104,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-11.log",
+      "digest": "sha256:99d2ac3bd424828a04e1d94de60987c3fc18678f1f837113fd908fd6e2544d4b"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/with-test-postgres.mjs",
+        "bash",
+        "-c",
+        "node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts"
+      ],
+      "started_at": "2026-09-20T16:56:03.622364+00:00",
+      "finished_at": "2026-09-20T16:56:04.839151+00:00",
+      "elapsed_ms": 1216.81,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-12.log",
+      "digest": "sha256:5f20442d6900e8f7a5df85c5ce0e3bfbbdd5cccdd3dafcbb30e83efa80d97017"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-design-checks.mjs"
+      ],
+      "started_at": "2026-09-20T16:56:04.839215+00:00",
+      "finished_at": "2026-09-20T16:56:07.465129+00:00",
+      "elapsed_ms": 2625.939,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-13.log",
+      "digest": "sha256:15939871d5e8c4b78203ff9ebe117dbfb639717251b6242d86fe0e54fe6abda4"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-design-handoff-checks.mjs"
+      ],
+      "started_at": "2026-09-20T16:56:07.465191+00:00",
+      "finished_at": "2026-09-20T16:56:09.491154+00:00",
+      "elapsed_ms": 2025.99,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-14.log",
+      "digest": "sha256:e67de277dcebd6e3ddb1b4f1d54d23db8e8e9c1dbbdd4b62dc8dddd534feee7d"
+    },
+    {
+      "command": [
+        "node",
+        ".agents/skills/poteto-mode/scripts/check-plan.mjs",
+        "docs/implementation-plan.md"
+      ],
+      "started_at": "2026-09-20T16:56:09.491223+00:00",
+      "finished_at": "2026-09-20T16:56:09.518392+00:00",
+      "elapsed_ms": 27.191,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-15.log",
+      "digest": "sha256:6216bdb31816bccf18d3caa739eab44e68518a1c2b0feea4c111218e5c303ee0"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_at": "2026-09-20T16:56:09.518451+00:00",
+      "finished_at": "2026-09-20T16:56:09.550333+00:00",
+      "elapsed_ms": 31.9,
+      "exit": 0,
+      "artifact": "evidence/U01a/agora-s1-enforce-test-first/validation-16.log",
+      "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

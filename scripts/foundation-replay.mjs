@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { tmpdir } from 'node:os';
 
 export const task = 'agora-s1-enforce-test-first';
 export const testFile = 'packages/verification/test/admission.test.ts';
@@ -31,7 +32,10 @@ export function withCopy(head, action) {
 		if (before !== digest()) throw new Error('source_mutation');
 		return result;
 	} finally {
-		try { git('worktree', 'remove', '--force', copy); } finally { rmSync(copy, { recursive: true, force: true }); }
+		try { git('worktree', 'remove', '--force', copy); } finally {
+			rmSync(copy, { recursive: true, force: true });
+			for (const suffix of ['.build.lock', '.build_Package.resolved.lock', '.build_workspace-state.json.lock']) rmSync(path.join(tmpdir(), `${copy.replaceAll('/', '_')}_contracts_swift_${suffix}`), { force: true });
+		}
 	}
 }
 export function assertions(document) {

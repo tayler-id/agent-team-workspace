@@ -1,0 +1,6 @@
+result: "{\"focused\":\"Skip to content\",\"outline\":\"solid\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"hash\":\"#main\",\"focused\":\"main\",\"landmark\":\"main\",\"animations\":0}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state

@@ -32,7 +32,7 @@ In progress at this task snapshot. The bounded driver and tests implement U01a.B
 
 ## Verification and proof
 
-The [policy](repo:scripts/foundation-policy.mjs), [replay engine](repo:scripts/foundation-replay.mjs), [public driver](repo:scripts/foundation.mjs) and [report schema](repo:contracts/schemas/foundation.schema.json) define the implementation. The [admission tests](repo:packages/verification/test/admission.test.ts) and [protocol negatives](repo:packages/verification/test/protocol.test.ts) check behavior. Retained proof belongs under `evidence/U01a/agora-s1-enforce-test-first/`; the baseline stub is an intentional test-only parent, not a product capability. The [verification instructions](repo:.agents/skills/verify-agora/SKILL.md) retain the literal commands.
+The [policy](repo:scripts/foundation-policy.mjs), [replay engine](repo:scripts/foundation-replay.mjs), [public driver](repo:scripts/foundation.mjs) and [report schema](repo:contracts/schemas/foundation.schema.json) define the implementation. The [admission tests](repo:packages/verification/test/admission.test.ts) and [protocol negatives](repo:packages/verification/test/protocol.test.ts) check behavior. The [retained task proof](repo:evidence/U01a/agora-s1-enforce-test-first/README.md) includes red/green receipts, both lane reports, security limits and the original performance anomaly. The baseline stub is an intentional test-only parent, not a product capability. The [verification instructions](repo:.agents/skills/verify-agora/SKILL.md) retain the literal commands.
 
 ### Public command reference
 

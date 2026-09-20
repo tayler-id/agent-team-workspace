@@ -1,0 +1,548 @@
+{
+  "head": "cfd755a902c865c5ac993d9bcff146f0ea8932c9",
+  "tree": "3aed6210a1af38238c014080a0939b955b9ec9fa",
+  "checks": [
+    {
+      "command": [
+        "node",
+        "scripts/with-test-postgres.mjs",
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--reporter=json",
+        "--outputFile=.scratch/owners.json"
+      ],
+      "started": "2026-09-20T16:58:23.942Z",
+      "finished": "2026-09-20T16:59:11.786Z",
+      "exit": 0,
+      "output": "JSON report written to /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/.scratch/foundation-x8Z8xc/.scratch/owners.json\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"started\",\"socket_dir\":\"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-YmCMUS\",\"database\":\"agora_test\",\"owner_role\":\"agora_owner\",\"app_role\":\"agora_app\",\"bypass_role\":\"agora_bypass\"}\n"
+    },
+    {
+      "command": [
+        "node",
+        "contracts/tools/generate.mjs",
+        "--check"
+      ],
+      "started": "2026-09-20T16:59:11.786Z",
+      "finished": "2026-09-20T16:59:13.308Z",
+      "exit": 0,
+      "output": "{\"schema_version\":\"agora.contract-generation-run/v1\",\"mode\":\"check\",\"outcome\":\"pass\",\"exit\":0,\"outputs\":[{\"file\":\"contracts/generated/openapi.bundled.json\",\"digest\":\"sha256:c2964653a9e91368d8dca548efc724782f7e7b22347bf8cf91b212e28d51436e\"},{\"file\":\"contracts/generated/typescript/openapi.d.ts\",\"digest\":\"sha256:ad1253c8d32e4c7f297f2245d11b8015d617098a9c6250c60643e91d84e7007d\"},{\"file\":\"contracts/swift/Sources/AgoraContracts/Generated/Client.swift\",\"digest\":\"sha256:0c91522556b6648d8629bc401e328ba76ad0b45242eabeb71ef8b7eba57b969d\"},{\"file\":\"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Headers.swift\",\"digest\":\"sha256:b98a3f97c4cb97176fe979d198d2a3705972f99e4346887f0af4a266c6de8365\"},{\"file\":\"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Parameters.swift\",\"digest\":\"sha256:d595dcdbd4f83d327e4c2ac0afd0c24e1f480a8a51080b3317e3705ecfc805d4\"},{\"file\":\"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+RequestBodies.swift\",\"digest\":\"sha256:00a9569f70ba89057fd5fd14b4ecbbad8a34d6941e8bb905c57dc198873116d5\"},{\"file\":\"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Responses.swift\",\"digest\":\"sha256:9398591b37a3141b09b726fcf5612eabf46e641bb56e0da6d7f0a098d307b348\"},{\"file\":\"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift\",\"digest\":\"sha256:b826264997a3a7f03f15b20cce98356f508cf8d49bf5904eb46c3a08e479d269\"},{\"file\":\"contracts/swift/Sources/AgoraContracts/Generated/Types+Components.swift\",\"digest\":\"sha256:a823627f9eccdb71d20853743709c54609c76fe51096cd751aa2493f3f828a38\"},{\"file\":\"contracts/swift/Sources/AgoraContracts/Generated/Types+Operations.swift\",\"digest\":\"sha256:163d477ad74b98eafe77c46470b1bc2ef32ae144eb7bd0ee9557d880ab2ace79\"},{\"file\":\"contracts/swift/Sources/AgoraContracts/Generated/Types.swift\",\"digest\":\"sha256:49aa1d90e0c5dde8f87940abfff61f2b0e416352bda4437beffd1da8beb4a869\"}],\"drift\":[]}\n"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/drive-client-core.ts",
+        "--json",
+        "--swift"
+      ],
+      "started": "2026-09-20T16:59:13.308Z",
+      "finished": "2026-09-20T16:59:14.537Z",
+      "exit": 0,
+      "output": "{\"outcome\":\"pass\",\"fixture\":\"contracts/fixtures/replay.json\",\"runtime\":\"v24.16.0\",\"elapsed_ms\":1139.403125,\"results\":[{\"id\":\"ordered\",\"outcome\":\"pass\",\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"transcript\":[{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"hello\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"1\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"3\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"3\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"4\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":2,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"4\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"5\"}]}]},{\"id\":\"gap\",\"outcome\":\"pass\",\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"transcript\":[{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"hello\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"1\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"hello\"}}],\"runs\":[],\"unread\":1,\"mode\":\"gap\",\"pending\":[{\"type\":\"event\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"4\",\"change\":{\"type\":\"message\",\"message\":{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}}}]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"1\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"gap\",\"pending\":[{\"type\":\"event\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"4\",\"change\":{\"type\":\"message\",\"message\":{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}}}]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"2\"}],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"gap\",\"pending\":[{\"type\":\"event\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"4\",\"change\":{\"type\":\"message\",\"message\":{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}}},{\"type\":\"event\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"5\",\"change\":{\"type\":\"message\",\"message\":{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}}}}]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"2\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"5\"}]}]},{\"id\":\"duplicates\",\"outcome\":\"pass\",\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"transcript\":[{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"hello\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"1\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"gap\",\"pending\":[{\"type\":\"event\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"4\",\"change\":{\"type\":\"message\",\"message\":{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}}}]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"2\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"4\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":2,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"4\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"4\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":2,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"5\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[]}]},{\"id\":\"unknown-state\",\"outcome\":\"pass\",\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"upgrade\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"transcript\":[{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"hello\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"1\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"upgrade\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"upgrade\",\"streamId\":\"11111111-1111-4111-8111-111111111111\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"upgrade\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[]}]},{\"id\":\"unfilled-gap\",\"outcome\":\"pass\",\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"hello\"}}],\"runs\":[],\"unread\":1,\"mode\":\"gap\",\"pending\":[{\"type\":\"event\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"3\",\"change\":{\"type\":\"run\",\"run\":{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}}}]}],\"commands\":[],\"drafts\":[]},\"transcript\":[{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"hello\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"1\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"hello\"}}],\"runs\":[],\"unread\":1,\"mode\":\"gap\",\"pending\":[{\"type\":\"event\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"3\",\"change\":{\"type\":\"run\",\"run\":{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}}}]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"1\"}],\"acknowledgements\":[]}]},{\"id\":\"stale-run-revision\",\"outcome\":\"pass\",\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"6\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"transcript\":[{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"hello\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[{\"type\":\"replay\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"after\":\"1\"}],\"acknowledgements\":[]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"2\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"3\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"3\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"4\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"2\",\"content\":{\"tag\":\"visible\",\"body\":\"edited\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":2,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"4\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"5\"}]},{\"state\":{\"rooms\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"cursor\":\"6\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"createdSeq\":\"1\",\"revision\":\"3\",\"content\":{\"tag\":\"tombstone\"}},{\"id\":\"22222222-2222-4222-8222-222222222222\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"second\"}}],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"unread\":1,\"mode\":\"live\",\"pending\":[]}],\"commands\":[],\"drafts\":[]},\"requests\":[],\"acknowledgements\":[{\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"seq\":\"6\"}]}]}],\"swift\":{\"outcome\":\"pass\",\"report\":{\"consumer\":\"swift\",\"replays\":[{\"id\":\"ordered\",\"outcome\":\"pass\",\"state\":{\"commands\":[],\"drafts\":[],\"rooms\":[{\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"content\":{\"tag\":\"tombstone\"},\"createdSeq\":\"1\",\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"3\"},{\"content\":{\"body\":\"second\",\"tag\":\"visible\"},\"createdSeq\":\"4\",\"id\":\"22222222-2222-4222-8222-222222222222\",\"revision\":\"1\"}],\"mode\":\"live\",\"pending\":[],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"unread\":1}]}},{\"id\":\"gap\",\"outcome\":\"pass\",\"state\":{\"commands\":[],\"drafts\":[],\"rooms\":[{\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"content\":{\"tag\":\"tombstone\"},\"createdSeq\":\"1\",\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"3\"},{\"content\":{\"body\":\"second\",\"tag\":\"visible\"},\"createdSeq\":\"4\",\"id\":\"22222222-2222-4222-8222-222222222222\",\"revision\":\"1\"}],\"mode\":\"live\",\"pending\":[],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"unread\":1}]}},{\"id\":\"duplicates\",\"outcome\":\"pass\",\"state\":{\"commands\":[],\"drafts\":[],\"rooms\":[{\"cursor\":\"5\",\"lastSeen\":\"0\",\"messages\":[{\"content\":{\"tag\":\"tombstone\"},\"createdSeq\":\"1\",\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"3\"},{\"content\":{\"body\":\"second\",\"tag\":\"visible\"},\"createdSeq\":\"4\",\"id\":\"22222222-2222-4222-8222-222222222222\",\"revision\":\"1\"}],\"mode\":\"live\",\"pending\":[],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"unread\":1}]}},{\"id\":\"unknown-state\",\"outcome\":\"pass\",\"state\":{\"commands\":[],\"drafts\":[],\"rooms\":[{\"cursor\":\"2\",\"lastSeen\":\"0\",\"messages\":[{\"content\":{\"body\":\"edited\",\"tag\":\"visible\"},\"createdSeq\":\"1\",\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\"}],\"mode\":\"upgrade\",\"pending\":[],\"runs\":[],\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"unread\":1}]}},{\"id\":\"unfilled-gap\",\"outcome\":\"pass\",\"state\":{\"commands\":[],\"drafts\":[],\"rooms\":[{\"cursor\":\"1\",\"lastSeen\":\"0\",\"messages\":[{\"content\":{\"body\":\"hello\",\"tag\":\"visible\"},\"createdSeq\":\"1\",\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"1\"}],\"mode\":\"gap\",\"pending\":[{\"change\":{\"run\":{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"},\"type\":\"run\"},\"seq\":\"3\",\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"type\":\"event\"}],\"runs\":[],\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"unread\":1}]}},{\"id\":\"stale-run-revision\",\"outcome\":\"pass\",\"state\":{\"commands\":[],\"drafts\":[],\"rooms\":[{\"cursor\":\"6\",\"lastSeen\":\"0\",\"messages\":[{\"content\":{\"tag\":\"tombstone\"},\"createdSeq\":\"1\",\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"3\"},{\"content\":{\"body\":\"second\",\"tag\":\"visible\"},\"createdSeq\":\"4\",\"id\":\"22222222-2222-4222-8222-222222222222\",\"revision\":\"1\"}],\"mode\":\"live\",\"pending\":[],\"runs\":[{\"id\":\"11111111-1111-4111-8111-111111111111\",\"revision\":\"2\",\"state\":\"running\"}],\"streamId\":\"11111111-1111-4111-8111-111111111111\",\"unread\":1}]}}],\"schema_version\":\"agora.contract-conformance/v1\",\"vectors\":[]}}}\n"
+    },
+    {
+      "command": [
+        "pnpm",
+        "docs:check"
+      ],
+      "started": "2026-09-20T16:59:14.537Z",
+      "finished": "2026-09-20T16:59:17.073Z",
+      "exit": 0,
+      "output": "\n> agora@ docs:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/.scratch/foundation-x8Z8xc\n> markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs && node scripts/verify-design-handoff.mjs && pnpm docs:validate && pnpm docs:test\n\nmarkdownlint-cli2 v0.23.2 (markdownlint v0.41.1)\nFinding: AGENTS.md docs/**/*.md evidence/**/*.md .agents/skills/verify-agora/SKILL.md\nLinting: 57 files\nSummary: 0 issues in 0 files\nPASS authored structure: 7 documents; 24 requirements; 26 live-scenario mappings\nPASS semantic readiness: 22 milestones; 66 independently gated tasks; 66 exactly owned Build outcomes\nPASS combined dependency graph; 8 foundation proofs; evidence/canary before model writes; cloud-independent later tracks\nPASS 47 official skills; 76 append-only decisions; 192 local links; authored style/privacy checks\nSCOPE static design readiness only; no runtime foundation or product acceptance has run; upstream format/model literals are not semantic authority\nPASS packet structure: 14 files; 744 meaningful lines; required sections present\nPASS 90 relative links and anchors; 6 Mermaid diagrams; stage/status vocabularies; no private paths, placeholders or long dashes\nSCOPE packet structure only; it cannot verify that prose is true or that any screen exists; base revision 606cba2\n\n> agora@ docs:validate /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/.scratch/foundation-x8Z8xc\n> node docs/site/build.mjs --check\n\n{\"outcome\":\"pass\",\"pages\":24,\"milestones\":22}\n\n> agora@ docs:test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/.scratch/foundation-x8Z8xc\n> node --test docs/site/test/*.test.ts\n\n✔ the same public build driver produces a valid baseline before corpus assertions (0.29925ms)\n✔ the complete corpus has 24 pages and both audience tracks (0.284708ms)\n✔ the atlas explains all nine system nodes and eight connections (0.173792ms)\n✔ the committed design packet is readable as linked documentation, not a source-code dump (0.176875ms)\n✔ current commands and planned product availability have separate references (0.287791ms)\n✔ disabling only the private path guard makes its behavioral assertion fail (96.035833ms)\n✔ disabling only the : section guard makes its behavioral assertion fail (92.798917ms)\n✔ disabling only the : visual guard makes its behavioral assertion fail (89.774541ms)\n✔ disabling only the : link guard makes its behavioral assertion fail (89.183625ms)\n✔ disabling only the : source guard makes its behavioral assertion fail (90.429542ms)\n✔ disabling only the snapshot revision guard makes its behavioral assertion fail (94.305916ms)\n✔ disabling only the invalid status guard makes its behavioral assertion fail (94.957459ms)\n✔ disabling only the Built proof guard makes its behavioral assertion fail (97.130083ms)\n✔ disabling only the milestone coverage guard makes its behavioral assertion fail (95.60725ms)\n✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (94.539708ms)\n✔ disabling only the : outcome guard makes its behavioral assertion fail (102.808167ms)\n✔ disabling only the : stage guard makes its behavioral assertion fail (94.731583ms)\n✔ disabling only the inventory missing guard makes its behavioral assertion fail (93.89825ms)\n✔ disabling only the feature documentation guard makes its behavioral assertion fail (93.221375ms)\n✔ public documentation guard accepts the complete valid fixture (2.539792ms)\n✔ broken internal page and anchor links fail (1.093083ms)\n✔ feature explanations and visual flows are mandatory (0.271083ms)\n✔ progress statuses are closed and Built requires source test and evidence (0.28625ms)\n✔ all milestones must occur exactly once with an outcome and release stage (0.285ms)\n✔ milestone outcomes mirror the authoritative plan instead of drifting (0.099125ms)\n✔ every executable and package must have a documentation home (0.074292ms)\n✔ every feature-map entry requires a validated feature page (0.076042ms)\n✔ private absolute paths and unsafe links never enter the site (0.158709ms)\n✔ production links include generated navigation, fragment, stylesheet and nested source views (0.655875ms)\n✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (1.813875ms)\n✔ Mermaid mirror carries the same status and relationships as the data owner (0.140375ms)\nℹ tests 31\nℹ suites 0\nℹ pass 31\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1374.998541\n"
+    },
+    {
+      "command": [
+        "node",
+        "docs/site/build.mjs"
+      ],
+      "started": "2026-09-20T16:59:17.074Z",
+      "finished": "2026-09-20T16:59:17.227Z",
+      "exit": 0,
+      "output": "{\"outcome\":\"pass\",\"pages\":24,\"milestones\":22,\"output\":\".docs-dist\",\"sections\":4}\n"
+    },
+    {
+      "command": [
+        "pnpm",
+        "lint"
+      ],
+      "started": "2026-09-20T16:59:17.227Z",
+      "finished": "2026-09-20T16:59:19.684Z",
+      "exit": 0,
+      "output": "\n> agora@ lint /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/.scratch/foundation-x8Z8xc\n> eslint .\n\n"
+    },
+    {
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "started": "2026-09-20T16:59:19.684Z",
+      "finished": "2026-09-20T16:59:20.839Z",
+      "exit": 0,
+      "output": "\n> agora@ typecheck /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/.scratch/foundation-x8Z8xc\n> tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json\n\n"
+    }
+  ],
+  "assertions": [
+    {
+      "subject": "a fresh database applies every journal entry once and a second run is a no-op with the same schema digest",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "a full gap can still drain, and newer snapshot cursors cannot resurrect older message revisions",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "a hand edit to a generated consumer is drift that names the file",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "a missing agora_app role blocks the migration with a prerequisite error and applies nothing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "a non-UUID scope and a non-JSON body are both 400 malformed_command",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "a private storage adapter may import pg but cannot leak its types through the public port",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "an actor is denied a subject in another scope with a stable reason code",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "an actor may touch a subject in its own scope",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "an unavailable consumer result is a failure, never a silent pass on a reject vector",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "an unknown field is a 400 malformed_command with the offending path, never silently removed",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "an unknown route is a JSON 404 with a stable reason code and a correlation id",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "applicability cannot waive behavioral tests",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "asScopeId normalizes case and rejects non-UUID text",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "baseline admission driver accepts a complete task",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "baseline idle driver works before accepting an immutable snapshot and requesting strict-after replay",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "buffer-bound guard is necessary: disabling it in an isolated copy turns its public assertion red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "canonicalJson rejects non-finite numbers with the offending path",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "canonicalJson sorts member names recursively and drops whitespace",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "command-digest guard is necessary: disabling it in an isolated copy turns its public assertion red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "contracts/src/index.ts rejects framework, provider, storage and transport imports in every syntax",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "decimal cursor and message/run revisions compare beyond Number precision",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "detached Ed25519 signatures verify over the canonical bytes, and a tampered payload fails",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "digestCanonical is stable across member order",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "drafts stay explicitly unsent through route/snapshot changes; logout and revoke erase private state",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "duplicate guard is necessary: disabling it in an isolated copy turns its public assertion red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "every RFC 9562 UUID shape the schema accepts is also accepted by the decision, never a 500",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "every vector meets its golden expectation in TypeScript and every published component has a direct vector",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "export maps reject existing private files and the portable compile lane has no DOM or Node globals",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "FG01.red-required",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "fixture synchronization is not reachable from any production HTTP operation",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "forged or stale proof cannot pass",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "gap-ack guard is necessary: disabling it in an isolated copy turns its public assertion red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "gaps are bounded and invalid snapshot or changed message positions resync instead of acknowledging",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "GET /api/v1/health reports liveness without touching any dependency",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "GET /api/v1/health/ready is 200 ready against the real test database",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "GET /api/v1/health/ready is 503 not_ready when the database port refuses connections",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "GET /api/v1/health/ready reports not_ready with a 503 when the database probe fails",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "input-ownership guard is necessary: disabling it in an isolated copy turns its public assertion red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "lane 9 disables a real guard, detects always-red and stale negatives, and preserves source",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "missing client denies with client_missing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "missing green denies with green_missing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "missing guard denies with guard_missing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "operations reference published components only; inline schemas are refused",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "ordered replay, gaps and duplicate suppression converge to a literal snapshot",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "packages/client-core/src/model.ts rejects framework, provider, storage and transport imports in every syntax",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "packages/domain/src/index.ts rejects framework, provider, storage and transport imports in every syntax",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "POST /api/v1/fixture/policy/decisions allows an actor in the subject scope",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "POST /api/v1/fixture/policy/decisions denies a foreign scope with scope_mismatch",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "private relative paths, unknown dynamic targets and facade values cannot enter core",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "public usage failures have structured output and exit 64",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "race concurrent appends to one stream receive contiguous distinct sequences",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "race exactly one of eight concurrent claims wins and the losers see claimed: false",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "race twelve appended events read back in numeric sequence order, not text order",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "receipts dedupe commands but never fast-forward a timeline; offline sends are not queued",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "receipts reject infrastructure reds, duplicate subjects, skipped green and arbitrary exit prose",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "removing either boundary rule makes its denial assertion turn red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "removing the event-kind and unknown-field guards makes the denial assertions turn red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "retry decisions preserve the original id/digest, refresh stale state and respect denial/rate delay",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "revision guard is necessary: disabling it in an isolated copy turns its public assertion red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "rollback a failed transaction leaves no event and does not advance the stream counter",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "row-level security a connection without a bound scope sees nothing",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "row-level security another scope cannot attach an event to the owning scope's stream through the foreign key",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "row-level security another scope sees no rows, cannot append, and cannot forge a row into the owning scope",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "row-level security guard negative: a BYPASSRLS role sees every scope, so the denials above depend on the policies, not on the data",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "row-level security identifiers are scoped: another scope gets its own stream and claim under the same ids without learning they exist elsewhere",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "row-level security row security is forced, so even the table owner is confined to the bound scope",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "row-level security the owning scope reads its own rows",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "semantic prerequisite and feature mapping are required",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "snapshot-order guard is necessary: disabling it in an isolated copy turns its public assertion red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "snapshots race replay without dropping buffered events or rolling back a newer cursor",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "streams have independent cursors and a missing snapshot cannot be invented from an event",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "Swift and TypeScript agree on closed synchronization values and decimal precision",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "task success is not foundation or feature admission",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the app role and the schema owner are neither superusers nor BYPASSRLS, so forced row security binds both",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the CLI returns pass only for literal snapshots, and distinguishes assertion failure from usage error",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the committed consumers are byte-identical to a clean regeneration from the authoritative sources",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the documentation gate rejects a malformed TOML config rather than hanging",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the existing Swift conformance driver independently reproduces each golden replay projection",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the fixture adapter rejects malformed snapshots, cross-stream delivery and malformed receipts",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the live export-map reader permits only the exact schema wildcard and closed, contained code entries",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the live wire driver accepts baseline health and the literal synchronization values",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the public boundary command writes its machine report at the documented artifact path",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the public fixture driver converges every literal replay and refuses unknown state without cursor acknowledgement",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the subset gate rejects every weakening before a consumer is generated",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the Swift consumer reaches the same acceptance, canonical bytes, digests and signature verdicts",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "the test-only public harness starts empty and accepts an idle step without acknowledgement",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "TypeScript rejects each malformed vector at its offending path without coercion, defaults or removal",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "TypeScript reproduces the golden canonical bytes and digests for accepted vectors",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "unknown guard is necessary: disabling it in an isolated copy turns its public assertion red",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "unknown proof and duplicate subjects deny",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "unknown state changes pause with no projection mutation or ack and require supported resync",
+      "status": "passed",
+      "cause": ""
+    },
+    {
+      "subject": "unread uses visible created positions, not edits, tombstones or run events; seen is explicit and monotone",
+      "status": "passed",
+      "cause": ""
+    }
+  ],
+  "cleanup": "removed"
+}
