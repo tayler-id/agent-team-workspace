@@ -1,0 +1,33 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ❯ |unit| packages/client-core/test/fixture.test.ts (4 tests | 1 failed | 3 skipped) 8619ms
+   × the public boundary command writes its machine report at the documented artifact path 8618ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/fixture.test.ts > the public boundary command writes its machine report at the documented artifact path
+AssertionError: missing lane-8 JSON artifact: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/fixture.test.ts:34:61
+     32|  const result = spawnSync('pnpm', ['-s', 'boundaries'], { cwd: root, e…
+     33|  expect(result.status, result.stdout + result.stderr).toBe(0);
+     34|  expect(existsSync(report), 'missing lane-8 JSON artifact').toBe(true);
+       |                                                             ^
+     35|  expect(JSON.parse(readFileSync(report, 'utf8'))).toMatchObject({ succ…
+     36| }, 150_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  11:05:12
+   Duration  8.77s (tests 99%, import 1%)
+

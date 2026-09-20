@@ -1,0 +1,93 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ❯ |unit| packages/client-core/test/boundaries.test.ts (7 tests | 4 failed | 3 skipped) 860ms
+   × packages/client-core/src/model.ts rejects framework, provider, storage and transport imports in every syntax 706ms
+   × packages/domain/src/index.ts rejects framework, provider, storage and transport imports in every syntax 57ms
+   × contracts/src/index.ts rejects framework, provider, storage and transport imports in every syntax 52ms
+   × a private storage adapter may import pg but cannot leak its types through the public port 44ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > packages/client-core/src/model.ts rejects framework, provider, storage and transport imports in every syntax
+AssertionError: packages/client-core/src/model.ts: import { forbidden } from 'react'; export const leak: unknown = forbidden;: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:26:98
+     24|  for (const module of forbidden) for (const form of forms) {
+     25|   const messages = await boundary(form(module), file);
+     26|   expect(messages.some((m) => m.ruleId === 'agora/import-boundary'), `…
+       |                                                                                                  ^
+     27|  }
+     28| }, 120_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > packages/domain/src/index.ts rejects framework, provider, storage and transport imports in every syntax
+AssertionError: packages/domain/src/index.ts: import { forbidden } from 'react'; export const leak: unknown = forbidden;: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:26:98
+     24|  for (const module of forbidden) for (const form of forms) {
+     25|   const messages = await boundary(form(module), file);
+     26|   expect(messages.some((m) => m.ruleId === 'agora/import-boundary'), `…
+       |                                                                                                  ^
+     27|  }
+     28| }, 120_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > contracts/src/index.ts rejects framework, provider, storage and transport imports in every syntax
+AssertionError: contracts/src/index.ts: import { forbidden } from 'react'; export const leak: unknown = forbidden;: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:26:98
+     24|  for (const module of forbidden) for (const form of forms) {
+     25|   const messages = await boundary(form(module), file);
+     26|   expect(messages.some((m) => m.ruleId === 'agora/import-boundary'), `…
+       |                                                                                                  ^
+     27|  }
+     28| }, 120_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > a private storage adapter may import pg but cannot leak its types through the public port
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:46:86
+     44|  expect(await boundary(privateSdk, file)).toEqual([]);
+     45|  const leak = "import { Pool } from 'pg'; interface Hidden { nested: {…
+     46|  expect((await boundary(leak, file)).some((m) => m.ruleId === 'agora/p…
+       |                                                                                      ^
+     47| }, 120_000);
+     48|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 3 skipped (7)
+   Start at  10:23:39
+   Duration  1.06s (tests 85%, import 12%, transform 3%)
+

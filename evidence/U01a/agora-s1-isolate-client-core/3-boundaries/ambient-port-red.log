@@ -1,0 +1,34 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ❯ |unit| packages/client-core/test/boundaries.test.ts (7 tests | 1 failed | 6 skipped) 994ms
+   × a private storage adapter may import pg but cannot leak its types through the public port 993ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > a private storage adapter may import pg but cannot leak its types through the public port
+AssertionError: /// <reference lib="dom" />
+export function openDatabase(): CSSStyleDeclaration { throw new Error('fixture'); }: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/boundaries.test.ts:51:95
+     49|   "/// <reference lib=\"dom\" />\nexport function openDatabase(): Docu…
+     50|   "/// <reference lib=\"dom\" />\nexport function openDatabase(): CSSS…
+     51|  ]) expect((await boundary(leak, file)).some((m) => m.ruleId === 'agor…
+       |                                                                                               ^
+     52| }, 120_000);
+     53|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 skipped (7)
+   Start at  10:32:46
+   Duration  1.21s (tests 86%, import 11%, transform 3%)
+
