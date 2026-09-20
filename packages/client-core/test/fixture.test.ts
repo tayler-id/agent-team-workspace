@@ -32,6 +32,7 @@ test('the CLI returns pass only for literal snapshots, and distinguishes asserti
 	expect(valid.status, valid.stderr).toBe(0);
 	expect(JSON.parse(valid.stdout)).toMatchObject({ outcome: 'pass' });
 	expect(invoke('--unknown').status).toBe(64);
+	expect(invoke('--', '--json').status).toBe(0);
 	const dir = mkdtempSync(path.join(tmpdir(), 'agora-replay-cli-'));
 	try {
 		const target = path.join(dir, 'fixture.json');
