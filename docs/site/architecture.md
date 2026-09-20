@@ -1,6 +1,6 @@
 # System architecture
 
-The target is one hosted modular center, not a fleet of microservices. PostgreSQL owns the shared state. Workers execute elsewhere and send bounded facts back. Only the small [foundation fixture](foundation.md) is implemented today.
+The target is one hosted modular center, not a fleet of microservices. PostgreSQL owns the shared state. Workers execute elsewhere and send bounded facts back. Current implementation is limited to [foundation fixtures](foundation.md), [portable contracts](contracts.md), and a [renderer-independent core](synchronization.md), not this production topology.
 
 ## End-to-end shape
 
@@ -33,7 +33,7 @@ The API, scanner and outbox are intended to run in one Node process. It must nev
 | Browser | Accessible projections and narrow adapters | Authorization or a second timeline |
 | Worker | Isolated execution and host brokers | Center/domain/storage imports or database access |
 
-Existing roots and planned modules have [discoverable homes](repository.md). Current package exports are not proof that every future import rule is mechanically enforced; that active work belongs to [client isolation](synchronization.md).
+Existing roots and planned modules have [discoverable homes](repository.md). The current [client isolation](synchronization.md) slice enforces import forms, export maps, transitive public-type boundaries and platform-free compilation. These guards do not prove future adapters or product authorization.
 
 ## Command and event flow
 

@@ -9,11 +9,12 @@ Every executable, package and public driver needs a documentation home. This inv
 
 The site inventory is `docs/site/site.json`. Build validation discovers current package roots and root scripts and rejects missing homes. New public tools inside a package must also extend [the CLI reference](cli.md) and [feature map](repo:agora/feature-map.json), not merely inherit the package's name.
 
+`packages/client-core` and its fixture/boundary drivers landed after the atlas seed. They appear in the current inventory above; [synchronization](synchronization.md) separates their committed proof from the historical snapshot.
+
 ## Planned ownership roots
 
 | Root | Why it exists | Documentation home |
 | --- | --- | --- |
-| `packages/client-core` | Own replay and receipts independently of rendering | [Synchronization](synchronization.md), active |
 | `apps/web` | React browser projections of the core | [Architecture](architecture.md), S1 |
 | `packages/adapters` | Keep artifact, email, model and GitHub SDK details private | [Architecture](architecture.md), S1/S2 |
 | `apps/worker` | Standalone protocol client and isolated execution | [Workers](execution.md), S1/S2 |

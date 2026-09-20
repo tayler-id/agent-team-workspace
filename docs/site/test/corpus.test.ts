@@ -27,6 +27,8 @@ test('the committed design packet is readable as linked documentation, not a sou
 test('current commands and planned product availability have separate references', () => {
 	assert.match(html('cli.html'), /There is no installed/);
 	assert.match(html('cli.html'), /Planned product CLI: unavailable/);
+	assert.match(html('cli.html'), /pnpm client:replay/);
+	assert.match(html('synchronization.html'), /Built after the atlas snapshot, fixture only/);
 	assert.match(html('configuration.html'), /AGORA_TEST_SUPERUSER_DATABASE_URL/);
 	assert.match(html('faq.html'), /Why does/);
 });
