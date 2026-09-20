@@ -1,8 +1,8 @@
 # green.log (agora.red-green/v1)
-recorded_at: 2026-09-20T15:23:13.336Z
+recorded_at: 2026-09-20T15:36:55.706Z
 parent: 755b779c5f7eabe79078951f9119291debcb192c
-head: 7c06520500c2eb90cc3641fbd7623ecb960ffda6
-subject_revision: 7c06520500c2eb90cc3641fbd7623ecb960ffda6
+head: b87dad02dae2e7620a9366999d480f65089cc5a4
+subject_revision: b87dad02dae2e7620a9366999d480f65089cc5a4
 test_patch_applied_to_subject: false
 test_patch_files: docs/site/test/guard-weakening.test.ts, docs/site/test/guards.test.ts, docs/site/test/output.test.ts
 test_patch_digest: sha256:9c31c7759041055813351723f9379081c2794fa5b4a82818853c46ded600ac05
@@ -12,15 +12,15 @@ toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 1
 expected: every assertion passes at the head (exit 0)
 observed_exit: 0
 
-✔ public documentation guard accepts the complete valid fixture (2.582416ms)
-✔ broken internal page and anchor links fail (1.014209ms)
-✔ feature explanations and visual flows are mandatory (0.264375ms)
-✔ progress statuses are closed and Built requires source test and evidence (0.282542ms)
-✔ all milestones must occur exactly once with an outcome and release stage (0.277583ms)
-✔ milestone outcomes mirror the authoritative plan instead of drifting (0.083209ms)
-✔ every executable and package must have a documentation home (0.078584ms)
-✔ every feature-map entry requires a validated feature page (0.084667ms)
-✔ private absolute paths and unsafe links never enter the site (0.141ms)
+✔ public documentation guard accepts the complete valid fixture (2.425625ms)
+✔ broken internal page and anchor links fail (0.826ms)
+✔ feature explanations and visual flows are mandatory (0.214125ms)
+✔ progress statuses are closed and Built requires source test and evidence (0.24575ms)
+✔ all milestones must occur exactly once with an outcome and release stage (0.262291ms)
+✔ milestone outcomes mirror the authoritative plan instead of drifting (0.084459ms)
+✔ every executable and package must have a documentation home (0.07ms)
+✔ every feature-map entry requires a validated feature page (0.069084ms)
+✔ private absolute paths and unsafe links never enter the site (0.155958ms)
 ℹ tests 9
 ℹ suites 0
 ℹ pass 9
@@ -28,4 +28,4 @@ observed_exit: 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 83.305375
+ℹ duration_ms 76.563292

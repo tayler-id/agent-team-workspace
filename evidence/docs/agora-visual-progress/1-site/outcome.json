@@ -2,7 +2,7 @@
   "task": "agora-visual-progress",
   "change": "1-site",
   "branch": "fm/agora-visual-progress-1-site",
-  "code_head": "7c06520500c2eb90cc3641fbd7623ecb960ffda6",
+  "code_head": "b87dad02dae2e7620a9366999d480f65089cc5a4",
   "base": "57b9db6892861b98e5d1edede90ef8621a807dec",
   "scope": "Static documentation engine, five-page truthful shell, all 22 milestone outcomes, contributor completion rule, guards and precise negative fixtures. Full corpus follows in change 2.",
   "checks": {
@@ -12,12 +12,12 @@
     "green": "9 guard assertions pass",
     "guard_weakening": "14 precise weakenings produce intended assertion failures",
     "design_negatives": 23,
-    "skill": "Doctor, Drive and Cleanup run literally at code head; logs retained",
+    "skill": "Literal skill receipts at 7c06520; only feature explanation prose changed afterward. Fresh pnpm check and screenshot/red-green receipts at code_head. No runtime code changed.",
     "build": "self-contained output, internal generated links validated",
     "browser": "390x844 and 1440x900 screenshots inspected; keyboard skip and all five mobile pages exercised"
   },
   "size": {
-    "meaningful_added": 855,
+    "meaningful_added": 890,
     "authored_files": 23,
     "files": [
       {
@@ -57,9 +57,9 @@
       },
       {
         "path": "docs/site/authoring.md",
-        "added": 59,
+        "added": 80,
         "deleted": 0,
-        "meaningful_added": 36,
+        "meaningful_added": 52,
         "kind": "authored"
       },
       {
@@ -71,9 +71,9 @@
       },
       {
         "path": "docs/site/contracts.md",
-        "added": 30,
+        "added": 43,
         "deleted": 0,
-        "meaningful_added": 18,
+        "meaningful_added": 27,
         "kind": "authored"
       },
       {
@@ -85,9 +85,9 @@
       },
       {
         "path": "docs/site/foundation.md",
-        "added": 30,
+        "added": 45,
         "deleted": 0,
-        "meaningful_added": 18,
+        "meaningful_added": 28,
         "kind": "authored"
       },
       {
