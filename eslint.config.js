@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-	{ ignores: ['node_modules/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/generated/', 'contracts/swift/'] },
+	{ ignores: ['node_modules/', '.docs-dist/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/generated/', 'contracts/swift/'] },
 	js.configs.recommended,
 	...tseslint.configs.strictTypeChecked,
 	...tseslint.configs.stylisticTypeChecked,
@@ -19,9 +19,14 @@ export default tseslint.config(
 		},
 	},
 	{
-		files: ['**/*.mjs', '**/*.js'],
+		files: ['**/*.mjs', '**/*.js', 'docs/site/test/*.test.ts'],
 		extends: [tseslint.configs.disableTypeChecked],
 		languageOptions: { globals: { console: 'readonly', fetch: 'readonly', process: 'readonly' } },
 		rules: { 'no-console': 'off' },
+	},
+	{
+		files: ['docs/site/*.mjs'],
+		// JavaScript build tools have no TypeScript annotation syntax.
+		rules: { '@typescript-eslint/explicit-module-boundary-types': 'off' },
 	},
 );

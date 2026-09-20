@@ -2,3 +2,7 @@
 node_modules/
 *.tsbuildinfo
 contracts/swift/.build/
+
+.docs-dist/
+.scratch*/
+.scratch-noodle.txt

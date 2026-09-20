@@ -1,0 +1,39 @@
+{
+  "groups": [
+    {
+      "title": "Start here",
+      "pages": [
+        {"id": "index", "title": "Welcome", "kind": "guide"},
+        {"id": "atlas", "title": "Progress atlas", "kind": "guide"}
+      ]
+    },
+    {
+      "title": "Foundation and contribution",
+      "pages": [
+        {"id": "foundation", "title": "Repository foundation", "kind": "feature"},
+        {"id": "contracts", "title": "Portable contracts", "kind": "feature"},
+        {"id": "authoring", "title": "Documentation contract", "kind": "feature"}
+      ]
+    }
+  ],
+  "inventory": [
+    {"path": "apps/center", "page": "foundation.md"},
+    {"path": "contracts", "page": "contracts.md"},
+    {"path": "packages/domain", "page": "foundation.md"},
+    {"path": "packages/storage", "page": "foundation.md"},
+    {"path": "scripts/probe-center.mjs", "page": "authoring.md"},
+    {"path": "scripts/record-red-green.mjs", "page": "authoring.md"},
+    {"path": "scripts/require-test-postgres.ts", "page": "authoring.md"},
+    {"path": "scripts/test-design-checks.mjs", "page": "authoring.md"},
+    {"path": "scripts/verify-design.mjs", "page": "authoring.md"},
+    {"path": "scripts/with-test-postgres.mjs", "page": "authoring.md"},
+    {"path": "docs/site/validate.mjs", "page": "authoring.md"},
+    {"path": "docs/site/render.mjs", "page": "authoring.md"},
+    {"path": "docs/site/diagram.mjs", "page": "authoring.md"},
+    {"path": "docs/site/output-links.mjs", "page": "authoring.md"},
+    {"path": "docs/site/build.mjs", "page": "authoring.md"},
+    {"path": "docs/site/serve.mjs", "page": "authoring.md"},
+    {"path": "scripts/verify-design-handoff.mjs", "page": "authoring.md"},
+    {"path": "scripts/test-design-handoff-checks.mjs", "page": "authoring.md"}
+  ]
+}

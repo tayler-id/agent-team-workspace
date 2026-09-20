@@ -13,6 +13,8 @@ This repository holds the design baseline, official project-local pstack skills,
 - `docs/design-handoff/` is the designer-facing packet (entry `README.md`); `node scripts/verify-design-handoff.mjs` checks its sections, links, diagrams, stage labels, private paths and size. It proposes presentation only; product behavior stays in `docs/technical-spec.md`.
 - Every behavior change lands with its test, a feature-map entry in `agora/feature-map.json`, and `red.log`/`green.log` from `node scripts/record-red-green.mjs` under `evidence/<unit>/<task>/`. `.agents/skills/verify-agora/SKILL.md` holds the literal Doctor, Launch, Drive, Evidence and Cleanup commands.
 
+- Implementation is incomplete without its documentation page and explanatory visual in the same change. Follow `docs/site/authoring.md` for both audience tracks, atlas ownership and independent committed-code/evidence review; `pnpm docs:build` enforces the site contract.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.
