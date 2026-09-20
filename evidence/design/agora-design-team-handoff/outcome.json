@@ -1,0 +1,42 @@
+{
+	"schema_version": "agora.task-outcome/v1",
+	"task": "agora-design-team-handoff",
+	"kind": "design handoff packet and its structural check; prose plus documentation tooling, no product behavior",
+	"stage": "S1 foundation period; packet describes S1 through S3 surfaces with stage labels",
+	"design_parent": "606cba2bb9d90fc7c93169a24e72a488cb41b960",
+	"packet": {
+		"entry": "docs/design-handoff/README.md",
+		"manifest": "docs/design-handoff/manifest.json",
+		"packet_version": "2026-09-20.1",
+		"source_base_commit": "606cba2bb9d90fc7c93169a24e72a488cb41b960",
+		"files": 14,
+		"meaningful_lines": 744,
+		"mermaid_diagrams": 6,
+		"relative_links_checked": 90
+	},
+	"revisions": [
+		{ "order": 1, "head": "9b3fbf214ad3c666d792b2fc3f0834c06dfec040", "scope": "packet, manifest, 20 behavioral check cases, stub validator that accepts everything (R22 test-only harness revision)" },
+		{ "order": 2, "head": "d46b6ab35e2bf5a929fcc26ad63fb68c8611a1fb", "scope": "real validator, docs:check wiring, decision D74, AGENTS.md and validation runbook pointers, prose fixes" }
+	],
+	"red_green": {
+		"recorder": "node scripts/record-red-green.mjs --parent 9b3fbf2 --head d46b6ab --out evidence/design/agora-design-team-handoff -- node scripts/test-design-handoff-checks.mjs",
+		"red": "exit 1 at the harness revision: 'missing-required-section: unexpected exit' (stub accepted a packet with a renamed required section)",
+		"green": "exit 0 at the head: 20 cases, one accept and 19 rejects each asserting its diagnostic",
+		"note": "the test script lives under scripts/, outside the recorder's test-path filter, so it was committed in the harness revision and test_patch_files is empty by design"
+	},
+	"gates": {
+		"log": "gates.log",
+		"passed": ["pnpm docs:check (markdownlint 28 files, verify-design.mjs, verify-design-handoff.mjs)", "pnpm lint", "pnpm typecheck", "node scripts/test-design-handoff-checks.mjs", "git diff --check", "fm AGENTS.md helper: unchanged"],
+		"negatives": ["renamed required section fails docs:check through the new wiring", "machine-specific path rejected", "packet over 1,000 meaningful lines rejected", "each restored byte-identical, green confirmed after"],
+		"pre_existing_failure": "node scripts/test-design-checks.mjs baseline fails on main and here (fixture omits contracts/ cited by decision rows); not changed by this task"
+	},
+	"size_policy": {
+		"whole_change_meaningful_added_lines": 949,
+		"whole_change_files": 21,
+		"packet_meaningful_lines": 744,
+		"r11_note": "above the 200-line default target because the declared outcome is one portable packet; below the 1,000-line and 25-file block thresholds; risk class R0 (documentation plus a documentation check)"
+	},
+	"feature_map": "unchanged: agora/feature-map.json binds product paths and scenarios per delivery task; the packet check is documentation tooling like scripts/verify-design.mjs and is recorded in docs/validation/design-validation.md instead",
+	"not_created": ["React UI", "screens or prototypes", "design tokens in code", "documentation site", "any product behavior"],
+	"independent_review": "pending"
+}

@@ -1,0 +1,39 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-20T14:54:55.476Z
+parent: 9b3fbf214ad3c666d792b2fc3f0834c06dfec040
+head: d46b6ab35e2bf5a929fcc26ad63fb68c8611a1fb
+subject_revision: 9b3fbf214ad3c666d792b2fc3f0834c06dfec040
+test_patch_applied_to_subject: true
+test_patch_files: 
+test_patch_digest: sha256:4fff0946414e95cb3b91f97507b2e6ce3c2370ba46c71cbeef4a484fdf27125d
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node scripts/test-design-handoff-checks.mjs","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:25fad3cbf767d3cdcd29001dda769e1806e3946fa5dd462a64a922a768ff38d1"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+PASS accepts baseline
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: missing-required-section: unexpected exit
+SCOPE stub: no packet checks implemented
+
+
+
+0 !== 1
+
+    at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-bvF3vJ/scripts/test-design-handoff-checks.mjs:50:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:633:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0

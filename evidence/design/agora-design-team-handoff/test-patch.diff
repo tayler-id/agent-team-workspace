@@ -1,0 +1,249 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index b39d4a0..945080b 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -10,6 +10,7 @@ This repository holds the design baseline, official project-local pstack skills,
+ - Run `node scripts/verify-design.mjs` and `node scripts/test-design-checks.mjs` for authoritative design checks. Run the unchanged pstack plan checker as an informational format check. `docs/validation/design-validation.md` records commands and limits; design validation is not runtime foundation readiness.
+ - Wire contracts: `contracts/schemas/*.schema.json` and `contracts/openapi.json` are the only authored wire sources; `pnpm contracts:generate` regenerates the TypeScript and Swift consumers, `pnpm contracts:check` rejects drift and out-of-subset keywords, `pnpm contracts:conform` runs the golden vectors through both consumers. `docs/runbooks/development.md` has the subset and layout.
+ - Code gates: `pnpm check` runs lint, typecheck, docs, contract drift and tests. `pnpm test` boots a throwaway PostgreSQL 18 cluster; the pg tests block rather than skip without one. `docs/runbooks/development.md` explains commands, package boundaries, the PostgreSQL test path and migrations.
++- `docs/design-handoff/` is the designer-facing packet (entry `README.md`); `node scripts/verify-design-handoff.mjs` checks its sections, links, diagrams, stage labels, private paths and size. It proposes presentation only; product behavior stays in `docs/technical-spec.md`.
+ - Every behavior change lands with its test, a feature-map entry in `agora/feature-map.json`, and `red.log`/`green.log` from `node scripts/record-red-green.mjs` under `evidence/<unit>/<task>/`. `.agents/skills/verify-agora/SKILL.md` holds the literal Doctor, Launch, Drive, Evidence and Cleanup commands.
+ 
+ ## Maintaining this file
+diff --git a/docs/decisions.tsv b/docs/decisions.tsv
+index 5a81214..b734fd3 100644
+--- a/docs/decisions.tsv
++++ b/docs/decisions.tsv
+@@ -72,3 +72,4 @@ ts	phase	decision	why	evidence	result
+ 2026-09-20T11:25:00Z	contracts	D71 Publish the R12 CLI envelopes (CliCommand, CliReport, CliOutcome, ExitCode, Diagnostic, ArtifactReference, CleanupReceipt) with the foundation contract surface	Firstmate relayed the captain's rule that every capability stays runnable and verifiable through project-owned CLI tooling; R12 and R22 already require these shapes and later boxes consume them. Pre-envelope outputs (migration report, probe report, center start line, red-green line) stay unchanged until the agora project CLI lands in U01a.B04 and U01b	contracts/schemas/cli.schema.json; contracts/fixtures/vectors.json	golden vectors cover integer limits, timestamps, closed outcomes, exit codes and command text refusal in both consumers
+ 2026-09-20T11:27:00Z	spec	D72 Append the CLI-operability rule to R12: every public or operator capability has a scriptable CLI or public API driver with the same authorization; a UI is never the only path	The existing text required the managed-project CLI contract and the agora project commands but did not state the rule for every capability or that the CLI shares the UI's authorization and transitions	docs/technical-spec.md#r12-verification-contract-for-agora-and-managed-projects	append-only paragraph; no requirement renumbered; design gate still counts 24 requirements
+ 2026-09-20T11:40:00Z	contracts	D73 Land U01a.B02 as three stacked fast-forward branches (harness and wiring; contract sources, generation and TypeScript consumer; golden vectors, Swift consumer and joint conformance) instead of one change	The combined change measured 1,238 meaningful added lines in 35 source files, above R11's 1,000-line and 25-file block; Firstmate chose the split over a second size exception because the accepted instructions make the bootstrap exception non-precedent. The harness branch is the R22 test-only revision, so each later branch's red is a value-level assertion against the previous head rather than a missing runner	evidence/U01a/agora-s1-publish-portable-contracts/2-contracts/red.log; docs/technical-spec.md#r11-git-evidence-publication-review-and-merge	each branch passes every applicable check at its own head; the conformance branch red and per-branch sizes are recorded under evidence/U01a/agora-s1-publish-portable-contracts/3-conformance
++2026-09-20T13:30:00Z	design	D74 Publish the design-team handoff as a validated packet under docs/design-handoff with its own structural check	Designers need one portable entry point that traces to the specification without reconstructing it, and a prose-only packet needs a project-owned gate for sections, links, diagrams, stage labels, private paths and the R11-derived size limit	docs/design-handoff/README.md; scripts/verify-design-handoff.mjs; scripts/test-design-handoff-checks.mjs	packet of 14 files below 1,000 meaningful lines; 20 behavioral check cases; presentation proposals only, product authority stays in the specification
+diff --git a/docs/design-handoff/components.md b/docs/design-handoff/components.md
+index b3a917d..5ae8cc7 100644
+--- a/docs/design-handoff/components.md
++++ b/docs/design-handoff/components.md
+@@ -32,7 +32,7 @@ Behavior and variants for the parts the [screens](screens.md) share. No producti
+ | Countdown | Deadline for questions, approvals, queue wait, capability expiry | Running, expired |
+ | Scope preview list | Selected records with author, time, audience, trust class, omissions | Complete, partial coverage, audience restricted |
+ | Offline and resync banner | Connection state and required action | Offline with unsent drafts, resync required, revoked |
+-| Diff viewer | Read-only diff opened last in evidence review; every hunk mappable to a claim | Mapped, unmapped hunk highlighted by label |
++| Diff viewer | Read-only diff opened last in evidence review; every hunk mappable to a claim | Mapped, unmapped hunk marked by label |
+ 
+ ## Rendering constraints
+ 
+diff --git a/docs/design-handoff/design-assignment.md b/docs/design-handoff/design-assignment.md
+index a7d55be..041b903 100644
+--- a/docs/design-handoff/design-assignment.md
++++ b/docs/design-handoff/design-assignment.md
+@@ -12,7 +12,7 @@ Produce these, in this order:
+ 4. A component and state matrix for every row in the [component inventory](components.md): one column per state named there, including empty, loading, error, revoked, offline, historical, and unknown. Mark cells that are intentionally identical.
+ 5. Clickable prototype paths for the two-person story: one path as the task owner, one as the approving maintainer, and one where the other reviewer is absent so the waiting state is visible.
+ 6. Accessibility annotations on every frame: landmark roles, focus order, focus return target, live region text for each update, announced text for every badge and card, contrast values for any new color, and the reduced-motion variant of any motion.
+-7. The comprehension test from spec R23: script a proposed task, a failed check, a stale approval, and a recovery card. Two people who did not design them must name the owner, placement, current authority, missing proof, and safe next action without coaching. Record mistaken readings, not just completion.
++7. The comprehension test from spec R23: script a proposed task, a failed check, a stale approval, and a recovery card. Two people who did not design them must name the owner, placement, current authority, missing proof, and safe next action without coaching. Record mistaken readings as well as completion time.
+ 8. Content review of every label against [content design](content-design.md). Flag any place the design needed a word the packet does not define.
+ 
+ ## Unresolved decisions to flag
+diff --git a/docs/design-handoff/source-map.md b/docs/design-handoff/source-map.md
+index e06994f..dc1e76c 100644
+--- a/docs/design-handoff/source-map.md
++++ b/docs/design-handoff/source-map.md
+@@ -27,4 +27,4 @@ Requirement IDs (R01 to R24), acceptance criteria (AC00 to AC32), unit IDs (U01a
+ 
+ Eleven research and review reports informed this synthesis: the agent-team architecture, landscape, and product-definition studies, the chat-center research, the architecture deep dive, the pattern audit, the Jev study, the precedent archaeology, the follow-up research, and two independent specification reviews. The [research basis](../research-basis.md#research-coverage) lists what each contributed. Their private storage locations and operational mechanics are deliberately not part of this packet, and none of them is required reading to use it.
+ 
+-What the archive changed in this packet: the ledger-room direction and the flat-versus-raised rule come from the precedents' insistence that chat and authority never mix; the run board question in the design assignment comes from a disagreement between two reports; the comprehension test comes from one of the specification reviews; and the warnings not to advertise "your agent" or general research in S1 come from both reviews.
++The archive changed four things in this packet. The ledger-room direction and the flat-versus-raised rule come from the precedents' insistence that chat and authority never mix; the run board question in the design assignment comes from a disagreement between two reports; the comprehension test comes from one of the specification reviews; and the warnings not to advertise "your agent" or general research in S1 come from both reviews.
+diff --git a/docs/design-handoff/visual-theme.md b/docs/design-handoff/visual-theme.md
+index d7c44fa..7894f66 100644
+--- a/docs/design-handoff/visual-theme.md
++++ b/docs/design-handoff/visual-theme.md
+@@ -4,7 +4,7 @@ One recommended direction, stated so the design team can accept it, adjust it, o
+ 
+ ## Recommended direction
+ 
+-Call it the ledger room. An agora was a place where a town did its business in public: people talked, decisions were spoken aloud, and records were kept where anyone could read them. Take the public-record part, not the marble. The interface should feel like a well-kept shared ledger in a quiet room: paper-toned surfaces, ink-dark type, hairline rules, and one signal color that lights up only when something is happening right now.
++Call it the ledger room. An agora was where a town did its business in public. People talked, decisions were spoken aloud, and the records stayed where anyone could read them. Take the public-record part, not the marble. The interface should feel like a well-kept shared ledger in a quiet room, with paper-toned surfaces, ink-dark type, hairline rules, and one signal color that lights up only while something is happening.
+ 
+ What that means in practice:
+ 
+@@ -58,7 +58,7 @@ Starting values, checked for AA contrast against their intended surfaces. Every
+ | Diff added | `#E6F4EA` | `#17321F` | Added line background, with a `+` gutter glyph |
+ | Diff removed | `#FBE9E7` | `#3A1B18` | Removed line background, with a `-` gutter glyph |
+ 
+-Semantics: a state is carried by its word and glyph. Color reinforces at most one of them. A success box and an error box differ by glyph and word, and still work in greyscale. Never tint a fill and border it in the same color. Never cycle a color per item.
++A state is carried by its word and glyph. Color reinforces at most one of them. A success box and an error box differ by glyph and word, and still work in greyscale. Never tint a fill and border it in the same color. Never cycle a color per item.
+ 
+ ## Data visualization
+ 
+diff --git a/docs/design-handoff/workflows.md b/docs/design-handoff/workflows.md
+index b6382cf..c596d2d 100644
+--- a/docs/design-handoff/workflows.md
++++ b/docs/design-handoff/workflows.md
+@@ -2,7 +2,7 @@
+ 
+ Each flow lists actors, entry condition, steps, system feedback, denials, failure and recovery states, and completion. Sources: spec [R02](../technical-spec.md#r02-browser-experience-and-user-journeys) required journeys, [R06](../technical-spec.md#r06-state-machines-and-invariants) states, [R07](../technical-spec.md#r07-ordered-api-event-and-retry-contracts) receipts, [R11](../technical-spec.md#r11-git-evidence-publication-review-and-merge) publication, [R15](../technical-spec.md#r15-failure-recovery) recovery. Screens for each step are in the [screen inventory](screens.md).
+ 
+-A rule that applies to every flow: a mutation returns a receipt with a revision, and the interface shows the committed state from that receipt, not the optimistic guess. A lost network response is retried with the same command ID and can never duplicate a message, run, or push.
++One rule applies to every flow. A mutation returns a receipt with a revision, and the interface shows the committed state from that receipt, not the optimistic guess. A lost network response is retried with the same command ID and can never duplicate a message, run, or push.
+ 
+ ## Invitation and sign-in
+ 
+diff --git a/docs/validation/design-validation.md b/docs/validation/design-validation.md
+index 3b3812d..df61030 100644
+--- a/docs/validation/design-validation.md
++++ b/docs/validation/design-validation.md
+@@ -33,6 +33,8 @@ node scripts/verify-design.mjs
+ node scripts/test-design-checks.mjs
+ node --check scripts/verify-design.mjs
+ node --check scripts/test-design-checks.mjs
++node scripts/verify-design-handoff.mjs
++node scripts/test-design-handoff-checks.mjs
+ node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md
+ npx -y markdownlint-cli2@0.23.2 'AGENTS.md' 'docs/**/*.md'
+ git diff --check
+diff --git a/package.json b/package.json
+index 5df417e..8657954 100644
+--- a/package.json
++++ b/package.json
+@@ -10,7 +10,7 @@
+ 	"scripts": {
+ 		"lint": "eslint .",
+ 		"typecheck": "tsc -p tsconfig.json",
+-		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs",
++		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs && node scripts/verify-design-handoff.mjs",
+ 		"contracts:generate": "node contracts/tools/generate.mjs",
+ 		"contracts:check": "node contracts/tools/generate.mjs --check",
+ 		"contracts:conform": "node contracts/src/conform-cli.ts",
+diff --git a/scripts/verify-design-handoff.mjs b/scripts/verify-design-handoff.mjs
+index 8aa407a..9d05bf0 100644
+--- a/scripts/verify-design-handoff.mjs
++++ b/scripts/verify-design-handoff.mjs
+@@ -1,2 +1,124 @@
+-// Test-only harness revision (R22): starts correctly and accepts every packet. The behavioral checks land in the next revision.
+-console.log('SCOPE stub: no packet checks implemented');
++// Checks the design handoff packet under docs/design-handoff: required sections, relative links, Mermaid
++// diagrams, stage/status vocabularies, private paths and the R11-derived size limit. Run from the repository root.
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import path from 'node:path';
++
++const packet = 'docs/design-handoff';
++const read = file => fs.readFileSync(file, 'utf8');
++const slug = heading => heading.toLowerCase().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s/g, '-');
++const anchors = file => new Set([...read(file).matchAll(/^#{1,6} (.+)$/gm)].map(m => slug(m[1])));
++const REQUIRED = {
++	'README.md': ['Truth labels', 'Read in this order', 'Design first', 'Deliverables'],
++	'product-brief.md': ['Purpose', 'Principles', 'Current stage', 'What is built and what is planned', 'Non-goals'],
++	'audiences-and-authority.md': ['Audiences', 'Authority matrix'],
++	'information-architecture.md': ['Areas', 'Navigation rail', 'Right pane'],
++	'workflows.md': ['Invitation and sign-in', 'Entering a project room', 'Human conversation', 'Asking the center agent', 'Creating and owning a task', 'Launching on a selected machine', 'Following and steering a run', 'Recovering a run', 'Reviewing evidence', 'Approving publication', 'Revocation', 'Project provisioning and cloud execution (S2)'],
++	'screens.md': ['Screen inventory', 'First prototype'],
++	'interaction-and-state.md': ['Record families', 'Never implied by color or prose alone'],
++	'components.md': ['Component inventory', 'Rendering constraints'],
++	'visual-theme.md': ['Recommended direction', 'Typography roles', 'Color roles', 'Light and dark strategy', 'Starting tokens versus brand decisions'],
++	'accessibility-and-responsive.md': ['Requirements', 'Small-screen collapse'],
++	'content-design.md': ['Canonical nouns', 'Status labels', 'Voice and tone', 'Examples'],
++	'visual-maps.md': ['System map', 'Information architecture', 'Conversation to work journey', 'Run, evidence and publication lifecycle', 'Memory scopes', 'Release-stage surface map'],
++	'design-assignment.md': ['Checklist', 'Unresolved decisions to flag', 'Handing results back'],
++	'source-map.md': ['Authoritative sources', 'Research archive'],
++};
++const MERMAID_TYPES = /^(flowchart|graph|sequenceDiagram|stateDiagram-v2)\b/;
++const MAX_LINES = 1000;
++const MAX_FILES = 25;
++
++const manifest = JSON.parse(read(path.join(packet, 'manifest.json')));
++assert.equal(manifest.schema_version, 'agora.design-handoff/v1', 'manifest.json: schema_version');
++assert(/^[0-9a-f]{40}$/.test(manifest.source_base_commit), 'manifest.json: source_base_commit must be a commit hash');
++assert(typeof manifest.packet_version === 'string' && manifest.packet_version.length, 'manifest.json: packet_version');
++assert.equal(manifest.entry, 'README.md', 'manifest.json: entry must be README.md');
++const stageLabels = new Set(manifest.stage_labels);
++const statusLabels = new Set(manifest.status_labels);
++const listed = manifest.files;
++const present = fs.readdirSync(packet).filter(f => f.endsWith('.md')).sort();
++for (const file of listed) assert(present.includes(file), `manifest.json lists missing ${file}`);
++for (const file of present) assert(listed.includes(file), `${file} not listed in manifest.json`);
++assert.equal(new Set(listed).size, listed.length, 'manifest.json: duplicate file');
++assert(listed.length <= MAX_FILES, `packet exceeds ${MAX_FILES} files`);
++for (const file of Object.keys(REQUIRED)) assert(listed.includes(file), `manifest.json: required file ${file} missing`);
++
++let links = 0;
++let diagrams = 0;
++let meaningful = 0;
++function checkLink(from, target) {
++	if (/^(https?:|mailto:)/.test(target)) return;
++	const [part, fragment] = target.split('#');
++	const file = path.normalize(path.join(path.dirname(from), decodeURIComponent(part || path.basename(from))));
++	assert(!file.startsWith('..'), `${from}: link escapes project ${target}`);
++	assert(fs.existsSync(file), `${from}: missing link ${target}`);
++	if (fragment && file.endsWith('.md')) assert(anchors(file).has(fragment), `${from}: missing anchor ${target}`);
++	links++;
++}
++function checkTables(name, text) {
++	const lines = text.split('\n');
++	for (let i = 0; i + 1 < lines.length; i++) {
++		if (!lines[i].startsWith('|') || !/^\|(\s*-+\s*\|)+\s*$/.test(lines[i + 1])) continue;
++		const header = lines[i].split('|').slice(1, -1).map(c => c.trim());
++		const columns = header.map((h, index) => (h === 'Stage' ? { index, allowed: stageLabels, kind: 'stage' } : h === 'Status' ? { index, allowed: statusLabels, kind: 'status' } : null)).filter(Boolean);
++		if (!columns.length) continue;
++		for (let row = i + 2; row < lines.length && lines[row].startsWith('|'); row++) {
++			const cells = lines[row].split('|').slice(1, -1).map(c => c.trim());
++			for (const column of columns) assert(column.allowed.has(cells[column.index]), `${name}: unknown ${column.kind} label "${cells[column.index]}"`);
++		}
++	}
++}
++for (const name of listed) {
++	const file = path.join(packet, name);
++	const text = read(file);
++	assert(!/[–—]/u.test(text), `${name}: long dash`);
++	assert(!/\b(TODO|TBD|FIXME|XXX)\b|<placeholder>|\[insert\b/iu.test(text), `${name}: unresolved placeholder`);
++	assert(!/\/Users\/|\/home\/[a-z]|\.treehouse\/|\.local\/share\/|\/private\/tmp\/|FIRSTMATE_OP|firstmate/i.test(text), `${name}: private operational path`);
++	assert.equal([...text.matchAll(/^# /gm)].length, 1, `${name}: one H1 required`);
++	let previous = 0;
++	let fence = null;
++	let body = [];
++	const headings = new Set();
++	for (const line of text.split('\n')) {
++		if (line.trim()) meaningful++;
++		if (line.startsWith('```')) {
++			if (fence === null) {
++				fence = line.slice(3).trim();
++				body = [];
++			} else {
++				if (fence === 'mermaid') {
++					assert(MERMAID_TYPES.test(body[0] || ''), `${name}: unknown Mermaid diagram type "${body[0] || ''}"`);
++					diagrams++;
++				}
++				fence = null;
++			}
++			continue;
++		}
++		if (fence !== null) {
++			body.push(line);
++			continue;
++		}
++		const match = line.match(/^(#{1,6}) (.+)$/);
++		if (match) {
++			assert(match[1].length <= previous + 1, `${name}: skipped heading level`);
++			previous = match[1].length;
++			if (match[1].length === 2) headings.add(match[2]);
++		}
++	}
++	assert.equal(fence, null, `${name}: unclosed fence`);
++	for (const heading of REQUIRED[name] || []) assert(headings.has(heading), `${name}: missing required section "${heading}"`);
++	for (const m of text.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) checkLink(file, m[1]);
++	checkTables(name, text);
++}
++const maps = read(path.join(packet, 'visual-maps.md'));
++for (const section of REQUIRED['visual-maps.md']) {
++	const bodyText = maps.split(`## ${section}\n`)[1]?.split(/^## /m)[0] || '';
++	assert(/```mermaid\n/.test(bodyText), `visual-maps.md: missing Mermaid diagram in "${section}"`);
++}
++const readme = read(path.join(packet, 'README.md'));
++const order = [...readme.matchAll(/^\| \d+ \| \[[^\]]+\]\(([a-z-]+\.md)\) \|/gm)].map(m => m[1]);
++assert.deepEqual(['README.md', ...order], listed, 'README.md reading order differs from manifest.json');
++assert(meaningful <= MAX_LINES, `packet exceeds ${MAX_LINES} meaningful lines (${meaningful})`);
++console.log(`PASS packet structure: ${listed.length} files; ${meaningful} meaningful lines; required sections present`);
++console.log(`PASS ${links} relative links and anchors; ${diagrams} Mermaid diagrams; stage/status vocabularies; no private paths, placeholders or long dashes`);
++console.log(`SCOPE packet structure only; it cannot verify that prose is true or that any screen exists; base revision ${manifest.source_base_commit.slice(0, 7)}`);

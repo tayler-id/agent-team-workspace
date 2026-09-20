@@ -1,0 +1,47 @@
+# gates.log (agora.gate-negatives/v1)
+head: d46b6ab35e2bf5a929fcc26ad63fb68c8611a1fb
+recorded_at: 2026-09-20T14:55:05Z
+node: v24.16.0  pnpm: 10.34.1  host: Darwin 25.5.0 arm64
+method: break one thing, run the named gate, observe it fail, restore byte for byte (git checkout --), confirm green at the end.
+
+## negative: required workflow section renamed, docs gate must reach the packet check
+command: pnpm -s docs:check
+expectation: exit 1 naming 'missing required section "Revocation"'
+AssertionError [ERR_ASSERTION]: workflows.md: missing required section "Revocation"
+observed_exit: 1 (expected 1)
+restored: byte-identical (docs/design-handoff/workflows.md)
+
+## negative: machine-specific path pasted into the source map
+command: node scripts/verify-design-handoff.mjs
+expectation: exit 1 naming 'private operational path'
+AssertionError [ERR_ASSERTION]: source-map.md: private operational path
+observed_exit: 1 (expected 1)
+restored: byte-identical (docs/design-handoff/source-map.md)
+
+## negative: packet pushed over the 1,000 meaningful-line limit
+command: node scripts/verify-design-handoff.mjs
+expectation: exit 1 naming 'packet exceeds 1000 meaningful lines'
+AssertionError [ERR_ASSERTION]: packet exceeds 1000 meaningful lines (1044)
+observed_exit: 1 (expected 1)
+restored: byte-identical (docs/design-handoff/content-design.md)
+
+## green after restore
+command: pnpm -s docs:check && pnpm -s lint && pnpm -s typecheck && node scripts/test-design-handoff-checks.mjs && git diff --check
+Summary: 0 issues in 0 files
+PASS authored structure: 7 documents; 24 requirements; 26 live-scenario mappings
+PASS semantic readiness: 22 milestones; 66 independently gated tasks; 66 exactly owned Build outcomes
+PASS combined dependency graph; 8 foundation proofs; evidence/canary before model writes; cloud-independent later tracks
+PASS 47 official skills; 74 append-only decisions; 187 local links; authored style/privacy checks
+SCOPE static design readiness only; no runtime foundation or product acceptance has run; upstream format/model literals are not semantic authority
+PASS packet structure: 14 files; 744 meaningful lines; required sections present
+PASS 90 relative links and anchors; 6 Mermaid diagrams; stage/status vocabularies; no private paths, placeholders or long dashes
+SCOPE packet structure only; it cannot verify that prose is true or that any screen exists; base revision 606cba2
+docs:check observed_exit: 0 (expected 0)
+lint observed_exit: 0 (expected 0)
+typecheck observed_exit: 0 (expected 0)
+PASS 20 behavioral design-handoff check cases; no application acceptance implied
+handoff tests observed_exit: 0 (expected 0)
+whitespace observed_exit: 0 (expected 0)
+
+## pre-existing, not changed here
+node scripts/test-design-checks.mjs fails its baseline on main and on this branch: its fixture copies evidence/ and packages/ but not contracts/, and decision D69-era rows cite contracts/tools/generate.mjs. Unrelated to the packet; reported, not fixed.
