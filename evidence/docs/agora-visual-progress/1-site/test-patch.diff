@@ -1,0 +1,121 @@
+diff --git a/docs/site/test/guard-weakening.test.ts b/docs/site/test/guard-weakening.test.ts
+new file mode 100644
+index 0000000..ea8cd57
+--- /dev/null
++++ b/docs/site/test/guard-weakening.test.ts
+@@ -0,0 +1,29 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
++import { spawnSync } from 'node:child_process';
++import path from 'node:path';
++
++const root = path.resolve(import.meta.dirname, '../../..');
++const validator = readFileSync(path.join(root, 'docs/site/validate.mjs'), 'utf8');
++const assertions = readFileSync(path.join(import.meta.dirname, 'guards.test.ts'), 'utf8');
++for (const marker of ['private path', ': section', ': visual', ': link', ': source', 'snapshot revision', 'invalid status', 'Built proof', 'milestone coverage', 'milestone outcome drift', ': outcome', ': stage', 'inventory missing', 'feature documentation']) {
++	test(`disabling only the ${marker} guard makes its behavioral assertion fail`, () => {
++		const dir = mkdtempSync(path.join(root, '.scratch-docs-guard-'));
++		try {
++			mkdirSync(path.join(dir, 'test'));
++			const lines = validator.split('\n');
++			const index = lines.findIndex(line => line.includes('errors.push') && line.includes(marker));
++			assert.notEqual(index, -1, `guard marker exists: ${marker}`);
++			lines[index] = lines[index].replace('errors.push(', 'void (');
++			writeFileSync(path.join(dir, 'validate.mjs'), lines.join('\n'));
++			writeFileSync(path.join(dir, 'test/guards.test.ts'), assertions);
++			const env = { ...process.env };
++			delete env.NODE_TEST_CONTEXT;
++			const run = spawnSync(process.execPath, ['--test', path.join(dir, 'test/guards.test.ts')], { encoding: 'utf8', env });
++			assert.equal(run.status, 1, run.stdout + run.stderr);
++			assert.match(run.stdout + run.stderr, /must reject/);
++			assert.doesNotMatch(run.stdout + run.stderr, /SyntaxError|ERR_MODULE_NOT_FOUND/);
++		} finally { rmSync(dir, { recursive: true, force: true }); }
++	});
++}
+diff --git a/docs/site/test/guards.test.ts b/docs/site/test/guards.test.ts
+index 8347673..39508f1 100644
+--- a/docs/site/test/guards.test.ts
++++ b/docs/site/test/guards.test.ts
+@@ -2,6 +2,44 @@ import { test } from 'node:test';
+ import assert from 'node:assert/strict';
+ import { validateSite } from '../validate.mjs';
+ 
+-test('documentation guard driver starts and accepts its empty baseline', () => {
+-	assert.deepEqual(validateSite({ pages: [], atlas: { milestones: [] } }), []);
++const content = '# Fixture\n\n' + ['What it is', 'What it does', 'Why it exists', 'How it works', 'Implementation status', 'Verification and proof'].map(h => `## ${h}\n\nSpecific explanation.\n`).join('\n') + '\n```flow\nInput | Validate bytes\nOutput | Return receipt\n```\n[Home](index.md#fixture)';
++const fixture = () => ({
++	pages: [{ id: 'index', kind: 'feature', content }],
++	atlas: { revision: '606cba2', date: '2026-09-20', features: [{ id: 'fixture', status: 'Built', proof: ['repo:apps/center/src/app.ts', 'repo:apps/center/test/policy.test.ts', 'repo:evidence/proof.log'] }], milestones: [{ id: 'U01a', stage: 'S1', status: 'In progress', outcome: 'A real public fixture.' }] },
++	expectedMilestones: ['U01a'], expectedMilestoneDetails: [{ id: 'U01a', stage: 'S1', outcome: 'A real public fixture.' }], inventory: ['apps/center'], documentedInventory: ['apps/center'],
++	sources: ['apps/center/src/app.ts', 'apps/center/test/policy.test.ts', 'evidence/proof.log'], featurePages: ['docs/site/index.md'],
++});
++const rejects = (mutate, reason) => {
++	const input = fixture();
++	mutate(input);
++	assert.ok(validateSite(input).some(e => e.includes(reason)), `must reject ${reason}`);
++};
++
++test('public documentation guard accepts the complete valid fixture', () => assert.deepEqual(validateSite(fixture()), []));
++test('broken internal page and anchor links fail', () => {
++	rejects(i => { i.pages[0].content += '\n[Missing](lost.md)'; }, 'link');
++	rejects(i => { i.pages[0].content += '\n[Missing](index.md#absent)'; }, 'link');
++	rejects(i => { i.pages[0].content += '\n[Missing](repo:missing.ts)'; }, 'source');
++});
++test('feature explanations and visual flows are mandatory', () => {
++	rejects(i => { i.pages[0].content = content.replace('## Why it exists', '## Other'); }, 'section');
++	rejects(i => { i.pages[0].content = content.replace(/```flow[\s\S]*?```/, ''); }, 'visual');
++});
++test('progress statuses are closed and Built requires source test and evidence', () => {
++	rejects(i => { i.atlas.features[0].status = 'Done-ish'; }, 'status');
++	rejects(i => { i.atlas.features[0].proof = []; }, 'proof');
++	rejects(i => { i.atlas.revision = ''; }, 'snapshot');
++});
++test('all milestones must occur exactly once with an outcome and release stage', () => {
++	rejects(i => { i.atlas.milestones = []; }, 'coverage');
++	rejects(i => { i.atlas.milestones.push(i.atlas.milestones[0]); }, 'coverage');
++	rejects(i => { i.atlas.milestones[0].outcome = ''; }, 'outcome required');
++	rejects(i => { i.atlas.milestones[0].stage = 'S4'; }, 'stage required');
++});
++test('milestone outcomes mirror the authoritative plan instead of drifting', () => rejects(i => { i.atlas.milestones[0].outcome = 'Unrelated outcome'; }, 'milestone outcome drift'));
++test('every executable and package must have a documentation home', () => rejects(i => { i.documentedInventory = []; }, 'inventory'));
++test('every feature-map entry requires a validated feature page', () => rejects(i => { i.featurePages = [undefined]; }, 'feature documentation'));
++test('private absolute paths and unsafe links never enter the site', () => {
++	rejects(i => { i.pages[0].content += '\n/Users/someone/private/archive'; }, 'private');
++	rejects(i => { i.pages[0].content += '\n[Escape](../secret.md)'; }, 'link');
+ });
+diff --git a/docs/site/test/output.test.ts b/docs/site/test/output.test.ts
+new file mode 100644
+index 0000000..201d17a
+--- /dev/null
++++ b/docs/site/test/output.test.ts
+@@ -0,0 +1,29 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { outputLinks } from '../output-links.mjs';
++import { companion, markdown, shell } from '../render.mjs';
++
++test('production links include generated navigation, fragment, stylesheet and nested source views', () => {
++	const files = new Map([['index.html', '<a href="source/code.html#value">Source</a><link href="style.css">'], ['source/code.html', '<h2 id="value">Value</h2><a href="../index.html">Back</a>'], ['style.css', 'body {}']]);
++	assert.deepEqual(outputLinks(files), []);
++	files.delete('style.css');
++	assert.match(outputLinks(files).join(), /style.css/);
++	files.set('source/code.html', '<h2 id="different">Value</h2>');
++	assert.match(outputLinks(files).join(), /#value/);
++});
++test('renderer escapes HTML and flows, works without a browser script and gives native navigation semantics', () => {
++	const md = markdown({}, []);
++	const html = md.render('# Hello\n\n```flow\nInput | <script>alert(1)</script>\nResult | Safe text\n```');
++	assert.ok(html.includes('&lt;script&gt;'));
++	assert.ok(html.includes('<ol>'));
++	const page = shell({ id: 'index', title: 'Hello' }, html, { groups: [{ title: 'Use', pages: [{ id: 'index', title: 'Hello' }] }] }, []);
++	assert.ok(page.includes('aria-current="page"'));
++	assert.ok(page.includes('Skip to content'));
++	assert.ok(page.includes('<details class="mobile-nav">'));
++	assert.ok(!page.includes('<script'));
++});
++test('Mermaid mirror carries the same status and relationships as the data owner', () => {
++	const a = { date: '2026-09-20', revision: '606cba2', nodes: [{ id: 'a', title: 'Input', availability: 'Planned', why: 'Reason', page: 'index.md' }, { id: 'b', title: 'Output', availability: 'Planned', why: 'Reason', page: 'index.md' }], edges: [['a', 'b', 'Authorized command']], features: [], milestones: [{ id: 'U01a', stage: 'S1', status: 'In progress', outcome: 'Fixture' }] };
++	assert.ok(companion(a).includes('a -->|Authorized command| b'));
++	assert.ok(companion(a).includes('U01a - In progress'));
++});
