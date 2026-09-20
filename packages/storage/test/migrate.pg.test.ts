@@ -2,10 +2,11 @@ import { readFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, expect, test } from 'vitest';
 import { Pool } from 'pg';
-import { openDatabase, type Database } from '@agora/storage';
+import { MigrationPrerequisiteError, openDatabase, type Database } from '@agora/storage';
 
 const ownerUrl = process.env['AGORA_TEST_OWNER_DATABASE_URL'] ?? '';
 const appUrl = process.env['AGORA_TEST_DATABASE_URL'] ?? '';
+const superuserUrl = process.env['AGORA_TEST_SUPERUSER_DATABASE_URL'] ?? '';
 const probeName = `agora_migrate_probe_${randomUUID().replaceAll('-', '')}`;
 const admin = new Pool({ connectionString: ownerUrl });
 let probe: Database;
@@ -41,4 +42,21 @@ test('a fresh database applies every journal entry once and a second run is a no
 	expect(first.applied).toBe(journal.entries.length);
 	expect(first.total).toBe(journal.entries.length);
 	expect(second).toEqual({ ...first, applied: 0 });
+});
+
+test('a missing agora_app role blocks the migration with a prerequisite error and applies nothing', async () => {
+	const superuser = new Pool({ connectionString: superuserUrl });
+	const blockedName = `agora_blocked_probe_${randomUUID().replaceAll('-', '')}`;
+	await admin.query(`create database ${blockedName}`);
+	const blocked = openDatabase(ownerUrl.replace(/^([a-z]+:\/\/[^/?]*)\/[^?]*(\?.*)?$/, (_match, prefix: string, query: string | undefined) => `${prefix}/${blockedName}${query ?? ''}`));
+	await superuser.query('alter role agora_app rename to agora_app_hidden');
+	try {
+		await expect(blocked.migrate()).rejects.toThrow(MigrationPrerequisiteError);
+	} finally {
+		await superuser.query('alter role agora_app_hidden rename to agora_app');
+		await superuser.end();
+	}
+	expect(await blocked.migrate()).toMatchObject({ applied: 1, total: 1 });
+	await blocked.close();
+	await admin.query(`drop database ${blockedName}`);
 });

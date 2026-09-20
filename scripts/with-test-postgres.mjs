@@ -32,7 +32,7 @@ const runChild = (env) => new Promise((resolve) => {
 	});
 });
 
-if (process.env.AGORA_TEST_DATABASE_URL && process.env.AGORA_TEST_OWNER_DATABASE_URL && process.env.AGORA_TEST_BYPASS_DATABASE_URL) {
+if (process.env.AGORA_TEST_DATABASE_URL && process.env.AGORA_TEST_OWNER_DATABASE_URL && process.env.AGORA_TEST_BYPASS_DATABASE_URL && process.env.AGORA_TEST_SUPERUSER_DATABASE_URL) {
 	process.exit(await runChild(process.env));
 }
 
@@ -77,6 +77,8 @@ const env = {
 	AGORA_TEST_DATABASE_URL: url(APP),
 	AGORA_TEST_OWNER_DATABASE_URL: url(OWNER),
 	AGORA_TEST_BYPASS_DATABASE_URL: url(BYPASS),
+	// Superuser access exists only so tests can remove and restore cluster-level prerequisites.
+	AGORA_TEST_SUPERUSER_DATABASE_URL: url(SUPERUSER),
 	// The service runs as the non-owner role; only migrations use the owner.
 	AGORA_DATABASE_URL: process.env.AGORA_DATABASE_URL ?? url(APP),
 	AGORA_MIGRATION_DATABASE_URL: process.env.AGORA_MIGRATION_DATABASE_URL ?? url(OWNER),
