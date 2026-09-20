@@ -1,0 +1,11 @@
+{
+  "subject": "cef2a19beccd804656db20ec10c1ef3773992f32",
+  "build_ms": [
+    112,
+    87.3,
+    85.1,
+    83.4,
+    83.5
+  ],
+  "parent": "1-site outcome.json: median 111.3ms; larger 23-page and design-packet corpus is expected work, not a product runtime benchmark"
+}

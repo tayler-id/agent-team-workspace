@@ -1,0 +1,42 @@
+{"route":"index.html","title":"Welcome · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"atlas.html","title":"Progress atlas · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"introduction.html","title":"Introduction · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"getting-started.html","title":"Installation and first checks · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"concepts.html","title":"Mental model and glossary · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"workflows.html","title":"Roles and workflows · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"cookbook.html","title":"Practical guides · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"cli.html","title":"CLI and public drivers · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"configuration.html","title":"Configuration · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"faq.html","title":"Troubleshooting and FAQ · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"architecture.html","title":"System architecture · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"repository.html","title":"Repository and tools · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"foundation.html","title":"Repository foundation · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"contracts.html","title":"Portable contracts · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"synchronization.html","title":"Client synchronization · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"memory.html","title":"Data and memory · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"authorization.html","title":"Authorization and agents · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"execution.html","title":"Workers and cloud · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"operations.html","title":"Operations and recovery · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"verification.html","title":"Verification and evidence · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"authoring.html","title":"Contribute documentation · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"research.html","title":"Research and decisions · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"handoff.html","title":"Design Handoff · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/README.md.html","title":"docs/design-handoff/README.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/product-brief.md.html","title":"docs/design-handoff/product-brief.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/audiences-and-authority.md.html","title":"docs/design-handoff/audiences-and-authority.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/information-architecture.md.html","title":"docs/design-handoff/information-architecture.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/workflows.md.html","title":"docs/design-handoff/workflows.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/screens.md.html","title":"docs/design-handoff/screens.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/interaction-and-state.md.html","title":"docs/design-handoff/interaction-and-state.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/components.md.html","title":"docs/design-handoff/components.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/visual-theme.md.html","title":"docs/design-handoff/visual-theme.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/accessibility-and-responsive.md.html","title":"docs/design-handoff/accessibility-and-responsive.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/content-design.md.html","title":"docs/design-handoff/content-design.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/visual-maps.md.html","title":"docs/design-handoff/visual-maps.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/design-assignment.md.html","title":"docs/design-handoff/design-assignment.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+{"route":"source/docs/design-handoff/source-map.md.html","title":"docs/design-handoff/source-map.md · Agora","width":390,"height":844,"overflow":false,"h1":1,"scripts":0,"externalAssets":[],"outcome":"pass"}
+first-tab: Skip to content
+skip-target: main
+focused-menu: Browse documentation
+menu-open: true
+first-menu-link: Welcome
