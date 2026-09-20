@@ -1,0 +1,24 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-20T11:50:59.905Z
+parent: f3de1119f1291f1b71ef662b72ae920ffb90bfea
+head: 6753b28ab72c1f4728ab1b9c03759dbd3a9a26cd
+subject_revision: 6753b28ab72c1f4728ab1b9c03759dbd3a9a26cd
+test_patch_applied_to_subject: false
+test_patch_files: contracts/test/generation.test.ts
+test_patch_digest: sha256:131c9c830c37f418e4b63fc7150429641407247286758a585a35c0589068d661
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/openapi.json","digest":"sha256:32bb4625c449a6caebd04e7d2d8f678b97ac116518a870a6c569aeaebdf11260"},{"file":"contracts/schemas/cli.schema.json","digest":"sha256:ee33369671f16efec7ba63e206ca24911313919e07ff3c626758aa30da422b8e"},{"file":"contracts/schemas/errors.schema.json","digest":"sha256:64a68dd9a0d28fd91beaf75f5fc98396fa7185fbe62ebb93b5aa8530a1147232"},{"file":"contracts/schemas/fixture-policy.schema.json","digest":"sha256:705287e6d6322bf21c3c8f3ba117537eb70cacf6b56345053121d0c70ec7dac5"},{"file":"contracts/schemas/health.schema.json","digest":"sha256:a95577283729805c5bab8f0a390b134a5939d593b058648a88f2dc6dac95b1a3"},{"file":"contracts/schemas/primitives.schema.json","digest":"sha256:49ce96b833daec5fd30c3c5a79babac3cc8e046dd4b9af5bdb753e93c35b9c77"},{"file":"contracts/src/index.ts","digest":"sha256:2f18c1ad9510ed5656859ffb4f6d8dd38268481576ca0b606fd6433dc741344f"},{"file":"contracts/test/generation.test.ts","digest":"sha256:a55ff957e68a1bd3215640b8f5b3d88c809661f86f7602d832e078762794d655"},{"file":"contracts/tools/generate.mjs","digest":"sha256:4f94db7c5fc31da92e433f5920214d7d9277fe613adec65c6f38eea3f02c2561"}]}
+configuration: {"command":"pnpm -s test","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:25fad3cbf767d3cdcd29001dda769e1806e3946fa5dd462a64a922a768ff38d1"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-OVoS0a
+
+
+ Test Files  9 passed (9)
+      Tests  36 passed (36)
+   Start at  07:50:28
+   Duration  29.36s (tests 97%, import 3%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-gu9ajj","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}

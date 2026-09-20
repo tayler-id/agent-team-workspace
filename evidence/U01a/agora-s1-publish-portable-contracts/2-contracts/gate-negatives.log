@@ -1,0 +1,68 @@
+# gate-negatives.log (agora.gate-negatives/v1)
+head: 6753b28ab72c1f4728ab1b9c03759dbd3a9a26cd
+recorded_at: 2026-09-20T11:51:02Z
+node: v24.16.0  pnpm: 10.34.1  swift: swift-driver version: 1.148.6 Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)  postgres: pg_ctl (PostgreSQL) 18.4 (Homebrew)  host: Darwin 25.5.0 arm64
+method: break one thing, run the named gate, observe it fail, restore byte for byte (git checkout --), confirm green at the end. Guard-disabled cases follow R22: the normally denied input is repeated with precisely that guard removed and the assertion must turn red.
+
+## subset negative: HealthReport opened with additionalProperties true
+command: pnpm -s contracts:check
+expectation: exit 1 naming the keyword
+{"schema_version":"agora.contract-generation-run/v1","mode":"check","outcome":"fail","exit":1,"message":"health.schema.json#/$defs/HealthReport: objects must declare additionalProperties: false"}
+observed_exit: 1
+restored: byte-identical (contracts/schemas/health.schema.json)
+
+## subset guard disabled: additionalProperties check deleted from generate.mjs, open-object weakening replayed
+command: pnpm -s test:unit
+expectation: nonzero, the open-object case in generation.test.ts turns red
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |contracts| contracts/test/generation.test.ts > the subset gate rejects every weakening before a consumer is generated
+-   "open-object: exit 1 names the weakening",
++   "open-object: exit 0 unexpected message pass",
+observed_exit: 1
+restored: byte-identical (contracts/tools/generate.mjs)
+
+## drift negative: one line appended to the generated TypeScript consumer
+command: pnpm -s contracts:check
+expectation: exit 1 with generated_drift naming openapi.d.ts
+fail 1 generated_drift contracts/generated/typescript/openapi.d.ts
+observed_exit: 1
+restored: byte-identical (contracts/generated/typescript/openapi.d.ts)
+
+## drift negative: HealthReport unknown-key guard removed from the generated Swift types
+command: pnpm -s contracts:check
+expectation: exit 1 with generated_drift naming the Swift schemas file
+fail 1 generated_drift contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift
+observed_exit: 1
+restored: byte-identical (contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift)
+
+## manifest negative: a source digest altered in the committed manifest
+command: pnpm -s contracts:check
+expectation: exit 1 with generated_drift naming manifest.json
+fail 1 generated_drift contracts/generated/manifest.json
+observed_exit: 1
+restored: byte-identical (contracts/generated/manifest.json)
+
+## typecheck negative: center liveness status set outside the generated HealthReport type
+command: pnpm -s typecheck
+expectation: nonzero
+apps/center/src/app.ts(21,93): error TS2769: No overload matches this call.
+observed_exit: 2
+restored: byte-identical (apps/center/src/app.ts)
+
+## contract negative (center): ScopeReference opened, consumers regenerated, unknown-field request replayed
+command: pnpm -s contracts:generate && pnpm -s test:unit
+expectation: nonzero, the unknown-field 400 assertion in apps/center/test/policy.test.ts turns red
+(the subset gate blocks generation first; the replay below shows the gate's verdict rather than a widened consumer)
+{"schema_version":"agora.contract-generation-run/v1","mode":"generate","outcome":"fail","exit":1,"message":"fixture-policy.schema.json#/$defs/ScopeReference: objects must declare additionalProperties:
+generate_exit: 1 (expected 1)
+restored: byte-identical (contracts/schemas/fixture-policy.schema.json)
+generated tree: unchanged
+
+## restored: every code gate green again
+command: pnpm -s typecheck && pnpm -s lint && pnpm -s contracts:check && pnpm -s test
+{"schema_version":"agora.contract-generation-run/v1","mode":"check","outcome":"pass","exit
+ Test Files  9 passed (9)
+      Tests  36 passed (36)
+observed_exit: 0 (expected 0)
+working tree: no tracked code modifications
