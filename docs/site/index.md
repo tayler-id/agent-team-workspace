@@ -1,33 +1,31 @@
-# Agora field guide
+# Shared conversation. Accountable work
 
-Agora is a planned invitation-only communication center for small developer teams. Shared conversation becomes bounded, human-owned work; agents propose and execute within explicit authority, and humans review and merge.
+Agora is a communication center for a small development team: talk in project rooms, ask visible agents for help, and turn a conversation into bounded, human-owned work.
 
-> No usable communication center exists yet. Only the non-production repository fixture and portable contracts have landed at the atlas snapshot. Client synchronization is In progress. No milestone is qualified.
+> **Early foundation, not a released product.** The repository has a working non-production fixture and portable contracts. There is no usable chat center, worker installer, or qualified release yet.
 
 The atlas deliberately preserves task-base revision `606cba2`. Newer fixture-only client-core and boundary work landed during this documentation change; [the foundation page](foundation.md#implementation-status) links its implementation, tests and receipts separately. It still does not deliver a usable communication center.
 
-## Two tracks, one growing site
+## Choose your path
 
-- **Use Agora:** the complete installation, concepts, role workflows, CLI/configuration, cookbook and FAQ track follows in the independently gated documentation-corpus change. Today, only contributor fixture commands work.
-- **Build and operate:** inspect [the repository foundation](foundation.md), [portable contracts](contracts.md) and [progress atlas](atlas.md). Architecture, production operations and recovery remain specified, not deployed.
-- **Design Handoff:** the [committed portable packet](repo:docs/design-handoff/README.md) describes the planned product experience. It is not proof of implemented screens.
+- **[Use Agora](introduction.md)**: understand the product, what will be available, and what you can actually try today.
+- **[Build and operate](architecture.md)**: see the system boundaries, repository, verification tools, and production design.
+- **[Progress atlas](atlas.md)**: explore what has landed, what is active, and all 22 milestone outcomes.
+- **[Design Handoff](handoff.md)**: a shareable starting point for designing the experience, with the authoritative document map.
 
-## The intended boundary
+## One record, many places to work
 
 ```flow
-Conversation | People discuss goals and retain the shared record.
-Human command | Confirm scope, owner, placement, tools and budget before execution.
-Isolated attempt | An outbound local worker first, cloud later; neither owns durable truth.
-Evidence and review | Inspect exact-head proof, obtain independent review, and merge as a human.
+Conversation | People explain the goal and retain the shared record.
+Human authorization | An explicit command, not a model's suggestion, permits bounded work.
+Isolated execution | A local worker first; cloud execution later. Neither owns durable truth.
+Evidence and review | A result has proof. Another human reviews. A human merges on GitHub.
 ```
 
-[The specification](repo:docs/technical-spec.md) owns behavior; [the plan](repo:docs/implementation-plan.md) owns milestones; [the task breakdown](repo:docs/task-breakdown.md) owns independently gated changes. The [documentation contract](authoring.md) requires an explanation and visual in the same change as implementation.
+This is the intended product flow, not functionality available in the fixture. Read [the mental model](concepts.md) before interpreting a green result as permission to publish.
 
-## Read locally
+## What you can inspect today
 
-```sh
-pnpm install --frozen-lockfile
-pnpm docs:dev
-```
+The [repository foundation](foundation.md) exposes health, readiness, and a scope-policy fixture. [Portable contracts](contracts.md) make TypeScript and Swift agree on wire values. Those are useful engineering foundations, not invitations, conversations, or agent execution.
 
-Open `http://127.0.0.1:4173`; Ctrl+C stops the loopback server. Set `DOCS_PORT` if occupied. `pnpm docs:build` creates ordinary self-contained HTML/CSS in `.docs-dist/`. No hosted service or external account is needed.
+Start with [installation and first checks](getting-started.md), or read [why this architecture was selected](research.md). Documentation grows in the same change as implementation; [the authoring contract](authoring.md) is part of completion.

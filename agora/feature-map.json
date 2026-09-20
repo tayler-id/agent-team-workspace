@@ -108,7 +108,7 @@
 			"id": "living-documentation",
 			"paths": ["docs/site", "package.json"],
 			"public": ["pnpm docs:dev", "pnpm docs:build", "pnpm docs:validate", "pnpm docs:atlas"],
-			"scenarios": ["docs/site/test/guards.test.ts", "docs/site/test/guard-weakening.test.ts", "docs/site/test/output.test.ts", "browser: docs at 390x844 and 1440x900"],
+			"scenarios": ["docs/site/test/guards.test.ts", "docs/site/test/guard-weakening.test.ts", "docs/site/test/output.test.ts", "docs/site/test/corpus.test.ts", "browser: docs at 390x844 and 1440x900"],
 			"platforms": ["node24", "static-html"],
 			"owner": "agora-visual-progress",
 			"documentation": "docs/site/authoring.md"
