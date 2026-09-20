@@ -4,7 +4,7 @@ import { importBoundaryRule } from './scripts/boundary-policy.ts';
 import { publicTypesRule } from './scripts/public-types.ts';
 
 export default tseslint.config(
-	{ ignores: ['node_modules/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/swift/'] },
+	{ ignores: ['node_modules/', '.docs-dist/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/swift/'] },
 	js.configs.recommended,
 	...tseslint.configs.strictTypeChecked,
 	...tseslint.configs.stylisticTypeChecked,
@@ -36,9 +36,14 @@ export default tseslint.config(
 		rules: { '@typescript-eslint/consistent-indexed-object-style': 'off' },
 	},
 	{
-		files: ['**/*.mjs', '**/*.js'],
+		files: ['**/*.mjs', '**/*.js', 'docs/site/test/*.test.ts'],
 		extends: [tseslint.configs.disableTypeChecked],
 		languageOptions: { globals: { console: 'readonly', fetch: 'readonly', process: 'readonly' } },
 		rules: { 'no-console': 'off' },
+	},
+	{
+		files: ['docs/site/*.mjs'],
+		// JavaScript build tools have no TypeScript annotation syntax.
+		rules: { '@typescript-eslint/explicit-module-boundary-types': 'off' },
 	},
 );
