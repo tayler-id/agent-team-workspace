@@ -13,6 +13,7 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `pnpm contracts:generate` | Bundles the schema families with the OpenAPI operations and regenerates the TypeScript and Swift consumers |
 | `pnpm contracts:check` | Regenerates into a clean directory and fails on any byte of drift or any schema keyword outside the tested subset |
 | `pnpm contracts:conform` | Runs the golden vectors through the TypeScript and Swift consumers and prints the joint report |
+| `pnpm client:replay -- --json --swift` | Public lane-7 fixture driver, comparing literal replay snapshots in the core and independent generated-value Swift consumer |
 | `pnpm test` | Unit and PostgreSQL tests against a throwaway cluster |
 | `pnpm test:unit` | Unit tests only, no database |
 | `pnpm test:pg` | PostgreSQL tests only, throwaway cluster |
@@ -25,7 +26,7 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | --- | --- | --- | --- |
 | `@agora/contracts` | `contracts` | JSON Schema families, OpenAPI operations, generated consumers, canonical JSON, the pinned Ajv wire validator | Anything but schema tooling; never domain, storage, Hono, React or transport code |
 | `@agora/domain` | `packages/domain` | Pure decisions, branded identifiers | Hono, Drizzle, pg, React |
-| `@agora/client-core` | `packages/client-core` | R22 test-only empty baseline until the synchronization implementation slice | Frameworks, transports, domain/server/storage internals |
+| `@agora/client-core` | `packages/client-core` | Immutable normalized snapshots, synchronization, drafts and command decisions | Frameworks, transports, domain/server/storage internals |
 | `@agora/storage` | `packages/storage` | Migrations, explicit SQL, the `Database` handle | Hono, React; it never exports pg types |
 | `@agora/center` | `apps/center` | Hono routes and composition | Raw SQL |
 
@@ -41,7 +42,17 @@ Import boundaries are documented here and enforced by package export maps. The m
 
 `sync.schema.json` supplies reusable R07 `StreamCursor` and `CommandReceipt` values. `fixture-sync.schema.json` supplies only non-production snapshot and closed message-revision, tombstone and run-card payloads. All use generated consumers and the same validation/conformance commands. No HTTP operation references these fixture types. Separate event components keep each payload closed without widening the generator subset. A later fixture adapter translates them into neutral core inputs; the core must not export fixture types or know fixture kind names.
 
-`created_seq` identifies the first visible message position and stays fixed across edits. `last_seen_room_seq` covers the whole room stream, but unread counts only visible positions created after it. Edits, tombstones and run updates do not create unread positions; delivery never advances reading state. Cross-record consistency and actual replay belong to the following core slice, not JSON Schema validation. These fixtures establish no production conversation schema or authorization.
+`created_seq` identifies the first visible message position and stays fixed across edits. `last_seen_room_seq` covers the whole room stream, but unread counts only visible positions created after it. Edits, tombstones and run updates do not create unread positions; delivery never advances reading state. Cross-record consistency and replay are core transitions, not JSON Schema validation. These fixtures establish no production conversation schema or authorization.
+
+### Framework-independent client core
+
+`@agora/client-core` exports `initialState` and `synchronize(state, input)`. Inputs are internal, transport-neutral projections using generated UUID, revision, digest and receipt values through the types-only `@agora/contracts/values` export. They are not a second wire schema. `scripts/client-fixture.ts` validates the fixture wire values before translating them; neither fixture names nor generated fixture types enter the core API.
+
+A transition returns a deeply immutable state plus explicit requests and acknowledgements. Adapters execute requests; the core opens no connection and authorizes nothing. Snapshots replace the relevant stream, retain newer known record revisions, and replay strictly after the accepted cursor. Events dedupe by stream/sequence, buffer at most 1,000 out-of-order entries, and acknowledge only the applied contiguous prefix. Replay-floor loss or overflow requests a fresh snapshot. Unknown state changes retain the projection and cursor, set synchronization mode to `upgrade`, and block further events until a supported snapshot arrives. Other streams remain independent.
+
+Reading is explicit and monotone. Drafts remain `unsent` across snapshot/route changes; `clear` for logout or revocation erases all private state. Browser session-storage integration is not implemented here. A receipt settles its known pending command but never advances a stream cursor. Retry decisions keep the original command ID and request digest, honor offline/rate waits, stop on denial, and request refreshed state after stale revisions. These are retries of idempotent Agora commands, never direct provider calls or a billable-call retry policy. No privileged offline queue is created.
+
+`contracts/fixtures/replay.json` contains test vectors, not production API payload definitions. `pnpm client:replay -- --json --swift` drives six literal ordered/gap/duplicate/unknown/stale-revision snapshots independently through TypeScript and Swift. Remove `--swift` for the pure Node driver; absence of Swift with that flag exits 3, not pass. `--file` selects a reviewed local vector file. `packages/client-core/test/guards.test.ts` disables guards only in disposable source copies and requires their public assertions to fail. Lanes 8 and foundation readiness are still separate gates.
 
 ## PostgreSQL test path
 

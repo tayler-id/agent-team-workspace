@@ -4,11 +4,11 @@
 	"task": "agora-s1-isolate-client-core",
 	"features": [
 		{
-			"id": "client-core-test-harness",
-			"paths": ["packages/client-core/src/index.ts", "packages/client-core/package.json"],
-			"public": ["@agora/client-core initialState", "@agora/client-core synchronize"],
-			"scenarios": ["packages/client-core/test/harness.test.ts"],
-			"fixtures": ["R22 test-only empty baseline, not synchronization behavior"],
+			"id": "client-synchronization",
+			"paths": ["packages/client-core/src/index.ts", "packages/client-core/src/model.ts", "packages/client-core/package.json", "contracts/package.json", "scripts/client-fixture.ts", "scripts/drive-client-core.ts", "contracts/fixtures/replay.json", "contracts/swift/Sources/AgoraContractsConform/Replay.swift"],
+			"public": ["@agora/client-core initialState", "@agora/client-core synchronize", "pnpm client:replay"],
+			"scenarios": ["packages/client-core/test/harness.test.ts", "packages/client-core/test/sync.test.ts", "packages/client-core/test/fixture.test.ts", "packages/client-core/test/guards.test.ts", "contracts/test/replay.test.ts", "scripts/drive-client-core.ts"],
+			"fixtures": ["agora.foundation-fixture.sync-event/v1", "agora.foundation-fixture.sync-snapshot/v1"],
 			"platforms": ["node24"],
 			"owner": "U01a.B03"
 		},

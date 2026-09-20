@@ -14,6 +14,7 @@
 		"contracts:generate": "node contracts/tools/generate.mjs",
 		"contracts:check": "node contracts/tools/generate.mjs --check",
 		"contracts:conform": "node contracts/src/conform-cli.ts",
+		"client:replay": "node scripts/drive-client-core.ts",
 		"test": "node scripts/with-test-postgres.mjs vitest run",
 		"test:unit": "vitest run --project unit --project contracts",
 		"test:pg": "node scripts/with-test-postgres.mjs vitest run --project pg",
@@ -22,6 +23,8 @@
 		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test"
 	},
 	"devDependencies": {
+		"@agora/client-core": "workspace:*",
+		"@agora/contracts": "workspace:*",
 		"@eslint/js": "10.0.1",
 		"@types/node": "24.10.1",
 		"eslint": "10.11.0",
