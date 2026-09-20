@@ -40,10 +40,20 @@
 			"owner": "U01a.B02"
 		},
 		{
+			"id": "contract-conformance",
+			"paths": ["contracts/src/index.ts", "contracts/src/conformance.ts", "contracts/src/conform-cli.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform"],
+			"public": ["pnpm contracts:conform"],
+			"contracts": ["contracts/fixtures/vectors.json"],
+			"fixtures": ["fixture-only Ed25519 signing key derived from a public seed"],
+			"scenarios": ["contracts/test/conformance.test.ts", "contracts/src/conform-cli.ts"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "U01a.B02"
+		},
+		{
 			"id": "canonical-json",
 			"paths": ["contracts/src/canonical.ts"],
 			"public": ["canonicalJson", "digestCanonical"],
-			"scenarios": ["contracts/test/canonical.test.ts"],
+			"scenarios": ["contracts/test/canonical.test.ts", "contracts/test/conformance.test.ts"],
 			"platforms": ["node24"],
 			"owner": "U01a.B02"
 		}

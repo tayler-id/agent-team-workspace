@@ -12,6 +12,7 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `pnpm docs:check` | markdownlint over authored Markdown, then the semantic design gate |
 | `pnpm contracts:generate` | Bundles the schema families with the OpenAPI operations and regenerates the TypeScript and Swift consumers |
 | `pnpm contracts:check` | Regenerates into a clean directory and fails on any byte of drift or any schema keyword outside the tested subset |
+| `pnpm contracts:conform` | Runs the golden vectors through the TypeScript and Swift consumers and prints the joint report |
 | `pnpm test` | Unit and PostgreSQL tests against a throwaway cluster |
 | `pnpm test:unit` | Unit tests only, no database |
 | `pnpm test:pg` | PostgreSQL tests only, throwaway cluster |
@@ -32,6 +33,8 @@ Import boundaries are documented here and enforced by package export maps. The m
 ## Contracts
 
 `contracts/schemas/*.schema.json` (one JSON Schema 2020-12 file per wire family, every component a `$defs` entry) and `contracts/openapi.json` (OpenAPI 3.1.1 operations only) are the authoritative wire sources. There is no handwritten TypeScript, Zod or Swift wire type; the center takes its report types from the generated consumer. `contracts/tools/generate.mjs` rewrites the family `$ref`s into `#/components/schemas/Name`, rejects any keyword outside the subset both generators represent faithfully (closed objects, string and integer enums, anchored ASCII patterns, bounded integers, arrays with items; no `oneOf`, `null`, `number`, `const`, `$defs` inside a component or shorthand regex classes), validates every family with Ajv, then writes `contracts/generated/openapi.bundled.json`, `contracts/generated/typescript/openapi.d.ts` (openapi-typescript 7.13.0), the Swift files under `contracts/swift/Sources/AgoraContracts/Generated/` (swift-openapi-generator 1.13.1, run through SwiftPM from `contracts/swift/Package.swift`) and `contracts/generated/manifest.json` with source and output digests. Generated files are regenerated, never edited; `pnpm check` runs the drift check.
+
+`contracts/fixtures/vectors.json` holds the golden vectors: exact wire bytes per component with the expected acceptance, canonical RFC 8785 bytes, SHA-256 digest and, where present, a detached Ed25519 signature from a fixture-only key. `contracts/src/conform-cli.ts` runs them through the TypeScript consumer (Ajv plus `canonicalJson`) and the Swift consumer (`agora-contracts-conform`: generated types, a runtime validator over the bundled document, CryptoKit) and fails on any disagreement. A missing Swift toolchain exits 3 (unavailable) and is never a pass. The first Swift build fetches the pinned packages recorded in `contracts/swift/Package.resolved` and takes a few minutes; `contracts/swift/.build/` is a cache, not evidence.
 
 ## PostgreSQL test path
 

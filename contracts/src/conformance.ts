@@ -1,4 +1,6 @@
-import { type ComponentName } from './index.ts';
+import { createPublicKey, verify } from 'node:crypto';
+import { canonicalJson, digestCanonical } from './canonical.ts';
+import { type ComponentName, createWireValidator } from './index.ts';
 
 // Golden vectors carry wire bytes as text so each consumer parses exactly what would arrive on the wire.
 export interface Vector {
@@ -33,9 +35,32 @@ export interface ConsumerReport {
 	vectors: VectorResult[];
 }
 
-// Harness revision: the TypeScript consumer starts and reports every vector unavailable until a contract is published.
 export function runTypeScriptConsumer(file: VectorFile): ConsumerReport {
-	return { schema_version: 'agora.contract-conformance/v1', consumer: 'typescript', vectors: file.vectors.map((vector) => ({ id: vector.id, accepted: false, rejection: 'unavailable: no published contract' })) };
+	const validator = createWireValidator();
+	return {
+		schema_version: 'agora.contract-conformance/v1',
+		consumer: 'typescript',
+		vectors: file.vectors.map((vector) => {
+			let parsed: unknown;
+			try {
+				parsed = JSON.parse(vector.wire);
+			} catch (error) {
+				return { id: vector.id, accepted: false, rejection: `not json: ${error instanceof Error ? error.message : String(error)}` };
+			}
+			const validation = validator.validate(vector.component, parsed);
+			if (!validation.ok) return { id: vector.id, accepted: false, rejection: validation.details.join('; ') };
+			const canonical = canonicalJson(validation.value);
+			const result: VectorResult = { id: vector.id, accepted: true, canonical, digest: digestCanonical(validation.value) };
+			if (vector.signature) result.signature = verifyDetached(canonical, vector.signature.public_key, vector.signature.signature) ? 'valid' : 'invalid';
+			return result;
+		}),
+	};
+}
+
+// R05: signatures cover the canonical bytes of the payload, never a typed object that may have dropped fields.
+export function verifyDetached(canonical: string, publicKeyHex: string, signatureHex: string): boolean {
+	const key = createPublicKey({ key: { kty: 'OKP', crv: 'Ed25519', x: Buffer.from(publicKeyHex, 'hex').toString('base64url') }, format: 'jwk' });
+	return verify(null, Buffer.from(canonical, 'utf8'), key, Buffer.from(signatureHex, 'hex'));
 }
 
 export type Consumer = 'typescript' | 'swift';

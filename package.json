@@ -13,6 +13,7 @@
 		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs",
 		"contracts:generate": "node contracts/tools/generate.mjs",
 		"contracts:check": "node contracts/tools/generate.mjs --check",
+		"contracts:conform": "node contracts/src/conform-cli.ts",
 		"test": "node scripts/with-test-postgres.mjs vitest run",
 		"test:unit": "vitest run --project unit --project contracts",
 		"test:pg": "node scripts/with-test-postgres.mjs vitest run --project pg",
