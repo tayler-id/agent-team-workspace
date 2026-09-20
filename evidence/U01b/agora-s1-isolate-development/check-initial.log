@@ -1,0 +1,20 @@
+
+> agora@ check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test
+
+
+> agora@ lint /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> eslint .
+
+
+> agora@ typecheck /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json
+
+apps/center/src/verification.mjs(9,29): error TS7006: Parameter 'state' implicitly has an 'any' type.
+apps/center/src/verification.mjs(14,15): error TS7030: Not all code paths return a value.
+apps/center/src/verification.mjs(30,6): error TS7034: Variable 'server' implicitly has type 'any' in some locations where its type cannot be determined.
+apps/center/src/verification.mjs(31,76): error TS7005: Variable 'server' implicitly has an 'any' type.
+apps/center/src/verification.mjs(31,89): error TS7006: Parameter 'error' implicitly has an 'any' type.
+apps/center/src/verification.mjs(31,122): error TS2810: Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.
+ ELIFECYCLE  Command failed with exit code 2.
+ ELIFECYCLE  Command failed with exit code 2.
