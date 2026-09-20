@@ -1931,8 +1931,59 @@ extension Components {
             }
             /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/authority`.
             public var authority: Components.Schemas.ProjectFixtureConfig.authorityPayload
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/commandsPayload`.
+            public struct commandsPayloadPayload: Codable, Hashable, Sendable {
+                /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/commandsPayload/command`.
+                public var command: Components.Schemas.CliCommandName
+                /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/commandsPayload/agora`.
+                public var agora: [Swift.String]
+                /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/commandsPayload/python`.
+                public var python: [Swift.String]
+                /// Creates a new `commandsPayloadPayload`.
+                ///
+                /// - Parameters:
+                ///   - command:
+                ///   - agora:
+                ///   - python:
+                public init(
+                    command: Components.Schemas.CliCommandName,
+                    agora: [Swift.String],
+                    python: [Swift.String]
+                ) {
+                    self.command = command
+                    self.agora = agora
+                    self.python = python
+                }
+                public enum CodingKeys: String, CodingKey {
+                    case command
+                    case agora
+                    case python
+                }
+                public init(from decoder: any Swift.Decoder) throws {
+                    let container = try decoder.container(keyedBy: CodingKeys.self)
+                    self.command = try container.decode(
+                        Components.Schemas.CliCommandName.self,
+                        forKey: .command
+                    )
+                    self.agora = try container.decode(
+                        [Swift.String].self,
+                        forKey: .agora
+                    )
+                    self.python = try container.decode(
+                        [Swift.String].self,
+                        forKey: .python
+                    )
+                    try decoder.ensureNoAdditionalProperties(knownKeys: [
+                        "command",
+                        "agora",
+                        "python"
+                    ])
+                }
+            }
             /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/commands`.
-            public var commands: [Components.Schemas.CliCommandName]
+            public typealias commandsPayload = [Components.Schemas.ProjectFixtureConfig.commandsPayloadPayload]
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/commands`.
+            public var commands: Components.Schemas.ProjectFixtureConfig.commandsPayload
             /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/scenarios`.
             public var scenarios: [Swift.String]
             /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/lanes`.
@@ -1964,7 +2015,7 @@ extension Components {
             public init(
                 schema_version: Components.Schemas.ProjectFixtureConfig.schema_versionPayload,
                 authority: Components.Schemas.ProjectFixtureConfig.authorityPayload,
-                commands: [Components.Schemas.CliCommandName],
+                commands: Components.Schemas.ProjectFixtureConfig.commandsPayload,
                 scenarios: [Swift.String],
                 lanes: [Components.Schemas.FixtureLane],
                 driver: [Swift.String],
@@ -2004,7 +2055,7 @@ extension Components {
                     forKey: .authority
                 )
                 self.commands = try container.decode(
-                    [Components.Schemas.CliCommandName].self,
+                    Components.Schemas.ProjectFixtureConfig.commandsPayload.self,
                     forKey: .commands
                 )
                 self.scenarios = try container.decode(

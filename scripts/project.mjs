@@ -65,7 +65,9 @@ try {
 			let ready;
 			for (let n = 0; n < 600; n++) { ready = json(stateFile); if (ready.phase !== 'starting') break; await sleep(100); }
 			requireThat(ready.phase === 'ready', 'instance_start_failed', 'infrastructure_failure');
-			assert.deepEqual(await control(ready, 'inspect'), ready); report.instance = instanceView(ready);
+			assert.deepEqual(await control(ready, 'inspect'), ready);
+			const health = await fetch(ready.url + '/api/v1/health/ready', { headers: { 'x-agora-handle': ready.handle }, signal: globalThis.AbortSignal.timeout(10_000) });
+			assert.equal(health.status, 200); assert.equal((await health.json()).status, 'ready'); report.instance = instanceView(ready);
 		} else {
 			requireThat(existsSync(stateFile), 'instance_unknown'); const state = json(stateFile);
 			requireThat(state.owner === realpathSync('.') && state.id === id && state.fixture === fixture, 'foreign_owner');

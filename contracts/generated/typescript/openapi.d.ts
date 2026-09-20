@@ -287,7 +287,11 @@ export interface components {
             schema_version: "agora.verification-fixture/v1";
             /** @enum {string} */
             authority: "foundation_fixture";
-            commands: components["schemas"]["CliCommandName"][];
+            commands: {
+                command: components["schemas"]["CliCommandName"];
+                agora: string[];
+                python: string[];
+            }[];
             scenarios: string[];
             lanes: components["schemas"]["FixtureLane"][];
             driver: string[];

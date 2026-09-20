@@ -9,6 +9,7 @@ const cli=(...args)=>{const python=args[args.indexOf('--fixture')+1]==='python';
 const pass=(...args)=>{const v=cli(...args); assert.equal(v.outcome,'pass',JSON.stringify(v));return v;};
 assert.equal(pass('doctor').command,'doctor');
 const inventory=pass('scenarios'); assert.ok(inventory.scenarios.includes('policy'));
+const registered=JSON.parse(fs.readFileSync('agora/project.json')).commands;assert.deepEqual(registered.find(entry=>entry.command==='start')?.agora,['node','scripts/project.mjs','project','start']);assert.deepEqual(registered.find(entry=>entry.command==='start')?.python,['python3','packages/verification/fixture/project.py','start']);
 ${body}`], { encoding: 'utf8', timeout: 300_000 });
 	expect(result.status, result.stdout + result.stderr).toBe(0);
 }

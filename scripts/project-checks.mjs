@@ -35,6 +35,7 @@ export function versions() {
 export function mapped() {
 	const manifest = json('agora/project.json'); const features = json('agora/feature-map.json').features;
 	requireThat(wire.validate('ProjectFixtureConfig', manifest).ok, 'manifest_invalid');
+	requireThat(manifest.commands.map(entry => entry.command).join(',') === 'doctor,scenarios,start,verify,evidence,stop,lanes' && manifest.commands.every(entry => JSON.stringify(entry.agora) === JSON.stringify(['node','scripts/project.mjs','project',entry.command]) && JSON.stringify(entry.python) === JSON.stringify(['python3','packages/verification/fixture/project.py',entry.command])), 'command_drift');
 	const baseline = JSON.parse(command(['git', 'show', '421f572:agora/feature-map.json']).stdout).features;
 	requireThat(new Set(features.map(feature => feature.id)).size === features.length && baseline.every(old => features.some(feature => feature.id === old.id && old.scenarios.every(id => feature.scenarios.includes(id)))), 'feature_map_drift');
 	const entry = features.find(feature => feature.id === 'project-controls');

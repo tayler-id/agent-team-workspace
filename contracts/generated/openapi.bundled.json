@@ -1033,7 +1033,34 @@
 						"type": "array",
 						"maxItems": 7,
 						"items": {
-							"$ref": "#/components/schemas/CliCommandName"
+							"type": "object",
+							"additionalProperties": false,
+							"required": [
+								"command",
+								"agora",
+								"python"
+							],
+							"properties": {
+								"command": {
+									"$ref": "#/components/schemas/CliCommandName"
+								},
+								"agora": {
+									"type": "array",
+									"maxItems": 16,
+									"items": {
+										"type": "string",
+										"minLength": 1
+									}
+								},
+								"python": {
+									"type": "array",
+									"maxItems": 16,
+									"items": {
+										"type": "string",
+										"minLength": 1
+									}
+								}
+							}
 						}
 					},
 					"scenarios": {
