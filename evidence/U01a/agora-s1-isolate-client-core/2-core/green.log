@@ -1,0 +1,23 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-20T14:09:40.794Z
+parent: a449e6aadc30cb44d6500e0cee667146b44b942e
+head: ea44a461cdfe7fd3ad39d64a0f14406300560c05
+subject_revision: ea44a461cdfe7fd3ad39d64a0f14406300560c05
+test_patch_applied_to_subject: false
+test_patch_files: contracts/fixtures/replay.json, contracts/test/replay.test.ts, packages/client-core/test/fixture.test.ts, packages/client-core/test/guards.test.ts, packages/client-core/test/sync.test.ts
+test_patch_digest: sha256:cd39cf549cceffd84e59cfc3b278acf6abab869cd174f95d088321d5a9d39f7e
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/replay.json","digest":"sha256:3aa772e653f13c3ccb3dbe456e1eb902856e61db8706d3f792218c443904b38d"},{"file":"contracts/package.json","digest":"sha256:0d17aafe0e42e6eb5f2bee30bbb6a2829b21f5c976d25a1ac0fd51c8406308b0"},{"file":"contracts/swift/Sources/AgoraContractsConform/Replay.swift","digest":"sha256:c812323c6e2f458e721c283c0b09f29f11d0fc28045812333145e64cebb0ef29"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:0bfc2423c294545bb4cdb6646719004ad3c69be1d26f68ec9eecc3c7a0d1c7fe"},{"file":"contracts/test/replay.test.ts","digest":"sha256:ff27332b9780499edc0a01f0b9111d82ea35dd5993b3e5d53a997cade162d122"}]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/sync.test.ts --project contracts contracts/test/replay.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:63e28fa680f03c82f9080b98b312e1d7489a26fa8244778ec23061a8860acc51"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-xlD5nu
+
+
+ Test Files  2 passed (2)
+      Tests  13 passed (13)
+   Start at  10:09:28
+   Duration  10.67s (tests 99%)
+

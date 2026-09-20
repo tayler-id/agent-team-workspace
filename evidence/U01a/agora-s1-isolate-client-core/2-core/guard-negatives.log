@@ -1,0 +1,17 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ✓ |unit| packages/client-core/test/guards.test.ts > revision guard is necessary: disabling it in an isolated copy turns its public assertion red 77ms
+ ✓ |unit| packages/client-core/test/guards.test.ts > duplicate guard is necessary: disabling it in an isolated copy turns its public assertion red 76ms
+ ✓ |unit| packages/client-core/test/guards.test.ts > gap-ack guard is necessary: disabling it in an isolated copy turns its public assertion red 78ms
+ ✓ |unit| packages/client-core/test/guards.test.ts > unknown guard is necessary: disabling it in an isolated copy turns its public assertion red 74ms
+ ✓ |unit| packages/client-core/test/guards.test.ts > snapshot-order guard is necessary: disabling it in an isolated copy turns its public assertion red 77ms
+ ✓ |unit| packages/client-core/test/guards.test.ts > buffer-bound guard is necessary: disabling it in an isolated copy turns its public assertion red 196ms
+ ✓ |unit| packages/client-core/test/guards.test.ts > command-digest guard is necessary: disabling it in an isolated copy turns its public assertion red 80ms
+ ✓ |unit| packages/client-core/test/guards.test.ts > input-ownership guard is necessary: disabling it in an isolated copy turns its public assertion red 77ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  10:10:17
+   Duration  795ms (tests 98%, transform 1%, import 1%)
+

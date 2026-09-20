@@ -1,0 +1,33 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ❯ |unit| packages/client-core/test/fixture.test.ts (3 tests | 1 failed) 180ms
+   × the CLI returns pass only for literal snapshots, and distinguishes assertion failure from usage error 176ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/fixture.test.ts > the CLI returns pass only for literal snapshots, and distinguishes assertion failure from usage error
+AssertionError: expected +0 to be 64 // Object.is equality
+
+- Expected
++ Received
+
+- 64
++ 0
+
+ ❯ packages/client-core/test/fixture.test.ts:34:37
+     32|  expect(valid.status, valid.stderr).toBe(0);
+     33|  expect(JSON.parse(valid.stdout)).toMatchObject({ outcome: 'pass' });
+     34|  expect(invoke('--unknown').status).toBe(64);
+       |                                     ^
+     35|  const dir = mkdtempSync(path.join(tmpdir(), 'agora-replay-cli-'));
+     36|  try {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  10:01:00
+   Duration  307ms (tests 70%, import 18%, transform 11%, worker 1%)
+

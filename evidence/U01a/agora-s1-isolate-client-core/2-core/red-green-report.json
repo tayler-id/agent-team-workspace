@@ -1,0 +1,1 @@
+{"schema_version":"agora.red-green/v1","outcome":"pass","parent":"a449e6aadc30cb44d6500e0cee667146b44b942e","head":"ea44a461cdfe7fd3ad39d64a0f14406300560c05","red_exit":1,"green_exit":0,"test_patch_digest":"sha256:cd39cf549cceffd84e59cfc3b278acf6abab869cd174f95d088321d5a9d39f7e","out":"evidence/U01a/agora-s1-isolate-client-core/2-core"}
