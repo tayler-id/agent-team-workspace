@@ -9,7 +9,8 @@
 	},
 	"scripts": {
 		"lint": "eslint .",
-		"typecheck": "tsc -p tsconfig.json",
+		"typecheck": "tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json",
+		"boundaries": "vitest run --project unit packages/client-core/test/boundaries.test.ts packages/client-core/test/export-maps.test.ts --reporter=json",
 		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs",
 		"contracts:generate": "node contracts/tools/generate.mjs",
 		"contracts:check": "node contracts/tools/generate.mjs --check",
@@ -27,6 +28,7 @@
 		"@agora/contracts": "workspace:*",
 		"@eslint/js": "10.0.1",
 		"@types/node": "24.10.1",
+		"@typescript-eslint/utils": "8.70.0",
 		"eslint": "10.11.0",
 		"markdownlint-cli2": "0.23.2",
 		"typescript": "5.9.3",

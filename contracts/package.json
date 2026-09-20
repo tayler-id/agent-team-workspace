@@ -6,6 +6,7 @@
 	"exports": {
 		".": "./src/index.ts",
 		"./values": { "types": "./generated/typescript/openapi.d.ts" },
+		"./canonical": "./src/canonical.ts",
 		"./schemas/*": "./schemas/*"
 	},
 	"dependencies": {

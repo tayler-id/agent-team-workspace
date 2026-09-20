@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { createApp } from '@agora/center';
+import { createApp } from '../src/app.ts';
 
 test('GET /api/v1/health reports liveness without touching any dependency', async () => {
 	const response = await createApp({ probeDatabase: () => Promise.reject(new Error('liveness must not probe')) }).request('/api/v1/health');

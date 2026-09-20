@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture and its portable contracts from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, contracts or agora/feature-map.json. Scope U01a.B01, U01a.B02 and the U01a.B03 contract/core slices; the boundary slice extends it.
+description: Project-owned instructions that prove the Agora foundation fixture and its portable contracts from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B03; later tasks extend it.
 ---
 
 # Verify Agora
@@ -36,6 +36,7 @@ node scripts/with-test-postgres.mjs <command>
 pnpm contracts:check
 pnpm contracts:conform -- --json
 pnpm client:replay -- --json --swift
+pnpm boundaries
 pnpm test
 node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
 node scripts/with-test-postgres.mjs bash -c 'node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts'
@@ -47,7 +48,7 @@ Pass predicates:
 - `pnpm contracts:conform` prints `"outcome": "pass"` with `"swift": "pass"` and every result `pass`; a `fail` result names the vector and each consumer's disagreement. This includes the `sync-*` fixture snapshot, event and reusable cursor/receipt vectors. Fixture payloads are not production HTTP operations.
 - `contracts/test/sync.test.ts` rejects unsupported event kinds/fields and proves each denial assertion turns red with its guard removed from an isolated schema copy. This is wire rejection, not yet core replay or acknowledgement proof.
 - `pnpm client:replay` reports `outcome: pass` only if all six TypeScript snapshots equal their literal golden states; `--swift` additionally requires the independent Swift projections to equal those same states. The transcript includes each contiguous-prefix acknowledgement and replay/upgrade request. No DOM or browser runs in lane 7.
-- `packages/client-core/test/sync.test.ts` covers snapshot races, large decimal ordering, receipts, retry, unread, drafts and clearing. `guards.test.ts` repeats the public assertions with one guard disabled per disposable copy; every disabled-guard run must exit 1 for its named assertion. Lane 8 remains unqualified until the boundary slice lands.
+- `packages/client-core/test/sync.test.ts` covers snapshot races, large decimal ordering, receipts, retry, unread, drafts and clearing. `guards.test.ts` repeats the public assertions with one guard disabled per disposable copy; every disabled-guard run must exit 1 for its named assertion. Lane 8 runs through `pnpm boundaries`: all import-form, public-type, private-path, export-map and no-platform fixtures must pass. The negative-rule configurations are isolated test instances, never runtime guard switches.
 - `pnpm test` exits 0 with every unit and pg test passing. The pg project refuses to run without a database; the contract tests fail, never skip, without Swift.
 - The probe report has `"outcome": "pass"` for `health-liveness` (200), `health-readiness` (200), `policy-allow` (200, `decision: allow`), `policy-deny` (200, `reason_code: scope_mismatch`), `policy-unknown-field` (400, `malformed_command`) and `unknown-route` (404, `not_found`).
 - The first migration report has `applied: 1`; the second has `applied: 0` and the same `schema_digest`.
@@ -65,6 +66,8 @@ For the U01a.B03 core slice, use the existing empty public harness and Swift con
 ```sh
 node scripts/record-red-green.mjs --parent <slice-1-head> --head <core-head> --out evidence/U01a/agora-s1-isolate-client-core/2-core -- pnpm exec vitest run --project unit packages/client-core/test/sync.test.ts --project contracts contracts/test/replay.test.ts
 ```
+
+For the U01a.B03 boundary slice, run `packages/client-core/test/boundaries.test.ts` through the same recorder. The parent already has ESLint, TypeScript and a valid core public import. Red is a missing forbidden-edge/public-port diagnostic, not a missing SDK or runner. The dedicated no-platform compiler is also part of `pnpm typecheck`; it includes only ES2024, with neither DOM nor Node globals.
 
 `red.log` must show the intended assertions failing (for example `expected 404 to be 200`), not a missing runner, syntax error or dependency failure. `green.log` must exit 0. Copy probe and migration outputs beside them.
 
