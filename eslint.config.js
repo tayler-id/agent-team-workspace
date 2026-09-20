@@ -42,7 +42,7 @@ export default tseslint.config(
 		rules: { 'no-console': 'off' },
 	},
 	{
-		files: ['docs/site/*.mjs', 'scripts/foundation*.mjs'],
+		files: ['docs/site/*.mjs', 'scripts/foundation*.mjs', 'scripts/project*.mjs', 'apps/center/src/verification.mjs'],
 		// JavaScript build tools have no TypeScript annotation syntax.
 		rules: { '@typescript-eslint/explicit-module-boundary-types': 'off' },
 	},

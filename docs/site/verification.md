@@ -4,7 +4,7 @@ Agora must prove both the platform and each managed project's actual behavior. O
 
 ## Run the existing foundation contract
 
-The project-owned [verify-agora skill](repo:.agents/skills/verify-agora/SKILL.md) supplies literal Doctor, Launch, Drive, Evidence and Cleanup instructions. Its current scope is U01a.B01 through U01a.B04, including cross-language replay, mechanical boundaries and [task proof admission](test-first.md).
+The project-owned [verify-agora skill](repo:.agents/skills/verify-agora/SKILL.md) supplies literal Doctor, Launch, Drive, Evidence and Cleanup instructions. Its current scope is U01a plus U01b.B01, including cross-language replay, mechanical boundaries, [task proof admission](test-first.md) and [owned project controls](project-controls.md).
 
 ```flow
 Doctor | Check runtimes, install locked tools and pass static gates.
@@ -14,7 +14,7 @@ Independent review | Inspect the committed implementation and proof, not the imp
 Cleanup | Remove only owned resources and prove evidence survives.
 ```
 
-Use [the current commands](cli.md) and [getting started](getting-started.md). The future `agora project` runner is not yet available.
+Use [the current commands](cli.md) and [checking a project](checking-a-project.md). The project-owned runner now drives task-local controls; it cannot qualify U01b's unimplemented later lanes.
 
 ## Red before green
 

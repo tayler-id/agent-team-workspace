@@ -17,6 +17,7 @@
         {"id": "workflows", "title": "Roles and workflows", "kind": "guide"},
         {"id": "cookbook", "title": "Practical guides", "kind": "guide"},
         {"id": "cli", "title": "CLI and public drivers", "kind": "guide"},
+        {"id": "checking-a-project", "title": "Checking a project", "kind": "feature"},
         {"id": "configuration", "title": "Configuration", "kind": "guide"},
         {"id": "faq", "title": "Troubleshooting and FAQ", "kind": "guide"}
       ]
@@ -28,6 +29,7 @@
         {"id": "repository", "title": "Repository and tools", "kind": "guide"},
         {"id": "foundation", "title": "Repository foundation", "kind": "feature"},
         {"id": "test-first", "title": "Task proof admission", "kind": "feature"},
+        {"id": "project-controls", "title": "Owned project verification", "kind": "feature"},
         {"id": "contracts", "title": "Portable contracts", "kind": "feature"},
         {"id": "synchronization", "title": "Client synchronization", "kind": "feature"},
         {"id": "memory", "title": "Data and memory", "kind": "guide"},
@@ -53,6 +55,9 @@
     {"path": "scripts/probe-center.mjs", "page": "cli.md"},
     {"path": "scripts/record-red-green.mjs", "page": "verification.md"},
     {"path": "scripts/foundation.mjs", "page": "test-first.md"},
+    {"path": "scripts/project.mjs", "page": "project-controls.md"},
+    {"path": "scripts/project-host.mjs", "page": "project-controls.md"},
+    {"path": "scripts/project-checks.mjs", "page": "project-controls.md"},
     {"path": "scripts/foundation-policy.mjs", "page": "test-first.md"},
     {"path": "scripts/foundation-replay.mjs", "page": "test-first.md"},
     {"path": "packages/verification", "page": "test-first.md"},

@@ -229,6 +229,99 @@ extension Components {
             case stop = "stop"
             case lanes = "lanes"
         }
+        /// - Remark: Generated from `#/components/schemas/CliInstance`.
+        public struct CliInstance: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/CliInstance/root`.
+            public var root: Swift.String
+            /// - Remark: Generated from `#/components/schemas/CliInstance/pid`.
+            public var pid: Swift.Int
+            /// - Remark: Generated from `#/components/schemas/CliInstance/process_start`.
+            public var process_start: Swift.String
+            /// - Remark: Generated from `#/components/schemas/CliInstance/url`.
+            public var url: Swift.String
+            /// - Remark: Generated from `#/components/schemas/CliInstance/database`.
+            public var database: Swift.String
+            /// - Remark: Generated from `#/components/schemas/CliInstance/object_namespace`.
+            public var object_namespace: Swift.String
+            /// - Remark: Generated from `#/components/schemas/CliInstance/cleanup_handle`.
+            public var cleanup_handle: Components.Schemas.Uuid
+            /// Creates a new `CliInstance`.
+            ///
+            /// - Parameters:
+            ///   - root:
+            ///   - pid:
+            ///   - process_start:
+            ///   - url:
+            ///   - database:
+            ///   - object_namespace:
+            ///   - cleanup_handle:
+            public init(
+                root: Swift.String,
+                pid: Swift.Int,
+                process_start: Swift.String,
+                url: Swift.String,
+                database: Swift.String,
+                object_namespace: Swift.String,
+                cleanup_handle: Components.Schemas.Uuid
+            ) {
+                self.root = root
+                self.pid = pid
+                self.process_start = process_start
+                self.url = url
+                self.database = database
+                self.object_namespace = object_namespace
+                self.cleanup_handle = cleanup_handle
+            }
+            public enum CodingKeys: String, CodingKey {
+                case root
+                case pid
+                case process_start
+                case url
+                case database
+                case object_namespace
+                case cleanup_handle
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.root = try container.decode(
+                    Swift.String.self,
+                    forKey: .root
+                )
+                self.pid = try container.decode(
+                    Swift.Int.self,
+                    forKey: .pid
+                )
+                self.process_start = try container.decode(
+                    Swift.String.self,
+                    forKey: .process_start
+                )
+                self.url = try container.decode(
+                    Swift.String.self,
+                    forKey: .url
+                )
+                self.database = try container.decode(
+                    Swift.String.self,
+                    forKey: .database
+                )
+                self.object_namespace = try container.decode(
+                    Swift.String.self,
+                    forKey: .object_namespace
+                )
+                self.cleanup_handle = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .cleanup_handle
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "root",
+                    "pid",
+                    "process_start",
+                    "url",
+                    "database",
+                    "object_namespace",
+                    "cleanup_handle"
+                ])
+            }
+        }
         /// Closed outcome set. Process exit follows the outcome exactly: pass 0, fail 1, blocked 2, unavailable 3, usage_error 64, infrastructure_failure 70. A report whose exit disagrees with its outcome is invalid evidence.
         ///
         /// - Remark: Generated from `#/components/schemas/CliOutcome`.
@@ -254,6 +347,10 @@ extension Components {
             public var command: Components.Schemas.CliCommandName
             /// - Remark: Generated from `#/components/schemas/CliReport/run_id`.
             public var run_id: Components.Schemas.Uuid?
+            /// - Remark: Generated from `#/components/schemas/CliReport/instance`.
+            public var instance: Components.Schemas.CliInstance?
+            /// - Remark: Generated from `#/components/schemas/CliReport/scenarios`.
+            public var scenarios: [Swift.String]?
             /// - Remark: Generated from `#/components/schemas/CliReport/scenario_id`.
             public var scenario_id: Swift.String?
             /// - Remark: Generated from `#/components/schemas/CliReport/versions`.
@@ -325,6 +422,8 @@ extension Components {
             ///   - schema_version:
             ///   - command:
             ///   - run_id:
+            ///   - instance:
+            ///   - scenarios:
             ///   - scenario_id:
             ///   - versions:
             ///   - outcome:
@@ -337,6 +436,8 @@ extension Components {
                 schema_version: Components.Schemas.CliReport.schema_versionPayload,
                 command: Components.Schemas.CliCommandName,
                 run_id: Components.Schemas.Uuid? = nil,
+                instance: Components.Schemas.CliInstance? = nil,
+                scenarios: [Swift.String]? = nil,
                 scenario_id: Swift.String? = nil,
                 versions: Components.Schemas.CliReport.versionsPayload,
                 outcome: Components.Schemas.CliOutcome,
@@ -349,6 +450,8 @@ extension Components {
                 self.schema_version = schema_version
                 self.command = command
                 self.run_id = run_id
+                self.instance = instance
+                self.scenarios = scenarios
                 self.scenario_id = scenario_id
                 self.versions = versions
                 self.outcome = outcome
@@ -362,6 +465,8 @@ extension Components {
                 case schema_version
                 case command
                 case run_id
+                case instance
+                case scenarios
                 case scenario_id
                 case versions
                 case outcome
@@ -384,6 +489,14 @@ extension Components {
                 self.run_id = try container.decodeIfPresent(
                     Components.Schemas.Uuid.self,
                     forKey: .run_id
+                )
+                self.instance = try container.decodeIfPresent(
+                    Components.Schemas.CliInstance.self,
+                    forKey: .instance
+                )
+                self.scenarios = try container.decodeIfPresent(
+                    [Swift.String].self,
+                    forKey: .scenarios
                 )
                 self.scenario_id = try container.decodeIfPresent(
                     Swift.String.self,
@@ -421,6 +534,8 @@ extension Components {
                     "schema_version",
                     "command",
                     "run_id",
+                    "instance",
+                    "scenarios",
                     "scenario_id",
                     "versions",
                     "outcome",
@@ -608,6 +723,84 @@ extension Components {
             case _3 = 3
             case _64 = 64
             case _70 = 70
+        }
+        /// - Remark: Generated from `#/components/schemas/FixtureEffect`.
+        public struct FixtureEffect: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureEffect/report`.
+            public var report: Components.Schemas.FixturePolicyDecisionReport
+            /// - Remark: Generated from `#/components/schemas/FixtureEffect/object`.
+            public var object: Components.Schemas.FixturePolicyDecisionReport
+            /// Creates a new `FixtureEffect`.
+            ///
+            /// - Parameters:
+            ///   - report:
+            ///   - object:
+            public init(
+                report: Components.Schemas.FixturePolicyDecisionReport,
+                object: Components.Schemas.FixturePolicyDecisionReport
+            ) {
+                self.report = report
+                self.object = object
+            }
+            public enum CodingKeys: String, CodingKey {
+                case report
+                case object
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.report = try container.decode(
+                    Components.Schemas.FixturePolicyDecisionReport.self,
+                    forKey: .report
+                )
+                self.object = try container.decode(
+                    Components.Schemas.FixturePolicyDecisionReport.self,
+                    forKey: .object
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "report",
+                    "object"
+                ])
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/FixtureEffects`.
+        public typealias FixtureEffects = [Components.Schemas.FixtureEffect]
+        /// - Remark: Generated from `#/components/schemas/FixtureLane`.
+        public struct FixtureLane: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/FixtureLane/id`.
+            public var id: Swift.Int
+            /// - Remark: Generated from `#/components/schemas/FixtureLane/predicate`.
+            public var predicate: Swift.String
+            /// Creates a new `FixtureLane`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - predicate:
+            public init(
+                id: Swift.Int,
+                predicate: Swift.String
+            ) {
+                self.id = id
+                self.predicate = predicate
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case predicate
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.id = try container.decode(
+                    Swift.Int.self,
+                    forKey: .id
+                )
+                self.predicate = try container.decode(
+                    Swift.String.self,
+                    forKey: .predicate
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "id",
+                    "predicate"
+                ])
+            }
         }
         /// Body of POST /api/v1/fixture/policy/decisions.
         ///
@@ -1721,6 +1914,133 @@ extension Components {
                     "schema_version",
                     "status",
                     "service"
+                ])
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig`.
+        public struct ProjectFixtureConfig: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_verification_hyphen_fixture_sol_v1 = "agora.verification-fixture/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/schema_version`.
+            public var schema_version: Components.Schemas.ProjectFixtureConfig.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/authority`.
+            @frozen public enum authorityPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case foundation_fixture = "foundation_fixture"
+            }
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/authority`.
+            public var authority: Components.Schemas.ProjectFixtureConfig.authorityPayload
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/commands`.
+            public var commands: [Components.Schemas.CliCommandName]
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/scenarios`.
+            public var scenarios: [Swift.String]
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/lanes`.
+            public var lanes: [Components.Schemas.FixtureLane]
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/driver`.
+            public var driver: [Swift.String]
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/timeout_ms`.
+            public var timeout_ms: Swift.Int
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/target`.
+            @frozen public enum targetPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case local_hyphen_foundation_hyphen_fixture = "local-foundation-fixture"
+            }
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/target`.
+            public var target: Components.Schemas.ProjectFixtureConfig.targetPayload
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/cleanup`.
+            public var cleanup: Swift.String
+            /// Creates a new `ProjectFixtureConfig`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - authority:
+            ///   - commands:
+            ///   - scenarios:
+            ///   - lanes:
+            ///   - driver:
+            ///   - timeout_ms:
+            ///   - target:
+            ///   - cleanup:
+            public init(
+                schema_version: Components.Schemas.ProjectFixtureConfig.schema_versionPayload,
+                authority: Components.Schemas.ProjectFixtureConfig.authorityPayload,
+                commands: [Components.Schemas.CliCommandName],
+                scenarios: [Swift.String],
+                lanes: [Components.Schemas.FixtureLane],
+                driver: [Swift.String],
+                timeout_ms: Swift.Int,
+                target: Components.Schemas.ProjectFixtureConfig.targetPayload,
+                cleanup: Swift.String
+            ) {
+                self.schema_version = schema_version
+                self.authority = authority
+                self.commands = commands
+                self.scenarios = scenarios
+                self.lanes = lanes
+                self.driver = driver
+                self.timeout_ms = timeout_ms
+                self.target = target
+                self.cleanup = cleanup
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case authority
+                case commands
+                case scenarios
+                case lanes
+                case driver
+                case timeout_ms
+                case target
+                case cleanup
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.ProjectFixtureConfig.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.authority = try container.decode(
+                    Components.Schemas.ProjectFixtureConfig.authorityPayload.self,
+                    forKey: .authority
+                )
+                self.commands = try container.decode(
+                    [Components.Schemas.CliCommandName].self,
+                    forKey: .commands
+                )
+                self.scenarios = try container.decode(
+                    [Swift.String].self,
+                    forKey: .scenarios
+                )
+                self.lanes = try container.decode(
+                    [Components.Schemas.FixtureLane].self,
+                    forKey: .lanes
+                )
+                self.driver = try container.decode(
+                    [Swift.String].self,
+                    forKey: .driver
+                )
+                self.timeout_ms = try container.decode(
+                    Swift.Int.self,
+                    forKey: .timeout_ms
+                )
+                self.target = try container.decode(
+                    Components.Schemas.ProjectFixtureConfig.targetPayload.self,
+                    forKey: .target
+                )
+                self.cleanup = try container.decode(
+                    Swift.String.self,
+                    forKey: .cleanup
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "authority",
+                    "commands",
+                    "scenarios",
+                    "lanes",
+                    "driver",
+                    "timeout_ms",
+                    "target",
+                    "cleanup"
                 ])
             }
         }

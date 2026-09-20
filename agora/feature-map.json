@@ -6,6 +6,7 @@
 		{
 			"id": "project-controls",
 			"documentation": "docs/site/project-controls.md",
+			"last_verified_subject": {"receipt": ".scratch/project/{fixture}/{instance}/evidence.json", "fields": ["versions.code", "versions.config", "versions.fixture"], "requires_live_pass": true},
 			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
 			"public": ["pnpm agora project doctor|scenarios|start|verify|evidence|stop|lanes", "python3 packages/verification/fixture/project.py"],
 			"contracts": ["contracts/schemas/cli.schema.json"],

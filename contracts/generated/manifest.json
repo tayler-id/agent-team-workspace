@@ -7,7 +7,7 @@
 		},
 		{
 			"file": "contracts/schemas/cli.schema.json",
-			"digest": "sha256:ee33369671f16efec7ba63e206ca24911313919e07ff3c626758aa30da422b8e"
+			"digest": "sha256:77a64f04ac45d5a9e5a6e2d858fba983e9e8ab1d4aed99f3efe45da9c4fc6f37"
 		},
 		{
 			"file": "contracts/schemas/errors.schema.json",
@@ -43,6 +43,7 @@
 		"CleanupReceipt",
 		"CliCommand",
 		"CliCommandName",
+		"CliInstance",
 		"CliOutcome",
 		"CliReport",
 		"CommandReceipt",
@@ -50,6 +51,9 @@
 		"Digest",
 		"ErrorReport",
 		"ExitCode",
+		"FixtureEffect",
+		"FixtureEffects",
+		"FixtureLane",
 		"FixturePolicyCommand",
 		"FixturePolicyDecisionReport",
 		"FixtureSyncMessage",
@@ -64,6 +68,7 @@
 		"FoundationReport",
 		"GitSha",
 		"HealthReport",
+		"ProjectFixtureConfig",
 		"ReadinessReport",
 		"ReasonCode",
 		"Revision",
@@ -79,11 +84,11 @@
 	"outputs": [
 		{
 			"file": "contracts/generated/openapi.bundled.json",
-			"digest": "sha256:c2964653a9e91368d8dca548efc724782f7e7b22347bf8cf91b212e28d51436e"
+			"digest": "sha256:758a5ff13590dd55bf5fedf312297fe81aad33e35b98c786cec9f072dc242438"
 		},
 		{
 			"file": "contracts/generated/typescript/openapi.d.ts",
-			"digest": "sha256:ad1253c8d32e4c7f297f2245d11b8015d617098a9c6250c60643e91d84e7007d"
+			"digest": "sha256:6a6b5bbba800fafc65845cdd3f0bf662cb9b9a33dadf3eb547c5b867df47f8e2"
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Client.swift",
@@ -107,7 +112,7 @@
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift",
-			"digest": "sha256:b826264997a3a7f03f15b20cce98356f508cf8d49bf5904eb46c3a08e479d269"
+			"digest": "sha256:26b25b40ff86e25419f930e7c941f557a279ade8fad12257ef723de1d59ed82f"
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components.swift",

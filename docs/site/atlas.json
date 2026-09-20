@@ -3,6 +3,14 @@
   "date": "2026-09-20",
   "features": [
     {
+      "id": "project-controls",
+      "title": "Owned project verification",
+      "status": "In progress",
+      "why": "Drive real isolated fixtures and retain proof without touching another attempt.",
+      "page": "project-controls.md",
+      "proof": ["repo:packages/verification/test/project.test.ts", "repo:evidence/U01b/agora-s1-isolate-development/assertion-red.log"]
+    },
+    {
       "id": "task-proof",
       "title": "Task proof admission",
       "status": "Built",

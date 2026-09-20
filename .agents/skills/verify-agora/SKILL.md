@@ -1,39 +1,62 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture and its portable contracts from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04; later tasks extend it.
+description: Prove the Agora and independent Python foundation fixtures through owned project controls, portable contracts and guard negatives. Use for center, storage, client-core, contracts, verification and feature-map changes. Scope U01a and U01b.B01 only.
 ---
 
 # Verify Agora
 
-Every step is a literal command run from the repository root. Record outputs under `evidence/U01a/<task>/`. A command that cannot run is a blocked prerequisite, not a pass. The feature map is `agora/feature-map.json`; a change to any path it lists invalidates that feature's scenarios until the Drive step passes again at the new head.
+Run every shell block, in order, from the repository root in one shell at a committed candidate. Use ordinary Node 24 without inherited forge credentials. This is local foundation-fixture proof, not product authority or U01b qualification. The [feature map](../../../agora/feature-map.json) and these instructions are freshness inputs: changing either invalidates prior receipts until a live pass. Read [project controls](../../../docs/site/project-controls.md) for prerequisites and trust limits.
 
 ## Doctor
 
-Toolchain and static checks only. Expected: Node 24.x, pnpm 10.x, PostgreSQL 18.x server binaries, a Swift 6 toolchain, install and static gates exit 0. A missing Swift toolchain blocks the contract steps; it never downgrades them to a pass.
+Expected: Node 24, pnpm 10, PostgreSQL 18 server tools, Swift 6 and Python 3 with the locked independent validator. Installation is explicit; `project doctor` itself is read-only. Missing prerequisites block, never skip.
 
 ```sh
+unset GH_TOKEN GITHUB_TOKEN
 node --version
 pnpm --version
 pg_ctl --version
 swift --version
+python3 -m venv .scratch/python
+.scratch/python/bin/pip install -r packages/verification/fixture/requirements.txt
+export PATH="$PWD/.scratch/python/bin:$PATH"
 pnpm install --frozen-lockfile
 pnpm audit --json
 pnpm typecheck
 pnpm lint
 pnpm docs:check
+pnpm -s agora project doctor --json
+python3 packages/verification/fixture/project.py doctor --json
+pnpm -s agora project scenarios --json
+python3 packages/verification/fixture/project.py scenarios --json
 ```
 
 ## Launch
 
-`scripts/with-test-postgres.mjs` boots a throwaway socket-only PostgreSQL cluster (owner role `agora_owner`, non-owner role `agora_app`, guard-negative role `agora_bypass`, database `agora_test`) for the duration of one command and removes it afterwards. It exports `AGORA_DATABASE_URL` as the service role and `AGORA_MIGRATION_DATABASE_URL` as the owner. To reuse an existing PostgreSQL 18 server, export `AGORA_TEST_DATABASE_URL` (as `agora_app`), `AGORA_TEST_OWNER_DATABASE_URL` (as the schema owner), `AGORA_TEST_BYPASS_DATABASE_URL` (a `BYPASSRLS` member of `agora_app`) and `AGORA_TEST_SUPERUSER_DATABASE_URL` (used only to remove and restore cluster-level prerequisites in one test) and the wrapper passes the command through.
+Each start creates a private, non-reusable UUID namespace. Agora uses a socket-only PostgreSQL cluster and non-owner service role. Python independently uses SQLite and JSON Schema. Both bind loopback HTTP port zero, use a private object directory and an authenticated control socket. No ambient database URL is reused. Keep the returned cleanup handle, process start identity and root ownership receipt.
 
 ```sh
-node scripts/with-test-postgres.mjs <command>
+A=$(node -e 'console.log(crypto.randomUUID())')
+B=$(node -e 'console.log(crypto.randomUUID())')
+P=$(node -e 'console.log(crypto.randomUUID())')
+OUT="evidence/U01b/agora-s1-isolate-development/live-$A"
+mkdir -p "$OUT"
+export TMPDIR=$(mktemp -d /tmp/agora-u01b-XXXXXX)
+printf '%s\n' "$TMPDIR" > "$OUT/temp-owner.txt"
+pnpm -s agora project start --profile verify --instance "$A" --json > "$OUT/a-start.json"
+pnpm -s agora project start --profile verify --instance "$B" --json > "$OUT/b-start.json"
+python3 packages/verification/fixture/project.py start --profile verify --instance "$P" --json > "$OUT/python-start.json"
 ```
 
 ## Drive
 
+Pass means literal public allow/deny results, exactly two additional persisted journal entries and matching object bytes. The task lane runner additionally proves two simultaneous instances of each application, foreign cleanup refusal, missing/altered/stale evidence rejection, missing runners, report/exit disagreement, instruction drift and deleted required coverage. Its isolated guard mutation must fail the original denial assertion. This is CLI/HTTP proof, not a screenshot or a browser application claim.
+
 ```sh
+pnpm -s agora project verify --scenario policy --instance "$A" --artifacts "$OUT/a" --json
+pnpm -s agora project verify --scenario policy --instance "$B" --artifacts "$OUT/b" --json
+python3 packages/verification/fixture/project.py verify --scenario policy --instance "$P" --artifacts "$OUT/python" --json
+pnpm -s agora project lanes --unit U01b --task agora-s1-isolate-development --artifacts "$OUT/lanes" --json
 pnpm contracts:check
 pnpm contracts:conform -- --json
 pnpm client:replay -- --json --swift
@@ -43,57 +66,40 @@ node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
 node scripts/with-test-postgres.mjs bash -c 'node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts'
 ```
 
-Pass predicates:
-
-- `pnpm contracts:check` prints `"outcome": "pass"` with an empty `drift` list; `"outcome": "unavailable"` (exit 3) means the Swift generator could not run and the step is blocked, not passed.
-- `pnpm contracts:conform` prints `"outcome": "pass"` with `"swift": "pass"` and every result `pass`; a `fail` result names the vector and each consumer's disagreement. This includes the `sync-*` fixture snapshot, event and reusable cursor/receipt vectors. Fixture payloads are not production HTTP operations.
-- `contracts/test/sync.test.ts` rejects unsupported event kinds/fields and proves each denial assertion turns red with its guard removed from an isolated schema copy. This is wire rejection, not yet core replay or acknowledgement proof.
-- `pnpm client:replay` reports `outcome: pass` only if all six TypeScript snapshots equal their literal golden states; `--swift` additionally requires the independent Swift projections to equal those same states. The transcript includes each contiguous-prefix acknowledgement and replay/upgrade request. No DOM or browser runs in lane 7.
-- `packages/client-core/test/sync.test.ts` covers snapshot races, large decimal ordering, receipts, retry, unread, drafts and clearing. `guards.test.ts` repeats the public assertions with one guard disabled per disposable copy; every disabled-guard run must exit 1 for its named assertion. Lane 8 runs through `pnpm boundaries`, writing native JSON to `.scratch/boundaries.json`: all import-form, public-type, private-path, export-map and no-platform fixtures must pass. The negative-rule configurations are isolated test instances, never runtime guard switches.
-- `pnpm test` exits 0 with every unit and pg test passing. The pg project refuses to run without a database; the contract tests fail, never skip, without Swift.
-- The probe report has `"outcome": "pass"` for `health-liveness` (200), `health-readiness` (200), `policy-allow` (200, `decision: allow`), `policy-deny` (200, `reason_code: scope_mismatch`), `policy-unknown-field` (400, `malformed_command`) and `unknown-route` (404, `not_found`).
-- The first migration report has `applied: 1`; the second has `applied: 0` and the same `schema_digest`.
+Every required command must exit zero. All native lane assertions must pass without skips. Conformance must name both consumers as passing. Boundaries produce `.scratch/boundaries.json`. The migration pair reports `applied: 1`, then `applied: 0` with the same schema digest. Whole-unit lanes remain blocked without U01b.B02/B03; the explicit task selector does not qualify that milestone. U01a's historical task-admission driver remains documented in [task proof](../../../docs/site/test-first.md), not a substitute for this task's controls.
 
 ## Evidence
 
-Red before green: apply the head's test patch to the parent revision and keep both receipts.
+The callable test-only baseline below has a passing doctor. Its scenario inventory is unavailable, so the new inventory assertion is red on a value, not a missing executable. The recorder applies the current test patch at that baseline. Retain both exits and causes; an infrastructure or syntax failure is not red proof.
 
 ```sh
-node scripts/record-red-green.mjs --parent <parent-sha> --head <head-sha> --out evidence/U01a/<task> -- pnpm -s test
+BASE=$(git rev-parse ab6a1832da47782ddad69e2ca80512bb4d24ed24)
+HEAD=$(git rev-parse HEAD)
+node scripts/record-red-green.mjs --parent "$BASE" --head "$HEAD" --out "$OUT/red-green" -- pnpm exec vitest run --project unit packages/verification/test/project.test.ts
+pnpm -s agora project evidence --instance "$A" --json > "$OUT/a-evidence.json"
+pnpm -s agora project evidence --instance "$B" --json > "$OUT/b-evidence.json"
+python3 packages/verification/fixture/project.py evidence --instance "$P" --json > "$OUT/python-evidence.json"
 ```
 
-For the U01a.B03 core slice, use the existing empty public harness and Swift consumer at its parent, with the focused command below. The fixture CLI is additional head-only integration proof, not a missing-driver red:
-
-```sh
-node scripts/record-red-green.mjs --parent <slice-1-head> --head <core-head> --out evidence/U01a/agora-s1-isolate-client-core/2-core -- pnpm exec vitest run --project unit packages/client-core/test/sync.test.ts --project contracts contracts/test/replay.test.ts
-```
-
-For the U01a.B03 boundary slice, run `packages/client-core/test/boundaries.test.ts` through the same recorder. The parent already has ESLint, TypeScript and a valid core public import. Red is a missing forbidden-edge/public-port diagnostic, not a missing SDK or runner. The dedicated no-platform compiler is also part of `pnpm typecheck`; it includes only ES2024, with neither DOM nor Node globals.
-
-`red.log` must show the intended assertions failing (for example `expected 404 to be 200`), not a missing runner, syntax error or dependency failure. `green.log` must exit 0. Copy probe and migration outputs beside them.
-
-For U01a.B04, use full committed parent/head SHAs and the task evidence directory. The public driver invokes the same recorder with the fixed native-assertion command, then captures the isolated guard mutation. Run both lanes and task admission. The final foundation command must exit 2 with FG04-FG08 missing and U01a integration unqualified; that expected denial is not task failure.
-
-```sh
-node scripts/foundation.mjs --scope record --parent PARENT --head HEAD --evidence DIR --json
-node scripts/foundation.mjs --scope lane-9 --parent PARENT --head HEAD --evidence DIR --json
-node scripts/foundation.mjs --scope lane-10 --parent PARENT --head HEAD --evidence DIR --json
-node scripts/foundation.mjs --scope task --parent PARENT --head HEAD --evidence DIR --json
-pnpm verify:foundation -- --parent PARENT --head HEAD --evidence DIR --json
-```
-
-The first four commands require exit 0. `task_outcome: pass` never qualifies the unit or authorizes features. Inspect exact `FG01.red-required` red cause, baseline pass, same-subject green, guard normal/disabled assertions, and retained artifact hashes. No receipt is accepted without fresh replay. The [driver reference](../../../docs/site/test-first.md) documents scope and trust limits.
+The local receipt binds head and content digests, scenario and instance, plus artifact hashes and lengths. Missing artifacts and stale bytes refuse. This is not U01b.B02's general signed evidence validator, and a malicious owner can modify this local implementation. Exact-head independent review remains mandatory.
 
 ## Cleanup
 
-`with-test-postgres.mjs` stops and deletes its cluster on exit, including on SIGINT. `record-red-green.mjs` removes its worktrees. `generate.mjs --check` and the contract tests remove their temporary trees. `contracts/swift/.build/` is an ignored build cache and may stay. Confirm nothing else is left behind:
+Stop only owned handles. Stopping A must leave B usable. Evidence remains readable after every stop. Repeated matching stop is idempotent; a foreign handle fails even after removal. On an earlier failed step, use these same recorded handles to clean up and preserve that failure before a fresh attempt.
 
 ```sh
-git worktree prune
-git worktree list | grep -c 'agora-red-\|agora-green-\|agora-clean-' || echo "worktrees: clean"
-ls "${TMPDIR:-/tmp}" | grep agora- || echo "tmp: clean"
+AH=$(node -p "JSON.parse(require('fs').readFileSync('$OUT/a-start.json')).instance.cleanup_handle")
+BH=$(node -p "JSON.parse(require('fs').readFileSync('$OUT/b-start.json')).instance.cleanup_handle")
+PH=$(node -p "JSON.parse(require('fs').readFileSync('$OUT/python-start.json')).instance.cleanup_handle")
+pnpm -s agora project stop --instance "$A" --handle "$AH" --json
+pnpm -s agora project verify --scenario policy --instance "$B" --artifacts "$OUT/b-after-a-stop" --json
+pnpm -s agora project stop --instance "$B" --handle "$BH" --json
+python3 packages/verification/fixture/project.py stop --instance "$P" --handle "$PH" --json
+pnpm -s agora project evidence --instance "$A" --json
+pnpm -s agora project evidence --instance "$B" --json
+python3 packages/verification/fixture/project.py evidence --instance "$P" --json
+rmdir "$TMPDIR"
+unset TMPDIR
 ```
 
-Both greps must find nothing.
-
-Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.
+`rmdir` must succeed on this invocation's owned temp root. Never sweep the platform temp directory or prune somebody else's worktrees. The ignored `.scratch/project/` ownership journals and evidence directories remain deliberately; no database, object runtime namespace, HTTP listener or owned host process may remain.
