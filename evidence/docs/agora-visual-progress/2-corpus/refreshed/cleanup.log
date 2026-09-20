@@ -1,0 +1,12 @@
+Owned processes before cleanup:
+41594 /opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python -m http.server 48763 --bind 127.0.0.1 --directory .docs-dist
+69264 node docs/site/serve.mjs
+COMMAND   PID         USER   FD   TYPE DEVICE SIZE/OFF     NODE NAME
+Python  41594 taylerramsay  cwd    DIR   1,13     2944 58035901 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+node    69264 taylerramsay  cwd    DIR   1,13     2944 58035901 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+status: closed
+pageId: 2
+Owned preview and documentation development listeners stopped; other project ports untouched.
+0
+worktrees: clean
+tmp: clean

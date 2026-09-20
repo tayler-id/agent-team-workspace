@@ -1,5 +1,6 @@
 {
   "task": "agora-visual-progress",
+  "superseded_by": "refreshed/outcome.json",
   "change": "2-corpus",
   "code_head": "cef2a19beccd804656db20ec10c1ef3773992f32",
   "parent": "931cdfe7e153da9b582fde79a75557d1af64ca5b",

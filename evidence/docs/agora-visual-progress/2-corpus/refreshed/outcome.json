@@ -1,0 +1,40 @@
+{
+  "task": "agora-visual-progress",
+  "change": "2-corpus",
+  "branch": "fm/agora-visual-progress",
+  "code_head": "b1d71c72392567f3f4db7c88d39268b70e2724fa",
+  "parent": "d68203ab49f0618921b1d6a35703ad40382a64d7",
+  "main_base": "a2641fd4241833a9a9af6c5be30d5124919b769a",
+  "scope": "Complete 23-page product/user and build/production corpus; nine-node system map; all 22 milestone outcomes across S1/S2/S3; 14 source-owned design-handoff pages rendered with working relative navigation.",
+  "snapshot": "Atlas and generated companion intentionally retain the requested 606cba2 task-base snapshot. Newly landed fixture-only client core, replay and mechanical boundaries have separate current explanations, driver references, inventory homes and committed proof links. No milestone or usable product is claimed.",
+  "checks": {
+    "documentation_tests": 31,
+    "runtime_and_contract_tests": 79,
+    "red_green": "Recorder applies current corpus assertions to independently passing first change: valid public build passes, four intended corpus assertions fail; all five pass at code_head.",
+    "guard_negatives": "Precise documentation guard weakenings, 23 design cases, 20 handoff cases, core and import/public-type boundary negatives all pass.",
+    "verification": "All current verify-agora Doctor, Drive and Cleanup commands pass, including locked install/audit, lint, both typecheck lanes, TypeScript/Swift conformance/replay, contract drift, real PostgreSQL tests, public probe and idempotent migrations.",
+    "production_build": "Self-contained .docs-dist output; all generated relative links and anchors validated. Local public pnpm docs:dev launch also exercised through the browser.",
+    "browser": "All 37 authored pages checked sequentially at 390x844 and 1440x900: no horizontal overflow, one main H1, current desktop navigation, zero scripts/animations and no foreign mobile assets. Packet and repository-directory links clicked successfully.",
+    "keyboard": "Tab reaches Skip to content first; Enter focuses main. Four Tabs then Enter opens the native mobile menu; the next Tab reaches Welcome with a visible focus ring.",
+    "accessibility": "Final desktop and mobile Lighthouse accessibility scores 100, zero failed audits. Full JSON reports and semantic tree retained. No native screen-reader session claimed.",
+    "visual_review": "Inspected final home, atlas, connected system, handoff, mobile navigation and roadmap screenshots. Stage/status text remains readable and independent of color.",
+    "privacy": "Every generated file scanned for absolute home/file URLs; no matches. Explicit reviewed source records only, not recursive archive publication.",
+    "cleanup": "Both owned preview/development listeners and owned browser tab stopped. Disposable worktrees and Agora temporary resources absent; required evidence retained. Exploratory artifacts moved into ignored .scratch."
+  },
+  "size": {
+    "authored_files": 24,
+    "meaningful_added": 726,
+    "meaningful_deleted": 47,
+    "receipt": "size.json",
+    "rationale": "The smaller default target is exceeded to deliver a coherent two-audience corpus and shared design-packet navigation, without deleting useful explanations. Additions plus deletions remain below 1000 and authored files below 25. Generated companion and evidence are visibly separate. No R11 exception."
+  },
+  "performance": "Five local static builds: 89.5-108.2ms, median 92.8ms. First change median 72.7ms for five pages rather than 23 plus the packet. Raw samples retained; not an Agora product benchmark.",
+  "limits": [
+    "Independent exact-head documentation/code review remains the landing authority responsibility; no independent approval is self-claimed",
+    "No full Agora runtime foundation, native screen-reader session or product comprehension trial claimed",
+    "Initial batch-browser failures remain in ../browser-driver-errors.log; final proof uses the approved sequential CLI route, not batch execution",
+    "A mistaken mobile-menu selector in one proof attempt is retained in keyboard-selector-error.log; corrected .mobile-nav assertions pass in keyboard.log",
+    "Standard installed Node 24.16.0 avoided the signed wrapper's native-binding Team-ID incompatibility without disabling checks",
+    "Local commits only: no push, PR, merge, deployment or application pipeline"
+  ]
+}

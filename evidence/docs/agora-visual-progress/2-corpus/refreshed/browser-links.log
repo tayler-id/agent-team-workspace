@@ -1,0 +1,6 @@
+result: "{\"action\":\"click Product brief\",\"url\":\"/source/docs/design-handoff/product-brief.md.html\",\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"action\":\"click Landed evidence\",\"url\":\"/source/evidence.html\",\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state

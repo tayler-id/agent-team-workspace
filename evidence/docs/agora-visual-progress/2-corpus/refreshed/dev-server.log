@@ -1,0 +1,9 @@
+
+> agora@ docs:dev /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> node docs/site/serve.mjs
+
+Agora docs: http://127.0.0.1:48764 (Ctrl+C stops this process)
+ENOENT: no such file or directory, stat '/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.docs-dist/favicon.ico'
+result: "{\"url\":\"http://127.0.0.1:48764/index.html?driver=b1d71c7\",\"h1\":\"Shared conversation. Accountable work\",\"driver\":\"pnpm docs:dev\",\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state

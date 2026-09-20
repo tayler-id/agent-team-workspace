@@ -1,0 +1,11 @@
+{
+  "subject": "b1d71c72392567f3f4db7c88d39268b70e2724fa",
+  "build_ms": [
+    108.2,
+    91.5,
+    89.5,
+    94.8,
+    92.8
+  ],
+  "scope": "Five local static build samples, not product runtime performance; parent measurements retained in the first-site outcome."
+}

@@ -1,0 +1,9 @@
+result: "{\"action\":\"first Tab\",\"focused\":\"Skip to content\",\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"action\":\"Enter on skip\",\"focused\":\"main\",\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"action\":\"four Tabs, Enter, Tab\",\"open\":true,\"focused\":\"Welcome\",\"outcome\":\"pass\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state

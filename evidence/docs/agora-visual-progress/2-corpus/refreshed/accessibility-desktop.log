@@ -1,0 +1,18 @@
+lighthouse:
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+## Lighthouse Audit Results
+Mode: navigation
+Device: desktop
+URL: http://127.0.0.1:48763/atlas.html?audit=b1d71c7
+### Category Scores
+- Accessibility: 100 (accessibility)
+- Best Practices: 100 (best-practices)
+- SEO: 100 (seo)
+- Agentic Browsing: 100 (agentic-browsing)
+### Audit Summary
+Passed: 53
+Failed: 0
+Total Timing: 3737.64ms
+### Reports
+- /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/refreshed-desktop-audit/report.json
+- /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/refreshed-desktop-audit/report.html

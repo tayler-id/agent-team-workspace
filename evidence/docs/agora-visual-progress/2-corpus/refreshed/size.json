@@ -1,0 +1,159 @@
+{
+  "base": "d68203ab49f0618921b1d6a35703ad40382a64d7",
+  "subject": "b1d71c72392567f3f4db7c88d39268b70e2724fa",
+  "authored_files": 24,
+  "meaningful_added": 726,
+  "meaningful_deleted": 47,
+  "files": [
+    {
+      "path": "agora/feature-map.json",
+      "meaningful_added": 3,
+      "meaningful_deleted": 3,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/architecture.md",
+      "meaningful_added": 29,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/atlas.json",
+      "meaningful_added": 74,
+      "meaningful_deleted": 2,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/authorization.md",
+      "meaningful_added": 24,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/build.mjs",
+      "meaningful_added": 26,
+      "meaningful_deleted": 7,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/cli.md",
+      "meaningful_added": 56,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/concepts.md",
+      "meaningful_added": 34,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/configuration.md",
+      "meaningful_added": 29,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/cookbook.md",
+      "meaningful_added": 39,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/execution.md",
+      "meaningful_added": 21,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/faq.md",
+      "meaningful_added": 22,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/getting-started.md",
+      "meaningful_added": 31,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/handoff.md",
+      "meaningful_added": 28,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/index.md",
+      "meaningful_added": 17,
+      "meaningful_deleted": 19,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/introduction.md",
+      "meaningful_added": 23,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/memory.md",
+      "meaningful_added": 26,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/operations.md",
+      "meaningful_added": 26,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/progress.md",
+      "meaningful_added": 20,
+      "meaningful_deleted": 2,
+      "kind": "generated"
+    },
+    {
+      "path": "docs/site/repository.md",
+      "meaningful_added": 36,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/research.md",
+      "meaningful_added": 24,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/site.json",
+      "meaningful_added": 39,
+      "meaningful_deleted": 16,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/synchronization.md",
+      "meaningful_added": 23,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/test/corpus.test.ts",
+      "meaningful_added": 33,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/verification.md",
+      "meaningful_added": 36,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    },
+    {
+      "path": "docs/site/workflows.md",
+      "meaningful_added": 27,
+      "meaningful_deleted": 0,
+      "kind": "authored"
+    }
+  ]
+}
