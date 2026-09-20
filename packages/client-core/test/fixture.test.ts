@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { expect, test } from 'vitest';
@@ -26,6 +26,14 @@ test('the fixture adapter rejects malformed snapshots, cross-stream delivery and
 	expect(fixtureReceipt(receipt)).toEqual({ ...receipt, command_id: id.toLowerCase(), aggregate_id: id.toLowerCase(), receipt_id: id.toLowerCase(), event_cursors: [{ stream_id: id.toLowerCase(), committed_seq: '2' }] });
 	expect(fixtureReceipt({ ...receipt, actor_id: id })).toBeUndefined();
 });
+test('the public boundary command writes its machine report at the documented artifact path', () => {
+	const root = path.resolve(import.meta.dirname, '../../..'), report = path.join(root, '.scratch/boundaries.json');
+	rmSync(report, { force: true });
+	const result = spawnSync('pnpm', ['-s', 'boundaries'], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+	expect(result.status, result.stdout + result.stderr).toBe(0);
+	expect(existsSync(report), 'missing lane-8 JSON artifact').toBe(true);
+	expect(JSON.parse(readFileSync(report, 'utf8'))).toMatchObject({ success: true, numFailedTests: 0, numPendingTests: 0 });
+}, 150_000);
 test('the CLI returns pass only for literal snapshots, and distinguishes assertion failure from usage error', () => {
 	const invoke = (...args: string[]) => spawnSync(process.execPath, ['scripts/drive-client-core.ts', ...args], { cwd: path.resolve(import.meta.dirname, '../../..'), encoding: 'utf8' });
 	const valid = invoke('--json');
