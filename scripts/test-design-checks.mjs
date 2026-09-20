@@ -69,4 +69,5 @@ for (const test of cases) {
 	if (test.reason) assert(result.stderr.includes(test.reason), `${test.name}: rejected for wrong reason\n${result.stderr}`);
 	console.log(`PASS ${test.expected === 0 ? 'accepts' : 'rejects'} ${test.name}`);
 }
+fs.rmSync(runRoot, { recursive: true, force: true });
 console.log(`PASS ${cases.length} behavioral design-check cases; no application acceptance implied`);

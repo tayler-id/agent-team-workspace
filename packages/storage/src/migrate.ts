@@ -23,8 +23,13 @@ async function appliedCount(pool: Pool): Promise<number> {
 	return Number(count.rows[0]?.count ?? 0);
 }
 
+export class MigrationPrerequisiteError extends Error {}
+
 // Applies every journal entry not yet recorded. Rerunning is a no-op that returns applied: 0 and the same digest.
+// Roles are cluster-level and created by the operator; the migration only grants to them.
 export async function runMigrations(pool: Pool): Promise<MigrationReport> {
+	const role = await pool.query('select 1 from pg_roles where rolname = $1', ['agora_app']);
+	if (role.rowCount === 0) throw new MigrationPrerequisiteError('blocked prerequisite: role agora_app does not exist; create it before migrating (see docs/runbooks/development.md)');
 	const before = await appliedCount(pool);
 	await migrate(drizzle(pool), { migrationsFolder, migrationsSchema: BOOKKEEPING });
 	const total = await appliedCount(pool);

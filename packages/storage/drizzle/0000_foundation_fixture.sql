@@ -1,13 +1,5 @@
 CREATE SCHEMA foundation_fixture;
 --> statement-breakpoint
-DO $$
-BEGIN
-	IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'agora_app') THEN
-		CREATE ROLE agora_app NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
-	END IF;
-END
-$$;
---> statement-breakpoint
 CREATE TABLE foundation_fixture.stream (
 	scope_id uuid NOT NULL,
 	stream_id uuid NOT NULL,

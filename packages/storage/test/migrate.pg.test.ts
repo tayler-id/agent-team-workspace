@@ -12,8 +12,8 @@ let probe: Database;
 
 beforeAll(async () => {
 	await admin.query(`create database ${probeName}`);
-	// Replace the database segment; the URL may name a Unix socket dir in its query and no host.
-	probe = openDatabase(ownerUrl.replace(/\/[^/?]*(\?.*)?$/, (_match, query: string | undefined) => `/${probeName}${query ?? ''}`));
+	// Replace only the database segment; the URL may have no host and may carry an unencoded socket dir in its query.
+	probe = openDatabase(ownerUrl.replace(/^([a-z]+:\/\/[^/?]*)\/[^?]*(\?.*)?$/, (_match, prefix: string, query: string | undefined) => `${prefix}/${probeName}${query ?? ''}`));
 });
 
 afterAll(async () => {

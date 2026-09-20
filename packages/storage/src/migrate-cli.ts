@@ -1,6 +1,7 @@
 import { openDatabase } from './database.ts';
+import { MigrationPrerequisiteError } from './migrate.ts';
 
-// Exit codes follow R12: 0 pass, 64 usage error, 70 infrastructure failure.
+// Exit codes follow R12: 0 pass, 2 blocked prerequisite, 64 usage error, 70 infrastructure failure.
 // Migrations run as the schema owner, never as the service role.
 const connectionString = process.env['AGORA_MIGRATION_DATABASE_URL'];
 if (!connectionString) {
@@ -12,8 +13,9 @@ try {
 	const report = await database.migrate();
 	process.stdout.write(`${JSON.stringify({ ...report, outcome: 'pass' })}\n`);
 } catch (error) {
-	console.error(JSON.stringify({ schema_version: 'agora.migration-report/v1', outcome: 'infrastructure_failure', message: error instanceof Error ? error.message : String(error) }));
-	process.exitCode = 70;
+	const blocked = error instanceof MigrationPrerequisiteError;
+	console.error(JSON.stringify({ schema_version: 'agora.migration-report/v1', outcome: blocked ? 'blocked' : 'infrastructure_failure', message: error instanceof Error ? error.message : String(error) }));
+	process.exitCode = blocked ? 2 : 70;
 } finally {
 	await database.close();
 }
