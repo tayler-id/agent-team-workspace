@@ -28,9 +28,21 @@ test('an unknown field is a 400 malformed_command with the offending path, never
 test('a non-UUID scope and a non-JSON body are both 400 malformed_command', async () => {
 	const badScope = await decide({ schema_version: 'agora.fixture-policy-command/v1', actor: { scope_id: 'root' }, subject: { scope_id: A } });
 	expect(badScope.status).toBe(400);
-	expect(await badScope.json()).toMatchObject({ details: ['/actor/scope_id must match format "uuid"'] });
+	expect(await badScope.json()).toMatchObject({ details: ['/actor/scope_id must match pattern "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"'] });
 	const notJson = await app.request('/api/v1/fixture/policy/decisions', { method: 'POST', body: 'not json' });
 	expect(notJson.status).toBe(400);
+});
+
+test('every RFC 9562 UUID shape the schema accepts is also accepted by the decision, never a 500', async () => {
+	const nil = await decide({ schema_version: 'agora.fixture-policy-command/v1', actor: { scope_id: '00000000-0000-0000-0000-000000000000' }, subject: { scope_id: '00000000-0000-0000-0000-000000000000' } });
+	expect(nil.status).toBe(200);
+	expect(await nil.json()).toMatchObject({ decision: 'allow' });
+	const upper = await decide({ schema_version: 'agora.fixture-policy-command/v1', actor: { scope_id: A.toUpperCase() }, subject: { scope_id: A } });
+	expect(upper.status).toBe(200);
+	expect(await upper.json()).toMatchObject({ decision: 'allow' });
+	const urn = await decide({ schema_version: 'agora.fixture-policy-command/v1', actor: { scope_id: `urn:uuid:${A}` }, subject: { scope_id: A } });
+	expect(urn.status).toBe(400);
+	expect(await urn.json()).toMatchObject({ reason_code: 'malformed_command', details: ['/actor/scope_id must match pattern "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"'] });
 });
 
 test('an unknown route is a JSON 404 with a stable reason code and a correlation id', async () => {

@@ -55,7 +55,14 @@ describe('race', () => {
 	test('concurrent appends to one stream receive contiguous distinct sequences', async () => {
 		const streamId = randomUUID();
 		await app.withScope(scopeA, (tx) => tx.ensureStream(streamId));
-		const seqs = await Promise.all(Array.from({ length: 8 }, (_, i) => app.withScope(scopeA, (tx) => tx.appendEvent(streamId, 'status', { i }))));
+		let begun = 0;
+		let release = (): void => undefined;
+		const everyTransactionOpen = new Promise<void>((resolve) => { release = resolve; });
+		const seqs = await Promise.all(Array.from({ length: 8 }, (_, i) => app.withScope(scopeA, async (tx) => {
+			if (++begun === 8) release();
+			await everyTransactionOpen;
+			return tx.appendEvent(streamId, 'status', { i });
+		})));
 		expect([...seqs].sort((x, y) => Number(x) - Number(y))).toEqual(['1', '2', '3', '4', '5', '6', '7', '8']);
 		const observed = await app.withScope(scopeA, async (tx) => ({ kinds: (await tx.readEvents(streamId)).map((e) => `${e.seq}:${e.kind}`), nextSeq: await tx.readNextSeq(streamId) }));
 		expect(observed).toEqual({ kinds: ['1:status', '2:status', '3:status', '4:status', '5:status', '6:status', '7:status', '8:status'], nextSeq: '9' });
@@ -96,6 +103,24 @@ describe('row-level security', () => {
 		await expect(rawAs(scopeB, 'insert into foundation_fixture.stream (stream_id, scope_id) values ($1, $2)', [randomUUID(), scopeA])).rejects.toMatchObject({ code: '42501' });
 	});
 
+	test('another scope cannot attach an event to the owning scope\'s stream through the foreign key', async () => {
+		await expect(rawAs(scopeB, 'insert into foundation_fixture.event (stream_id, seq, scope_id, kind, payload) values ($1, 99, $2, $3, $4)', [streamId, scopeB, 'status', '{}'])).rejects.toMatchObject({ code: '23503' });
+		const observed = await app.withScope(scopeA, async (tx) => ({ events: (await tx.readEvents(streamId)).map((e) => e.seq), nextSeq: await tx.readNextSeq(streamId) }));
+		expect(observed).toEqual({ events: ['1'], nextSeq: '2' });
+	});
+
+	test('identifiers are scoped: another scope gets its own stream and claim under the same ids without learning they exist elsewhere', async () => {
+		const observed = await app.withScope(scopeB, async (tx) => {
+			await tx.ensureStream(streamId);
+			const seq = await tx.appendEvent(streamId, 'status', { owner: 'B' });
+			const claim = await tx.claimSubject(subjectId, 'worker-b', '5');
+			return { seq, claim, events: (await tx.readEvents(streamId)).map((e) => e.payload) };
+		});
+		expect(observed).toEqual({ seq: '1', claim: { claimed: true, fence: '5' }, events: [{ owner: 'B' }] });
+		const untouched = await app.withScope(scopeA, async (tx) => ({ events: (await tx.readEvents(streamId)).map((e) => e.payload), claim: await tx.readClaim(subjectId) }));
+		expect(untouched).toEqual({ events: [{ owner: 'A' }], claim: { claimed_by: 'worker-a', fence: '1' } });
+	});
+
 	test('a connection without a bound scope sees nothing', async () => {
 		const result = await raw.query<{ count: string }>('select count(*)::text as count from foundation_fixture.event where stream_id = $1', [streamId]);
 		expect(result.rows[0]).toEqual({ count: '0' });
@@ -103,6 +128,6 @@ describe('row-level security', () => {
 
 	test('guard negative: the table owner bypasses the policy, so the denial above depends on the non-owner role', async () => {
 		const observed = await owner.withScope(scopeB, (tx) => tx.readEvents(streamId));
-		expect(observed.map((e) => e.payload)).toEqual([{ owner: 'A' }]);
+		expect(observed.map((e) => e.payload as { owner: string }).sort((x, y) => x.owner.localeCompare(y.owner))).toEqual([{ owner: 'A' }, { owner: 'B' }]);
 	});
 });

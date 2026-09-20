@@ -2,7 +2,8 @@ import { digestCanonical, type Digest } from '../canonical.ts';
 
 export type ScopeId = string & { readonly ScopeId: unique symbol };
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+// Any RFC 9562 textual UUID, including nil and max; identifiers are opaque (R05). Same shape as the contract schema pattern.
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function asScopeId(value: string): ScopeId {
 	if (!UUID.test(value)) throw new TypeError('ScopeId must be an RFC 9562 UUID');

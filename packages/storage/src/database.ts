@@ -33,12 +33,17 @@ export function openDatabase(connectionString: string): Database {
 				await client.query('select set_config($1, $2, true)', ['agora.scope_id', scopeId]);
 				const result = await work(bindFixtureTransaction(client));
 				await client.query('commit');
+				client.release();
 				return result;
 			} catch (error) {
-				await client.query('rollback');
+				// A failed rollback must not hand a client with an open transaction and bound scope back to the pool.
+				try {
+					await client.query('rollback');
+					client.release();
+				} catch (rollbackError) {
+					client.release(rollbackError instanceof Error ? rollbackError : new Error(String(rollbackError)));
+				}
 				throw error;
-			} finally {
-				client.release();
 			}
 		},
 		close: () => pool.end(),

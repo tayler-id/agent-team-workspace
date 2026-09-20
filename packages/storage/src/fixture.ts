@@ -2,6 +2,7 @@ import type { PoolClient } from 'pg';
 
 // Foundation fixture, namespaced under foundation_fixture. Explicit SQL for the counter, event and claim paths.
 // Every statement runs inside Database.withScope, which binds agora.scope_id for the row-level-security policies.
+// Identifiers are scoped: (scope_id, stream_id) and (scope_id, subject_id) are the keys, so one scope cannot probe another's ids.
 
 export type Seq = string; // nonnegative 64-bit integer as a decimal string (R05)
 
@@ -36,7 +37,7 @@ const SCOPE_SETTING = 'agora.scope_id';
 export function bindFixtureTransaction(client: PoolClient): FixtureTransaction {
 	return {
 		async ensureStream(streamId) {
-			await client.query('insert into foundation_fixture.stream (stream_id, scope_id) values ($1, current_setting($2)::uuid) on conflict (stream_id) do nothing', [streamId, SCOPE_SETTING]);
+			await client.query('insert into foundation_fixture.stream (stream_id, scope_id) values ($1, current_setting($2)::uuid) on conflict (scope_id, stream_id) do nothing', [streamId, SCOPE_SETTING]);
 		},
 		// Locks the per-stream counter row and appends the event in the same transaction, so a rollback leaves neither.
 		async appendEvent(streamId, kind, payload) {
@@ -56,7 +57,7 @@ export function bindFixtureTransaction(client: PoolClient): FixtureTransaction {
 		},
 		// First writer wins; every later claim observes claimed: false without an error.
 		async claimSubject(subjectId, claimedBy, fence) {
-			const result = await client.query<{ fence: Seq }>('insert into foundation_fixture.claim (subject_id, scope_id, claimed_by, fence) values ($1, current_setting($2)::uuid, $3, $4) on conflict (subject_id) do nothing returning fence::text as fence', [subjectId, SCOPE_SETTING, claimedBy, fence]);
+			const result = await client.query<{ fence: Seq }>('insert into foundation_fixture.claim (subject_id, scope_id, claimed_by, fence) values ($1, current_setting($2)::uuid, $3, $4) on conflict (scope_id, subject_id) do nothing returning fence::text as fence', [subjectId, SCOPE_SETTING, claimedBy, fence]);
 			const row = result.rows[0];
 			return row ? { claimed: true, fence: row.fence } : { claimed: false };
 		},

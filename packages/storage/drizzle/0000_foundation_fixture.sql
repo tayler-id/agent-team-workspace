@@ -9,25 +9,28 @@ END
 $$;
 --> statement-breakpoint
 CREATE TABLE foundation_fixture.stream (
-	stream_id uuid PRIMARY KEY,
 	scope_id uuid NOT NULL,
-	next_seq bigint NOT NULL DEFAULT 1 CHECK (next_seq >= 1)
+	stream_id uuid NOT NULL,
+	next_seq bigint NOT NULL DEFAULT 1 CHECK (next_seq >= 1),
+	PRIMARY KEY (scope_id, stream_id)
 );
 --> statement-breakpoint
 CREATE TABLE foundation_fixture.event (
-	stream_id uuid NOT NULL REFERENCES foundation_fixture.stream (stream_id),
-	seq bigint NOT NULL CHECK (seq >= 1),
 	scope_id uuid NOT NULL,
+	stream_id uuid NOT NULL,
+	seq bigint NOT NULL CHECK (seq >= 1),
 	kind text NOT NULL CHECK (length(kind) BETWEEN 1 AND 64),
 	payload jsonb NOT NULL,
-	PRIMARY KEY (stream_id, seq)
+	PRIMARY KEY (scope_id, stream_id, seq),
+	FOREIGN KEY (scope_id, stream_id) REFERENCES foundation_fixture.stream (scope_id, stream_id)
 );
 --> statement-breakpoint
 CREATE TABLE foundation_fixture.claim (
-	subject_id uuid PRIMARY KEY,
 	scope_id uuid NOT NULL,
+	subject_id uuid NOT NULL,
 	claimed_by text NOT NULL CHECK (length(claimed_by) BETWEEN 1 AND 128),
-	fence bigint NOT NULL CHECK (fence >= 0)
+	fence bigint NOT NULL CHECK (fence >= 0),
+	PRIMARY KEY (scope_id, subject_id)
 );
 --> statement-breakpoint
 ALTER TABLE foundation_fixture.stream ENABLE ROW LEVEL SECURITY;

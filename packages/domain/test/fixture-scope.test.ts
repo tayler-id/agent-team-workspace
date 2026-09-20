@@ -14,5 +14,7 @@ test('an actor is denied a subject in another scope with a stable reason code', 
 
 test('asScopeId normalizes case and rejects non-UUID text', () => {
 	expect(asScopeId('AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA')).toBe('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');
+	expect(asScopeId('00000000-0000-0000-0000-000000000000')).toBe('00000000-0000-0000-0000-000000000000');
 	expect(() => asScopeId('not-a-uuid')).toThrow('ScopeId must be an RFC 9562 UUID');
+	expect(() => asScopeId('urn:uuid:11111111-1111-4111-8111-111111111111')).toThrow('ScopeId must be an RFC 9562 UUID');
 });
