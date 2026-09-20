@@ -1,0 +1,14 @@
+# gates.log: static gates at bc7fc034f8d70c6d20a8b0613c9702bce143fc37 (2026-09-20T11:44:56Z)
+Done in 179ms using pnpm v10.34.1
+install_exit: 0
+typecheck_exit: 0
+lint_exit: 0
+PASS 47 official skills; 68 append-only decisions; 175 local links; authored style/privacy checks
+SCOPE static design readiness only; no runtime foundation or product acceptance has run; upstream format/model literals are not semantic authority
+docs_check_exit: 0
+contracts:check: no contract source exists at this revision; the stub driver reports:
+{"schema_version":"agora.contract-generation-run/v1","mode":"check","outcome":"unavailable","exit":3,"message":"no contract sources published"}
+observed_exit: 3 (expected 3, unavailable)
+whitespace_exit: 0
+temp root after the run:
+tmp: clean
