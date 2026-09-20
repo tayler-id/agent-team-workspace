@@ -89,6 +89,8 @@ for vector in file.vectors {
 		}
 	} catch { result["rejection"] = "\(error)" }
 }
-let report: [String: Any] = ["schema_version": "agora.contract-conformance/v1", "consumer": "swift", "vectors": results]
+var report: [String: Any] = ["schema_version": "agora.contract-conformance/v1", "consumer": "swift", "vectors": results]
+let fixtureFile = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: arguments[1]))) as? [String: Any]
+if let replays = fixtureFile?["replays"] as? [[String: Any]] { report["replays"] = try replayFixtures(replays, validator) }
 FileHandle.standardOutput.write(try JSONSerialization.data(withJSONObject: report, options: [.sortedKeys]))
 FileHandle.standardOutput.write(Data("\n".utf8))

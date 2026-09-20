@@ -8,6 +8,12 @@ importers:
 
   .:
     devDependencies:
+      '@agora/client-core':
+        specifier: workspace:*
+        version: link:packages/client-core
+      '@agora/contracts':
+        specifier: workspace:*
+        version: link:contracts
       '@eslint/js':
         specifier: 10.0.1
         version: 10.0.1(eslint@10.11.0)
@@ -64,7 +70,11 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
 
-  packages/client-core: {}
+  packages/client-core:
+    dependencies:
+      '@agora/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
 
   packages/domain:
     dependencies:
