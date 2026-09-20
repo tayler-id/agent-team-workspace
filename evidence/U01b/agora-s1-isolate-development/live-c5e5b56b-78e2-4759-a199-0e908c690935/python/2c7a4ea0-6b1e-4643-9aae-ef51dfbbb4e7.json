@@ -1,0 +1,63 @@
+{
+  "instance": {
+    "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-ZgfpVn",
+    "pid": 40635,
+    "process_start": "Sun Sep 20 17:29:55 2026",
+    "url": "http://127.0.0.1:54972",
+    "database": "/private/tmp/agora-u01b-kd2Lml/agora-b01-ZgfpVn/fixture.sqlite",
+    "object_namespace": "/private/tmp/agora-u01b-kd2Lml/agora-b01-ZgfpVn/objects",
+    "cleanup_handle": "b0649bd9-68a8-480e-b604-b253db3dc5bb"
+  },
+  "observed": [
+    {
+      "schema_version": "agora.fixture-policy-decision/v1",
+      "decision": "allow",
+      "policy_version": "agora.fixture-policy/v1",
+      "policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+    },
+    {
+      "schema_version": "agora.fixture-policy-decision/v1",
+      "decision": "deny",
+      "policy_version": "agora.fixture-policy/v1",
+      "policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4",
+      "reason_code": "scope_mismatch"
+    }
+  ],
+  "persisted": [
+    {
+      "report": {
+        "schema_version": "agora.fixture-policy-decision/v1",
+        "decision": "allow",
+        "policy_version": "agora.fixture-policy/v1",
+        "policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+      },
+      "object": {
+        "schema_version": "agora.fixture-policy-decision/v1",
+        "decision": "allow",
+        "policy_version": "agora.fixture-policy/v1",
+        "policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+      }
+    },
+    {
+      "report": {
+        "schema_version": "agora.fixture-policy-decision/v1",
+        "decision": "deny",
+        "policy_version": "agora.fixture-policy/v1",
+        "policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4",
+        "reason_code": "scope_mismatch"
+      },
+      "object": {
+        "schema_version": "agora.fixture-policy-decision/v1",
+        "decision": "deny",
+        "policy_version": "agora.fixture-policy/v1",
+        "policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4",
+        "reason_code": "scope_mismatch"
+      }
+    }
+  ],
+  "versions": {
+    "code": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+    "config": "sha256:9a0e1e42972a778d832173f930949bf00f3c772227a5a99feb9081e8829df581",
+    "fixture": "sha256:04383173d3606891d8ec0d49b61e7e36f4b800fc7c7185805c778058bd6ed856"
+  }
+}

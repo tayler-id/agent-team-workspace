@@ -1,0 +1,26 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "evidence",
+  "versions": {
+    "code": "5c159701ef4d888beeaad46ac18f7c81aba80b2d",
+    "config": "sha256:b80220911b60497eb7fb99511e85d885e75a31a56810e1a688d6eedcf976a14c",
+    "fixture": "sha256:f65f8c860912ac2b5aeef24ac5ff68332758122b29ff47b83276dd535018567e"
+  },
+  "outcome": "pass",
+  "diagnostics": [],
+  "artifacts": [
+    {
+      "path": "evidence/U01b/agora-s1-isolate-development/live-7c48efaf-cc35-4fca-a652-f289d96e0b27/a/84480671-07c0-444f-9bfc-0368b1837067.json",
+      "digest": "sha256:84c253631ad36d03492acce03b95f44915e3964f105fd7d8cb17150035babd8a",
+      "byte_length": 2467,
+      "media_type": "application/json"
+    }
+  ],
+  "started_at": "2026-09-20T21:27:22.677Z",
+  "finished_at": "2026-09-20T21:27:22.764Z",
+  "run_id": "7c48efaf-cc35-4fca-a652-f289d96e0b27",
+  "cleanup": {
+    "outcome": "retained",
+    "handle": "1c0dedd0-f1af-46fe-9134-6861b18f6e76"
+  }
+}

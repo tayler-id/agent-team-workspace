@@ -1,0 +1,267 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-20T21:27:22.354Z
+parent: ab6a1832da47782ddad69e2ca80512bb4d24ed24
+head: 5c159701ef4d888beeaad46ac18f7c81aba80b2d
+subject_revision: ab6a1832da47782ddad69e2ca80512bb4d24ed24
+test_patch_applied_to_subject: true
+test_patch_files: contracts/fixtures/vectors.json, docs/site/test/corpus.test.ts, packages/verification/test/project.test.ts
+test_patch_digest: sha256:7e8167cdc2a448f982ffa7127c28136e2c39d6ddbcfae081294bb1de4e6afdf3
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:d178a37082bbd2e3d1cc7b1381db1f2b096d69dd4b4da2eeafc0ec70420d6aa7"},{"file":"contracts/schemas/cli.schema.json","digest":"sha256:77a64f04ac45d5a9e5a6e2d858fba983e9e8ab1d4aed99f3efe45da9c4fc6f37"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:89279d52607659d43a81b101bf83690a5993310796998a6154b346d79b8163f6"}]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/verification/test/project.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3
+
+ ❯ |unit| packages/verification/test/project.test.ts (5 tests | 5 failed) 405ms
+   × project lane 1 persists literal public effects in Agora and Python 84ms
+   × project lane 2 isolates resources and refuses foreign cleanup 80ms
+   × project lane 3 rejects unknown scenarios and missing or mismatched artifacts 80ms
+   × project lane 4 invalidates changed instructions and deleted feature coverage 80ms
+   × project guards require their own assertions to turn red in isolated copies 81ms
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  17:26:57
+   Duration  476ms (tests 97%, transform 2%, import 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 1 persists literal public effects in Agora and Python
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"schema_version":"agora.cli-report/v1","command":"scenarios","versions":{"code":"ab6a1832da47782ddad69e2ca80512bb4d24ed24","config":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f","fixture":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f"},"outcome":"unavailable","diagnostics":[],"artifacts":[],"started_at":"2026-09-20T21:26:57.190Z","finished_at":"2026-09-20T21:26:57.191Z"}
++ actual - expected
+
++ 'unavailable'
+- 'pass'
+
+    at pass (file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:5:53)
+    at file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:7:17
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'unavailable',
+  expected: 'pass',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ pass [eval1]:5:53
+ ❯ [eval1]:7:17
+ ❯ probe packages/verification/test/project.test.ts:13:55
+     11| const inventory=pass('scenarios'); assert.ok(inventory.scenarios.inclu…
+     12| ${body}`], { encoding: 'utf8', timeout: 300_000 });
+     13|  expect(result.status, result.stdout + result.stderr).toBe(0);
+       |                                                       ^
+     14| }
+     15|
+ ❯ packages/verification/test/project.test.ts:17:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 2 isolates resources and refuses foreign cleanup
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"schema_version":"agora.cli-report/v1","command":"scenarios","versions":{"code":"ab6a1832da47782ddad69e2ca80512bb4d24ed24","config":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f","fixture":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f"},"outcome":"unavailable","diagnostics":[],"artifacts":[],"started_at":"2026-09-20T21:26:57.272Z","finished_at":"2026-09-20T21:26:57.272Z"}
++ actual - expected
+
++ 'unavailable'
+- 'pass'
+
+    at pass (file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:5:53)
+    at file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:7:17
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'unavailable',
+  expected: 'pass',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ pass [eval1]:5:53
+ ❯ [eval1]:7:17
+ ❯ probe packages/verification/test/project.test.ts:13:55
+     11| const inventory=pass('scenarios'); assert.ok(inventory.scenarios.inclu…
+     12| ${body}`], { encoding: 'utf8', timeout: 300_000 });
+     13|  expect(result.status, result.stdout + result.stderr).toBe(0);
+       |                                                       ^
+     14| }
+     15|
+ ❯ packages/verification/test/project.test.ts:27:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 3 rejects unknown scenarios and missing or mismatched artifacts
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"schema_version":"agora.cli-report/v1","command":"scenarios","versions":{"code":"ab6a1832da47782ddad69e2ca80512bb4d24ed24","config":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f","fixture":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f"},"outcome":"unavailable","diagnostics":[],"artifacts":[],"started_at":"2026-09-20T21:26:57.352Z","finished_at":"2026-09-20T21:26:57.352Z"}
++ actual - expected
+
++ 'unavailable'
+- 'pass'
+
+    at pass (file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:5:53)
+    at file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:7:17
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'unavailable',
+  expected: 'pass',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ pass [eval1]:5:53
+ ❯ [eval1]:7:17
+ ❯ probe packages/verification/test/project.test.ts:13:55
+     11| const inventory=pass('scenarios'); assert.ok(inventory.scenarios.inclu…
+     12| ${body}`], { encoding: 'utf8', timeout: 300_000 });
+     13|  expect(result.status, result.stdout + result.stderr).toBe(0);
+       |                                                       ^
+     14| }
+     15|
+ ❯ packages/verification/test/project.test.ts:39:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 4 invalidates changed instructions and deleted feature coverage
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"schema_version":"agora.cli-report/v1","command":"scenarios","versions":{"code":"ab6a1832da47782ddad69e2ca80512bb4d24ed24","config":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f","fixture":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f"},"outcome":"unavailable","diagnostics":[],"artifacts":[],"started_at":"2026-09-20T21:26:57.432Z","finished_at":"2026-09-20T21:26:57.432Z"}
++ actual - expected
+
++ 'unavailable'
+- 'pass'
+
+    at pass (file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:5:53)
+    at file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:7:17
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'unavailable',
+  expected: 'pass',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ pass [eval1]:5:53
+ ❯ [eval1]:7:17
+ ❯ probe packages/verification/test/project.test.ts:13:55
+     11| const inventory=pass('scenarios'); assert.ok(inventory.scenarios.inclu…
+     12| ${body}`], { encoding: 'utf8', timeout: 300_000 });
+     13|  expect(result.status, result.stdout + result.stderr).toBe(0);
+       |                                                       ^
+     14| }
+     15|
+ ❯ packages/verification/test/project.test.ts:52:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project guards require their own assertions to turn red in isolated copies
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"schema_version":"agora.cli-report/v1","command":"scenarios","versions":{"code":"ab6a1832da47782ddad69e2ca80512bb4d24ed24","config":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f","fixture":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f"},"outcome":"unavailable","diagnostics":[],"artifacts":[],"started_at":"2026-09-20T21:26:57.513Z","finished_at":"2026-09-20T21:26:57.513Z"}
++ actual - expected
+
++ 'unavailable'
+- 'pass'
+
+    at pass (file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:5:53)
+    at file:///private/tmp/agora-u01b-CoVKMx/agora-red-s8Z4F3/[eval1]:7:17
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'unavailable',
+  expected: 'pass',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ pass [eval1]:5:53
+ ❯ [eval1]:7:17
+ ❯ probe packages/verification/test/project.test.ts:13:55
+     11| const inventory=pass('scenarios'); assert.ok(inventory.scenarios.inclu…
+     12| ${body}`], { encoding: 'utf8', timeout: 300_000 });
+     13|  expect(result.status, result.stdout + result.stderr).toBe(0);
+       |                                                       ^
+     14| }
+     15|
+ ❯ packages/verification/test/project.test.ts:60:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+

@@ -1,0 +1,207 @@
+result: "{\"interrupted\":false}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/evidence/U01b/agora-s1-isolate-development/docs-desktop-flow.png
+result: "\"{\\\"viewport\\\":[1440,900],\\\"overflow\\\":false,\\\"flow\\\":\\\"How it works · read in orderDoctor and allocateCheck Node 24, PostgreSQL 18 or Python plus its locked validator; allocate a fresh UUID and private root.Own the instanceThe host owns a private control socket, loopback HTTP port, database and object directory; return PID plus process start identity and handle.Drive public behaviorPOST literal same-scope and other-scope commands; GET the committed journal and independently read its stored object bytes.Bind proofRecord exact head and source/configuration/skill digests, public observations, artifact size and hash; reject drift before reuse.Stop narrowlyAuthenticate the recorded live host and cleanup handle; remove its resources, never the retained evidence or another instance.\\\",\\\"animations\\\":0}\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+resized:
+  width: 390
+  height: 844
+page:
+  title: Checking a project · Agora
+  url: "http://127.0.0.1:43261/checking-a-project.html"
+  refs: 54
+snapshot:
+uid=g3:3_0 RootWebArea "Checking a project · Agora" url="http://127.0.0.1:43261/checking-a-project.html"
+  uid=g3:3_1 link "Skip to content" url="http://127.0.0.1:43261/checking-a-project.html#main"
+    uid=g3:3_2 StaticText "Skip to content"
+  uid=g3:3_3 banner
+    uid=g3:3_4 link "agora" url="http://127.0.0.1:43261/index.html"
+      uid=g3:3_5 StaticText "agora"
+    uid=g3:3_6 link "Progress atlas ↗" url="http://127.0.0.1:43261/atlas.html"
+      uid=g3:3_7 StaticText "Progress atlas ↗"
+  uid=g3:3_8 DisclosureTriangle "Browse documentation" expandable
+  uid=g3:3_9 main
+    uid=g3:3_10 StaticText "AGORA / FIELD GUIDE"
+    uid=g3:3_11 heading "Checking a project" level="1"
+    uid=g3:3_12 heading "What it is" level="2"
+    uid=g3:3_13 StaticText "An engineer can now run Agora's small verification application and a separate Python example through the same controls. These are "
+    uid=g3:3_14 StaticText "non-production foundation fixtures"
+    uid=g3:3_15 StaticText ", not your team's rooms or projects. They demonstrate the verification contract before Agora can run real tasks."
+    uid=g3:3_16 heading "What it does" level="2"
+    uid=g3:3_17 StaticText "The controls check prerequisites, list available scenarios, start isolated instances, drive their actual behavior, collect proof and stop them safely. The demonstration sends one permitted and one denied scope decision, then checks the saved records and object bytes. Both applications must agree on those literal results."
+    uid=g3:3_18 heading "Why it exists" level="2"
+    uid=g3:3_19 StaticText "“Tests passed” is not enough if the test used somebody else's database or its evidence disappeared during cleanup. A named instance and preserved proof let a reviewer distinguish an observed result from a claim, and let you stop one check without breaking another."
+    uid=g3:3_20 heading "How it works" level="2"
+    uid=g3:3_21 StaticText "HOW IT WORKS · READ IN ORDER"
+    uid=g3:3_22 StaticText "Check readiness"
+    uid=g3:3_23 StaticText "Doctor explains missing local prerequisites; nothing is installed or started implicitly."
+    uid=g3:3_24 StaticText "Choose and start"
+    uid=g3:3_25 StaticText "Scenarios lists supported checks; start returns a fresh instance, allocated address and cleanup handle."
+    uid=g3:3_26 StaticText "Observe and retain"
+    uid=g3:3_27 StaticText "Verify drives the real application; evidence checks the saved bytes against this code and these instructions."
+    uid=g3:3_28 StaticText "Stop safely"
+    uid=g3:3_29 StaticText "Present the instance's own handle; its database and processes disappear while evidence remains available."
+    uid=g3:3_30 StaticText "Use "
+    uid=g3:3_31 link "the CLI reference" url="http://127.0.0.1:43261/cli.html#owned-project-controls"
+      uid=g3:3_32 StaticText "the CLI reference"
+    uid=g3:3_33 StaticText " and the "
+    uid=g3:3_34 link "engineer's literal recipe" url="http://127.0.0.1:43261/source/.agents/skills/verify-agora/SKILL.md.html"
+      uid=g3:3_35 StaticText "engineer's literal recipe"
+    uid=g3:3_36 StaticText ". A failed, blocked or unavailable result is not a pass. Changing code or instructions requires fresh verification. An unknown scenario, another instance's cleanup handle or missing artifact is refused. Nothing here grants permission to publish, merge or run an agent."
+    uid=g3:3_37 heading "Implementation status" level="2"
+    uid=g3:3_38 StaticText "In progress pending independent task review."
+    uid=g3:3_39 StaticText " Two fixture implementations and owned controls are present. There is no customer onboarding, hosted verification UI or production project execution yet. U01b's general evidence validation and independent trusted checks remain separate future tasks; finishing this capability does not finish that milestone."
+    uid=g3:3_40 heading "Verification and proof" level="2"
+    uid=g3:3_41 StaticText "The "
+    uid=g3:3_42 link "task tests" url="http://127.0.0.1:43261/source/packages/verification/test/project.test.ts.html"
+      uid=g3:3_43 StaticText "task tests"
+    uid=g3:3_44 StaticText " check both applications, two concurrent instances and refusal cases. The "
+    uid=g3:3_45 link "retained red assertion" url="http://127.0.0.1:43261/source/evidence/U01b/agora-s1-isolate-development/assertion-red.log.html"
+      uid=g3:3_46 StaticText "retained red assertion"
+    uid=g3:3_47 StaticText " records the earlier absence honestly. "
+    uid=g3:3_48 link "Operator details" url="http://127.0.0.1:43261/project-controls.html"
+      uid=g3:3_49 StaticText "Operator details"
+    uid=g3:3_50 StaticText " explain namespaces, cleanup, exact receipts and the limits of local owner-attested proof. Independent review must inspect the committed code and receipts before the atlas can call the task complete."
+    uid=g3:3_51 link "Improve this page" url="http://127.0.0.1:43261/authoring.html"
+      uid=g3:3_52 StaticText "Improve this page"
+    uid=g3:3_53 StaticText "Documentation is part of implementation."
+help[3]:
+  Run `chrome-devtools-axi click @g3:3_1` to click the "Skip to content" link
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+result: "\"{\\\"viewport\\\":[500,844],\\\"overflow\\\":false,\\\"title\\\":\\\"Checking a project\\\"}\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/evidence/U01b/agora-s1-isolate-development/docs-mobile.png
+page:
+  title: Checking a project · Agora
+  refs: 54
+snapshot:
+uid=g4:3_0 RootWebArea "Checking a project · Agora" url="http://127.0.0.1:43261/checking-a-project.html"
+  uid=g4:3_1 link "Skip to content" focusable focused url="http://127.0.0.1:43261/checking-a-project.html#main"
+    uid=g4:3_2 StaticText "Skip to content"
+  uid=g4:3_3 banner
+    uid=g4:3_4 link "agora" url="http://127.0.0.1:43261/index.html"
+      uid=g4:3_5 StaticText "agora"
+    uid=g4:3_6 link "Progress atlas ↗" url="http://127.0.0.1:43261/atlas.html"
+      uid=g4:3_7 StaticText "Progress atlas ↗"
+  uid=g4:3_8 DisclosureTriangle "Browse documentation" expandable
+  uid=g4:3_9 main
+    uid=g4:3_10 StaticText "AGORA / FIELD GUIDE"
+    uid=g4:3_11 heading "Checking a project" level="1"
+    uid=g4:3_12 heading "What it is" level="2"
+    uid=g4:3_13 StaticText "An engineer can now run Agora's small verification application and a separate Python example through the same controls. These are "
+    uid=g4:3_14 StaticText "non-production foundation fixtures"
+    uid=g4:3_15 StaticText ", not your team's rooms or projects. They demonstrate the verification contract before Agora can run real tasks."
+    uid=g4:3_16 heading "What it does" level="2"
+    uid=g4:3_17 StaticText "The controls check prerequisites, list available scenarios, start isolated instances, drive their actual behavior, collect proof and stop them safely. The demonstration sends one permitted and one denied scope decision, then checks the saved records and object bytes. Both applications must agree on those literal results."
+    uid=g4:3_18 heading "Why it exists" level="2"
+    uid=g4:3_19 StaticText "“Tests passed” is not enough if the test used somebody else's database or its evidence disappeared during cleanup. A named instance and preserved proof let a reviewer distinguish an observed result from a claim, and let you stop one check without breaking another."
+    uid=g4:3_20 heading "How it works" level="2"
+    uid=g4:3_21 StaticText "HOW IT WORKS · READ IN ORDER"
+    uid=g4:3_22 StaticText "Check readiness"
+    uid=g4:3_23 StaticText "Doctor explains missing local prerequisites; nothing is installed or started implicitly."
+    uid=g4:3_24 StaticText "Choose and start"
+    uid=g4:3_25 StaticText "Scenarios lists supported checks; start returns a fresh instance, allocated address and cleanup handle."
+    uid=g4:3_26 StaticText "Observe and retain"
+    uid=g4:3_27 StaticText "Verify drives the real application; evidence checks the saved bytes against this code and these instructions."
+    uid=g4:3_28 StaticText "Stop safely"
+    uid=g4:3_29 StaticText "Present the instance's own handle; its database and processes disappear while evidence remains available."
+    uid=g4:3_30 StaticText "Use "
+    uid=g4:3_31 link "the CLI reference" url="http://127.0.0.1:43261/cli.html#owned-project-controls"
+      uid=g4:3_32 StaticText "the CLI reference"
+    uid=g4:3_33 StaticText " and the "
+    uid=g4:3_34 link "engineer's literal recipe" url="http://127.0.0.1:43261/source/.agents/skills/verify-agora/SKILL.md.html"
+      uid=g4:3_35 StaticText "engineer's literal recipe"
+    uid=g4:3_36 StaticText ". A failed, blocked or unavailable result is not a pass. Changing code or instructions requires fresh verification. An unknown scenario, another instance's cleanup handle or missing artifact is refused. Nothing here grants permission to publish, merge or run an agent."
+    uid=g4:3_37 heading "Implementation status" level="2"
+    uid=g4:3_38 StaticText "In progress pending independent task review."
+    uid=g4:3_39 StaticText " Two fixture implementations and owned controls are present. There is no customer onboarding, hosted verification UI or production project execution yet. U01b's general evidence validation and independent trusted checks remain separate future tasks; finishing this capability does not finish that milestone."
+    uid=g4:3_40 heading "Verification and proof" level="2"
+    uid=g4:3_41 StaticText "The "
+    uid=g4:3_42 link "task tests" url="http://127.0.0.1:43261/source/packages/verification/test/project.test.ts.html"
+      uid=g4:3_43 StaticText "task tests"
+    uid=g4:3_44 StaticText " check both applications, two concurrent instances and refusal cases. The "
+    uid=g4:3_45 link "retained red assertion" url="http://127.0.0.1:43261/source/evidence/U01b/agora-s1-isolate-development/assertion-red.log.html"
+      uid=g4:3_46 StaticText "retained red assertion"
+    uid=g4:3_47 StaticText " records the earlier absence honestly. "
+    uid=g4:3_48 link "Operator details" url="http://127.0.0.1:43261/project-controls.html"
+      uid=g4:3_49 StaticText "Operator details"
+    uid=g4:3_50 StaticText " explain namespaces, cleanup, exact receipts and the limits of local owner-attested proof. Independent review must inspect the committed code and receipts before the atlas can call the task complete."
+    uid=g4:3_51 link "Improve this page" url="http://127.0.0.1:43261/authoring.html"
+      uid=g4:3_52 StaticText "Improve this page"
+    uid=g4:3_53 StaticText "Documentation is part of implementation."
+help[3]:
+  Run `chrome-devtools-axi click @g4:3_1` to click the "Skip to content" link
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+result: "\"{\\\"active\\\":\\\"Skip to content\\\"}\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+page:
+  title: Checking a project · Agora
+  refs: 54
+snapshot:
+uid=g5:3_0 RootWebArea "Checking a project · Agora" url="http://127.0.0.1:43261/checking-a-project.html#main"
+  uid=g5:3_1 link "Skip to content" url="http://127.0.0.1:43261/checking-a-project.html#main"
+    uid=g5:3_2 StaticText "Skip to content"
+  uid=g5:3_3 banner
+    uid=g5:3_4 link "agora" url="http://127.0.0.1:43261/index.html"
+      uid=g5:3_5 StaticText "agora"
+    uid=g5:3_6 link "Progress atlas ↗" url="http://127.0.0.1:43261/atlas.html"
+      uid=g5:3_7 StaticText "Progress atlas ↗"
+  uid=g5:3_8 DisclosureTriangle "Browse documentation" expandable
+  uid=g5:3_9 main focusable focused
+    uid=g5:3_10 StaticText "AGORA / FIELD GUIDE"
+    uid=g5:3_11 heading "Checking a project" level="1"
+    uid=g5:3_12 heading "What it is" level="2"
+    uid=g5:3_13 StaticText "An engineer can now run Agora's small verification application and a separate Python example through the same controls. These are "
+    uid=g5:3_14 StaticText "non-production foundation fixtures"
+    uid=g5:3_15 StaticText ", not your team's rooms or projects. They demonstrate the verification contract before Agora can run real tasks."
+    uid=g5:3_16 heading "What it does" level="2"
+    uid=g5:3_17 StaticText "The controls check prerequisites, list available scenarios, start isolated instances, drive their actual behavior, collect proof and stop them safely. The demonstration sends one permitted and one denied scope decision, then checks the saved records and object bytes. Both applications must agree on those literal results."
+    uid=g5:3_18 heading "Why it exists" level="2"
+    uid=g5:3_19 StaticText "“Tests passed” is not enough if the test used somebody else's database or its evidence disappeared during cleanup. A named instance and preserved proof let a reviewer distinguish an observed result from a claim, and let you stop one check without breaking another."
+    uid=g5:3_20 heading "How it works" level="2"
+    uid=g5:3_21 StaticText "HOW IT WORKS · READ IN ORDER"
+    uid=g5:3_22 StaticText "Check readiness"
+    uid=g5:3_23 StaticText "Doctor explains missing local prerequisites; nothing is installed or started implicitly."
+    uid=g5:3_24 StaticText "Choose and start"
+    uid=g5:3_25 StaticText "Scenarios lists supported checks; start returns a fresh instance, allocated address and cleanup handle."
+    uid=g5:3_26 StaticText "Observe and retain"
+    uid=g5:3_27 StaticText "Verify drives the real application; evidence checks the saved bytes against this code and these instructions."
+    uid=g5:3_28 StaticText "Stop safely"
+    uid=g5:3_29 StaticText "Present the instance's own handle; its database and processes disappear while evidence remains available."
+    uid=g5:3_30 StaticText "Use "
+    uid=g5:3_31 link "the CLI reference" url="http://127.0.0.1:43261/cli.html#owned-project-controls"
+      uid=g5:3_32 StaticText "the CLI reference"
+    uid=g5:3_33 StaticText " and the "
+    uid=g5:3_34 link "engineer's literal recipe" url="http://127.0.0.1:43261/source/.agents/skills/verify-agora/SKILL.md.html"
+      uid=g5:3_35 StaticText "engineer's literal recipe"
+    uid=g5:3_36 StaticText ". A failed, blocked or unavailable result is not a pass. Changing code or instructions requires fresh verification. An unknown scenario, another instance's cleanup handle or missing artifact is refused. Nothing here grants permission to publish, merge or run an agent."
+    uid=g5:3_37 heading "Implementation status" level="2"
+    uid=g5:3_38 StaticText "In progress pending independent task review."
+    uid=g5:3_39 StaticText " Two fixture implementations and owned controls are present. There is no customer onboarding, hosted verification UI or production project execution yet. U01b's general evidence validation and independent trusted checks remain separate future tasks; finishing this capability does not finish that milestone."
+    uid=g5:3_40 heading "Verification and proof" level="2"
+    uid=g5:3_41 StaticText "The "
+    uid=g5:3_42 link "task tests" url="http://127.0.0.1:43261/source/packages/verification/test/project.test.ts.html"
+      uid=g5:3_43 StaticText "task tests"
+    uid=g5:3_44 StaticText " check both applications, two concurrent instances and refusal cases. The "
+    uid=g5:3_45 link "retained red assertion" url="http://127.0.0.1:43261/source/evidence/U01b/agora-s1-isolate-development/assertion-red.log.html"
+      uid=g5:3_46 StaticText "retained red assertion"
+    uid=g5:3_47 StaticText " records the earlier absence honestly. "
+    uid=g5:3_48 link "Operator details" url="http://127.0.0.1:43261/project-controls.html"
+      uid=g5:3_49 StaticText "Operator details"
+    uid=g5:3_50 StaticText " explain namespaces, cleanup, exact receipts and the limits of local owner-attested proof. Independent review must inspect the committed code and receipts before the atlas can call the task complete."
+    uid=g5:3_51 link "Improve this page" url="http://127.0.0.1:43261/authoring.html"
+      uid=g5:3_52 StaticText "Improve this page"
+    uid=g5:3_53 StaticText "Documentation is part of implementation."
+help[3]:
+  Run `chrome-devtools-axi click @g5:3_1` to click the "Skip to content" link
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+result: "\"{\\\"focus\\\":\\\"MAIN\\\",\\\"id\\\":\\\"main\\\"}\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state

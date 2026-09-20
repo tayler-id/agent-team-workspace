@@ -1,0 +1,64 @@
+[
+  {
+    "argv": [
+      "node",
+      "scripts/project.mjs",
+      "project",
+      "stop",
+      "--fixture",
+      "agora",
+      "--instance",
+      "af160f15-db9d-47d9-8093-bb3ac9c85c03",
+      "--handle",
+      "b7a6789d-5e21-4992-ab93-971c3a2a66ae",
+      "--json"
+    ],
+    "exit": 0,
+    "stdout": "{\n  \"schema_version\": \"agora.cli-report/v1\",\n  \"command\": \"stop\",\n  \"versions\": {\n    \"code\": \"c1a4edcf977f80535d35aef0e372794d9b03af15\",\n    \"config\": \"sha256:4991c8507e9c9343c420ecbae26a765f534bb5b01dde0e6e32ad8ddd2c884bb4\",\n    \"fixture\": \"sha256:f65f8c860912ac2b5aeef24ac5ff68332758122b29ff47b83276dd535018567e\"\n  },\n  \"outcome\": \"pass\",\n  \"diagnostics\": [],\n  \"artifacts\": [],\n  \"started_at\": \"2026-09-20T21:22:17.237Z\",\n  \"finished_at\": \"2026-09-20T21:22:17.399Z\",\n  \"run_id\": \"af160f15-db9d-47d9-8093-bb3ac9c85c03\",\n  \"cleanup\": {\n    \"outcome\": \"removed\",\n    \"handle\": \"b7a6789d-5e21-4992-ab93-971c3a2a66ae\"\n  }\n}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/project.mjs",
+      "project",
+      "stop",
+      "--fixture",
+      "agora",
+      "--instance",
+      "4b653f9c-bec8-4085-8050-c495ede821f7",
+      "--handle",
+      "adfcd3e6-a902-46f2-9114-97636af5eb2b",
+      "--json"
+    ],
+    "exit": 0,
+    "stdout": "{\n  \"schema_version\": \"agora.cli-report/v1\",\n  \"command\": \"stop\",\n  \"versions\": {\n    \"code\": \"c1a4edcf977f80535d35aef0e372794d9b03af15\",\n    \"config\": \"sha256:4991c8507e9c9343c420ecbae26a765f534bb5b01dde0e6e32ad8ddd2c884bb4\",\n    \"fixture\": \"sha256:f65f8c860912ac2b5aeef24ac5ff68332758122b29ff47b83276dd535018567e\"\n  },\n  \"outcome\": \"pass\",\n  \"diagnostics\": [],\n  \"artifacts\": [],\n  \"started_at\": \"2026-09-20T21:22:17.577Z\",\n  \"finished_at\": \"2026-09-20T21:22:17.727Z\",\n  \"run_id\": \"4b653f9c-bec8-4085-8050-c495ede821f7\",\n  \"cleanup\": {\n    \"outcome\": \"removed\",\n    \"handle\": \"adfcd3e6-a902-46f2-9114-97636af5eb2b\"\n  }\n}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/project.mjs",
+      "project",
+      "stop",
+      "--fixture",
+      "python",
+      "--instance",
+      "861df15c-5588-4e10-bb25-923d824d9df1",
+      "--handle",
+      "7f4ea409-5333-4440-b856-954d6d302d09",
+      "--json"
+    ],
+    "exit": 0,
+    "stdout": "{\n  \"schema_version\": \"agora.cli-report/v1\",\n  \"command\": \"stop\",\n  \"versions\": {\n    \"code\": \"c1a4edcf977f80535d35aef0e372794d9b03af15\",\n    \"config\": \"sha256:4991c8507e9c9343c420ecbae26a765f534bb5b01dde0e6e32ad8ddd2c884bb4\",\n    \"fixture\": \"sha256:f65f8c860912ac2b5aeef24ac5ff68332758122b29ff47b83276dd535018567e\"\n  },\n  \"outcome\": \"pass\",\n  \"diagnostics\": [],\n  \"artifacts\": [],\n  \"started_at\": \"2026-09-20T21:22:17.904Z\",\n  \"finished_at\": \"2026-09-20T21:22:17.916Z\",\n  \"run_id\": \"861df15c-5588-4e10-bb25-923d824d9df1\",\n  \"cleanup\": {\n    \"outcome\": \"removed\",\n    \"handle\": \"7f4ea409-5333-4440-b856-954d6d302d09\"\n  }\n}\n",
+    "stderr": ""
+  },
+  {
+    "orphan_pid": 17118,
+    "observed_start_and_owned_command": "Sun Sep 20 17:20:46 2026     /Users/taylerramsay/.local/node/bin/node scripts/project-host.mjs /private/tmp/agora-u01b-9tAUwj/agora-green-UrBMQ0/.scratch/project/agora/5bc5e64d-c216-4c0f-8c15-db8ff903df8f\n",
+    "action": "SIGTERM to owned host, whose handler closes its server and exact PostgreSQL data directory"
+  },
+  {
+    "orphan_root_removed": false
+  }
+]

@@ -1,0 +1,74 @@
+emulated:
+  viewport: "390x844x1,mobile,touch"
+page:
+  title: Checking a project · Agora
+  url: "http://127.0.0.1:43261/checking-a-project.html"
+  refs: 54
+snapshot:
+uid=g6:6_0 RootWebArea "Checking a project · Agora" url="http://127.0.0.1:43261/checking-a-project.html"
+  uid=g6:6_1 link "Skip to content" url="http://127.0.0.1:43261/checking-a-project.html#main"
+    uid=g6:6_2 StaticText "Skip to content"
+  uid=g6:6_3 banner
+    uid=g6:6_4 link "agora" url="http://127.0.0.1:43261/index.html"
+      uid=g6:6_5 StaticText "agora"
+    uid=g6:6_6 link "Progress atlas ↗" url="http://127.0.0.1:43261/atlas.html"
+      uid=g6:6_7 StaticText "Progress atlas ↗"
+  uid=g6:6_8 DisclosureTriangle "Browse documentation" expandable
+  uid=g6:6_9 main
+    uid=g6:6_10 StaticText "AGORA / FIELD GUIDE"
+    uid=g6:6_11 heading "Checking a project" level="1"
+    uid=g6:6_12 heading "What it is" level="2"
+    uid=g6:6_13 StaticText "An engineer can now run Agora's small verification application and a separate Python example through the same controls. These are "
+    uid=g6:6_14 StaticText "non-production foundation fixtures"
+    uid=g6:6_15 StaticText ", not your team's rooms or projects. They demonstrate the verification contract before Agora can run real tasks."
+    uid=g6:6_16 heading "What it does" level="2"
+    uid=g6:6_17 StaticText "The controls check prerequisites, list available scenarios, start isolated instances, drive their actual behavior, collect proof and stop them safely. The demonstration sends one permitted and one denied scope decision, then checks the saved records and object bytes. Both applications must agree on those literal results."
+    uid=g6:6_18 heading "Why it exists" level="2"
+    uid=g6:6_19 StaticText "“Tests passed” is not enough if the test used somebody else's database or its evidence disappeared during cleanup. A named instance and preserved proof let a reviewer distinguish an observed result from a claim, and let you stop one check without breaking another."
+    uid=g6:6_20 heading "How it works" level="2"
+    uid=g6:6_21 StaticText "HOW IT WORKS · READ IN ORDER"
+    uid=g6:6_22 StaticText "Check readiness"
+    uid=g6:6_23 StaticText "Doctor explains missing local prerequisites; nothing is installed or started implicitly."
+    uid=g6:6_24 StaticText "Choose and start"
+    uid=g6:6_25 StaticText "Scenarios lists supported checks; start returns a fresh instance, allocated address and cleanup handle."
+    uid=g6:6_26 StaticText "Observe and retain"
+    uid=g6:6_27 StaticText "Verify drives the real application; evidence checks the saved bytes against this code and these instructions."
+    uid=g6:6_28 StaticText "Stop safely"
+    uid=g6:6_29 StaticText "Present the instance's own handle; its database and processes disappear while evidence remains available."
+    uid=g6:6_30 StaticText "Use "
+    uid=g6:6_31 link "the CLI reference" url="http://127.0.0.1:43261/cli.html#owned-project-controls"
+      uid=g6:6_32 StaticText "the CLI reference"
+    uid=g6:6_33 StaticText " and the "
+    uid=g6:6_34 link "engineer's literal recipe" url="http://127.0.0.1:43261/source/.agents/skills/verify-agora/SKILL.md.html"
+      uid=g6:6_35 StaticText "engineer's literal recipe"
+    uid=g6:6_36 StaticText ". A failed, blocked or unavailable result is not a pass. Changing code or instructions requires fresh verification. An unknown scenario, another instance's cleanup handle or missing artifact is refused. Nothing here grants permission to publish, merge or run an agent."
+    uid=g6:6_37 heading "Implementation status" level="2"
+    uid=g6:6_38 StaticText "In progress pending independent task review."
+    uid=g6:6_39 StaticText " Two fixture implementations and owned controls are present. There is no customer onboarding, hosted verification UI or production project execution yet. U01b's general evidence validation and independent trusted checks remain separate future tasks; finishing this capability does not finish that milestone."
+    uid=g6:6_40 heading "Verification and proof" level="2"
+    uid=g6:6_41 StaticText "The "
+    uid=g6:6_42 link "task tests" url="http://127.0.0.1:43261/source/packages/verification/test/project.test.ts.html"
+      uid=g6:6_43 StaticText "task tests"
+    uid=g6:6_44 StaticText " check both applications, two concurrent instances and refusal cases. The "
+    uid=g6:6_45 link "retained red assertion" url="http://127.0.0.1:43261/source/evidence/U01b/agora-s1-isolate-development/assertion-red.log.html"
+      uid=g6:6_46 StaticText "retained red assertion"
+    uid=g6:6_47 StaticText " records the earlier absence honestly. "
+    uid=g6:6_48 link "Operator details" url="http://127.0.0.1:43261/project-controls.html"
+      uid=g6:6_49 StaticText "Operator details"
+    uid=g6:6_50 StaticText " explain namespaces, cleanup, exact receipts and the limits of local owner-attested proof. Independent review must inspect the committed code and receipts before the atlas can call the task complete."
+    uid=g6:6_51 link "Improve this page" url="http://127.0.0.1:43261/authoring.html"
+      uid=g6:6_52 StaticText "Improve this page"
+    uid=g6:6_53 StaticText "Documentation is part of implementation."
+help[3]:
+  Run `chrome-devtools-axi click @g6:6_1` to click the "Skip to content" link
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+result: "\"{\\\"viewport\\\":[390,844],\\\"overflow\\\":false,\\\"title\\\":\\\"Checking a project\\\",\\\"steps\\\":4,\\\"animations\\\":0}\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/evidence/U01b/agora-s1-isolate-development/docs-mobile.png
+result: "{\"interrupted\":false}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/evidence/U01b/agora-s1-isolate-development/docs-mobile-flow.png
+status: stopped

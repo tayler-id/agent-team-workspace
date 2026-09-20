@@ -1,0 +1,154 @@
+{
+  "source_files": 24,
+  "conservative_lines_including_blanks": 845,
+  "authored": [
+    {
+      "path": ".agents/skills/verify-agora/SKILL.md",
+      "added": 51,
+      "deleted": 45
+    },
+    {
+      "path": "AGENTS.md",
+      "added": 1,
+      "deleted": 0
+    },
+    {
+      "path": "agora/feature-map.json",
+      "added": 12,
+      "deleted": 0
+    },
+    {
+      "path": "agora/project.json",
+      "added": 24,
+      "deleted": 0
+    },
+    {
+      "path": "apps/center/src/verification.mjs",
+      "added": 35,
+      "deleted": 0
+    },
+    {
+      "path": "contracts/fixtures/vectors.json",
+      "added": 6,
+      "deleted": 0
+    },
+    {
+      "path": "contracts/schemas/cli.schema.json",
+      "added": 46,
+      "deleted": 0
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContractsConform/main.swift",
+      "added": 5,
+      "deleted": 0
+    },
+    {
+      "path": "docs/site/atlas.json",
+      "added": 9,
+      "deleted": 1
+    },
+    {
+      "path": "docs/site/checking-a-project.md",
+      "added": 32,
+      "deleted": 0
+    },
+    {
+      "path": "docs/site/cli.md",
+      "added": 17,
+      "deleted": 0
+    },
+    {
+      "path": "docs/site/project-controls.md",
+      "added": 37,
+      "deleted": 0
+    },
+    {
+      "path": "docs/site/site.json",
+      "added": 5,
+      "deleted": 0
+    },
+    {
+      "path": "docs/site/test/corpus.test.ts",
+      "added": 4,
+      "deleted": 2
+    },
+    {
+      "path": "docs/site/verification.md",
+      "added": 2,
+      "deleted": 2
+    },
+    {
+      "path": "eslint.config.js",
+      "added": 1,
+      "deleted": 1
+    },
+    {
+      "path": "package.json",
+      "added": 1,
+      "deleted": 0
+    },
+    {
+      "path": "packages/verification/fixture/project.py",
+      "added": 91,
+      "deleted": 0
+    },
+    {
+      "path": "packages/verification/fixture/requirements.txt",
+      "added": 5,
+      "deleted": 0
+    },
+    {
+      "path": "packages/verification/test/project.test.ts",
+      "added": 72,
+      "deleted": 0
+    },
+    {
+      "path": "scripts/project-checks.mjs",
+      "added": 63,
+      "deleted": 0
+    },
+    {
+      "path": "scripts/project-host.mjs",
+      "added": 56,
+      "deleted": 0
+    },
+    {
+      "path": "scripts/project.mjs",
+      "added": 117,
+      "deleted": 0
+    },
+    {
+      "path": "evidence/U01b/agora-s1-isolate-development/README.md",
+      "added": 102,
+      "deleted": 0
+    }
+  ],
+  "generated_visible_exclusions": [
+    {
+      "path": "contracts/generated/manifest.json",
+      "added": 9,
+      "deleted": 4
+    },
+    {
+      "path": "contracts/generated/openapi.bundled.json",
+      "added": 197,
+      "deleted": 0
+    },
+    {
+      "path": "contracts/generated/typescript/openapi.d.ts",
+      "added": 38,
+      "deleted": 0
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift",
+      "added": 371,
+      "deleted": 0
+    },
+    {
+      "path": "docs/site/progress.md",
+      "added": 2,
+      "deleted": 1
+    }
+  ],
+  "retained_artifacts": "logs, JSON observations, PNGs, recorder test-patch copies excluded; README measurement code counted"
+}

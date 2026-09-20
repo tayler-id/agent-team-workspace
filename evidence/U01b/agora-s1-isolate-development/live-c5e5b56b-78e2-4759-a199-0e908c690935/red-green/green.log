@@ -1,0 +1,23 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-20T21:31:53.070Z
+parent: ab6a1832da47782ddad69e2ca80512bb4d24ed24
+head: 2d93d40c911ec4f73cfc32705263ba31fc0c684b
+subject_revision: 2d93d40c911ec4f73cfc32705263ba31fc0c684b
+test_patch_applied_to_subject: false
+test_patch_files: contracts/fixtures/vectors.json, docs/site/test/corpus.test.ts, packages/verification/test/project.test.ts
+test_patch_digest: sha256:949025e8cc21a032cd1c3ca5fb83c39ef971661c716881bec5745645c00c010b
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:d178a37082bbd2e3d1cc7b1381db1f2b096d69dd4b4da2eeafc0ec70420d6aa7"},{"file":"contracts/schemas/cli.schema.json","digest":"sha256:9b422c85e6bd8103fff40ef73cda75de6b39c2df03a1586108856ef36b6a9271"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:89279d52607659d43a81b101bf83690a5993310796998a6154b346d79b8163f6"}]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/verification/test/project.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/tmp/agora-u01b-kd2Lml/agora-green-OfyDXa
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  17:31:31
+   Duration  19.97s (tests 100%)
+

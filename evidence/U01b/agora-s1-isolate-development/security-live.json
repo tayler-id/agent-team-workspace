@@ -1,0 +1,245 @@
+{
+  "head": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+  "outcome": "pass",
+  "observations": [
+    {
+      "argv": [
+        "start",
+        "--profile",
+        "verify",
+        "--instance",
+        "3ce4f0e7-48a3-4d51-a25e-c23740858350",
+        "--fixture",
+        "agora"
+      ],
+      "exit": 0,
+      "report": {
+        "schema_version": "agora.cli-report/v1",
+        "command": "start",
+        "versions": {
+          "code": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+          "config": "sha256:9a0e1e42972a778d832173f930949bf00f3c772227a5a99feb9081e8829df581",
+          "fixture": "sha256:04383173d3606891d8ec0d49b61e7e36f4b800fc7c7185805c778058bd6ed856"
+        },
+        "outcome": "pass",
+        "diagnostics": [],
+        "artifacts": [],
+        "started_at": "2026-09-20T21:46:12.059Z",
+        "finished_at": "2026-09-20T21:46:13.011Z",
+        "run_id": "3ce4f0e7-48a3-4d51-a25e-c23740858350",
+        "instance": {
+          "root": "/private/tmp/agora-u01b-security-fl10h0fh/agora-b01-X2t9nP",
+          "pid": 25068,
+          "process_start": "Sun Sep 20 17:46:12 2026",
+          "url": "http://127.0.0.1:57542",
+          "database": "postgresql://agora_app@/agora_fixture?host=%2Fprivate%2Ftmp%2Fagora-u01b-security-fl10h0fh%2Fagora-b01-X2t9nP",
+          "object_namespace": "/private/tmp/agora-u01b-security-fl10h0fh/agora-b01-X2t9nP/objects",
+          "cleanup_handle": "2373bcd8-23a3-4a67-9e14-5ef6d0585955"
+        }
+      }
+    },
+    {
+      "fixture": "agora",
+      "pid": 25068,
+      "sentinel_environment_absent": true
+    },
+    {
+      "fixture": "agora",
+      "no_handle_status": 403
+    },
+    {
+      "argv": [
+        "verify",
+        "--fixture",
+        "agora",
+        "--instance",
+        "3ce4f0e7-48a3-4d51-a25e-c23740858350",
+        "--scenario",
+        "policy",
+        "--artifacts",
+        ".scratch/security-link-3ce4f0e7-48a3-4d51-a25e-c23740858350/escape"
+      ],
+      "exit": 1,
+      "report": {
+        "schema_version": "agora.cli-report/v1",
+        "command": "verify",
+        "versions": {
+          "code": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+          "config": "sha256:9a0e1e42972a778d832173f930949bf00f3c772227a5a99feb9081e8829df581",
+          "fixture": "sha256:04383173d3606891d8ec0d49b61e7e36f4b800fc7c7185805c778058bd6ed856"
+        },
+        "outcome": "fail",
+        "diagnostics": [
+          {
+            "reason_code": "blocked_prerequisite",
+            "message": "unsafe_path"
+          }
+        ],
+        "artifacts": [],
+        "started_at": "2026-09-20T21:46:13.193Z",
+        "finished_at": "2026-09-20T21:46:13.207Z",
+        "run_id": "3ce4f0e7-48a3-4d51-a25e-c23740858350",
+        "scenario_id": "policy"
+      }
+    },
+    {
+      "argv": [
+        "stop",
+        "--fixture",
+        "agora",
+        "--instance",
+        "3ce4f0e7-48a3-4d51-a25e-c23740858350",
+        "--handle",
+        "2373bcd8-23a3-4a67-9e14-5ef6d0585955"
+      ],
+      "exit": 0,
+      "report": {
+        "schema_version": "agora.cli-report/v1",
+        "command": "stop",
+        "versions": {
+          "code": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+          "config": "sha256:9a0e1e42972a778d832173f930949bf00f3c772227a5a99feb9081e8829df581",
+          "fixture": "sha256:04383173d3606891d8ec0d49b61e7e36f4b800fc7c7185805c778058bd6ed856"
+        },
+        "outcome": "pass",
+        "diagnostics": [],
+        "artifacts": [],
+        "started_at": "2026-09-20T21:46:13.371Z",
+        "finished_at": "2026-09-20T21:46:13.527Z",
+        "run_id": "3ce4f0e7-48a3-4d51-a25e-c23740858350",
+        "cleanup": {
+          "outcome": "removed",
+          "handle": "2373bcd8-23a3-4a67-9e14-5ef6d0585955"
+        }
+      }
+    },
+    {
+      "fixture": "agora",
+      "original_process_removed": true,
+      "root_removed": true
+    },
+    {
+      "argv": [
+        "start",
+        "--profile",
+        "verify",
+        "--instance",
+        "e2fb2f8b-5092-4351-955e-b56f4875162c",
+        "--fixture",
+        "python"
+      ],
+      "exit": 0,
+      "report": {
+        "schema_version": "agora.cli-report/v1",
+        "command": "start",
+        "versions": {
+          "code": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+          "config": "sha256:9a0e1e42972a778d832173f930949bf00f3c772227a5a99feb9081e8829df581",
+          "fixture": "sha256:04383173d3606891d8ec0d49b61e7e36f4b800fc7c7185805c778058bd6ed856"
+        },
+        "outcome": "pass",
+        "diagnostics": [],
+        "artifacts": [],
+        "started_at": "2026-09-20T21:46:13.831Z",
+        "finished_at": "2026-09-20T21:46:14.131Z",
+        "run_id": "e2fb2f8b-5092-4351-955e-b56f4875162c",
+        "instance": {
+          "root": "/private/tmp/agora-u01b-security-fl10h0fh/agora-b01-qmv7eT",
+          "pid": 25304,
+          "process_start": "Sun Sep 20 17:46:13 2026",
+          "url": "http://127.0.0.1:57545",
+          "database": "/private/tmp/agora-u01b-security-fl10h0fh/agora-b01-qmv7eT/fixture.sqlite",
+          "object_namespace": "/private/tmp/agora-u01b-security-fl10h0fh/agora-b01-qmv7eT/objects",
+          "cleanup_handle": "6e76a685-abba-42fa-b5d3-b9826b7b3b02"
+        }
+      }
+    },
+    {
+      "fixture": "python",
+      "pid": 25304,
+      "sentinel_environment_absent": true
+    },
+    {
+      "fixture": "python",
+      "pid": 25322,
+      "sentinel_environment_absent": true
+    },
+    {
+      "fixture": "python",
+      "no_handle_status": 403
+    },
+    {
+      "argv": [
+        "verify",
+        "--fixture",
+        "python",
+        "--instance",
+        "e2fb2f8b-5092-4351-955e-b56f4875162c",
+        "--scenario",
+        "policy",
+        "--artifacts",
+        ".scratch/security-link-e2fb2f8b-5092-4351-955e-b56f4875162c/escape"
+      ],
+      "exit": 1,
+      "report": {
+        "schema_version": "agora.cli-report/v1",
+        "command": "verify",
+        "versions": {
+          "code": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+          "config": "sha256:9a0e1e42972a778d832173f930949bf00f3c772227a5a99feb9081e8829df581",
+          "fixture": "sha256:04383173d3606891d8ec0d49b61e7e36f4b800fc7c7185805c778058bd6ed856"
+        },
+        "outcome": "fail",
+        "diagnostics": [
+          {
+            "reason_code": "blocked_prerequisite",
+            "message": "unsafe_path"
+          }
+        ],
+        "artifacts": [],
+        "started_at": "2026-09-20T21:46:14.312Z",
+        "finished_at": "2026-09-20T21:46:14.326Z",
+        "run_id": "e2fb2f8b-5092-4351-955e-b56f4875162c",
+        "scenario_id": "policy"
+      }
+    },
+    {
+      "argv": [
+        "stop",
+        "--fixture",
+        "python",
+        "--instance",
+        "e2fb2f8b-5092-4351-955e-b56f4875162c",
+        "--handle",
+        "6e76a685-abba-42fa-b5d3-b9826b7b3b02"
+      ],
+      "exit": 0,
+      "report": {
+        "schema_version": "agora.cli-report/v1",
+        "command": "stop",
+        "versions": {
+          "code": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+          "config": "sha256:9a0e1e42972a778d832173f930949bf00f3c772227a5a99feb9081e8829df581",
+          "fixture": "sha256:04383173d3606891d8ec0d49b61e7e36f4b800fc7c7185805c778058bd6ed856"
+        },
+        "outcome": "pass",
+        "diagnostics": [],
+        "artifacts": [],
+        "started_at": "2026-09-20T21:46:14.492Z",
+        "finished_at": "2026-09-20T21:46:14.501Z",
+        "run_id": "e2fb2f8b-5092-4351-955e-b56f4875162c",
+        "cleanup": {
+          "outcome": "removed",
+          "handle": "6e76a685-abba-42fa-b5d3-b9826b7b3b02"
+        }
+      }
+    },
+    {
+      "fixture": "python",
+      "original_process_removed": true,
+      "root_removed": true
+    }
+  ],
+  "temp_root": "/tmp/agora-u01b-security-fl10h0fh",
+  "cleanup": "removed"
+}
