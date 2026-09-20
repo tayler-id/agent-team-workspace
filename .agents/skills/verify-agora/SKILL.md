@@ -98,8 +98,8 @@ python3 packages/verification/fixture/project.py stop --instance "$P" --handle "
 pnpm -s agora project evidence --instance "$A" --json
 pnpm -s agora project evidence --instance "$B" --json
 python3 packages/verification/fixture/project.py evidence --instance "$P" --json
-rmdir "$TMPDIR"
+node --input-type=module -e 'import fs from "node:fs"; import assert from "node:assert/strict"; const root=process.env.TMPDIR; assert.ok(root.startsWith("/tmp/agora-u01b-")); const entries=fs.readdirSync(root); assert.ok(!entries.some(name=>/^agora-(b01|pg|red|green|clean)-/.test(name)), "owned runtime leak"); console.log(JSON.stringify({owned_root:root,remaining_tool_scratch:entries})); fs.rmSync(root,{recursive:true});'
 unset TMPDIR
 ```
 
-`rmdir` must succeed on this invocation's owned temp root. Never sweep the platform temp directory or prune somebody else's worktrees. The ignored `.scratch/project/` ownership journals and evidence directories remain deliberately; no database, object runtime namespace, HTTP listener or owned host process may remain.
+The final command must find no owned runtime resource before deleting only this invocation's remaining Swift tool scratch. SwiftPM leaves `.keep-directory` and lock files even after its build exits; the first literal run exposed that distinction. Never sweep the platform temp directory or prune somebody else's worktrees. The ignored `.scratch/project/` ownership journals and evidence directories remain deliberately; no database, object runtime namespace, HTTP listener or owned host process may remain.

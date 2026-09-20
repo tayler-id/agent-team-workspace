@@ -57,7 +57,9 @@ const map=JSON.parse(original);map.features=map.features.filter(x=>x.id!=='proje
 }, 300_000);
 
 test('project guards require their own assertions to turn red in isolated copies', () => {
-	probe(`const id=randomUUID(),s=pass('start','--profile','verify','--instance',id),copy='.scratch/project-guard-'+id+'.mjs';
+	probe(`const fsDefault=(await import('node:fs')).default,{syncBuiltinESMExports}=await import('node:module');const write=fsDefault.writeFileSync,target='.scratch/atomic-state-'+randomUUID();write(target,'{"old":true}');
+try {fsDefault.writeFileSync=(file,bytes,options)=>{write(file,String(bytes).slice(0,3),options);assert.deepEqual(JSON.parse(fs.readFileSync(target)),{old:true},'readers see a complete prior snapshot during a partial write');write(file,bytes,options);};syncBuiltinESMExports();const {writeState}=await import('./scripts/project-checks.mjs');writeState(target,{fresh:true});assert.deepEqual(JSON.parse(fs.readFileSync(target)),{fresh:true});}finally{fsDefault.writeFileSync=write;syncBuiltinESMExports();fs.rmSync(target,{force:true});}
+const id=randomUUID(),s=pass('start','--profile','verify','--instance',id),copy='.scratch/project-guard-'+id+'.mjs';
 try {const v=pass('verify','--scenario','policy','--instance',id,'--artifacts','.scratch/project-tests/'+id);fs.writeFileSync(v.artifacts[0].path,'{}');
 const original=fs.readFileSync('scripts/project-checks.mjs','utf8'), needle="bytes.length === artifact.byte_length && hash(bytes) === artifact.digest";
 assert.equal(original.split(needle).length,2); const trials=[];

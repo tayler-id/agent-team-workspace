@@ -7,7 +7,7 @@ import { request } from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { artifact, checkEvidence, command, environment, exits, json, mapped, requireThat, safe, validateReport, versions, wire } from './project-checks.mjs';
+import { artifact, checkEvidence, command, environment, exits, json, mapped, requireThat, safe, validateReport, versions, wire, writeState } from './project-checks.mjs';
 const args = process.argv.slice(2).filter(arg => arg !== '--' && arg !== '--json');
 if (args[0] === 'project') args.shift();
 const action = args.shift(); const options = {}; let invalid = false;
@@ -102,7 +102,7 @@ try {
 				const file = path.join(out, randomUUID() + '.json'); save(file, { instance: instanceView(state), observed, persisted, versions: report.versions });
 				report.instance = instanceView(state); report.artifacts = [artifact(file)]; report.cleanup = { outcome: 'retained', handle: state.handle };
 				report.finished_at = new Date().toISOString(); validateReport(report, 0);
-				writeFileSync(path.join(registry, 'evidence.json'), JSON.stringify(report));
+				writeState(path.join(registry, 'evidence.json'), report);
 			}
 		}
 	}

@@ -1,18 +1,18 @@
 // One owned foreground host behind each detached instance. No PID-only stop or global process sweep.
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
-import { chmodSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import path from 'node:path';
-import { command, environment, json, requireThat, safe } from './project-checks.mjs';
+import { command, environment, json, requireThat, safe, writeState } from './project-checks.mjs';
 const registry = safe(process.argv[2]); const state = json(path.join(registry, 'state.json'));
-const save = () => writeFileSync(path.join(registry, 'state.json'), JSON.stringify(state));
+const save = () => writeState(path.join(registry, 'state.json'), state);
 const pg = name => process.env.AGORA_PG_BIN ? path.join(process.env.AGORA_PG_BIN, name) : name;
 const data = path.join(state.root, 'pg'); let databaseStarted = false, application, python;
 async function cleanup() {
 	if (application) await application();
 	if (python && python.exitCode === null) { python.kill('SIGTERM'); await new Promise(resolve => python.once('exit', resolve)); }
-	if (databaseStarted) requireThat(command([pg('pg_ctl'), '-D', data, '-m', 'fast', '-w', 'stop']).status === 0, 'database_cleanup_failed');
-	rmSync(state.root, { recursive: true }); state.phase = 'removed'; save();
+	if (databaseStarted) requireThat(command([pg('pg_ctl'), '-D', data, '-m', 'fast', '-w', 'stop'], state.root).status === 0, 'database_cleanup_failed');
+	rmSync(state.root, { recursive: true }); state.phase = 'removed'; if (existsSync(registry)) save();
 }
 const control = createServer(async (request, response) => {
 	if (request.headers['x-agora-handle'] !== state.handle) { response.writeHead(403).end(); return; }
@@ -26,6 +26,7 @@ const control = createServer(async (request, response) => {
 try {
 	requireThat(state.owner === process.cwd() && state.phase === 'starting', 'foreign_owner');
 	state.pid = process.pid; state.process_start = command(['ps', '-p', String(process.pid), '-o', 'lstart=']).stdout.trim(); save();
+	writeState(path.join(state.root, 'owner.json'), state);
 	await new Promise((resolve, reject) => { control.once('error', reject); control.listen(path.join(state.root, 'control.sock'), resolve); });
 	chmodSync(path.join(state.root, 'control.sock'), 0o600);
 	mkdirSync(path.join(state.root, 'objects')); state.object_namespace = path.join(state.root, 'objects');

@@ -1,13 +1,17 @@
 // Local fixture freshness and ownership checks, not U01b.B02's signed general evidence validator.
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { existsSync, lstatSync, readFileSync, realpathSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, realpathSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { createWireValidator } from '../contracts/src/index.ts';
 export const wire = createWireValidator();
 export const exits = { pass: 0, fail: 1, blocked: 2, unavailable: 3, usage_error: 64, infrastructure_failure: 70 };
 export const hash = bytes => `sha256:${createHash('sha256').update(bytes).digest('hex')}`;
 export const json = file => JSON.parse(readFileSync(file, 'utf8'));
+export function writeState(file, value) {
+	const pending = `${file}.${process.pid}.pending`;
+	writeFileSync(pending, JSON.stringify(value), { mode: 0o600 }); renameSync(pending, file);
+}
 export function requireThat(ok, reason, outcome = 'fail') { if (!ok) throw Object.assign(new Error(reason), { outcome }); }
 export function command(argv, cwd = process.cwd()) {
 	return spawnSync(argv[0], argv.slice(1), { cwd, encoding: 'utf8', timeout: 300_000, maxBuffer: 8 * 1024 * 1024, env: environment() });
