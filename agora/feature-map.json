@@ -1,8 +1,18 @@
 {
 	"schema_version": "agora.feature-map/v1",
 	"unit": "U01a",
-	"task": "agora-s1-isolate-client-core",
+	"task": "agora-s1-enforce-test-first",
 	"features": [
+		{
+			"id": "foundation-admission",
+			"documentation": "docs/site/test-first.md",
+			"paths": ["scripts/foundation-policy.mjs", "scripts/foundation-replay.mjs", "scripts/foundation.mjs", "packages/verification/test", "contracts/schemas/foundation.schema.json"],
+			"public": ["pnpm verify:foundation", "node scripts/foundation.mjs"],
+			"scenarios": ["packages/verification/test/admission.test.ts", "lane-9", "lane-10"],
+			"fixtures": ["foundation-only task proof, no product authority"],
+			"platforms": ["node24", "postgresql18", "swift6-macos"],
+			"owner": "U01a.B04"
+		},
 		{
 			"id": "documentation-config-rejection",
 			"documentation": "docs/site/authoring.md",
