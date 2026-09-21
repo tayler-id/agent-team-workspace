@@ -47,7 +47,8 @@
 	},
 	"pnpm": {
 		"overrides": {
-			"vite": "6.4.1"
+			"vite": "6.4.1",
+			"markdownlint-cli2>smol-toml": "1.7.1"
 		},
 		"onlyBuiltDependencies": [
 			"esbuild"
