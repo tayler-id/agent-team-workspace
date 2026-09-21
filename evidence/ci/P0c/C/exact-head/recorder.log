@@ -1,1 +1,0 @@
-{"schema_version":"agora.red-green/v1","outcome":"pass","parent":"d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef","head":"609921f6d69e4ddc5cc27fca561b4c008a118db3","red_exit":1,"green_exit":0,"test_patch_digest":"sha256:6f022b9f609cc4cb420c928aa4684821de0552f22a828369b328369e90e8e1e2","out":"evidence/ci/P0c/C/exact-head"}

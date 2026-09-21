@@ -1,12 +1,20 @@
 {
   "schema_version": "agora.p0c-sysv-own-segments/v1",
-  "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
-  "scope": "Only segments named in this run's scenario or guard environment_diff; no global sweep.",
-  "named": [],
-  "removed": [],
+  "head": "bd8d8078902d4e05e0353da736da9350aba639bd",
+  "scope": "Only segments named in this run's guard or scenario environment_diff / swept receipts; no global sweep.",
+  "named": [
+    { "id": 141885443, "key": "0x04dfd594", "cpid": 69099, "source": "guard", "scenario": "foreign-lock-refusal-normal" },
+    { "id": 142213123, "key": "0x04dfdac8", "cpid": 69616, "source": "guard", "scenario": "foreign-lock-refusal-weakened" },
+    { "id": 146341891, "key": "0x04e01b1d", "cpid": 84803, "source": "scenarios", "scenario": "postmaster-killed-at-started" },
+    { "id": 149618691, "key": "0x04e048ad", "cpid": 4098, "source": "scenarios", "scenario": "foreign-process-lock" },
+    { "id": 149946371, "key": "0x04e04de3", "cpid": 4438, "source": "scenarios", "scenario": "foreign-listener" },
+    { "id": 150274051, "key": "0x04e05314", "cpid": 4739, "source": "scenarios", "scenario": "foreign-listener-exact-lock" },
+    { "id": 150601731, "key": "0x04e05843", "cpid": 5040, "source": "scenarios", "scenario": "foreign-socket-file" }
+  ],
+  "removed": [141885443, 142213123, 146341891, 149618691, 149946371, 150274051, 150601731],
   "retained": [],
-  "segments_before": 24,
-  "segments_after": 24,
+  "reason": "creator dead and unattached, attributable to this run's recorded starting postmaster",
+  "segments_after_run": 26,
   "unrelated_untouched": true,
-  "recorded_at": "2026-09-21T22:50:15.661Z"
+  "recorded_at": "2026-09-21T23:25:24.000Z"
 }
