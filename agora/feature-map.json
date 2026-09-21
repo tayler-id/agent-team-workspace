@@ -7,7 +7,7 @@
 			"id": "postgres-wrapper-lifecycle", "documentation": "docs/site/foundation.md",
 			"paths": ["scripts/with-test-postgres.mjs", "scripts/postgres-socket.ts", "packages/storage/test/postgres-wrapper.test.ts"],
 			"public": ["node scripts/with-test-postgres.mjs COMMAND ARGS...", "pnpm test:pg"],
-			"scenarios": ["packages/storage/test/postgres-wrapper.test.ts", "deep-success", "SIGINT", "SIGTERM", "forced-cancel", "startup-failure", "startup-timeout", "foreign-preservation"],
+			"scenarios": ["packages/storage/test/postgres-wrapper.test.ts", "deep-success", "SIGINT", "SIGTERM", "forced-cancel", "startup-failure", "startup-timeout", "foreign-preservation", "abort-stop-throw", "initdb-stderr", "psql-stderr", "missing-pg-isready"],
 			"fixtures": ["P0c B private PostgreSQL 18 lifecycle; qualification C remains pending"], "platforms": ["node24", "posix"], "owner": "CI P0c B"
 		},
 		{
