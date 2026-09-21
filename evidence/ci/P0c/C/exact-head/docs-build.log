@@ -1,5 +1,5 @@
 
-> agora@ docs:build /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> agora@ docs:build /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
 > node docs/site/build.mjs
 
-{"outcome":"pass","pages":25,"milestones":22,"output":".docs-dist","sections":4}
+{"outcome":"pass","pages":26,"milestones":22,"output":".docs-dist","sections":4}

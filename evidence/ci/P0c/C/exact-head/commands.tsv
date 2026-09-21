@@ -1,6 +1,12 @@
 label	exit	head	command
-focused	0	fd274b3a44451264edc8a80753cf9c2c072906a7	pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept
-atlas	0	fd274b3a44451264edc8a80753cf9c2c072906a7	pnpm docs:atlas
-docs-build	0	fd274b3a44451264edc8a80753cf9c2c072906a7	pnpm docs:build
-plan	0	fd274b3a44451264edc8a80753cf9c2c072906a7	node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md
-check	0	fd274b3a44451264edc8a80753cf9c2c072906a7	pnpm check
+hygiene	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	git hygiene sections: head, main, fast-forward, tree, status, diff --check, changed files, forbidden paths, allocator identity, source lines, digests, atlas revision
+install	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	pnpm install --frozen-lockfile
+focused	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept
+recorder	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	node scripts/record-red-green.mjs --parent d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef --head 609921f6d69e4ddc5cc27fca561b4c008a118db3 --out evidence/ci/P0c/C/exact-head -- pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t abort-stop-throw|initdb-stderr|psql-stderr|missing-pg-isready
+guard	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	node evidence/ci/P0c/C/driver/guard.mjs --out evidence/ci/P0c/C/exact-head
+lifecycle	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	node evidence/ci/P0c/C/driver/scenarios.mjs --out evidence/ci/P0c/C/exact-head
+sysv-own-segments	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	node /private/tmp/claude-501/-Users-taylerramsay--treehouse-agent-team-workspace-50d2db-4-agent-team-workspace/19e074cc-7ba2-44ad-96f4-25bd8a3c1271/scratchpad/sweep-own-segments.mjs evidence/ci/P0c/C/exact-head
+atlas	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	pnpm docs:atlas
+docs-build	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	pnpm docs:build
+plan	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md
+check	0	609921f6d69e4ddc5cc27fca561b4c008a118db3	pnpm check

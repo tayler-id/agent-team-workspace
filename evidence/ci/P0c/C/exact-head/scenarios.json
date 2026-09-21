@@ -1,0 +1,1882 @@
+{
+  "schema_version": "agora.p0c-lifecycle-scenarios/v1",
+  "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+  "outcome": "pass",
+  "wrapper_digest": "89a9562850c5373aa00e60301f8d20b2f535e07b501da59bb5b3362af4d95374",
+  "driver": {
+    "evidence/ci/P0c/C/driver/lib.mjs": "b8aecc010ff6ca9e7ba91a4097c879af0a1ee58e64f31d4f8c358d1587da1366",
+    "evidence/ci/P0c/C/driver/scenarios.mjs": "6c48badae1c4de30a039223bc6cadac1150232aa50c5a98c27bbf5b6e1bfcb7a"
+  },
+  "recorded_at": "2026-09-21T22:50:15.621Z",
+  "receipts": [
+    {
+      "scenario": "success",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 0,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 670,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "6392a354-29db-45ce-b2b4-12c65b2a78da",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-success/agora-pg-97RCTr",
+            "socketDir": "/private/tmp/agora-p0c-6392a354-29db-45ce-b2b4-12c65b2a78da"
+          },
+          "starting_pid": 53435,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "agora_app|f|f\n",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "deep-tmpdir",
+      "verdict": "pass",
+      "assertion": null,
+      "tmpdir_bytes": 666,
+      "socket_bytes": 73,
+      "runs": [
+        {
+          "code": 0,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 897,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "a9fcc5d7-bcb0-44c3-a764-7819b1add179",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-deep-tmpdir/deep dir 0 with spaces and a long name/deep dir 1 with spaces and a long name/deep dir 2 with spaces and a long name/deep dir 3 with spaces and a long name/deep dir 4 with spaces and a long name/deep dir 5 with spaces and a long name/deep dir 6 with spaces and a long name/deep dir 7 with spaces and a long name/deep dir 8 with spaces and a long name/deep dir 9 with spaces and a long name/deep dir 10 with spaces and a long name/deep dir 11 with spaces and a long name/deep dir 12 with spaces and a long name/deep dir 13 with spaces and a long name/agora-pg-bWdSDQ",
+            "socketDir": "/private/tmp/agora-p0c-a9fcc5d7-bcb0-44c3-a764-7819b1add179"
+          },
+          "starting_pid": 56454,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "agora_app|f|f\n",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "command-failure",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 255,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 776,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "96abbc09-28db-4590-bb23-7b45dd06db56",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-command-failure/agora-pg-G8lCif",
+            "socketDir": "/private/tmp/agora-p0c-96abbc09-28db-4590-bb23-7b45dd06db56"
+          },
+          "starting_pid": 59113,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "command-signal",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 1,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 667,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "7984d7cf-7c68-4a4c-b52a-8e5bf64f5c78",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-command-signal/agora-pg-69WMnT",
+            "socketDir": "/private/tmp/agora-p0c-7984d7cf-7c68-4a4c-b52a-8e5bf64f5c78"
+          },
+          "starting_pid": 61220,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "missing-command",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 670,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "a08d4673-8a9d-45a4-aae9-e5e700d66c06",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-missing-command/agora-pg-kCXRRl",
+            "socketDir": "/private/tmp/agora-p0c-a08d4673-8a9d-45a4-aae9-e5e700d66c06"
+          },
+          "starting_pid": 62993,
+          "blocked": [
+            "Error: spawn ./absent-command ENOENT"
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "startup-failure",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 478,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "6c477032-5a8c-4444-8681-a530768e9296",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-startup-failure/agora-pg-Ysd9hT",
+            "socketDir": "/private/tmp/agora-p0c-6c477032-5a8c-4444-8681-a530768e9296"
+          },
+          "starting_pid": 64783,
+          "blocked": [
+            "Error: postgres exited before readiness"
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "postmaster-killed-at-started",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 0,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 2130,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "69df4977-982c-4186-a38c-f373b3f6e5c4",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-postmaster-killed-at-started/agora-pg-IFefTm",
+            "socketDir": "/private/tmp/agora-p0c-69df4977-982c-4186-a38c-f373b3f6e5c4"
+          },
+          "starting_pid": 66355,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": true,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [
+        "sysv-segment 38600729 key=0x04d9774e cpid=66355 creator-dead unattached"
+      ],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "startup-timeout",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1295,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "blocked",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "6f51b434-9d14-423c-9620-2249467242a8",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-startup-timeout/agora-pg-ke6cJY",
+            "socketDir": "/private/tmp/agora-p0c-6f51b434-9d14-423c-9620-2249467242a8"
+          },
+          "starting_pid": 68286,
+          "blocked": [
+            "startup timeout",
+            "AbortError: The operation was aborted"
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "cancel-at-allocated",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 143,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 52,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "cb383254-b32a-4cf7-ba98-37b7090fdfbf",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-cancel-at-allocated/agora-pg-hPp0JS",
+            "socketDir": "/private/tmp/agora-p0c-cb383254-b32a-4cf7-ba98-37b7090fdfbf"
+          },
+          "starting_pid": null,
+          "blocked": [
+            "Error: initdb failed (1): "
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "cancel-during-initdb",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 130,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 179,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "d0647b07-f933-4216-a67d-7e52647e48db",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-cancel-during-initdb/agora-pg-gzp6EA",
+            "socketDir": "/private/tmp/agora-p0c-d0647b07-f933-4216-a67d-7e52647e48db"
+          },
+          "starting_pid": null,
+          "blocked": [
+            "Error: initdb failed (1): initdb: removing data directory \"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-cancel-during-initdb/agora-pg-gzp6EA"
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "cancel-at-starting",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 130,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 447,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "87a3633b-9abf-4f92-931c-983ca4437732",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-cancel-at-starting/agora-pg-7RSIS6",
+            "socketDir": "/private/tmp/agora-p0c-87a3633b-9abf-4f92-931c-983ca4437732"
+          },
+          "starting_pid": 69142,
+          "blocked": [
+            "AbortError: The operation was aborted"
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "cancel-at-started",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 143,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 833,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "37a2fa40-9a65-456e-935e-4f864a1e3447",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-cancel-at-started/agora-pg-XGxTuE",
+            "socketDir": "/private/tmp/agora-p0c-37a2fa40-9a65-456e-935e-4f864a1e3447"
+          },
+          "starting_pid": 69468,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "[69534,69535]\n",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "signal-storm",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 130,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 590,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "82d67b5a-3da8-4bd3-b546-46fb1c18b53b",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-signal-storm/agora-pg-oDjzgn",
+            "socketDir": "/private/tmp/agora-p0c-82d67b5a-3da8-4bd3-b546-46fb1c18b53b"
+          },
+          "starting_pid": 70187,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "sigint-sweep",
+      "verdict": "pass",
+      "assertion": null,
+      "sweep": [
+        {
+          "delay_ms": 0,
+          "code": null,
+          "signal": "SIGINT",
+          "outcomes": []
+        },
+        {
+          "delay_ms": 1,
+          "code": null,
+          "signal": "SIGINT",
+          "outcomes": []
+        },
+        {
+          "delay_ms": 5,
+          "code": null,
+          "signal": "SIGINT",
+          "outcomes": []
+        },
+        {
+          "delay_ms": 20,
+          "code": null,
+          "signal": "SIGINT",
+          "outcomes": []
+        },
+        {
+          "delay_ms": 35,
+          "code": null,
+          "signal": "SIGINT",
+          "outcomes": []
+        },
+        {
+          "delay_ms": 50,
+          "code": 130,
+          "signal": null,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ]
+        },
+        {
+          "delay_ms": 100,
+          "code": 130,
+          "signal": null,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ]
+        },
+        {
+          "delay_ms": 200,
+          "code": 130,
+          "signal": null,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ]
+        },
+        {
+          "delay_ms": 400,
+          "code": 130,
+          "signal": null,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ]
+        },
+        {
+          "delay_ms": 600,
+          "code": 130,
+          "signal": null,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ]
+        },
+        {
+          "delay_ms": 800,
+          "code": 130,
+          "signal": null,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "code": null,
+          "signal": "SIGINT",
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 2,
+          "outcomes": [],
+          "allocated": null,
+          "starting_pid": null,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "none_allocated": true
+          }
+        },
+        {
+          "code": null,
+          "signal": "SIGINT",
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 2,
+          "outcomes": [],
+          "allocated": null,
+          "starting_pid": null,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "none_allocated": true
+          }
+        },
+        {
+          "code": null,
+          "signal": "SIGINT",
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 6,
+          "outcomes": [],
+          "allocated": null,
+          "starting_pid": null,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "none_allocated": true
+          }
+        },
+        {
+          "code": null,
+          "signal": "SIGINT",
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 23,
+          "outcomes": [],
+          "allocated": null,
+          "starting_pid": null,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "none_allocated": true
+          }
+        },
+        {
+          "code": null,
+          "signal": "SIGINT",
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 39,
+          "outcomes": [],
+          "allocated": null,
+          "starting_pid": null,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "none_allocated": true
+          }
+        },
+        {
+          "code": 130,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 57,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "2456b268-35ab-48e3-a282-0114d534755a",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-sigint-sweep/agora-pg-jbpbAh",
+            "socketDir": "/private/tmp/agora-p0c-2456b268-35ab-48e3-a282-0114d534755a"
+          },
+          "starting_pid": null,
+          "blocked": [
+            "Error: initdb failed (1): "
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 130,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 108,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "b152eb38-2121-44e1-a669-463c8ce19bc9",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-sigint-sweep/agora-pg-vfnS0j",
+            "socketDir": "/private/tmp/agora-p0c-b152eb38-2121-44e1-a669-463c8ce19bc9"
+          },
+          "starting_pid": null,
+          "blocked": [
+            "Error: initdb failed (1): initdb: removing data directory \"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-sigint-sweep/agora-pg-vfnS0j/data\""
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 130,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 218,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "5c0c97f4-0715-4b39-9b29-bb12c6d1959d",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-sigint-sweep/agora-pg-AOnjsQ",
+            "socketDir": "/private/tmp/agora-p0c-5c0c97f4-0715-4b39-9b29-bb12c6d1959d"
+          },
+          "starting_pid": null,
+          "blocked": [
+            "Error: initdb failed (1): child process was terminated by signal 15: Terminated: 15\ninitdb: removing data directory \"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/."
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 130,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 436,
+          "outcomes": [
+            "allocated",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "328b2ac9-9124-4a72-9af5-c2a7684a380d",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-sigint-sweep/agora-pg-j2RM2C",
+            "socketDir": "/private/tmp/agora-p0c-328b2ac9-9124-4a72-9af5-c2a7684a380d"
+          },
+          "starting_pid": null,
+          "blocked": [
+            "Error: initdb failed (1): initdb: removing data directory \"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-sigint-sweep/agora-pg-j2RM2C/data\""
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 130,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 685,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "1c66c480-fe29-4097-87cf-ae8032b605db",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-sigint-sweep/agora-pg-vRKxin",
+            "socketDir": "/private/tmp/agora-p0c-1c66c480-fe29-4097-87cf-ae8032b605db"
+          },
+          "starting_pid": 70632,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "[70689,70690]\n",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 130,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 887,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "db2cd8a9-daf0-4ab8-862a-0059e8bb1700",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-sigint-sweep/agora-pg-gkxsYc",
+            "socketDir": "/private/tmp/agora-p0c-db2cd8a9-daf0-4ab8-862a-0059e8bb1700"
+          },
+          "starting_pid": 70723,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "[70780,70781]\n",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "nested-group",
+      "verdict": "pass",
+      "assertion": null,
+      "group_members": 4,
+      "runs": [
+        {
+          "code": 143,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1022,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "c03d8d38-cb83-4638-8cf2-9b03d6f3748e",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-nested-group/agora-pg-Fc1zil",
+            "socketDir": "/private/tmp/agora-p0c-c03d8d38-cb83-4638-8cf2-9b03d6f3748e"
+          },
+          "starting_pid": 71514,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "foreign-process-lock",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 2028,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleanup-failed"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "33120c36-6933-425d-919a-1fb3d4900379",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-process-lock/agora-pg-oID2Mv",
+            "socketDir": "/private/tmp/agora-p0c-33120c36-6933-425d-919a-1fb3d4900379"
+          },
+          "starting_pid": 72061,
+          "blocked": [],
+          "cleanup_failed": [
+            "Error: foreign socket lock"
+          ],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": true,
+            "socket_listing": [
+              ".s.PGSQL.5432",
+              ".s.PGSQL.5432.lock",
+              "owner.json"
+            ],
+            "artifact_root": true,
+            "postmaster_alive": false,
+            "sysv_segment": true,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [
+        "socket /private/tmp/agora-p0c-33120c36-6933-425d-919a-1fb3d4900379",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-process-lock/agora-pg-oID2Mv",
+        "sysv-segment 41943065 key=0x04d9a5e7 cpid=72061 creator-dead unattached"
+      ],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "foreign-listener",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1999,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleanup-failed"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "9d1b1abd-0edc-4d1b-a87d-a2cb5f740437",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-listener/agora-pg-nl8AmW",
+            "socketDir": "/private/tmp/agora-p0c-9d1b1abd-0edc-4d1b-a87d-a2cb5f740437"
+          },
+          "starting_pid": 73027,
+          "blocked": [],
+          "cleanup_failed": [
+            "Error: foreign socket lock"
+          ],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": true,
+            "socket_listing": [
+              ".s.PGSQL.5432.lock",
+              "owner.json"
+            ],
+            "artifact_root": true,
+            "postmaster_alive": false,
+            "sysv_segment": true,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [
+        "socket /private/tmp/agora-p0c-9d1b1abd-0edc-4d1b-a87d-a2cb5f740437",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-listener/agora-pg-nl8AmW",
+        "sysv-segment 42270745 key=0x04d9ab29 cpid=73027 creator-dead unattached"
+      ],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "foreign-listener-exact-lock",
+      "verdict": "pass",
+      "assertion": null,
+      "known_limit": "same-user listener at the exact dead-postmaster socket path with an untouched lock is unlinked; outside the accepted trust boundary",
+      "runs": [
+        {
+          "code": 0,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 2056,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "45342587-04f5-473a-8f68-5d910a1ce727",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-listener-exact-lock/agora-pg-j6qlvd",
+            "socketDir": "/private/tmp/agora-p0c-45342587-04f5-473a-8f68-5d910a1ce727"
+          },
+          "starting_pid": 73425,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": true,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [
+        "sysv-segment 42598425 key=0x04d9b069 cpid=73425 creator-dead unattached"
+      ],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "foreign-socket-file",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 2024,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleanup-failed"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "e7606473-f8fd-4cf1-8804-85d847fdcd9c",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-socket-file/agora-pg-fHbcSZ",
+            "socketDir": "/private/tmp/agora-p0c-e7606473-f8fd-4cf1-8804-85d847fdcd9c"
+          },
+          "starting_pid": 73761,
+          "blocked": [],
+          "cleanup_failed": [
+            "Error: foreign socket"
+          ],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": true,
+            "socket_listing": [
+              ".s.PGSQL.5432",
+              ".s.PGSQL.5432.lock",
+              "owner.json"
+            ],
+            "artifact_root": true,
+            "postmaster_alive": false,
+            "sysv_segment": true,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [
+        "socket /private/tmp/agora-p0c-e7606473-f8fd-4cf1-8804-85d847fdcd9c",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-socket-file/agora-pg-fHbcSZ",
+        "sysv-segment 42926105 key=0x04d9b59b cpid=73761 creator-dead unattached"
+      ],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "foreign-directory",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1023,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleanup-failed"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "ccd79826-882a-497f-a8f7-e53ebca76073",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-directory/agora-pg-wvW9Rf",
+            "socketDir": "/private/tmp/agora-p0c-ccd79826-882a-497f-a8f7-e53ebca76073"
+          },
+          "starting_pid": 74139,
+          "blocked": [],
+          "cleanup_failed": [
+            "Error: artifact ownership mismatch"
+          ],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": true,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-directory/agora-pg-wvW9Rf",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-foreign-directory/agora-pg-wvW9Rf.moved"
+      ],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "socket-dir-intruder",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1081,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleanup-failed"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "6546f349-f8fa-46e8-b3c0-5ee3b63e1c8d",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-socket-dir-intruder/agora-pg-lXTDzj",
+            "socketDir": "/private/tmp/agora-p0c-6546f349-f8fa-46e8-b3c0-5ee3b63e1c8d"
+          },
+          "starting_pid": 74801,
+          "blocked": [],
+          "cleanup_failed": [
+            "Error: socket not empty"
+          ],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": true,
+            "socket_listing": [
+              "intruder",
+              "owner.json"
+            ],
+            "artifact_root": true,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [
+        "socket /private/tmp/agora-p0c-6546f349-f8fa-46e8-b3c0-5ee3b63e1c8d",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-socket-dir-intruder/agora-pg-lXTDzj"
+      ],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "socket-dir-mode",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1088,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleanup-failed"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "3c93b42d-52ee-4e2f-b7f7-08c3f87451bc",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-socket-dir-mode/agora-pg-SHu5LO",
+            "socketDir": "/private/tmp/agora-p0c-3c93b42d-52ee-4e2f-b7f7-08c3f87451bc"
+          },
+          "starting_pid": 75125,
+          "blocked": [],
+          "cleanup_failed": [
+            "Error: socket ownership mismatch"
+          ],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": true,
+            "socket_listing": [
+              "owner.json"
+            ],
+            "artifact_root": true,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [
+        "socket /private/tmp/agora-p0c-3c93b42d-52ee-4e2f-b7f7-08c3f87451bc",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-socket-dir-mode/agora-pg-SHu5LO"
+      ],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "concurrent-neighbor",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 143,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1037,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "ef02d98c-6964-4fb8-bb36-d7727f99ab1e",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-concurrent-neighbor/one/agora-pg-In7gqx",
+            "socketDir": "/private/tmp/agora-p0c-ef02d98c-6964-4fb8-bb36-d7727f99ab1e"
+          },
+          "starting_pid": 75479,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "[75595,75596]\n",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 0,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 2279,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "1361b705-61f6-435d-b50f-2b2187e3fe08",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-concurrent-neighbor/two/agora-pg-GRMkZ4",
+            "socketDir": "/private/tmp/agora-p0c-1361b705-61f6-435d-b50f-2b2187e3fe08"
+          },
+          "starting_pid": 75480,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "agora_app|f|f\n",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "missing-pg-isready",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 537,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "blocked",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "c7ef5479-e9ae-42da-94ec-9d14b11aa634",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-missing-pg-isready/agora-pg-Je4wqK",
+            "socketDir": "/private/tmp/agora-p0c-c7ef5479-e9ae-42da-94ec-9d14b11aa634"
+          },
+          "starting_pid": 76076,
+          "blocked": [
+            "Error: spawn /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-missing-pg-isready/bin/pg_isready ENOENT",
+            "Error: spawn /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-missing-pg-isready/bin/pg_isready ENOENT"
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "tool-stderr",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 70,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 655,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "blocked",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "29e72997-6bc2-4255-939b-65e03e79f080",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-tool-stderr/agora-pg-O9Fhm2",
+            "socketDir": "/private/tmp/agora-p0c-29e72997-6bc2-4255-939b-65e03e79f080"
+          },
+          "starting_pid": 76310,
+          "blocked": [
+            "Error: psql failed (1): psql: unrecognized option `--definitely-not-a-flag'\npsql: hint: Try \"psql --help\" for more information."
+          ],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "forced-cancel-repeat",
+      "verdict": "pass",
+      "assertion": null,
+      "rounds": [
+        {
+          "round": 1,
+          "postmaster": 76656,
+          "leaked_segment": 45154329,
+          "swept": [
+            "sysv-segment 45154329 key=0x04d9dced cpid=76656 creator-dead unattached"
+          ]
+        },
+        {
+          "round": 2,
+          "postmaster": 76991,
+          "leaked_segment": 45482009,
+          "swept": [
+            "sysv-segment 45482009 key=0x04d9e24c cpid=76991 creator-dead unattached"
+          ]
+        },
+        {
+          "round": 3,
+          "postmaster": 77355,
+          "leaked_segment": 45809689,
+          "swept": [
+            "sysv-segment 45809689 key=0x04d9e77c cpid=77355 creator-dead unattached"
+          ]
+        },
+        {
+          "round": 4,
+          "postmaster": 77804,
+          "leaked_segment": 46137369,
+          "swept": [
+            "sysv-segment 46137369 key=0x04d9ecaf cpid=77804 creator-dead unattached"
+          ]
+        },
+        {
+          "round": 5,
+          "postmaster": 78224,
+          "leaked_segment": 46465049,
+          "swept": [
+            "sysv-segment 46465049 key=0x04d9f1da cpid=78224 creator-dead unattached"
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "code": 143,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1620,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "c466d9ab-d75d-43ea-b84d-d9d3ee5cabfb",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-forced-cancel-repeat/round-1/agora-pg-OEPZ0M",
+            "socketDir": "/private/tmp/agora-p0c-c466d9ab-d75d-43ea-b84d-d9d3ee5cabfb"
+          },
+          "starting_pid": 76656,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 143,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1657,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "4d94025f-0184-4d13-bf1d-ba625abbe8d3",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-forced-cancel-repeat/round-2/agora-pg-6n7nYv",
+            "socketDir": "/private/tmp/agora-p0c-4d94025f-0184-4d13-bf1d-ba625abbe8d3"
+          },
+          "starting_pid": 76991,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 143,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1573,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "05cc4e4d-f1b3-41d4-88d5-6e3c8603a736",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-forced-cancel-repeat/round-3/agora-pg-hNm4bz",
+            "socketDir": "/private/tmp/agora-p0c-05cc4e4d-f1b3-41d4-88d5-6e3c8603a736"
+          },
+          "starting_pid": 77355,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 143,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1719,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "6278e0ce-ae89-4972-8065-aba8e1b3070b",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-forced-cancel-repeat/round-4/agora-pg-9wtN0U",
+            "socketDir": "/private/tmp/agora-p0c-6278e0ce-ae89-4972-8065-aba8e1b3070b"
+          },
+          "starting_pid": 77804,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        },
+        {
+          "code": 143,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 1575,
+          "outcomes": [
+            "allocated",
+            "starting",
+            "started",
+            "cleaned"
+          ],
+          "allocated": {
+            "schema_version": "agora.test-postgres/v1",
+            "outcome": "allocated",
+            "runId": "714a5b7f-5521-4d73-8907-946016c73489",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/.scratch/p0cc/scenario-forced-cancel-repeat/round-5/agora-pg-YyJKge",
+            "socketDir": "/private/tmp/agora-p0c-714a5b7f-5521-4d73-8907-946016c73489"
+          },
+          "starting_pid": 78224,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "socket_dir": false,
+            "socket_listing": null,
+            "artifact_root": false,
+            "postmaster_alive": false,
+            "sysv_segment": false,
+            "listeners": []
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    },
+    {
+      "scenario": "external-url-passthrough",
+      "verdict": "pass",
+      "assertion": null,
+      "runs": [
+        {
+          "code": 9,
+          "signal": null,
+          "hung": false,
+          "orphaned_pipes": false,
+          "elapsed_ms": 48,
+          "outcomes": [],
+          "allocated": null,
+          "starting_pid": null,
+          "blocked": [],
+          "cleanup_failed": [],
+          "stdout": "",
+          "residue_before_sweep": {
+            "none_allocated": true
+          }
+        }
+      ],
+      "swept": [],
+      "residue_after_sweep": [],
+      "neighbors": {
+        "dir_intact": true,
+        "process_alive": true,
+        "file_intact": true
+      },
+      "environment_diff": {}
+    }
+  ]
+}

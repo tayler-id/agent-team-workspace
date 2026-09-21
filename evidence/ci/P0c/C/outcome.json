@@ -2,8 +2,8 @@
   "schema_version": "agora.p0c-qualification-evidence/v1",
   "purpose": "foundation_fixture",
   "scope": "P0c C qualification of the integrated PostgreSQL socket guard; no product feature, schema, dependency, hosted workflow or trusted-CI claim",
-  "parent": "c04f5606df49eb7976ad5cf244911c73f77dd1fb",
-  "head": "8d4d42c94dbe71bc3fc45a048ac8b32372bbbd53",
+  "parent": "d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef",
+  "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
   "toolchain": {
     "node": "v24.16.0",
     "node_executable": "/Users/taylerramsay/.local/node/bin/node",
@@ -25,14 +25,14 @@
     },
     {
       "file": "agora/feature-map.json",
-      "digest": "sha256:83bfbded2eb98c5178a5a09563b6d010663e27183c4b2cac152de9e97657cc9d",
+      "digest": "sha256:55e261667ad241cd4660710fdcf3441f05359da1fd80dd67a2556d37f9d65619",
       "meaningful_added_lines": 3
     }
   ],
   "allocator": {
     "file": "scripts/postgres-socket.ts",
     "digest": "sha256:55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
-    "unchanged_since": "2c94bfa (P0c A)"
+    "unchanged_since": "2c94bfa (P0c A); byte-identical on main d46c19f"
   },
   "size": {
     "meaningful_implementation_tracking_additions": 50,
@@ -369,7 +369,8 @@
     "EPERM for a live command group is not reachable as this user; stop-failure reporting is proved with an injected fault in a disposable source copy (mock, named).",
     "A never-ready live server is produced with a pg_isready shim that always exits 1; the server, roles and cleanup are real.",
     "On macOS a SIGKILLed postmaster leaves its 56-byte System V shared memory interlock segment; kern.sysv.shmmni=32 caps the number of clusters that can start until unattached segments with dead creators are removed with ipcrm. Found during C when 31 orphans from earlier lanes blocked initdb; sysv-shm-sweep.json records the one-time removal.",
-    "A same-user listener bound at the exact dead postmaster socket path with the lock untouched is unlinked as the stale socket (foreign-listener-exact-lock); same-user hostile code is outside the accepted boundary and the model was not broadened."
+    "A same-user listener bound at the exact dead postmaster socket path with the lock untouched is unlinked as the stale socket (foreign-listener-exact-lock); same-user hostile code is outside the accepted boundary and the model was not broadened.",
+    "A SIGINT that lands while initdb is running its bootstrap backend leaves that backend's System V segment on macOS; the wrapper never saw a postmaster, so its run-owned reclaim cannot name it. The scenario driver records such segments under environment_diff.segments.added and exact-head/sysv-shm-own-segments.json removes only those, after proving the creator dead and the segment unattached. Found by sigint-sweep during the reconciliation rerun; the wrapper is unchanged."
   ],
   "artifacts": [
     {
@@ -454,38 +455,98 @@
     },
     {
       "file": "exact-head/atlas.log",
-      "digest": "sha256:ec60336a2d5780dcffae9e2b23c16ad3ba28222300b70accf61532d9d7bd796d",
-      "bytes": 195
+      "digest": "sha256:5f71e0516e0495e5c4eae25b7abd38934b7cc68ea643fed0ee67f7b56e9476fb",
+      "bytes": 194
     },
     {
       "file": "exact-head/check.log",
-      "digest": "sha256:7d226cf09352aa3f9a87ca169a993f70e5133b48c8dcba1ce7f1ef7be57393d2",
-      "bytes": 8969
+      "digest": "sha256:d26bf41002dbdbe5799720929652aec4b582d78405b3d0cf9b7bde98be517b78",
+      "bytes": 9015
     },
     {
       "file": "exact-head/commands.tsv",
-      "digest": "sha256:56024d7d6eae1126addd86e5f010b3c714d4c3f4721219b366bdd2de7615b592",
-      "bytes": 556
+      "digest": "sha256:cb217ebc02affb67422c50092144e5c98c36926f88ba92a2199218e1f73ba5bc",
+      "bytes": 1753
     },
     {
       "file": "exact-head/docs-build.log",
-      "digest": "sha256:96f4ebcf3a68aa8bbe14478605bcd8e29bc4d5647b11d8d8bcecac0128fcda76",
-      "bytes": 213
+      "digest": "sha256:9a7f072e513bf59d418538b29fadf6136901c4279c887e5336110c18671db015",
+      "bytes": 212
     },
     {
       "file": "exact-head/focused.log",
-      "digest": "sha256:2279600c90759854b2161a99f9c9c5d515a5e8dd00e1ab72465ad2d7aa47a709",
-      "bytes": 42387
+      "digest": "sha256:ff65a8fc7dbb7a409ab4e8185e5d54ce4f1dbbab6949488d6cc1247ce771e69e",
+      "bytes": 42285
+    },
+    {
+      "file": "exact-head/green.log",
+      "digest": "sha256:56753c6152837025e70d3b228fab1afac1ac97218c80374bef84df38339a9ec0",
+      "bytes": 1496
+    },
+    {
+      "file": "exact-head/guard.json",
+      "digest": "sha256:5fd516daf602723e6a746260ffe002a18b66a8bcb7d4cae7b58f933632dc3850",
+      "bytes": 46848
+    },
+    {
+      "file": "exact-head/guard.log",
+      "digest": "sha256:ea01fce33acc4b9ea914d3fa323bcc67a89fb683dd769406805d1174ffe2ba63",
+      "bytes": 3055
     },
     {
       "file": "exact-head/hygiene.log",
-      "digest": "sha256:fa5d49ad6f11a92c23c6ad4d706ce434359e1a7b5edf9045f5800e75e60355f8",
-      "bytes": 3350
+      "digest": "sha256:040ceb573b7a487eaf1bd4da38fbb5c4eaaf3d03dffb7584261a35a3f774918c",
+      "bytes": 3746
+    },
+    {
+      "file": "exact-head/install.log",
+      "digest": "sha256:783af0e6bea63c99fb0a3d82a1131394d6f5b1d55c0acdeaf32b40da304ed9aa",
+      "bytes": 137
+    },
+    {
+      "file": "exact-head/lifecycle.log",
+      "digest": "sha256:702be19a84e51cb5f77bf9667a13631f595d7fa71f1acd9d964272211f03ecad",
+      "bytes": 3784
+    },
+    {
+      "file": "exact-head/no-leftovers.json",
+      "digest": "sha256:f710a3af97958d1a633adc62d53d328a291c561de0a0372daf180be31287e55e",
+      "bytes": 2594
     },
     {
       "file": "exact-head/plan.log",
       "digest": "sha256:6216bdb31816bccf18d3caa739eab44e68518a1c2b0feea4c111218e5c303ee0",
       "bytes": 3522
+    },
+    {
+      "file": "exact-head/recorder.log",
+      "digest": "sha256:c9682ff36e80f733e39c85e2fb2efd28083883288b630e2ea85d53a120283f99",
+      "bytes": 318
+    },
+    {
+      "file": "exact-head/red.log",
+      "digest": "sha256:4ee53ce2e4a8c200b9a0dfa27c48cd9bb8108e1822c10ec7e2ac82b2e5f69f40",
+      "bytes": 35517
+    },
+    {
+      "file": "exact-head/scenarios.json",
+      "digest": "sha256:8a2d862077cc5f1a915fb85ebe728602f3cd3a4b5c8d56b66f07410a7da4a4d3",
+      "bytes": 59973
+    },
+    {
+      "file": "exact-head/sysv-own-segments.log",
+      "digest": "sha256:61bd8cf5f5b6d00a518f9a23a96182f615f217200f4b6200be523ccae9f3b71e",
+      "bytes": 87
+    },
+    {
+      "file": "exact-head/sysv-shm-own-segments.json",
+      "digest": "sha256:1a241ae6f00e068051fc826819540a35a65c8676a5408c9b5bf9ef75c9763534",
+      "bytes": 387
+    },
+    {
+      "file": "exact-head/test-patch.diff",
+      "digest": "sha256:6f022b9f609cc4cb420c928aa4684821de0552f22a828369b328369e90e8e1e2",
+      "bytes": 12629
     },
     {
       "file": "focused.log",
@@ -579,8 +640,8 @@
     },
     {
       "file": "review.md",
-      "digest": "sha256:07ca1a1a78d84ac927e07918fc7a725d44becb66b4540ddc3e64368d91729270",
-      "bytes": 8651
+      "digest": "sha256:c265c6365f54f5a70e19b691a499bba46d42c845a3cef0e63689690cb2f6f409",
+      "bytes": 12577
     },
     {
       "file": "scenarios.json",
@@ -629,8 +690,166 @@
     },
     {
       "file": "validated-head.txt",
-      "digest": "sha256:7cbe77da2a501549f81f68b62959986b3838c143414e0a71cb55777f55ce64dc",
+      "digest": "sha256:23b5cb34655663e882e0d14a1531ff8c77c00879cfe724549176a052cc65ac02",
       "bytes": 70
     }
-  ]
+  ],
+  "validated_head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+  "original_run": {
+    "branch": "fm/agora-ci-postgres-fixture-proof",
+    "branch_head": "b122ac61fe2edc5bf7b42b6dc9617dff6d52bb5b",
+    "parent": "c04f5606df49eb7976ad5cf244911c73f77dd1fb",
+    "head": "8d4d42c94dbe71bc3fc45a048ac8b32372bbbd53",
+    "note": "checks[], red_green, guard_negatives and lifecycle below, and every top-level artifact except outcome.json and validated-head.txt, record the full 26-lane run at this pre-rebase code head. The branch is preserved unchanged; those commits are not ancestors of the reconciled candidate."
+  },
+  "reconciliation": {
+    "onto": "d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef",
+    "method": "git rebase --onto d46c19f c04f560 b122ac6; five doc conflicts resolved by keeping the L2/B1 wording from main and the P0c-C qualification text together (AGENTS.md, .agents/skills/verify-agora/SKILL.md, docs/site/cli.md, docs/site/atlas.json, docs/site/progress.md); atlas.json kept the expanded format main adopted.",
+    "candidate_code_head": "6f055e03c4587528b01ab51a1449db5ebcbb8057",
+    "validated_head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+    "source_drift": [
+      "agora/feature-map.json digest refreshed: main reformatted the file before the P0c-C entries were rebased onto it"
+    ],
+    "stale_digests_corrected": [
+      "exact-head/check.log",
+      "exact-head/commands.tsv",
+      "exact-head/focused.log",
+      "exact-head/hygiene.log",
+      "validated-head.txt"
+    ],
+    "lanes_rerun": [
+      {
+        "label": "hygiene",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "git hygiene sections: head, main, fast-forward, tree, status, diff --check, changed files, forbidden paths, allocator identity, source lines, digests, atlas revision"
+      },
+      {
+        "label": "install",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "pnpm install --frozen-lockfile"
+      },
+      {
+        "label": "focused",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept"
+      },
+      {
+        "label": "recorder",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "node scripts/record-red-green.mjs --parent d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef --head 609921f6d69e4ddc5cc27fca561b4c008a118db3 --out evidence/ci/P0c/C/exact-head -- pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t abort-stop-throw|initdb-stderr|psql-stderr|missing-pg-isready"
+      },
+      {
+        "label": "guard",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "node evidence/ci/P0c/C/driver/guard.mjs --out evidence/ci/P0c/C/exact-head"
+      },
+      {
+        "label": "lifecycle",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "node evidence/ci/P0c/C/driver/scenarios.mjs --out evidence/ci/P0c/C/exact-head"
+      },
+      {
+        "label": "sysv-own-segments",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "node /private/tmp/claude-501/-Users-taylerramsay--treehouse-agent-team-workspace-50d2db-4-agent-team-workspace/19e074cc-7ba2-44ad-96f4-25bd8a3c1271/scratchpad/sweep-own-segments.mjs evidence/ci/P0c/C/exact-head"
+      },
+      {
+        "label": "atlas",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "pnpm docs:atlas"
+      },
+      {
+        "label": "docs-build",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "pnpm docs:build"
+      },
+      {
+        "label": "plan",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md"
+      },
+      {
+        "label": "check",
+        "exit": 0,
+        "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+        "command": "pnpm check"
+      }
+    ],
+    "red_green": {
+      "schema_version": "agora.red-green/v1",
+      "outcome": "pass",
+      "parent": "d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef",
+      "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3",
+      "red_exit": 1,
+      "green_exit": 0,
+      "test_patch_digest": "sha256:6f022b9f609cc4cb420c928aa4684821de0552f22a828369b328369e90e8e1e2",
+      "out": "evidence/ci/P0c/C/exact-head"
+    },
+    "guard_negatives": {
+      "outcome": "pass",
+      "guards": [
+        "short-socket-selection",
+        "lease-verification",
+        "exact-process-group-stop",
+        "bounded-startup",
+        "cancellation-cleanup",
+        "foreign-lock-refusal",
+        "artifact-ownership-refusal",
+        "stderr-capture",
+        "probe-spawn-failure",
+        "stop-failure-report"
+      ],
+      "head": "609921f6d69e4ddc5cc27fca561b4c008a118db3"
+    },
+    "lifecycle": {
+      "outcome": "pass",
+      "scenarios": [
+        "success",
+        "deep-tmpdir",
+        "command-failure",
+        "command-signal",
+        "missing-command",
+        "startup-failure",
+        "postmaster-killed-at-started",
+        "startup-timeout",
+        "cancel-at-allocated",
+        "cancel-during-initdb",
+        "cancel-at-starting",
+        "cancel-at-started",
+        "signal-storm",
+        "sigint-sweep",
+        "nested-group",
+        "foreign-process-lock",
+        "foreign-listener",
+        "foreign-listener-exact-lock",
+        "foreign-socket-file",
+        "foreign-directory",
+        "socket-dir-intruder",
+        "socket-dir-mode",
+        "concurrent-neighbor",
+        "missing-pg-isready",
+        "tool-stderr",
+        "forced-cancel-repeat",
+        "external-url-passthrough"
+      ],
+      "identities_checked": 36,
+      "leftovers": 0
+    },
+    "not_rerun": "audit, contracts-check, conform, replay, boundaries, scenarios, probe, migrations, design, design-negatives, handoff-negatives and cleanup-inventory keep their 8d4d42c records; pnpm check at the validated head covers lint, typecheck, docs:check, contracts:check and the full test suite.",
+    "sysv_own_segments": {
+      "named": 0,
+      "removed": 0,
+      "record": "exact-head/sysv-shm-own-segments.json"
+    }
+  }
 }

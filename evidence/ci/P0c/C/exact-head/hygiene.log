@@ -1,8 +1,8 @@
-head fd274b3a44451264edc8a80753cf9c2c072906a7
-main c04f5606df49eb7976ad5cf244911c73f77dd1fb
+head 609921f6d69e4ddc5cc27fca561b4c008a118db3
+main d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef
 fast-forward: main is an ancestor of HEAD
-tree a4983fd64a27613e665e526d52ec4ffc564dc523
-status: 0 dirty entries
+tree 3ea693f59614a909a4d8de7c44dd55b6f964af37
+status: 0 dirty entries outside this run's outputs (exact-head/, validated-head.txt)
 == git diff --check
 whitespace clean
 == changed files
@@ -85,10 +85,10 @@ AGENTS.md 1
 scripts/with-test-postgres.mjs sha256:89a9562850c5373aa00e60301f8d20b2f535e07b501da59bb5b3362af4d95374
 scripts/postgres-socket.ts sha256:55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf
 packages/storage/test/postgres-wrapper.test.ts sha256:506fff2f7aeae17281fd3c7a3a9858a3b663d2ddce0b148876fae6ebe2bae2e7
-agora/feature-map.json sha256:83bfbded2eb98c5178a5a09563b6d010663e27183c4b2cac152de9e97657cc9d
-docs/site/atlas.json sha256:704c32f73a4772174bcadfc12efe01d6f16717858ab5c6a1030161384becbf3a
+agora/feature-map.json sha256:55e261667ad241cd4660710fdcf3441f05359da1fd80dd67a2556d37f9d65619
+docs/site/atlas.json sha256:37be37d0159b493b6d6fe4e2610c5452f40d62f64788d2eb7ea3e3225a1f4d1f
 evidence/ci/P0c/C/driver/lib.mjs sha256:b8aecc010ff6ca9e7ba91a4097c879af0a1ee58e64f31d4f8c358d1587da1366
 evidence/ci/P0c/C/driver/guard.mjs sha256:e55c470e06ab8a512873fde46dce8c17ff952fe3e2e28b548a4d37c97c895e9f
 evidence/ci/P0c/C/driver/scenarios.mjs sha256:6c48badae1c4de30a039223bc6cadac1150232aa50c5a98c27bbf5b6e1bfcb7a
 == atlas revision
-"revision": "df5b499fd770941b36b63af3cbce4e57fa204f13"
+"revision": "6f055e03c4587528b01ab51a1449db5ebcbb8057"
