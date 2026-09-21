@@ -109,6 +109,11 @@
           "kind": "feature"
         },
         {
+          "id": "local-room-web-shell",
+          "title": "Local room web shell",
+          "kind": "feature"
+        },
+        {
           "id": "memory",
           "title": "Data and memory",
           "kind": "guide"

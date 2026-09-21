@@ -27,6 +27,9 @@
 		"test:pg": "node scripts/with-test-postgres.mjs vitest run --project pg",
 		"migrate": "node packages/storage/src/migrate-cli.ts",
 		"migrate:ephemeral": "node scripts/with-test-postgres.mjs node packages/storage/src/migrate-cli.ts",
+		"web:dev": "pnpm --filter @agora/web dev",
+		"web:build": "pnpm --filter @agora/web build",
+		"web:test": "pnpm --filter @agora/web exec vitest run --config vitest.config.ts",
 		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test"
 	},
 	"devDependencies": {
