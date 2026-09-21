@@ -33,11 +33,14 @@ const packageAllowed: Record<string, readonly string[]> = {
 	'packages/domain': ['@agora/contracts/canonical', 'node:crypto'],
 	contracts: ['ajv', 'ajv-formats', 'openapi-typescript', 'node:crypto'],
 	'packages/storage': ['@agora/domain', '@agora/contracts/canonical', 'pg', 'drizzle-orm', 'node:crypto', 'node:fs', 'node:path', 'node:url'],
-	'apps/center': ['@agora/contracts', '@agora/domain', '@agora/storage', 'hono', '@hono/node-server', 'node:url', 'node:crypto'],
+	'apps/center': ['@agora/contracts', '@agora/contracts/canonical', '@agora/domain', '@agora/storage', 'hono', '@hono/node-server', 'node:url', 'node:crypto'],
 	'apps/web': ['@agora/contracts', '@agora/client-core', 'react', 'react-dom', 'react/jsx-runtime'],
 	'apps/worker': ['@agora/contracts', '@agora/client-core'],
 };
 const contractsTooling = ['node:child_process', 'node:fs', 'node:path', 'node:url', 'node:os'] as const;
+/** Test and build tooling allowed only outside apps/web/src (apps/web/test and the Vite/Vitest config files); product code never sees it. */
+const webTooling = ['vitest', 'vitest/config', 'vite', '@vitejs/plugin-react', '@testing-library/react', '@testing-library/dom', 'react-dom/client'] as const;
+const isWebTooling = (file: string): boolean => { const rel = relPosix(file); return rel.startsWith('apps/web/test/') || /^apps\/web\/[^/]+\.config\.ts$/.test(rel); };
 const supportedOwner = (file: string): string => {
 	const layer = webLayer(file);
 	if (layer?.kind === 'feature') return `Feature owner ${WEB_OWNERS.features}/${layer.name} (public entrypoints only for framework/client/host)`;
@@ -111,7 +114,7 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 	if (owner === 'apps/worker' && specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core'].includes(specifier)) {
 		return `worker cannot import server package ${specifier}; use published contracts only`;
 	}
-	const allowed = [...(packageAllowed[owner] ?? []), ...(owner === 'contracts' && (file.includes('/tools/') || file.endsWith('/src/conform-cli.ts')) ? contractsTooling : [])];
+	const allowed = [...(packageAllowed[owner] ?? []), ...(owner === 'contracts' && (file.includes('/tools/') || file.endsWith('/src/conform-cli.ts')) ? contractsTooling : []), ...(owner === 'apps/web' && isWebTooling(file) ? webTooling : [])];
 	if (!allowed.some((name) => specifier === name || prefixOk(name, specifier))) {
 		return owner === 'packages/client-core'
 			? `portable client-core cannot import ${specifier}; keep browser and application code out of packages/client-core`

@@ -3,7 +3,8 @@ import type { Readable } from 'node:stream';
 import { once } from 'node:events';
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, expect, test } from 'vitest';
-import { createWireValidator, digestCanonical, type Schema } from '@agora/contracts';
+import { createWireValidator, type Schema } from '@agora/contracts';
+import { digestCanonical } from '@agora/contracts/canonical';
 import { openDatabase } from '@agora/storage';
 
 // Drives the real center process over HTTP against the test cluster, as the non-owner service role. The ids are the

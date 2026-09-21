@@ -11,11 +11,12 @@ const framework = 'apps/web/src/framework/index.ts';
 const client = 'apps/web/src/client/index.ts';
 const host = 'apps/web/src/host/index.ts';
 const owners = { framework: 'apps/web/src/framework', client: 'apps/web/src/client', host: 'apps/web/src/host', features: 'apps/web/src/features' } as const;
-const ownerStubs = [feature, notes, framework, client, host];
+// Only stubs this test created are removed afterwards; real owner entrypoints that already exist stay untouched.
+const ownerStubs = [feature, notes, framework, client, host].filter((rel) => !existsSync(path.join(root, rel)));
 for (const rel of ownerStubs) {
 	const abs = path.join(root, rel);
 	mkdirSync(path.dirname(abs), { recursive: true });
-	if (!existsSync(abs)) writeFileSync(abs, 'export {};\n');
+	writeFileSync(abs, 'export {};\n');
 }
 const engine = new ESLint({ cwd: root, ignore: false });
 const probes = new Set<string>();
