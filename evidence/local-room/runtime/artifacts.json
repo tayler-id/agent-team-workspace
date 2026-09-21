@@ -1,5 +1,5 @@
 {
-  "qualified_source_head": "db0bd96a15060c4c6d2ba2edc3877fc7c4472d24",
+  "qualified_source_head": "986fb82bd8019a09fce368de522d8c338953d76c",
   "trust": "owner_attested; hashes are integrity inventory, not independent or CI signatures",
   "excluded": [
     "artifacts.json itself"
@@ -87,8 +87,8 @@
     },
     {
       "path": "delivery-inventory.json",
-      "bytes": 22692,
-      "sha256": "09ada6469c05928ed138ff781f8f34ef336300a80c67208c48db3f1ccea5d8a7"
+      "bytes": 32620,
+      "sha256": "7088780c12e79dbe74c10d794c516a707037c29653dbe88d479a5ffb9afb46a9"
     },
     {
       "path": "design-checks.log",
@@ -247,8 +247,8 @@
     },
     {
       "path": "outcome.json",
-      "bytes": 8098,
-      "sha256": "4a1c9028097a4266de396b9f65e888dcaa62d09f09ec8eeed9234e9d27ca0e03"
+      "bytes": 8725,
+      "sha256": "07b1268106018b2faedb490fc7f894e6fd2dcc29682e38b606de8440b0c0a3d4"
     },
     {
       "path": "ownership-negatives.jsonl",
@@ -334,6 +334,31 @@
       "path": "video.json",
       "bytes": 2547,
       "sha256": "c8fb956bb70637ef81da31e9d9f0a763ce53b4f6077b5626f35ec768f78d8ce2"
+    },
+    {
+      "path": "whitespace-cleanup.log",
+      "bytes": 30,
+      "sha256": "6ed0d93b24070f9a36ecb3720fa91ea590e0cd1482bd648efbd35a7f4a45155d"
+    },
+    {
+      "path": "whitespace-correction.json",
+      "bytes": 3635,
+      "sha256": "d545e2ef427f764cdb06449f24915bca981f641ab9dc1eded74ef6b2d7d9f271"
+    },
+    {
+      "path": "whitespace-full-check.log",
+      "bytes": 7976,
+      "sha256": "5080367fd0b0fa918cdb4e9c8fde5f266a05a1abda30345023e03746153e7714"
+    },
+    {
+      "path": "whitespace.green.log",
+      "bytes": 17,
+      "sha256": "76dbf7a54394bad8d591f97b633fbaf7355300852669e3a163f841adc02f11b6"
+    },
+    {
+      "path": "whitespace.red.log",
+      "bytes": 79,
+      "sha256": "c82836a99b57fcb9085d936b733480aa81a07849d51ffae6a188ec83d633b430"
     }
   ]
 }
