@@ -1,0 +1,23 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-21T06:40:46.597Z
+parent: c04f5606df49eb7976ad5cf244911c73f77dd1fb
+head: 051da4431f517e5906d67f51d22a7701cc61d719
+subject_revision: 051da4431f517e5906d67f51d22a7701cc61d719
+test_patch_applied_to_subject: false
+test_patch_files: packages/storage/test/postgres-wrapper.test.ts
+test_patch_digest: sha256:ebb3df952e3081230b137a78455b34f2f1013615d92c360912113ffa6cdc01c5
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t abort-stop-throw|initdb-stderr|psql-stderr|missing-pg-isready","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-green-VvYVLG
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed | 14 skipped (18)
+   Start at  02:40:43
+   Duration  2.26s (tests 99%, transform 1%, import 1%)
+

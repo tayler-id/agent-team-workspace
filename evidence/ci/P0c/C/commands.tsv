@@ -1,0 +1,27 @@
+label	exit	head	command
+doctor	0	051da4431f517e5906d67f51d22a7701cc61d719	node --version; which node; pnpm --version; pg_ctl --version; swift --version; git rev-parse HEAD; date -u
+install	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm install --frozen-lockfile
+audit	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm audit --json
+typecheck	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm typecheck
+lint	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm lint
+docs-check	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm docs:check
+recorder	0	051da4431f517e5906d67f51d22a7701cc61d719	node scripts/record-red-green.mjs --parent c04f5606df49eb7976ad5cf244911c73f77dd1fb --head 051da4431f517e5906d67f51d22a7701cc61d719 --out evidence/ci/P0c/C -- pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t abort-stop-throw|initdb-stderr|psql-stderr|missing-pg-isready
+focused	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept
+contracts-check	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm contracts:check
+conform	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm contracts:conform -- --json
+replay	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm client:replay -- --json --swift
+boundaries	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm boundaries
+test	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm test
+scenarios	0	051da4431f517e5906d67f51d22a7701cc61d719	node scripts/probe-center.mjs --scenarios
+probe	0	051da4431f517e5906d67f51d22a7701cc61d719	node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
+migrations	0	051da4431f517e5906d67f51d22a7701cc61d719	node scripts/with-test-postgres.mjs bash -c node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts
+design	0	051da4431f517e5906d67f51d22a7701cc61d719	node scripts/verify-design.mjs
+design-negatives	1	051da4431f517e5906d67f51d22a7701cc61d719	node scripts/test-design-checks.mjs
+handoff-negatives	0	051da4431f517e5906d67f51d22a7701cc61d719	node scripts/test-design-handoff-checks.mjs
+plan	0	051da4431f517e5906d67f51d22a7701cc61d719	node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md
+docs-build	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm docs:build
+atlas	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm docs:atlas
+check	0	051da4431f517e5906d67f51d22a7701cc61d719	pnpm check
+cleanup-inventory	0	051da4431f517e5906d67f51d22a7701cc61d719	git worktree list; ls /private/tmp/agora-p0c-*/; ls $TMPDIR/agora-pg-*; ps postmasters; lsof -U agora-p0c; ipcs -mp; git status --short
+guard	0	051da4431f517e5906d67f51d22a7701cc61d719	node evidence/ci/P0c/C/driver/guard.mjs --out evidence/ci/P0c/C
+lifecycle	0	051da4431f517e5906d67f51d22a7701cc61d719	node evidence/ci/P0c/C/driver/scenarios.mjs --out evidence/ci/P0c/C

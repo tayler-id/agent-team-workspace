@@ -1,0 +1,1 @@
+red-run residue swept 2026-09-21: killed orphaned command group 60214 (leader+child) and foreign neighbor 60180 (all started 02:20:23-24 inside the red run, ppid 1); removed /private/tmp/agora-p0c-266e1947-... and -ad0c5e9f-... (owner.json artifactDir under this worktree .scratch) and .scratch/wrapper deep artifacts-5YhAoF
