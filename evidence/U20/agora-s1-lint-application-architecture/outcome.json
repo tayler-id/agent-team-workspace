@@ -3,7 +3,7 @@
   "task": "agora-s1-lint-application-architecture",
   "unit": "U20",
   "parent": "dc38b1078d797afb87744436a2a0c3f4ccb67950",
-  "head": "b0278725bfa7285304405e278fa4709ceca47669",
+  "head": "ab84cda3130cb9d779eccd58b2ab9cfe5829e37c",
   "result": "pass",
   "summary": "B2 adds renderer foot-guns, architecture exceptions and residual mixed-union DOM mutation denials on top of B1 import ownership (D86/D87). Framework aliased-effect control restored. M14/M15 recorded as explicit limits.",
   "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
