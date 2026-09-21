@@ -1,5 +1,5 @@
 {
-  "revision": "bc27cff7731082982245fa54944fd4ddea6f49cb",
+  "revision": "a4e41f7c9437e7a9d15b555f051b06c414031b68",
   "date": "2026-09-21",
   "features": [
     {
@@ -102,6 +102,7 @@
       "why": "Make Feature/Client/Host import shortcuts fail in lint and tests with owner-named diagnostics (B1 import ownership).",
       "page": "app-architecture.md",
       "proof": [
+        "repo:apps/web/src/reserved-owners.ts",
         "repo:scripts/boundary-policy.ts",
         "repo:packages/client-core/test/app-architecture.test.ts",
         "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json",

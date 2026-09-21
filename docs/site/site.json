@@ -3,72 +3,265 @@
     {
       "title": "Start here",
       "pages": [
-        {"id": "index", "title": "Welcome", "kind": "guide"},
-        {"id": "atlas", "title": "Progress atlas", "kind": "guide"},
-        {"id": "handoff", "title": "Design Handoff", "kind": "guide"}
+        {
+          "id": "index",
+          "title": "Welcome",
+          "kind": "guide"
+        },
+        {
+          "id": "atlas",
+          "title": "Progress atlas",
+          "kind": "guide"
+        },
+        {
+          "id": "handoff",
+          "title": "Design Handoff",
+          "kind": "guide"
+        }
       ]
     },
     {
       "title": "Use Agora",
       "pages": [
-        {"id": "introduction", "title": "Introduction", "kind": "guide"},
-        {"id": "getting-started", "title": "Installation and first checks", "kind": "guide"},
-        {"id": "concepts", "title": "Mental model and glossary", "kind": "guide"},
-        {"id": "workflows", "title": "Roles and workflows", "kind": "guide"},
-        {"id": "cookbook", "title": "Practical guides", "kind": "guide"},
-        {"id": "cli", "title": "CLI and public drivers", "kind": "guide"},
-        {"id": "configuration", "title": "Configuration", "kind": "guide"},
-        {"id": "faq", "title": "Troubleshooting and FAQ", "kind": "guide"}
+        {
+          "id": "introduction",
+          "title": "Introduction",
+          "kind": "guide"
+        },
+        {
+          "id": "getting-started",
+          "title": "Installation and first checks",
+          "kind": "guide"
+        },
+        {
+          "id": "concepts",
+          "title": "Mental model and glossary",
+          "kind": "guide"
+        },
+        {
+          "id": "workflows",
+          "title": "Roles and workflows",
+          "kind": "guide"
+        },
+        {
+          "id": "cookbook",
+          "title": "Practical guides",
+          "kind": "guide"
+        },
+        {
+          "id": "cli",
+          "title": "CLI and public drivers",
+          "kind": "guide"
+        },
+        {
+          "id": "configuration",
+          "title": "Configuration",
+          "kind": "guide"
+        },
+        {
+          "id": "faq",
+          "title": "Troubleshooting and FAQ",
+          "kind": "guide"
+        }
       ]
     },
     {
       "title": "Build and operate",
       "pages": [
-        {"id": "architecture", "title": "System architecture", "kind": "guide"},
-        {"id": "repository", "title": "Repository and tools", "kind": "guide"},
-        {"id": "foundation", "title": "Repository foundation", "kind": "feature"},
-        {"id": "test-first", "title": "Task proof admission", "kind": "feature"},
-        {"id": "contracts", "title": "Portable contracts", "kind": "feature"},
-        {"id": "local-room", "title": "Local room", "kind": "feature"},
-        {"id": "synchronization", "title": "Client synchronization", "kind": "feature"},
-        {"id": "memory", "title": "Data and memory", "kind": "guide"},
-        {"id": "authorization", "title": "Authorization and agents", "kind": "guide"},
-        {"id": "execution", "title": "Workers and cloud", "kind": "guide"},
-        {"id": "operations", "title": "Operations and recovery", "kind": "guide"},
-        {"id": "verification", "title": "Verification and evidence", "kind": "guide"},
-        {"id": "authoring", "title": "Contribute documentation", "kind": "feature"},
-        {"id": "research", "title": "Research and decisions", "kind": "guide"}
+        {
+          "id": "architecture",
+          "title": "System architecture",
+          "kind": "guide"
+        },
+        {
+          "id": "app-architecture",
+          "title": "Application architecture",
+          "kind": "feature"
+        },
+        {
+          "id": "repository",
+          "title": "Repository and tools",
+          "kind": "guide"
+        },
+        {
+          "id": "foundation",
+          "title": "Repository foundation",
+          "kind": "feature"
+        },
+        {
+          "id": "test-first",
+          "title": "Task proof admission",
+          "kind": "feature"
+        },
+        {
+          "id": "contracts",
+          "title": "Portable contracts",
+          "kind": "feature"
+        },
+        {
+          "id": "local-room",
+          "title": "Local room",
+          "kind": "feature"
+        },
+        {
+          "id": "synchronization",
+          "title": "Client synchronization",
+          "kind": "feature"
+        },
+        {
+          "id": "memory",
+          "title": "Data and memory",
+          "kind": "guide"
+        },
+        {
+          "id": "authorization",
+          "title": "Authorization and agents",
+          "kind": "guide"
+        },
+        {
+          "id": "execution",
+          "title": "Workers and cloud",
+          "kind": "guide"
+        },
+        {
+          "id": "operations",
+          "title": "Operations and recovery",
+          "kind": "guide"
+        },
+        {
+          "id": "verification",
+          "title": "Verification and evidence",
+          "kind": "guide"
+        },
+        {
+          "id": "authoring",
+          "title": "Contribute documentation",
+          "kind": "feature"
+        },
+        {
+          "id": "research",
+          "title": "Research and decisions",
+          "kind": "guide"
+        }
       ]
     }
   ],
   "inventory": [
-    {"path": "apps/center", "page": "foundation.md"},
-    {"path": "contracts", "page": "contracts.md"},
-    {"path": "packages/domain", "page": "foundation.md"},
-    {"path": "packages/client-core", "page": "synchronization.md"},
-    {"path": "scripts/boundary-policy.ts", "page": "synchronization.md"},
-    {"path": "scripts/public-types.ts", "page": "synchronization.md"},
-    {"path": "scripts/client-fixture.ts", "page": "synchronization.md"},
-    {"path": "scripts/drive-client-core.ts", "page": "cli.md"},
-    {"path": "packages/storage", "page": "foundation.md"},
-    {"path": "scripts/probe-center.mjs", "page": "cli.md"},
-    {"path": "scripts/record-red-green.mjs", "page": "verification.md"},
-    {"path": "scripts/foundation.mjs", "page": "test-first.md"},
-    {"path": "scripts/foundation-policy.mjs", "page": "test-first.md"},
-    {"path": "scripts/foundation-replay.mjs", "page": "test-first.md"},
-    {"path": "packages/verification", "page": "test-first.md"},
-    {"path": "scripts/require-test-postgres.ts", "page": "verification.md"},
-    {"path": "scripts/test-design-checks.mjs", "page": "verification.md"},
-    {"path": "scripts/verify-design.mjs", "page": "verification.md"},
-    {"path": "scripts/with-test-postgres.mjs", "page": "cli.md"},
-    {"path": "scripts/postgres-socket.ts", "page": "foundation.md"},
-    {"path": "docs/site/validate.mjs", "page": "authoring.md"},
-    {"path": "docs/site/render.mjs", "page": "authoring.md"},
-    {"path": "docs/site/diagram.mjs", "page": "authoring.md"},
-    {"path": "docs/site/output-links.mjs", "page": "authoring.md"},
-    {"path": "docs/site/build.mjs", "page": "authoring.md"},
-    {"path": "docs/site/serve.mjs", "page": "authoring.md"},
-    {"path": "scripts/verify-design-handoff.mjs", "page": "verification.md"},
-    {"path": "scripts/test-design-handoff-checks.mjs", "page": "verification.md"}
+    {
+      "path": "apps/center",
+      "page": "foundation.md"
+    },
+    {
+      "path": "contracts",
+      "page": "contracts.md"
+    },
+    {
+      "path": "packages/domain",
+      "page": "foundation.md"
+    },
+    {
+      "path": "packages/client-core",
+      "page": "synchronization.md"
+    },
+    {
+      "path": "scripts/boundary-policy.ts",
+      "page": "synchronization.md"
+    },
+    {
+      "path": "scripts/public-types.ts",
+      "page": "synchronization.md"
+    },
+    {
+      "path": "scripts/client-fixture.ts",
+      "page": "synchronization.md"
+    },
+    {
+      "path": "scripts/drive-client-core.ts",
+      "page": "cli.md"
+    },
+    {
+      "path": "packages/storage",
+      "page": "foundation.md"
+    },
+    {
+      "path": "scripts/probe-center.mjs",
+      "page": "cli.md"
+    },
+    {
+      "path": "scripts/record-red-green.mjs",
+      "page": "verification.md"
+    },
+    {
+      "path": "scripts/foundation.mjs",
+      "page": "test-first.md"
+    },
+    {
+      "path": "scripts/foundation-policy.mjs",
+      "page": "test-first.md"
+    },
+    {
+      "path": "scripts/foundation-replay.mjs",
+      "page": "test-first.md"
+    },
+    {
+      "path": "packages/verification",
+      "page": "test-first.md"
+    },
+    {
+      "path": "scripts/require-test-postgres.ts",
+      "page": "verification.md"
+    },
+    {
+      "path": "scripts/test-design-checks.mjs",
+      "page": "verification.md"
+    },
+    {
+      "path": "scripts/verify-design.mjs",
+      "page": "verification.md"
+    },
+    {
+      "path": "scripts/with-test-postgres.mjs",
+      "page": "cli.md"
+    },
+    {
+      "path": "scripts/postgres-socket.ts",
+      "page": "foundation.md"
+    },
+    {
+      "path": "docs/site/validate.mjs",
+      "page": "authoring.md"
+    },
+    {
+      "path": "docs/site/render.mjs",
+      "page": "authoring.md"
+    },
+    {
+      "path": "docs/site/diagram.mjs",
+      "page": "authoring.md"
+    },
+    {
+      "path": "docs/site/output-links.mjs",
+      "page": "authoring.md"
+    },
+    {
+      "path": "docs/site/build.mjs",
+      "page": "authoring.md"
+    },
+    {
+      "path": "docs/site/serve.mjs",
+      "page": "authoring.md"
+    },
+    {
+      "path": "scripts/verify-design-handoff.mjs",
+      "page": "verification.md"
+    },
+    {
+      "path": "scripts/test-design-handoff-checks.mjs",
+      "page": "verification.md"
+    },
+    {
+      "path": "apps/web",
+      "page": "app-architecture.md"
+    }
   ]
 }
