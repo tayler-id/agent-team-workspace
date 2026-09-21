@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { load } from '../src/fixture/adapter.ts';
-import { composer, rows, segments, status, window } from '../src/projection.ts';
+import { composer, rows, segments, status } from '../src/projection.ts';
 import { createStore } from '../src/store.ts';
 import room from '../src/fixture/room.json' with { type: 'json' };
 
@@ -23,15 +23,6 @@ test('rows project the ordered core timeline with authors, edits, tombstones, ci
 	expect(projected.filter((r) => r.unread).map((r) => r.message.createdSeq)).toEqual(['7', '8']);
 	expect(projected.map((r) => r.firstUnread)).toEqual([false, false, false, false, false, false, true, false]);
 	expect(rows(undefined, fixture.presentation)).toEqual([]);
-});
-
-test('window keeps the newest rows and counts older ones for the explicit load path', () => {
-	const store = createStore();
-	store.dispatch(fixture.snapshot);
-	const projected = rows(store.getState().rooms[0], fixture.presentation);
-	expect(window(projected, 5)).toMatchObject({ older: 3, total: 8 });
-	expect(window(projected, 5).rows.map((r) => r.message.createdSeq)).toEqual(['4', '5', '6', '7', '8']);
-	expect(window(projected, 50)).toMatchObject({ older: 0, total: 8 });
 });
 
 test('status names every phase from core mode and transport connection state without inventing one', () => {

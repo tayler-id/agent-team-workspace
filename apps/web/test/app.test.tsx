@@ -43,7 +43,7 @@ test('empty, loading, live, gap, resync, upgrade, error and revoked states are n
 	expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Agora local room fixture · General room');
 	expect(screen.getByRole('banner')).toHaveTextContent('3 members');
 	expect(screen.getByRole('banner')).toHaveTextContent('2 unread');
-	expect(screen.getByRole('list', { name: 'Messages, showing 8 of 8' })).toBeTruthy();
+	expect(screen.getByRole('list', { name: 'Messages, 8 total' })).toBeTruthy();
 	expect(screen.getByRole('separator', { name: 'Unread messages start here' })).toBeTruthy();
 	expect(screen.getByText('Deleted message (tombstone, revision 2)')).toBeTruthy();
 	expect(screen.getByText('edited (revision 2)')).toBeTruthy();
@@ -135,20 +135,14 @@ test('phone viewport applies a compact layout without hiding the timeline behind
 	expect(screen.getByRole('main').parentElement?.dataset['viewport']).toBe('desktop');
 	setPhone(true);
 	expect(screen.getByRole('main').parentElement?.dataset['viewport']).toBe('phone');
-	expect(screen.getByRole('list', { name: /^Messages, showing/ })).toBeTruthy();
+	expect(screen.getByRole('list', { name: /^Messages, / })).toBeTruthy();
 	setPhone(false);
 	expect(screen.getByRole('main').parentElement?.dataset['viewport']).toBe('desktop');
 });
 
-test('large rooms window to the newest page, Load older messages extends it, and a citation focuses the cited message', async () => {
+test('a citation focuses the cited message', async () => {
 	const { transport } = mount();
-	act(() => { transport.loadLargeRoom(400); });
-	expect(screen.getByRole('list', { name: 'Messages, showing 50 of 400' })).toBeTruthy();
-	expect(screen.getAllByRole('article')).toHaveLength(50);
-	fireEvent.click(screen.getByRole('button', { name: 'Load older messages (350 older)' }));
-	expect(screen.getByRole('list', { name: 'Messages, showing 100 of 400' })).toBeTruthy();
-	expect(status()).toHaveTextContent('Loaded 50 older messages.');
-	act(() => { transport.revoke(); transport.loadSnapshot(); });
+	act(() => { transport.loadSnapshot(); });
 	const agentRow = screen.getByRole('article', { name: /^Local room agent,/ });
 	const [firstCitation] = within(agentRow).getAllByRole('button', { name: 'Cited: Ada' });
 	if (!firstCitation) throw new Error('citation button missing');
