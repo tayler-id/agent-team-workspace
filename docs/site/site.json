@@ -262,6 +262,18 @@
     {
       "path": "apps/web",
       "page": "app-architecture.md"
+    },
+    {
+      "path": "scripts/renderer-policy.ts",
+      "page": "app-architecture.md"
+    },
+    {
+      "path": "scripts/architecture-exceptions.ts",
+      "page": "app-architecture.md"
+    },
+    {
+      "path": "agora/architecture-exceptions.json",
+      "page": "app-architecture.md"
     }
   ]
 }
