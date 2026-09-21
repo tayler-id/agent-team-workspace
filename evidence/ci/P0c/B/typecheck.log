@@ -1,0 +1,6 @@
+
+> agora@ typecheck /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json
+
+packages/storage/test/postgres-wrapper.test.ts(10,30): error TS4111: Property 'AGORA_PG_BIN' comes from an index signature, so it must be accessed with ['AGORA_PG_BIN'].
+ ELIFECYCLE  Command failed with exit code 2.

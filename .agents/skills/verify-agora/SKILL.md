@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the local-room L1 contract baseline from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 and CI P0c A allocation only; later slices extend it.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the local-room L1 contract baseline from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 and CI P0c A/B allocation and wrapper lifecycle; C qualification remains pending.
 ---
 
 # Verify Agora
@@ -25,7 +25,7 @@ pnpm docs:check
 
 ## Launch
 
-`scripts/with-test-postgres.mjs` boots a throwaway socket-only PostgreSQL cluster (owner role `agora_owner`, non-owner role `agora_app`, guard-negative role `agora_bypass`, database `agora_test`) for the duration of one command and removes it afterwards. It exports `AGORA_DATABASE_URL` as the service role and `AGORA_MIGRATION_DATABASE_URL` as the owner. To reuse an existing PostgreSQL 18 server, export `AGORA_TEST_DATABASE_URL` (as `agora_app`), `AGORA_TEST_OWNER_DATABASE_URL` (as the schema owner), `AGORA_TEST_BYPASS_DATABASE_URL` (a `BYPASSRLS` member of `agora_app`) and `AGORA_TEST_SUPERUSER_DATABASE_URL` (used only to remove and restore cluster-level prerequisites in one test) and the wrapper passes the command through.
+`scripts/with-test-postgres.mjs` uses the unchanged owned short-socket allocator and a 30-second startup deadline (`AGORA_PG_STARTUP_TIMEOUT_MS`, 1..300000 ms). It boots a throwaway socket-only PostgreSQL cluster (owner role `agora_owner`, non-owner role `agora_app`, guard-negative role `agora_bypass`, database `agora_test`) for the duration of one command and removes it afterwards. It exports `AGORA_DATABASE_URL` as the service role and `AGORA_MIGRATION_DATABASE_URL` as the owner. To reuse an existing PostgreSQL 18 server, export `AGORA_TEST_DATABASE_URL` (as `agora_app`), `AGORA_TEST_OWNER_DATABASE_URL` (as the schema owner), `AGORA_TEST_BYPASS_DATABASE_URL` (a `BYPASSRLS` member of `agora_app`) and `AGORA_TEST_SUPERUSER_DATABASE_URL` (used only to remove and restore cluster-level prerequisites in one test) and the wrapper passes the command through.
 
 ```sh
 node scripts/with-test-postgres.mjs <command>
@@ -33,10 +33,10 @@ node scripts/with-test-postgres.mjs <command>
 
 ## Drive
 
-CI P0c A is allocation-only, not wrapper/lifecycle readiness. Its direct driver requires Node 24, installed Vitest and a writable local temporary root; no PostgreSQL server or Swift is needed for this focused scenario. Retain its output under `evidence/ci/P0c/`; integration and process cleanup remain slices B/C.
+CI P0c A's allocation driver requires Node 24 and Vitest, not PostgreSQL or Swift. B's wrapper driver additionally requires PostgreSQL 18 binaries and proves deep-path non-owner access, success/failure cleanup, SIGINT/SIGTERM (also during startup), forced shutdown, initialization/readiness timeouts and foreign/neighborhood preservation. Retain outputs under `evidence/ci/P0c/B/`; C qualification remains pending.
 
 ```sh
-pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts --disableConsoleIntercept
+pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept
 ```
 
 ```sh
@@ -115,18 +115,20 @@ For P0c A, replay the test-only allocation parent with the focused baseline and 
 node scripts/record-red-green.mjs --parent c9e6fe16c1f107da95d77f35d092e0a923781783 --head HEAD --out .scratch/p0c-replay -- pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts -t 'allocation baseline|short socket denial'
 ```
 
+For P0c B, replay qualified parent `17fbf24609fb3cbcb25c052ae7ecee124bc0bc87` against the committed implementation head with the recorder and focused command `pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t deep-success`. Red is PostgreSQL's native long-socket failure (exit 70 versus expected 0); green connects as `agora_app` and verifies removal. Set `TMPDIR` to a private directory inside the task worktree for recorder worktrees, data and logs; only allocator-owned short sockets live outside it.
+
 ## Cleanup
 
-P0c A's driver allocates and releases only its recorded socket directories; its native assertions verify removal while retaining artifact neighbors. Replacement inodes, simulated device changes and hard-linked records must deny verify and cleanup with `socket ownership mismatch`; unrelated children must deny cleanup with `socket not empty`. It never starts a process. For this slice, do not globally sweep temporary directories or prune other tasks' worktrees. Wrapper cancellation, timeout and process cleanup are explicitly unimplemented until B/C.
+P0c A's driver allocates and releases only its recorded socket directories; its native assertions verify removal while retaining artifact neighbors. Replacement inodes, simulated device changes and hard-linked records must deny verify and cleanup with `socket ownership mismatch`; unrelated children must deny cleanup with `socket not empty`. It never starts a process. For this slice, do not globally sweep temporary directories or prune other tasks' worktrees. B's driver asserts each recorded postmaster and command descendant has exited, its socket/data/log root is gone, and neighbors remain. Ownership substitution must report `cleanup-failed`, not success; the test restores and removes only its own substituted fixture.
 
-`with-test-postgres.mjs` stops and deletes its cluster on exit, including on SIGINT. `record-red-green.mjs` removes its worktrees. `generate.mjs --check` and the contract tests remove their temporary trees. `contracts/swift/.build/` is an ignored build cache and may stay. Confirm nothing else is left behind:
+`with-test-postgres.mjs` stops and deletes its owned cluster on success, command failure, startup failure, timeout, SIGINT and SIGTERM. Check NDJSON `cleaned` against the allocated identity; SIGKILL of the wrapper and deliberate process-group escape are not supported cleanup paths. `record-red-green.mjs` removes its worktrees. `generate.mjs --check` and the contract tests remove their temporary trees. `contracts/swift/.build/` is an ignored build cache and may stay. Confirm nothing else is left behind:
 
 ```sh
-git worktree prune
-git worktree list | grep -c 'agora-red-\|agora-green-\|agora-clean-' || echo "worktrees: clean"
-ls "${TMPDIR:-/tmp}" | grep agora- || echo "tmp: clean"
+# Inspect only this task's recorded identities; never prune or sweep other runs.
+git worktree list
+pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept
 ```
 
-Both greps must find nothing.
+The driver must pass its exact-owned PID/path removal assertions. Recorder-created worktrees must be absent from the listing; unrelated worktrees and resources remain untouched.
 
 Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.

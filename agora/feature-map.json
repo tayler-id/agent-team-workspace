@@ -4,11 +4,18 @@
 	"task": "agora-s1-enforce-test-first",
 	"features": [
 		{
+			"id": "postgres-wrapper-lifecycle", "documentation": "docs/site/foundation.md",
+			"paths": ["scripts/with-test-postgres.mjs", "scripts/postgres-socket.ts", "packages/storage/test/postgres-wrapper.test.ts"],
+			"public": ["node scripts/with-test-postgres.mjs COMMAND ARGS...", "pnpm test:pg"],
+			"scenarios": ["packages/storage/test/postgres-wrapper.test.ts", "deep-success", "SIGINT", "SIGTERM", "forced-cancel", "startup-failure", "startup-timeout", "foreign-preservation"],
+			"fixtures": ["P0c B private PostgreSQL 18 lifecycle; qualification C remains pending"], "platforms": ["node24", "posix"], "owner": "CI P0c B"
+		},
+		{
 			"id": "postgres-socket-ownership", "documentation": "docs/site/foundation.md",
 			"paths": ["scripts/postgres-socket.ts", "packages/storage/test/postgres-socket.test.ts"],
 			"public": ["pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts"],
 			"scenarios": ["allocation baseline", "short socket denial", "collision", "foreign ownership", "unsafe permissions", "cleanup", "guard-disabled denial"],
-			"fixtures": ["P0c A allocation only; wrapper integration deferred"], "platforms": ["node24", "posix"], "owner": "CI P0c A"
+			"fixtures": ["P0c A allocation ownership semantics; B integrates without changing them"], "platforms": ["node24", "posix"], "owner": "CI P0c A"
 		},
 		{
 			"id": "foundation-admission",

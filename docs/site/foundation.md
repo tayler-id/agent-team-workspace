@@ -41,17 +41,18 @@ U01a milestone qualification followed at revision `b9c65c4`: all ten plan-define
 
 After the seeded `606cba2` snapshot, U01a.B03 landed a deeply immutable client state machine and portable import/public-type guards. It turns validated snapshots and events into replay, acknowledgement and command decisions without a renderer or network transport. The [source-owned synchronization explanation](repo:docs/features/client-synchronization.md) covers its state flow and fixture-only limits. `scripts/client-fixture.ts` translates fixtures outside the core; `scripts/drive-client-core.ts` compares TypeScript and Swift through `pnpm client:replay -- --json --swift`. `scripts/boundary-policy.ts` and `scripts/public-types.ts` enforce dependency and public-port boundaries through `pnpm boundaries`.
 
-### PostgreSQL socket ownership (CI P0c A)
+### PostgreSQL socket ownership and lifecycle (CI P0c A/B)
 
-For contributors, this isolated allocation helper prepares short private sockets without moving long data or evidence paths. It adds no user-facing room behavior. The PostgreSQL wrapper is unchanged: integration, cancellation, timeout and process cleanup belong to dependent slice B; integrated guard proof belongs to C. This is not complete P0c or foundation qualification.
+For contributors, the existing PostgreSQL wrapper now uses the qualified allocator without shortening data or evidence paths. B adds bounded startup, cancellation and owned process-group cleanup, not user-facing room behavior. Full P0c-C qualification remains pending.
 
 ```flow
 Long task paths | Keep data, logs and retained evidence inside the worktree.
 Short private socket | Allocate a run-bound 0700 directory under the canonical local temporary root.
-Ownership boundary | Verify exact identity before use or removal; preserve evidence and unrelated resources.
+Owned execution | Start PostgreSQL directly, wait for readiness within the startup deadline, then run ordinary tests as agora_app.
+Ownership boundary | Stop only owned groups, verify identity before removal, and preserve evidence and neighboring resources.
 ```
 
-The [allocation helper](repo:scripts/postgres-socket.ts) and [literal tests](repo:packages/storage/test/postgres-socket.test.ts) cover allocation, two live identities, collision refusal, private permissions, foreign records, inode replacement, simulated device substitution, hard-linked records, symlinks, nonempty directories and idempotent removal. Both source-copy guard mutations must turn their named denial assertions red. The [evidence record](repo:evidence/ci/P0c/review.md) retains the untouched-wrapper failure and approved slice boundary; no data directory was shortened to hide it. The [runbook](repo:docs/runbooks/development.md) distinguishes this allocation proof from server lifecycle readiness.
+The [allocation helper](repo:scripts/postgres-socket.ts) and [literal tests](repo:packages/storage/test/postgres-socket.test.ts) cover allocation, two live identities, collision refusal, private permissions, foreign records, inode replacement, simulated device substitution, hard-linked records, symlinks, nonempty directories and idempotent removal. Both source-copy guard mutations must turn their named denial assertions red. The [evidence record](repo:evidence/ci/P0c/review.md) retains the untouched-wrapper failure and approved slice boundary; no data directory was shortened to hide it. B's [public wrapper tests](repo:packages/storage/test/postgres-wrapper.test.ts) exercise real deep-path connections, signal cancellation, forced termination, startup failure/timeout and foreign-resource preservation. Its [receipts](repo:evidence/ci/P0c/B/review.md) distinguish observed lifecycle behavior from C qualification. The [runbook](repo:docs/runbooks/development.md) defines timeout, exit and fail-closed retention behavior.
 
 ## Verification and proof
 

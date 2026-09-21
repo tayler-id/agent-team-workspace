@@ -1,0 +1,1 @@
+{"schema_version":"agora.test-postgres/v1","outcome":"blocked","exit":70,"message":"pg_ctl start failed","detail":"pg_ctl: could not start server\nExamine the log output.\nwaiting for server to start.... stopped waiting\n"}
