@@ -8,7 +8,7 @@ Not yet. You can read this site and run foundation checks. There is no product l
 
 ## Can I send a message to a room?
 
-Not yet. The [local room contracts](local-room.md) fix what a message, command, event, snapshot and receipt mean, and the center already validates and dispatches a send. The answer today is a typed 404 `unavailable_capability`, because no persistence adapter is composed. Four further slices add storage, lifecycle, a browser room and a bounded local answer.
+Over HTTP, yes. The [local room](local-room.md) accepts a send to one fixed local-development room, commits it to PostgreSQL with its event and receipt in one transaction, and reads the room back in order after a restart. There is no browser room yet and no command that starts the service for you. Three further slices add lifecycle, a browser room and a bounded local answer.
 
 ## The site says Built. Why is S1 still incomplete?
 

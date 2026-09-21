@@ -99,7 +99,7 @@
 		"/api/v1/local-room/messages": {
 			"post": {
 				"operationId": "sendLocalRoomMessage",
-				"summary": "Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it",
+				"summary": "Send one immutable message to the fixed local-development room; committed in one PostgreSQL transaction with the room counter, event and receipt (local-room L2)",
 				"requestBody": {
 					"required": true,
 					"content": {
@@ -132,7 +132,45 @@
 						}
 					},
 					"404": {
-						"description": "unavailable_capability: the room path is dispatched but no persistence adapter is composed in this slice",
+						"description": "scope_mismatch when the command names another project or room; not_found when a citation names no persisted message; unavailable_capability when no persistence adapter is composed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorReport"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "command_conflict: the same command_id was already committed with a different request digest",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorReport"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/local-room/snapshot": {
+			"get": {
+				"operationId": "getLocalRoomSnapshot",
+				"summary": "Ordered history and cursor of the fixed local-development room from one repeatable read; at most the latest 1000 messages",
+				"responses": {
+					"200": {
+						"description": "Snapshot",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoomSnapshot"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "unavailable_capability: no persistence adapter is composed",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -1030,12 +1068,13 @@
 				}
 			},
 			"ReasonCode": {
-				"description": "Closed set of stable reason codes in use on the foundation surface. A new code is a contract change.",
+				"description": "Closed set of stable reason codes in use on the foundation surface. A new code is a contract change. command_conflict is the R07 409: the same actor and command_id reused with a different request digest.",
 				"type": "string",
 				"enum": [
 					"malformed_command",
 					"not_found",
 					"scope_mismatch",
+					"command_conflict",
 					"blocked_prerequisite",
 					"unavailable_capability",
 					"usage_error",

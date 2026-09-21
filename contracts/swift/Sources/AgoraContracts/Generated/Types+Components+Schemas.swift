@@ -1894,13 +1894,14 @@ extension Components {
                 ])
             }
         }
-        /// Closed set of stable reason codes in use on the foundation surface. A new code is a contract change.
+        /// Closed set of stable reason codes in use on the foundation surface. A new code is a contract change. command_conflict is the R07 409: the same actor and command_id reused with a different request digest.
         ///
         /// - Remark: Generated from `#/components/schemas/ReasonCode`.
         @frozen public enum ReasonCode: String, Codable, Hashable, Sendable, CaseIterable {
             case malformed_command = "malformed_command"
             case not_found = "not_found"
             case scope_mismatch = "scope_mismatch"
+            case command_conflict = "command_conflict"
             case blocked_prerequisite = "blocked_prerequisite"
             case unavailable_capability = "unavailable_capability"
             case usage_error = "usage_error"

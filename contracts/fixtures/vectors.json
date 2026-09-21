@@ -208,6 +208,14 @@
 			"reason": "array item type"
 		},
 		{
+			"id": "error-command-conflict",
+			"component": "ErrorReport",
+			"wire": "{\"reason_code\":\"command_conflict\",\"correlation_id\":\"11111111-1111-4111-8111-111111111111\",\"details\":[\"command 33333333-3333-4333-8333-333333333333 was committed with request_digest sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"]}",
+			"expect": "accept",
+			"canonical": "{\"correlation_id\":\"11111111-1111-4111-8111-111111111111\",\"details\":[\"command 33333333-3333-4333-8333-333333333333 was committed with request_digest sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"],\"reason_code\":\"command_conflict\"}",
+			"digest": "sha256:c37680d971b076189507135fdacfe7f49a85a8b1f6ab15ad45358c7b3cd65bf5"
+		},
+		{
 			"id": "revision-zero",
 			"component": "Revision",
 			"wire": "\"0\"",

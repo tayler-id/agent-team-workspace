@@ -271,7 +271,7 @@ public struct Client: APIProtocol {
             }
         )
     }
-    /// Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it
+    /// Send one immutable message to the fixed local-development room; committed in one PostgreSQL transaction with the room counter, event and receipt (local-room L2)
     ///
     /// - Remark: HTTP `POST /api/v1/local-room/messages`.
     /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)`.
@@ -353,6 +353,110 @@ public struct Client: APIProtocol {
                 case 404:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
                     let body: Operations.sendLocalRoomMessage.Output.NotFound.Body
+                    let chosenContentType = try converter.bestContentType(
+                        received: contentType,
+                        options: [
+                            "application/json"
+                        ]
+                    )
+                    switch chosenContentType {
+                    case "application/json":
+                        body = try await converter.getResponseBodyAsJSON(
+                            Components.Schemas.ErrorReport.self,
+                            from: responseBody,
+                            transforming: { value in
+                                .json(value)
+                            }
+                        )
+                    default:
+                        preconditionFailure("bestContentType chose an invalid content type.")
+                    }
+                    return .notFound(.init(body: body))
+                case 409:
+                    let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
+                    let body: Operations.sendLocalRoomMessage.Output.Conflict.Body
+                    let chosenContentType = try converter.bestContentType(
+                        received: contentType,
+                        options: [
+                            "application/json"
+                        ]
+                    )
+                    switch chosenContentType {
+                    case "application/json":
+                        body = try await converter.getResponseBodyAsJSON(
+                            Components.Schemas.ErrorReport.self,
+                            from: responseBody,
+                            transforming: { value in
+                                .json(value)
+                            }
+                        )
+                    default:
+                        preconditionFailure("bestContentType chose an invalid content type.")
+                    }
+                    return .conflict(.init(body: body))
+                default:
+                    return .undocumented(
+                        statusCode: response.status.code,
+                        .init(
+                            headerFields: response.headerFields,
+                            body: responseBody
+                        )
+                    )
+                }
+            }
+        )
+    }
+    /// Ordered history and cursor of the fixed local-development room from one repeatable read; at most the latest 1000 messages
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/snapshot`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/snapshot/get(getLocalRoomSnapshot)`.
+    public func getLocalRoomSnapshot(_ input: Operations.getLocalRoomSnapshot.Input) async throws -> Operations.getLocalRoomSnapshot.Output {
+        try await client.send(
+            input: input,
+            forOperation: Operations.getLocalRoomSnapshot.id,
+            serializer: { input in
+                let path = try converter.renderedPath(
+                    template: "/api/v1/local-room/snapshot",
+                    parameters: []
+                )
+                var request: HTTPTypes.HTTPRequest = .init(
+                    soar_path: path,
+                    method: .get
+                )
+                suppressMutabilityWarning(&request)
+                converter.setAcceptHeader(
+                    in: &request.headerFields,
+                    contentTypes: input.headers.accept
+                )
+                return (request, nil)
+            },
+            deserializer: { response, responseBody in
+                switch response.status.code {
+                case 200:
+                    let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
+                    let body: Operations.getLocalRoomSnapshot.Output.Ok.Body
+                    let chosenContentType = try converter.bestContentType(
+                        received: contentType,
+                        options: [
+                            "application/json"
+                        ]
+                    )
+                    switch chosenContentType {
+                    case "application/json":
+                        body = try await converter.getResponseBodyAsJSON(
+                            Components.Schemas.RoomSnapshot.self,
+                            from: responseBody,
+                            transforming: { value in
+                                .json(value)
+                            }
+                        )
+                    default:
+                        preconditionFailure("bestContentType chose an invalid content type.")
+                    }
+                    return .ok(.init(body: body))
+                case 404:
+                    let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
+                    let body: Operations.getLocalRoomSnapshot.Output.NotFound.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [

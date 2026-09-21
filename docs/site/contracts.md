@@ -30,7 +30,7 @@ Reject drift | Regenerate into a clean temporary tree and compare every output b
 
 The later U01a.B03 slice adds [neutral synchronization values](repo:contracts/schemas/sync.schema.json) and [namespaced fixture envelopes](repo:contracts/schemas/fixture-sync.schema.json), with [wire guard-negative tests](repo:contracts/test/sync.test.ts) and [retained review proof](repo:evidence/U01a/agora-s1-isolate-client-core/1-contracts/review.md). They support client replay without inventing production room schemas or HTTP operations. Follow the current runbook for the expanded vector corpus.
 
-Local-room L1 adds the [agora.local-room/v1 family](repo:contracts/schemas/local-room.schema.json), the first authored operation outside the fixture, and twenty-nine `local-room-*` vectors. [Local room contracts](local-room.md) documents its scope; the generation, subset and drift rules on this page apply to it unchanged.
+Local-room L1 adds the [agora.local-room/v1 family](repo:contracts/schemas/local-room.schema.json), the first authored operation outside the fixture, and twenty-nine `local-room-*` vectors. L2 adds the `command_conflict` reason code with its accept vector, the 409 answer of the send and the snapshot operation. [Local room](local-room.md) documents the scope; the generation, subset and drift rules on this page apply unchanged.
 
 The tested subset supports closed objects, explicit required fields, arrays, bounded integers, string/integer enums and restricted anchored ASCII patterns. It rejects unsupported keywords rather than generating unconstrained types. Schema extension must preserve cross-language proof; do not edit generated files.
 

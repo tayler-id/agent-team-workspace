@@ -26,7 +26,7 @@ The site inventory is `docs/site/site.json`. Build validation discovers current 
 
 ## Planned domain modules
 
-Identity owns membership and device grants. Collaboration owns rooms and message revisions; its first port, `packages/domain/src/local-room/port.ts`, landed with the [local room contracts](local-room.md). Control owns tasks, leases, budgets and receipts. Policy makes pure decisions. Agents compile context and call providers without shell authority. Evidence verifies exact-head manifests. Projects owns registration and provisioning. Knowledge owns reviewed claims and invalidation. Integrations reconciles external effects. These are responsibilities in [R03](repo:docs/technical-spec.md), not a claim that modules already exist in source.
+Identity owns membership and device grants. Collaboration owns rooms and message revisions; its first port and send decision, `packages/domain/src/local-room/port.ts`, landed with the [local room](local-room.md), and `packages/storage/src/local-room.ts` is its PostgreSQL adapter. Control owns tasks, leases, budgets and receipts. Policy makes pure decisions. Agents compile context and call providers without shell authority. Evidence verifies exact-head manifests. Projects owns registration and provisioning. Knowledge owns reviewed claims and invalidation. Integrations reconciles external effects. These are responsibilities in [R03](repo:docs/technical-spec.md), not a claim that modules already exist in source.
 
 ```flow
 Contracts | Public values cross language and process boundaries.

@@ -6,7 +6,7 @@ The durable Agora record is designed to live outside every model session and exe
 
 | Location | Intended content | Authority / lifetime |
 | --- | --- | --- |
-| PostgreSQL | Membership, message revisions, tasks, runs, receipts, decisions and knowledge versions | Durable service authority; current fixture contains only streams, events and claims |
+| PostgreSQL | Membership, message revisions, tasks, runs, receipts, decisions and knowledge versions | Durable service authority; today the fixture streams, events and claims plus the fixed local room's messages, events and receipts |
 | S3-compatible artifacts | Logs, screenshots, manifests and bounded attachments | Immutable bytes after quarantine and hash verification; planned |
 | Context bundle | Selected authorized revisions with trust labels, digests and omissions | Frozen input for a session/run, never permission; planned |
 | Model context | Temporary interpretation of the supplied bundle | Not persistent project truth |

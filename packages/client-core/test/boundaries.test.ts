@@ -28,6 +28,8 @@ test.each(consumers)('%s rejects framework, provider, storage and transport impo
 		const messages = await boundary(form(module), file);
 		expect(messages.some((m) => m.ruleId === 'agora/import-boundary'), `${file}: ${form(module)}`).toBe(true);
 	}
+	// The shared type-aware project keeps the last text linted for a path; restore the committed source so later lints of its importers see real exports.
+	expect(await boundary(readFileSync(path.join(root, file), 'utf8'), file)).toEqual([]);
 }, 120_000);
 
 test('private relative paths, unknown dynamic targets and facade values cannot enter core', async () => {

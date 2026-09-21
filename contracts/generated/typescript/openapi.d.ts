@@ -60,8 +60,25 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it */
+        /** Send one immutable message to the fixed local-development room; committed in one PostgreSQL transaction with the room counter, event and receipt (local-room L2) */
         post: operations["sendLocalRoomMessage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/local-room/snapshot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ordered history and cursor of the fixed local-development room from one repeatable read; at most the latest 1000 messages */
+        get: operations["getLocalRoomSnapshot"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -301,10 +318,10 @@ export interface components {
             };
         };
         /**
-         * @description Closed set of stable reason codes in use on the foundation surface. A new code is a contract change.
+         * @description Closed set of stable reason codes in use on the foundation surface. A new code is a contract change. command_conflict is the R07 409: the same actor and command_id reused with a different request digest.
          * @enum {string}
          */
-        ReasonCode: "malformed_command" | "not_found" | "scope_mismatch" | "blocked_prerequisite" | "unavailable_capability" | "usage_error" | "infrastructure_failure";
+        ReasonCode: "malformed_command" | "not_found" | "scope_mismatch" | "command_conflict" | "blocked_prerequisite" | "unavailable_capability" | "usage_error" | "infrastructure_failure";
         /** @description Reference to a record already persisted in the same room. record_kind is closed; L1 knows only messages. room_seq repeats the cited message's sequence so a reader can locate it without a lookup; adapters check that the record exists at or below the citing message. */
         RecordCitation: {
             /** @enum {string} */
@@ -508,7 +525,45 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorReport"];
                 };
             };
-            /** @description unavailable_capability: the room path is dispatched but no persistence adapter is composed in this slice */
+            /** @description scope_mismatch when the command names another project or room; not_found when a citation names no persisted message; unavailable_capability when no persistence adapter is composed */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+            /** @description command_conflict: the same command_id was already committed with a different request digest */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+        };
+    };
+    getLocalRoomSnapshot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Snapshot */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomSnapshot"];
+                };
+            };
+            /** @description unavailable_capability: no persistence adapter is composed */
             404: {
                 headers: {
                     [name: string]: unknown;
