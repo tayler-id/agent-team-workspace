@@ -8,8 +8,6 @@
 		"pnpm": ">=10.34.1 <11"
 	},
 	"scripts": {
-		"ci:doctor": "node scripts/ci-doctor.mjs",
-		"ci:doctor:test": "node --test scripts/test/ci-doctor.test.ts",
 		"lint": "eslint .",
 		"typecheck": "tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json && tsc -p apps/web/tsconfig.json",
 		"boundaries": "vitest run --project unit packages/client-core/test/boundaries.test.ts packages/client-core/test/export-maps.test.ts packages/client-core/test/app-architecture.test.ts --reporter=json --outputFile=.scratch/boundaries.json",

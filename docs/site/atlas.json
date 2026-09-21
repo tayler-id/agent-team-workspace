@@ -26,10 +26,12 @@
       "id": "ci-toolchain",
       "title": "Toolchain and native readiness",
       "status": "In progress",
-      "why": "P0b prerequisite diagnosis only; mandatory CI and hosted enforcement remain unimplemented.",
+      "why": "P0b doctor implemented, review pending; mandatory CI, PostgreSQL hardening, React guards and hosted enforcement remain unimplemented.",
       "page": "ci.md",
       "proof": [
-        "repo:scripts/test/ci-doctor.test.ts"
+        "repo:scripts/ci-doctor.mjs",
+        "repo:scripts/test/ci-doctor.test.ts",
+        "repo:evidence/ci/P0b/green.log"
       ]
     },
     {
