@@ -1,0 +1,24 @@
+{
+  "schema_version": "agora.task-outcome/v1",
+  "task": "agora-s1-lint-application-architecture",
+  "unit": "U20",
+  "parent": "cacbd069052fc60a591e0895eec3f0c5ac7a25b5",
+  "head": "PENDING_B1_HEAD",
+  "result": "pass",
+  "summary": "B1 import-boundary slice extends Agora owners to apps/web Feature/Client/Host across guarded extensions under the captain 400-line/12-file target; renderer foot-guns and exceptions deferred to B2 (D84/D85).",
+  "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
+  "green": "evidence/U20/agora-s1-lint-application-architecture/green.log",
+  "red_assertions": "Whole-feature red: head tests fail on parent cacbd069052fc60a591e0895eec3f0c5ac7a25b5 (8 failed); owner tables, server imports, extensions, entrypoints, relocation, client-core, noInlineConfig, guard-weakening",
+  "green_assertions": "Tests 8 passed (8)",
+  "commands": ["pnpm boundaries", "pnpm lint", "pnpm typecheck", "pnpm check"],
+  "limits": [
+    "No Client/Host runtime",
+    "No Feature discovery",
+    "No product Features",
+    "B1 only: no renderer-footgun, no architecture-exceptions file",
+    "B2 follow-up preserves renderer foot-guns, exceptions, mixed-union DOM, adversarial effect fixtures",
+    "Captain 400-line/12-file target met on B1 without size waiver (D85)"
+  ],
+  "test_patch_digest": "2011b490bcd21b2a3fd967dbf1cfecc744127a5038a76fe031f504576fb26670",
+  "lockfile_digest": "e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"
+}

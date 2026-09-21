@@ -3,9 +3,19 @@
   "date": "2026-09-21",
   "features": [
     {
-      "id": "postgres-socket", "title": "PostgreSQL socket ownership", "status": "In progress",
-      "why": "P0c A ownership and B bounded wrapper lifecycle proved; C qualification remains pending.", "page": "foundation.md",
-      "proof": ["repo:scripts/postgres-socket.ts", "repo:scripts/with-test-postgres.mjs", "repo:packages/storage/test/postgres-wrapper.test.ts", "repo:evidence/ci/P0c/B/outcome.json", "repo:evidence/ci/P0c/B/red.log", "repo:evidence/ci/P0c/B/green.log"]
+      "id": "postgres-socket",
+      "title": "PostgreSQL socket ownership",
+      "status": "In progress",
+      "why": "P0c A ownership and B bounded wrapper lifecycle proved; C qualification remains pending.",
+      "page": "foundation.md",
+      "proof": [
+        "repo:scripts/postgres-socket.ts",
+        "repo:scripts/with-test-postgres.mjs",
+        "repo:packages/storage/test/postgres-wrapper.test.ts",
+        "repo:evidence/ci/P0c/B/outcome.json",
+        "repo:evidence/ci/P0c/B/red.log",
+        "repo:evidence/ci/P0c/B/green.log"
+      ]
     },
     {
       "id": "task-proof",
@@ -83,6 +93,20 @@
       "page": "authoring.md",
       "proof": [
         "repo:docs/implementation-plan.md"
+      ]
+    },
+    {
+      "id": "app-architecture",
+      "title": "Application architecture boundaries",
+      "status": "Built",
+      "why": "Make Feature/Client/Host import shortcuts fail in lint and tests with owner-named diagnostics (B1 import ownership).",
+      "page": "app-architecture.md",
+      "proof": [
+        "repo:scripts/boundary-policy.ts",
+        "repo:packages/client-core/test/app-architecture.test.ts",
+        "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json",
+        "repo:evidence/U20/agora-s1-lint-application-architecture/whole-feature-red.log",
+        "repo:evidence/U20/agora-s1-lint-application-architecture/green.log"
       ]
     }
   ],

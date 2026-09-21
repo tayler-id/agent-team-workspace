@@ -1,0 +1,145 @@
+import { ESLint } from 'eslint';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { afterAll, afterEach, expect, test } from 'vitest';
+
+const root = path.resolve(import.meta.dirname, '../../..');
+const feature = 'apps/web/src/features/room/index.tsx';
+const notes = 'apps/web/src/features/notes/index.ts';
+const framework = 'apps/web/src/framework/index.ts';
+const client = 'apps/web/src/client/index.ts';
+const host = 'apps/web/src/host/index.ts';
+const owners = { framework: 'apps/web/src/framework', client: 'apps/web/src/client', host: 'apps/web/src/host', features: 'apps/web/src/features' } as const;
+const ownerStubs = [feature, notes, framework, client, host];
+for (const rel of ownerStubs) {
+	const abs = path.join(root, rel);
+	mkdirSync(path.dirname(abs), { recursive: true });
+	if (!existsSync(abs)) writeFileSync(abs, 'export {};\n');
+}
+const engine = new ESLint({ cwd: root, ignore: false });
+const probes = new Set<string>();
+const track = (rel: string): string => { probes.add(rel); return path.join(root, rel); };
+afterAll(() => { for (const rel of ownerStubs) try { rmSync(path.join(root, rel), { force: true }); } catch { /* gone */ } });
+afterEach(() => { for (const rel of probes) try { rmSync(path.join(root, rel), { force: true }); } catch { /* gone */ } probes.clear(); });
+const agora = async (code: string, file: string, lint = engine) =>
+	(await lint.lintText(code, { filePath: path.join(root, file) })).flatMap((r) => r.messages).filter((m) => m.ruleId?.startsWith('agora/'));
+const has = async (code: string, file: string, rule: string, needle?: string) =>
+	(await agora(code, file)).some((m) => m.ruleId === rule && (needle === undefined || m.message.includes(needle)));
+const writeProbe = (rel: string, code: string): string => {
+	const abs = track(rel); mkdirSync(path.dirname(abs), { recursive: true }); writeFileSync(abs, code); return abs;
+};
+const publicEslint = (rel: string): { status: number; out: string } => {
+	const r = spawnSync('pnpm', ['exec', 'eslint', rel, '-f', 'json'], {
+		cwd: root, encoding: 'utf8', env: { ...process.env, GH_TOKEN: undefined, GITHUB_TOKEN: undefined, FIRSTMATE_GH_TOKEN: undefined },
+	});
+	return { status: r.status ?? 1, out: `${r.stdout}\n${r.stderr}` };
+};
+const storageLeak = "import type { Database } from '@agora/storage';\nexport type Leak = keyof Database;\n";
+const cjsLeak = "const storage = require('@agora/storage');\nmodule.exports = { storage };\n";
+
+test('owner tables are explicit and test-visible architecture policy', () => {
+	const b = readFileSync(path.join(root, 'scripts/boundary-policy.ts'), 'utf8');
+	const e = readFileSync(path.join(root, 'eslint.config.js'), 'utf8');
+	expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker']");
+	for (const s of ["framework: 'apps/web/src/framework'", "client: 'apps/web/src/client'", "host: 'apps/web/src/host'", "features: 'apps/web/src/features'", 'apps/web/src']) expect(b).toContain(s);
+	expect(e).toContain('noInlineConfig: true');
+	expect(e).toContain('ts,tsx,mts,cts,js,jsx,mjs,cjs');
+	expect(e).toContain('apps/web/**');
+	expect(e).toContain('contracts/**/*.js');
+	expect(e).toContain('contracts/**/*.{mjs,cjs}');
+	expect(e).not.toContain('renderer-footgun');
+	expect(readFileSync(path.join(root, 'package.json'), 'utf8')).toContain('tsc -p apps/web/tsconfig.json');
+	expect(readFileSync(path.join(root, 'tsconfig.json'), 'utf8')).toContain('"apps/web/**"');
+});
+
+test('tsx renderer rejects server imports with owner-named diagnostics across import forms', async () => {
+	const forms = [
+		(m: string) => `import type { X } from '${m}'; export type Leak = X;`,
+		(m: string) => `export async function leak(): Promise<unknown> { return import('${m}'); }`,
+		(m: string) => `export type * from '${m}';`,
+		(m: string) => `export { type X as Leak } from '${m}';`,
+	];
+	for (const module of ['@agora/storage', '@agora/domain', '@agora/center', 'pg', 'hono', 'drizzle-orm']) {
+		for (const form of forms) {
+			expect(await has(form(module), feature, 'agora/import-boundary', 'renderer')).toBe(true);
+			expect(await has(form(module), feature, 'agora/import-boundary', owners.client)).toBe(true);
+		}
+	}
+	expect(await agora('export const ok = (value: string): string => value;', feature)).toEqual([]);
+}, 120_000);
+
+test('every guarded source extension keeps import-boundary diagnostics via public CLI', () => {
+	const stamp = `ext${Date.now().toString(36)}`;
+	const rows: { rel: string; body: string; needle: string }[] = [
+		...(['ts', 'tsx', 'mts', 'cts', 'js', 'jsx', 'mjs'] as const).map((ext) => ({ rel: `apps/web/src/features/room/${stamp}-${ext}.${ext}`, body: storageLeak, needle: 'renderer' })),
+		{ rel: `apps/web/src/features/room/${stamp}-cjs.cjs`, body: cjsLeak, needle: 'renderer' },
+		...(['js', 'mts', 'tsx', 'mjs'] as const).map((ext) => ({ rel: `packages/client-core/src/${stamp}-${ext}.${ext}`, body: storageLeak, needle: 'portable client-core' })),
+		{ rel: `packages/client-core/src/${stamp}-cjs.cjs`, body: cjsLeak, needle: 'portable client-core' },
+		...(['mts', 'mjs', 'js'] as const).map((ext) => ({ rel: `contracts/src/${stamp}-${ext}.${ext}`, body: "import { readFileSync } from 'node:fs';\nexport const r = readFileSync;\n", needle: 'package owner contracts' })),
+		{ rel: `contracts/src/${stamp}-cjs.cjs`, body: "import { readFileSync } from 'node:fs';\nexport const r = readFileSync;\n", needle: 'package owner contracts' },
+	];
+	for (const row of rows) {
+		writeProbe(row.rel, row.body);
+		const { status, out } = publicEslint(row.rel);
+		expect(status, row.rel).toBe(1);
+		expect(out, row.rel).toContain('agora/import-boundary');
+		expect(out, row.rel).toContain(row.needle);
+		expect(out, row.rel).not.toContain('Error while loading rule');
+		expect(out, row.rel).not.toContain('File ignored because no matching configuration');
+	}
+}, 180_000);
+
+test('framework client and host never import features; features use public entrypoints only', async () => {
+	for (const file of [framework, client, host]) {
+		expect(await has("import { x } from '../features/room/private'; export const y = x;", file, 'agora/import-boundary', 'must not import product Features')).toBe(true);
+	}
+	expect(await has("import { x } from '../notes/secret'; export const y = x;", feature, 'agora/import-boundary', 'private files')).toBe(true);
+	expect(await has("import { x } from '../../framework/internal'; export const y = x;", feature, 'agora/import-boundary', 'public entrypoint')).toBe(true);
+	expect(await has("import { x } from '../../framework/index.ts'; export const y = x;", feature, 'agora/import-boundary')).toBe(false);
+	expect(await has("import { x } from '../room/index.tsx'; export const y = x;", notes, 'agora/import-boundary')).toBe(false);
+}, 120_000);
+
+test('apps/web non-src relocation cannot bypass import boundaries', () => {
+	const stamp = `reloc${Date.now().toString(36)}`;
+	writeProbe(`apps/web/test/${stamp}-leak.ts`, storageLeak);
+	writeProbe(`apps/web/lib/${stamp}-leak.ts`, storageLeak);
+	const featureRel = `apps/web/src/features/room/${stamp}-reloc.tsx`;
+	writeProbe(featureRel, [
+		`import type { Leak as A } from '../../../test/${stamp}-leak.ts';`,
+		`import type { Leak as B } from '../../../lib/${stamp}-leak.ts';`,
+		'export type Hold = A | B;',
+	].join('\n'));
+	const ctrl = `apps/web/src/features/room/${stamp}-ctrl.tsx`;
+	writeProbe(ctrl, storageLeak);
+	for (const rel of [`apps/web/test/${stamp}-leak.ts`, `apps/web/lib/${stamp}-leak.ts`, ctrl]) {
+		const { status, out } = publicEslint(rel);
+		expect(status, rel).toBe(1);
+		expect(out, rel).toContain('agora/import-boundary');
+	}
+	const { status, out } = publicEslint(featureRel);
+	expect(status).toBe(1);
+	expect(out).toContain('agora/import-boundary');
+	expect(out).toMatch(/apps\/web\/src|relative import escapes/);
+}, 120_000);
+
+test('portable client-core rejects application and storage edges', async () => {
+	const file = 'packages/client-core/src/model.ts';
+	expect(await has("import type { X } from '../../../apps/web/src/client/index.ts'; export type Leak = X;", file, 'agora/import-boundary', 'application code')).toBe(true);
+	expect(await has("import type { Database } from '@agora/storage'; export type Leak = keyof Database;", file, 'agora/import-boundary')).toBe(true);
+}, 120_000);
+
+test('inline eslint disables cannot suppress import-boundary under noInlineConfig', async () => {
+	const leak = "import type { Database } from '@agora/storage'; export type Leak = keyof Database;";
+	expect(await has(`/* eslint-disable */\n${leak}`, feature, 'agora/import-boundary', 'renderer')).toBe(true);
+	expect(await has(`/* eslint-disable agora/import-boundary */\n${leak}`, feature, 'agora/import-boundary', 'renderer')).toBe(true);
+	expect(await has(`${leak} // eslint-disable-line agora/import-boundary`, feature, 'agora/import-boundary', 'renderer')).toBe(true);
+}, 120_000);
+
+test('removing import-boundary protection makes denial assertions turn red', async () => {
+	const code = "import type { Database } from '@agora/storage'; export type Leak = keyof Database;";
+	expect((await agora(code, feature)).some((m) => m.ruleId === 'agora/import-boundary')).toBe(true);
+	const messages = await agora(code, feature, new ESLint({ cwd: root, ignore: false, overrideConfig: [{ rules: { 'agora/import-boundary': 'off' } }] }));
+	expect(messages.filter((m) => m.ruleId === 'agora/import-boundary')).toEqual([]);
+	expect(() => { expect(messages.some((m) => m.ruleId === 'agora/import-boundary')).toBe(true); }).toThrow('expected false to be true');
+}, 120_000);

@@ -3,15 +3,24 @@ import tseslint from 'typescript-eslint';
 import { importBoundaryRule } from './scripts/boundary-policy.ts';
 import { publicTypesRule } from './scripts/public-types.ts';
 
+const exts = '{ts,tsx,mts,cts,js,jsx,mjs,cjs}';
+const agoraPlugin = {
+	agora: {
+		rules: {
+			'import-boundary': importBoundaryRule,
+			'public-types': publicTypesRule,
+		},
+	},
+};
+const noInline = { noInlineConfig: true };
+
 export default tseslint.config(
 	{ ignores: ['node_modules/', '.docs-dist/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/swift/'] },
 	js.configs.recommended,
 	...tseslint.configs.strictTypeChecked,
 	...tseslint.configs.stylisticTypeChecked,
 	{
-		languageOptions: {
-			parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname },
-		},
+		languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
 		rules: {
 			'@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
 			'@typescript-eslint/explicit-module-boundary-types': 'error',
@@ -21,13 +30,30 @@ export default tseslint.config(
 		},
 	},
 	{
-		files: ['contracts/**/*.ts', 'packages/*/src/**/*.ts', 'apps/*/src/**/*.ts'],
-		ignores: ['contracts/test/**'],
-		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule, 'public-types': publicTypesRule } } },
-		rules: { 'agora/import-boundary': 'error', 'agora/public-types': 'error' },
+		// Guard apps/*/src and the entire apps/web tree so non-src relocation cannot bypass owner import rules.
+		files: [`contracts/**/*.${exts}`, `packages/*/src/**/*.${exts}`, `apps/*/src/**/*.${exts}`, `apps/web/**/*.${exts}`],
+		ignores: ['contracts/test/**', '**/*.{mjs,cjs}'],
+		linterOptions: noInline,
+		plugins: agoraPlugin,
+		rules: {
+			'agora/import-boundary': 'error',
+			'agora/public-types': 'error',
+		},
 	},
 	{
-		files: ['contracts/**/*.mjs'],
+		files: [`apps/*/src/**/*.{mjs,cjs}`, `packages/*/src/**/*.{mjs,cjs}`, `apps/web/**/*.{mjs,cjs}`],
+		extends: [tseslint.configs.disableTypeChecked],
+		linterOptions: noInline,
+		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule } } },
+		rules: { 'agora/import-boundary': 'error' },
+	},
+	{
+		files: ['contracts/**/*.js'],
+		rules: { 'agora/public-types': 'off' },
+	},
+	{
+		files: ['contracts/**/*.{mjs,cjs}'],
+		linterOptions: noInline,
 		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule } } },
 		rules: { 'agora/import-boundary': 'error' },
 	},
@@ -37,13 +63,13 @@ export default tseslint.config(
 	},
 	{
 		files: ['**/*.mjs', '**/*.js', 'docs/site/test/*.test.ts'],
+		ignores: ['apps/*/src/**', 'packages/*/src/**', 'apps/web/**'],
 		extends: [tseslint.configs.disableTypeChecked],
 		languageOptions: { globals: { console: 'readonly', fetch: 'readonly', process: 'readonly' } },
 		rules: { 'no-console': 'off' },
 	},
 	{
 		files: ['docs/site/*.mjs', 'scripts/foundation*.mjs'],
-		// JavaScript build tools have no TypeScript annotation syntax.
 		rules: { '@typescript-eslint/explicit-module-boundary-types': 'off' },
 	},
 );

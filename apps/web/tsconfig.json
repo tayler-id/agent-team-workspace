@@ -1,0 +1,11 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"lib": ["es2024", "DOM"],
+		"jsx": "react-jsx",
+		"types": [],
+		"allowJs": true,
+		"checkJs": true
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.mts", "src/**/*.cts", "src/**/*.js", "src/**/*.jsx", "src/**/*.mjs", "src/**/*.cjs"]
+}

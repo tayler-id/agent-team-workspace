@@ -9,8 +9,8 @@
 	},
 	"scripts": {
 		"lint": "eslint .",
-		"typecheck": "tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json",
-		"boundaries": "vitest run --project unit packages/client-core/test/boundaries.test.ts packages/client-core/test/export-maps.test.ts --reporter=json --outputFile=.scratch/boundaries.json",
+		"typecheck": "tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json && tsc -p apps/web/tsconfig.json",
+		"boundaries": "vitest run --project unit packages/client-core/test/boundaries.test.ts packages/client-core/test/export-maps.test.ts packages/client-core/test/app-architecture.test.ts --reporter=json --outputFile=.scratch/boundaries.json",
 		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs && node scripts/verify-design-handoff.mjs && pnpm docs:validate && pnpm docs:test",
 		"docs:dev": "node docs/site/serve.mjs",
 		"docs:build": "node docs/site/build.mjs",
