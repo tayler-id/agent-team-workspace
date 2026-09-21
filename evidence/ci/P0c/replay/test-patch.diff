@@ -1,26 +1,40 @@
 diff --git a/packages/storage/test/postgres-socket.test.ts b/packages/storage/test/postgres-socket.test.ts
-index dd21095..46c5c61 100644
+index dd21095..280aaca 100644
 --- a/packages/storage/test/postgres-socket.test.ts
 +++ b/packages/storage/test/postgres-socket.test.ts
-@@ -1,12 +1,14 @@
+@@ -1,12 +1,26 @@
 -import { mkdirSync, mkdtempSync, realpathSync, rmSync, statSync } from 'node:fs';
 +import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, renameSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
 +import { spawnSync } from 'node:child_process';
 +import { createHash, randomUUID } from 'node:crypto';
  import { afterAll, expect, test } from 'vitest';
- import { allocatePostgresSocket } from '../../../scripts/postgres-socket.ts';
+-import { allocatePostgresSocket } from '../../../scripts/postgres-socket.ts';
++import { allocatePostgresSocket as allocate } from '../../../scripts/postgres-socket.ts';
  
  mkdirSync('.scratch', { recursive: true });
 -const artifacts = mkdtempSync(`${realpathSync('.scratch')}/socket-test-`);
+-afterAll(() => { rmSync(artifacts, { recursive: true }); });
 +const artifacts = mkdtempSync(`${realpathSync('.scratch')}/socket-test-deep-artifacts-`);
- afterAll(() => { rmSync(artifacts, { recursive: true }); });
++const leases: ReturnType<typeof allocate>[] = [];
++function allocatePostgresSocket(directory: string, runId?: string): ReturnType<typeof allocate> {
++	const lease = allocate(directory, runId);
++	leases.push(lease);
++	console.error(JSON.stringify({ allocated: lease.identity, mode: statSync(lease.identity.socketDir).mode & 0o777 }));
++	return lease;
++}
++afterAll(() => {
++	const removed = leases.every(lease => !existsSync(lease.identity.socketDir));
++	console.error(JSON.stringify({ cleanup: removed, runs: leases.map(lease => lease.identity.runId) }));
++	expect(removed).toBe(true);
++	rmSync(artifacts, { recursive: true });
++});
  
 -test('allocation baseline: creates a private empty directory without touching artifacts', () => {
 +test('allocation baseline: creates a private directory without touching artifacts', () => {
  	const lease = allocatePostgresSocket(artifacts);
  	try {
  		lease.verify();
-@@ -14,3 +16,80 @@ test('allocation baseline: creates a private empty directory without touching ar
+@@ -14,3 +28,80 @@ test('allocation baseline: creates a private empty directory without touching ar
  		expect(lease.identity.artifactDir).toBe(artifacts);
  	} finally { lease.cleanup(); }
  });

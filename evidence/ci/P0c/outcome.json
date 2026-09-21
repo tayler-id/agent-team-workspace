@@ -1,0 +1,309 @@
+{
+  "scope": "CI P0c A allocation only",
+  "outcome": "pass",
+  "trust": "owner-observed, not trusted CI",
+  "base": "95f35277fbfc821be148029521222f0de617d7de",
+  "parent": "c9e6fe16c1f107da95d77f35d092e0a923781783",
+  "head": "9797eb15e34a72116b1802c5bc5efeb3fffa5c62",
+  "tree": "84f047b5d06006ac86ac1cb8f8b40cb6037132a1",
+  "source_tree_digest": "sha256:58be6faafc752eba34b41e45dac50703a6a755e21d4bcd7c195622307fc1ef91",
+  "test_patch_digest": "sha256:6bda9a7fc89c15df797d94e89c2df61cc17c6a609d4eb93d477a3d63b70413af",
+  "counts": {
+    "authored": {
+      "files": 8,
+      "raw": 202,
+      "nonblank": 184,
+      "meaningful": 162
+    },
+    "generated": {
+      "files": 1,
+      "raw": 3,
+      "nonblank": 3,
+      "meaningful": 3
+    },
+    "receipts": {
+      "files": 32,
+      "raw": 1264,
+      "nonblank": 1171,
+      "meaningful": 1014
+    },
+    "evidence-prose": {
+      "files": 2,
+      "raw": 25,
+      "nonblank": 14,
+      "meaningful": 14
+    }
+  },
+  "count_method": "Added plus removed lines; meaningful excludes blanks, punctuation-only lines and // comments. Authored includes docs/config/tests; evidence prose counted separately but included in the 200-line assertion. Native receipts and generated mirror are visible exclusions.",
+  "changed_paths": {
+    ".agents/skills/verify-agora/SKILL.md": "authored",
+    "agora/feature-map.json": "authored",
+    "docs/runbooks/development.md": "authored",
+    "docs/site/atlas.json": "authored",
+    "docs/site/foundation.md": "authored",
+    "docs/site/progress.md": "generated",
+    "docs/site/site.json": "authored",
+    "evidence/ci/P0c/audit.json": "receipts",
+    "evidence/ci/P0c/check-boundaries.log": "receipts",
+    "evidence/ci/P0c/check-check.log": "receipts",
+    "evidence/ci/P0c/check-client_replay------json---swift.log": "receipts",
+    "evidence/ci/P0c/check-contracts_conform------json.log": "receipts",
+    "evidence/ci/P0c/check-docs_build.log": "receipts",
+    "evidence/ci/P0c/check-scripts_probe-center_mjs---scenarios.log": "receipts",
+    "evidence/ci/P0c/check-scripts_test-design-checks_mjs.log": "receipts",
+    "evidence/ci/P0c/check-scripts_test-design-handoff-checks_mjs.log": "receipts",
+    "evidence/ci/P0c/check-scripts_verify-design_mjs.log": "receipts",
+    "evidence/ci/P0c/check-scripts_with-test-postgres_mjs-bash--c-node_packages_storage_src_migrate-cli_ts__node_packages_storage_src_migrate-cli_ts.log": "receipts",
+    "evidence/ci/P0c/check-scripts_with-test-postgres_mjs-node-scripts_probe-center_mjs.log": "receipts",
+    "evidence/ci/P0c/check-test_pg.log": "receipts",
+    "evidence/ci/P0c/counterfactual-cleanup.json": "receipts",
+    "evidence/ci/P0c/counterfactual-identity.json": "receipts",
+    "evidence/ci/P0c/counterfactual-postgres.log": "receipts",
+    "evidence/ci/P0c/counterfactual-transcript.json": "receipts",
+    "evidence/ci/P0c/docs-check.log": "receipts",
+    "evidence/ci/P0c/doctor.log": "receipts",
+    "evidence/ci/P0c/focused.log": "receipts",
+    "evidence/ci/P0c/harness.log": "receipts",
+    "evidence/ci/P0c/lint.log": "receipts",
+    "evidence/ci/P0c/plan-check.log": "receipts",
+    "evidence/ci/P0c/recorder.log": "receipts",
+    "evidence/ci/P0c/red-before-edit.log": "receipts",
+    "evidence/ci/P0c/replay/green.log": "receipts",
+    "evidence/ci/P0c/replay/red.log": "receipts",
+    "evidence/ci/P0c/replay/test-patch.diff": "receipts",
+    "evidence/ci/P0c/reproduction-postgres.log": "receipts",
+    "evidence/ci/P0c/reproduction.log": "receipts",
+    "evidence/ci/P0c/review.md": "evidence-prose",
+    "evidence/ci/P0c/scope-proposal.md": "evidence-prose",
+    "evidence/ci/P0c/typecheck.log": "receipts",
+    "evidence/ci/P0c/validated-head.txt": "receipts",
+    "packages/storage/test/postgres-socket.test.ts": "authored",
+    "scripts/postgres-socket.ts": "authored"
+  },
+  "owned_replay_worktrees_remaining": [],
+  "guards": [
+    {
+      "guard": "short-selection",
+      "weakened": false,
+      "source": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+      "input": "a0a241fb7ffea2c48c323c2b08433d4c6feb9ce138ccf43f6974dc4275f6e73f",
+      "exit": 0,
+      "identity": "{\"runId\":\"3eaa1073-e4eb-49d9-95af-66b6613d221a\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-YmvCeL\",\"socketDir\":\"/private/tmp/agora-p0c-3eaa1073-e4eb-49d9-95af-66b6613d221a\"}\n",
+      "diagnostic": ""
+    },
+    {
+      "guard": "short-selection",
+      "weakened": true,
+      "source": "3518b355692ac373ae072f92d8a5076f70cf34a09e1e49092e4d608a8061cb0d",
+      "input": "a0a241fb7ffea2c48c323c2b08433d4c6feb9ce138ccf43f6974dc4275f6e73f",
+      "exit": 1,
+      "identity": "{\"runId\":\"3eaa1073-e4eb-49d9-95af-66b6613d221a\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-YmvCeL\",\"socketDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-YmvCeL/agora-p0c-3eaa1073-e4eb-49d9-95af-66b6613d221a\"}\n",
+      "diagnostic": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: short selection denial\n    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/[eval1]:4:14\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:230:26\n    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.16.0\n"
+    },
+    {
+      "guard": "ownership",
+      "weakened": false,
+      "source": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+      "input": "76e18b92bd8811c598dfe809cdf0e843cc448a609dc331c231ed3287180bcfa3",
+      "exit": 0,
+      "identity": "{\"runId\":\"4798a65f-89a5-4139-add7-00dcc87f6e9a\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-YmvCeL\",\"socketDir\":\"/private/tmp/agora-p0c-4798a65f-89a5-4139-add7-00dcc87f6e9a\"}\n",
+      "diagnostic": ""
+    },
+    {
+      "guard": "ownership",
+      "weakened": true,
+      "source": "faa2b6f2aea7493d9f01d8608d33340433535e8e50b1c9ce0d29af3aae167be1",
+      "input": "76e18b92bd8811c598dfe809cdf0e843cc448a609dc331c231ed3287180bcfa3",
+      "exit": 1,
+      "identity": "{\"runId\":\"4798a65f-89a5-4139-add7-00dcc87f6e9a\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-YmvCeL\",\"socketDir\":\"/private/tmp/agora-p0c-4798a65f-89a5-4139-add7-00dcc87f6e9a\"}\n",
+      "diagnostic": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected exception: ownership denial\n    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/[eval1]:4:75\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:230:26\n    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: /socket ownership/,\n  operator: 'throws',\n  diff: 'simple'\n}\n\nNode.js v24.16.0\n"
+    }
+  ],
+  "cleanup": {
+    "runId": "9cfeccae-b9ec-4836-b582-e775d61fc153",
+    "socketRemoved": true,
+    "dataRemoved": true,
+    "logsRetained": true,
+    "evidenceRetained": true,
+    "postmasterStopped": true
+  },
+  "known_limits": [
+    "P0a unchanged design-negative sandbox fails, retained separately at the first code head",
+    "Wrapper integration, cancellation, timeout and startup-failure qualification deferred to B/C",
+    "Candidate dependency state unchanged; recorder frozen installs use task-local scratch store/cache",
+    "No hosted, product, browser or foundation-readiness qualification; independent review required"
+  ],
+  "artifacts": [
+    {
+      "path": "evidence/ci/P0c/audit.json",
+      "bytes": 310,
+      "digest": "sha256:53fffac9d1f4c670d03248d227edd0f8963297eced25ee4d32d6e29d5d5b7c09"
+    },
+    {
+      "path": "evidence/ci/P0c/check-boundaries.log",
+      "bytes": 433,
+      "digest": "sha256:f3939a6ec4181b2cade1df3e10c9d3ec35db3b3da4f30701a41a03cc919ad469"
+    },
+    {
+      "path": "evidence/ci/P0c/check-check.log",
+      "bytes": 7567,
+      "digest": "sha256:f95c5f804b2bdcb51aa4f966277a0f85420e9aa281fdc20828924093e0cf808d"
+    },
+    {
+      "path": "evidence/ci/P0c/check-client_replay------json---swift.log",
+      "bytes": 22245,
+      "digest": "sha256:58dc1d7a9863ff2b4d79fa11f32fd9d29e29a7e697fdf9aefc04b3e521535723"
+    },
+    {
+      "path": "evidence/ci/P0c/check-contracts_conform------json.log",
+      "bytes": 65735,
+      "digest": "sha256:2e87717880f4b270a9af93201e8b0ed1e74f45ee5affe41ec651e1f9118b9f6c"
+    },
+    {
+      "path": "evidence/ci/P0c/check-docs_build.log",
+      "bytes": 237,
+      "digest": "sha256:a2056d02bb5b2a3c09872baa306cd8d9da4a7926ced15d3d73af5634f20fde5c"
+    },
+    {
+      "path": "evidence/ci/P0c/check-scripts_probe-center_mjs---scenarios.log",
+      "bytes": 1402,
+      "digest": "sha256:06c1a8516ce9af56d4e441d6c02ea79c69a6c9f7cef4e005eaad5c20d16ccfb8"
+    },
+    {
+      "path": "evidence/ci/P0c/check-scripts_test-design-checks_mjs.log",
+      "bytes": 1437,
+      "digest": "sha256:6a060fe157d53c0fea5a709b12c5f6707dc96c21bc4c555b1c40a6aa2b787da3"
+    },
+    {
+      "path": "evidence/ci/P0c/check-scripts_test-design-handoff-checks_mjs.log",
+      "bytes": 784,
+      "digest": "sha256:3b178c9fb2b46b15b1472a0e92330ac8d5fffcc6797aa4696f609a8f9644f812"
+    },
+    {
+      "path": "evidence/ci/P0c/check-scripts_verify-design_mjs.log",
+      "bytes": 588,
+      "digest": "sha256:950552a73075aa5249ac52d1a9a840e963169dbc7d043f69849f8e39a0b1c299"
+    },
+    {
+      "path": "evidence/ci/P0c/check-scripts_with-test-postgres_mjs-bash--c-node_packages_storage_src_migrate-cli_ts__node_packages_storage_src_migrate-cli_ts.log",
+      "bytes": 583,
+      "digest": "sha256:afb5eb98a835bccc65bd36406eb479d1c4bef1a25d48b150c6815fa305329254"
+    },
+    {
+      "path": "evidence/ci/P0c/check-scripts_with-test-postgres_mjs-node-scripts_probe-center_mjs.log",
+      "bytes": 4140,
+      "digest": "sha256:3fd31e4549e26f4979c20f4ff64c8650831650f69e9f1df9bc216de144e0d0f0"
+    },
+    {
+      "path": "evidence/ci/P0c/check-test_pg.log",
+      "bytes": 418,
+      "digest": "sha256:e317dc8a039dc86eadfac41da5275df6381da5b2102639c640667df68fcccd83"
+    },
+    {
+      "path": "evidence/ci/P0c/counterfactual-cleanup.json",
+      "bytes": 158,
+      "digest": "sha256:bc62d6460ee33a58a065bda6774de5323c26c8f94b2b51ae9310d6d01162d7e9"
+    },
+    {
+      "path": "evidence/ci/P0c/counterfactual-identity.json",
+      "bytes": 910,
+      "digest": "sha256:c5a08bfd33cc4c1513af026e806f1ab57388205e0f0783e351858679a8821007"
+    },
+    {
+      "path": "evidence/ci/P0c/counterfactual-postgres.log",
+      "bytes": 5003,
+      "digest": "sha256:088e79cc8bc4842e7c6e00266d7abce0b1a5b76f65ab30cc21a107cb2cdbd9ae"
+    },
+    {
+      "path": "evidence/ci/P0c/counterfactual-transcript.json",
+      "bytes": 125733,
+      "digest": "sha256:6def65559408ea260a53d38f833387e8566e97f4ce88494fad9e024aa648bbeb"
+    },
+    {
+      "path": "evidence/ci/P0c/docs-check.log",
+      "bytes": 4607,
+      "digest": "sha256:c3017c1ab9f3708c3d79ffcef6a366d9a2108a845e7a97b9ccb45ef562c2f442"
+    },
+    {
+      "path": "evidence/ci/P0c/doctor.log",
+      "bytes": 206,
+      "digest": "sha256:f750f69ec3044caf874838908d14f078a44b82e6fec4827a97e028d4201acaf3"
+    },
+    {
+      "path": "evidence/ci/P0c/focused.log",
+      "bytes": 8882,
+      "digest": "sha256:a3958f31a39dc905ede9cf462a77b806ff1c232024751e3be0039d5010daafdd"
+    },
+    {
+      "path": "evidence/ci/P0c/harness.log",
+      "bytes": 249,
+      "digest": "sha256:afae65817be89a1735c052c03aff133c6e94169241e4fb10bf05a26c33200011"
+    },
+    {
+      "path": "evidence/ci/P0c/lint.log",
+      "bytes": 110,
+      "digest": "sha256:58224f07dc182fe7acc93e82f23b3152474b7d390b0c6d2fd183edd3174c8c96"
+    },
+    {
+      "path": "evidence/ci/P0c/plan-check.log",
+      "bytes": 3522,
+      "digest": "sha256:6216bdb31816bccf18d3caa739eab44e68518a1c2b0feea4c111218e5c303ee0"
+    },
+    {
+      "path": "evidence/ci/P0c/recorder.log",
+      "bytes": 312,
+      "digest": "sha256:8587f40dbae17332a0a70a37300de223e918172d71ed81f87bce4a8b31a62353"
+    },
+    {
+      "path": "evidence/ci/P0c/red-before-edit.log",
+      "bytes": 1363,
+      "digest": "sha256:4cd4008f636f179c0ba87d90803a2c1828e1b08cfab7bd232ec13d7ace07b55b"
+    },
+    {
+      "path": "evidence/ci/P0c/replay/green.log",
+      "bytes": 1480,
+      "digest": "sha256:5165615a4374574fb72330c7595886faf19d435a47ee15f34a3cbb5adecc02f1"
+    },
+    {
+      "path": "evidence/ci/P0c/replay/red.log",
+      "bytes": 3359,
+      "digest": "sha256:d8afdcfed227aebd7687ded43830699534f433ebcc81ce13cd95e92b0dbaa5d7"
+    },
+    {
+      "path": "evidence/ci/P0c/replay/test-patch.diff",
+      "bytes": 7218,
+      "digest": "sha256:6bda9a7fc89c15df797d94e89c2df61cc17c6a609d4eb93d477a3d63b70413af"
+    },
+    {
+      "path": "evidence/ci/P0c/reproduction-postgres.log",
+      "bytes": 916,
+      "digest": "sha256:872f483f43c602f8c891ca6b23da5660f623cb9487ef5eff8f007fce551bb054"
+    },
+    {
+      "path": "evidence/ci/P0c/reproduction.log",
+      "bytes": 1744,
+      "digest": "sha256:7a060c94aa19682b8d705a803b11956b2480c1a71ee98cdf0dcf0d2c1f593541"
+    },
+    {
+      "path": "evidence/ci/P0c/review.md",
+      "bytes": 3580,
+      "digest": "sha256:7fa4d059a4b1391ea62b207853f7c164cf87018d2eea1e696d99756b85b194a3"
+    },
+    {
+      "path": "evidence/ci/P0c/scope-proposal.md",
+      "bytes": 2767,
+      "digest": "sha256:c43cb84ee7492111cb03e33326995a278f322f22df8d85ef84f45571ab9601d0"
+    },
+    {
+      "path": "evidence/ci/P0c/typecheck.log",
+      "bytes": 172,
+      "digest": "sha256:3fb397e503accf40f3a71f1a5351fe5dd715b9cff732b36f8ecdf34921e4a474"
+    },
+    {
+      "path": "evidence/ci/P0c/validated-head.txt",
+      "bytes": 41,
+      "digest": "sha256:554d060963f3f607fa9de7dbbd9e3314e246c8094e32d630b45b56e4d4ee35b3"
+    }
+  ],
+  "artifact_bytes": 278211
+}
