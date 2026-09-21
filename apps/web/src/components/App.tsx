@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactElement } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactElement } from 'react';
 import { rows as projectRows, status as projectStatus, type Presentation } from '../projection.ts';
 import { useSelector, type Store } from '../store.ts';
 import { type RoomHeader, type RoomTransportPort, useTransportState } from '../transport/port.ts';
@@ -38,8 +38,9 @@ export function App({ store, port, header, presentation, digest = subtleDigest }
 		const timer = setTimeout(() => { setAnnouncement(`${count - previous} new message${count - previous === 1 ? '' : 's'}.`); }, announceDelay);
 		return () => { clearTimeout(timer); };
 	}, [rows.length]);
-	const loadedOlder = (count: number): void => { setNotice(`Loaded ${count} older messages.`); };
-	const cite = (messageId: string): void => { setFocusRequest(undefined); setTimeout(() => { setFocusRequest(messageId); }, 0); };
+	// Stable across renders so an unrelated connection or command update does not break MessageRow's memoization.
+	const loadedOlder = useCallback((count: number): void => { setNotice(`Loaded ${count} older messages.`); }, []);
+	const cite = useCallback((messageId: string): void => { setFocusRequest(undefined); setTimeout(() => { setFocusRequest(messageId); }, 0); }, []);
 	const composerDisabled = !room || status.phase === 'revoked';
 
 	return (
