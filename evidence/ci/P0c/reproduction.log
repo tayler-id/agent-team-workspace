@@ -1,0 +1,27 @@
+Mon Sep 21 03:06:28 UTC 2026
+95f35277fbfc821be148029521222f0de617d7de
+95f35277fbfc821be148029521222f0de617d7de
+{"execPath":"/Users/taylerramsay/.local/node/bin/node","version":"v24.16.0"}
+pg_ctl (PostgreSQL) 18.4 (Homebrew)
+drwx------ /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/deliberately-deep-private-artifacts/unchanged-long-data-logs-and-evidence
+prospective socket bytes:      199
+7a0a68ad738eec74603581abe0d61484b023c5d8917d84586ffd62b826b70d04  scripts/with-test-postgres.mjs
+ 3886 84191 postgres: taylerramsay agora 127.0.0.1(61478) idle  
+ 3902 84191 postgres: taylerramsay agora 127.0.0.1(61514) idle  
+ 5462 84191 postgres: taylerramsay agora 127.0.0.1(61599) idle  
+ 5478 84191 postgres: taylerramsay agora 127.0.0.1(61635) idle  
+80436 84191 postgres: taylerramsay agora 127.0.0.1(60087) idle  
+84191     1 /opt/homebrew/opt/postgresql@18/bin/postgres -D /opt/homebrew/var/postgresql@18
+84194 84191 postgres: io worker 0  
+84195 84191 postgres: io worker 1  
+84196 84191 postgres: io worker 2  
+84197 84191 postgres: checkpointer   
+84198 84191 postgres: background writer   
+84200 84191 postgres: walwriter   
+84201 84191 postgres: autovacuum launcher   
+84202 84191 postgres: logical replication launcher   
+97422 84191 postgres: taylerramsay agora 127.0.0.1(61443) idle  
+{"schema_version":"agora.test-postgres/v1","outcome":"blocked","exit":70,"message":"pg_ctl start failed","detail":"pg_ctl: could not start server\nExamine the log output.\nwaiting for server to start.... stopped waiting\n"}
+wrapper exit: 70
+source state after reproduction:
+Inventory note: removed the invoking agent argv (which repeated the task brief); PostgreSQL rows and diagnostics are unchanged.

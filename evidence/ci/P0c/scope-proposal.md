@@ -1,0 +1,12 @@
+# P0c reproduction and required scope decision
+
+Parent/main: `95f35277fbfc821be148029521222f0de617d7de`. No implementation changed or dependency installation attempted. Official Node `/Users/taylerramsay/.local/node/bin/node` is v24.16.0; PostgreSQL is Homebrew 18.4, not the unexercised target minors.
+
+`reproduction.log` records the untouched public wrapper exiting 70. `reproduction-postgres.log` preserves the exact native diagnostic: Unix-domain socket path is too long (maximum 103 bytes), followed by `FATAL: could not create any Unix-domain sockets`. Actual prospective socket length is **199 bytes** (correcting the status-line transcription of 209). The deep artifact parent was mode 0700. The existing wrapper removed its allocated data directory. The observation-only pg_ctl shim copied the native log after pg_ctl returned and before the unchanged wrapper deleted it; arguments and exit status were preserved. No shared server was modified.
+
+## Requested boundaries
+
+1. Authorize only run-unique `/tmp/agora-p0c-*` private socket directories outside this worktree for controlled counterfactuals and tests. On this macOS host `/tmp` resolves through `/private/tmp`. The worktree root is already long; a socket short enough for the deliberately deeper data path cannot live below it. The blanket rule to modify nothing outside this worktree conflicts with the requested short-socket execution. Data, logs, evidence and disposable source copies will stay below this worktree, unchanged in length.
+2. Approve staged P0c deliveries rather than compressing ownership, asynchronous cancellation, integration tests, mutation proofs and five documentation owners into 200 authored lines. Proposed dependent slices: (a) owned short-socket allocation/identity and denial tests; (b) wrapper integration with bounded cancellation/startup-failure cleanup, deep-path and process tests; (c) any remaining guard-negative/literal-verifier integration proof. Each must have its own relevant documentation and evidence, stay below 200 meaningful authored lines/eight source files, and make no full-P0c readiness claim before all dependent checks pass. Alternatively authorize an explicit larger target with an independently reviewed rationale, which is not the brief's current size contract. Prefer splitting rather than code-golfing safety logic or omitting tests.
+
+No implementation candidate or passing counterfactual is claimed. Awaiting firstmate's authorized scope, not a dependency blocker.

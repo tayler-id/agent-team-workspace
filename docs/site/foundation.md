@@ -41,6 +41,18 @@ U01a milestone qualification followed at revision `b9c65c4`: all ten plan-define
 
 After the seeded `606cba2` snapshot, U01a.B03 landed a deeply immutable client state machine and portable import/public-type guards. It turns validated snapshots and events into replay, acknowledgement and command decisions without a renderer or network transport. The [source-owned synchronization explanation](repo:docs/features/client-synchronization.md) covers its state flow and fixture-only limits. `scripts/client-fixture.ts` translates fixtures outside the core; `scripts/drive-client-core.ts` compares TypeScript and Swift through `pnpm client:replay -- --json --swift`. `scripts/boundary-policy.ts` and `scripts/public-types.ts` enforce dependency and public-port boundaries through `pnpm boundaries`.
 
+### PostgreSQL socket ownership (CI P0c A)
+
+For contributors, this isolated allocation helper prepares short private sockets without moving long data or evidence paths. It adds no user-facing room behavior. The PostgreSQL wrapper is unchanged: integration, cancellation, timeout and process cleanup belong to dependent slice B; integrated guard proof belongs to C. This is not complete P0c or foundation qualification.
+
+```flow
+Long task paths | Keep data, logs and retained evidence inside the worktree.
+Short private socket | Allocate a run-bound 0700 directory under the canonical local temporary root.
+Ownership boundary | Verify exact identity before use or removal; preserve evidence and unrelated resources.
+```
+
+The [allocation helper](repo:scripts/postgres-socket.ts) and [literal tests](repo:packages/storage/test/postgres-socket.test.ts) start with a test-only baseline. The [runbook](repo:docs/runbooks/development.md) distinguishes this allocation proof from server lifecycle readiness.
+
 ## Verification and proof
 
 Inspected committed [center implementation](repo:apps/center/src/app.ts), [scope decision](repo:packages/domain/src/policy/fixture-scope.ts), [storage implementation](repo:packages/storage/src/fixture.ts), [public policy tests](repo:apps/center/test/policy.test.ts), and [real database tests](repo:packages/storage/test/fixture.pg.test.ts).

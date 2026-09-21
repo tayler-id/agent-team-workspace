@@ -3,6 +3,11 @@
   "date": "2026-09-20",
   "features": [
     {
+      "id": "postgres-socket", "title": "PostgreSQL socket ownership", "status": "In progress",
+      "why": "P0c A allocation baseline only; wrapper integration and lifecycle proof remain B/C.", "page": "foundation.md",
+      "proof": ["repo:scripts/postgres-socket.ts", "repo:packages/storage/test/postgres-socket.test.ts", "repo:evidence/ci/P0c/harness.log"]
+    },
+    {
       "id": "task-proof",
       "title": "Task proof admission",
       "status": "Built",

@@ -61,6 +61,7 @@
     {"path": "scripts/test-design-checks.mjs", "page": "verification.md"},
     {"path": "scripts/verify-design.mjs", "page": "verification.md"},
     {"path": "scripts/with-test-postgres.mjs", "page": "cli.md"},
+    {"path": "scripts/postgres-socket.ts", "page": "foundation.md"},
     {"path": "docs/site/validate.mjs", "page": "authoring.md"},
     {"path": "docs/site/render.mjs", "page": "authoring.md"},
     {"path": "docs/site/diagram.mjs", "page": "authoring.md"},

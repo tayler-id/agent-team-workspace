@@ -1,0 +1,5 @@
+2026-09-20 23:06:29.372 EDT [36476] LOG:  starting PostgreSQL 18.4 (Homebrew) on aarch64-apple-darwin25.6.0, compiled by Apple clang version 21.0.0 (clang-2100.1.1.101), 64-bit
+2026-09-20 23:06:29.372 EDT [36476] LOG:  Unix-domain socket path "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/deliberately-deep-private-artifacts/unchanged-long-data-logs-and-evidence/agora-pg-dE5DHt/.s.PGSQL.5432" is too long (maximum 103 bytes)
+2026-09-20 23:06:29.372 EDT [36476] WARNING:  could not create Unix-domain socket in directory "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/deliberately-deep-private-artifacts/unchanged-long-data-logs-and-evidence/agora-pg-dE5DHt"
+2026-09-20 23:06:29.372 EDT [36476] FATAL:  could not create any Unix-domain sockets
+2026-09-20 23:06:29.373 EDT [36476] LOG:  database system is shut down

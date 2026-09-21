@@ -33,6 +33,12 @@ node scripts/with-test-postgres.mjs <command>
 
 ## Drive
 
+CI P0c A is allocation-only, not wrapper/lifecycle readiness. Its direct driver requires Node 24, installed Vitest and a writable local temporary root; no PostgreSQL server or Swift is needed for this focused scenario. Retain its output under `evidence/ci/P0c/`; integration and process cleanup remain slices B/C.
+
+```sh
+pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts
+```
+
 ```sh
 pnpm contracts:check
 pnpm contracts:conform -- --json
