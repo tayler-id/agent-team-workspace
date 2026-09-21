@@ -62,6 +62,16 @@ test('renderer footguns: effects only in framework; browser APIs only in host or
 	const effect = "import { useEffect } from 'react'; export function Card(): null { useEffect(() => undefined, []); return null; }";
 	expect(await has(effect, feature, 'agora/renderer-footgun', owners.framework)).toBe(true);
 	expect(await has(effect, framework, 'agora/renderer-footgun')).toBe(false);
+	const aliased = "import { useEffect as sideEffect } from 'react'; export function Card(): null { sideEffect(() => undefined, []); return null; }";
+	expect(await has(aliased, feature, 'agora/renderer-footgun', 'useEffect')).toBe(true);
+	expect(await has(aliased, framework, 'agora/renderer-footgun')).toBe(false);
+	const namespaced = "import * as React from 'react'; export function Card(): null { React.useLayoutEffect(() => undefined, []); return null; }";
+	expect(await has(namespaced, feature, 'agora/renderer-footgun', 'useLayoutEffect')).toBe(true);
+	expect(await has(namespaced, framework, 'agora/renderer-footgun')).toBe(false);
+	const defaultNs = "import React from 'react'; export function Card(): null { React.useInsertionEffect(() => undefined, []); return null; }";
+	expect(await has(defaultNs, feature, 'agora/renderer-footgun', 'useInsertionEffect')).toBe(true);
+	const localSameName = 'export function useEffect(run: () => void): void { run(); } export function Card(): null { useEffect(() => undefined); return null; }';
+	expect(await has(localSameName, feature, 'agora/renderer-footgun')).toBe(false);
 	const browser = 'export function read(): string { return window.localStorage.getItem("k") ?? ""; }';
 	expect(await has(browser, feature, 'agora/renderer-footgun', owners.host)).toBe(true);
 	expect(await has(browser, client, 'agora/renderer-footgun', 'Host/framework')).toBe(true);
@@ -113,6 +123,8 @@ test('removing app-architecture protections makes denial assertions turn red', a
 	for (const [rule, file, code] of [
 		['agora/import-boundary', feature, "import type { Database } from '@agora/storage'; export type Leak = keyof Database;"],
 		['agora/renderer-footgun', feature, "import { useEffect } from 'react'; export function Card(): null { useEffect(() => undefined, []); return null; }"],
+		['agora/renderer-footgun', feature, "import { useEffect as sideEffect } from 'react'; export function Card(): null { sideEffect(() => undefined, []); return null; }"],
+		['agora/renderer-footgun', feature, "import * as React from 'react'; export function Card(): null { React.useEffect(() => undefined, []); return null; }"],
 		['agora/renderer-footgun', feature, 'export const read = (): string => window.name;'],
 	] as const) {
 		expect((await agora(code, file)).some((m) => m.ruleId === rule)).toBe(true);
