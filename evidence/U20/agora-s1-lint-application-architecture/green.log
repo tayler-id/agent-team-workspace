@@ -1,3 +1,6 @@
+subject_head=9bb746277d5ec608cfbd614a54111f5de34a472e
+command=pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts
+---
 
  RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/14/agent-team-workspace
 
