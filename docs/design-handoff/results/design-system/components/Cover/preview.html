@@ -1,0 +1,30 @@
+<!-- @dsCard height=300 -->
+<style>
+ .ground{background:var(--surface-base);width:960px;height:300px}
+ .ink{fill:var(--action)}
+ .b{fill:var(--agent-blue-tint)} .bg{fill:var(--agent-blue-glyph)}
+ .s{fill:var(--agent-sky-tint)} .sg{fill:var(--agent-sky-glyph)}
+ .p{fill:var(--agent-pink-tint)} .pg{fill:var(--agent-pink-glyph)}
+ .t{fill:var(--agent-teal-tint)} .tg{fill:var(--agent-teal-glyph)}
+ .live{fill:var(--signal-live)}
+ .name{fill:var(--ink);font-family:var(--font-sans);font-weight:600;font-size:120px;letter-spacing:-0.03em}
+ .tag{fill:var(--ink-secondary);font-family:var(--font-text);font-size:15px}
+</style>
+<div class="ground">
+<!-- Derivation
+     blocks: action 168x252 rx radius-card; agent-blue, sky, pink and teal tints each 132x120 rx radius-tile; sides multiples of space-3 and space-6
+     arrangement: one black slab (the one action colour) beside a 2x2 of agent pastels, the way the shell sits beside its agents; right of x=480, 36% of the cover
+     pattern: one soft rounded-square glyph cut into each pastel in its own family's glyph colour, tone on tone, and one live dot on the slab - the identity system and the one live signal, drawn as the product draws them
+     scales: gutter 12 = space-3, insets 24 = space-6, marks 40 = space-10 at radius-control, dot 12 = space-3
+-->
+<svg width="960" height="300" viewBox="0 0 960 300" role="img" aria-label="Agora">
+ <rect class="ink" x="480" y="24" width="168" height="252" rx="24"/>
+ <circle class="live" cx="612" cy="60" r="6"/>
+ <rect class="b" x="660" y="24"  width="132" height="120" rx="16"/><rect class="bg" x="706" y="64" width="40" height="40" rx="12"/>
+ <rect class="s" x="804" y="24"  width="132" height="120" rx="16"/><rect class="sg" x="850" y="64" width="40" height="40" rx="12"/>
+ <rect class="p" x="660" y="156" width="132" height="120" rx="16"/><rect class="pg" x="706" y="196" width="40" height="40" rx="12"/>
+ <rect class="t" x="804" y="156" width="132" height="120" rx="16"/><rect class="tg" x="850" y="196" width="40" height="40" rx="12"/>
+ <text class="name" x="48" y="228">Agora</text>
+ <text class="tag"  x="50" y="256">A room where a team and its agents work in the open.</text>
+</svg>
+</div>

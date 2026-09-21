@@ -1,0 +1,149 @@
+<!-- @dsCard group="Story" height=900 width=1440 page subtitle="Step 7: follow and steer. The run pane's head is committed state; the stream below is history. Steering says what it cannot do" -->
+<style>
+ .st{background:var(--surface-base);color:var(--ink);font-family:var(--font-text);-webkit-font-smoothing:antialiased}
+ .sans{font-family:var(--font-sans)}
+ .card{background:var(--surface-raised);border-radius:var(--radius-card);padding:var(--space-5)}
+ .tile{background:var(--surface-inset);border-radius:var(--radius-tile);padding:var(--space-4)}
+ .two{color:var(--ink-secondary)}
+ .pill{display:inline-flex;align-items:center;gap:var(--space-2);border-radius:var(--radius-pill);padding:var(--space-2) var(--space-4);min-height:var(--space-8);font-family:var(--font-sans);font-weight:600;white-space:nowrap}
+ .pill.black{background:var(--action);color:var(--on-action)}
+ .pill.ghost{background:var(--surface-raised);border:1px solid var(--hairline)}
+ .pill.soft{background:var(--surface-inset)}
+ .pill.dis{background:var(--surface-inset);color:var(--ink-muted)}
+ .chip{display:inline-flex;align-items:center;gap:var(--space-1);border-radius:var(--radius-pill);padding:var(--space-1) var(--space-2);min-height:var(--space-6);font-family:var(--font-sans);font-weight:600;white-space:nowrap}
+ .chip{color:var(--ink);background:var(--surface-inset)}
+ .chip .g{color:var(--ink-secondary)}
+ .chip.live .dot{background:var(--signal-live)}
+ .chip.pass .dot{background:var(--mark-pass)}
+ .chip.fail .dot{background:var(--mark-fail)}
+ .chip.neutral{background:var(--surface-inset)}
+ .chip.hist{background:var(--surface-inset);color:var(--ink-secondary)}
+ .dot{width:8px;height:8px;border-radius:var(--radius-pill);background:var(--ink-secondary);display:inline-block;flex:none}
+ .live .dot{animation:pulse 1.6s ease-in-out infinite}
+ @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+ @media (prefers-reduced-motion: reduce){.live .dot{animation:none}}
+ .av{width:var(--space-8);height:var(--space-8);border-radius:var(--radius-pill);display:inline-grid;place-items:center;font-family:var(--font-sans);font-weight:600;background:var(--surface-selected);color:var(--ink);flex:none}
+ .ag{width:var(--space-8);height:var(--space-8);border-radius:var(--radius-control);display:inline-grid;place-items:center;flex:none}
+ .ag.lg,.av.lg{width:var(--space-10);height:var(--space-10)}
+ .t-blue{background:var(--agent-blue-tint);color:var(--agent-blue-glyph)}
+ .t-violet{background:var(--agent-violet-tint);color:var(--agent-violet-glyph)}
+ .t-mint{background:var(--agent-mint-tint);color:var(--agent-mint-glyph)}
+ .t-sky{background:var(--agent-sky-tint);color:var(--agent-sky-glyph)}
+ .t-pink{background:var(--agent-pink-tint);color:var(--agent-pink-glyph)}
+ .t-teal{background:var(--agent-teal-tint);color:var(--agent-teal-glyph)}
+ .g{width:18px;height:18px;stroke-width:1.75;fill:none;stroke:currentColor;vertical-align:-4px}
+ .g.sm{width:14px;height:14px;stroke-width:1.75;vertical-align:-2px}
+ .row{display:flex;align-items:center;gap:var(--space-3)}
+ .between{justify-content:space-between}
+ .stack>*+*{margin-top:var(--space-3)}
+ .seg{display:flex;gap:var(--space-1)}
+ .seg span{flex:1;height:var(--space-3);border-radius:var(--radius-pill);background:var(--surface-selected)}
+ .seg span.u{background:var(--ink)}
+ .seg span.r{background:var(--surface-selected);border:1px solid var(--ink-secondary);box-sizing:border-box}
+ .seg span.e{background:none;border:1px dashed var(--hairline);box-sizing:border-box}
+ .n{font-variant-numeric:tabular-nums}
+ .z{font-feature-settings:"zero" 1}
+ .mono{font-family:var(--font-mono)}
+ p{margin:0}
+
+ .canvas{padding:var(--space-4);height:100%;box-sizing:border-box}
+ .frame{display:grid;grid-template-columns:240px minmax(0,1fr) 420px;grid-template-rows:minmax(0,1fr);background:var(--surface-raised);border-radius:var(--radius-card);height:100%;overflow:hidden;position:relative}
+ .rail{border-right:1px solid var(--hairline);padding:var(--space-5) var(--space-3);display:flex;flex-direction:column;gap:2px;min-height:0}
+ .rail .mark{font-family:var(--font-sans);font-weight:600;font-size:22px;letter-spacing:-0.02em;padding:0 var(--space-3) var(--space-4);display:flex;align-items:center;gap:var(--space-2)}
+ .rail .mark i{width:var(--space-6);height:var(--space-6);border-radius:var(--radius-control);background:var(--action);display:inline-grid;place-items:center;color:var(--on-action)}
+ .rail .sec{padding:var(--space-4) var(--space-3) var(--space-1);color:var(--ink-secondary)}
+ .rail a{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-3);border-radius:var(--radius-control);color:var(--ink);text-decoration:none;min-height:36px}
+ .rail a.on{background:var(--surface-inset);font-weight:600;font-family:var(--font-sans)}
+ .rail a .ct{margin-left:auto}
+ .rail .me{margin-top:auto;display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3)}
+ .pres{position:relative}
+ .pres:after{content:"";position:absolute;right:-1px;bottom:-1px;width:8px;height:8px;border-radius:var(--radius-pill);background:var(--mark-pass);border:2px solid var(--surface-raised)}
+ .center{display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-width:0}
+ .center>*{min-width:0}
+ .pane>*{min-width:0}
+ .hdr{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-5);border-bottom:1px solid var(--hairline);min-height:64px;box-sizing:border-box;white-space:nowrap;overflow:hidden}
+ .hdr .crumb{font-family:var(--font-sans);font-weight:600;font-size:18px;letter-spacing:-0.01em}
+ .hdr .sp{flex:1}
+ .search{color:var(--ink-secondary);font-weight:400;width:180px;justify-content:space-between;min-height:36px;padding:var(--space-1) var(--space-3)}
+ .kbd{font-family:var(--font-mono);font-size:11px;background:var(--surface-inset);border-radius:6px;padding:2px 6px;color:var(--ink-secondary)}
+ .iconbtn{width:36px;height:36px;border-radius:var(--radius-pill);display:grid;place-items:center;background:var(--surface-inset);position:relative}
+ .iconbtn .b{position:absolute;top:4px;right:4px;background:var(--signal-live);border-radius:var(--radius-pill);width:9px;height:9px;font-size:0;border:2px solid var(--surface-raised)}
+ .msgs{overflow:hidden;padding:var(--space-4) var(--space-5) 0;min-height:0}
+ .day{display:flex;justify-content:center;margin:0 0 var(--space-3)}
+ .msg{display:flex;gap:var(--space-3);padding:var(--space-2) 0}
+ .msg .c{min-width:0;flex:1}
+ .msg .who{display:flex;align-items:baseline;gap:var(--space-2)}
+ .msg .who b{font-family:var(--font-sans);font-weight:600}
+ .msg .acts{display:flex;gap:var(--space-2);margin-top:var(--space-2)}
+ .tl-card .acts .pill,.msg .acts .pill{min-height:30px;padding:var(--space-1) var(--space-3);font-size:13px}
+ .tl-card{border:1px solid var(--hairline);border-radius:var(--radius-tile);padding:var(--space-3) var(--space-4);margin-top:var(--space-2)}
+ .tl-card.agent .nm{color:inherit}
+ .tl-card .top{display:flex;align-items:center;gap:var(--space-3)}
+ .tl-card .top .c{flex:1;min-width:0}
+ .tl-card .nm{font-family:var(--font-sans);font-weight:600}
+ .tl-card .facts{display:flex;flex-wrap:wrap;gap:var(--space-1) var(--space-3);margin-top:var(--space-2);color:var(--ink-secondary)}
+ .unread{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) 0}
+ .unread i{flex:1;height:1px;background:var(--hairline)}
+ .comp{padding:var(--space-3) var(--space-5) var(--space-5);border-top:1px solid var(--hairline)}
+ .comp .quick{display:flex;gap:var(--space-2);margin-bottom:var(--space-3)}
+ .comp .quick .pill,.pane .quick .pill,.pf .quick .pill{min-height:32px;padding:var(--space-1) var(--space-3);font-size:13px;font-weight:500}
+ .cbox{background:var(--surface-inset);border-radius:var(--radius-tile);padding:var(--space-3) var(--space-4)}
+ .cbox .plh{display:block;color:var(--ink-secondary);min-height:44px}
+ .cbox .bar{display:flex;align-items:center;gap:var(--space-3);color:var(--ink-secondary);margin-top:var(--space-2)}
+ .cbox .bar .sp{flex:1}
+ .rnd{width:36px;height:36px;border-radius:var(--radius-pill);display:grid;place-items:center;background:var(--surface-raised)}
+ .rnd.black{background:var(--action);color:var(--on-action)}
+ .hint{display:flex;gap:var(--space-3);margin-top:var(--space-2);color:var(--ink-secondary)}
+ .pane{border-left:1px solid var(--hairline);display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-width:0;background:var(--surface-raised)}
+ .pane .ph{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-5);border-bottom:1px solid var(--hairline);min-height:64px;box-sizing:border-box}
+ .pane .ph h2{margin:0;flex:1;min-width:0}
+ .pane .pb{overflow:hidden;padding:var(--space-4) var(--space-5);min-height:0}
+ .pane .pf{padding:var(--space-3) var(--space-5) var(--space-5);border-top:1px solid var(--hairline)}
+ .sec{padding:var(--space-3) 0;border-top:1px solid var(--hairline)}
+ .sec:first-child{border-top:0;padding-top:0}
+ .sec .h{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2)}
+ .sec .h .caps{flex:1;color:var(--ink-secondary)}
+ .kv{display:grid;grid-template-columns:auto 1fr;column-gap:var(--space-3);row-gap:var(--space-1)}
+ .kv dt{color:var(--ink-secondary)} .kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+ .act{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) 0}
+ .act .seqn{width:36px;color:var(--ink-muted);text-align:right;flex:none}
+ .act .c{flex:1;min-width:0}
+ .chk{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2) 0;border-top:1px solid var(--hairline)}
+ .chk:first-of-type{border-top:0}
+ .chk .nm{flex:1;min-width:0}
+ .veil{position:absolute;inset:0;background:var(--surface-base);opacity:.55}
+ .sheet{position:absolute;right:var(--space-5);top:var(--space-5);bottom:var(--space-5);width:440px;background:var(--surface-raised);border-radius:var(--radius-card);box-shadow:var(--shadow-card);display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}
+ .sheet .ph{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-5) var(--space-5) var(--space-3)}
+ .sheet .ph h2{margin:0;flex:1}
+ .sheet .pb{overflow:hidden;padding:0 var(--space-5);min-height:0}
+ .sheet .pf{padding:var(--space-4) var(--space-5) var(--space-5);display:flex;gap:var(--space-2);align-items:center}
+ .num{font-variant-numeric:tabular-nums}
+ .stackm{display:inline-flex}
+ .stackm .ag{width:22px;height:22px;border:2px solid var(--surface-inset);margin-left:-8px}
+ .stackm .ag:first-child{margin-left:0}
+ .z{font-feature-settings:"zero" 1,"tnum" 1}
+ .big{font-family:var(--font-sans);font-weight:600;font-size:28px;letter-spacing:-0.03em;line-height:32px}
+ .bubble{display:inline-block;border-radius:var(--radius-tile);padding:var(--space-2) var(--space-3)}
+</style>
+<svg style="display:none" aria-hidden="true">
+ <symbol id="check" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5"/></symbol>
+ <symbol id="cross" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></symbol>
+ <symbol id="dash" viewBox="0 0 16 16"><path d="M3.5 8h9"/></symbol>
+ <symbol id="q" viewBox="0 0 16 16"><path d="M5.8 5.6a2.3 2.3 0 1 1 2.6 2.7v1.4"/><circle cx="8.4" cy="12.2" r=".9" fill="currentColor" stroke="none"/></symbol>
+ <symbol id="clock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 4.8V8l2.3 1.6"/></symbol>
+ <symbol id="lock" viewBox="0 0 16 16"><rect x="3.5" y="7" width="9" height="6" rx="1.5"/><path d="M5.8 7V5.4a2.2 2.2 0 0 1 4.4 0V7"/></symbol>
+ <symbol id="shield" viewBox="0 0 16 16"><path d="M8 2.5l4.5 1.8v3.5c0 2.6-1.9 4.6-4.5 5.7-2.6-1.1-4.5-3.1-4.5-5.7V4.3z"/></symbol>
+ <symbol id="person" viewBox="0 0 16 16"><circle cx="8" cy="5.8" r="2.4"/><path d="M3.6 13a4.6 4.6 0 0 1 8.8 0"/></symbol>
+ <symbol id="chip" viewBox="0 0 16 16"><rect x="4.5" y="4.5" width="7" height="7" rx="1.5"/><path d="M6.6 2.6v1.9M9.4 2.6v1.9M6.6 11.5v1.9M9.4 11.5v1.9M2.6 6.6h1.9M2.6 9.4h1.9M11.5 6.6h1.9M11.5 9.4h1.9"/></symbol>
+ <symbol id="spark" viewBox="0 0 16 16"><path d="M8 2.5l1.4 3.6L13 7.5l-3.6 1.4L8 12.5 6.6 8.9 3 7.5l3.6-1.4z"/></symbol>
+ <symbol id="bolt" viewBox="0 0 16 16"><path d="M9 2.5L4 9h3.5L7 13.5 12 7H8.5z"/></symbol>
+ <symbol id="branch" viewBox="0 0 16 16"><circle cx="5" cy="4" r="1.6"/><circle cx="5" cy="12" r="1.6"/><circle cx="11" cy="6" r="1.6"/><path d="M5 5.6v4.8M11 7.6c0 2.4-6 1.6-6 2.8"/></symbol>
+ <symbol id="archive" viewBox="0 0 16 16"><path d="M2.6 4.4h10.8v2.2H2.6zM3.6 6.6v6.4h8.8V6.6M6.4 9.2h3.2"/></symbol>
+ <symbol id="search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.2"/><path d="M10.2 10.2L13.5 13.5"/></symbol>
+ <symbol id="bell" viewBox="0 0 16 16"><path d="M4 11h8l-1-1.6V7a3 3 0 0 0-6 0v2.4z"/><path d="M6.8 13a1.3 1.3 0 0 0 2.4 0"/></symbol>
+ <symbol id="plus" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></symbol>
+ <symbol id="send" viewBox="0 0 16 16"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5"/></symbol>
+ <symbol id="home" viewBox="0 0 16 16"><path d="M3 7.5L8 3l5 4.5V13H3z"/></symbol>
+ <symbol id="inbox" viewBox="0 0 16 16"><path d="M3 9h3l1 1.5h2L10 9h3v4H3zM4 9l1.5-5h5L12 9"/></symbol>
+</svg>
+<div class="st" style="height:900px"><div class="canvas"><div class="frame"><nav class="rail" aria-label="Rooms, runs and inbox"><div class="mark"><i><svg class="g sm"><use href="#bolt"/></svg></i>Agora</div><div class="caps sec">ROOMS</div><a href="#" class="body"><span class="av" style="width:22px;height:22px;font-size:10px">G</span>general</a><a href="#" class="body on"><span class="ag t-sky" style="width:22px;height:22px"><svg class="g sm"><use href="#branch"/></svg></span>acme/billing<span class="chip live ct"><span class="dot"></span>4</span></a><a href="#" class="body"><span class="ag t-blue" style="width:22px;height:22px"><svg class="g sm"><use href="#branch"/></svg></span>acme/ledger</a><div class="caps sec">RUNS</div><a href="#" class="body"><span class="ag t-sky" style="width:22px;height:22px"><svg class="g sm"><use href="#chip"/></svg></span>Run 2 · task 7<span class="chip live ct"><span class="dot"></span></span></a><a href="#" class="body"><span class="ag t-pink" style="width:22px;height:22px"><svg class="g sm"><use href="#chip"/></svg></span>Run 6 · task 9<span class="chip live ct"><span class="dot"></span></span></a><a href="#" class="body"><span class="ag t-mint" style="width:22px;height:22px"><svg class="g sm"><use href="#chip"/></svg></span>Run 4 · task 3<span class="chip neutral ct"><svg class="g sm"><use href="#q"/></svg></span></a><div class="caps sec">YOU</div><a href="#" class="body"><svg class="g "><use href="#inbox"/></svg>Inbox<span class="chip neutral ct">7</span></a><a href="#" class="body"><svg class="g "><use href="#chip"/></svg>Machines</a><div class="me"><span class="av pres">AM</span><div><p class="body" style="font-family:var(--font-sans);font-weight:600">Ada Mensah</p><p class="meta two">maintainer · acme/billing</p></div></div></nav><section class="center"><header class="hdr"><span class="crumb"><span class="two">acme /</span> billing</span><span class="chip pass"><span class="dot"></span>Active</span><span class="chip hist">project agent · not_enabled</span><span class="sp"></span><span class="pill ghost search"><svg class="g sm"><use href="#search"/></svg> Search <span class="kbd">⌘K</span></span><span class="iconbtn"><svg class="g "><use href="#bell"/></svg><span class="b">5</span></span></header><div class="msgs"><div class="day"><span class="chip hist">Wednesday 17 Sep</span></div><div class="msg"><span class="av pres">BO</span><div class="c"><div class="who"><b class="body" style="color:var(--ink)">Ben Ojo</b><span class="meta two">14:02</span></div><p class="body">Duplicate invoice emails again on the retry path. Same two customers as Tuesday.</p></div></div><div class="msg"><span class="av pres">AM</span><div class="c"><div class="who"><b class="body" style="color:var(--ink)">Ada Mensah</b><span class="meta two">14:03 · edited 14:05</span></div><p class="body">Reproduced. The receipt is written before the send is confirmed, so a retry re-sends.</p><div class="acts"><span class="chip neutral"><svg class="g sm"><use href="#inbox"/></svg> 3 replies</span><span class="chip neutral"><svg class="g sm"><use href="#spark"/></svg> Ask center</span></div></div></div><div class="unread"><span class="chip live"><span class="dot"></span>4 new</span><i></i></div><div class="msg"><span class="ag t-blue"><svg class="g "><use href="#spark"/></svg></span><div class="c"><div class="who"><b class="body" style="color:var(--ink)">center</b><span class="meta two">14:12 · answer · 4 records read</span></div><p class="body"></p><div class="tl-card agent"><p class="caps two"><span class="ag t-blue" style="width:16px;height:16px;border-radius:5px;vertical-align:-3px;margin-right:6px"></span>COMMITTED ANSWER · PARTIAL COVERAGE · $0.04 · PAYER ADA</p><p class="body" style="margin-top:var(--space-2)">The duplicate send comes from the receipt being written before delivery is confirmed. The retry path was last changed in <u>decision 41</u>; Ben raised the same two customers in <u>message 8c21</u>.</p><div class="acts" style="margin-top:var(--space-3)"><span class="chip neutral">2 citations</span><span class="chip neutral"><svg class="g sm"><use href="#q"/></svg> 2 records omitted for size</span></div></div></div></div><div class="msg"><span class="av pres">AM</span><div class="c"><div class="who"><b class="body" style="color:var(--ink)">Ada Mensah</b><span class="meta two">14:15</span></div><p class="body">Opening a task for this.</p><div class="tl-card"><div class="top"><span class="ag t-sky"><svg class="g "><use href="#branch"/></svg></span><div class="c"><p class="body nm">Confirm the invoice receipt after delivery</p><p class="meta two">Task 7 · Ada owns · from message 14:03</p></div><span class="chip live"><span class="dot"></span>Executing</span></div><div class="meta facts"><span>3 acceptance items</span><span>scope billing/receipt.ts, billing/mailer.ts</span><span>attempt 2 of 2</span></div><div class="acts" style="margin-top:var(--space-3)"><span class="pill soft">Open</span><span class="pill soft">Cancel task</span></div></div></div></div><div class="msg"><span class="ag t-sky"><svg class="g "><use href="#chip"/></svg></span><div class="c"><div class="who"><b class="body" style="color:var(--ink)">run 2 delegate</b><span class="meta two">14:41 · question</span></div><p class="body"></p><div class="tl-card agent"><p class="caps two"><span class="ag t-yellow" style="width:16px;height:16px;border-radius:5px;vertical-align:-3px;margin-right:6px"></span>QUESTION · ANSWER BEFORE 14:49</p><p class="body" style="margin-top:var(--space-2)">Which fixture database should the contract test use, <span class="mono">billing_test</span> or <span class="mono">billing_ci</span>?</p><div class="acts" style="margin-top:var(--space-3)"><span class="pill black">Answer</span><span class="chip live"><span class="dot"></span>8 min left</span></div></div></div></div></div><div class="comp"><div class="quick"><span class="pill soft"><svg class="g sm"><use href="#spark"/></svg> Ask center</span><span class="pill soft"><svg class="g sm"><use href="#branch"/></svg> Create task</span></div><div class="cbox"><span class="body plh">Message acme/billing</span><div class="bar"><svg class="g "><use href="#plus"/></svg><svg class="g "><use href="#person"/></svg><span class="stackm"><span class="ag t-blue"><svg class="g sm"><use href="#spark"/></svg></span><span class="ag t-sky"><svg class="g sm"><use href="#chip"/></svg></span><span class="ag t-pink"><svg class="g sm"><use href="#chip"/></svg></span></span><span class="meta">center + 2 delegates in room</span><span class="sp"></span><span class="rnd black" style="width:36px;height:36px"><svg class="g "><use href="#send"/></svg></span></div></div></div></section><aside class="pane"><div class="ph"><div style="flex:1;min-width:0"><div class="row" style="display:flex;align-items:center;gap:var(--space-2)"><span class="ag t-sky"><svg class="g "><use href="#chip"/></svg></span><h2 class="title">Run 2 · task 7</h2></div><p class="meta two">Ada owns · delegate task agent · Ada-laptop · attempt 2 of 2</p></div><span class="chip live"><span class="dot"></span>Running</span><span class="iconbtn"><svg class="g sm"><use href="#cross"/></svg></span></div><div class="pb"><div class="sec"><div class="h"><span class="caps">LIVE</span><span class="meta two num">last progress 40 s ago · acknowledgment 3 s ago</span></div></div><div class="sec"><div class="h"><span class="caps">TYPED ACTIVITY · IMMUTABLE</span></div><div class="act"><span class="meta seqn num">0041</span><span class="ag t-yellow" style="width:24px;height:24px"><svg class="g sm"><use href="#chip"/></svg></span><div class="c"><p class="meta two">status</p><p class="body">Prepared workspace at head <span class='mono z'>91be0d3</span></p></div></div><div class="act"><span class="meta seqn num">0042</span><span class="ag t-yellow" style="width:24px;height:24px"><svg class="g sm"><use href="#chip"/></svg></span><div class="c"><p class="meta two">action</p><p class="body">Read billing/receipt.ts, billing/mailer.ts</p></div></div><div class="act"><span class="meta seqn num">0043</span><span class="ag t-yellow" style="width:24px;height:24px"><svg class="g sm"><use href="#clock"/></svg></span><div class="c"><p class="meta two">question · 14:41</p><p class="body">Which fixture database should the contract test use?</p></div></div><div class="act"><span class="meta seqn num">0044</span><span class="ag t-yellow" style="width:24px;height:24px"><svg class="g sm"><use href="#person"/></svg></span><div class="c"><p class="meta two">response · Ada 14:44</p><p class="body">Use <span class='mono'>billing_test</span>.</p></div></div><div class="act"><span class="meta seqn num">0045</span><span class="ag t-yellow" style="width:24px;height:24px"><svg class="g sm"><use href="#chip"/></svg></span><div class="c"><p class="meta two">action</p><p class="body">Ran pnpm test --filter billing</p></div></div><div class="act"><span class="meta seqn num">0046</span><span class="ag t-yellow" style="width:24px;height:24px"><svg class="g sm"><use href="#cross"/></svg></span><div class="c"><p class="meta two">error</p><p class="body"><span class='mono'>check_failed</span> billing-contract · expected 1 send, received 2</p></div></div></div><div class="sec"><div class="h"><span class="caps">BUDGET · USED OF RESERVED</span></div><dl class="kv meta"><dt>execution</dt><dd class="num">$1.90 of $5.00</dd><dt>verification</dt><dd class="num">$0.30 of $2.50</dd><dt>payer</dt><dd>Ada</dd></dl></div></div><div class="pf"><div class="cbox"><span class="body plh" style="min-height:24px">Steer run 2</span><div class="bar"><span class="meta">Immutable once sent · cannot widen scope, tools, payer or placement</span><span class="sp"></span><span class="rnd black" style="width:36px;height:36px"><svg class="g "><use href="#send"/></svg></span></div></div><div class="row" style="display:flex;gap:var(--space-2);margin-top:var(--space-3)"><span class="pill ghost" style="color:var(--fail-text)">Cancel run 2</span></div></div></aside></div></div></div>
