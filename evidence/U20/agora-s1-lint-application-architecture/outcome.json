@@ -2,30 +2,40 @@
   "schema_version": "agora.task-outcome/v1",
   "task": "agora-s1-lint-application-architecture",
   "unit": "U20",
-  "parent": "cacbd069052fc60a591e0895eec3f0c5ac7a25b5",
-  "head": "ef70dcd77cccad7b53c68069434aa2ff25625000",
+  "parent": "d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef",
+  "head": "618921ec8a3200c3a13521f053ca0a225bd20ec2",
   "result": "pass",
-  "summary": "B1 import-boundary slice extends Agora owners to apps/web Feature/Client/Host across guarded extensions; closes un-owned apps/web/src two-hop relay; under captain 400-line/12-file target. Renderer foot-guns and exceptions deferred to B2 (D84/D85).",
+  "summary": "B2 adds renderer foot-guns, architecture exceptions and residual mixed-union DOM mutation denials on top of B1 import ownership (D86/D87), transplanted from preserved tip 89bc038 (rooted at dc38b10) onto the corrected B1 landing d46c19f. B1 relay fixtures and guard-weakening proof are retained inside the B2 red test. Framework aliased-effect control restored. M14/M15 recorded as explicit limits.",
   "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
   "green": "evidence/U20/agora-s1-lint-application-architecture/green.log",
-  "red_assertions": "Whole-feature red: head tests fail on parent cacbd069052fc60a591e0895eec3f0c5ac7a25b5 (8 failed); owner tables, server imports, extensions, entrypoints+relay, relocation, client-core, noInlineConfig, guard-weakening",
-  "green_assertions": "Tests 8 passed (8)",
+  "red_assertions": "B2 head tests fail on corrected B1 parent d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef (Tests 12 failed | 4 passed (16)): renderer/exception cases fail, the four B1 import cases stay green",
+  "green_assertions": "Tests 16 passed (16)",
   "commands": [
+    "node scripts/record-red-green.mjs --parent d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef --head 618921ec8a3200c3a13521f053ca0a225bd20ec2 --out evidence/U20/agora-s1-lint-application-architecture -- pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts",
     "pnpm boundaries",
     "pnpm lint",
     "pnpm typecheck",
     "pnpm check"
   ],
+  "size": {
+    "receipt": "evidence/U20/agora-s1-lint-application-architecture/size.json",
+    "source_files": 7,
+    "source_meaningful_lines": 525,
+    "implementation_meaningful_lines": 313,
+    "test_meaningful_lines": 212,
+    "captain_target": "400 meaningful lines / 12 source files (D85)",
+    "note": "Implementation lines are under the 400 target and files are under 12; the count including the test file is 525. Identical to the preserved B2 diff; the reviewer decides whether the target counts test lines."
+  },
   "limits": [
     "No Client/Host runtime",
     "No Feature discovery",
     "No product Features",
-    "B1 only: no renderer-footgun, no architecture-exceptions file",
-    "B2 follow-up preserves renderer foot-guns, exceptions, mixed-union DOM, adversarial effect fixtures",
-    "Captain 400-line/12-file target met on B1 without size waiver (D85)",
-    "M14/MM: emptying base domGlobals (globalThis/process) is uncovered in B1 focused suite; ambient browser capability enforcement is B2 renderer-footgun scope",
-    "MN closed: Feature react/react-dom prefix positives asserted in owners test"
+    "Stacked on B1 import-ownership and the ef70dcd relay fix (D84/D85)",
+    "whole-feature-red.log is the retained B1 receipt (cacbd06 to ef70dcd); B2 red/green are the receipts above",
+    "M14 drop portable-host escapes from domGlobals not red-proven in focused suite",
+    "M15 remove noInlineConfig from mjs/cjs block not red-proven in focused suite",
+    "JSDoc import types, property-assignment mutators, untyped ambiguous mutators and Reflect.get deferred"
   ],
-  "test_patch_digest": "62f8ce5a6087c6b5f6d193819c434b91f61630446f51ad2dacdadd1135b45cdb",
+  "test_patch_digest": "a84d4b776a522718d31443e405df92b3d8dd3c0ec0f3d6e0db8f853f2694022a",
   "lockfile_digest": "e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"
 }

@@ -1,11 +1,11 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-21T15:25:58.431Z
-parent: cacbd069052fc60a591e0895eec3f0c5ac7a25b5
-head: ef70dcd77cccad7b53c68069434aa2ff25625000
-subject_revision: cacbd069052fc60a591e0895eec3f0c5ac7a25b5
+recorded_at: 2026-09-21T22:17:17.699Z
+parent: d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef
+head: 618921ec8a3200c3a13521f053ca0a225bd20ec2
+subject_revision: d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef
 test_patch_applied_to_subject: true
-test_patch_files: docs/site/test/corpus.test.ts, packages/client-core/test/app-architecture.test.ts
-test_patch_digest: sha256:62f8ce5a6087c6b5f6d193819c434b91f61630446f51ad2dacdadd1135b45cdb
+test_patch_files: packages/client-core/test/app-architecture.test.ts
+test_patch_digest: sha256:a84d4b776a522718d31443e405df92b3d8dd3c0ec0f3d6e0db8f853f2694022a
 fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
 configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"}
 toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
@@ -13,182 +13,44 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-os8ZjO
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-nNmXyc
 
- ❯ |unit| packages/client-core/test/app-architecture.test.ts (8 tests | 8 failed) 3979ms
-   × owner tables are explicit and test-visible architecture policy 7ms
-   × tsx renderer rejects server imports with owner-named diagnostics across import forms 1099ms
-   × every guarded source extension keeps import-boundary diagnostics via public CLI 1620ms
-   × framework client and host never import features; features use public entrypoints only 40ms
-   × apps/web non-src relocation cannot bypass import boundaries 1106ms
-   × portable client-core rejects application and storage edges 89ms
-   × inline eslint disables cannot suppress import-boundary under noInlineConfig 9ms
-   × removing import-boundary protection makes denial assertions turn red 8ms
+ ❯ |unit| packages/client-core/test/app-architecture.test.ts (16 tests | 12 failed) 17458ms
+   × owner tables are explicit and test-visible architecture policy 3ms
+   × apps/web non-src relocation cannot bypass renderer footguns or import boundaries 682ms
+   × renderer footguns: effects only in framework; browser APIs only in host or framework 8ms
+   × effect ownership closes aliases barrels dynamic imports and re-exports without rejecting locals 4ms
+   × browser globals require unresolved references; Host ports and ordinary names stay allowed 37ms
+   × ambient declare shadows cannot hide browser globals 7ms
+   × DOM mutation is receiver-aware including computed and union keys; ordinary writers stay allowed 17ms
+   × inline eslint disables cannot suppress Agora rules including bare and line forms 6ms
+   × architecture exceptions reject wildcard expired unknown broadened and self-approved records and load committed file 0ms
+   × exact architecture exceptions cover scoped relative and dynamic symbols without broadening 11ms
+   × eslint config load path fails closed on invalid architecture exceptions 1ms
+   × removing app-architecture protections makes denial assertions turn red 19ms
 
  Test Files  1 failed (1)
-      Tests  8 failed (8)
-   Start at  11:25:27
-   Duration  4.12s (tests 98%, import 2%)
+      Tests  12 failed | 4 passed (16)
+   Start at  18:16:28
+   Duration  17.63s (tests 99%)
 
 
-⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  |unit| packages/client-core/test/app-architecture.test.ts > owner tables are explicit and test-visible architecture policy
-AssertionError: expected 'import { existsSync, readFileSync, re…' to contain 'export const PACKAGE_OWNERS = [\'cont…'
-
-- Expected
-+ Received
-
-- export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker']
-+ import { existsSync, readFileSync, realpathSync } from 'node:fs';
-+ import path from 'node:path';
-+ import ts from 'typescript';
-+ import { AST_NODE_TYPES, ESLintUtils, type TSESLint, type TSESTree } from '@typescript-eslint/utils';
-+ export const projectRoot = path.resolve(import.meta.dirname, '..');
-+ const owners = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker'];
-+ const inside = (root: string, file: string): boolean => !path.relative(root, file).startsWith('..') && !path.isAbsolute(path.relative(root, file));
-+ const physical = (file: string): string => existsSync(file) ? realpathSync(file) : file;
-+
-+ function violation(file: string, specifier: string | undefined, typesOnly: boolean, program: ts.Program | null): string | undefined {
-+ 	const owner = owners.find((p) => inside(path.join(projectRoot, p), file));
-+ 	if (!owner) return undefined;
-+ 	if (!specifier) return 'nonliteral module target cannot be checked';
-+ 	const resolved = ts.resolveModuleName(specifier, file, program?.getCompilerOptions() ?? { moduleResolution: ts.ModuleResolutionKind.NodeNext }, ts.sys).resolvedModule?.resolvedFileName;
-+ 	if (specifier.startsWith('.')) {
-+ 		const target = physical(resolved ?? path.resolve(path.dirname(file), specifier));
-+ 		const boundary = file.includes('/contracts/generated/') ? 'contracts/generated' : owner;
-+ 		return inside(physical(path.join(projectRoot, boundary)), target) ? undefined : 'relative import escapes its owning package';
-+ 	}
-+ 	if (file.includes('/contracts/generated/')) return 'generated neutral values cannot import SDKs';
-+ 	if (specifier === '@agora/contracts/values') {
-+ 		return typesOnly && resolved && physical(resolved) === physical(path.join(projectRoot, 'contracts/generated/typescript/openapi.d.ts')) ? undefined : 'generated values require a type-only edge to the declared generated file';
-+ 	}
-+ 	const allowed: Record<string, string[]> = {
-+ 		'packages/client-core': [],
-+ 		'packages/domain': ['@agora/contracts/canonical', 'node:crypto'],
-+ 		'contracts': ['ajv', 'ajv-formats', 'openapi-typescript', 'node:crypto'],
-+ 		'packages/storage': ['@agora/domain', '@agora/contracts/canonical', 'pg', 'drizzle-orm', 'node:crypto', 'node:fs', 'node:path', 'node:url'],
-+ 		'apps/center': ['@agora/contracts', '@agora/domain', '@agora/storage', 'hono', '@hono/node-server', 'node:url', 'node:crypto'],
-+ 	};
-+ 	if (owner === 'contracts' && (file.includes('/tools/') || file.endsWith('/src/conform-cli.ts'))) allowed[owner]?.push('node:child_process', 'node:fs', 'node:path', 'node:url', 'node:os');
-+ 	if (owner === 'packages/storage' && file.endsWith('/src/index.ts')) return specifier === '@agora/domain' ? undefined : 'public storage entry exports domain ports, not SDK bindings';
-+ 	if (owner === 'apps/web' || owner === 'apps/worker') return specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core'].includes(specifier) ? 'client imports a server package' : undefined;
-+ 	if (!(allowed[owner] ?? []).some((name) => specifier === name || (name === 'ajv' || name === 'drizzle-orm') && specifier.startsWith(`${name}/`))) return `${owner} cannot import ${specifier}`;
-+ 	if (specifier === '@agora/contracts/canonical' && resolved && physical(resolved) !== physical(path.join(projectRoot, 'contracts/src/canonical.ts'))) return 'canonical export resolves outside the neutral contract utility';
-+ 	return undefined;
-+ }
-+
-+ // Derive DOM global names from the pinned compiler, not a perpetually incomplete list of browser types.
-+ const domFile = path.join(path.dirname(ts.getDefaultLibFilePath({})), 'lib.dom.d.ts');
-+ const dom = ts.createSourceFile(domFile, readFileSync(domFile, 'utf8'), ts.ScriptTarget.Latest, true);
-+ const globals = new Set(['globalThis', 'global', 'process', 'require', 'eval', 'Function']);
-+ for (const statement of dom.statements) {
-+ 	if ('name' in statement && statement.name && ts.isIdentifier(statement.name as ts.Node)) globals.add((statement.name as ts.Identifier).text);
-+ 	if (ts.isVariableStatement(statement)) for (const declaration of statement.declarationList.declarations) if (ts.isIdentifier(declaration.name)) globals.add(declaration.name.text);
-+ }
-+
-+ export const importBoundaryRule: TSESLint.RuleModule<'forbidden'> = {
-+ 	meta: { type: 'problem', schema: [], messages: { forbidden: '{{reason}}' } }, defaultOptions: [],
-+ 	create(context) {
-+ 		const { program } = ESLintUtils.getParserServices(context, true);
-+ 		const file = context.filename;
-+ 		const check = (node: TSESTree.Node, source: TSESTree.Node | null | undefined, typesOnly: boolean): void => {
-+ 			const specifier = source?.type === AST_NODE_TYPES.Literal && typeof source.value === 'string' ? source.value : undefined;
-+ 			const reason = violation(file, specifier, typesOnly, program);
-+ 			if (reason) context.report({ node, messageId: 'forbidden', data: { reason } });
-+ 		};
-+ 		return {
-+ 			ImportDeclaration(node) { check(node, node.source, node.importKind === 'type' || node.specifiers.length > 0 && node.specifiers.every((s) => s.type === AST_NODE_TYPES.ImportSpecifier && s.importKind === 'type')); },
-+ 			ExportNamedDeclaration(node) { if (node.source) check(node, node.source, node.exportKind === 'type' || node.specifiers.length > 0 && node.specifiers.every((s) => s.exportKind === 'type')); },
-+ 			ExportAllDeclaration(node) { check(node, node.source, node.exportKind === 'type'); },
-+ 			ImportExpression(node) { check(node, node.source, false); },
-+ 			TSImportType(node) { check(node, node.source, true); },
-+ 			TSImportEqualsDeclaration(node) { if (node.moduleReference.type === AST_NODE_TYPES.TSExternalModuleReference) check(node, node.moduleReference.expression, node.importKind === 'type'); },
-+ 			CallExpression(node) { if (node.callee.type === AST_NODE_TYPES.Identifier && node.callee.name === 'require') check(node, node.arguments[0], false); },
-+ 			Identifier(node) {
-+ 				if (!file.includes('/packages/client-core/src/') && !file.includes('/packages/domain/src/') && !file.includes('/contracts/')) return;
-+ 				if (file.includes('/contracts/tools/') || file.endsWith('/contracts/src/conform-cli.ts')) return;
-+ 				if (file.includes('/contracts/') && ['process', 'global', 'require'].includes(node.name)) return;
-+ 				if (!globals.has(node.name)) return;
-+ 				const reference = context.sourceCode.getScope(node).references.find((r) => r.identifier === node);
-+ 				if (reference && !(reference.resolved?.defs.length)) context.report({ node, messageId: 'forbidden', data: { reason: `ambient ${node.name} is outside the portable boundary` } });
-+ 			},
-+ 		};
-+ 	},
-+ };
-+
-
- ❯ packages/client-core/test/app-architecture.test.ts:44:12
-     42|  const b = readFileSync(path.join(root, 'scripts/boundary-policy.ts'),…
-     43|  const e = readFileSync(path.join(root, 'eslint.config.js'), 'utf8');
-     44|  expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'pac…
+Error: ENOENT: no such file or directory, open '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-nNmXyc/scripts/architecture-exceptions.ts'
+ ❯ packages/client-core/test/app-architecture.test.ts:48:12
+     46| test('owner tables are explicit and test-visible architecture policy',…
+     47|  const b = readFileSync(path.join(root, 'scripts/boundary-policy.ts'),…
+     48|  const x = readFileSync(path.join(root, 'scripts/architecture-exceptio…
        |            ^
-     45|  for (const s of ["framework: 'apps/web/src/framework'", "client: 'app…
-     46|  expect(e).toContain('noInlineConfig: true');
+     49|  const e = readFileSync(path.join(root, 'eslint.config.js'), 'utf8');
+     50|  expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'pac…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
 
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > tsx renderer rejects server imports with owner-named diagnostics across import forms
-AssertionError: expected false to be true // Object.is equality
-
-- Expected
-+ Received
-
-- true
-+ false
-
- ❯ packages/client-core/test/app-architecture.test.ts:65:82
-     63|  for (const module of ['@agora/storage', '@agora/domain', '@agora/cent…
-     64|   for (const form of forms) {
-     65|    expect(await has(form(module), feature, 'agora/import-boundary', 'r…
-       |                                                                                  ^
-     66|    expect(await has(form(module), feature, 'agora/import-boundary', ow…
-     67|   }
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
-
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > every guarded source extension keeps import-boundary diagnostics via public CLI
-AssertionError: apps/web/src/features/room/extmubeczj8-ts.ts: expected '[{"filePath":"/private/var/folders/h7…' to contain 'renderer'
-
-- Expected
-+ Received
-
-- renderer
-+ [{"filePath":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-os8ZjO/apps/web/src/features/room/extmubeczj8-ts.ts","messages":[{"ruleId":"agora/import-boundary","severity":2,"message":"client imports a server package","line":1,"column":1,"messageId":"forbidden","endLine":1,"endColumn":48}],"suppressedMessages":[],"errorCount":1,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0,"source":"import type { Database } from '@agora/storage';\nexport type Leak = keyof Database;\n","usedDeprecatedRules":[]}]
-+
-+
-
- ❯ packages/client-core/test/app-architecture.test.ts:87:24
-     85|   expect(status, row.rel).toBe(1);
-     86|   expect(out, row.rel).toContain('agora/import-boundary');
-     87|   expect(out, row.rel).toContain(row.needle);
-       |                        ^
-     88|   expect(out, row.rel).not.toContain('Error while loading rule');
-     89|   expect(out, row.rel).not.toContain('File ignored because no matching…
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
-
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > framework client and host never import features; features use public entrypoints only
-AssertionError: expected false to be true // Object.is equality
-
-- Expected
-+ Received
-
-- true
-+ false
-
- ❯ packages/client-core/test/app-architecture.test.ts:95:157
-     93| test('framework client and host never import features; features use pu…
-     94|  for (const file of [framework, client, host]) {
-     95|   expect(await has("import { x } from '../features/room/private'; expo…
-       |                                                                                                                                                             ^
-     96|  }
-     97|  expect(await has("import { x } from '../notes/secret'; export const y…
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
-
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > apps/web non-src relocation cannot bypass import boundaries
-AssertionError: apps/web/test/relocmubed0tc-leak.ts: expected +0 to be 1 // Object.is equality
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > apps/web non-src relocation cannot bypass renderer footguns or import boundaries
+AssertionError: apps/web/test/relocmubt1wap-leak.ts: expected +0 to be 1 // Object.is equality
 
 - Expected
 + Received
@@ -196,17 +58,17 @@ AssertionError: apps/web/test/relocmubed0tc-leak.ts: expected +0 to be 1 // Obje
 - 1
 + 0
 
- ❯ packages/client-core/test/app-architecture.test.ts:134:23
-    132|  for (const rel of [`apps/web/test/${stamp}-leak.ts`, `apps/web/lib/${…
-    133|   const { status, out } = publicEslint(rel);
-    134|   expect(status, rel).toBe(1);
+ ❯ packages/client-core/test/app-architecture.test.ts:138:23
+    136|  for (const rel of [`apps/web/test/${stamp}-leak.ts`, `apps/web/lib/${…
+    137|   const { status, out } = publicEslint(rel);
+    138|   expect(status, rel).toBe(1);
        |                       ^
-    135|   expect(out, rel).toContain('agora/import-boundary');
-    136|  }
+    139|   expect(out, rel).toContain('agora/renderer-footgun');
+    140|  }
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
 
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > portable client-core rejects application and storage edges
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > renderer footguns: effects only in framework; browser APIs only in host or framework
 AssertionError: expected false to be true // Object.is equality
 
 - Expected
@@ -215,17 +77,17 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:145:160
-    143| test('portable client-core rejects application and storage edges', asy…
-    144|  const file = 'packages/client-core/src/model.ts';
-    145|  expect(await has("import type { X } from '../../../apps/web/src/clien…
-       |                                                                                                                                                                ^
-    146|  expect(await has("import type { Database } from '@agora/storage'; exp…
-    147| }, 120_000);
+ ❯ packages/client-core/test/app-architecture.test.ts:149:81
+    147| test('renderer footguns: effects only in framework; browser APIs only …
+    148|  const effect = effectCard("import { useEffect } from 'react';", 'useE…
+    149|  expect(await has(effect, feature, 'agora/renderer-footgun', owners.fr…
+       |                                                                                 ^
+    150|  expect(await has(effect, framework, 'agora/renderer-footgun')).toBe(f…
+    151|  const aliased = effectCard("import { useEffect as sideEffect } from '…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
 
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > inline eslint disables cannot suppress import-boundary under noInlineConfig
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > effect ownership closes aliases barrels dynamic imports and re-exports without rejecting locals
 AssertionError: expected false to be true // Object.is equality
 
 - Expected
@@ -234,17 +96,18 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:151:99
-    149| test('inline eslint disables cannot suppress import-boundary under noI…
-    150|  const leak = "import type { Database } from '@agora/storage'; export …
-    151|  expect(await has(`/* eslint-disable */\n${leak}`, feature, 'agora/imp…
-       |                                                                                                   ^
-    152|  expect(await has(`/* eslint-disable agora/import-boundary */\n${leak}…
-    153|  expect(await has(`${leak} // eslint-disable-line agora/import-boundar…
+ ❯ deny packages/client-core/test/app-architecture.test.ts:172:158
+    170|
+    171| test('effect ownership closes aliases barrels dynamic imports and re-e…
+    172|  const deny = async (code: string, needle: string = owners.framework):…
+       |                                                                                                                                                              ^
+    173|  await deny("import React from 'react'; const { useEffect } = React; e…
+    174|  await deny("import * as R from 'react'; const { useLayoutEffect } = R…
+ ❯ packages/client-core/test/app-architecture.test.ts:173:2
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
 
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > removing import-boundary protection makes denial assertions turn red
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > browser globals require unresolved references; Host ports and ordinary names stay allowed
 AssertionError: expected false to be true // Object.is equality
 
 - Expected
@@ -253,13 +116,210 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:158:89
-    156| test('removing import-boundary protection makes denial assertions turn…
-    157|  const code = "import type { Database } from '@agora/storage'; export …
-    158|  expect((await agora(code, feature)).some((m) => m.ruleId === 'agora/i…
-       |                                                                                         ^
-    159|  const messages = await agora(code, feature, new ESLint({ cwd: root, i…
-    160|  expect(messages.filter((m) => m.ruleId === 'agora/import-boundary')).…
+ ❯ packages/client-core/test/app-architecture.test.ts:195:115
+    193|  await allow('export function label(window: { name: string }): string …
+    194|  await allow("import { fetch } from '../../host/index.ts'; export asyn…
+    195|  expect(await has('export const read = (): string => window.name;', fe…
+       |                                                                                                                   ^
+    196|  expect(await has('export const read = (): string => document.title;',…
+    197|  expect(await has('export const openSocket = (): WebSocket => new WebS…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > ambient declare shadows cannot hide browser globals
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:202:71
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > DOM mutation is receiver-aware including computed and union keys; ordinary writers stay allowed
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ deny packages/client-core/test/app-architecture.test.ts:215:131
+    213| test('DOM mutation is receiver-aware including computed and union keys…
+    214|  const allow = async (code: string): Promise<void> => { expect(await h…
+    215|  const deny = async (code: string): Promise<void> => { expect(await ha…
+       |                                                                                                                                   ^
+    216|  await allow('export const q = (p: URLSearchParams, v: string): void =…
+    217|  await allow('export const h = (x: Headers): void => { x.append("a", "…
+ ❯ packages/client-core/test/app-architecture.test.ts:220:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/12]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > inline eslint disables cannot suppress Agora rules including bare and line forms
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:238:103
+    236| test('inline eslint disables cannot suppress Agora rules including bar…
+    237|  const windowUse = 'export const read = (): string => window.name;';
+    238|  expect(await has(`/* eslint-disable */\n${windowUse}`, feature, 'agor…
+       |                                                                                                       ^
+    239|  expect(await has(`/* eslint-disable agora/renderer-footgun */\n${wind…
+    240|  expect(await has(`${windowUse} // eslint-disable-line agora/renderer-…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/12]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > architecture exceptions reject wildcard expired unknown broadened and self-approved records and load committed file
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:257:76
+    255|
+    256| test('architecture exceptions reject wildcard expired unknown broadene…
+    257|  expect(existsSync(path.join(root, 'scripts/architecture-exceptions.ts…
+       |                                                                            ^
+    258|  const mod = await import('../../../scripts/architecture-exceptions.ts…
+    259|  mod.clearArchitectureExceptionCache();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/12]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > exact architecture exceptions cover scoped relative and dynamic symbols without broadening
+Error: Cannot find module '/scripts/architecture-exceptions.ts' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-nNmXyc/packages/client-core/test/app-architecture.test.ts
+ ❯ packages/client-core/test/app-architecture.test.ts:280:14
+    278|
+    279| test('exact architecture exceptions cover scoped relative and dynamic …
+    280|  const mod = await import('../../../scripts/architecture-exceptions.ts…
+       |              ^
+    281|  const tempRoot = mkdtempSync(path.join(tmpdir(), 'agora-arch-ex-'));
+    282|  mkdirSync(path.join(tempRoot, 'agora'), { recursive: true });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/12]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > eslint config load path fails closed on invalid architecture exceptions
+AssertionError: expected 'import js from \'@eslint/js\';\nimpor…' to match /^assertArchitectureExceptionsValid\s…/m
+
+- Expected:
+/^assertArchitectureExceptionsValid\s*\(\s*\)\s*;/m
+
++ Received:
+"import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import { importBoundaryRule } from './scripts/boundary-policy.ts';
+import { publicTypesRule } from './scripts/public-types.ts';
+
+const exts = '{ts,tsx,mts,cts,js,jsx,mjs,cjs}';
+const agoraPlugin = {
+	agora: {
+		rules: {
+			'import-boundary': importBoundaryRule,
+			'public-types': publicTypesRule,
+		},
+	},
+};
+const noInline = { noInlineConfig: true };
+
+export default tseslint.config(
+	{ ignores: ['node_modules/', '.docs-dist/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/swift/'] },
+	js.configs.recommended,
+	...tseslint.configs.strictTypeChecked,
+	...tseslint.configs.stylisticTypeChecked,
+	{
+		languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
+		rules: {
+			'@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
+			'@typescript-eslint/explicit-module-boundary-types': 'error',
+			'@typescript-eslint/switch-exhaustiveness-check': ['error', { considerDefaultExhaustiveForUnions: true }],
+			'@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
+			'no-console': ['error', { allow: ['error'] }],
+		},
+	},
+	{
+		// Guard apps/*/src and the entire apps/web tree so non-src relocation cannot bypass owner import rules.
+		files: [`contracts/**/*.${exts}`, `packages/*/src/**/*.${exts}`, `apps/*/src/**/*.${exts}`, `apps/web/**/*.${exts}`],
+		ignores: ['contracts/test/**', '**/*.{mjs,cjs}'],
+		linterOptions: noInline,
+		plugins: agoraPlugin,
+		rules: {
+			'agora/import-boundary': 'error',
+			'agora/public-types': 'error',
+		},
+	},
+	{
+		files: [`apps/*/src/**/*.{mjs,cjs}`, `packages/*/src/**/*.{mjs,cjs}`, `apps/web/**/*.{mjs,cjs}`],
+		extends: [tseslint.configs.disableTypeChecked],
+		linterOptions: noInline,
+		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule } } },
+		rules: { 'agora/import-boundary': 'error' },
+	},
+	{
+		files: ['contracts/**/*.js'],
+		rules: { 'agora/public-types': 'off' },
+	},
+	{
+		files: ['contracts/**/*.{mjs,cjs}'],
+		linterOptions: noInline,
+		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule } } },
+		rules: { 'agora/import-boundary': 'error' },
+	},
+	{
+		files: ['contracts/generated/**/*.d.ts'],
+		rules: { '@typescript-eslint/consistent-indexed-object-style': 'off' },
+	},
+	{
+		files: ['**/*.mjs', '**/*.js', 'docs/site/test/*.test.ts'],
+		ignores: ['apps/*/src/**', 'packages/*/src/**', 'apps/web/**'],
+		extends: [tseslint.configs.disableTypeChecked],
+		languageOptions: { globals: { console: 'readonly', fetch: 'readonly', process: 'readonly' } },
+		rules: { 'no-console': 'off' },
+	},
+	{
+		files: ['docs/site/*.mjs', 'scripts/foundation*.mjs'],
+		rules: { '@typescript-eslint/explicit-module-boundary-types': 'off' },
+	},
+);
+"
+
+ ❯ packages/client-core/test/app-architecture.test.ts:314:23
+    312| test('eslint config load path fails closed on invalid architecture exc…
+    313|  const eslintConfig = readFileSync(path.join(root, 'eslint.config.js')…
+    314|  expect(eslintConfig).toMatch(/^assertArchitectureExceptionsValid\s*\(…
+       |                       ^
+    315|  const tempRoot = mkdtempSync(path.join(tmpdir(), 'agora-arch-load-'));
+    316|  mkdirSync(path.join(tempRoot, 'agora'), { recursive: true });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/12]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > removing app-architecture protections makes denial assertions turn red
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:351:68
+    349|   ['agora/renderer-footgun', feature, 'declare const window: Window; e…
+    350|  ] as const) {
+    351|   expect((await agora(code, file)).some((m) => m.ruleId === rule)).toB…
+       |                                                                    ^
+    352|   const messages = await agora(code, file, new ESLint({ cwd: root, ign…
+    353|   expect(messages.filter((m) => m.ruleId === rule)).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/12]⎯
 
