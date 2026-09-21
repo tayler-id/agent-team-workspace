@@ -28,6 +28,7 @@ for (const [signal, code] of [['SIGINT', 130], ['SIGTERM', 143]]) process.on(sig
 const launch = (file, args, options = {}, signal = 'SIGTERM') => {
 	controller.signal.throwIfAborted();
 	const child = spawn(file, args, { detached: true, stdio: 'ignore', ...options });
+	let unstoppable = false, spawnError;
 	const kill = (sig) => {
 		try { if (child.pid) process.kill(-child.pid, sig); }
 		catch (error) {
@@ -35,12 +36,15 @@ const launch = (file, args, options = {}, signal = 'SIGTERM') => {
 			// Darwin can return EPERM for a group containing only exiting zombies.
 			const census = spawnSync('ps', ['-A', '-o', 'pgid=,stat='], { encoding: 'utf8', timeout: 1_000 });
 			const live = census.stdout?.split('\n').some(line => { const [group, state] = line.trim().split(/\s+/); return group === String(child.pid) && !state?.startsWith('Z'); });
-			if (error.code !== 'EPERM' || census.status !== 0 || live) throw error;
+			if (error.code === 'EPERM' && census.status === 0 && !live) return;
+			// A group this wrapper cannot signal is reported once and still awaited, never abandoned by a crash.
+			if (!unstoppable) report('blocked', { message: `stop failed: ${error}`, pid: child.pid, signal: sig });
+			unstoppable = true; exitCode = 70;
 		}
 	};
 	const done = new Promise(resolve => {
-		child.once('error', error => { report('blocked', { message: String(error) }); resolve(70); });
-		child.once('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
+		child.once('error', error => { spawnError = error; report('blocked', { message: String(error) }); resolve(70); });
+		child.once('close', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
 	});
 	const stop = async () => {
 		kill(signal);
@@ -51,7 +55,7 @@ const launch = (file, args, options = {}, signal = 'SIGTERM') => {
 	children.add(stop);
 	controller.signal.addEventListener('abort', abort, { once: true });
 	void done.then(() => { kill('SIGKILL'); children.delete(stop); controller.signal.removeEventListener('abort', abort); });
-	return { child, done };
+	return { child, done, get error() { return spawnError; } };
 };
 const runChild = (env) => launch(command[0], command.slice(1), { stdio: 'inherit', env }).done;
 if (['DATABASE', 'OWNER_DATABASE', 'BYPASS_DATABASE', 'SUPERUSER_DATABASE'].every(name => process.env[`AGORA_TEST_${name}_URL`])) {
@@ -65,8 +69,11 @@ if (['DATABASE', 'OWNER_DATABASE', 'BYPASS_DATABASE', 'SUPERUSER_DATABASE'].ever
 	let lease, server;
 	const timer = setTimeout(() => { report('blocked', { message: 'startup timeout', startup_ms: startupMs }); cancel(70); }, startupMs);
 	const run = async (name, args) => {
-		const code = await launch(bin(name), args).done;
-		if (code !== 0) throw new Error(`${name} failed (${code})`);
+		const { child, done } = launch(bin(name), args, { stdio: ['ignore', 'ignore', 'pipe'] });
+		let stderr = '';
+		child.stderr.on('data', bytes => { stderr = `${stderr}${bytes}`.slice(-4_096); }); // Bounded tail of the tool's own words.
+		const code = await done;
+		if (code !== 0) throw new Error(`${name} failed (${code}): ${stderr.trim()}`);
 	};
 	try {
 		if (await launch(bin('pg_ctl'), ['--version']).done !== 0) { exitCode ||= 3; throw new Error('PostgreSQL 18 binaries unavailable; set AGORA_PG_BIN'); }
@@ -79,7 +86,9 @@ if (['DATABASE', 'OWNER_DATABASE', 'BYPASS_DATABASE', 'SUPERUSER_DATABASE'].ever
 		try { server = launch(bin('postgres'), ['-D', dataDir, '-k', lease.identity.socketDir, '-p', '5432', '-c', 'listen_addresses=', '-c', 'fsync=off'], { stdio: ['ignore', log, log] }, 'SIGINT'); }
 		finally { closeSync(log); }
 		report('starting', { ...lease.identity, pid: server.child.pid });
-		while (await launch(bin('pg_isready'), ['-h', lease.identity.socketDir, '-p', '5432', '-U', SUPERUSER, '-d', 'postgres']).done !== 0) {
+		let probe;
+		while (await (probe = launch(bin('pg_isready'), ['-h', lease.identity.socketDir, '-p', '5432', '-U', SUPERUSER, '-d', 'postgres'])).done !== 0) {
+			if (probe.error) throw probe.error; // An unspawnable probe is fatal, not "not ready yet".
 			if (server.child.exitCode !== null || server.child.signalCode !== null) throw new Error('postgres exited before readiness');
 			await delay(25, undefined, { signal: controller.signal });
 		}
