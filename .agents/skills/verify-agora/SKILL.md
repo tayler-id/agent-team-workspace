@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the local-room L1 contract baseline from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 and CI P0c A allocation only; later slices extend it.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the local-room L1 contract baseline from the public surface. Use before closing any task that touches apps/center, apps/web, packages/domain, packages/storage, packages/client-core, packages/web-framework, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1, CI P0c A allocation and the web-framework Client/Host shell; later slices extend it.
 ---
 
 # Verify Agora
@@ -114,6 +114,28 @@ For P0c A, replay the test-only allocation parent with the focused baseline and 
 ```sh
 node scripts/record-red-green.mjs --parent c9e6fe16c1f107da95d77f35d092e0a923781783 --head HEAD --out .scratch/p0c-replay -- pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts -t 'allocation baseline|short socket denial'
 ```
+
+
+## Web framework Client and Host
+
+Scope: **browser shell and `@agora/web-framework` available; persistence not connected.** Coding stream independent of L1-L3 storage. Fixture is `agora.web-fixture.room/v1`.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm typecheck
+pnpm lint
+pnpm boundaries
+pnpm web:test
+pnpm web:dev
+pnpm web:build
+```
+
+Pass predicates:
+
+- `pnpm typecheck` includes `packages/web-framework` and `apps/web`. `pnpm lint` / `pnpm boundaries` cover framework forbidden imports (apps/*, domain, storage, provider SDKs, unrestricted browser globals) and apps/web allowing only `@agora/contracts`, `@agora/client-core` and `@agora/web-framework` from the `@agora/` scope.
+- `pnpm web:test` runs jsdom shell, fixture and framework-hook tests: one-writer identity, named commands, duplicate/gap replay, stale completion, keyboard roving focus, update isolation, phone viewport, draft/submit/revoke.
+- Browser verification uses `chrome-devtools-axi` when available: `pnpm web:dev`, open `http://127.0.0.1:4174`, exercise fixture controls, 390x844 and 1440x900, reduced-motion, no horizontal overflow, Tab through timeline and composer. Record under `evidence/docs/<task>/`.
+- `@agora/contracts` main entry must stay free of `node:crypto` (use `@agora/contracts/canonical` for digests).
 
 ## Cleanup
 

@@ -3,7 +3,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { AST_NODE_TYPES, ESLintUtils, type TSESLint, type TSESTree } from '@typescript-eslint/utils';
 export const projectRoot = path.resolve(import.meta.dirname, '..');
-const owners = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker'];
+const owners = ['contracts', 'packages/client-core', 'packages/web-framework', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker'];
 const inside = (root: string, file: string): boolean => !path.relative(root, file).startsWith('..') && !path.isAbsolute(path.relative(root, file));
 const physical = (file: string): string => existsSync(file) ? realpathSync(file) : file;
 
@@ -23,6 +23,7 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 	}
 	const allowed: Record<string, string[]> = {
 		'packages/client-core': [],
+		'packages/web-framework': ['@agora/client-core', 'react'],
 		'packages/domain': ['@agora/contracts/canonical', 'node:crypto'],
 		'contracts': ['ajv', 'ajv-formats', 'openapi-typescript', 'node:crypto'],
 		'packages/storage': ['@agora/domain', '@agora/contracts/canonical', 'pg', 'drizzle-orm', 'node:crypto', 'node:fs', 'node:path', 'node:url'],
@@ -30,7 +31,8 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 	};
 	if (owner === 'contracts' && (file.includes('/tools/') || file.endsWith('/src/conform-cli.ts'))) allowed[owner]?.push('node:child_process', 'node:fs', 'node:path', 'node:url', 'node:os');
 	if (owner === 'packages/storage' && file.endsWith('/src/index.ts')) return specifier === '@agora/domain' ? undefined : 'public storage entry exports domain ports, not SDK bindings';
-	if (owner === 'apps/web' || owner === 'apps/worker') return specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core'].includes(specifier) ? 'client imports a server package' : undefined;
+	if (owner === 'apps/web') return specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core', '@agora/web-framework'].includes(specifier) ? 'client imports a server package' : undefined;
+	if (owner === 'apps/worker') return specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core'].includes(specifier) ? 'client imports a server package' : undefined;
 	if (!(allowed[owner] ?? []).some((name) => specifier === name || (name === 'ajv' || name === 'drizzle-orm') && specifier.startsWith(`${name}/`))) return `${owner} cannot import ${specifier}`;
 	if (specifier === '@agora/contracts/canonical' && resolved && physical(resolved) !== physical(path.join(projectRoot, 'contracts/src/canonical.ts'))) return 'canonical export resolves outside the neutral contract utility';
 	return undefined;
@@ -64,7 +66,7 @@ export const importBoundaryRule: TSESLint.RuleModule<'forbidden'> = {
 			TSImportEqualsDeclaration(node) { if (node.moduleReference.type === AST_NODE_TYPES.TSExternalModuleReference) check(node, node.moduleReference.expression, node.importKind === 'type'); },
 			CallExpression(node) { if (node.callee.type === AST_NODE_TYPES.Identifier && node.callee.name === 'require') check(node, node.arguments[0], false); },
 			Identifier(node) {
-				if (!file.includes('/packages/client-core/src/') && !file.includes('/packages/domain/src/') && !file.includes('/contracts/')) return;
+				if (!file.includes('/packages/client-core/src/') && !file.includes('/packages/web-framework/src/') && !file.includes('/packages/domain/src/') && !file.includes('/contracts/')) return;
 				if (file.includes('/contracts/tools/') || file.endsWith('/contracts/src/conform-cli.ts')) return;
 				if (file.includes('/contracts/') && ['process', 'global', 'require'].includes(node.name)) return;
 				if (!globals.has(node.name)) return;

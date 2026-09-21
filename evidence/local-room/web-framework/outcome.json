@@ -1,0 +1,14 @@
+{
+  "schema_version": "agora.evidence.outcome/v1",
+  "unit": "web-framework-client-host",
+  "status": "implemented",
+  "summary": "Reusable @agora/web-framework with one-writer RoomClient, named hooks and typed EnvironmentPort; apps/web Host adapter and fixture shell preserved behaviorally from candidate 60bcd79 onto design-baseline main.",
+  "proof": [
+    "packages/web-framework/test/client.test.ts",
+    "packages/web-framework/test/boundaries.test.ts",
+    "apps/web/test/app.test.tsx",
+    "apps/web/test/fixture.test.ts",
+    "evidence/local-room/web-framework/isolation/green.log",
+    "evidence/local-room/web-framework/source-range.md"
+  ]
+}

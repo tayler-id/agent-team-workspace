@@ -9,8 +9,8 @@
 	},
 	"scripts": {
 		"lint": "eslint .",
-		"typecheck": "tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json",
-		"boundaries": "vitest run --project unit packages/client-core/test/boundaries.test.ts packages/client-core/test/export-maps.test.ts --reporter=json --outputFile=.scratch/boundaries.json",
+		"typecheck": "tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json && tsc -p packages/web-framework/tsconfig.json && tsc -p apps/web/tsconfig.json",
+		"boundaries": "vitest run --project unit packages/client-core/test/boundaries.test.ts packages/client-core/test/export-maps.test.ts packages/web-framework/test/boundaries.test.ts --reporter=json --outputFile=.scratch/boundaries.json",
 		"docs:check": "markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs && node scripts/verify-design-handoff.mjs && pnpm docs:validate && pnpm docs:test",
 		"docs:dev": "node docs/site/serve.mjs",
 		"docs:build": "node docs/site/build.mjs",
@@ -27,7 +27,10 @@
 		"test:pg": "node scripts/with-test-postgres.mjs vitest run --project pg",
 		"migrate": "node packages/storage/src/migrate-cli.ts",
 		"migrate:ephemeral": "node scripts/with-test-postgres.mjs node packages/storage/src/migrate-cli.ts",
-		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test"
+		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test",
+		"web:dev": "pnpm --filter @agora/web dev",
+		"web:build": "pnpm --filter @agora/web build",
+		"web:test": "pnpm --filter @agora/web exec vitest run --config vitest.config.ts"
 	},
 	"devDependencies": {
 		"@agora/client-core": "workspace:*",
@@ -41,5 +44,13 @@
 		"typescript": "5.9.3",
 		"typescript-eslint": "8.70.0",
 		"vitest": "5.0.1"
+	},
+	"pnpm": {
+		"overrides": {
+			"vite": "6.4.1"
+		},
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
 	}
 }

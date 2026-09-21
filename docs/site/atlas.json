@@ -74,6 +74,21 @@
       ]
     },
     {
+      "id": "local-room-web-shell",
+      "title": "Web framework, Client and Host",
+      "status": "In progress",
+      "why": "Give the browser one writer Client, named hooks and a typed EnvironmentPort so the room shell cannot own a second timeline.",
+      "page": "local-room-web-shell.md",
+      "proof": [
+        "repo:packages/web-framework/src/client.ts",
+        "repo:packages/web-framework/src/environment.ts",
+        "repo:apps/web/src/host/environment.ts",
+        "repo:apps/web/test/app.test.tsx",
+        "repo:packages/web-framework/test/boundaries.test.ts",
+        "repo:evidence/local-room/web-framework/source-range.md"
+      ]
+    },
+    {
       "id": "documentation",
       "title": "Living documentation and progress atlas",
       "status": "In progress",
@@ -88,7 +103,7 @@
     {
       "id": "browser",
       "title": "Browser and client core",
-      "availability": "S1 planned UI; core in progress",
+      "availability": "S1 planned UI; core built; web-framework and fixture shell in progress",
       "page": "architecture.md",
       "why": "Show shared conversation without owning authority."
     },

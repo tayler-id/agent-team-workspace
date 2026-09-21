@@ -19,6 +19,7 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `pnpm test:unit` | Unit tests only, no database |
 | `pnpm test:pg` | PostgreSQL tests only, throwaway cluster |
 | `pnpm migrate` | Applies pending migrations as the owner in `AGORA_MIGRATION_DATABASE_URL` and prints a JSON report |
+| `pnpm web:dev` / `pnpm web:build` / `pnpm web:test` | Web framework room shell: Vite dev server, production build, jsdom unit/component tests. Independent of `pnpm check`; see [Web framework and room shell](../site/local-room-web-shell.md) |
 | `pnpm check` | All of the above gates in sequence |
 
 The documentation tool's TOML parser is pinned to `smol-toml` 1.7.1 through a narrow workspace override. Its upstream 1.7.0 pin hangs on a malformed trailing comment (CVE-2026-85730); a bounded public-CLI regression test and full dependency audit cover this repair.
@@ -30,8 +31,10 @@ The documentation tool's TOML parser is pinned to `smol-toml` 1.7.1 through a na
 | `@agora/contracts` | `contracts` | JSON Schema families, OpenAPI operations, generated consumers, canonical JSON, the pinned Ajv wire validator | Anything but schema tooling; never domain, storage, Hono, React or transport code |
 | `@agora/domain` | `packages/domain` | Pure decisions, branded identifiers | Hono, Drizzle, pg, React |
 | `@agora/client-core` | `packages/client-core` | Immutable normalized snapshots, synchronization, drafts and command decisions | Frameworks, transports, domain/server/storage internals |
+| `@agora/web-framework` | `packages/web-framework` | One-writer RoomClient, named hooks, pure projection, typed EnvironmentPort | apps/*, domain, storage, provider SDKs, unrestricted browser globals |
 | `@agora/storage` | `packages/storage` | Migrations, explicit SQL, the `Database` handle | Hono, React; it never exports pg types |
 | `@agora/center` | `apps/center` | Hono routes and composition | Raw SQL |
+| `@agora/web` | `apps/web` | Browser Host adapter, fixture transport and room shell over the framework | Any `@agora/*` package but `contracts`, `client-core` and `web-framework`; `@agora/contracts` main entry stays free of `node:crypto` |
 
 Import boundaries are enforced by package export maps and the `agora/import-boundary` and `agora/public-types` ESLint rules. The first checks value/type-only imports, dynamic imports, import types, re-exports, CommonJS import syntax, owning-package paths and ambient DOM references. It rejects unprovable dynamic targets. The second follows public export types through aliases, generics, inheritance, callbacks and nested fields, so a private SDK type cannot hide behind a domain port. The exact contract-schema wildcard is the only permitted wildcard export; private code paths remain closed.
 

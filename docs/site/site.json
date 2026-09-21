@@ -30,6 +30,7 @@
         {"id": "test-first", "title": "Task proof admission", "kind": "feature"},
         {"id": "contracts", "title": "Portable contracts", "kind": "feature"},
         {"id": "local-room", "title": "Local room contracts", "kind": "feature"},
+        {"id": "local-room-web-shell", "title": "Web framework and room shell", "kind": "feature"},
         {"id": "synchronization", "title": "Client synchronization", "kind": "feature"},
         {"id": "memory", "title": "Data and memory", "kind": "guide"},
         {"id": "authorization", "title": "Authorization and agents", "kind": "guide"},
@@ -69,6 +70,8 @@
     {"path": "docs/site/build.mjs", "page": "authoring.md"},
     {"path": "docs/site/serve.mjs", "page": "authoring.md"},
     {"path": "scripts/verify-design-handoff.mjs", "page": "verification.md"},
-    {"path": "scripts/test-design-handoff-checks.mjs", "page": "verification.md"}
+    {"path": "scripts/test-design-handoff-checks.mjs", "page": "verification.md"},
+    {"path": "apps/web", "page": "local-room-web-shell.md"},
+    {"path": "packages/web-framework", "page": "local-room-web-shell.md"}
   ]
 }
