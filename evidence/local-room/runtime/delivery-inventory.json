@@ -1,7 +1,7 @@
 {
   "stacked_base": "55269a5103656a63cc6f246c00ebb1efa6785866",
-  "qualified_source_head": "db0bd96a15060c4c6d2ba2edc3877fc7c4472d24",
-  "method": "Full delivered source/docs/evidence diff; documentation corpus test counted conservatively as source. Binary evidence has byte counts rather than line counts. Closing receipt-only commit is separately hashed in artifacts.json.",
+  "qualified_source_head": "986fb82bd8019a09fce368de522d8c338953d76c",
+  "method": "Full qualified source/docs/evidence diff; documentation corpus test counted conservatively as source. Binary evidence has byte counts rather than line counts. Closing receipt-only commit is separately hashed in artifacts.json.",
   "totals": {
     "docs": {
       "files": 15,
@@ -12,10 +12,10 @@
     },
     "source": {
       "files": 18,
-      "added_lines": 715,
+      "added_lines": 714,
       "removed_lines": 23,
       "meaningful_added": 692,
-      "head_bytes": 100250
+      "head_bytes": 100249
     },
     "fixtures": {
       "files": 1,
@@ -32,11 +32,11 @@
       "head_bytes": 285769
     },
     "evidence": {
-      "files": 63,
-      "added_lines": 15471,
+      "files": 67,
+      "added_lines": 16794,
       "removed_lines": 0,
-      "meaningful_added": 14166,
-      "head_bytes": 1578215
+      "meaningful_added": 15469,
+      "head_bytes": 1619643
     }
   },
   "unchanged_categories": [
@@ -50,7 +50,8 @@
       "added_lines": 47,
       "removed_lines": 1,
       "meaningful_added": 33,
-      "head_bytes": 17455
+      "head_bytes": 17455,
+      "sha256": "b738783cfbfbd90102891382e5b1e5840422e4c915adb563264d776b611131c3"
     },
     {
       "path": "AGENTS.md",
@@ -58,7 +59,8 @@
       "added_lines": 1,
       "removed_lines": 1,
       "meaningful_added": 1,
-      "head_bytes": 3910
+      "head_bytes": 3910,
+      "sha256": "1dd050641df77bc609b65384245e0c7f4b60b32d4410ada543308cfa39ae031b"
     },
     {
       "path": "agora/feature-map.json",
@@ -66,7 +68,8 @@
       "added_lines": 11,
       "removed_lines": 0,
       "meaningful_added": 11,
-      "head_bytes": 11159
+      "head_bytes": 11159,
+      "sha256": "40885d308c46654eb31fcc16a4e9311f71eaa0ce0c8f3a629b31e83b1759b4ad"
     },
     {
       "path": "apps/center/src/app.ts",
@@ -74,15 +77,17 @@
       "added_lines": 8,
       "removed_lines": 21,
       "meaningful_added": 8,
-      "head_bytes": 5187
+      "head_bytes": 5187,
+      "sha256": "6f57cbe08ad258b8aedeb053b9602d75cda9caec01e910bdfda7474bfae9e5b0"
     },
     {
       "path": "apps/center/src/local-room-wire.ts",
       "category": "source",
-      "added_lines": 23,
+      "added_lines": 22,
       "removed_lines": 0,
       "meaningful_added": 20,
-      "head_bytes": 1046
+      "head_bytes": 1045,
+      "sha256": "d67cec8cc4a1ed5f76008f5bb41729473f0aee251ee966029153fa6974049ca0"
     },
     {
       "path": "apps/center/test/runtime.pg.test.ts",
@@ -90,7 +95,8 @@
       "added_lines": 163,
       "removed_lines": 0,
       "meaningful_added": 158,
-      "head_bytes": 10689
+      "head_bytes": 10689,
+      "sha256": "b17f145781f5c37bee9a7e128af73e9cbe39a54d0fcd52898bb3ddecf1cfa997"
     },
     {
       "path": "apps/center/test/runtime.test.ts",
@@ -98,7 +104,8 @@
       "added_lines": 70,
       "removed_lines": 0,
       "meaningful_added": 64,
-      "head_bytes": 6492
+      "head_bytes": 6492,
+      "sha256": "42025afb4a47fc270a62d59e1c3d2d978bd6bd795fb3b72cd8cb60ce9bb61ec7"
     },
     {
       "path": "contracts/fixtures/vectors.json",
@@ -106,7 +113,8 @@
       "added_lines": 37,
       "removed_lines": 0,
       "meaningful_added": 37,
-      "head_bytes": 132657
+      "head_bytes": 132657,
+      "sha256": "e54d3ab6ebd3f17d014081f8d162ea98d00587e087c99f21629e568653df576f"
     },
     {
       "path": "contracts/generated/manifest.json",
@@ -114,7 +122,8 @@
       "added_lines": 10,
       "removed_lines": 8,
       "meaningful_added": 10,
-      "head_bytes": 4549
+      "head_bytes": 4549,
+      "sha256": "181f9c63a352b6b59dd980013b2738803195dc701719cce8506dc051dd05c5e5"
     },
     {
       "path": "contracts/generated/openapi.bundled.json",
@@ -122,7 +131,8 @@
       "added_lines": 122,
       "removed_lines": 0,
       "meaningful_added": 122,
-      "head_bytes": 36828
+      "head_bytes": 36828,
+      "sha256": "884768b9324dde34af056e9f26bd8014d80a01d39c9b0634cb7601957eb61948"
     },
     {
       "path": "contracts/generated/typescript/openapi.d.ts",
@@ -130,7 +140,8 @@
       "added_lines": 68,
       "removed_lines": 0,
       "meaningful_added": 61,
-      "head_bytes": 28708
+      "head_bytes": 28708,
+      "sha256": "66c18e8b247ad9eec126a86c32dc95801c759095d5134e532cf82e5d68d02ad7"
     },
     {
       "path": "contracts/openapi.json",
@@ -138,7 +149,8 @@
       "added_lines": 11,
       "removed_lines": 0,
       "meaningful_added": 11,
-      "head_bytes": 4534
+      "head_bytes": 4534,
+      "sha256": "634b80eb469cc61163879a4e2dd637b4c6da2d8dc5ff7843b364d0d3f2c6fa11"
     },
     {
       "path": "contracts/schemas/local-room.schema.json",
@@ -146,7 +158,8 @@
       "added_lines": 24,
       "removed_lines": 0,
       "meaningful_added": 24,
-      "head_bytes": 9244
+      "head_bytes": 9244,
+      "sha256": "ccf8deda4b7a805f7b7a9e23a7f266a4c81cd1aedf372bdadafe0e03c3f0f241"
     },
     {
       "path": "contracts/swift/Sources/AgoraContracts/Generated/Client.swift",
@@ -154,7 +167,8 @@
       "added_lines": 89,
       "removed_lines": 0,
       "meaningful_added": 85,
-      "head_bytes": 26378
+      "head_bytes": 26378,
+      "sha256": "a34934daa7657658a41ddf817bbe89b584ada17b650c6fd12a2bda4e66ef3ba1"
     },
     {
       "path": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift",
@@ -162,7 +176,8 @@
       "added_lines": 182,
       "removed_lines": 0,
       "meaningful_added": 145,
-      "head_bytes": 133589
+      "head_bytes": 133589,
+      "sha256": "e562e14e91b916824efab1c0dcfb2148ea5642288596b9267f1e7e93f4e707de"
     },
     {
       "path": "contracts/swift/Sources/AgoraContracts/Generated/Types+Operations.swift",
@@ -170,7 +185,8 @@
       "added_lines": 179,
       "removed_lines": 0,
       "meaningful_added": 116,
-      "head_bytes": 49063
+      "head_bytes": 49063,
+      "sha256": "72b0fa43b708730ad5b0d7bdf7fa19b9849b39947a8ae3323bd4153b15a2aa26"
     },
     {
       "path": "contracts/swift/Sources/AgoraContracts/Generated/Types.swift",
@@ -178,7 +194,8 @@
       "added_lines": 18,
       "removed_lines": 0,
       "meaningful_added": 10,
-      "head_bytes": 6654
+      "head_bytes": 6654,
+      "sha256": "38b5160d8a6275373363ac8a89d172b60f323014895941b7d3790f472060fba6"
     },
     {
       "path": "contracts/swift/Sources/AgoraContractsConform/main.swift",
@@ -186,7 +203,8 @@
       "added_lines": 2,
       "removed_lines": 0,
       "meaningful_added": 2,
-      "head_bytes": 6892
+      "head_bytes": 6892,
+      "sha256": "a1ab75ea1ed0653f552949fcd0adbf275d79be73250420fe1f2ead0bca0c1e65"
     },
     {
       "path": "contracts/tools/browser-validator.ts",
@@ -194,7 +212,8 @@
       "added_lines": 23,
       "removed_lines": 0,
       "meaningful_added": 21,
-      "head_bytes": 1337
+      "head_bytes": 1337,
+      "sha256": "9a3b12007fbca8d94f3872a54a705c874ff686aab2020bfaabc0274e0d800bc6"
     },
     {
       "path": "docs/decisions.tsv",
@@ -202,7 +221,8 @@
       "added_lines": 3,
       "removed_lines": 0,
       "meaningful_added": 3,
-      "head_bytes": 37577
+      "head_bytes": 37577,
+      "sha256": "3f0849ac23652203e3f4d5ee0bf3d5e9579fcf929af33a1d619203db2173f3ec"
     },
     {
       "path": "docs/runbooks/development.md",
@@ -210,7 +230,8 @@
       "added_lines": 14,
       "removed_lines": 2,
       "meaningful_added": 8,
-      "head_bytes": 18250
+      "head_bytes": 18250,
+      "sha256": "89b06d4a248d6468b49fc4a54ea59d64930cfc9801c11c5ce2d3857343418e22"
     },
     {
       "path": "docs/site/atlas.json",
@@ -218,7 +239,8 @@
       "added_lines": 8,
       "removed_lines": 3,
       "meaningful_added": 8,
-      "head_bytes": 13049
+      "head_bytes": 13049,
+      "sha256": "64c3e13fa4622392a260232c6504dc35afc0bb0517cc1768087c494e4ea7d34f"
     },
     {
       "path": "docs/site/cli.md",
@@ -226,7 +248,8 @@
       "added_lines": 21,
       "removed_lines": 0,
       "meaningful_added": 16,
-      "head_bytes": 10435
+      "head_bytes": 10435,
+      "sha256": "1baa6bae28ac9fd783bbb6fe97e9f22116b4752cec33054aa88509fd461fa696"
     },
     {
       "path": "docs/site/configuration.md",
@@ -234,7 +257,8 @@
       "added_lines": 4,
       "removed_lines": 0,
       "meaningful_added": 2,
-      "head_bytes": 3579
+      "head_bytes": 3579,
+      "sha256": "ee5980fc49be42de3c272df23e171b74f30918d5ab2e749fd7a64bf203bd1620"
     },
     {
       "path": "docs/site/contracts.md",
@@ -242,7 +266,8 @@
       "added_lines": 2,
       "removed_lines": 2,
       "meaningful_added": 1,
-      "head_bytes": 4399
+      "head_bytes": 4399,
+      "sha256": "9c43ff558d5a3e42a10139c6d2aeafece26ce1db82d0353c31bae69f22984120"
     },
     {
       "path": "docs/site/faq.md",
@@ -250,7 +275,8 @@
       "added_lines": 1,
       "removed_lines": 1,
       "meaningful_added": 1,
-      "head_bytes": 3540
+      "head_bytes": 3540,
+      "sha256": "2e49bbac511731b84e62fe97e27873f2ab9fd0b4a8783223e4d7db293b5e4432"
     },
     {
       "path": "docs/site/getting-started.md",
@@ -258,7 +284,8 @@
       "added_lines": 12,
       "removed_lines": 1,
       "meaningful_added": 8,
-      "head_bytes": 3598
+      "head_bytes": 3598,
+      "sha256": "08a8dc39a41dbc17e8ce9745db97ae5efbd9a608a13650bc14f6ab42910eb909"
     },
     {
       "path": "docs/site/local-room.md",
@@ -266,7 +293,8 @@
       "added_lines": 37,
       "removed_lines": 19,
       "meaningful_added": 31,
-      "head_bytes": 7907
+      "head_bytes": 7907,
+      "sha256": "c7f114d1532cce51553bfb3b9def30395ea228be6de62c64d034e2b9a7cacc14"
     },
     {
       "path": "docs/site/operations.md",
@@ -274,7 +302,8 @@
       "added_lines": 10,
       "removed_lines": 0,
       "meaningful_added": 5,
-      "head_bytes": 5224
+      "head_bytes": 5224,
+      "sha256": "b60b2b8765c0f534c355b1d81588fb3d8b7f7144d2176c75a445f4d4107bd385"
     },
     {
       "path": "docs/site/progress.md",
@@ -282,7 +311,8 @@
       "added_lines": 2,
       "removed_lines": 2,
       "meaningful_added": 2,
-      "head_bytes": 9647
+      "head_bytes": 9647,
+      "sha256": "ba30ea4c08823a8510d240eadb2bf476fb673389adcf9c96e18dfdc794feaaf1"
     },
     {
       "path": "docs/site/site.json",
@@ -290,7 +320,8 @@
       "added_lines": 6,
       "removed_lines": 0,
       "meaningful_added": 6,
-      "head_bytes": 4435
+      "head_bytes": 4435,
+      "sha256": "f87d65778d7f9c6756eaaf1b9e747b01511358b5463375be3895366ec8f5c7a0"
     },
     {
       "path": "docs/site/synchronization.md",
@@ -298,7 +329,8 @@
       "added_lines": 1,
       "removed_lines": 1,
       "meaningful_added": 0,
-      "head_bytes": 3821
+      "head_bytes": 3821,
+      "sha256": "04f6558c50c5334c500766a28c612c438a88346c3b7a03970b95f1c30ec700ad"
     },
     {
       "path": "docs/site/test/corpus.test.ts",
@@ -306,7 +338,8 @@
       "added_lines": 2,
       "removed_lines": 1,
       "meaningful_added": 2,
-      "head_bytes": 2247
+      "head_bytes": 2247,
+      "sha256": "7382f10c85ddebf6d4ae314f85ee3d36a834d75993c97fb9fb4e6588a674bce8"
     },
     {
       "path": "evidence/local-room/runtime/README.md",
@@ -314,7 +347,17 @@
       "added_lines": 21,
       "removed_lines": 0,
       "meaningful_added": 11,
-      "head_bytes": 4633
+      "head_bytes": 4633,
+      "sha256": "512c94b34959b4c40c44a260e3427e6e56e9e64e3e0ca08e60bcdfb13f2c46ab"
+    },
+    {
+      "path": "evidence/local-room/runtime/artifacts.json",
+      "category": "evidence",
+      "added_lines": 339,
+      "removed_lines": 0,
+      "meaningful_added": 339,
+      "head_bytes": 10308,
+      "sha256": "2bed9c43257713bd7513616970cb767d3d7b2b6021b35379cc9e35d93451190d"
     },
     {
       "path": "evidence/local-room/runtime/audit.json",
@@ -322,7 +365,8 @@
       "added_lines": 18,
       "removed_lines": 0,
       "meaningful_added": 18,
-      "head_bytes": 310
+      "head_bytes": 310,
+      "sha256": "53fffac9d1f4c670d03248d227edd0f8963297eced25ee4d32d6e29d5d5b7c09"
     },
     {
       "path": "evidence/local-room/runtime/boundaries.json",
@@ -330,7 +374,8 @@
       "added_lines": 1,
       "removed_lines": 0,
       "meaningful_added": 1,
-      "head_bytes": 3663
+      "head_bytes": 3663,
+      "sha256": "00bef9f24ba4fee69300aa81910ccce9a9d1af76f720a3a6710eb2e6b5cefa50"
     },
     {
       "path": "evidence/local-room/runtime/boundaries.log",
@@ -338,7 +383,8 @@
       "added_lines": 5,
       "removed_lines": 0,
       "meaningful_added": 3,
-      "head_bytes": 407
+      "head_bytes": 407,
+      "sha256": "6a13cb1a3f0dc2fcdc0ac7bdde35d1e29102b4f4b90ec3aa2ff817d2a86ee146"
     },
     {
       "path": "evidence/local-room/runtime/browser-accessibility.txt",
@@ -346,7 +392,8 @@
       "added_lines": 83,
       "removed_lines": 0,
       "meaningful_added": 83,
-      "head_bytes": 2800
+      "head_bytes": 2800,
+      "sha256": "120065db3b6541a9f7449cd28ec6632d623c90e18440fa069eea579466e4f145"
     },
     {
       "path": "evidence/local-room/runtime/browser-cleanup.log",
@@ -354,7 +401,8 @@
       "added_lines": 1,
       "removed_lines": 0,
       "meaningful_added": 1,
-      "head_bytes": 16
+      "head_bytes": 16,
+      "sha256": "f2bc7e29f103aa6b355ed78f349a607be6b4f2626f0a19aeae7eee6cbdeaba81"
     },
     {
       "path": "evidence/local-room/runtime/browser-console.log",
@@ -362,7 +410,8 @@
       "added_lines": 7,
       "removed_lines": 0,
       "meaningful_added": 7,
-      "head_bytes": 328
+      "head_bytes": 328,
+      "sha256": "5966633f32deecd0930facd10994c29fe1d259bbbdb5b28624c391c90f5f7fe0"
     },
     {
       "path": "evidence/local-room/runtime/browser-csp.red.log",
@@ -370,7 +419,8 @@
       "added_lines": 3,
       "removed_lines": 0,
       "meaningful_added": 3,
-      "head_bytes": 54
+      "head_bytes": 54,
+      "sha256": "f780b3c93a11098293c6764d33b41d53263716d4c6d84e75d6ceed152ba745ed"
     },
     {
       "path": "evidence/local-room/runtime/browser-drive.log",
@@ -378,7 +428,8 @@
       "added_lines": 404,
       "removed_lines": 0,
       "meaningful_added": 403,
-      "head_bytes": 17790
+      "head_bytes": 17790,
+      "sha256": "8b2c2e7bc75397ea7d661affd5ee21df3a8a4a3b354c5b608075b64292ba23ec"
     },
     {
       "path": "evidence/local-room/runtime/browser-script-route.unavailable.log",
@@ -386,7 +437,8 @@
       "added_lines": 4,
       "removed_lines": 0,
       "meaningful_added": 4,
-      "head_bytes": 102
+      "head_bytes": 102,
+      "sha256": "d4584a76cdc4208f3e890bf77e50f7a664860ebe1081a6f8fd83943091cbcbf5"
     },
     {
       "path": "evidence/local-room/runtime/browser-send.txt",
@@ -394,7 +446,8 @@
       "added_lines": 65,
       "removed_lines": 0,
       "meaningful_added": 65,
-      "head_bytes": 2376
+      "head_bytes": 2376,
+      "sha256": "2e2d51f2f0cd28480981abb091aaee46f387835b2a8a3662098adaf73c879f1f"
     },
     {
       "path": "evidence/local-room/runtime/check-code-head.log",
@@ -402,7 +455,8 @@
       "added_lines": 96,
       "removed_lines": 0,
       "meaningful_added": 76,
-      "head_bytes": 7814
+      "head_bytes": 7814,
+      "sha256": "2506193a7f31c1a0a3355894b88f1a8f9ef676e138878c14990de676ca515504"
     },
     {
       "path": "evidence/local-room/runtime/cleanup.jsonl",
@@ -410,7 +464,8 @@
       "added_lines": 3,
       "removed_lines": 0,
       "meaningful_added": 3,
-      "head_bytes": 1199
+      "head_bytes": 1199,
+      "sha256": "a7423845ec5566e4e3a69909175a18fe1e8728061f17228c1e1b6cecacb05ea5"
     },
     {
       "path": "evidence/local-room/runtime/client-replay.json",
@@ -418,7 +473,8 @@
       "added_lines": 1,
       "removed_lines": 0,
       "meaningful_added": 1,
-      "head_bytes": 22038
+      "head_bytes": 22038,
+      "sha256": "c06c266b7ee175eaf5c4e932104dac34ef7ae237cf9cec627cba05f4975b5bb3"
     },
     {
       "path": "evidence/local-room/runtime/contracts-check.json",
@@ -426,7 +482,8 @@
       "added_lines": 1,
       "removed_lines": 0,
       "meaningful_added": 1,
-      "head_bytes": 1915
+      "head_bytes": 1915,
+      "sha256": "5dc552cb0b7e918ddb8703cbafbe3be69965b80bbaf1ac6f1105831b685c5942"
     },
     {
       "path": "evidence/local-room/runtime/contracts-conform.json",
@@ -434,7 +491,17 @@
       "added_lines": 1,
       "removed_lines": 0,
       "meaningful_added": 1,
-      "head_bytes": 100075
+      "head_bytes": 100075,
+      "sha256": "877460e055dfac02fec2fcacde515f3f1dad1d422cffbed6f5f3753d5ed631ad"
+    },
+    {
+      "path": "evidence/local-room/runtime/delivery-inventory.json",
+      "category": "evidence",
+      "added_lines": 880,
+      "removed_lines": 0,
+      "meaningful_added": 880,
+      "head_bytes": 22692,
+      "sha256": "09ada6469c05928ed138ff781f8f34ef336300a80c67208c48db3f1ccea5d8a7"
     },
     {
       "path": "evidence/local-room/runtime/design-checks.log",
@@ -442,7 +509,8 @@
       "added_lines": 91,
       "removed_lines": 0,
       "meaningful_added": 83,
-      "head_bytes": 6193
+      "head_bytes": 6193,
+      "sha256": "4ef279d7fda09c8c5a84989c896d5628d1493df77289632c45aee6ac38b757cd"
     },
     {
       "path": "evidence/local-room/runtime/docs-atlas.log",
@@ -450,7 +518,8 @@
       "added_lines": 5,
       "removed_lines": 0,
       "meaningful_added": 3,
-      "head_bytes": 194
+      "head_bytes": 194,
+      "sha256": "721f82f6de4ac075c1889a2e61386fb44c40cc145c9ef08328627bb0dbe46b14"
     },
     {
       "path": "evidence/local-room/runtime/docs-build.log",
@@ -458,7 +527,8 @@
       "added_lines": 5,
       "removed_lines": 0,
       "meaningful_added": 3,
-      "head_bytes": 212
+      "head_bytes": 212,
+      "sha256": "bcf671b5b5292c803b0c739f94764990402fc7aca59e6b9a5a7ad639017f375d"
     },
     {
       "path": "evidence/local-room/runtime/docs-final.log",
@@ -466,7 +536,8 @@
       "added_lines": 64,
       "removed_lines": 0,
       "meaningful_added": 58,
-      "head_bytes": 4604
+      "head_bytes": 4604,
+      "sha256": "480efdf5161197a746f26997c8bf1c59c1a5dd9759326fcb6604c5a5f9c33a89"
     },
     {
       "path": "evidence/local-room/runtime/docs-status.red.log",
@@ -474,7 +545,8 @@
       "added_lines": 105,
       "removed_lines": 0,
       "meaningful_added": 95,
-      "head_bytes": 23585
+      "head_bytes": 23585,
+      "sha256": "a398242e5e16b1529ff00041d412c4b661882cb1233e37683c1467f6f21fa675"
     },
     {
       "path": "evidence/local-room/runtime/doctor.log",
@@ -482,7 +554,26 @@
       "added_lines": 101,
       "removed_lines": 0,
       "meaningful_added": 90,
-      "head_bytes": 5557
+      "head_bytes": 5557,
+      "sha256": "55a98754d981539a46694e408be1e5040b62edabd840713af461ee97aa7e71db"
+    },
+    {
+      "path": "evidence/local-room/runtime/final-cleanup.log",
+      "category": "evidence",
+      "added_lines": 3,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 30,
+      "sha256": "6ed0d93b24070f9a36ecb3720fa91ea590e0cd1482bd648efbd35a7f4a45155d"
+    },
+    {
+      "path": "evidence/local-room/runtime/final-head-check.log",
+      "category": "evidence",
+      "added_lines": 98,
+      "removed_lines": 0,
+      "meaningful_added": 78,
+      "head_bytes": 7898,
+      "sha256": "0bdbd53193bdb7936aa41e57fd07d308dd06bffd42665c97d3647e99a792ef0d"
     },
     {
       "path": "evidence/local-room/runtime/foundation-attempt.log",
@@ -490,7 +581,8 @@
       "added_lines": 96,
       "removed_lines": 0,
       "meaningful_added": 94,
-      "head_bytes": 2685
+      "head_bytes": 2685,
+      "sha256": "351afaac298ca0b1f652a1e178e999c96e091c24d2f48afd8ddeba93531aafd4"
     },
     {
       "path": "evidence/local-room/runtime/generate.log",
@@ -498,7 +590,8 @@
       "added_lines": 5,
       "removed_lines": 0,
       "meaningful_added": 3,
-      "head_bytes": 2055
+      "head_bytes": 2055,
+      "sha256": "919db22121f8093e450ae4122a4d7a4105bf3dbc7a2e5710a4960c1898368363"
     },
     {
       "path": "evidence/local-room/runtime/green.log",
@@ -506,7 +599,8 @@
       "added_lines": 24,
       "removed_lines": 0,
       "meaningful_added": 19,
-      "head_bytes": 2379
+      "head_bytes": 2379,
+      "sha256": "fbe61b2790441bd25d0e5e5ff423e2bb8166f2a50017411eead92a65ceed52ec"
     },
     {
       "path": "evidence/local-room/runtime/guard-negatives.log",
@@ -514,7 +608,8 @@
       "added_lines": 384,
       "removed_lines": 0,
       "meaningful_added": 267,
-      "head_bytes": 18134
+      "head_bytes": 18134,
+      "sha256": "5d916bd0ce1d64f60886a2fab7f3eb8c39540556d1977af18ea0ec1a082f8a40"
     },
     {
       "path": "evidence/local-room/runtime/harness-500px-before.png",
@@ -522,7 +617,8 @@
       "added_lines": 0,
       "removed_lines": 0,
       "meaningful_added": 0,
-      "head_bytes": 69470
+      "head_bytes": 69470,
+      "sha256": "3a59d41ff5c0d431f830e7f77c57c772f0ce873765955d3bd111aa067873c6ed"
     },
     {
       "path": "evidence/local-room/runtime/harness-before.png",
@@ -530,7 +626,8 @@
       "added_lines": 0,
       "removed_lines": 0,
       "meaningful_added": 0,
-      "head_bytes": 87162
+      "head_bytes": 87162,
+      "sha256": "08edb70ed228a55ee7186638c369bd16c130a776ff4616c816743a8d41826006"
     },
     {
       "path": "evidence/local-room/runtime/harness-desktop.png",
@@ -538,7 +635,8 @@
       "added_lines": 0,
       "removed_lines": 0,
       "meaningful_added": 0,
-      "head_bytes": 97171
+      "head_bytes": 97171,
+      "sha256": "96e7836e5f55bc8062b1b6c4121e98367b14d8212b080a36b6e586a09cfa3897"
     },
     {
       "path": "evidence/local-room/runtime/harness-interaction.mp4",
@@ -546,7 +644,8 @@
       "added_lines": 0,
       "removed_lines": 0,
       "meaningful_added": 0,
-      "head_bytes": 108309
+      "head_bytes": 108309,
+      "sha256": "be15ee6363283fabe009eec5b845dc09bd1db323d0169ef4cb34f2da3cb47ee4"
     },
     {
       "path": "evidence/local-room/runtime/harness-mobile.png",
@@ -554,7 +653,8 @@
       "added_lines": 0,
       "removed_lines": 0,
       "meaningful_added": 0,
-      "head_bytes": 58466
+      "head_bytes": 58466,
+      "sha256": "d5038f8a596326f889f9dc86d77841aa006c1d265056449bb3aedc87d36e8dcb"
     },
     {
       "path": "evidence/local-room/runtime/initial-red.log",
@@ -562,7 +662,8 @@
       "added_lines": 31,
       "removed_lines": 0,
       "meaningful_added": 21,
-      "head_bytes": 1432
+      "head_bytes": 1432,
+      "sha256": "ccd6beea252b6f9a960f92b0aab277c63bbb9aebceb24d98a4206b4e2322e764"
     },
     {
       "path": "evidence/local-room/runtime/install.log",
@@ -570,7 +671,8 @@
       "added_lines": 10,
       "removed_lines": 0,
       "meaningful_added": 9,
-      "head_bytes": 520
+      "head_bytes": 520,
+      "sha256": "752ecd23c96cc35dce10dd83ab2ba0febdd630209f6e336c13f333ab3640e36f"
     },
     {
       "path": "evidence/local-room/runtime/inventory-after.log",
@@ -578,7 +680,8 @@
       "added_lines": 9,
       "removed_lines": 0,
       "meaningful_added": 9,
-      "head_bytes": 504
+      "head_bytes": 504,
+      "sha256": "f9c332c53ad2af0a33d15cb8abb0290e0d568c4fcff7c78d195336f9cd96aa55"
     },
     {
       "path": "evidence/local-room/runtime/inventory-before.log",
@@ -586,7 +689,8 @@
       "added_lines": 17,
       "removed_lines": 0,
       "meaningful_added": 17,
-      "head_bytes": 1961
+      "head_bytes": 1961,
+      "sha256": "0bd8df9d2abdac96ac0b931ca41dbc32038197fc57a9e8dd294ea7e44dd7bdc3"
     },
     {
       "path": "evidence/local-room/runtime/landmark.green.log",
@@ -594,7 +698,8 @@
       "added_lines": 10,
       "removed_lines": 0,
       "meaningful_added": 6,
-      "head_bytes": 474
+      "head_bytes": 474,
+      "sha256": "4d844eeb1fe736936945dbdeffdf173854e5550b94ae5341b11ec9d6e293f246"
     },
     {
       "path": "evidence/local-room/runtime/landmark.red.log",
@@ -602,7 +707,8 @@
       "added_lines": 50,
       "removed_lines": 0,
       "meaningful_added": 39,
-      "head_bytes": 2800
+      "head_bytes": 2800,
+      "sha256": "5740270d787d166e789d8c32818bcd8c185f9b6451d9a3c78b9c3e1af2ad8cef"
     },
     {
       "path": "evidence/local-room/runtime/lighthouse-before.log",
@@ -610,7 +716,8 @@
       "added_lines": 17,
       "removed_lines": 0,
       "meaningful_added": 17,
-      "head_bytes": 584
+      "head_bytes": 584,
+      "sha256": "f58b95efaa3c4d9b5174ef17debe3139c5bd6de6f4eab91d51223721c646eb6f"
     },
     {
       "path": "evidence/local-room/runtime/lighthouse-before/report.html",
@@ -618,7 +725,8 @@
       "added_lines": 2901,
       "removed_lines": 0,
       "meaningful_added": 2386,
-      "head_bytes": 270856
+      "head_bytes": 270856,
+      "sha256": "43d5ac4cc9b2336d595fea56bf68dfb15032759d0aa8f9b2f38f9f4bbc7b906c"
     },
     {
       "path": "evidence/local-room/runtime/lighthouse-before/report.json",
@@ -626,7 +734,8 @@
       "added_lines": 2997,
       "removed_lines": 0,
       "meaningful_added": 2997,
-      "head_bytes": 111330
+      "head_bytes": 111330,
+      "sha256": "d504e15307e646b86f09adc992d23560a86ea087473fee1928004a8a752079c8"
     },
     {
       "path": "evidence/local-room/runtime/lighthouse.log",
@@ -634,7 +743,8 @@
       "added_lines": 18,
       "removed_lines": 0,
       "meaningful_added": 18,
-      "head_bytes": 707
+      "head_bytes": 707,
+      "sha256": "5de91de4396555f0ef88331421059ae5a30dc1577aaf753c11526df5068a55f1"
     },
     {
       "path": "evidence/local-room/runtime/lighthouse/report.html",
@@ -642,7 +752,8 @@
       "added_lines": 2901,
       "removed_lines": 0,
       "meaningful_added": 2386,
-      "head_bytes": 270401
+      "head_bytes": 270401,
+      "sha256": "66ffec7973f6ffd1ec63b5998ebe067d708b5a612b12589d2766415dacf1aaed"
     },
     {
       "path": "evidence/local-room/runtime/lighthouse/report.json",
@@ -650,7 +761,8 @@
       "added_lines": 2969,
       "removed_lines": 0,
       "meaningful_added": 2969,
-      "head_bytes": 110479
+      "head_bytes": 110479,
+      "sha256": "f9163a2cae16e61fce9407087e400c62faf63cb06365694f644c9aded8d32e2e"
     },
     {
       "path": "evidence/local-room/runtime/migrations.log",
@@ -658,7 +770,8 @@
       "added_lines": 3,
       "removed_lines": 0,
       "meaningful_added": 3,
-      "head_bytes": 695
+      "head_bytes": 695,
+      "sha256": "5f0ffef57da10f22fde66a0a024ec6b6a47ce01b6e1e1b7ef3b837325994b4bf"
     },
     {
       "path": "evidence/local-room/runtime/numeric-order.red.log",
@@ -666,15 +779,17 @@
       "added_lines": 31,
       "removed_lines": 0,
       "meaningful_added": 21,
-      "head_bytes": 1493
+      "head_bytes": 1493,
+      "sha256": "780644bf2c7e7d6c2437cfdd3862a5eea47b88eb42d5a7dd143c316b59a71ed0"
     },
     {
       "path": "evidence/local-room/runtime/outcome.json",
       "category": "evidence",
-      "added_lines": 66,
+      "added_lines": 69,
       "removed_lines": 0,
-      "meaningful_added": 66,
-      "head_bytes": 7598
+      "meaningful_added": 69,
+      "head_bytes": 8098,
+      "sha256": "4a1c9028097a4266de396b9f65e888dcaa62d09f09ec8eeed9234e9d27ca0e03"
     },
     {
       "path": "evidence/local-room/runtime/ownership-negatives.jsonl",
@@ -682,7 +797,8 @@
       "added_lines": 8,
       "removed_lines": 0,
       "meaningful_added": 8,
-      "head_bytes": 2765
+      "head_bytes": 2765,
+      "sha256": "3467c51b5cab5c6d4bf3b0f04cd7196281e8885794251c6155b4a6f8215d9726"
     },
     {
       "path": "evidence/local-room/runtime/postgres-start.log",
@@ -690,7 +806,8 @@
       "added_lines": 42,
       "removed_lines": 0,
       "meaningful_added": 42,
-      "head_bytes": 4836
+      "head_bytes": 4836,
+      "sha256": "7b5c03b37269cd326b41d4305705890b400ef7ce42524e7dd65efc30ab5dd8d1"
     },
     {
       "path": "evidence/local-room/runtime/preliminary-cleanup.log",
@@ -698,7 +815,8 @@
       "added_lines": 2,
       "removed_lines": 0,
       "meaningful_added": 2,
-      "head_bytes": 786
+      "head_bytes": 786,
+      "sha256": "1b09ae8facc71eb6954e8570aab1e2a52b1a21c6a7f87a0e3e746a57b6c51afc"
     },
     {
       "path": "evidence/local-room/runtime/probe-center.json",
@@ -706,7 +824,8 @@
       "added_lines": 428,
       "removed_lines": 0,
       "meaningful_added": 428,
-      "head_bytes": 10452
+      "head_bytes": 10452,
+      "sha256": "b1f3338a8e21fa2856531843293b8838c3bded623fc0da09836bb4e73dfba248"
     },
     {
       "path": "evidence/local-room/runtime/probe-postgres.log",
@@ -714,7 +833,8 @@
       "added_lines": 1,
       "removed_lines": 0,
       "meaningful_added": 1,
-      "head_bytes": 247
+      "head_bytes": 247,
+      "sha256": "fa5b2e1db67918bb0157267e15e7bd2dd93d908380148adac45928c2463e4a1b"
     },
     {
       "path": "evidence/local-room/runtime/probe-scenarios.json",
@@ -722,7 +842,8 @@
       "added_lines": 126,
       "removed_lines": 0,
       "meaningful_added": 126,
-      "head_bytes": 3053
+      "head_bytes": 3053,
+      "sha256": "83e2d95537ec9b62b8abd6a97f870789d11956626e79ca947964386ed3c21357"
     },
     {
       "path": "evidence/local-room/runtime/public-cli.jsonl",
@@ -730,7 +851,8 @@
       "added_lines": 19,
       "removed_lines": 0,
       "meaningful_added": 19,
-      "head_bytes": 18934
+      "head_bytes": 18934,
+      "sha256": "552534b5c0203f1cf9591bb518d2d8cfb72a1823e12a4e6c7f14ce118565bcd1"
     },
     {
       "path": "evidence/local-room/runtime/recorder-cleanup.log",
@@ -738,7 +860,8 @@
       "added_lines": 3,
       "removed_lines": 0,
       "meaningful_added": 3,
-      "head_bytes": 30
+      "head_bytes": 30,
+      "sha256": "6ed0d93b24070f9a36ecb3720fa91ea590e0cd1482bd648efbd35a7f4a45155d"
     },
     {
       "path": "evidence/local-room/runtime/recorder.json",
@@ -746,7 +869,8 @@
       "added_lines": 1,
       "removed_lines": 0,
       "meaningful_added": 1,
-      "head_bytes": 317
+      "head_bytes": 317,
+      "sha256": "b156513aa68464b8d8e69db69d9fa68b7c0f05562cfb4e27201192a836d62032"
     },
     {
       "path": "evidence/local-room/runtime/red.log",
@@ -754,7 +878,8 @@
       "added_lines": 45,
       "removed_lines": 0,
       "meaningful_added": 34,
-      "head_bytes": 3383
+      "head_bytes": 3383,
+      "sha256": "fedad8142440f3d3a2c2d272d3b09a3abfe0c6dfeed488c06372268e5e58dc3b"
     },
     {
       "path": "evidence/local-room/runtime/runtime-pg.log",
@@ -762,7 +887,8 @@
       "added_lines": 14,
       "removed_lines": 0,
       "meaningful_added": 10,
-      "head_bytes": 1064
+      "head_bytes": 1064,
+      "sha256": "6142a437d33e1bc4d6fb614e8c0cd5c027e2cd2a19474c69fbde1f2507550d16"
     },
     {
       "path": "evidence/local-room/runtime/runtime-unit.log",
@@ -770,7 +896,8 @@
       "added_lines": 18,
       "removed_lines": 0,
       "meaningful_added": 14,
-      "head_bytes": 1163
+      "head_bytes": 1163,
+      "sha256": "d6482fd3b007fdbf8db82a10a41fce57d600d7a56c338479a0bb98790e5b35b4"
     },
     {
       "path": "evidence/local-room/runtime/security-scan.json",
@@ -778,7 +905,8 @@
       "added_lines": 16,
       "removed_lines": 0,
       "meaningful_added": 16,
-      "head_bytes": 325
+      "head_bytes": 325,
+      "sha256": "e179b2202c54f5aff05195b81ff9056a1eda1fbe251f972ebe6c3e8fea4b57fa"
     },
     {
       "path": "evidence/local-room/runtime/size.json",
@@ -786,7 +914,8 @@
       "added_lines": 338,
       "removed_lines": 0,
       "meaningful_added": 338,
-      "head_bytes": 7758
+      "head_bytes": 7758,
+      "sha256": "568bd808d5c8a39e42b7e281dc2f118b63f08d9b9276d0bb7ca1a79712c42b47"
     },
     {
       "path": "evidence/local-room/runtime/test-patch.diff",
@@ -794,7 +923,8 @@
       "added_lines": 290,
       "removed_lines": 0,
       "meaningful_added": 290,
-      "head_bytes": 66765
+      "head_bytes": 66765,
+      "sha256": "00f827d8760eaff57ef208acc596f09f445b7974d66b7fcd4ca05eb18bb49674"
     },
     {
       "path": "evidence/local-room/runtime/video-capture.log",
@@ -802,7 +932,8 @@
       "added_lines": 423,
       "removed_lines": 0,
       "meaningful_added": 401,
-      "head_bytes": 20260
+      "head_bytes": 20260,
+      "sha256": "27d9f3d05110c00702af93071f7debbcb173d7228a1f372b4c54fe9ae639d574"
     },
     {
       "path": "evidence/local-room/runtime/video.json",
@@ -810,7 +941,8 @@
       "added_lines": 73,
       "removed_lines": 0,
       "meaningful_added": 73,
-      "head_bytes": 2547
+      "head_bytes": 2547,
+      "sha256": "c8fb956bb70637ef81da31e9d9f0a763ce53b4f6077b5626f35ec768f78d8ce2"
     },
     {
       "path": "packages/domain/src/local-room/port.ts",
@@ -818,7 +950,8 @@
       "added_lines": 3,
       "removed_lines": 1,
       "meaningful_added": 3,
-      "head_bytes": 8182
+      "head_bytes": 8182,
+      "sha256": "5af1fe4db793fb4e6e85b30a106c6a9d6122018d701202066009cdb2e52f0e16"
     },
     {
       "path": "packages/storage/src/local-room.ts",
@@ -826,7 +959,8 @@
       "added_lines": 5,
       "removed_lines": 0,
       "meaningful_added": 5,
-      "head_bytes": 5806
+      "head_bytes": 5806,
+      "sha256": "2f23914801c8c9940a8c252557143a9e9c587113d7b167ed945f36e3e24d12fc"
     },
     {
       "path": "scripts/local-room-browser.ts",
@@ -834,7 +968,8 @@
       "added_lines": 41,
       "removed_lines": 0,
       "meaningful_added": 40,
-      "head_bytes": 2432
+      "head_bytes": 2432,
+      "sha256": "13b48fa1371307788f670f2b1dac16f3ba1d423f4d31ebcb6f2ea13dd3db8dcf"
     },
     {
       "path": "scripts/local-room-client.ts",
@@ -842,7 +977,8 @@
       "added_lines": 61,
       "removed_lines": 0,
       "meaningful_added": 59,
-      "head_bytes": 4333
+      "head_bytes": 4333,
+      "sha256": "80f6f53a779b5dced3932e460ea80993b256d13dbefd402c68161af5bd062c3a"
     },
     {
       "path": "scripts/local-room-harness.html",
@@ -850,7 +986,8 @@
       "added_lines": 17,
       "removed_lines": 0,
       "meaningful_added": 17,
-      "head_bytes": 1415
+      "head_bytes": 1415,
+      "sha256": "ab0b63c93f9576cfb89f04ffa96d8878b3d0d8fc83eb7943a7eeadf232edc433"
     },
     {
       "path": "scripts/local-room-owner.ts",
@@ -858,7 +995,8 @@
       "added_lines": 56,
       "removed_lines": 0,
       "meaningful_added": 55,
-      "head_bytes": 3518
+      "head_bytes": 3518,
+      "sha256": "150750641c4c669b283d051ee633a3c0f2a2823ceb07f157d728a0533aa6d725"
     },
     {
       "path": "scripts/local-room-service.ts",
@@ -866,7 +1004,8 @@
       "added_lines": 111,
       "removed_lines": 0,
       "meaningful_added": 109,
-      "head_bytes": 8857
+      "head_bytes": 8857,
+      "sha256": "0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81"
     },
     {
       "path": "scripts/local-room.ts",
@@ -874,7 +1013,8 @@
       "added_lines": 84,
       "removed_lines": 0,
       "meaningful_added": 83,
-      "head_bytes": 6880
+      "head_bytes": 6880,
+      "sha256": "a6283ec2889b1a0a872e8fbd3396e294e4634d471424c6524e512f7533caffe2"
     }
   ]
 }

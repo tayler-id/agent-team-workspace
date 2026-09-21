@@ -1,0 +1,98 @@
+{
+  "qualified_source_head": "986fb82bd8019a09fce368de522d8c338953d76c",
+  "qualified_source_tree": "c987a943fd8c7381becdd3136450241f1e18dec3",
+  "correction_parent": "fea17179e98e1a6783da7dd22dfebf67c5b53dc5",
+  "stacked_base": "55269a5103656a63cc6f246c00ebb1efa6785866",
+  "recorded_at": "2026-09-21T04:11:06.382952+00:00",
+  "changed_source_paths": [
+    "apps/center/src/local-room-wire.ts"
+  ],
+  "proof": "before bytes equal after bytes plus exactly one LF; final single LF remains; no other path changed in correction commit",
+  "before_sha256": "e4d57d5300f4c63130a619321a61163d237834f2c110e21ff90e22b81043edae",
+  "after_sha256": "d67cec8cc4a1ed5f76008f5bb41729473f0aee251ee966029153fa6974049ca0",
+  "diff_check": {
+    "red_exit": 2,
+    "green_exit": 0,
+    "note": "red native log records the actual git exit; no runtime behavior change"
+  },
+  "full_check": {
+    "exit": 0,
+    "tests_passed": 129,
+    "test_files_passed": 25,
+    "receipt": "whitespace-full-check.log"
+  },
+  "source_receipts": [
+    {
+      "path": "agora/feature-map.json",
+      "sha256": "40885d308c46654eb31fcc16a4e9311f71eaa0ce0c8f3a629b31e83b1759b4ad"
+    },
+    {
+      "path": "apps/center/src/app.ts",
+      "sha256": "6f57cbe08ad258b8aedeb053b9602d75cda9caec01e910bdfda7474bfae9e5b0"
+    },
+    {
+      "path": "apps/center/src/local-room-wire.ts",
+      "sha256": "d67cec8cc4a1ed5f76008f5bb41729473f0aee251ee966029153fa6974049ca0"
+    },
+    {
+      "path": "apps/center/test/runtime.pg.test.ts",
+      "sha256": "b17f145781f5c37bee9a7e128af73e9cbe39a54d0fcd52898bb3ddecf1cfa997"
+    },
+    {
+      "path": "apps/center/test/runtime.test.ts",
+      "sha256": "42025afb4a47fc270a62d59e1c3d2d978bd6bd795fb3b72cd8cb60ce9bb61ec7"
+    },
+    {
+      "path": "contracts/openapi.json",
+      "sha256": "634b80eb469cc61163879a4e2dd637b4c6da2d8dc5ff7843b364d0d3f2c6fa11"
+    },
+    {
+      "path": "contracts/schemas/local-room.schema.json",
+      "sha256": "ccf8deda4b7a805f7b7a9e23a7f266a4c81cd1aedf372bdadafe0e03c3f0f241"
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContractsConform/main.swift",
+      "sha256": "a1ab75ea1ed0653f552949fcd0adbf275d79be73250420fe1f2ead0bca0c1e65"
+    },
+    {
+      "path": "contracts/tools/browser-validator.ts",
+      "sha256": "9a3b12007fbca8d94f3872a54a705c874ff686aab2020bfaabc0274e0d800bc6"
+    },
+    {
+      "path": "docs/site/test/corpus.test.ts",
+      "sha256": "7382f10c85ddebf6d4ae314f85ee3d36a834d75993c97fb9fb4e6588a674bce8"
+    },
+    {
+      "path": "packages/domain/src/local-room/port.ts",
+      "sha256": "5af1fe4db793fb4e6e85b30a106c6a9d6122018d701202066009cdb2e52f0e16"
+    },
+    {
+      "path": "packages/storage/src/local-room.ts",
+      "sha256": "2f23914801c8c9940a8c252557143a9e9c587113d7b167ed945f36e3e24d12fc"
+    },
+    {
+      "path": "scripts/local-room-browser.ts",
+      "sha256": "13b48fa1371307788f670f2b1dac16f3ba1d423f4d31ebcb6f2ea13dd3db8dcf"
+    },
+    {
+      "path": "scripts/local-room-client.ts",
+      "sha256": "80f6f53a779b5dced3932e460ea80993b256d13dbefd402c68161af5bd062c3a"
+    },
+    {
+      "path": "scripts/local-room-harness.html",
+      "sha256": "ab0b63c93f9576cfb89f04ffa96d8878b3d0d8fc83eb7943a7eeadf232edc433"
+    },
+    {
+      "path": "scripts/local-room-owner.ts",
+      "sha256": "150750641c4c669b283d051ee633a3c0f2a2823ceb07f157d728a0533aa6d725"
+    },
+    {
+      "path": "scripts/local-room-service.ts",
+      "sha256": "0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81"
+    },
+    {
+      "path": "scripts/local-room.ts",
+      "sha256": "a6283ec2889b1a0a872e8fbd3396e294e4634d471424c6524e512f7533caffe2"
+    }
+  ]
+}
