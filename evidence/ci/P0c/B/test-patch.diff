@@ -1,9 +1,9 @@
 diff --git a/packages/storage/test/postgres-wrapper.test.ts b/packages/storage/test/postgres-wrapper.test.ts
 new file mode 100644
-index 0000000..40125cf
+index 0000000..a62354e
 --- /dev/null
 +++ b/packages/storage/test/postgres-wrapper.test.ts
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,71 @@
 +import { spawn, spawnSync } from 'node:child_process';
 +import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, rmdirSync, statSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
 +import path from 'node:path';
@@ -39,6 +39,7 @@ index 0000000..40125cf
 +			diagnostic += bytes.toString(); pending += bytes.toString();
 +			while (pending.includes('\n')) {
 +				const end = pending.indexOf('\n'), line = pending.slice(0, end); pending = pending.slice(end + 1);
++				if (!line.startsWith('{"schema_version":')) continue;
 +				const receipt = JSON.parse(line) as Receipt; receipts.push(receipt);
 +				if (receipt.outcome === 'starting' && scenario === 'startup-cancel') child.kill('SIGINT');
 +				if (receipt.outcome === 'started' && scenario === 'forced-cancel') process.kill(receipt.pid, 'SIGSTOP');
@@ -51,8 +52,8 @@ index 0000000..40125cf
 +		});
 +		const code = await new Promise<number | null>(resolve => child.once('close', resolve));
 +		console.error(JSON.stringify({ scenario, code, elapsed_ms: Date.now() - begin, output, diagnostic, descendants, neighbor: neighbor.identity, foreign: foreign.pid }));
++		expect(code, diagnostic).toBe(scenario === 'deep-success' ? 0 : scenario === 'child-failure' ? 7 : ['SIGINT', 'startup-cancel'].includes(scenario) ? 130 : ['SIGTERM', 'forced-cancel'].includes(scenario) ? 143 : 70);
 +		expect(receipts.filter(record => record.outcome === 'allocated')).toHaveLength(1);
-+		expect(code).toBe(scenario === 'deep-success' ? 0 : scenario === 'child-failure' ? 7 : ['SIGINT', 'startup-cancel'].includes(scenario) ? 130 : ['SIGTERM', 'forced-cancel'].includes(scenario) ? 143 : 70);
 +		if (scenario === 'deep-success') expect(output.trim()).toBe('agora_app');
 +		if (scenario.endsWith('timeout')) { expect(diagnostic).toContain('startup timeout'); expect(Date.now() - begin).toBeLessThan(5_000); }
 +		if (scenario === 'initdb-timeout') expect(alive(Number(readFileSync(`${artifacts}/tool.pid`, 'utf8')))).toBe(false);
@@ -68,5 +69,9 @@ index 0000000..40125cf
 +		for (const pid of [...descendants, ...receipts.filter(record => record.outcome === 'starting').map(record => record.pid)]) expect(alive(pid), `owned PID ${pid} exited`).toBe(false);
 +		neighbor.verify(); expect(statSync(neighbor.identity.socketDir).mode & 0o777).toBe(0o700);
 +		expect(alive(foreign.pid ?? 0)).toBe(true); expect(readFileSync(`${artifacts}/evidence`, 'utf8')).toBe('retained');
-+	} finally { foreign.kill(); await new Promise(resolve => foreign.once('close', resolve)); neighbor.cleanup(); rmSync(artifacts, { recursive: true }); }
++	} finally {
++		foreign.kill(); await new Promise(resolve => foreign.once('close', resolve)); neighbor.cleanup();
++		expect(receipts.some(record => record.outcome === 'starting' && alive(record.pid)), `live owned server retained at ${artifacts}`).toBe(false);
++		rmSync(artifacts, { recursive: true });
++	}
 +}, 45_000);

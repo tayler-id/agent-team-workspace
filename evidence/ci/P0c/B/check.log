@@ -30,7 +30,69 @@ SCOPE packet structure only; it cannot verify that prose is true or that any scr
 > agora@ docs:validate /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
 > node docs/site/build.mjs --check
 
-cli: source repo:docs/runbooks/development.md#postgresql-test-path
- ELIFECYCLE  Command failed with exit code 1.
- ELIFECYCLE  Command failed with exit code 1.
- ELIFECYCLE  Command failed with exit code 1.
+{"outcome":"pass","pages":25,"milestones":22}
+
+> agora@ docs:test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> node --test docs/site/test/*.test.ts
+
+✔ the same public build driver produces a valid baseline before corpus assertions (0.3255ms)
+✔ the complete corpus has 25 pages and both audience tracks (0.600834ms)
+✔ the atlas explains all nine system nodes and eight connections (0.332584ms)
+✔ the committed design packet is readable as linked documentation, not a source-code dump (0.253875ms)
+✔ current commands and planned product availability have separate references (0.420666ms)
+✔ disabling only the private path guard makes its behavioral assertion fail (121.983792ms)
+✔ disabling only the : section guard makes its behavioral assertion fail (184.638125ms)
+✔ disabling only the : visual guard makes its behavioral assertion fail (139.408125ms)
+✔ disabling only the : link guard makes its behavioral assertion fail (138.22275ms)
+✔ disabling only the : source guard makes its behavioral assertion fail (157.168375ms)
+✔ disabling only the snapshot revision guard makes its behavioral assertion fail (121.321125ms)
+✔ disabling only the invalid status guard makes its behavioral assertion fail (102.107666ms)
+✔ disabling only the Built proof guard makes its behavioral assertion fail (100.44425ms)
+✔ disabling only the milestone coverage guard makes its behavioral assertion fail (102.777791ms)
+✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (99.185125ms)
+✔ disabling only the : outcome guard makes its behavioral assertion fail (103.177667ms)
+✔ disabling only the : stage guard makes its behavioral assertion fail (102.173833ms)
+✔ disabling only the inventory missing guard makes its behavioral assertion fail (96.858458ms)
+✔ disabling only the feature documentation guard makes its behavioral assertion fail (94.31925ms)
+✔ public documentation guard accepts the complete valid fixture (2.927708ms)
+✔ broken internal page and anchor links fail (5.560375ms)
+✔ feature explanations and visual flows are mandatory (0.302083ms)
+✔ progress statuses are closed and Built requires source test and evidence (0.521583ms)
+✔ all milestones must occur exactly once with an outcome and release stage (0.48225ms)
+✔ milestone outcomes mirror the authoritative plan instead of drifting (0.141334ms)
+✔ every executable and package must have a documentation home (0.147209ms)
+✔ every feature-map entry requires a validated feature page (0.131ms)
+✔ private absolute paths and unsafe links never enter the site (0.173917ms)
+✔ production links include generated navigation, fragment, stylesheet and nested source views (0.840792ms)
+✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (1.911625ms)
+✔ Mermaid mirror carries the same status and relationships as the data owner (0.139834ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1723.051875
+
+> agora@ contracts:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> node contracts/tools/generate.mjs --check
+
+{"schema_version":"agora.contract-generation-run/v1","mode":"check","outcome":"pass","exit":0,"outputs":[{"file":"contracts/generated/openapi.bundled.json","digest":"sha256:b4d0995df6c2e3678dd9f33c3af5910c35ef5a7d0e2f4be96cda0a8eb680d3ef"},{"file":"contracts/generated/typescript/openapi.d.ts","digest":"sha256:84a047df5d192b18e1120d274513fe136f3f0b633edd02f934c02476cc7a6adb"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Client.swift","digest":"sha256:a319b0c3e4b69a907f8c7373cdf75e2fa20f86e32bdbf937b9ab4dccdc5b186c"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Headers.swift","digest":"sha256:b98a3f97c4cb97176fe979d198d2a3705972f99e4346887f0af4a266c6de8365"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Parameters.swift","digest":"sha256:d595dcdbd4f83d327e4c2ac0afd0c24e1f480a8a51080b3317e3705ecfc805d4"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+RequestBodies.swift","digest":"sha256:00a9569f70ba89057fd5fd14b4ecbbad8a34d6941e8bb905c57dc198873116d5"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Responses.swift","digest":"sha256:9398591b37a3141b09b726fcf5612eabf46e641bb56e0da6d7f0a098d307b348"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift","digest":"sha256:ec6966cd2b6a90f3be5acdddb4f405b54e40bf0f90175068a2a2e9c792aeaa03"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components.swift","digest":"sha256:a823627f9eccdb71d20853743709c54609c76fe51096cd751aa2493f3f828a38"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Operations.swift","digest":"sha256:a8cf4d9376d7869e1dfd1d71e09820129d97ac8844b29c83550895807593a100"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types.swift","digest":"sha256:9d9109d4d6ff07079683f632c17c3a6dca1dbfd9fe8a3d54aeb02459b42c1368"}],"drift":[]}
+
+> agora@ test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> node scripts/with-test-postgres.mjs vitest run
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"681ad39e-454f-4617-8dfd-130e54404e02","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-pg-FUzx1V","socketDir":"/private/tmp/agora-p0c-681ad39e-454f-4617-8dfd-130e54404e02"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"681ad39e-454f-4617-8dfd-130e54404e02","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-pg-FUzx1V","socketDir":"/private/tmp/agora-p0c-681ad39e-454f-4617-8dfd-130e54404e02","pid":92319}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"681ad39e-454f-4617-8dfd-130e54404e02","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-pg-FUzx1V","socketDir":"/private/tmp/agora-p0c-681ad39e-454f-4617-8dfd-130e54404e02","socket_dir":"/private/tmp/agora-p0c-681ad39e-454f-4617-8dfd-130e54404e02","pid":92319,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+
+
+ Test Files  23 passed (23)
+      Tests  129 passed | 1 expected fail (130)
+   Start at  01:30:55
+   Duration  37.62s (tests 96%, import 3%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-pg-FUzx1V","socketDir":"/private/tmp/agora-p0c-681ad39e-454f-4617-8dfd-130e54404e02"}

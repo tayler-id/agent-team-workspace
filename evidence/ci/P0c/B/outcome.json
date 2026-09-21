@@ -1,0 +1,344 @@
+{
+  "schema_version": "agora.p0c-wrapper-evidence/v1",
+  "purpose": "foundation_fixture",
+  "scope": "P0c B only, not C qualification or trusted CI",
+  "parent": "17fbf24609fb3cbcb25c052ae7ecee124bc0bc87",
+  "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+  "toolchain": {
+    "node": "v24.16.0",
+    "node_executable": "/Users/taylerramsay/.local/node/bin/node",
+    "postgres": "18.4",
+    "pnpm": "10.34.1",
+    "swift": "6.3.3"
+  },
+  "credentials": "GH_TOKEN, GITHUB_TOKEN and FIRSTMATE_GH_TOKEN removed from every validation invocation, never printed",
+  "source": [
+    {
+      "file": "scripts/with-test-postgres.mjs",
+      "digest": "sha256:a938e58b48480b36d486948a4dbba726268967844322fa824de78cf36b85d745",
+      "meaningful_added_lines": 110
+    },
+    {
+      "file": "packages/storage/test/postgres-wrapper.test.ts",
+      "digest": "sha256:9932c4ac2b8acb2e073846e6b6b47ec232f9ccc12796ee3b9d5b9f8016dd0a48",
+      "meaningful_added_lines": 69
+    },
+    {
+      "file": "agora/feature-map.json",
+      "digest": "sha256:794d278efe7137b8d83879e8f92c86f60ae0ca81f1afe0ec370786214a230ce4",
+      "meaningful_added_lines": 8
+    }
+  ],
+  "allocator_unchanged": true,
+  "size": {
+    "meaningful_implementation_tracking_additions": 187,
+    "source_files": 3,
+    "living_documentation_atlas_owners": 5,
+    "generated_and_evidence": "reported separately; not implementation lines"
+  },
+  "checks": [
+    {
+      "label": "install",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "pnpm install --frozen-lockfile"
+    },
+    {
+      "label": "audit",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "pnpm audit --json"
+    },
+    {
+      "label": "focused",
+      "exit": 0,
+      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+      "command": "pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept"
+    },
+    {
+      "label": "typecheck",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "pnpm typecheck"
+    },
+    {
+      "label": "lint",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "pnpm lint"
+    },
+    {
+      "label": "test-pg",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "pnpm test:pg"
+    },
+    {
+      "label": "conform",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "pnpm contracts:conform -- --json"
+    },
+    {
+      "label": "replay",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "pnpm client:replay -- --json --swift"
+    },
+    {
+      "label": "boundaries",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "pnpm boundaries"
+    },
+    {
+      "label": "scenarios",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "node scripts/probe-center.mjs --scenarios"
+    },
+    {
+      "label": "probe",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "node scripts/with-test-postgres.mjs node scripts/probe-center.mjs"
+    },
+    {
+      "label": "migrations",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "node scripts/with-test-postgres.mjs bash -c node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts"
+    },
+    {
+      "label": "design",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "node scripts/verify-design.mjs"
+    },
+    {
+      "label": "design-negatives",
+      "exit": 1,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "node scripts/test-design-checks.mjs"
+    },
+    {
+      "label": "handoff-negatives",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "node scripts/test-design-handoff-checks.mjs"
+    },
+    {
+      "label": "plan",
+      "exit": 0,
+      "head": "1a56700700d3822d75963d28e9795d2e2433bd70",
+      "command": "node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md"
+    },
+    {
+      "label": "guard",
+      "exit": 0,
+      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+      "command": "node .scratch/p0cb/guard.mjs"
+    },
+    {
+      "label": "recorder",
+      "exit": 0,
+      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+      "command": "node scripts/record-red-green.mjs --parent 17fbf24609fb3cbcb25c052ae7ecee124bc0bc87 --head 8a3f41cb3322e6ef530885e7bb0aede1a035b4cb --out evidence/ci/P0c/B -- pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t deep-success"
+    },
+    {
+      "label": "check",
+      "exit": 0,
+      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+      "command": "pnpm check"
+    },
+    {
+      "label": "two-clusters",
+      "exit": 0,
+      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+      "command": "node scripts/with-test-postgres.mjs COMMAND ARGS...; two simultaneous instances; native psql, ps and lsof read-back"
+    }
+  ],
+  "known_external_failure": "Unchanged P0a test-design-checks sandbox lacks apps/center/src/app.ts, as on qualified main; no B or C readiness claimed from it.",
+  "artifacts": [
+    {
+      "file": "audit.log",
+      "digest": "sha256:53fffac9d1f4c670d03248d227edd0f8963297eced25ee4d32d6e29d5d5b7c09",
+      "bytes": 310
+    },
+    {
+      "file": "boundaries.log",
+      "digest": "sha256:62776b14b91964ce18fa300dca4fcd8a20087c580409335d1f4e76baf1a65a25",
+      "bytes": 409
+    },
+    {
+      "file": "check.log",
+      "digest": "sha256:2b33c521c709c89c458165cf2ad870bccc47940f928f7acdd7e9980b41f4c206",
+      "bytes": 8975
+    },
+    {
+      "file": "cli-red.log",
+      "digest": "sha256:25d35e49d546fb30cb1a78bfb48d29fcfcc75c074d1ae0bf7eb4912bfd03d1f2",
+      "bytes": 224
+    },
+    {
+      "file": "commands.tsv",
+      "digest": "sha256:ef8e6f24539884a0fddc85b496fe96cf12139c127dc874ce32c5e4ea0ca8da87",
+      "bytes": 2234
+    },
+    {
+      "file": "conform.log",
+      "digest": "sha256:041534fc6d72e6bdd98e9dcfe987bad184d1f93bfa910ce0a5d70c3348d90921",
+      "bytes": 96764
+    },
+    {
+      "file": "design-negatives.log",
+      "digest": "sha256:36a48e823bf2be459b707096f430c28d05b06c463778fc4f50c97d85e036537b",
+      "bytes": 1393
+    },
+    {
+      "file": "design.log",
+      "digest": "sha256:4c8b6fd38b577a823cd874802e0bfd62a0ce976a41427145112de5f6b33ead96",
+      "bytes": 549
+    },
+    {
+      "file": "doctor.log",
+      "digest": "sha256:9ebbe11f1ab7e7b5530dc3d8ccad5de265c60779818a52d4004e72ab95653d8a",
+      "bytes": 262
+    },
+    {
+      "file": "failed-run-cleanup.json",
+      "digest": "sha256:13144f9aaef70e00429765859889421da06de37561cb1a94ecb082a9274cb703",
+      "bytes": 855
+    },
+    {
+      "file": "first-green.log",
+      "digest": "sha256:b352c78a9ec1e44059e8408cef54cf0e68d56e393f45e3b16308715476a1f139",
+      "bytes": 3599
+    },
+    {
+      "file": "focused.log",
+      "digest": "sha256:92ff6a9137248db46c4a0eebfaada3ef689490b5ab3ed34320cf378104c843d2",
+      "bytes": 32726
+    },
+    {
+      "file": "full-check-cancellation.red.log",
+      "digest": "sha256:cb1f00816bff894ee1825098739705ac9c5f2f5097e4e0b4eeecc1799be2a1f6",
+      "bytes": 17839
+    },
+    {
+      "file": "green.log",
+      "digest": "sha256:e41f711546a0e449f884dca6b3c9f0c87cbc3a1580fed57516b2f221ad9e846d",
+      "bytes": 1437
+    },
+    {
+      "file": "guard-run.log",
+      "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "guard.json",
+      "digest": "sha256:a8336ea5aea8a7cc34799a584388e842c42bb3daf00685521462c4da643d2ae8",
+      "bytes": 6556
+    },
+    {
+      "file": "guard.log",
+      "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "handoff-negatives.log",
+      "digest": "sha256:e67de277dcebd6e3ddb1b4f1d54d23db8e8e9c1dbbdd4b62dc8dddd534feee7d",
+      "bytes": 732
+    },
+    {
+      "file": "install.log",
+      "digest": "sha256:2e819b9479a6cf5350480e572ae74aaf9f20c4d32ca06211b39875bb8a90c788",
+      "bytes": 137
+    },
+    {
+      "file": "lifecycle.log",
+      "digest": "sha256:3ba40229f2233b3b45cba26125f54d0450fd6c27e09fc0e63844b38a6dd5d5f0",
+      "bytes": 21835
+    },
+    {
+      "file": "lint.log",
+      "digest": "sha256:58224f07dc182fe7acc93e82f23b3152474b7d390b0c6d2fd183edd3174c8c96",
+      "bytes": 110
+    },
+    {
+      "file": "migrations.log",
+      "digest": "sha256:08b6e083a83c2b80d8cd5bf5836be9f8e5a0af2675c2d73985d1978352567af9",
+      "bytes": 1878
+    },
+    {
+      "file": "native-red.log",
+      "digest": "sha256:fb1d3655a6c1912798d6fd4275946d918eff160073827d5eb809cb58870dee05",
+      "bytes": 792
+    },
+    {
+      "file": "no-leftovers.json",
+      "digest": "sha256:ab3f8539d8c8ec31d861e30728cbe16d08fc9e381388a6d78e0796507746c1df",
+      "bytes": 14280
+    },
+    {
+      "file": "plan.log",
+      "digest": "sha256:6216bdb31816bccf18d3caa739eab44e68518a1c2b0feea4c111218e5c303ee0",
+      "bytes": 3522
+    },
+    {
+      "file": "probe.log",
+      "digest": "sha256:1415b92ed9b38261e0c7764e2fe4966ccc16e33573a4d6908139c85514343eb4",
+      "bytes": 5495
+    },
+    {
+      "file": "recorder.log",
+      "digest": "sha256:0ae557458af2edc03df162df018928ca183e199f043ae05f708db434d6860df2",
+      "bytes": 307
+    },
+    {
+      "file": "red-before-edit.log",
+      "digest": "sha256:15be4701b03816b10b33f3b5278d8ecac4432f392e4f8269e3fdab8c2ce8cc39",
+      "bytes": 1653
+    },
+    {
+      "file": "red.log",
+      "digest": "sha256:27f2d73969e634299b07e69afcea72b554b21e90fd61b108c8c37d527ea14639",
+      "bytes": 2960
+    },
+    {
+      "file": "replay.log",
+      "digest": "sha256:4f769f8b45dcb563fd306389fe507ae79cef09215eb0d3875e6c4bf708ffe94f",
+      "bytes": 22207
+    },
+    {
+      "file": "review.md",
+      "digest": "sha256:87582ee4a5362c2b95051e5bab9afaea9683dcd4f58131d886037e476f3aefff",
+      "bytes": 4862
+    },
+    {
+      "file": "scenarios.log",
+      "digest": "sha256:78758bff7fdf1e5ead9007530e24ad4ac3dae70e95f49be13e43818c9815c45f",
+      "bytes": 1352
+    },
+    {
+      "file": "test-patch.diff",
+      "digest": "sha256:ea964e6137d29cf5d22f066b51bec5c9fb4136ce5a02822e40e360ff23cdcb3f",
+      "bytes": 6706
+    },
+    {
+      "file": "test-pg.log",
+      "digest": "sha256:6c5661bf3931df93e37743ec224a46b5fc065d6a1ecdd1e2adfc7402c32a53ad",
+      "bytes": 1838
+    },
+    {
+      "file": "two-clusters.log",
+      "digest": "sha256:bbeb2507e1182ae7e015e3f46624e85373df301e4f4d339799839a72d9a4c1bc",
+      "bytes": 4312
+    },
+    {
+      "file": "typecheck.log",
+      "digest": "sha256:3fb397e503accf40f3a71f1a5351fe5dd715b9cff732b36f8ecdf34921e4a474",
+      "bytes": 172
+    }
+  ]
+}

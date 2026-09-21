@@ -1,11 +1,11 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-21T05:21:41.263Z
+recorded_at: 2026-09-21T05:31:43.413Z
 parent: 17fbf24609fb3cbcb25c052ae7ecee124bc0bc87
-head: 16d29605732750cbe96e3cc40ec41e94d93f46ec
+head: 8a3f41cb3322e6ef530885e7bb0aede1a035b4cb
 subject_revision: 17fbf24609fb3cbcb25c052ae7ecee124bc0bc87
 test_patch_applied_to_subject: true
 test_patch_files: packages/storage/test/postgres-wrapper.test.ts
-test_patch_digest: sha256:a608f4c1571c8ee416046d9f8078dc1e2a590a4da037bd59d169c465d61242ee
+test_patch_digest: sha256:ea964e6137d29cf5d22f066b51bec5c9fb4136ce5a02822e40e360ff23cdcb3f
 fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
 configuration: {"command":"pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t deep-success","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
 toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
@@ -13,32 +13,33 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-red-bU4LPB
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-red-gCtyWg
 
- ❯ |unit| packages/storage/test/postgres-wrapper.test.ts (13 tests | 1 failed | 12 skipped) 534ms
-   × wrapper: deep-success 533ms
+ ❯ |unit| packages/storage/test/postgres-wrapper.test.ts (13 tests | 1 failed | 12 skipped) 537ms
+   × wrapper: deep-success 537ms
 
  Test Files  1 failed (1)
       Tests  1 failed | 12 skipped (13)
-   Start at  01:21:34
-   Duration  625ms (tests 95%, transform 2%, import 2%)
+   Start at  01:31:36
+   Duration  621ms (tests 95%, transform 2%, import 2%)
 
 stderr | packages/storage/test/postgres-wrapper.test.ts > wrapper: deep-success
-{"scenario":"deep-success","code":70,"elapsed_ms":526,"output":"","diagnostic":"{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"blocked\",\"exit\":70,\"message\":\"pg_ctl start failed\",\"detail\":\"pg_ctl: could not start server\\nExamine the log output.\\nwaiting for server to start.... stopped waiting\\n\"}\n","descendants":[],"neighbor":{"runId":"f4771bc7-0a02-434f-b882-5ca966b46a76","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-red-bU4LPB/.scratch/wrapper deep artifacts-CAqLJC","socketDir":"/private/tmp/agora-p0c-f4771bc7-0a02-434f-b882-5ca966b46a76"},"foreign":24054}
+{"scenario":"deep-success","code":70,"elapsed_ms":531,"output":"","diagnostic":"{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"blocked\",\"exit\":70,\"message\":\"pg_ctl start failed\",\"detail\":\"pg_ctl: could not start server\\nExamine the log output.\\nwaiting for server to start.... stopped waiting\\n\"}\n","descendants":[],"neighbor":{"runId":"079a485a-0cbd-445e-9ea5-d9eda718a163","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-red-gCtyWg/.scratch/wrapper deep artifacts-lg3da0","socketDir":"/private/tmp/agora-p0c-079a485a-0cbd-445e-9ea5-d9eda718a163"},"foreign":23767}
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  |unit| packages/storage/test/postgres-wrapper.test.ts > wrapper: deep-success
-AssertionError: expected [] to have a length of 1 but got +0
+AssertionError: {"schema_version":"agora.test-postgres/v1","outcome":"blocked","exit":70,"message":"pg_ctl start failed","detail":"pg_ctl: could not start server\nExamine the log output.\nwaiting for server to start.... stopped waiting\n"}
+: expected 70 to be +0 // Object.is equality
 
 - Expected
 + Received
 
-- 1
-+ 0
+- 0
++ 70
 
- ❯ packages/storage/test/postgres-wrapper.test.ts:48:69
+ ❯ packages/storage/test/postgres-wrapper.test.ts:49:28
 
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

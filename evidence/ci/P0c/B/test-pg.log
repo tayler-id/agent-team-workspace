@@ -1,0 +1,17 @@
+
+> agora@ test:pg /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> node scripts/with-test-postgres.mjs vitest run --project pg
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"141251e1-4dfb-4fde-b30a-34764fa5563d","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-pg-wAsZD1","socketDir":"/private/tmp/agora-p0c-141251e1-4dfb-4fde-b30a-34764fa5563d"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"141251e1-4dfb-4fde-b30a-34764fa5563d","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-pg-wAsZD1","socketDir":"/private/tmp/agora-p0c-141251e1-4dfb-4fde-b30a-34764fa5563d","pid":29534}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"141251e1-4dfb-4fde-b30a-34764fa5563d","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-pg-wAsZD1","socketDir":"/private/tmp/agora-p0c-141251e1-4dfb-4fde-b30a-34764fa5563d","socket_dir":"/private/tmp/agora-p0c-141251e1-4dfb-4fde-b30a-34764fa5563d","pid":29534,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+
+
+ Test Files  3 passed (3)
+      Tests  16 passed (16)
+   Start at  01:28:11
+   Duration  1.01s (import 68%, tests 26%, transform 5%, worker 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cb/tmp/agora-pg-wAsZD1","socketDir":"/private/tmp/agora-p0c-141251e1-4dfb-4fde-b30a-34764fa5563d"}
