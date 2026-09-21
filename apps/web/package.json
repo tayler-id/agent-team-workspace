@@ -13,6 +13,8 @@
 	"dependencies": {
 		"@agora/client-core": "workspace:*",
 		"@agora/contracts": "workspace:*",
+		"@chenglou/pretext": "0.0.9",
+		"@tanstack/react-virtual": "3.14.13",
 		"react": "19.3.0",
 		"react-dom": "19.3.0"
 	},
