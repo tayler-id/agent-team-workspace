@@ -19,6 +19,7 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `pnpm test:unit` | Unit tests only, no database |
 | `pnpm test:pg` | PostgreSQL tests only, throwaway cluster |
 | `pnpm migrate` | Applies pending migrations as the owner in `AGORA_MIGRATION_DATABASE_URL` and prints a JSON report |
+| `pnpm web:dev` / `pnpm web:build` / `pnpm web:test` | Local room web shell: Vite dev server, production build, jsdom unit/component tests. Independent of `pnpm check`; see [Local room web shell](../site/local-room.md) |
 | `pnpm check` | All of the above gates in sequence |
 
 The documentation tool's TOML parser is pinned to `smol-toml` 1.7.1 through a narrow workspace override. Its upstream 1.7.0 pin hangs on a malformed trailing comment (CVE-2026-85730); a bounded public-CLI regression test and full dependency audit cover this repair.
@@ -32,6 +33,7 @@ The documentation tool's TOML parser is pinned to `smol-toml` 1.7.1 through a na
 | `@agora/client-core` | `packages/client-core` | Immutable normalized snapshots, synchronization, drafts and command decisions | Frameworks, transports, domain/server/storage internals |
 | `@agora/storage` | `packages/storage` | Migrations, explicit SQL, the `Database` handle | Hono, React; it never exports pg types |
 | `@agora/center` | `apps/center` | Hono routes and composition | Raw SQL |
+| `@agora/web` | `apps/web` | React room shell behind `RoomTransportPort`, a development-only fixture transport | Any `@agora/*` package but `contracts` and `client-core`; `@agora/contracts`'s main entry must stay free of `node:crypto` and other Node-only bindings for this reason |
 
 Import boundaries are enforced by package export maps and the `agora/import-boundary` and `agora/public-types` ESLint rules. The first checks value/type-only imports, dynamic imports, import types, re-exports, CommonJS import syntax, owning-package paths and ambient DOM references. It rejects unprovable dynamic targets. The second follows public export types through aliases, generics, inheritance, callbacks and nested fields, so a private SDK type cannot hide behind a domain port. The exact contract-schema wildcard is the only permitted wildcard export; private code paths remain closed.
 
