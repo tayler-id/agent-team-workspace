@@ -5,16 +5,21 @@
     {
       "id": "postgres-socket",
       "title": "PostgreSQL socket ownership",
-      "status": "In progress",
-      "why": "P0c A ownership and B bounded wrapper lifecycle proved; C qualification remains pending.",
+      "status": "Built",
+      "why": "P0c A ownership, B bounded wrapper lifecycle and C guard-negative qualification proved at the recorded head.",
       "page": "foundation.md",
       "proof": [
         "repo:scripts/postgres-socket.ts",
         "repo:scripts/with-test-postgres.mjs",
+        "repo:packages/storage/src/migrate-cli.ts",
         "repo:packages/storage/test/postgres-wrapper.test.ts",
+        "repo:evidence/ci/P0c/C/migrations.log",
         "repo:evidence/ci/P0c/B/outcome.json",
-        "repo:evidence/ci/P0c/B/red.log",
-        "repo:evidence/ci/P0c/B/green.log"
+        "repo:evidence/ci/P0c/C/outcome.json",
+        "repo:evidence/ci/P0c/C/guard.json",
+        "repo:evidence/ci/P0c/C/scenarios.json",
+        "repo:evidence/ci/P0c/C/red.log",
+        "repo:evidence/ci/P0c/C/green.log"
       ]
     },
     {

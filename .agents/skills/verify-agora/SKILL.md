@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 and L2) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 and L2, and CI P0c A/B allocation and wrapper lifecycle; C qualification remains pending.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 and L2) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 and L2, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
 ---
 
 # Verify Agora
@@ -33,10 +33,12 @@ node scripts/with-test-postgres.mjs <command>
 
 ## Drive
 
-CI P0c A's allocation driver requires Node 24 and Vitest, not PostgreSQL or Swift. B's wrapper driver additionally requires PostgreSQL 18 binaries and proves deep-path non-owner access, success/failure cleanup, SIGINT/SIGTERM (also during startup), forced shutdown, initialization/readiness timeouts and foreign/neighborhood preservation. Retain outputs under `evidence/ci/P0c/B/`; C qualification remains pending.
+CI P0c A's allocation driver requires Node 24 and Vitest, not PostgreSQL or Swift. B's wrapper driver additionally requires PostgreSQL 18 binaries and proves deep-path non-owner access, success/failure cleanup, SIGINT/SIGTERM (also during startup), forced shutdown, initialization/readiness timeouts and foreign/neighborhood preservation. Retain outputs under `evidence/ci/P0c/C/`. C's drivers replay ten guard negatives in a disposable source copy and twenty-six lifecycle scenarios against the committed wrapper with real PostgreSQL 18; both must exit 0 and leave `leftovers` empty in `no-leftovers.json`.
 
 ```sh
 pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept
+node evidence/ci/P0c/C/driver/guard.mjs --out .scratch/p0c-c
+node evidence/ci/P0c/C/driver/scenarios.mjs --out .scratch/p0c-c
 ```
 
 ```sh
@@ -126,9 +128,11 @@ node scripts/record-red-green.mjs --parent c9e6fe16c1f107da95d77f35d092e0a923781
 
 For P0c B, replay qualified parent `17fbf24609fb3cbcb25c052ae7ecee124bc0bc87` against the committed implementation head with the recorder and focused command `pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t deep-success`. Red is PostgreSQL's native long-socket failure (exit 70 versus expected 0); green connects as `agora_app` and verifies removal. Set `TMPDIR` to a private directory inside the task worktree for recorder worktrees, data and logs; only allocator-owned short sockets live outside it.
 
+For P0c C, replay qualified parent `c04f5606df49eb7976ad5cf244911c73f77dd1fb` against code head `051da4431f517e5906d67f51d22a7701cc61d719` with the focused command `pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t 'abort-stop-throw|initdb-stderr|psql-stderr|missing-pg-isready'`. Red shows the abort-path crash (`expected 1 to be 70`), empty tool diagnostics (`initdb failed (1)` without the tool's words) and the probe flood (62 `blocked` receipts against 2); green shows `Tests 4 passed`.
+
 ## Cleanup
 
-P0c A's driver allocates and releases only its recorded socket directories; its native assertions verify removal while retaining artifact neighbors. Replacement inodes, simulated device changes and hard-linked records must deny verify and cleanup with `socket ownership mismatch`; unrelated children must deny cleanup with `socket not empty`. It never starts a process. For this slice, do not globally sweep temporary directories or prune other tasks' worktrees. B's driver asserts each recorded postmaster and command descendant has exited, its socket/data/log root is gone, and neighbors remain. Ownership substitution must report `cleanup-failed`, not success; the test restores and removes only its own substituted fixture.
+P0c A's driver allocates and releases only its recorded socket directories; its native assertions verify removal while retaining artifact neighbors. Replacement inodes, simulated device changes and hard-linked records must deny verify and cleanup with `socket ownership mismatch`; unrelated children must deny cleanup with `socket not empty`. It never starts a process. For this slice, do not globally sweep temporary directories or prune other tasks' worktrees. B's driver asserts each recorded postmaster and command descendant has exited, its socket/data/log root is gone, and neighbors remain. Ownership substitution must report `cleanup-failed`, not success; the test restores and removes only its own substituted fixture. C's drivers remove only identities their own receipts recorded, including the System V segment a SIGKILLed postmaster leaves behind on macOS, and write every identity they checked to `no-leftovers.json`.
 
 `with-test-postgres.mjs` stops and deletes its owned cluster on success, command failure, startup failure, timeout, SIGINT and SIGTERM. Check NDJSON `cleaned` against the allocated identity; SIGKILL of the wrapper and deliberate process-group escape are not supported cleanup paths. `record-red-green.mjs` removes its worktrees. `generate.mjs --check` and the contract tests remove their temporary trees. `contracts/swift/.build/` is an ignored build cache and may stay. Confirm nothing else is left behind:
 

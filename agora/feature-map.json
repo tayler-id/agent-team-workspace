@@ -8,14 +8,14 @@
 			"paths": ["scripts/with-test-postgres.mjs", "scripts/postgres-socket.ts", "packages/storage/test/postgres-wrapper.test.ts"],
 			"public": ["node scripts/with-test-postgres.mjs COMMAND ARGS...", "pnpm test:pg"],
 			"scenarios": ["packages/storage/test/postgres-wrapper.test.ts", "deep-success", "SIGINT", "SIGTERM", "forced-cancel", "startup-failure", "startup-timeout", "foreign-preservation", "abort-stop-throw", "initdb-stderr", "psql-stderr", "missing-pg-isready"],
-			"fixtures": ["P0c B private PostgreSQL 18 lifecycle; qualification C remains pending"], "platforms": ["node24", "posix"], "owner": "CI P0c B"
+			"fixtures": ["P0c A/B/C private PostgreSQL 18 lifecycle, qualified by evidence/ci/P0c/C"], "platforms": ["node24", "posix"], "owner": "CI P0c C"
 		},
 		{
 			"id": "postgres-socket-ownership", "documentation": "docs/site/foundation.md",
 			"paths": ["scripts/postgres-socket.ts", "packages/storage/test/postgres-socket.test.ts"],
 			"public": ["pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts"],
 			"scenarios": ["allocation baseline", "short socket denial", "collision", "foreign ownership", "unsafe permissions", "cleanup", "guard-disabled denial"],
-			"fixtures": ["P0c A allocation ownership semantics; B integrates without changing them"], "platforms": ["node24", "posix"], "owner": "CI P0c A"
+			"fixtures": ["P0c A allocation ownership semantics; B and C leave them unchanged"], "platforms": ["node24", "posix"], "owner": "CI P0c A"
 		},
 		{
 			"id": "foundation-admission",
