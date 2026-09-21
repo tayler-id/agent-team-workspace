@@ -1,8 +1,8 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-21T01:00:13.011Z
-parent: bd0962e29b5c8a46e98a9c564df12d7ce0e94fb6
-head: ea71ffec9fc45dd3245f505cbdea8162e516a357
-subject_revision: bd0962e29b5c8a46e98a9c564df12d7ce0e94fb6
+recorded_at: 2026-09-21T01:17:51.056Z
+parent: bb62afa5edcb363d09e74b13f91d9fb5ce525b2b
+head: aab2c0c57f033fd004a276c7477e3b2ccafdc190
+subject_revision: bb62afa5edcb363d09e74b13f91d9fb5ce525b2b
 test_patch_applied_to_subject: true
 test_patch_files: 
 test_patch_digest: sha256:0325646108bfeaaec963bfd119b7edc270fb794264406263e9d851606ff111d5
@@ -13,15 +13,15 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-qPigQT/apps/web
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-MZe7m7/apps/web
 
- ❯ |web| test/app.test.tsx (7 tests | 1 failed) 240ms
-   × an unrelated connection update leaves every message row uncommitted 14ms
+ ❯ |web| test/app.test.tsx (7 tests | 1 failed) 222ms
+   × an unrelated connection update leaves every message row uncommitted 13ms
 
  Test Files  1 failed | 2 passed (3)
       Tests  1 failed | 16 passed (17)
-   Start at  21:00:04
-   Duration  984ms (environment 67%, import 14%, tests 11%, transform 7%)
+   Start at  21:17:42
+   Duration  915ms (environment 67%, import 14%, tests 11%, transform 7%)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
