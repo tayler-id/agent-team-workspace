@@ -1,7 +1,7 @@
 label	exit	head	command
 install	0	1a56700700d3822d75963d28e9795d2e2433bd70	pnpm install --frozen-lockfile
 audit	0	1a56700700d3822d75963d28e9795d2e2433bd70	pnpm audit --json
-focused	0	8a3f41cb3322e6ef530885e7bb0aede1a035b4cb	pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept
+focused	0	164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad	pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept
 typecheck	0	1a56700700d3822d75963d28e9795d2e2433bd70	pnpm typecheck
 lint	0	1a56700700d3822d75963d28e9795d2e2433bd70	pnpm lint
 test-pg	0	1a56700700d3822d75963d28e9795d2e2433bd70	pnpm test:pg
@@ -15,7 +15,7 @@ design	0	1a56700700d3822d75963d28e9795d2e2433bd70	node scripts/verify-design.mjs
 design-negatives	1	1a56700700d3822d75963d28e9795d2e2433bd70	node scripts/test-design-checks.mjs
 handoff-negatives	0	1a56700700d3822d75963d28e9795d2e2433bd70	node scripts/test-design-handoff-checks.mjs
 plan	0	1a56700700d3822d75963d28e9795d2e2433bd70	node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md
-guard	0	8a3f41cb3322e6ef530885e7bb0aede1a035b4cb	node .scratch/p0cb/guard.mjs
-recorder	0	8a3f41cb3322e6ef530885e7bb0aede1a035b4cb	node scripts/record-red-green.mjs --parent 17fbf24609fb3cbcb25c052ae7ecee124bc0bc87 --head 8a3f41cb3322e6ef530885e7bb0aede1a035b4cb --out evidence/ci/P0c/B -- pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t deep-success
-check	0	8a3f41cb3322e6ef530885e7bb0aede1a035b4cb	pnpm check
-two-clusters	0	8a3f41cb3322e6ef530885e7bb0aede1a035b4cb	node scripts/with-test-postgres.mjs COMMAND ARGS...; two simultaneous instances; native psql, ps and lsof read-back
+guard	0	164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad	node .scratch/p0cb/guard.mjs
+recorder	0	164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad	node scripts/record-red-green.mjs --parent 17fbf24609fb3cbcb25c052ae7ecee124bc0bc87 --head 164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad --out evidence/ci/P0c/B -- pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t deep-success
+check	0	164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad	pnpm check
+two-clusters	0	164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad	node scripts/with-test-postgres.mjs COMMAND ARGS...; two simultaneous instances; native psql, ps and lsof read-back

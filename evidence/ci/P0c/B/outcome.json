@@ -3,7 +3,7 @@
   "purpose": "foundation_fixture",
   "scope": "P0c B only, not C qualification or trusted CI",
   "parent": "17fbf24609fb3cbcb25c052ae7ecee124bc0bc87",
-  "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+  "head": "164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad",
   "toolchain": {
     "node": "v24.16.0",
     "node_executable": "/Users/taylerramsay/.local/node/bin/node",
@@ -15,12 +15,12 @@
   "source": [
     {
       "file": "scripts/with-test-postgres.mjs",
-      "digest": "sha256:a938e58b48480b36d486948a4dbba726268967844322fa824de78cf36b85d745",
+      "digest": "sha256:6e487b82e28243c38f743d2a78fe2e1695edf938ccd9e994a5636fa2a810b95d",
       "meaningful_added_lines": 110
     },
     {
       "file": "packages/storage/test/postgres-wrapper.test.ts",
-      "digest": "sha256:9932c4ac2b8acb2e073846e6b6b47ec232f9ccc12796ee3b9d5b9f8016dd0a48",
+      "digest": "sha256:f457eceb9e9290af942efe1ffe0fb93cefd364dc9f552a05aa20f2b72bcf6fd4",
       "meaningful_added_lines": 69
     },
     {
@@ -34,7 +34,35 @@
     "meaningful_implementation_tracking_additions": 187,
     "source_files": 3,
     "living_documentation_atlas_owners": 5,
-    "generated_and_evidence": "reported separately; not implementation lines"
+    "generated_and_evidence": "reported separately; not implementation lines",
+    "documentation_additions": [
+      {
+        "file": ".agents/skills/verify-agora/SKILL.md",
+        "added_lines": 12
+      },
+      {
+        "file": "docs/runbooks/development.md",
+        "added_lines": 5
+      },
+      {
+        "file": "docs/site/cli.md",
+        "added_lines": 1
+      },
+      {
+        "file": "docs/site/foundation.md",
+        "added_lines": 5
+      },
+      {
+        "file": "docs/site/atlas.json",
+        "added_lines": 3
+      }
+    ],
+    "generated": [
+      {
+        "file": "docs/site/progress.md",
+        "bytes": 9586
+      }
+    ]
   },
   "checks": [
     {
@@ -52,7 +80,7 @@
     {
       "label": "focused",
       "exit": 0,
-      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+      "head": "164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad",
       "command": "pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept"
     },
     {
@@ -136,30 +164,35 @@
     {
       "label": "guard",
       "exit": 0,
-      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+      "head": "164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad",
       "command": "node .scratch/p0cb/guard.mjs"
     },
     {
       "label": "recorder",
       "exit": 0,
-      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
-      "command": "node scripts/record-red-green.mjs --parent 17fbf24609fb3cbcb25c052ae7ecee124bc0bc87 --head 8a3f41cb3322e6ef530885e7bb0aede1a035b4cb --out evidence/ci/P0c/B -- pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t deep-success"
+      "head": "164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad",
+      "command": "node scripts/record-red-green.mjs --parent 17fbf24609fb3cbcb25c052ae7ecee124bc0bc87 --head 164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad --out evidence/ci/P0c/B -- pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t deep-success"
     },
     {
       "label": "check",
       "exit": 0,
-      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+      "head": "164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad",
       "command": "pnpm check"
     },
     {
       "label": "two-clusters",
       "exit": 0,
-      "head": "8a3f41cb3322e6ef530885e7bb0aede1a035b4cb",
+      "head": "164b1bdf4cde4fc80756f7f1c0f3f48b70d444ad",
       "command": "node scripts/with-test-postgres.mjs COMMAND ARGS...; two simultaneous instances; native psql, ps and lsof read-back"
     }
   ],
   "known_external_failure": "Unchanged P0a test-design-checks sandbox lacks apps/center/src/app.ts, as on qualified main; no B or C readiness claimed from it.",
   "artifacts": [
+    {
+      "file": "atlas.log",
+      "digest": "sha256:ec60336a2d5780dcffae9e2b23c16ad3ba28222300b70accf61532d9d7bd796d",
+      "bytes": 195
+    },
     {
       "file": "audit.log",
       "digest": "sha256:53fffac9d1f4c670d03248d227edd0f8963297eced25ee4d32d6e29d5d5b7c09",
@@ -172,8 +205,13 @@
     },
     {
       "file": "check.log",
-      "digest": "sha256:2b33c521c709c89c458165cf2ad870bccc47940f928f7acdd7e9980b41f4c206",
-      "bytes": 8975
+      "digest": "sha256:a51410ea1ca4b56f9cff2de361f1cead109db8b12f672b74078d901c6dac0aed",
+      "bytes": 8971
+    },
+    {
+      "file": "child-signal.red.log",
+      "digest": "sha256:582a01bb333ca4aa804ab4ac4a7d3432e0df997d4485aae65befa906791d0888",
+      "bytes": 4356
     },
     {
       "file": "cli-red.log",
@@ -182,7 +220,7 @@
     },
     {
       "file": "commands.tsv",
-      "digest": "sha256:ef8e6f24539884a0fddc85b496fe96cf12139c127dc874ce32c5e4ea0ca8da87",
+      "digest": "sha256:ff271fbe29e21a4ce5f3f70a41635c7c94ea7865eeeb2007e0c4477f07b206bc",
       "bytes": 2234
     },
     {
@@ -201,6 +239,16 @@
       "bytes": 549
     },
     {
+      "file": "docs-build.log",
+      "digest": "sha256:96f4ebcf3a68aa8bbe14478605bcd8e29bc4d5647b11d8d8bcecac0128fcda76",
+      "bytes": 213
+    },
+    {
+      "file": "docs-check.log",
+      "digest": "sha256:af460d45b0d3dcd492629ddead5b861702c7f680285b1ca3ca26e2dd007d8240",
+      "bytes": 4600
+    },
+    {
       "file": "doctor.log",
       "digest": "sha256:9ebbe11f1ab7e7b5530dc3d8ccad5de265c60779818a52d4004e72ab95653d8a",
       "bytes": 262
@@ -217,8 +265,8 @@
     },
     {
       "file": "focused.log",
-      "digest": "sha256:92ff6a9137248db46c4a0eebfaada3ef689490b5ab3ed34320cf378104c843d2",
-      "bytes": 32726
+      "digest": "sha256:c8690337ae823d51733f269e8c4784d4f2e89e50e456b3dd0e408fef50a07629",
+      "bytes": 34809
     },
     {
       "file": "full-check-cancellation.red.log",
@@ -227,7 +275,7 @@
     },
     {
       "file": "green.log",
-      "digest": "sha256:e41f711546a0e449f884dca6b3c9f0c87cbc3a1580fed57516b2f221ad9e846d",
+      "digest": "sha256:1c8283d417e7275c7831bf574cd3825d7db63eb12e4760fc5fcb8c600d411851",
       "bytes": 1437
     },
     {
@@ -237,7 +285,7 @@
     },
     {
       "file": "guard.json",
-      "digest": "sha256:a8336ea5aea8a7cc34799a584388e842c42bb3daf00685521462c4da643d2ae8",
+      "digest": "sha256:0ee233efd5f31922c0123856d3aba3f2d43caa576d99020f2bc79569503b13fb",
       "bytes": 6556
     },
     {
@@ -277,8 +325,8 @@
     },
     {
       "file": "no-leftovers.json",
-      "digest": "sha256:ab3f8539d8c8ec31d861e30728cbe16d08fc9e381388a6d78e0796507746c1df",
-      "bytes": 14280
+      "digest": "sha256:16c777e36b0bea416e1a35e8a7ad7e694257c79bf1e044fe82f461a935bcc4c1",
+      "bytes": 15096
     },
     {
       "file": "plan.log",
@@ -292,7 +340,7 @@
     },
     {
       "file": "recorder.log",
-      "digest": "sha256:0ae557458af2edc03df162df018928ca183e199f043ae05f708db434d6860df2",
+      "digest": "sha256:a9bd783d2ef1a151d23da1021e5b5cca2747fae38dfe0bb66cb6bd446671368c",
       "bytes": 307
     },
     {
@@ -302,7 +350,7 @@
     },
     {
       "file": "red.log",
-      "digest": "sha256:27f2d73969e634299b07e69afcea72b554b21e90fd61b108c8c37d527ea14639",
+      "digest": "sha256:7fdd1be6b99727acfa409608ce602d5c22fe61dab50c40919fda2e7b53a3bc67",
       "bytes": 2960
     },
     {
@@ -312,8 +360,8 @@
     },
     {
       "file": "review.md",
-      "digest": "sha256:87582ee4a5362c2b95051e5bab9afaea9683dcd4f58131d886037e476f3aefff",
-      "bytes": 4862
+      "digest": "sha256:b33a6eb2e1a5341129ad28acc788dcfbdb1ee7390cb3c633d3c4ba7cd6ae0daf",
+      "bytes": 5056
     },
     {
       "file": "scenarios.log",
@@ -322,8 +370,8 @@
     },
     {
       "file": "test-patch.diff",
-      "digest": "sha256:ea964e6137d29cf5d22f066b51bec5c9fb4136ce5a02822e40e360ff23cdcb3f",
-      "bytes": 6706
+      "digest": "sha256:0822779284e6352e0c584af2fb5f2c6dc5b12cbba3831750d7a87b3997cb0b4b",
+      "bytes": 6826
     },
     {
       "file": "test-pg.log",
@@ -332,7 +380,7 @@
     },
     {
       "file": "two-clusters.log",
-      "digest": "sha256:bbeb2507e1182ae7e015e3f46624e85373df301e4f4d339799839a72d9a4c1bc",
+      "digest": "sha256:060e1fcf48c35cd0dddce8c2c6591ed3d7255d2e307d22ea2bac15193bf20b68",
       "bytes": 4312
     },
     {
@@ -340,5 +388,15 @@
       "digest": "sha256:3fb397e503accf40f3a71f1a5351fe5dd715b9cff732b36f8ecdf34921e4a474",
       "bytes": 172
     }
+  ],
+  "historical_artifacts": [
+    "cli-red.log",
+    "native-red.log",
+    "red-before-edit.log",
+    "first-green.log",
+    "lifecycle.log",
+    "full-check-cancellation.red.log",
+    "failed-run-cleanup.json",
+    "child-signal.red.log"
   ]
 }
