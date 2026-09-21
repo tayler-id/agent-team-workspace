@@ -35,37 +35,37 @@ SCOPE packet structure only; it cannot verify that prose is true or that any scr
 > agora@ docs:test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
 > node --test docs/site/test/*.test.ts
 
-✔ the same public build driver produces a valid baseline before corpus assertions (0.273333ms)
-✔ the complete corpus has 25 pages and both audience tracks (0.252208ms)
-✔ the atlas explains all nine system nodes and eight connections (0.164208ms)
-✔ the committed design packet is readable as linked documentation, not a source-code dump (0.154542ms)
-✔ current commands and planned product availability have separate references (0.173708ms)
-✔ disabling only the private path guard makes its behavioral assertion fail (101.125458ms)
-✔ disabling only the : section guard makes its behavioral assertion fail (97.985958ms)
-✔ disabling only the : visual guard makes its behavioral assertion fail (96.602792ms)
-✔ disabling only the : link guard makes its behavioral assertion fail (96.572667ms)
-✔ disabling only the : source guard makes its behavioral assertion fail (93.117917ms)
-✔ disabling only the snapshot revision guard makes its behavioral assertion fail (92.008209ms)
-✔ disabling only the invalid status guard makes its behavioral assertion fail (94.209542ms)
-✔ disabling only the Built proof guard makes its behavioral assertion fail (92.094375ms)
-✔ disabling only the milestone coverage guard makes its behavioral assertion fail (91.744833ms)
-✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (94.416708ms)
-✔ disabling only the : outcome guard makes its behavioral assertion fail (90.204584ms)
-✔ disabling only the : stage guard makes its behavioral assertion fail (92.05875ms)
-✔ disabling only the inventory missing guard makes its behavioral assertion fail (92.881083ms)
-✔ disabling only the feature documentation guard makes its behavioral assertion fail (92.838875ms)
-✔ public documentation guard accepts the complete valid fixture (2.654209ms)
-✔ broken internal page and anchor links fail (1.301458ms)
-✔ feature explanations and visual flows are mandatory (0.36275ms)
-✔ progress statuses are closed and Built requires source test and evidence (0.383667ms)
-✔ all milestones must occur exactly once with an outcome and release stage (0.433292ms)
-✔ milestone outcomes mirror the authoritative plan instead of drifting (0.160792ms)
-✔ every executable and package must have a documentation home (0.115583ms)
-✔ every feature-map entry requires a validated feature page (0.12125ms)
-✔ private absolute paths and unsafe links never enter the site (0.290833ms)
-✔ production links include generated navigation, fragment, stylesheet and nested source views (0.6525ms)
-✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (1.984542ms)
-✔ Mermaid mirror carries the same status and relationships as the data owner (0.166792ms)
+✔ the same public build driver produces a valid baseline before corpus assertions (0.29775ms)
+✔ the complete corpus has 25 pages and both audience tracks (0.27125ms)
+✔ the atlas explains all nine system nodes and eight connections (0.173542ms)
+✔ the committed design packet is readable as linked documentation, not a source-code dump (0.155792ms)
+✔ current commands and planned product availability have separate references (0.172917ms)
+✔ disabling only the private path guard makes its behavioral assertion fail (102.131ms)
+✔ disabling only the : section guard makes its behavioral assertion fail (96.240917ms)
+✔ disabling only the : visual guard makes its behavioral assertion fail (98.497458ms)
+✔ disabling only the : link guard makes its behavioral assertion fail (94.264042ms)
+✔ disabling only the : source guard makes its behavioral assertion fail (91.107166ms)
+✔ disabling only the snapshot revision guard makes its behavioral assertion fail (92.39025ms)
+✔ disabling only the invalid status guard makes its behavioral assertion fail (93.744875ms)
+✔ disabling only the Built proof guard makes its behavioral assertion fail (88.99725ms)
+✔ disabling only the milestone coverage guard makes its behavioral assertion fail (92.362167ms)
+✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (91.658625ms)
+✔ disabling only the : outcome guard makes its behavioral assertion fail (88.708209ms)
+✔ disabling only the : stage guard makes its behavioral assertion fail (87.488084ms)
+✔ disabling only the inventory missing guard makes its behavioral assertion fail (88.870333ms)
+✔ disabling only the feature documentation guard makes its behavioral assertion fail (89.829375ms)
+✔ public documentation guard accepts the complete valid fixture (2.864959ms)
+✔ broken internal page and anchor links fail (1.410375ms)
+✔ feature explanations and visual flows are mandatory (0.360541ms)
+✔ progress statuses are closed and Built requires source test and evidence (0.456292ms)
+✔ all milestones must occur exactly once with an outcome and release stage (0.441792ms)
+✔ milestone outcomes mirror the authoritative plan instead of drifting (0.135083ms)
+✔ every executable and package must have a documentation home (0.100875ms)
+✔ every feature-map entry requires a validated feature page (0.224292ms)
+✔ private absolute paths and unsafe links never enter the site (0.318625ms)
+✔ production links include generated navigation, fragment, stylesheet and nested source views (0.8215ms)
+✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (1.889709ms)
+✔ Mermaid mirror carries the same status and relationships as the data owner (0.1395ms)
 ℹ tests 31
 ℹ suites 0
 ℹ pass 31
@@ -73,7 +73,7 @@ SCOPE packet structure only; it cannot verify that prose is true or that any scr
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 1373.921584
+ℹ duration_ms 1352.022708
 
 > agora@ contracts:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
 > node contracts/tools/generate.mjs --check
@@ -83,16 +83,16 @@ SCOPE packet structure only; it cannot verify that prose is true or that any scr
 > agora@ test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
 > node scripts/with-test-postgres.mjs vitest run
 
-{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"41c78b85-22ca-4f61-939d-3e9bf2dfb58c","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-GRQvUE","socketDir":"/private/tmp/agora-p0c-41c78b85-22ca-4f61-939d-3e9bf2dfb58c"}
-{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"41c78b85-22ca-4f61-939d-3e9bf2dfb58c","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-GRQvUE","socketDir":"/private/tmp/agora-p0c-41c78b85-22ca-4f61-939d-3e9bf2dfb58c","pid":84019}
-{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"41c78b85-22ca-4f61-939d-3e9bf2dfb58c","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-GRQvUE","socketDir":"/private/tmp/agora-p0c-41c78b85-22ca-4f61-939d-3e9bf2dfb58c","socket_dir":"/private/tmp/agora-p0c-41c78b85-22ca-4f61-939d-3e9bf2dfb58c","pid":84019,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"98fc8902-5077-4152-a1dc-3f93b1d1b4c9","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-DLoDwD","socketDir":"/private/tmp/agora-p0c-98fc8902-5077-4152-a1dc-3f93b1d1b4c9"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"98fc8902-5077-4152-a1dc-3f93b1d1b4c9","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-DLoDwD","socketDir":"/private/tmp/agora-p0c-98fc8902-5077-4152-a1dc-3f93b1d1b4c9","pid":63591}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"98fc8902-5077-4152-a1dc-3f93b1d1b4c9","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-DLoDwD","socketDir":"/private/tmp/agora-p0c-98fc8902-5077-4152-a1dc-3f93b1d1b4c9","socket_dir":"/private/tmp/agora-p0c-98fc8902-5077-4152-a1dc-3f93b1d1b4c9","pid":63591,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
 
  RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
 
 
  Test Files  23 passed (23)
       Tests  134 passed | 1 expected fail (135)
-   Start at  02:50:46
-   Duration  43.27s (tests 96%, import 3%, transform 1%)
+   Start at  03:09:11
+   Duration  39.29s (tests 96%, import 3%, transform 1%)
 
-{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-GRQvUE","socketDir":"/private/tmp/agora-p0c-41c78b85-22ca-4f61-939d-3e9bf2dfb58c"}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-DLoDwD","socketDir":"/private/tmp/agora-p0c-98fc8902-5077-4152-a1dc-3f93b1d1b4c9"}
