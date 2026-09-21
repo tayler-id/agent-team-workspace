@@ -40,7 +40,7 @@ const launch = (file, args, options = {}, signal = 'SIGTERM') => {
 	};
 	const done = new Promise(resolve => {
 		child.once('error', error => { report('blocked', { message: String(error) }); resolve(70); });
-		child.once('exit', (code) => resolve(code ?? 70));
+		child.once('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
 	});
 	const stop = async () => {
 		kill(signal);

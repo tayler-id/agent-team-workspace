@@ -1,0 +1,35 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+
+stderr | packages/storage/test/postgres-wrapper.test.ts > wrapper: child-signal
+{"scenario":"child-signal","code":70,"elapsed_ms":633,"output":"","diagnostic":"{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"allocated\",\"runId\":\"d247840f-52f6-434c-ae0e-12d448ceaf2e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-P67T2l/agora-pg-a3nbZ8\",\"socketDir\":\"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"starting\",\"runId\":\"d247840f-52f6-434c-ae0e-12d448ceaf2e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-P67T2l/agora-pg-a3nbZ8\",\"socketDir\":\"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e\",\"pid\":5780}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"started\",\"runId\":\"d247840f-52f6-434c-ae0e-12d448ceaf2e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-P67T2l/agora-pg-a3nbZ8\",\"socketDir\":\"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e\",\"socket_dir\":\"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e\",\"pid\":5780,\"database\":\"agora_test\",\"owner_role\":\"agora_owner\",\"app_role\":\"agora_app\",\"bypass_role\":\"agora_bypass\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"cleaned\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-P67T2l/agora-pg-a3nbZ8\",\"socketDir\":\"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e\"}\n","descendants":[],"neighbor":{"runId":"6ea91fec-d3b1-4d5c-8746-297d7aea59a5","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-P67T2l","socketDir":"/private/tmp/agora-p0c-6ea91fec-d3b1-4d5c-8746-297d7aea59a5"},"foreign":5714}
+
+ ❯ |unit| packages/storage/test/postgres-wrapper.test.ts (14 tests | 1 failed | 13 skipped) 641ms
+   × wrapper: child-signal 640ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/storage/test/postgres-wrapper.test.ts > wrapper: child-signal
+AssertionError: {"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"d247840f-52f6-434c-ae0e-12d448ceaf2e","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-P67T2l/agora-pg-a3nbZ8","socketDir":"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"d247840f-52f6-434c-ae0e-12d448ceaf2e","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-P67T2l/agora-pg-a3nbZ8","socketDir":"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e","pid":5780}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"d247840f-52f6-434c-ae0e-12d448ceaf2e","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-P67T2l/agora-pg-a3nbZ8","socketDir":"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e","socket_dir":"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e","pid":5780,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-P67T2l/agora-pg-a3nbZ8","socketDir":"/private/tmp/agora-p0c-d247840f-52f6-434c-ae0e-12d448ceaf2e"}
+: expected 70 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 70
+
+ ❯ packages/storage/test/postgres-wrapper.test.ts:49:28
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 skipped (14)
+   Start at  01:38:28
+   Duration  726ms (tests 96%, transform 2%, import 2%)
+

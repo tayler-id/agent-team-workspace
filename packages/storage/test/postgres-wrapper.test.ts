@@ -10,7 +10,7 @@ const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^
 const binaries = process.env['AGORA_PG_BIN'] ?? spawnSync('pg_config', ['--bindir'], { encoding: 'utf8' }).stdout.trim();
 const query = "process.stdout.write(require('node:child_process').execFileSync('psql', [process.env.AGORA_TEST_DATABASE_URL, '-Atc', 'select current_user']))";
 
-test.each(['deep-success', 'child-failure', 'missing-command', 'initdb-failure', 'initdb-timeout', 'startup-failure', 'bootstrap-failure', 'startup-timeout', 'SIGINT', 'SIGTERM', 'startup-cancel', 'forced-cancel', 'foreign-preservation'])('wrapper: %s', async (scenario) => {
+test.each(['deep-success', 'child-failure', 'child-signal', 'missing-command', 'initdb-failure', 'initdb-timeout', 'startup-failure', 'bootstrap-failure', 'startup-timeout', 'SIGINT', 'SIGTERM', 'startup-cancel', 'forced-cancel', 'foreign-preservation'])('wrapper: %s', async (scenario) => {
 	mkdirSync('.scratch', { recursive: true });
 	const artifacts = mkdtempSync(`${realpathSync('.scratch')}/wrapper deep artifacts-`);
 	const neighbor = allocatePostgresSocket(artifacts);
@@ -26,7 +26,7 @@ test.each(['deep-success', 'child-failure', 'missing-command', 'initdb-failure',
 			else symlinkSync(`${binaries}/${name}`, `${artifacts}/bin/${name}`);
 		}
 		const cancelling = ['SIGINT', 'SIGTERM', 'forced-cancel'].includes(scenario);
-		const script = cancelling ? "const c=require('node:child_process').spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:'ignore'}); console.log(JSON.stringify([process.pid,c.pid])); setInterval(()=>{},1000)" : scenario === 'child-failure' ? 'process.exit(7)' : query;
+		const script = cancelling ? "const c=require('node:child_process').spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:'ignore'}); console.log(JSON.stringify([process.pid,c.pid])); setInterval(()=>{},1000)" : scenario === 'child-failure' ? 'process.exit(7)' : scenario === 'child-signal' ? "process.kill(process.pid,'SIGTERM')" : query;
 		const begin = Date.now();
 		const child = spawn(process.execPath, [path.resolve('scripts/with-test-postgres.mjs'), ...(scenario === 'missing-command' ? ['./absent-command'] : [process.execPath, '-e', script])], { cwd: artifacts, env: { ...env, TMPDIR: artifacts, AGORA_PG_BIN: `${artifacts}/bin`, AGORA_PG_STARTUP_TIMEOUT_MS: scenario.endsWith('timeout') ? '2000' : '30000' } });
 		child.stderr.on('data', (bytes: Buffer) => {
@@ -46,7 +46,7 @@ test.each(['deep-success', 'child-failure', 'missing-command', 'initdb-failure',
 		});
 		const code = await new Promise<number | null>(resolve => child.once('close', resolve));
 		console.error(JSON.stringify({ scenario, code, elapsed_ms: Date.now() - begin, output, diagnostic, descendants, neighbor: neighbor.identity, foreign: foreign.pid }));
-		expect(code, diagnostic).toBe(scenario === 'deep-success' ? 0 : scenario === 'child-failure' ? 7 : ['SIGINT', 'startup-cancel'].includes(scenario) ? 130 : ['SIGTERM', 'forced-cancel'].includes(scenario) ? 143 : 70);
+		expect(code, diagnostic).toBe(scenario === 'deep-success' ? 0 : scenario === 'child-failure' ? 7 : scenario === 'child-signal' ? 1 : ['SIGINT', 'startup-cancel'].includes(scenario) ? 130 : ['SIGTERM', 'forced-cancel'].includes(scenario) ? 143 : 70);
 		expect(receipts.filter(record => record.outcome === 'allocated')).toHaveLength(1);
 		if (scenario === 'deep-success') expect(output.trim()).toBe('agora_app');
 		if (scenario.endsWith('timeout')) { expect(diagnostic).toContain('startup timeout'); expect(Date.now() - begin).toBeLessThan(5_000); }
