@@ -1,0 +1,880 @@
+{
+  "stacked_base": "55269a5103656a63cc6f246c00ebb1efa6785866",
+  "qualified_source_head": "db0bd96a15060c4c6d2ba2edc3877fc7c4472d24",
+  "method": "Full delivered source/docs/evidence diff; documentation corpus test counted conservatively as source. Binary evidence has byte counts rather than line counts. Closing receipt-only commit is separately hashed in artifacts.json.",
+  "totals": {
+    "docs": {
+      "files": 15,
+      "added_lines": 169,
+      "removed_lines": 33,
+      "meaningful_added": 125,
+      "head_bytes": 146826
+    },
+    "source": {
+      "files": 18,
+      "added_lines": 715,
+      "removed_lines": 23,
+      "meaningful_added": 692,
+      "head_bytes": 100250
+    },
+    "fixtures": {
+      "files": 1,
+      "added_lines": 37,
+      "removed_lines": 0,
+      "meaningful_added": 37,
+      "head_bytes": 132657
+    },
+    "generated": {
+      "files": 7,
+      "added_lines": 668,
+      "removed_lines": 8,
+      "meaningful_added": 549,
+      "head_bytes": 285769
+    },
+    "evidence": {
+      "files": 63,
+      "added_lines": 15471,
+      "removed_lines": 0,
+      "meaningful_added": 14166,
+      "head_bytes": 1578215
+    }
+  },
+  "unchanged_categories": [
+    "migrations",
+    "pnpm-lock.yaml"
+  ],
+  "files": [
+    {
+      "path": ".agents/skills/verify-agora/SKILL.md",
+      "category": "docs",
+      "added_lines": 47,
+      "removed_lines": 1,
+      "meaningful_added": 33,
+      "head_bytes": 17455
+    },
+    {
+      "path": "AGENTS.md",
+      "category": "docs",
+      "added_lines": 1,
+      "removed_lines": 1,
+      "meaningful_added": 1,
+      "head_bytes": 3910
+    },
+    {
+      "path": "agora/feature-map.json",
+      "category": "source",
+      "added_lines": 11,
+      "removed_lines": 0,
+      "meaningful_added": 11,
+      "head_bytes": 11159
+    },
+    {
+      "path": "apps/center/src/app.ts",
+      "category": "source",
+      "added_lines": 8,
+      "removed_lines": 21,
+      "meaningful_added": 8,
+      "head_bytes": 5187
+    },
+    {
+      "path": "apps/center/src/local-room-wire.ts",
+      "category": "source",
+      "added_lines": 23,
+      "removed_lines": 0,
+      "meaningful_added": 20,
+      "head_bytes": 1046
+    },
+    {
+      "path": "apps/center/test/runtime.pg.test.ts",
+      "category": "source",
+      "added_lines": 163,
+      "removed_lines": 0,
+      "meaningful_added": 158,
+      "head_bytes": 10689
+    },
+    {
+      "path": "apps/center/test/runtime.test.ts",
+      "category": "source",
+      "added_lines": 70,
+      "removed_lines": 0,
+      "meaningful_added": 64,
+      "head_bytes": 6492
+    },
+    {
+      "path": "contracts/fixtures/vectors.json",
+      "category": "fixtures",
+      "added_lines": 37,
+      "removed_lines": 0,
+      "meaningful_added": 37,
+      "head_bytes": 132657
+    },
+    {
+      "path": "contracts/generated/manifest.json",
+      "category": "generated",
+      "added_lines": 10,
+      "removed_lines": 8,
+      "meaningful_added": 10,
+      "head_bytes": 4549
+    },
+    {
+      "path": "contracts/generated/openapi.bundled.json",
+      "category": "generated",
+      "added_lines": 122,
+      "removed_lines": 0,
+      "meaningful_added": 122,
+      "head_bytes": 36828
+    },
+    {
+      "path": "contracts/generated/typescript/openapi.d.ts",
+      "category": "generated",
+      "added_lines": 68,
+      "removed_lines": 0,
+      "meaningful_added": 61,
+      "head_bytes": 28708
+    },
+    {
+      "path": "contracts/openapi.json",
+      "category": "source",
+      "added_lines": 11,
+      "removed_lines": 0,
+      "meaningful_added": 11,
+      "head_bytes": 4534
+    },
+    {
+      "path": "contracts/schemas/local-room.schema.json",
+      "category": "source",
+      "added_lines": 24,
+      "removed_lines": 0,
+      "meaningful_added": 24,
+      "head_bytes": 9244
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContracts/Generated/Client.swift",
+      "category": "generated",
+      "added_lines": 89,
+      "removed_lines": 0,
+      "meaningful_added": 85,
+      "head_bytes": 26378
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift",
+      "category": "generated",
+      "added_lines": 182,
+      "removed_lines": 0,
+      "meaningful_added": 145,
+      "head_bytes": 133589
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContracts/Generated/Types+Operations.swift",
+      "category": "generated",
+      "added_lines": 179,
+      "removed_lines": 0,
+      "meaningful_added": 116,
+      "head_bytes": 49063
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContracts/Generated/Types.swift",
+      "category": "generated",
+      "added_lines": 18,
+      "removed_lines": 0,
+      "meaningful_added": 10,
+      "head_bytes": 6654
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContractsConform/main.swift",
+      "category": "source",
+      "added_lines": 2,
+      "removed_lines": 0,
+      "meaningful_added": 2,
+      "head_bytes": 6892
+    },
+    {
+      "path": "contracts/tools/browser-validator.ts",
+      "category": "source",
+      "added_lines": 23,
+      "removed_lines": 0,
+      "meaningful_added": 21,
+      "head_bytes": 1337
+    },
+    {
+      "path": "docs/decisions.tsv",
+      "category": "docs",
+      "added_lines": 3,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 37577
+    },
+    {
+      "path": "docs/runbooks/development.md",
+      "category": "docs",
+      "added_lines": 14,
+      "removed_lines": 2,
+      "meaningful_added": 8,
+      "head_bytes": 18250
+    },
+    {
+      "path": "docs/site/atlas.json",
+      "category": "docs",
+      "added_lines": 8,
+      "removed_lines": 3,
+      "meaningful_added": 8,
+      "head_bytes": 13049
+    },
+    {
+      "path": "docs/site/cli.md",
+      "category": "docs",
+      "added_lines": 21,
+      "removed_lines": 0,
+      "meaningful_added": 16,
+      "head_bytes": 10435
+    },
+    {
+      "path": "docs/site/configuration.md",
+      "category": "docs",
+      "added_lines": 4,
+      "removed_lines": 0,
+      "meaningful_added": 2,
+      "head_bytes": 3579
+    },
+    {
+      "path": "docs/site/contracts.md",
+      "category": "docs",
+      "added_lines": 2,
+      "removed_lines": 2,
+      "meaningful_added": 1,
+      "head_bytes": 4399
+    },
+    {
+      "path": "docs/site/faq.md",
+      "category": "docs",
+      "added_lines": 1,
+      "removed_lines": 1,
+      "meaningful_added": 1,
+      "head_bytes": 3540
+    },
+    {
+      "path": "docs/site/getting-started.md",
+      "category": "docs",
+      "added_lines": 12,
+      "removed_lines": 1,
+      "meaningful_added": 8,
+      "head_bytes": 3598
+    },
+    {
+      "path": "docs/site/local-room.md",
+      "category": "docs",
+      "added_lines": 37,
+      "removed_lines": 19,
+      "meaningful_added": 31,
+      "head_bytes": 7907
+    },
+    {
+      "path": "docs/site/operations.md",
+      "category": "docs",
+      "added_lines": 10,
+      "removed_lines": 0,
+      "meaningful_added": 5,
+      "head_bytes": 5224
+    },
+    {
+      "path": "docs/site/progress.md",
+      "category": "docs",
+      "added_lines": 2,
+      "removed_lines": 2,
+      "meaningful_added": 2,
+      "head_bytes": 9647
+    },
+    {
+      "path": "docs/site/site.json",
+      "category": "docs",
+      "added_lines": 6,
+      "removed_lines": 0,
+      "meaningful_added": 6,
+      "head_bytes": 4435
+    },
+    {
+      "path": "docs/site/synchronization.md",
+      "category": "docs",
+      "added_lines": 1,
+      "removed_lines": 1,
+      "meaningful_added": 0,
+      "head_bytes": 3821
+    },
+    {
+      "path": "docs/site/test/corpus.test.ts",
+      "category": "source",
+      "added_lines": 2,
+      "removed_lines": 1,
+      "meaningful_added": 2,
+      "head_bytes": 2247
+    },
+    {
+      "path": "evidence/local-room/runtime/README.md",
+      "category": "evidence",
+      "added_lines": 21,
+      "removed_lines": 0,
+      "meaningful_added": 11,
+      "head_bytes": 4633
+    },
+    {
+      "path": "evidence/local-room/runtime/audit.json",
+      "category": "evidence",
+      "added_lines": 18,
+      "removed_lines": 0,
+      "meaningful_added": 18,
+      "head_bytes": 310
+    },
+    {
+      "path": "evidence/local-room/runtime/boundaries.json",
+      "category": "evidence",
+      "added_lines": 1,
+      "removed_lines": 0,
+      "meaningful_added": 1,
+      "head_bytes": 3663
+    },
+    {
+      "path": "evidence/local-room/runtime/boundaries.log",
+      "category": "evidence",
+      "added_lines": 5,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 407
+    },
+    {
+      "path": "evidence/local-room/runtime/browser-accessibility.txt",
+      "category": "evidence",
+      "added_lines": 83,
+      "removed_lines": 0,
+      "meaningful_added": 83,
+      "head_bytes": 2800
+    },
+    {
+      "path": "evidence/local-room/runtime/browser-cleanup.log",
+      "category": "evidence",
+      "added_lines": 1,
+      "removed_lines": 0,
+      "meaningful_added": 1,
+      "head_bytes": 16
+    },
+    {
+      "path": "evidence/local-room/runtime/browser-console.log",
+      "category": "evidence",
+      "added_lines": 7,
+      "removed_lines": 0,
+      "meaningful_added": 7,
+      "head_bytes": 328
+    },
+    {
+      "path": "evidence/local-room/runtime/browser-csp.red.log",
+      "category": "evidence",
+      "added_lines": 3,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 54
+    },
+    {
+      "path": "evidence/local-room/runtime/browser-drive.log",
+      "category": "evidence",
+      "added_lines": 404,
+      "removed_lines": 0,
+      "meaningful_added": 403,
+      "head_bytes": 17790
+    },
+    {
+      "path": "evidence/local-room/runtime/browser-script-route.unavailable.log",
+      "category": "evidence",
+      "added_lines": 4,
+      "removed_lines": 0,
+      "meaningful_added": 4,
+      "head_bytes": 102
+    },
+    {
+      "path": "evidence/local-room/runtime/browser-send.txt",
+      "category": "evidence",
+      "added_lines": 65,
+      "removed_lines": 0,
+      "meaningful_added": 65,
+      "head_bytes": 2376
+    },
+    {
+      "path": "evidence/local-room/runtime/check-code-head.log",
+      "category": "evidence",
+      "added_lines": 96,
+      "removed_lines": 0,
+      "meaningful_added": 76,
+      "head_bytes": 7814
+    },
+    {
+      "path": "evidence/local-room/runtime/cleanup.jsonl",
+      "category": "evidence",
+      "added_lines": 3,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 1199
+    },
+    {
+      "path": "evidence/local-room/runtime/client-replay.json",
+      "category": "evidence",
+      "added_lines": 1,
+      "removed_lines": 0,
+      "meaningful_added": 1,
+      "head_bytes": 22038
+    },
+    {
+      "path": "evidence/local-room/runtime/contracts-check.json",
+      "category": "evidence",
+      "added_lines": 1,
+      "removed_lines": 0,
+      "meaningful_added": 1,
+      "head_bytes": 1915
+    },
+    {
+      "path": "evidence/local-room/runtime/contracts-conform.json",
+      "category": "evidence",
+      "added_lines": 1,
+      "removed_lines": 0,
+      "meaningful_added": 1,
+      "head_bytes": 100075
+    },
+    {
+      "path": "evidence/local-room/runtime/design-checks.log",
+      "category": "evidence",
+      "added_lines": 91,
+      "removed_lines": 0,
+      "meaningful_added": 83,
+      "head_bytes": 6193
+    },
+    {
+      "path": "evidence/local-room/runtime/docs-atlas.log",
+      "category": "evidence",
+      "added_lines": 5,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 194
+    },
+    {
+      "path": "evidence/local-room/runtime/docs-build.log",
+      "category": "evidence",
+      "added_lines": 5,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 212
+    },
+    {
+      "path": "evidence/local-room/runtime/docs-final.log",
+      "category": "evidence",
+      "added_lines": 64,
+      "removed_lines": 0,
+      "meaningful_added": 58,
+      "head_bytes": 4604
+    },
+    {
+      "path": "evidence/local-room/runtime/docs-status.red.log",
+      "category": "evidence",
+      "added_lines": 105,
+      "removed_lines": 0,
+      "meaningful_added": 95,
+      "head_bytes": 23585
+    },
+    {
+      "path": "evidence/local-room/runtime/doctor.log",
+      "category": "evidence",
+      "added_lines": 101,
+      "removed_lines": 0,
+      "meaningful_added": 90,
+      "head_bytes": 5557
+    },
+    {
+      "path": "evidence/local-room/runtime/foundation-attempt.log",
+      "category": "evidence",
+      "added_lines": 96,
+      "removed_lines": 0,
+      "meaningful_added": 94,
+      "head_bytes": 2685
+    },
+    {
+      "path": "evidence/local-room/runtime/generate.log",
+      "category": "evidence",
+      "added_lines": 5,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 2055
+    },
+    {
+      "path": "evidence/local-room/runtime/green.log",
+      "category": "evidence",
+      "added_lines": 24,
+      "removed_lines": 0,
+      "meaningful_added": 19,
+      "head_bytes": 2379
+    },
+    {
+      "path": "evidence/local-room/runtime/guard-negatives.log",
+      "category": "evidence",
+      "added_lines": 384,
+      "removed_lines": 0,
+      "meaningful_added": 267,
+      "head_bytes": 18134
+    },
+    {
+      "path": "evidence/local-room/runtime/harness-500px-before.png",
+      "category": "evidence",
+      "added_lines": 0,
+      "removed_lines": 0,
+      "meaningful_added": 0,
+      "head_bytes": 69470
+    },
+    {
+      "path": "evidence/local-room/runtime/harness-before.png",
+      "category": "evidence",
+      "added_lines": 0,
+      "removed_lines": 0,
+      "meaningful_added": 0,
+      "head_bytes": 87162
+    },
+    {
+      "path": "evidence/local-room/runtime/harness-desktop.png",
+      "category": "evidence",
+      "added_lines": 0,
+      "removed_lines": 0,
+      "meaningful_added": 0,
+      "head_bytes": 97171
+    },
+    {
+      "path": "evidence/local-room/runtime/harness-interaction.mp4",
+      "category": "evidence",
+      "added_lines": 0,
+      "removed_lines": 0,
+      "meaningful_added": 0,
+      "head_bytes": 108309
+    },
+    {
+      "path": "evidence/local-room/runtime/harness-mobile.png",
+      "category": "evidence",
+      "added_lines": 0,
+      "removed_lines": 0,
+      "meaningful_added": 0,
+      "head_bytes": 58466
+    },
+    {
+      "path": "evidence/local-room/runtime/initial-red.log",
+      "category": "evidence",
+      "added_lines": 31,
+      "removed_lines": 0,
+      "meaningful_added": 21,
+      "head_bytes": 1432
+    },
+    {
+      "path": "evidence/local-room/runtime/install.log",
+      "category": "evidence",
+      "added_lines": 10,
+      "removed_lines": 0,
+      "meaningful_added": 9,
+      "head_bytes": 520
+    },
+    {
+      "path": "evidence/local-room/runtime/inventory-after.log",
+      "category": "evidence",
+      "added_lines": 9,
+      "removed_lines": 0,
+      "meaningful_added": 9,
+      "head_bytes": 504
+    },
+    {
+      "path": "evidence/local-room/runtime/inventory-before.log",
+      "category": "evidence",
+      "added_lines": 17,
+      "removed_lines": 0,
+      "meaningful_added": 17,
+      "head_bytes": 1961
+    },
+    {
+      "path": "evidence/local-room/runtime/landmark.green.log",
+      "category": "evidence",
+      "added_lines": 10,
+      "removed_lines": 0,
+      "meaningful_added": 6,
+      "head_bytes": 474
+    },
+    {
+      "path": "evidence/local-room/runtime/landmark.red.log",
+      "category": "evidence",
+      "added_lines": 50,
+      "removed_lines": 0,
+      "meaningful_added": 39,
+      "head_bytes": 2800
+    },
+    {
+      "path": "evidence/local-room/runtime/lighthouse-before.log",
+      "category": "evidence",
+      "added_lines": 17,
+      "removed_lines": 0,
+      "meaningful_added": 17,
+      "head_bytes": 584
+    },
+    {
+      "path": "evidence/local-room/runtime/lighthouse-before/report.html",
+      "category": "evidence",
+      "added_lines": 2901,
+      "removed_lines": 0,
+      "meaningful_added": 2386,
+      "head_bytes": 270856
+    },
+    {
+      "path": "evidence/local-room/runtime/lighthouse-before/report.json",
+      "category": "evidence",
+      "added_lines": 2997,
+      "removed_lines": 0,
+      "meaningful_added": 2997,
+      "head_bytes": 111330
+    },
+    {
+      "path": "evidence/local-room/runtime/lighthouse.log",
+      "category": "evidence",
+      "added_lines": 18,
+      "removed_lines": 0,
+      "meaningful_added": 18,
+      "head_bytes": 707
+    },
+    {
+      "path": "evidence/local-room/runtime/lighthouse/report.html",
+      "category": "evidence",
+      "added_lines": 2901,
+      "removed_lines": 0,
+      "meaningful_added": 2386,
+      "head_bytes": 270401
+    },
+    {
+      "path": "evidence/local-room/runtime/lighthouse/report.json",
+      "category": "evidence",
+      "added_lines": 2969,
+      "removed_lines": 0,
+      "meaningful_added": 2969,
+      "head_bytes": 110479
+    },
+    {
+      "path": "evidence/local-room/runtime/migrations.log",
+      "category": "evidence",
+      "added_lines": 3,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 695
+    },
+    {
+      "path": "evidence/local-room/runtime/numeric-order.red.log",
+      "category": "evidence",
+      "added_lines": 31,
+      "removed_lines": 0,
+      "meaningful_added": 21,
+      "head_bytes": 1493
+    },
+    {
+      "path": "evidence/local-room/runtime/outcome.json",
+      "category": "evidence",
+      "added_lines": 66,
+      "removed_lines": 0,
+      "meaningful_added": 66,
+      "head_bytes": 7598
+    },
+    {
+      "path": "evidence/local-room/runtime/ownership-negatives.jsonl",
+      "category": "evidence",
+      "added_lines": 8,
+      "removed_lines": 0,
+      "meaningful_added": 8,
+      "head_bytes": 2765
+    },
+    {
+      "path": "evidence/local-room/runtime/postgres-start.log",
+      "category": "evidence",
+      "added_lines": 42,
+      "removed_lines": 0,
+      "meaningful_added": 42,
+      "head_bytes": 4836
+    },
+    {
+      "path": "evidence/local-room/runtime/preliminary-cleanup.log",
+      "category": "evidence",
+      "added_lines": 2,
+      "removed_lines": 0,
+      "meaningful_added": 2,
+      "head_bytes": 786
+    },
+    {
+      "path": "evidence/local-room/runtime/probe-center.json",
+      "category": "evidence",
+      "added_lines": 428,
+      "removed_lines": 0,
+      "meaningful_added": 428,
+      "head_bytes": 10452
+    },
+    {
+      "path": "evidence/local-room/runtime/probe-postgres.log",
+      "category": "evidence",
+      "added_lines": 1,
+      "removed_lines": 0,
+      "meaningful_added": 1,
+      "head_bytes": 247
+    },
+    {
+      "path": "evidence/local-room/runtime/probe-scenarios.json",
+      "category": "evidence",
+      "added_lines": 126,
+      "removed_lines": 0,
+      "meaningful_added": 126,
+      "head_bytes": 3053
+    },
+    {
+      "path": "evidence/local-room/runtime/public-cli.jsonl",
+      "category": "evidence",
+      "added_lines": 19,
+      "removed_lines": 0,
+      "meaningful_added": 19,
+      "head_bytes": 18934
+    },
+    {
+      "path": "evidence/local-room/runtime/recorder-cleanup.log",
+      "category": "evidence",
+      "added_lines": 3,
+      "removed_lines": 0,
+      "meaningful_added": 3,
+      "head_bytes": 30
+    },
+    {
+      "path": "evidence/local-room/runtime/recorder.json",
+      "category": "evidence",
+      "added_lines": 1,
+      "removed_lines": 0,
+      "meaningful_added": 1,
+      "head_bytes": 317
+    },
+    {
+      "path": "evidence/local-room/runtime/red.log",
+      "category": "evidence",
+      "added_lines": 45,
+      "removed_lines": 0,
+      "meaningful_added": 34,
+      "head_bytes": 3383
+    },
+    {
+      "path": "evidence/local-room/runtime/runtime-pg.log",
+      "category": "evidence",
+      "added_lines": 14,
+      "removed_lines": 0,
+      "meaningful_added": 10,
+      "head_bytes": 1064
+    },
+    {
+      "path": "evidence/local-room/runtime/runtime-unit.log",
+      "category": "evidence",
+      "added_lines": 18,
+      "removed_lines": 0,
+      "meaningful_added": 14,
+      "head_bytes": 1163
+    },
+    {
+      "path": "evidence/local-room/runtime/security-scan.json",
+      "category": "evidence",
+      "added_lines": 16,
+      "removed_lines": 0,
+      "meaningful_added": 16,
+      "head_bytes": 325
+    },
+    {
+      "path": "evidence/local-room/runtime/size.json",
+      "category": "evidence",
+      "added_lines": 338,
+      "removed_lines": 0,
+      "meaningful_added": 338,
+      "head_bytes": 7758
+    },
+    {
+      "path": "evidence/local-room/runtime/test-patch.diff",
+      "category": "evidence",
+      "added_lines": 290,
+      "removed_lines": 0,
+      "meaningful_added": 290,
+      "head_bytes": 66765
+    },
+    {
+      "path": "evidence/local-room/runtime/video-capture.log",
+      "category": "evidence",
+      "added_lines": 423,
+      "removed_lines": 0,
+      "meaningful_added": 401,
+      "head_bytes": 20260
+    },
+    {
+      "path": "evidence/local-room/runtime/video.json",
+      "category": "evidence",
+      "added_lines": 73,
+      "removed_lines": 0,
+      "meaningful_added": 73,
+      "head_bytes": 2547
+    },
+    {
+      "path": "packages/domain/src/local-room/port.ts",
+      "category": "source",
+      "added_lines": 3,
+      "removed_lines": 1,
+      "meaningful_added": 3,
+      "head_bytes": 8182
+    },
+    {
+      "path": "packages/storage/src/local-room.ts",
+      "category": "source",
+      "added_lines": 5,
+      "removed_lines": 0,
+      "meaningful_added": 5,
+      "head_bytes": 5806
+    },
+    {
+      "path": "scripts/local-room-browser.ts",
+      "category": "source",
+      "added_lines": 41,
+      "removed_lines": 0,
+      "meaningful_added": 40,
+      "head_bytes": 2432
+    },
+    {
+      "path": "scripts/local-room-client.ts",
+      "category": "source",
+      "added_lines": 61,
+      "removed_lines": 0,
+      "meaningful_added": 59,
+      "head_bytes": 4333
+    },
+    {
+      "path": "scripts/local-room-harness.html",
+      "category": "source",
+      "added_lines": 17,
+      "removed_lines": 0,
+      "meaningful_added": 17,
+      "head_bytes": 1415
+    },
+    {
+      "path": "scripts/local-room-owner.ts",
+      "category": "source",
+      "added_lines": 56,
+      "removed_lines": 0,
+      "meaningful_added": 55,
+      "head_bytes": 3518
+    },
+    {
+      "path": "scripts/local-room-service.ts",
+      "category": "source",
+      "added_lines": 111,
+      "removed_lines": 0,
+      "meaningful_added": 109,
+      "head_bytes": 8857
+    },
+    {
+      "path": "scripts/local-room.ts",
+      "category": "source",
+      "added_lines": 84,
+      "removed_lines": 0,
+      "meaningful_added": 83,
+      "head_bytes": 6880
+    }
+  ]
+}
