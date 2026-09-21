@@ -1,0 +1,126 @@
+{
+  "schema_version": "agora.probe-scenarios/v1",
+  "target": "apps/center/src/main.ts",
+  "scenarios": [
+    {
+      "id": "health-liveness",
+      "method": "GET",
+      "path": "/api/v1/health",
+      "expected_status": 200,
+      "restarts_center": false
+    },
+    {
+      "id": "health-readiness",
+      "method": "GET",
+      "path": "/api/v1/health/ready",
+      "expected_status": 200,
+      "restarts_center": false
+    },
+    {
+      "id": "policy-allow",
+      "method": "POST",
+      "path": "/api/v1/fixture/policy/decisions",
+      "expected_status": 200,
+      "restarts_center": false
+    },
+    {
+      "id": "policy-deny",
+      "method": "POST",
+      "path": "/api/v1/fixture/policy/decisions",
+      "expected_status": 200,
+      "expected_reason_code": "scope_mismatch",
+      "restarts_center": false
+    },
+    {
+      "id": "policy-unknown-field",
+      "method": "POST",
+      "path": "/api/v1/fixture/policy/decisions",
+      "expected_status": 400,
+      "expected_reason_code": "malformed_command",
+      "restarts_center": false
+    },
+    {
+      "id": "unknown-route",
+      "method": "GET",
+      "path": "/api/v1/nothing",
+      "expected_status": 404,
+      "expected_reason_code": "not_found",
+      "restarts_center": false
+    },
+    {
+      "id": "local-room-snapshot-before",
+      "method": "GET",
+      "path": "/api/v1/local-room/snapshot",
+      "expected_status": 200,
+      "restarts_center": false
+    },
+    {
+      "id": "local-room-send-committed",
+      "method": "POST",
+      "path": "/api/v1/local-room/messages",
+      "expected_status": 201,
+      "restarts_center": false
+    },
+    {
+      "id": "local-room-send-replayed",
+      "method": "POST",
+      "path": "/api/v1/local-room/messages",
+      "expected_status": 201,
+      "restarts_center": false
+    },
+    {
+      "id": "local-room-send-changed-body",
+      "method": "POST",
+      "path": "/api/v1/local-room/messages",
+      "expected_status": 409,
+      "expected_reason_code": "command_conflict",
+      "restarts_center": false
+    },
+    {
+      "id": "local-room-send-other-scope",
+      "method": "POST",
+      "path": "/api/v1/local-room/messages",
+      "expected_status": 404,
+      "expected_reason_code": "scope_mismatch",
+      "restarts_center": false
+    },
+    {
+      "id": "local-room-send-unknown-citation",
+      "method": "POST",
+      "path": "/api/v1/local-room/messages",
+      "expected_status": 404,
+      "expected_reason_code": "not_found",
+      "restarts_center": false
+    },
+    {
+      "id": "local-room-send-empty-body",
+      "method": "POST",
+      "path": "/api/v1/local-room/messages",
+      "expected_status": 400,
+      "expected_reason_code": "malformed_command",
+      "restarts_center": false
+    },
+    {
+      "id": "local-room-send-unknown-field",
+      "method": "POST",
+      "path": "/api/v1/local-room/messages",
+      "expected_status": 400,
+      "expected_reason_code": "malformed_command",
+      "restarts_center": false
+    },
+    {
+      "id": "local-room-snapshot-after-restart",
+      "method": "GET",
+      "path": "/api/v1/local-room/snapshot",
+      "expected_status": 200,
+      "restarts_center": true
+    },
+    {
+      "id": "local-room-replay-after-restart",
+      "method": "POST",
+      "path": "/api/v1/local-room/messages",
+      "expected_status": 201,
+      "restarts_center": false
+    }
+  ]
+}

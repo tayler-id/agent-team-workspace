@@ -1,0 +1,7 @@
+{
+  "outcome": "pass",
+  "exit": 0,
+  "schema_version": "agora.contract-conformance-run/v1",
+  "vector_count": 127,
+  "disagreement_count": 0
+}

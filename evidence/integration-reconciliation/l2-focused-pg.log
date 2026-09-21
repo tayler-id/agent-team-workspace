@@ -1,0 +1,13 @@
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"a7665dba-75a1-4539-96ca-580daa444041","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-rjb8eO","socketDir":"/private/tmp/agora-p0c-a7665dba-75a1-4539-96ca-580daa444041"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"a7665dba-75a1-4539-96ca-580daa444041","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-rjb8eO","socketDir":"/private/tmp/agora-p0c-a7665dba-75a1-4539-96ca-580daa444041","pid":89378}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"a7665dba-75a1-4539-96ca-580daa444041","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-rjb8eO","socketDir":"/private/tmp/agora-p0c-a7665dba-75a1-4539-96ca-580daa444041","socket_dir":"/private/tmp/agora-p0c-a7665dba-75a1-4539-96ca-580daa444041","pid":89378,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace
+
+
+ Test Files  2 passed (2)
+      Tests  16 passed (16)
+   Start at  09:45:08
+   Duration  1.49s (tests 61%, import 35%, transform 4%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-rjb8eO","socketDir":"/private/tmp/agora-p0c-a7665dba-75a1-4539-96ca-580daa444041"}
