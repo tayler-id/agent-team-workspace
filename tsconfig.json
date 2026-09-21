@@ -3,6 +3,7 @@
 	"include": ["apps/*/src", "apps/*/test", "packages/*/src", "packages/*/test", "contracts/src", "contracts/test", "contracts/generated/typescript", "scripts/*.ts", "vitest.config.ts", "eslint.config.js"],
 	"compilerOptions": {
 		"allowJs": true,
-		"checkJs": true
+		"checkJs": true,
+		"jsx": "react-jsx"
 	}
 }
