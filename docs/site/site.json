@@ -94,6 +94,11 @@
           "kind": "feature"
         },
         {
+          "id": "ci",
+          "title": "Toolchain readiness",
+          "kind": "feature"
+        },
+        {
           "id": "contracts",
           "title": "Portable contracts",
           "kind": "feature"
@@ -186,6 +191,10 @@
     {
       "path": "scripts/probe-center.mjs",
       "page": "cli.md"
+    },
+    {
+      "path": "scripts/ci-doctor.mjs",
+      "page": "ci.md"
     },
     {
       "path": "scripts/record-red-green.mjs",

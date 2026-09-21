@@ -1,7 +1,20 @@
 {
 	"extends": "./tsconfig.base.json",
-	"include": ["apps/*/src", "apps/*/test", "packages/*/src", "packages/*/test", "contracts/src", "contracts/test", "contracts/generated/typescript", "scripts/*.ts", "vitest.config.ts", "eslint.config.js"],
-	"exclude": ["apps/web/**"],
+	"include": [
+		"apps/*/src",
+		"apps/*/test",
+		"packages/*/src",
+		"packages/*/test",
+		"contracts/src",
+		"contracts/test",
+		"contracts/generated/typescript",
+		"scripts/**/*.ts",
+		"vitest.config.ts",
+		"eslint.config.js"
+	],
+	"exclude": [
+		"apps/web/**"
+	],
 	"compilerOptions": {
 		"allowJs": true,
 		"checkJs": true,
