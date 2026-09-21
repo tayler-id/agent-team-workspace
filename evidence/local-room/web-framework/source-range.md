@@ -2,11 +2,12 @@
 
 | Ref | SHA | Role |
 | --- | --- | --- |
-| Base | `95f35277fbfc821be148029521222f0de617d7de` | Local-room L1 review corrections; parent of the web-shell candidate range |
-| Candidate head | `60bcd797...` (full: see `git rev-parse 60bcd79`) | Final corrected browser-shell candidate after size/lint/bundle claim fixes |
-| Current main | `2d947dce434db392305d98af5abf3627e1caad2f` | Base + provisional design-handoff results; no `apps/web` |
+| Candidate base | `95f35277fbfc821be148029521222f0de617d7de` | Local-room L1 review corrections; parent of the web-shell candidate range |
+| Candidate head | `60bcd797d3f7817651142d88ced49509ea040447` | Final corrected browser-shell candidate after size/lint/bundle claim fixes |
+| Main at rebase | `17fbf24609fb3cbcb25c052ae7ecee124bc0bc87` | Landed P0c-A main this branch rebased onto; no `apps/web` / `packages/web-framework` yet |
+| Tested subject | `5f29ec46fc934f6d43db8c5e857db8f216b0ac5b` | Rebased product + pin commits; the revision `pnpm check`, web tests and boundaries were run against |
 
-## Commit range `95f3527..60bcd79` (13 commits)
+## Commit range `95f3527..60bcd79` (product candidate only)
 
 ```text
 60bcd79 docs: record the final exact-head pnpm check gate after the correction commit
@@ -26,7 +27,4 @@ bb62afa test: cover the local room web shell with the isolation guard still red
 
 ## Replay policy
 
-This task reapplies the product shell behavior (room UI, fixture transport, contracts browser-safe barrel, docs/commands) onto current main, then refactors it into `packages/web-framework` + Host `EnvironmentPort`. It does **not** import the candidate's preservation inventory bulk, browser JPEG set, or outdated evidence claims that assumed the pre-framework layout.
-60bcd797d3f7817651142d88ced49509ea040447
-95f35277fbfc821be148029521222f0de617d7de
-2d947dce434db392305d98af5abf3627e1caad2f
+This branch reapplied product shell behavior from that candidate onto main `17fbf24609fb3cbcb25c052ae7ecee124bc0bc87`, then refactored it into `packages/web-framework` + Host `EnvironmentPort`. It does **not** import the candidate's preservation inventory bulk, browser JPEG set, or outdated evidence claims that assumed the pre-framework layout. P0c-A files and evidence under `evidence/ci/P0c/` are retained unchanged from main.

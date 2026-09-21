@@ -129,4 +129,3 @@ export function useStaleSafeBusy(): { readonly busy: boolean; readonly run: (wor
 export function useScheduleFocus(): EnvironmentPort['scheduleFocus'] {
 	return useEnvironment().scheduleFocus;
 }
-
