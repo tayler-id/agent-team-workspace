@@ -18,6 +18,8 @@ This is the complete current contributor command surface, plus a separate invent
 | Command | What is exercised |
 | --- | --- |
 | `pnpm install --frozen-lockfile` | Exact pnpm dependency graph |
+| `pnpm ci:doctor -- --json` | [P0b prerequisites](ci.md), not behavioral tests; exit 0 pass, 2 blocked, 64 usage; omit `--json` for remedies |
+| `pnpm ci:doctor:test` | Actual native positive, wrong/missing prerequisites and omitted-probe negatives |
 | `pnpm lint` | Strict ESLint and import/public-type rules; generated TypeScript retains boundary checking |
 | `pnpm typecheck` | TypeScript packages/tests plus a no-DOM/no-Node core compile lane |
 | `pnpm boundaries` | Isolated import/export/public-type and application-architecture import-ownership guard negatives; writes `.scratch/boundaries.json` |

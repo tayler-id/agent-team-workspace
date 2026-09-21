@@ -1,6 +1,10 @@
 # Development
 
-Runs from TypeScript source under Node 24 type stripping. There is no build step yet.
+Runs from TypeScript source under Node type stripping. P0b readiness requires exactly Node 24.21.0 (`.node-version`, the unchanged specification pin) and pnpm 10.34.1 (`packageManager`); the broader `engines` ranges are installation compatibility, not qualification. There is no build step yet.
+
+Run `node scripts/ci-doctor.mjs --json` before behavioral tests, even when pnpm cannot start. `pnpm ci:doctor -- --json` is the convenience alias; `pnpm ci:doctor:test` proves positives, missing/wrong prerequisites and each omitted-probe denial in disposable copies. Exit 2 is blocked infrastructure, never behavioral red. The doctor installs nothing and does not qualify PostgreSQL, Swift, browser, mandatory CI or hosted enforcement. See [toolchain readiness](../site/ci.md).
+
+On macOS, a signed host launcher can reject the correctly installed Rolldown addon with different Team IDs. Select an approved unwrapped Node 24.21.0 executable on PATH, then repeat the frozen install and doctor. Do not delete the lockfile, add WASM as a direct dependency, alter signatures or globally disable scripts. P0b changed no dependency or lifecycle policy; preserve optional dependencies. A fresh isolated store and the same installed tree under official Node proved this diagnosis; receipts are in `evidence/ci/P0b/`. Doctor scratch copies are removed in `finally`; evidence survives.
 
 ## Commands
 
@@ -19,7 +23,7 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `pnpm test:unit` | Unit/contract tests; wrapper lifecycle tests also require PostgreSQL 18 binaries |
 | `pnpm test:pg` | PostgreSQL tests only, throwaway cluster |
 | `pnpm migrate` | Applies pending migrations as the owner in `AGORA_MIGRATION_DATABASE_URL` and prints a JSON report |
-| `pnpm check` | All of the above gates in sequence |
+| `pnpm check` | Lint, typecheck, docs, contract drift and tests; not the doctor, standalone design negatives, public probe or foundation gate |
 
 The documentation tool's TOML parser is pinned to `smol-toml` 1.7.1 through a narrow workspace override. Its upstream 1.7.0 pin hangs on a malformed trailing comment (CVE-2026-85730); a bounded public-CLI regression test and full dependency audit cover this repair.
 
