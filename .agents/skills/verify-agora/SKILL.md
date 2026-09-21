@@ -9,7 +9,7 @@ Every step is a literal command run from the repository root. Record outputs und
 
 ## Doctor
 
-Toolchain and static checks only. Expected: Node 24.x, pnpm 10.x, PostgreSQL 18.x server binaries, a Swift 6 toolchain, install and static gates exit 0. A missing Swift toolchain blocks the contract steps; it never downgrades them to a pass.
+Toolchain and static checks only. P0b requires Node 24.21.0 and pnpm 10.34.1 exactly, plus the real Vitest/Vite Rolldown native import. Run the read-only doctor after the frozen install below; exit 2 is a blocked prerequisite, never behavioral red. Use `node scripts/ci-doctor.mjs --json` directly if pnpm cannot start. Remaining checks require PostgreSQL 18.x server binaries and Swift 6; P0b does not qualify their exact pins. Mandatory CI, PostgreSQL fixture hardening, React guardrails and hosted enforcement remain unimplemented.
 
 ```sh
 node --version
@@ -17,11 +17,15 @@ pnpm --version
 pg_ctl --version
 swift --version
 pnpm install --frozen-lockfile
+pnpm ci:doctor -- --json
+pnpm ci:doctor:test
 pnpm audit --json
 pnpm typecheck
 pnpm lint
 pnpm docs:check
 ```
+
+P0b alone launches no service. Drive `pnpm ci:doctor:test`: known-good actual native import passes, wrong Node/pnpm and unavailable native binding report blocked. Each omitted probe in a disposable copy makes its own denial assertion fail. Evidence: use the recorder below with `--parent f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec --head <code-head> --out .scratch/P0b/replay -- node --test scripts/test/ci-doctor.test.ts`; retain P0b receipts under `evidence/ci/P0b/`. Cleanup removes only owned `.scratch/doctor-*` copies, never receipts. Full fixture verification still follows below and may be independently blocked.
 
 ## Launch
 
