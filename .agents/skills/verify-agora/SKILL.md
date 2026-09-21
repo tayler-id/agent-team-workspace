@@ -117,7 +117,7 @@ node scripts/record-red-green.mjs --parent c9e6fe16c1f107da95d77f35d092e0a923781
 
 ## Cleanup
 
-P0c A's driver allocates and releases only its recorded socket directories; its native assertions verify removal while retaining artifact neighbors. It never starts a process. For this slice, do not globally sweep temporary directories or prune other tasks' worktrees. Wrapper cancellation, timeout and process cleanup are explicitly unimplemented until B/C.
+P0c A's driver allocates and releases only its recorded socket directories; its native assertions verify removal while retaining artifact neighbors. Replacement inodes, simulated device changes and hard-linked records must deny verify and cleanup with `socket ownership mismatch`; unrelated children must deny cleanup with `socket not empty`. It never starts a process. For this slice, do not globally sweep temporary directories or prune other tasks' worktrees. Wrapper cancellation, timeout and process cleanup are explicitly unimplemented until B/C.
 
 `with-test-postgres.mjs` stops and deletes its cluster on exit, including on SIGINT. `record-red-green.mjs` removes its worktrees. `generate.mjs --check` and the contract tests remove their temporary trees. `contracts/swift/.build/` is an ignored build cache and may stay. Confirm nothing else is left behind:
 

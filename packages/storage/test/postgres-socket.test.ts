@@ -1,7 +1,7 @@
-import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, renameSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, linkSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, renameSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
-import { afterAll, expect, test } from 'vitest';
+import { afterAll, expect, test, vi } from 'vitest';
 import { allocatePostgresSocket as allocate } from '../../../scripts/postgres-socket.ts';
 
 mkdirSync('.scratch', { recursive: true });
@@ -46,35 +46,61 @@ test('short socket denial, collision and idempotent cleanup', () => {
 	} finally { lease.cleanup(); }
 });
 
-test.each(['runId', 'artifactDir', 'socketDir', 'directory-mode', 'record-mode', 'neighbor', 'symlink', 'directory-symlink'])('refuses unsafe ownership: %s', (change) => {
+test.each(['runId', 'artifactDir', 'socketDir', 'directory-mode', 'record-mode', 'neighbor', 'symlink', 'directory-symlink', 'directory-replacement', 'hard-link'])('refuses unsafe ownership: %s', (change) => {
 	const lease = allocatePostgresSocket(artifacts);
 	const record = `${lease.identity.socketDir}/owner.json`;
 	const original = readFileSync(record, 'utf8');
 	try {
-		if (change === 'directory-symlink') {
+		if (change === 'directory-symlink' || change === 'directory-replacement') {
 			renameSync(lease.identity.socketDir, `${lease.identity.socketDir}.saved`);
-			symlinkSync(`${lease.identity.socketDir}.saved`, lease.identity.socketDir);
+			if (change === 'directory-symlink') symlinkSync(`${lease.identity.socketDir}.saved`, lease.identity.socketDir);
+			else {
+				mkdirSync(lease.identity.socketDir, { mode: 0o700 });
+				writeFileSync(record, original, { mode: 0o600 });
+				expect(statSync(lease.identity.socketDir).ino).not.toBe(statSync(`${lease.identity.socketDir}.saved`).ino);
+			}
 		} else if (change === 'symlink') {
 			renameSync(record, `${record}.saved`);
 			symlinkSync(`${record}.saved`, record);
 		} else if (change === 'directory-mode') chmodSync(lease.identity.socketDir, 0o755);
 		else if (change === 'record-mode') chmodSync(record, 0o644);
+		else if (change === 'hard-link') linkSync(record, `${artifacts}/owner-link`);
 		else if (change === 'neighbor') writeFileSync(`${lease.identity.socketDir}/neighbor`, 'unrelated');
 		else writeFileSync(record, JSON.stringify({ ...lease.identity, [change]: 'foreign' }));
 		expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)).toThrow('EEXIST');
-		if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow('socket ownership');
-		expect(() => { lease.cleanup(); }).toThrow(/socket ownership|socket not empty/);
+		if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow(new Error('socket ownership mismatch'));
+		expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'neighbor' ? 'socket not empty' : 'socket ownership mismatch'));
+		if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-link`, 'utf8')).toBe(original);
 		if (change === 'neighbor') expect(readFileSync(`${lease.identity.socketDir}/neighbor`, 'utf8')).toBe('unrelated');
 		expect(existsSync(record)).toBe(true);
 	} finally {
-		if (change === 'directory-symlink') { rmSync(lease.identity.socketDir); renameSync(`${lease.identity.socketDir}.saved`, lease.identity.socketDir); }
+		if (change === 'directory-symlink' || change === 'directory-replacement') {
+			rmSync(lease.identity.socketDir, { recursive: true });
+			renameSync(`${lease.identity.socketDir}.saved`, lease.identity.socketDir);
+		}
+		rmSync(`${artifacts}/owner-link`, { force: true });
 		if (change === 'symlink') { rmSync(record); renameSync(`${record}.saved`, record); }
-		chmodSync(lease.identity.socketDir, 0o700);
-		chmodSync(record, 0o600);
-		writeFileSync(record, original);
-		rmSync(`${lease.identity.socketDir}/neighbor`, { force: true });
+		if (existsSync(lease.identity.socketDir)) {
+			chmodSync(lease.identity.socketDir, 0o700);
+			writeFileSync(record, original, { mode: 0o600 });
+			chmodSync(record, 0o600);
+			rmSync(`${lease.identity.socketDir}/neighbor`, { force: true });
+		}
 		lease.cleanup();
 	}
+});
+
+vi.mock('node:fs', { spy: true });
+test('refuses substituted device identity without privileged mounts', () => {
+	const lease = allocatePostgresSocket(artifacts);
+	try {
+		for (const operation of [lease.verify, lease.cleanup]) {
+			const directory = lstatSync(lease.identity.socketDir);
+			vi.mocked(lstatSync).mockReturnValueOnce(Object.assign(directory, { dev: directory.dev + 1 }));
+			expect(operation).toThrow(new Error('socket ownership mismatch'));
+			expect(existsSync(`${lease.identity.socketDir}/owner.json`)).toBe(true);
+		}
+	} finally { vi.mocked(lstatSync).mockClear(); lease.cleanup(); }
 });
 
 test('refuses invalid run identity before allocation', () => {
