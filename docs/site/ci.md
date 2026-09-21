@@ -22,8 +22,8 @@ Ready for tests | Run behavioral checks separately; prerequisite success proves 
 
 ## Implementation status
 
-**In progress:** P0b now diagnoses exact toolchain/native readiness; the wider CI program remains unqualified. Mandatory CI, PostgreSQL socket hardening, React guardrails and hosted enforcement do not yet exist. This visual explains execution order, not an approved product design system.
+**Implemented P0b, review pending:** exact toolchain/native diagnosis is checked; the wider CI program remains unqualified. Mandatory CI, PostgreSQL socket hardening, React guardrails and hosted enforcement do not yet exist. This visual explains execution order, not an approved product design system.
 
 ## Verification and proof
 
-The [public doctor](repo:scripts/ci-doctor.mjs), [tests](repo:scripts/test/ci-doctor.test.ts) and [feature map](repo:agora/feature-map.json) own this bounded surface. Run `pnpm ci:doctor -- --json` and `pnpm ci:doctor:test`. The [P0b record](repo:evidence/ci/P0b/README.md) separates prerequisite failure from assertion red and proves each omitted probe loses its denial. Use the [development runbook](repo:docs/runbooks/development.md) and [verifier](repo:.agents/skills/verify-agora/SKILL.md) for the remaining checks.
+The [public doctor](repo:scripts/ci-doctor.mjs), [tests](repo:scripts/test/ci-doctor.test.ts) and [feature map](repo:agora/feature-map.json) own this bounded surface. Run `node scripts/ci-doctor.mjs --json` and `node --test scripts/test/ci-doctor.test.ts`. No pnpm aliases or aggregate wiring are added in P0b. The [P0b record](repo:evidence/ci/P0b/README.md) separates prerequisite failure from assertion red and proves each omitted probe loses its denial. Use the [development runbook](repo:docs/runbooks/development.md) and [verifier](repo:.agents/skills/verify-agora/SKILL.md) for the remaining checks.

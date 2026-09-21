@@ -17,15 +17,15 @@ pnpm --version
 pg_ctl --version
 swift --version
 pnpm install --frozen-lockfile
-pnpm ci:doctor -- --json
-pnpm ci:doctor:test
+node scripts/ci-doctor.mjs --json
+node --test scripts/test/ci-doctor.test.ts
 pnpm audit --json
 pnpm typecheck
 pnpm lint
 pnpm docs:check
 ```
 
-P0b alone launches no service. Drive `pnpm ci:doctor:test`: known-good actual native import passes, wrong Node/pnpm and unavailable native binding report blocked. Each omitted probe in a disposable copy makes its own denial assertion fail. Evidence: use the recorder below with `--parent f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec --head <code-head> --out .scratch/P0b/replay -- node --test scripts/test/ci-doctor.test.ts`; retain P0b receipts under `evidence/ci/P0b/`. Cleanup removes only owned `.scratch/doctor-*` copies, never receipts. Full fixture verification still follows below and may be independently blocked.
+P0b alone launches no service. Drive `node --test scripts/test/ci-doctor.test.ts`: known-good actual native import passes, wrong Node/pnpm and unavailable native binding report blocked. Each omitted probe in a disposable copy makes its own denial assertion fail. Evidence: use the recorder below with `--parent f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec --head <code-head> --out .scratch/P0b/replay -- node --test scripts/test/ci-doctor.test.ts`; retain P0b receipts under `evidence/ci/P0b/`. Cleanup removes only owned `.scratch/doctor-*` copies, never receipts. Full fixture verification still follows below and may be independently blocked.
 
 ## Launch
 
