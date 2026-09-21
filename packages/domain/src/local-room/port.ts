@@ -96,6 +96,7 @@ export type RoomSnapshotResult = { readonly outcome: 'ok'; readonly snapshot: Ro
 export interface LocalRoomPort {
 	send(command: SendRoomMessage): Promise<SendRoomMessageResult>;
 	snapshot(): Promise<RoomSnapshotResult>;
+	events(after: string): Promise<readonly RoomMessageCreated[]>;
 }
 
 // One transaction over one project's rows. lockRoom must hold the room counter row until commit so that the
@@ -107,6 +108,7 @@ export interface LocalRoomStore {
 	nextSeq(roomId: RoomId): Promise<string>;
 	append(message: RoomMessageRecord, event: RoomMessageCreated, actor: PrincipalId, receipt: RoomReceipt): Promise<void>;
 	readSnapshot(roomId: RoomId, limit: number): Promise<RoomSnapshotRecord>;
+	readEvents(roomId: RoomId, after: string, limit: number): Promise<readonly RoomMessageCreated[]>;
 }
 
 const inScope = (identity: LocalRoomIdentity, command: SendRoomMessage): boolean => command.projectId === identity.projectId && command.roomId === identity.roomId;
@@ -146,4 +148,4 @@ export async function sendRoomMessage(store: LocalRoomStore, identity: LocalRoom
 
 // The adapter of a composition without persistence: it accepts a well-formed command and reports that no persistence path is composed.
 const unsupported: Unsupported = { outcome: 'unsupported', reasonCode: 'unavailable_capability', detail: 'local-room message persistence is not composed in this process; the command was validated and dispatched' };
-export const unsupportedLocalRoom: LocalRoomPort = { send: () => Promise.resolve(unsupported), snapshot: () => Promise.resolve(unsupported) };
+export const unsupportedLocalRoom: LocalRoomPort = { send: () => Promise.resolve(unsupported), snapshot: () => Promise.resolve(unsupported), events: () => Promise.resolve([]) };

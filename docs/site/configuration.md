@@ -17,6 +17,10 @@ Current configuration is a contributor fixture's environment, not a production w
 
 The wrapper exports the normal app/migration URLs for its owned cluster. Prefer that path to configuring the four test URLs yourself. A database URI can contain a password; do not commit it or paste it into evidence. [Development runbook](repo:docs/runbooks/development.md) owns exact role prerequisites.
 
+## Local room runtime
+
+`node scripts/local-room.ts` uses its own database, not `AGORA_DATABASE_URL` or the test connection variables. Optional `AGORA_PG_BIN` selects a PostgreSQL 18 binary directory; otherwise server binaries come from PATH. `--instance` and `--port` are explicit CLI inputs. Private owner and password files under `.scratch/local-room-NAME` are runtime state, never configuration to copy to another instance or commit. Ordinary stop/start preserves them; explicit reset removes them. [CLI flags](cli.md#local-room-runtime) and [ownership/recovery](operations.md#local-room-lifecycle) describe refusal behavior.
+
 ## Source-owned configuration
 
 - `package.json` and `pnpm-lock.yaml` pin JavaScript tooling.

@@ -63,6 +63,8 @@ let generated: [String: (Data) throws -> Data] = [
 	"RoomMessageBody": roundTrip(Schemas.RoomMessageBody.self),
 	"RoomMessageCreatedEvent": roundTrip(Schemas.RoomMessageCreatedEvent.self),
 	"RoomSnapshot": roundTrip(Schemas.RoomSnapshot.self),
+	"RoomEventBatch": roundTrip(Schemas.RoomEventBatch.self),
+	"LocalRuntimeReport": roundTrip(Schemas.LocalRuntimeReport.self),
 	"ScopeReference": roundTrip(Schemas.ScopeReference.self),
 	"SendRoomMessageCommand": roundTrip(Schemas.SendRoomMessageCommand.self),
 	"Timestamp": roundTrip(Schemas.Timestamp.self),

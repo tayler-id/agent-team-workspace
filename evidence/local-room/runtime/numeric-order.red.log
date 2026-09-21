@@ -1,0 +1,31 @@
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-xWZmtN","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (3 tests | 1 failed) 10498ms
+   × bounded committed pump resumes between batches, receipt alone never advances, and rate denial stores nothing 1881ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > bounded committed pump resumes between batches, receipt alone never advances, and rate denial stores nothing
+AssertionError: expected '8' to be '50' // Object.is equality
+
+Expected: "50"
+Received: "8"
+
+ ❯ apps/center/test/runtime.pg.test.ts:108:36
+    106|   const batch = await c.request('events?after=0') as Schema<'RoomMessa…
+    107|   expect(batch).toHaveLength(50); c.events(batch);
+    108|   expect(c.state.rooms[0]?.cursor).toBe('50');
+       |                                    ^
+    109|   const cancel = new AbortController(); cancel.abort();
+    110|   await expect(c.resume(cancel.signal)).rejects.toThrow();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  23:08:18
+   Duration  10.65s (tests 99%, import 1%)
+

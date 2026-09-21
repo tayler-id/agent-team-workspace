@@ -1804,6 +1804,184 @@ extension Components {
                 ])
             }
         }
+        /// Local-only lifecycle CLI receipt. launch is a public UUID, never its secret challenge key. Optional data is the same public room contract as HTTP. Resource metadata is diagnostic, never PID-only cleanup authority.
+        ///
+        /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport`.
+        public struct LocalRuntimeReport: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_local_hyphen_runtime_sol_v1 = "agora.local-runtime/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/schema_version`.
+            public var schema_version: Components.Schemas.LocalRuntimeReport.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/command`.
+            @frozen public enum commandPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case doctor = "doctor"
+                case start = "start"
+                case status = "status"
+                case send = "send"
+                case history = "history"
+                case replay = "replay"
+                case evidence = "evidence"
+                case stop = "stop"
+                case reset = "reset"
+                case unknown = "unknown"
+            }
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/command`.
+            public var command: Components.Schemas.LocalRuntimeReport.commandPayload
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/outcome`.
+            public var outcome: Components.Schemas.CliOutcome
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/detail`.
+            public var detail: Swift.String
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/launch`.
+            public var launch: Components.Schemas.Uuid?
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/url`.
+            public var url: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/root`.
+            public var root: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/center_pid`.
+            public var center_pid: Swift.Int?
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/postgres_pid`.
+            public var postgres_pid: Swift.Int?
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/postgres_port`.
+            public var postgres_port: Swift.Int?
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/snapshot`.
+            public var snapshot: Components.Schemas.RoomSnapshot?
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/receipt`.
+            public var receipt: Components.Schemas.RoomCommandReceipt?
+            /// - Remark: Generated from `#/components/schemas/LocalRuntimeReport/events`.
+            public var events: Components.Schemas.RoomEventBatch?
+            /// Creates a new `LocalRuntimeReport`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - command:
+            ///   - outcome:
+            ///   - detail:
+            ///   - launch:
+            ///   - url:
+            ///   - root:
+            ///   - center_pid:
+            ///   - postgres_pid:
+            ///   - postgres_port:
+            ///   - snapshot:
+            ///   - receipt:
+            ///   - events:
+            public init(
+                schema_version: Components.Schemas.LocalRuntimeReport.schema_versionPayload,
+                command: Components.Schemas.LocalRuntimeReport.commandPayload,
+                outcome: Components.Schemas.CliOutcome,
+                detail: Swift.String,
+                launch: Components.Schemas.Uuid? = nil,
+                url: Swift.String? = nil,
+                root: Swift.String? = nil,
+                center_pid: Swift.Int? = nil,
+                postgres_pid: Swift.Int? = nil,
+                postgres_port: Swift.Int? = nil,
+                snapshot: Components.Schemas.RoomSnapshot? = nil,
+                receipt: Components.Schemas.RoomCommandReceipt? = nil,
+                events: Components.Schemas.RoomEventBatch? = nil
+            ) {
+                self.schema_version = schema_version
+                self.command = command
+                self.outcome = outcome
+                self.detail = detail
+                self.launch = launch
+                self.url = url
+                self.root = root
+                self.center_pid = center_pid
+                self.postgres_pid = postgres_pid
+                self.postgres_port = postgres_port
+                self.snapshot = snapshot
+                self.receipt = receipt
+                self.events = events
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case command
+                case outcome
+                case detail
+                case launch
+                case url
+                case root
+                case center_pid
+                case postgres_pid
+                case postgres_port
+                case snapshot
+                case receipt
+                case events
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.LocalRuntimeReport.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.command = try container.decode(
+                    Components.Schemas.LocalRuntimeReport.commandPayload.self,
+                    forKey: .command
+                )
+                self.outcome = try container.decode(
+                    Components.Schemas.CliOutcome.self,
+                    forKey: .outcome
+                )
+                self.detail = try container.decode(
+                    Swift.String.self,
+                    forKey: .detail
+                )
+                self.launch = try container.decodeIfPresent(
+                    Components.Schemas.Uuid.self,
+                    forKey: .launch
+                )
+                self.url = try container.decodeIfPresent(
+                    Swift.String.self,
+                    forKey: .url
+                )
+                self.root = try container.decodeIfPresent(
+                    Swift.String.self,
+                    forKey: .root
+                )
+                self.center_pid = try container.decodeIfPresent(
+                    Swift.Int.self,
+                    forKey: .center_pid
+                )
+                self.postgres_pid = try container.decodeIfPresent(
+                    Swift.Int.self,
+                    forKey: .postgres_pid
+                )
+                self.postgres_port = try container.decodeIfPresent(
+                    Swift.Int.self,
+                    forKey: .postgres_port
+                )
+                self.snapshot = try container.decodeIfPresent(
+                    Components.Schemas.RoomSnapshot.self,
+                    forKey: .snapshot
+                )
+                self.receipt = try container.decodeIfPresent(
+                    Components.Schemas.RoomCommandReceipt.self,
+                    forKey: .receipt
+                )
+                self.events = try container.decodeIfPresent(
+                    Components.Schemas.RoomEventBatch.self,
+                    forKey: .events
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "command",
+                    "outcome",
+                    "detail",
+                    "launch",
+                    "url",
+                    "root",
+                    "center_pid",
+                    "postgres_pid",
+                    "postgres_port",
+                    "snapshot",
+                    "receipt",
+                    "events"
+                ])
+            }
+        }
         /// Answer of GET /api/v1/health/ready. 200 when ready, 503 when not_ready.
         ///
         /// - Remark: Generated from `#/components/schemas/ReadinessReport`.
@@ -2088,6 +2266,10 @@ extension Components {
                 ])
             }
         }
+        /// Committed events strictly after the requested cursor, ascending, at most 50 per HTTP poll. Empty means caught up, not end of stream. No event compaction in this disposable local runtime.
+        ///
+        /// - Remark: Generated from `#/components/schemas/RoomEventBatch`.
+        public typealias RoomEventBatch = [Components.Schemas.RoomMessageCreatedEvent]
         /// One immutable persisted message. room_seq is the room stream's per-room counter allocated in the same transaction as the message; a snapshot lists messages in ascending room_seq. L1 defines no edit or tombstone: a correction is a new message. command_id names the command that created it.
         ///
         /// - Remark: Generated from `#/components/schemas/RoomMessage`.

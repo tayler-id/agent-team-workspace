@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 and L2) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 and L2, CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 through L3) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 through L3, CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
 ---
 
 # Verify Agora
@@ -39,6 +39,18 @@ P0b alone launches no service. Drive `node --test scripts/test/ci-doctor.test.ts
 node scripts/with-test-postgres.mjs <command>
 ```
 
+### Owned local runtime launch (L3)
+
+Use an official Node 24 binary; a host-signed launcher can prevent native toolchain bindings from loading. The local runtime ignores developer database URLs and creates its own private cluster. No migration owner serves product queries. Keep `INSTANCE` for Cleanup:
+
+```sh
+INSTANCE=verify-l3-$(date +%s)
+node scripts/local-room.ts doctor
+node scripts/local-room.ts start --instance "$INSTANCE"
+```
+
+Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/PostgreSQL port and harness `url`. Open that URL with the approved browser driver. It is a minimal projection harness, not the finished room UI. No external accounts or production credentials are needed.
+
 ## Drive
 
 CI P0c A's allocation driver requires Node 24 and Vitest, not PostgreSQL or Swift. B's wrapper driver additionally requires PostgreSQL 18 binaries and proves deep-path non-owner access, success/failure cleanup, SIGINT/SIGTERM (also during startup), forced shutdown, initialization/readiness timeouts and foreign/neighborhood preservation. Retain outputs under `evidence/ci/P0c/C/`. C's drivers replay ten guard negatives in a disposable source copy and twenty-seven lifecycle scenarios against the committed wrapper with real PostgreSQL 18; both must exit 0 and leave `leftovers` empty in `no-leftovers.json`.
@@ -59,6 +71,20 @@ node scripts/probe-center.mjs --scenarios
 node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
 node scripts/with-test-postgres.mjs bash -c 'node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts'
 ```
+
+For L3, also run these against the launched instance, retaining stdout outside its root:
+
+```sh
+node scripts/local-room.ts status --instance "$INSTANCE"
+node scripts/local-room.ts send --instance "$INSTANCE" --body 'Verification message'
+node scripts/local-room.ts history --instance "$INSTANCE"
+node scripts/local-room.ts replay --instance "$INSTANCE" --after 0
+node scripts/local-room.ts evidence --instance "$INSTANCE"
+pnpm exec vitest run --project unit apps/center/test/runtime.test.ts
+node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts
+```
+
+L3 predicates: every CLI report is `agora.local-runtime/v1`, `outcome: pass` with exit 0; the history contains the sent body; replay carries that same message ID and sequence. The pg tests prove snapshot/replay interleaving, accepted send without receipt, receipt-only cursor immobility, duplicate/gap repair, numeric multi-page replay, two same-port restarts, reset, parallel start, cancelled startup, 403 Host/Origin/stop negatives, 413 body bound, 429 rate bound, foreign record/listener/symlink refusal and cleanup. Unit negatives run a normally denied input and an isolated one-guard-disabled copy; the latter must fail its assertion. Core replay/guard tests remain mandatory. The browser must send, disconnect, observe another CLI send after reconnect, survive ordinary service restart, render injected markup as text and produce no CSP/runtime error. Retain 1440x900 and 390x844 observations and disclose harness-only UI scope.
 
 Pass predicates:
 
@@ -127,6 +153,28 @@ pnpm verify:foundation -- --parent PARENT --head HEAD --evidence DIR --json
 ```
 
 The first four commands require exit 0. `task_outcome: pass` never qualifies the unit or authorizes features. Inspect exact `FG01.red-required` red cause, baseline pass, same-subject green, guard normal/disabled assertions, and retained artifact hashes. No receipt is accepted without fresh replay. The [driver reference](../../../docs/site/test-first.md) documents scope and trust limits.
+
+### Local-room L3 evidence
+
+L3's executable test-only parent is `661b4c5`, directly on exact L2 `55269a5`. Its doctor works and start returns typed `unavailable`. Use the committed implementation head, never a moving branch name:
+
+```sh
+node scripts/record-red-green.mjs --parent 661b4c5 --head CODE_HEAD --out evidence/local-room/runtime -- pnpm exec node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t 'public runtime owns'
+```
+
+The selected red must be `expected 'unavailable' to be 'pass'` after doctor passes, not a missing runner or import. Run the complete runtime suites separately at head, without selection. Record the test-patch digest, stack bindings, source/line categories, native outputs, PostgreSQL/replay evidence, guard negatives and owned inventory before/after cleanup. CI and independent review remain distinct prerequisites; local green does not authorize landing the unlanded L3 stack.
+
+## Cleanup
+
+For the L3 instance created at Launch, save evidence first, then:
+
+```sh
+node scripts/local-room.ts stop --instance "$INSTANCE"
+node scripts/local-room.ts status --instance "$INSTANCE"
+node scripts/local-room.ts reset --instance "$INSTANCE" --confirm-disposable
+```
+
+Stop/status must prove both recorded listeners absent and say data retained. Reset separately proves owned disposable data removed; it must refuse a running/foreign instance. The automated pg scenarios cover repeated restart and foreign cleanup refusals. If an ownership or cleanup proof is uncertain, retain the instance and report blocked rather than killing a stored PID. Browser proof belongs outside the instance and must survive reset.
 
 For P0c A, replay the test-only allocation parent with the focused baseline and short-location assertion; other scenarios run unfiltered in Drive. Native guard receipts include source/input digests and expected assertion failures.
 

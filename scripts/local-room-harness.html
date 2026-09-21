@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agora local runtime harness</title>
+<style>
+body { font: 1rem/1.5 system-ui; max-width: 70rem; margin: auto; padding: 1.5rem; color: #202124; background: #fff; }
+textarea { display: block; box-sizing: border-box; width: 100%; min-height: 6rem; font: inherit; }
+button { font: inherit; padding: .6rem 1rem; margin: .5rem .5rem .5rem 0; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #f3f4f6; padding: 1rem; }
+:focus-visible { outline: 3px solid #1456c0; outline-offset: 3px; }
+</style>
+<h1>Local room runtime harness</h1>
+<p>Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents.</p>
+<button id="connection" type="button">Disconnect</button><p role="status">Connecting</p>
+<form><label for="body">Message text</label><textarea id="body" required maxlength="4096"></textarea><button type="submit">Send or retry pending command</button></form>
+<h2>Client-core committed projection</h2><pre aria-label="Room projection">Loading</pre>
+<script type="module" src="/harness.js"></script></html>

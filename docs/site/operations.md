@@ -19,6 +19,16 @@ For local development, `pnpm docs:dev` serves loopback only and rebuilds on page
 
 Use the [temporary cluster wrapper](cli.md) for tests. Persistent fixture databases need owner/app roles as described in the [development runbook](repo:docs/runbooks/development.md). The service role must not own tables or bypass row security. Readiness currently proves database reachability, not complete operational health.
 
+## Local room lifecycle
+
+Use `node scripts/local-room.ts start|status|evidence|stop` from the checkout root. Each `--instance NAME` owns `.scratch/local-room-NAME`, one center listener, one PostgreSQL listener and a private database. No supplied `AGORA_DATABASE_URL` or shared developer database is used. The same worktree may host separately named test instances without sharing data. This is development operation, not hosted Agora.
+
+An exclusive operation directory serializes start/stop/reset. A 256-bit secret proves a fresh launch by nonce, bound to its root, URL and process/listener inventory. Paths are canonical and filesystem identities bind the root and database. The supervisor stops only its unreaped PostgreSQL child; the CLI never kills a PID read from disk. Changed identity, foreign listener, symlink, surviving postmaster or an unavailable challenge blocks cleanup. Local files are private to the OS user, not a defense against that user's malicious administrator.
+
+Ordinary stop/start retains data and the URL. Start has a 35-second deadline; HTTP reads and incomplete requests are bounded to five seconds; PostgreSQL connections and statements have bounds. Interrupted startup requests owned shutdown. If startup or cleanup is uncertain, inspect the retained `runtime.log` and inventory. Do not delete locks, rewrite ownership records, adopt a foreign process or kill a stored PID to make a check pass. Supervisor crash recovery is intentionally fail-closed and requires operator investigation.
+
+Only `node scripts/local-room.ts reset --confirm-disposable` while stopped deletes the selected disposable instance. It proves its recorded listeners absent and refuses symlinks before removal. Save evidence outside that directory first, for example `node scripts/local-room.ts evidence > evidence/local-room/runtime/operator.json`. Reset never removes retained repository evidence. Reload a harness after reset because a fresh database is not a continuation of its old cursor. No backup or production restore qualification is claimed.
+
 ## Target production topology
 
 ```flow

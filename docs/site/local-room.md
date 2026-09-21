@@ -2,49 +2,67 @@
 
 ## What it is
 
-The local-development room is the first place a person types into Agora: one project, one room, on this machine, over loopback, opted into explicitly. Its delivery is split into five slices. This page covers the two that have landed. L1 published the conversation contracts, one JSON Schema 2020-12 family in [local-room.schema.json](repo:contracts/schemas/local-room.schema.json) with ten closed components. L2 makes the room durable: a send is committed to PostgreSQL in one transaction, and the room reads back in the same order after the service restarts. Cursors and the base receipt reuse the [synchronization values](repo:contracts/schemas/sync.schema.json); errors reuse the [stable reason codes](repo:contracts/schemas/errors.schema.json), which now include `command_conflict`.
+One explicitly started, loopback-only development room with one fixed human principal. L1 defines its language-neutral contracts; L2 persists messages in PostgreSQL; this L3 candidate adds an owned runtime, cursor replay and a minimal browser harness. This is **not the finished room UI**, production identity or a hosted deployment.
+
+The candidate is deliberately stacked on L2 `55269a5`. Neither the stack nor these local receipts authorize landing before L2 and the mandatory CI protections are available. L4 owns the usable room interface; L5 owns the bounded local response. Neither is implemented here.
 
 ## What it does
 
-`POST /api/v1/local-room/messages` takes a command that names the fixed room, a `command_id`, a body of 1 to 4096 Unicode scalars and up to ten citations to messages already in the room. The service derives the author; a command never carries one. An accepted command answers 201 with a receipt: the command identity (the id plus the canonical digest of the command bytes), the room revision the message received, the message id and whether the command was replayed. `GET /api/v1/local-room/snapshot` answers the room's messages in ascending `room_seq` with the cursor a later subscription must start after, at most the latest 1000 messages.
+Run these commands from the checkout root. No database URL or external account is needed:
 
-Sending the same command again returns the original receipt with `replayed: true` and stores nothing. Sending the same `command_id` with a different body is a 409 `command_conflict`. A command for another project or room is a 404 `scope_mismatch`. A citation that names no persisted message at its sequence is a 404 `not_found`. A malformed command is a 400 that names the offending path, and it reaches no storage. Messages, events and receipts are immutable once committed: neither the service role nor the schema owner can update or delete them.
+```sh
+node scripts/local-room.ts doctor
+node scripts/local-room.ts start
+node scripts/local-room.ts send --body 'Hello from the local room'
+node scripts/local-room.ts history
+node scripts/local-room.ts replay --after 0
+node scripts/local-room.ts evidence
+node scripts/local-room.ts stop
+```
+
+Open the `url` printed by start. The harness sends through the same HTTP command as the CLI and displays the **client-core committed projection**, not an optimistic timeline. Disconnect pauses its event requests; Reconnect resumes after its last applied cursor. A failed send retains its frozen command in that page so Send retries the same identity. Reload discards that pending command and unsent text; persistent drafts and polished delivery states belong to L4.
+
+Ordinary stop/start preserves the database and URL. Only `reset --confirm-disposable`, while stopped, removes that instance's disposable data. It is not an undo, backup or migration rollback. Use `--instance NAME` on every command for a separate development instance. Each instance has its own cluster, listeners and credentials, but the same fixed room IDs, not multi-room provisioning. [The CLI reference](cli.md#local-room-runtime) lists flags and structured results.
 
 ## Why it exists
 
-A room that loses or reorders messages when the process restarts is not a room. Persistence is the first product behavior a person can feel, and it decides the shape of everything after it: the browser room (L4) will render exactly the snapshot this slice returns, and the bounded local answer (L5) will cite exactly the record ids it stores.
+A receipt can be lost after PostgreSQL has committed. A client can disconnect between a snapshot and its next event. The room must still converge without duplicating a message or inventing a cursor. L2 commits the counter, immutable message, event and command receipt together under a room lock and forced project row-level security. Same actor, command ID and digest replays the original receipt; a changed body is 409 `command_conflict`.
 
-Transactionality is what makes the order trustworthy. The room counter, the message, its `message_created` event and the command receipt are written in one PostgreSQL transaction. If any of them fails, none of them exists and the counter has not moved, so a rollback never leaves a gap that a later reader would take for a lost message. Concurrent sends serialize on the room's counter row, which is why eight simultaneous commands receive eight contiguous sequences and the event sequence always equals the message sequence. The idempotency identity is the R07 one: the same actor, `command_id` and request digest replay; a changed digest is refused rather than silently creating a second message. That is what lets a client retry a send after a lost response without fear.
+L3 reads those committed event rows, never in-memory notifications. The snapshot's state and cursor come from one repeatable read. Reading strictly after that cursor covers messages committed while the snapshot was travelling. Client core deduplicates stream sequences, buffers gaps and refuses older revisions. A receipt settles a command but **never advances the room cursor**. This is why acceptance, delivery and reading remain distinct.
 
 ## How it works
 
 ```flow
-Validate | The center runs the shared wire validator; a malformed command is 400 with its path and never reaches the domain or the database.
-Convert and digest | Wire values become branded domain values and the request digest is computed over the validated command bytes.
-Open one transaction | The adapter binds the fixed project for row-level security and locks the room's counter row; every later step in this request holds that lock.
-Decide | The domain replays a matching receipt, denies a changed digest with command_conflict, denies a citation that names no persisted record with not_found, or allocates the next room sequence.
-Append together | The message, its message_created event with the same sequence, and the receipt are inserted; commit makes all of them visible at once, rollback none.
-Answer and read back | The receipt is answered as 201; a snapshot reads the counter and the messages in one repeatable read, so the cursor and the rows agree even during concurrent sends.
+Doctor and allocate | Check Node/PostgreSQL; exclusively claim the instance path. Refuse existing foreign or ambiguous paths and occupied listeners.
+Launch and prove ownership | Start a private SCRAM-protected PostgreSQL child and center. A fresh 256-bit launch key authenticates a nonce bound to the launch, paths, listener and process inventory.
+Snapshot at cursor C | Read state and counter together; show only the immutable client-core projection. Concurrent later commits are not lost.
+Replay strictly after C | HTTP reads at most 50 committed events in numeric sequence order. Apply contiguous events, deduplicate copies, buffer gaps and repeat after the applied cursor.
+Disconnect and resume | Cancel bounded HTTP reads. Reconnect from the applied cursor, including across ordinary service stop/start. Retry an unsettled command with its original ID and bytes.
+Stop or explicit reset | Authenticated stop shuts down the owned child, proves listeners absent and retains data. Separate confirmed reset checks stopped ownership and deletes only that disposable instance path.
 ```
 
-The pieces stay separable. [port.ts](repo:packages/domain/src/local-room/port.ts) owns the dispatch port, the store port and the send decision; it knows nothing about SQL or HTTP. [events.ts](repo:packages/domain/src/local-room/events.ts) owns the one event kind. [local-room.ts](repo:packages/storage/src/local-room.ts) binds the store to one PostgreSQL transaction confined to one project. [app.ts](repo:apps/center/src/app.ts) maps wire to domain and denials to R07 statuses; [main.ts](repo:apps/center/src/main.ts) is the one place the PostgreSQL adapter is composed. A process without that adapter still answers a typed 404 `unavailable_capability`.
+[Lifecycle control](repo:scripts/local-room.ts), [ownership checks](repo:scripts/local-room-owner.ts), [service composition](repo:scripts/local-room-service.ts), [wire conversion](repo:apps/center/src/local-room-wire.ts), [domain dispatch](repo:packages/domain/src/local-room/port.ts), [SQL storage](repo:packages/storage/src/local-room.ts) and the [client transport/projection adapter](repo:scripts/local-room-client.ts) are separate files. Neither the domain nor client core imports transport mechanics. The harness is a small renderer, not a React shell imported from another branch.
 
-Storage runs as the non-owner service role. Migration [0001_local_room.sql](repo:packages/storage/drizzle/0001_local_room.sql) creates the `local_room` schema, seeds the one fixed room, forces row-level security keyed on the project, grants the service role only what the path needs (select and the counter column update on the room; select and insert on the three record tables) and adds triggers that refuse updates and deletes for every role, the owner included. The event table's primary key references the message's sequence, so an event cannot exist at a sequence its message does not hold.
+The narrow development transport is bounded HTTP polling using the existing Hono HTTP surface: `GET /api/v1/local-room/events?after=CURSOR`. Each page is a schema-validated `RoomEventBatch`; an empty page means caught up. Polling uses 250 ms between attempts, a five-second read timeout and cancellation. This does not claim the production R07 WebSocket handshake, subscription or queue protocol. The replaceable adapter leaves that work separate.
+
+Browser validators are compiled from the same authored schemas before launch; CSP permits neither runtime evaluation nor external scripts. Message text is rendered with `textContent`. The runtime checks exact Host and, when present, Origin; accepts JSON mutations only; bounds bodies to 128 KiB and uses a shared 60-token bucket refilling one token per second. The database listens only on loopback, requires its private SCRAM password and runs product queries as non-owner `agora_app`. Migration credentials never serve product queries.
 
 ## Implementation status
 
-**In progress: L2 of 5 at this snapshot.** Present and proven: everything L1 published, plus the fixed room, the transactional send, the replayed and conflicting receipts, the snapshot operation, restart durability, the storage bounds and the immutability, scope and row-level-security guards. The room is fixed by the migration; there is no login, no project provisioning and no second room. The author is always the one fixed human principal. Not present: a project CLI that starts and stops the service (L3), realtime event delivery and cursor reconnect (L3), a browser room (L4), a local answer (L5), search, uploads, model providers, task authority, Skills, Routines or any external gateway. The snapshot returns at most the latest 1000 messages and defines no paging; older history is durable but not yet readable through the public surface. Nothing here is production identity or hosted transport, and this slice does not change the foundation gate or qualify U01b through U01d.
+**In progress: L3 of 5, stacked candidate only.** Snapshot history is bounded to the latest 1000 messages. Older immutable records remain readable through event replay in pages of 50; this disposable runtime has no event compaction or retention expiry. CLI replay prints one page; continue with the last event's `seq`. The client drains at most 200 pages per call, then reports the bound and can resume again.
+
+There is no login, second principal, production membership, search, upload, external provider, agent response, task, repository authority, publication, cloud execution or final visual design. Reset creates a new disposable database, not a historical continuation: reload the harness after reset. A crashed supervisor with ambiguous surviving resources is refused rather than adopted or killed by a stored PID. See [operator recovery](operations.md#local-room-lifecycle). These receipts do not qualify FG04-FG08, AC02, AC04 or the S1 release.
 
 ## Verification and proof
 
-Inspect the [schema family](repo:contracts/schemas/local-room.schema.json), the [operations](repo:contracts/openapi.json), the [domain port and send decision](repo:packages/domain/src/local-room/port.ts), the [PostgreSQL adapter](repo:packages/storage/src/local-room.ts), the [migration](repo:packages/storage/drizzle/0001_local_room.sql), the [center route](repo:apps/center/src/app.ts), the [storage tests](repo:packages/storage/test/local-room.pg.test.ts), the [center process tests](repo:apps/center/test/local-room.pg.test.ts) and the [contract tests](repo:contracts/test/local-room.test.ts). The features are mapped in [the feature map](repo:agora/feature-map.json) under `local-room-contracts` and `local-room-persistence`.
+[Runtime tests](repo:apps/center/test/runtime.pg.test.ts) exercise CLI/HTTP with real owned PostgreSQL: snapshot/replay interleaving, lost receipt, gap and duplicate convergence, numeric ordering beyond sequence 9, page boundaries, same-port restart durability, explicit reset, concurrent startup, cancellation, foreign identity and listener refusal, body/rate bounds and cleanup. [Adapter and guard tests](repo:apps/center/test/runtime.test.ts) cover unsupported frames, stale revisions, cancellation and isolated guard mutations. Existing [client-core tests](repo:packages/client-core/test/sync.test.ts) retain the transport-neutral ordering and retry proofs.
 
 ```sh
 pnpm contracts:check
 pnpm contracts:conform -- --json
-pnpm test:pg
-node scripts/probe-center.mjs --scenarios
-node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
+pnpm client:replay -- --json --swift
+pnpm test
+node scripts/local-room.ts doctor
 ```
 
-The inventory command starts nothing and lists sixteen scenarios. The live probe applies the migration, starts the real center process as the service role, sends, replays, provokes the 409, 404 and 400 answers, then stops the process, starts it again and proves the snapshot and a replay survive. The storage tests prove contiguous concurrent sequences, one message under eight simultaneous copies of one command, rollback without a consumed sequence, the 4096-scalar and ten-citation bounds at the table, project isolation with a `BYPASSRLS` guard negative, and immutability for both roles. Retained receipts, the recorded red against the L1 parent, the size measurement and the security notes live under [evidence/local-room/persistence](repo:evidence/local-room/persistence/outcome.json); L1's are under [evidence/local-room/contracts](repo:evidence/local-room/contracts/outcome.json). The literal commands are in [verify-agora](repo:.agents/skills/verify-agora/SKILL.md). See [portable contracts](contracts.md) for the generation contract and [the foundation](foundation.md) for the service and storage the room joins.
+The literal Doctor, Launch, Drive, Evidence and Cleanup commands live in [verify-agora](repo:.agents/skills/verify-agora/SKILL.md). The feature map includes `local-room-runtime`. Retained [runtime evidence](repo:evidence/local-room/runtime/README.md) distinguishes local assertions, native CLI and browser observations from unavailable CI and independent review. Earlier [L1](repo:evidence/local-room/contracts/outcome.json) and [L2](repo:evidence/local-room/persistence/outcome.json) receipts keep their own exact subjects.

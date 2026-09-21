@@ -68,6 +68,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/local-room/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read up to 50 committed events strictly after a room cursor; repeat to resume */
+        get: operations["replayLocalRoom"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/local-room/snapshot": {
         parameters: {
             query?: never;
@@ -306,6 +323,24 @@ export interface components {
             project_id: components["schemas"]["Uuid"];
             room_id: components["schemas"]["Uuid"];
         };
+        /** @description Local-only lifecycle CLI receipt. launch is a public UUID, never its secret challenge key. Optional data is the same public room contract as HTTP. Resource metadata is diagnostic, never PID-only cleanup authority. */
+        LocalRuntimeReport: {
+            /** @enum {string} */
+            schema_version: "agora.local-runtime/v1";
+            /** @enum {string} */
+            command: "doctor" | "start" | "status" | "send" | "history" | "replay" | "evidence" | "stop" | "reset" | "unknown";
+            outcome: components["schemas"]["CliOutcome"];
+            detail: string;
+            launch?: components["schemas"]["Uuid"];
+            url?: string;
+            root?: string;
+            center_pid?: number;
+            postgres_pid?: number;
+            postgres_port?: number;
+            snapshot?: components["schemas"]["RoomSnapshot"];
+            receipt?: components["schemas"]["RoomCommandReceipt"];
+            events?: components["schemas"]["RoomEventBatch"];
+        };
         /** @description Answer of GET /api/v1/health/ready. 200 when ready, 503 when not_ready. */
         ReadinessReport: {
             /** @enum {string} */
@@ -346,6 +381,8 @@ export interface components {
             message_id: components["schemas"]["Uuid"];
             replayed: boolean;
         };
+        /** @description Committed events strictly after the requested cursor, ascending, at most 50 per HTTP poll. Empty means caught up, not end of stream. No event compaction in this disposable local runtime. */
+        RoomEventBatch: components["schemas"]["RoomMessageCreatedEvent"][];
         /** @description One immutable persisted message. room_seq is the room stream's per-room counter allocated in the same transaction as the message; a snapshot lists messages in ascending room_seq. L1 defines no edit or tombstone: a correction is a new message. command_id names the command that created it. */
         RoomMessage: {
             /** @enum {string} */
@@ -536,6 +573,37 @@ export interface operations {
             };
             /** @description command_conflict: the same command_id was already committed with a different request digest */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+        };
+    };
+    replayLocalRoom: {
+        parameters: {
+            query: {
+                after: components["schemas"]["Revision"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Ordered committed events */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomEventBatch"];
+                };
+            };
+            /** @description Malformed cursor */
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };

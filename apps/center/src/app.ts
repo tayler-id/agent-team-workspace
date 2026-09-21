@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { createWireValidator, digestCanonical, type Schema } from '@agora/contracts';
-import { asCommandId, asMessageId, asProjectId, asRoomId, asScopeId, decideFixtureScopeAccess, FIXTURE_POLICY, FIXTURE_POLICY_DIGEST, type LocalRoomPort, type RoomMessageRecord, type RoomReceipt, type SendRoomMessage, unsupportedLocalRoom } from '@agora/domain';
+import { asCommandId, asMessageId, asProjectId, asRoomId, asScopeId, decideFixtureScopeAccess, FIXTURE_POLICY, FIXTURE_POLICY_DIGEST, type LocalRoomPort, type SendRoomMessage, unsupportedLocalRoom } from '@agora/domain';
 import { Hono } from 'hono';
+import { toWireMessage, toWireReceipt } from './local-room-wire.ts';
 
 // Wire types come only from the generated contract consumer; the center authors no wire shape of its own.
 export type HealthReport = Schema<'HealthReport'>;
@@ -29,26 +30,6 @@ function toSendRoomMessage(command: Schema<'SendRoomMessageCommand'>): SendRoomM
 		requestDigest: digestCanonical(command),
 	};
 }
-
-const toWireMessage = (m: RoomMessageRecord): Schema<'RoomMessage'> => ({
-	schema_version: 'agora.local-room.message/v1',
-	message_id: m.messageId,
-	scope: { project_id: m.projectId, room_id: m.roomId },
-	room_seq: m.roomSeq,
-	author: { kind: m.author.kind, principal_id: m.author.principalId },
-	command_id: m.commandId,
-	body: m.body,
-	citations: m.citations.map((c) => ({ record_kind: 'message', record_id: c.recordId, room_seq: c.roomSeq })),
-	created_at: m.createdAt,
-});
-
-const toWireReceipt = (r: RoomReceipt, replayed: boolean): Schema<'RoomCommandReceipt'> => ({
-	schema_version: 'agora.local-room.receipt/v1',
-	identity: { command_id: r.commandId, request_digest: r.requestDigest },
-	receipt: { command_id: r.commandId, aggregate_id: r.roomId, revision: r.revision, event_cursors: [{ stream_id: r.roomId, committed_seq: r.revision }], receipt_id: r.receiptId },
-	message_id: r.messageId,
-	replayed,
-});
 
 export function createApp(deps: CenterDependencies): Hono {
 	const localRoom = deps.localRoom ?? unsupportedLocalRoom;
@@ -78,6 +59,12 @@ export function createApp(deps: CenterDependencies): Hono {
 		const result = await localRoom.send(toSendRoomMessage(command.value));
 		if (result.outcome === 'committed') return c.json(toWireReceipt(result.receipt, result.replayed), 201);
 		return c.json<ErrorReport>({ reason_code: result.reasonCode, correlation_id: randomUUID(), details: [result.detail] }, DENIAL_STATUS[result.reasonCode]);
+	});
+	app.get('/api/v1/local-room/events', async (c) => {
+		const after = wire.validate('Revision', c.req.query('after'));
+		if (!after.ok) return c.json<ErrorReport>({ reason_code: 'malformed_command', correlation_id: randomUUID() }, 400);
+		const events = await localRoom.events(after.value);
+		return c.json<Schema<'RoomEventBatch'>>(events.map((e) => ({ schema_version: 'agora.local-room.event/v1', stream_id: e.streamId, seq: e.seq, event_id: e.eventId, kind: e.kind, actor: e.actor, occurred_at: e.occurredAt, payload: toWireMessage(e.payload) })));
 	});
 	app.get('/api/v1/local-room/snapshot', async (c) => {
 		const result = await localRoom.snapshot();

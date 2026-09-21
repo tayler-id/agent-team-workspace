@@ -728,6 +728,185 @@ public enum Operations {
             }
         }
     }
+    /// Read up to 50 committed events strictly after a room cursor; repeat to resume
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/events`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/events/get(replayLocalRoom)`.
+    public enum replayLocalRoom {
+        public static let id: Swift.String = "replayLocalRoom"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/api/v1/local-room/events/GET/query`.
+            public struct Query: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/events/GET/query/after`.
+                public var after: Components.Schemas.Revision
+                /// Creates a new `Query`.
+                ///
+                /// - Parameters:
+                ///   - after:
+                public init(after: Components.Schemas.Revision) {
+                    self.after = after
+                }
+            }
+            public var query: Operations.replayLocalRoom.Input.Query
+            /// - Remark: Generated from `#/paths/api/v1/local-room/events/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.replayLocalRoom.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.replayLocalRoom.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.replayLocalRoom.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - query:
+            ///   - headers:
+            public init(
+                query: Operations.replayLocalRoom.Input.Query,
+                headers: Operations.replayLocalRoom.Input.Headers = .init()
+            ) {
+                self.query = query
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/events/GET/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/events/GET/responses/200/content/application\/json`.
+                    case json(Components.Schemas.RoomEventBatch)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.RoomEventBatch {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.replayLocalRoom.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.replayLocalRoom.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// Ordered committed events
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/events/get(replayLocalRoom)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.replayLocalRoom.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.replayLocalRoom.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/events/GET/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/events/GET/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ErrorReport)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ErrorReport {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.replayLocalRoom.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.replayLocalRoom.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Malformed cursor
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/events/get(replayLocalRoom)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.replayLocalRoom.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.replayLocalRoom.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
     /// Ordered history and cursor of the fixed local-development room from one repeatable read; at most the latest 1000 messages
     ///
     /// - Remark: HTTP `GET /api/v1/local-room/snapshot`.
