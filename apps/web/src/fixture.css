@@ -1,0 +1,29 @@
+/* Engineering fixture - visual design pending. Neutral tokens only; the design team owns final presentation. */
+:root { color-scheme: light dark; --border: #8888; --surface: canvas; --text: canvastext; --gap: 0.75rem; }
+* { box-sizing: border-box; }
+html, body { margin: 0; max-width: 100%; overflow-x: hidden; }
+body { font: 15px/1.5 system-ui, sans-serif; color: var(--text); background: var(--surface); }
+.shell { display: flex; flex-direction: column; min-height: 100dvh; max-width: 100%; }
+.skip-link { position: absolute; left: -999px; }
+.skip-link:focus { position: static; padding: var(--gap); }
+.room-header, .main, .fixture-controls { padding: var(--gap); border-bottom: 1px solid var(--border); max-width: 100%; }
+.meta, .button-row { display: flex; flex-wrap: wrap; gap: var(--gap); align-items: center; }
+.badge { border: 1px solid var(--border); border-radius: 999px; padding: 0.1em 0.6em; font-size: 0.85em; text-transform: capitalize; }
+.status { border: 1px solid var(--border); border-radius: 0.5rem; padding: var(--gap); margin-top: var(--gap); }
+.alert { color: canvastext; border: 1px solid var(--border); border-left-width: 4px; padding: var(--gap); }
+.timeline .rows { list-style: none; margin: 0; padding: 0; }
+.row + .row { border-top: 1px solid var(--border); }
+.message { padding: var(--gap) 0; max-width: 100%; }
+.message.unread { background: color-mix(in srgb, canvastext 6%, transparent); }
+.message .meta { font-size: 0.85em; opacity: 0.8; }
+.message p, .message pre { overflow-wrap: anywhere; max-width: 100%; }
+.message pre { overflow-x: auto; padding: var(--gap); border: 1px solid var(--border); border-radius: 0.35rem; }
+.unread-boundary { text-align: center; font-size: 0.8em; opacity: 0.7; }
+.tombstone { font-style: italic; opacity: 0.7; }
+.citations { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.composer textarea { width: 100%; font: inherit; }
+.composer-actions { display: flex; align-items: baseline; gap: var(--gap); flex-wrap: wrap; }
+.empty { padding: calc(var(--gap) * 2); text-align: center; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.shell.phone .room-header, .shell.phone .main { padding: 0.5rem; }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
