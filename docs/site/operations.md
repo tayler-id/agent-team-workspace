@@ -19,6 +19,8 @@ For local development, `pnpm docs:dev` serves loopback only and rebuilds on page
 
 Use the [temporary cluster wrapper](cli.md) for tests. Persistent fixture databases need owner/app roles as described in the [development runbook](repo:docs/runbooks/development.md). The service role must not own tables or bypass row security. Readiness currently proves database reachability, not complete operational health.
 
+The [local-answer pure-core test driver](cli.md#local-answer-pure-core) needs no service, database connection or credential. Do not wire it into a running room from this stacked candidate. It proves deterministic proposals only; it cannot persist responses or suppress duplicate triggers across storage. L2 and applicable CI protections must land before rebase and independent exact-head review of this candidate.
+
 ## Target production topology
 
 ```flow

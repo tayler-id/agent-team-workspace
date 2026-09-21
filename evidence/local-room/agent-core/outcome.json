@@ -1,0 +1,8 @@
+{
+  "task": "agora-local-room-agent-core",
+  "stacked_base": "55269a5103656a63cc6f246c00ebb1efa6785866",
+  "behavioral_parent": "c221c808e6841c57d016b3d22e8c55f5335ed811",
+  "scope": "Deterministic local fixture, not AI inference; pure core only, no posting or trigger",
+  "status": "candidate validation in progress",
+  "landing": "not landable before L2 and applicable CI protections, rebase, full exact-head revalidation and independent review"
+}

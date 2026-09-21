@@ -40,6 +40,10 @@ Probe the fixture | Make actual HTTP requests against an isolated center and dat
 Stop owned resources | The wrapper removes its cluster, not your evidence.
 ```
 
+## Inspect a local answer without posting
+
+The [pure-core driver](cli.md#local-answer-pure-core) demonstrates explicitly selected message quotes with exact stored-record citations. It is labelled **Deterministic local fixture (not AI inference)**. It starts no room and adds no message. An interactive browser room and its persisted response trigger are not included in this candidate.
+
 ## What success means
 
 A passing probe proves a fixture boundary, not workspace authentication or production authorization. The fixture accepts scope IDs as test input; never expose it as a public access-control service. Use the [foundation page](foundation.md) to interpret the output, [configuration reference](configuration.md) for environment variables, and [troubleshooting](faq.md) for blocked prerequisites.

@@ -58,7 +58,7 @@
       "id": "local-room",
       "title": "Local room",
       "status": "In progress",
-      "why": "One fixed local room whose sends commit transactionally and read back in order after a restart; L2 of 5.",
+      "why": "L2 persistence plus independently testable L5 deterministic read-only proposals; no response posting, trigger or browser qualification.",
       "page": "local-room.md",
       "proof": [
         "repo:contracts/schemas/local-room.schema.json",
@@ -67,7 +67,11 @@
         "repo:packages/storage/drizzle/0001_local_room.sql",
         "repo:apps/center/test/local-room.pg.test.ts",
         "repo:packages/storage/test/local-room.pg.test.ts",
-        "repo:evidence/local-room/persistence/outcome.json"
+        "repo:evidence/local-room/persistence/outcome.json",
+        "repo:packages/domain/src/local-answer/proposal.ts",
+        "repo:packages/domain/test/local-answer.test.ts",
+        "repo:packages/domain/test/local-answer-guards.test.ts",
+        "repo:evidence/local-room/agent-core/outcome.json"
       ]
     },
     {
@@ -134,7 +138,7 @@
     {
       "id": "agents",
       "title": "Center and project-main agents",
-      "availability": "S1 / S2 planned",
+      "availability": "Read-only deterministic local fixture core; production agents S1 / S2 planned",
       "page": "authorization.md",
       "why": "Answer and propose within explicit audience boundaries."
     },

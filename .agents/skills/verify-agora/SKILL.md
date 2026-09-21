@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 and L2) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04 plus local-room L1 and L2; later slices extend it.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 and L2) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1/L2 and L5 pure-core preparation only; no response posting or browser qualification.
 ---
 
 # Verify Agora
@@ -38,6 +38,7 @@ pnpm contracts:check
 pnpm contracts:conform -- --json
 pnpm client:replay -- --json --swift
 pnpm boundaries
+pnpm exec vitest run --project unit packages/domain/test/local-answer.test.ts packages/domain/test/local-answer-guards.test.ts --reporter=json
 pnpm test
 node scripts/probe-center.mjs --scenarios
 node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
@@ -56,6 +57,7 @@ Pass predicates:
 - The live probe applies migration 0001 as the owner first, then starts the center as the service role. Its report has `"outcome": "pass"` for `health-liveness` (200), `health-readiness` (200), `policy-allow` (200, `decision: allow`), `policy-deny` (200, `reason_code: scope_mismatch`), `policy-unknown-field` (400, `malformed_command`), `unknown-route` (404, `not_found`), `local-room-snapshot-before` (200), `local-room-send-committed` (201, `replayed: false`, revision one above the snapshot's `committed_seq`, `request_digest` equal to the canonical digest of the command), `local-room-send-replayed` (201, byte-equal to the first receipt except `replayed: true`), `local-room-send-changed-body` (409, `command_conflict`), `local-room-send-other-scope` (404, `scope_mismatch`), `local-room-send-unknown-citation` (404, `not_found`), `local-room-send-empty-body` (400), `local-room-send-unknown-field` (400), `local-room-snapshot-after-restart` (200, same cursor and last message after the process was stopped and started) and `local-room-replay-after-restart` (201, the original `message_id`).
 - `contracts/test/local-room.test.ts` accepts every `local-room-*` vector that the golden file accepts, refuses each unknown field, variant and bound at its path in TypeScript and Swift, and proves the authorship, event-kind and unknown-field guards turn red with the guard removed from an isolated schema copy. `apps/center/test/local-room.test.ts` proves the health baseline on the same app, the 400 paths, and the typed 404 `unavailable_capability` of a process composed without a persistence adapter.
 - `apps/center/test/local-room.pg.test.ts` spawns the real center process as the service role and proves over HTTP: 201 receipt with the canonical request digest and the next room revision, replay with the original receipt, 409 `command_conflict`, 404 `scope_mismatch` and `not_found`, a committed citation, 400 before storage, and an identical snapshot plus a working replay and continued sequence after the process is stopped and started. `packages/storage/test/local-room.pg.test.ts` proves the seeded fixed room, durability across a closed and reopened pool, eight concurrent sends with contiguous sequences and equal event sequences, one message under eight concurrent copies of one command, rollback that consumes no sequence, replay and conflict, citation checks, the 4096-scalar and ten-citation table bounds, project isolation with the `BYPASSRLS` guard negative, and immutability for `agora_app` and the owner.
+- The local-answer public package driver reports 14 passing tests. It requires no Launch step or database: supplied fixtures represent validated persisted messages, not storage provenance proof. The behavioral suite proves bounds, numerical chronology, source-specific citations, empty/foreign/missing/unknown denial, deterministic digests/replay, requester/scope/request identity and inert injection-shaped text. The three isolated mutations each require normal exit 0 and weakened exit 1 for the named assertion (`unbounded-selector`, `outside-citation`, `injected-command`). The authority test checks the exact runtime export surface and twelve forbidden import/global probes. No core function accepts a posting handle; the posting port is type-only. This does not qualify final L5 or AC04, and the driver is not a product trigger.
 - The first migration report has `applied: 2`; the second has `applied: 0` and the same `schema_digest`.
 
 ## Evidence
@@ -100,6 +102,14 @@ node scripts/record-red-green.mjs --parent 95f35277fbfc821be148029521222f0de617d
 
 Red shows `Tests 6 failed (6)`: every HTTP assertion fails against the parent's running process for a behavioral reason (`expected 404 to be 201`, `expected 404 to be 200` for the snapshot, `expected 404 to be 409` for the changed body). Green shows `Tests 6 passed (6)`. The storage-level test cannot load at the parent, which exports no adapter, so it is retained head-only in `evidence/local-room/persistence/storage-pg.green.log`; its reds are the guard negatives in `gate-negatives.log`. `evidence/local-room/persistence/outcome.json` binds the revisions, sizes and receipts.
 
+For local-room L5 pure-core preparation, use its committed test-only harness on exact L2 `55269a5103656a63cc6f246c00ebb1efa6785866` as the behavioral parent. The harness loads the public package and denies capability; the baseline denial test stays green. Use the code head recorded in `evidence/local-room/agent-core/outcome.json`:
+
+```sh
+node scripts/record-red-green.mjs --parent c221c808e6841c57d016b3d22e8c55f5335ed811 --head CORE_HEAD --out evidence/local-room/agent-core -- pnpm exec vitest run --project unit packages/domain/test/local-answer.test.ts
+```
+
+Red must be `9 failed | 1 passed`, with value assertions against `unavailable_capability`, not module errors. Green must be `10 passed`. Guard mutations and cross-boundary negatives run separately at the head through the Drive command. The candidate remains stacked, not landable before L2 and applicable CI protections, a rebase, fresh exact-head validation and independent review. No pipeline or remote action belongs to this local-only preparation.
+
 For U01a.B04, use full committed parent/head SHAs and the task evidence directory. The public driver invokes the same recorder with the fixed native-assertion command, then captures the isolated guard mutation. Run both lanes and task admission. The final foundation command must exit 2 with FG04-FG08 missing and U01a integration unqualified; that expected denial is not task failure.
 
 ```sh
@@ -122,6 +132,6 @@ git worktree list | grep -c 'agora-red-\|agora-green-\|agora-clean-' || echo "wo
 ls "${TMPDIR:-/tmp}" | grep agora- || echo "tmp: clean"
 ```
 
-Both greps must find nothing.
+Both greps must find nothing. For the pure-core driver also run `find .scratch -maxdepth 1 -name 'answer-guard-*' -print`; no matching directory may remain. In parallel development, a shared temp/worktree match may belong to another lane: report it without deleting or inspecting its contents; prove this task's exact owned paths were removed.
 
 Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.
