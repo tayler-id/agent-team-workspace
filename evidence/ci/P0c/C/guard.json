@@ -1,16 +1,16 @@
 {
   "schema_version": "agora.p0c-guard-negatives/v1",
-  "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+  "head": "8d4d42c94dbe71bc3fc45a048ac8b32372bbbd53",
   "outcome": "pass",
   "committed_source_digests": {
     "scripts/with-test-postgres.mjs": "89a9562850c5373aa00e60301f8d20b2f535e07b501da59bb5b3362af4d95374",
     "scripts/postgres-socket.ts": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf"
   },
   "driver": {
-    "evidence/ci/P0c/C/driver/lib.mjs": "420c3d763f91f5d455da50d848f08c20015477ed914085e8edc0346eaa918563",
+    "evidence/ci/P0c/C/driver/lib.mjs": "b8aecc010ff6ca9e7ba91a4097c879af0a1ee58e64f31d4f8c358d1587da1366",
     "evidence/ci/P0c/C/driver/guard.mjs": "e55c470e06ab8a512873fde46dce8c17ff952fe3e2e28b548a4d37c97c895e9f"
   },
-  "recorded_at": "2026-09-21T06:45:15.838Z",
+  "recorded_at": "2026-09-21T07:05:02.336Z",
   "receipts": [
     {
       "guard": "short-socket-selection",
@@ -32,7 +32,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 710,
+          "elapsed_ms": 608,
           "outcomes": [
             "allocated",
             "starting",
@@ -42,11 +42,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "4515c92f-3f9f-4865-8df0-a7cd765df278",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-short-socket-selection-normal/deep dir 0 with spaces and a long name/deep dir 1 with spaces and a long name/deep dir 2 with spaces and a long name/deep dir 3 with spaces and a long name/deep dir 4 with spaces and a long name/deep dir 5 with spaces and a long name/deep dir 6 with spaces and a long name/deep dir 7 with spaces and a long name/deep dir 8 with spaces and a long name/deep dir 9 with spaces and a long name/deep dir 10 with spaces and a long name/deep dir 11 with spaces and a long name/agora-pg-TSn5vO",
-            "socketDir": "/private/tmp/agora-p0c-4515c92f-3f9f-4865-8df0-a7cd765df278"
+            "runId": "0088c93c-c7a8-4be5-8a20-a0940cacf5f5",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-short-socket-selection-normal/deep dir 0 with spaces and a long name/deep dir 1 with spaces and a long name/deep dir 2 with spaces and a long name/deep dir 3 with spaces and a long name/deep dir 4 with spaces and a long name/deep dir 5 with spaces and a long name/deep dir 6 with spaces and a long name/deep dir 7 with spaces and a long name/deep dir 8 with spaces and a long name/deep dir 9 with spaces and a long name/deep dir 10 with spaces and a long name/deep dir 11 with spaces and a long name/agora-pg-XgUgSx",
+            "socketDir": "/private/tmp/agora-p0c-0088c93c-c7a8-4be5-8a20-a0940cacf5f5"
           },
-          "starting_pid": 18444,
+          "starting_pid": 13516,
           "blocked": [],
           "cleanup_failed": [],
           "stdout": "agora_app|f|f\n",
@@ -89,7 +89,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 539,
+          "elapsed_ms": 454,
           "outcomes": [
             "allocated",
             "starting",
@@ -99,11 +99,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "7a89b2c4-2a89-4567-a124-e29bc8eef480",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-short-socket-selection-weakened/deep dir 0 with spaces and a long name/deep dir 1 with spaces and a long name/deep dir 2 with spaces and a long name/deep dir 3 with spaces and a long name/deep dir 4 with spaces and a long name/deep dir 5 with spaces and a long name/deep dir 6 with spaces and a long name/deep dir 7 with spaces and a long name/deep dir 8 with spaces and a long name/deep dir 9 with spaces and a long name/deep dir 10 with spaces and a long name/deep dir 11 with spaces and a long name/agora-pg-N0EM61",
-            "socketDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-short-socket-selection-weakened/deep dir 0 with spaces and a long name/deep dir 1 with spaces and a long name/deep dir 2 with spaces and a long name/deep dir 3 with spaces and a long name/deep dir 4 with spaces and a long name/deep dir 5 with spaces and a long name/deep dir 6 with spaces and a long name/deep dir 7 with spaces and a long name/deep dir 8 with spaces and a long name/deep dir 9 with spaces and a long name/deep dir 10 with spaces and a long name/deep dir 11 with spaces and a long name/agora-pg-N0EM61/agora-p0c-7a89b2c4-2a89-4567-a124-e29bc8eef480"
+            "runId": "072e11d7-96ee-4d30-a886-26b52e7d5b75",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-short-socket-selection-weakened/deep dir 0 with spaces and a long name/deep dir 1 with spaces and a long name/deep dir 2 with spaces and a long name/deep dir 3 with spaces and a long name/deep dir 4 with spaces and a long name/deep dir 5 with spaces and a long name/deep dir 6 with spaces and a long name/deep dir 7 with spaces and a long name/deep dir 8 with spaces and a long name/deep dir 9 with spaces and a long name/deep dir 10 with spaces and a long name/deep dir 11 with spaces and a long name/agora-pg-zPZvhB",
+            "socketDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-short-socket-selection-weakened/deep dir 0 with spaces and a long name/deep dir 1 with spaces and a long name/deep dir 2 with spaces and a long name/deep dir 3 with spaces and a long name/deep dir 4 with spaces and a long name/deep dir 5 with spaces and a long name/deep dir 6 with spaces and a long name/deep dir 7 with spaces and a long name/deep dir 8 with spaces and a long name/deep dir 9 with spaces and a long name/deep dir 10 with spaces and a long name/deep dir 11 with spaces and a long name/agora-pg-zPZvhB/agora-p0c-072e11d7-96ee-4d30-a886-26b52e7d5b75"
           },
-          "starting_pid": 18775,
+          "starting_pid": 13805,
           "blocked": [
             "Error: postgres exited before readiness"
           ],
@@ -148,7 +148,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 1094,
+          "elapsed_ms": 992,
           "outcomes": [
             "allocated",
             "starting",
@@ -158,11 +158,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "ab56dc03-054a-47f1-bf7f-cc05ed90a552",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-lease-verification-normal/agora-pg-GnHf6l",
-            "socketDir": "/private/tmp/agora-p0c-ab56dc03-054a-47f1-bf7f-cc05ed90a552"
+            "runId": "29867c3e-3947-4b37-aec1-3ca6129237ab",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-lease-verification-normal/agora-pg-rHE1e3",
+            "socketDir": "/private/tmp/agora-p0c-29867c3e-3947-4b37-aec1-3ca6129237ab"
           },
-          "starting_pid": 19101,
+          "starting_pid": 14050,
           "blocked": [],
           "cleanup_failed": [
             "Error: socket ownership mismatch"
@@ -181,8 +181,8 @@
         }
       ],
       "swept": [
-        "socket /private/tmp/agora-p0c-ab56dc03-054a-47f1-bf7f-cc05ed90a552",
-        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-lease-verification-normal/agora-pg-GnHf6l"
+        "socket /private/tmp/agora-p0c-29867c3e-3947-4b37-aec1-3ca6129237ab",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-lease-verification-normal/agora-pg-rHE1e3"
       ],
       "residue_after_sweep": [],
       "neighbors": {
@@ -212,7 +212,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 1104,
+          "elapsed_ms": 1046,
           "outcomes": [
             "allocated",
             "starting",
@@ -222,11 +222,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "f095240d-28d4-4f47-9460-b0eaebd6c5d4",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-lease-verification-weakened/agora-pg-3RnblD",
-            "socketDir": "/private/tmp/agora-p0c-f095240d-28d4-4f47-9460-b0eaebd6c5d4"
+            "runId": "d4ce8dbd-5ea8-4094-9703-3239bbed369b",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-lease-verification-weakened/agora-pg-p4VcaM",
+            "socketDir": "/private/tmp/agora-p0c-d4ce8dbd-5ea8-4094-9703-3239bbed369b"
           },
-          "starting_pid": 19443,
+          "starting_pid": 14414,
           "blocked": [],
           "cleanup_failed": [],
           "stdout": "",
@@ -269,7 +269,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 601,
+          "elapsed_ms": 571,
           "outcomes": [
             "allocated",
             "starting",
@@ -279,14 +279,14 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "69b0029c-3d13-40fc-8a73-85e2faa948c9",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-exact-process-group-stop-normal/agora-pg-YBHawW",
-            "socketDir": "/private/tmp/agora-p0c-69b0029c-3d13-40fc-8a73-85e2faa948c9"
+            "runId": "432abb2a-173f-4a10-b9d9-b6775fca7245",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-exact-process-group-stop-normal/agora-pg-o5AmzE",
+            "socketDir": "/private/tmp/agora-p0c-432abb2a-173f-4a10-b9d9-b6775fca7245"
           },
-          "starting_pid": 19777,
+          "starting_pid": 14722,
           "blocked": [],
           "cleanup_failed": [],
-          "stdout": "[19829,19830]\n",
+          "stdout": "[14773,14774]\n",
           "residue_before_sweep": {
             "socket_dir": false,
             "socket_listing": null,
@@ -317,7 +317,7 @@
         "scripts/with-test-postgres.mjs": "86a9999c213b404336f46740cd9d8411c11d3fb011fb1260b18f4ebbf5d97416",
         "scripts/postgres-socket.ts": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf"
       },
-      "assertion": "descendant 20136 exited\n\ntrue !== false\n",
+      "assertion": "descendant 15097 exited\n\ntrue !== false\n",
       "expected_assertion": "descendant",
       "verdict": "pass",
       "runs": [
@@ -326,7 +326,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 589,
+          "elapsed_ms": 539,
           "outcomes": [
             "allocated",
             "starting",
@@ -336,14 +336,14 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "6866c327-9148-4837-a133-e17c5bc0a334",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-exact-process-group-stop-weakened/agora-pg-siHcNq",
-            "socketDir": "/private/tmp/agora-p0c-6866c327-9148-4837-a133-e17c5bc0a334"
+            "runId": "7f390397-5335-4e11-bbb8-df30fa032c33",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-exact-process-group-stop-weakened/agora-pg-YwBMZR",
+            "socketDir": "/private/tmp/agora-p0c-7f390397-5335-4e11-bbb8-df30fa032c33"
           },
-          "starting_pid": 20082,
+          "starting_pid": 15045,
           "blocked": [],
           "cleanup_failed": [],
-          "stdout": "[20135,20136]\n",
+          "stdout": "[15096,15097]\n",
           "residue_before_sweep": {
             "socket_dir": false,
             "socket_listing": null,
@@ -355,7 +355,7 @@
         }
       ],
       "swept": [
-        "pid 20136"
+        "pid 15097"
       ],
       "residue_after_sweep": [],
       "neighbors": {
@@ -385,7 +385,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 1602,
+          "elapsed_ms": 1594,
           "outcomes": [
             "allocated",
             "starting",
@@ -396,11 +396,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "22f27380-1427-4df2-86fd-502743e7ff53",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-bounded-startup-normal/agora-pg-BKClVs",
-            "socketDir": "/private/tmp/agora-p0c-22f27380-1427-4df2-86fd-502743e7ff53"
+            "runId": "a5881d12-350c-4d51-9fc5-f56ef76bf118",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-bounded-startup-normal/agora-pg-784oQj",
+            "socketDir": "/private/tmp/agora-p0c-a5881d12-350c-4d51-9fc5-f56ef76bf118"
           },
-          "starting_pid": 20360,
+          "starting_pid": 15312,
           "blocked": [
             "startup timeout",
             "AbortError: The operation was aborted"
@@ -446,7 +446,7 @@
           "signal": null,
           "hung": true,
           "orphaned_pipes": false,
-          "elapsed_ms": 6057,
+          "elapsed_ms": 6045,
           "outcomes": [
             "allocated",
             "starting",
@@ -456,11 +456,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "f49cfdb5-9d1d-403f-9962-34ea1fbeed09",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-bounded-startup-weakened/agora-pg-U1c8wL",
-            "socketDir": "/private/tmp/agora-p0c-f49cfdb5-9d1d-403f-9962-34ea1fbeed09"
+            "runId": "f2f4d707-f6ba-448c-8c79-1eeb43de2a89",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-bounded-startup-weakened/agora-pg-OqoD2q",
+            "socketDir": "/private/tmp/agora-p0c-f2f4d707-f6ba-448c-8c79-1eeb43de2a89"
           },
-          "starting_pid": 20643,
+          "starting_pid": 15582,
           "blocked": [
             "AbortError: The operation was aborted"
           ],
@@ -505,7 +505,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 545,
+          "elapsed_ms": 559,
           "outcomes": [
             "allocated",
             "starting",
@@ -515,11 +515,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "1a7b0c99-efe5-4d59-baf2-a743a037d23d",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-cancellation-cleanup-normal/agora-pg-I6UQSU",
-            "socketDir": "/private/tmp/agora-p0c-1a7b0c99-efe5-4d59-baf2-a743a037d23d"
+            "runId": "fa2559ed-b646-4f23-973d-c43a79027576",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-cancellation-cleanup-normal/agora-pg-nRv7tj",
+            "socketDir": "/private/tmp/agora-p0c-fa2559ed-b646-4f23-973d-c43a79027576"
           },
-          "starting_pid": 21115,
+          "starting_pid": 17049,
           "blocked": [],
           "cleanup_failed": [],
           "stdout": "",
@@ -562,7 +562,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 3574,
+          "elapsed_ms": 3744,
           "outcomes": [
             "allocated",
             "starting",
@@ -572,11 +572,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "a2048484-91e5-40b8-9cf6-a8fca218e742",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-cancellation-cleanup-weakened/agora-pg-aWVBeh",
-            "socketDir": "/private/tmp/agora-p0c-a2048484-91e5-40b8-9cf6-a8fca218e742"
+            "runId": "d010646b-1d15-429a-b1a1-4994354b2ce7",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-cancellation-cleanup-weakened/agora-pg-VibqZF",
+            "socketDir": "/private/tmp/agora-p0c-d010646b-1d15-429a-b1a1-4994354b2ce7"
           },
-          "starting_pid": 21411,
+          "starting_pid": 20676,
           "blocked": [],
           "cleanup_failed": [],
           "stdout": "",
@@ -619,7 +619,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 2038,
+          "elapsed_ms": 1988,
           "outcomes": [
             "allocated",
             "starting",
@@ -629,11 +629,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "6cce7c8f-5762-46a8-9a72-d6e854c4cf83",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-foreign-lock-refusal-normal/agora-pg-DgjjLy",
-            "socketDir": "/private/tmp/agora-p0c-6cce7c8f-5762-46a8-9a72-d6e854c4cf83"
+            "runId": "4784a398-4e59-4fb2-b1c9-8c5b7dcc64d7",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-foreign-lock-refusal-normal/agora-pg-adnKJH",
+            "socketDir": "/private/tmp/agora-p0c-4784a398-4e59-4fb2-b1c9-8c5b7dcc64d7"
           },
-          "starting_pid": 21773,
+          "starting_pid": 28396,
           "blocked": [],
           "cleanup_failed": [
             "Error: foreign socket lock"
@@ -654,9 +654,9 @@
         }
       ],
       "swept": [
-        "socket /private/tmp/agora-p0c-6cce7c8f-5762-46a8-9a72-d6e854c4cf83",
-        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-foreign-lock-refusal-normal/agora-pg-DgjjLy",
-        "sysv-segment 51970051 key=0x049cbe6d cpid=21773"
+        "socket /private/tmp/agora-p0c-4784a398-4e59-4fb2-b1c9-8c5b7dcc64d7",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-foreign-lock-refusal-normal/agora-pg-adnKJH",
+        "sysv-segment 83427331 key=0x04aae8a1 cpid=28396 creator-dead unattached"
       ],
       "residue_after_sweep": [],
       "neighbors": {
@@ -686,7 +686,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 2066,
+          "elapsed_ms": 2046,
           "outcomes": [
             "allocated",
             "starting",
@@ -696,11 +696,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "adc094d0-7ade-4a0b-b7fc-448437df5924",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-foreign-lock-refusal-weakened/agora-pg-nScnHz",
-            "socketDir": "/private/tmp/agora-p0c-adc094d0-7ade-4a0b-b7fc-448437df5924"
+            "runId": "dbe515d1-42e4-4f6a-9da1-5d4d87feedfb",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-foreign-lock-refusal-weakened/agora-pg-14bXTC",
+            "socketDir": "/private/tmp/agora-p0c-dbe515d1-42e4-4f6a-9da1-5d4d87feedfb"
           },
-          "starting_pid": 23485,
+          "starting_pid": 32295,
           "blocked": [],
           "cleanup_failed": [],
           "stdout": "",
@@ -715,7 +715,7 @@
         }
       ],
       "swept": [
-        "sysv-segment 52297731 key=0x049cc39d cpid=23485"
+        "sysv-segment 83755011 key=0x04aaedd8 cpid=32295 creator-dead unattached"
       ],
       "residue_after_sweep": [],
       "neighbors": {
@@ -745,7 +745,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 995,
+          "elapsed_ms": 1025,
           "outcomes": [
             "allocated",
             "starting",
@@ -755,11 +755,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "b9bab6fc-b3d1-49ae-92a9-997852da9942",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-normal/agora-pg-ypVsDC",
-            "socketDir": "/private/tmp/agora-p0c-b9bab6fc-b3d1-49ae-92a9-997852da9942"
+            "runId": "35daf382-2f7a-4a42-9e2f-715b2b3e5a51",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-normal/agora-pg-4KowLx",
+            "socketDir": "/private/tmp/agora-p0c-35daf382-2f7a-4a42-9e2f-715b2b3e5a51"
           },
-          "starting_pid": 30590,
+          "starting_pid": 35815,
           "blocked": [],
           "cleanup_failed": [
             "Error: artifact ownership mismatch"
@@ -776,8 +776,8 @@
         }
       ],
       "swept": [
-        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-normal/agora-pg-ypVsDC",
-        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-normal/agora-pg-ypVsDC.moved"
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-normal/agora-pg-4KowLx",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-normal/agora-pg-4KowLx.moved"
       ],
       "residue_after_sweep": [],
       "neighbors": {
@@ -807,7 +807,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 1036,
+          "elapsed_ms": 1016,
           "outcomes": [
             "allocated",
             "starting",
@@ -817,11 +817,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "54218438-1ef9-4fe5-ae58-195e3965f298",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-weakened/agora-pg-uMeeFT",
-            "socketDir": "/private/tmp/agora-p0c-54218438-1ef9-4fe5-ae58-195e3965f298"
+            "runId": "cc9d83e1-bc1f-44de-8eab-dc7ec0c78dba",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-weakened/agora-pg-mmOok7",
+            "socketDir": "/private/tmp/agora-p0c-cc9d83e1-bc1f-44de-8eab-dc7ec0c78dba"
           },
-          "starting_pid": 34073,
+          "starting_pid": 37791,
           "blocked": [],
           "cleanup_failed": [],
           "stdout": "",
@@ -836,7 +836,7 @@
         }
       ],
       "swept": [
-        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-weakened/agora-pg-uMeeFT.moved"
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-artifact-ownership-refusal-weakened/agora-pg-mmOok7.moved"
       ],
       "residue_after_sweep": [],
       "neighbors": {
@@ -866,7 +866,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 193,
+          "elapsed_ms": 221,
           "outcomes": [
             "allocated",
             "blocked",
@@ -875,9 +875,9 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "d9455d13-b0f2-4abc-b323-f161119f98fe",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stderr-capture-normal/agora-pg-PM74tE",
-            "socketDir": "/private/tmp/agora-p0c-d9455d13-b0f2-4abc-b323-f161119f98fe"
+            "runId": "b8d74b61-70fd-4c4c-864a-44bdd14a12d7",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stderr-capture-normal/agora-pg-TCOGtr",
+            "socketDir": "/private/tmp/agora-p0c-b8d74b61-70fd-4c4c-864a-44bdd14a12d7"
           },
           "starting_pid": null,
           "blocked": [
@@ -924,7 +924,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 186,
+          "elapsed_ms": 205,
           "outcomes": [
             "allocated",
             "blocked",
@@ -933,9 +933,9 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "33e26d0b-f61c-4e15-9541-a2693045911d",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stderr-capture-weakened/agora-pg-2hubcx",
-            "socketDir": "/private/tmp/agora-p0c-33e26d0b-f61c-4e15-9541-a2693045911d"
+            "runId": "b01ec8de-d7d9-48be-acf2-e384a54cec9a",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stderr-capture-weakened/agora-pg-gXEPkY",
+            "socketDir": "/private/tmp/agora-p0c-b01ec8de-d7d9-48be-acf2-e384a54cec9a"
           },
           "starting_pid": null,
           "blocked": [
@@ -982,7 +982,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 421,
+          "elapsed_ms": 427,
           "outcomes": [
             "allocated",
             "starting",
@@ -993,11 +993,11 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "4d419179-8455-476a-88c5-70ec31bb4110",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-normal/agora-pg-UJlUmJ",
-            "socketDir": "/private/tmp/agora-p0c-4d419179-8455-476a-88c5-70ec31bb4110"
+            "runId": "704f8dad-4b85-4d5b-a7ad-d070df2d38cd",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-normal/agora-pg-aOAtD5",
+            "socketDir": "/private/tmp/agora-p0c-704f8dad-4b85-4d5b-a7ad-d070df2d38cd"
           },
-          "starting_pid": 38178,
+          "starting_pid": 38409,
           "blocked": [
             "Error: spawn /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-normal/bin/pg_isready ENOENT",
             "Error: spawn /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-normal/bin/pg_isready ENOENT"
@@ -1043,12 +1043,10 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 892,
+          "elapsed_ms": 909,
           "outcomes": [
             "allocated",
             "starting",
-            "blocked",
-            "blocked",
             "blocked",
             "blocked",
             "blocked",
@@ -1070,14 +1068,12 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "171aad55-335d-4441-9035-e2cdd999a2df",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-weakened/agora-pg-4BkzC1",
-            "socketDir": "/private/tmp/agora-p0c-171aad55-335d-4441-9035-e2cdd999a2df"
+            "runId": "fedd04dc-3be7-48ec-a0fd-6e616d2fda66",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-weakened/agora-pg-DoBU9m",
+            "socketDir": "/private/tmp/agora-p0c-fedd04dc-3be7-48ec-a0fd-6e616d2fda66"
           },
-          "starting_pid": 39532,
+          "starting_pid": 38624,
           "blocked": [
-            "Error: spawn /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-weakened/bin/pg_isready ENOENT",
-            "Error: spawn /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-weakened/bin/pg_isready ENOENT",
             "Error: spawn /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-weakened/bin/pg_isready ENOENT",
             "Error: spawn /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-weakened/bin/pg_isready ENOENT",
             "Error: spawn /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-probe-spawn-failure-weakened/bin/pg_isready ENOENT",
@@ -1140,7 +1136,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": false,
-          "elapsed_ms": 608,
+          "elapsed_ms": 560,
           "outcomes": [
             "allocated",
             "starting",
@@ -1151,16 +1147,16 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "f1587478-ed5c-4375-9fea-d518cff85b13",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stop-failure-report-normal/agora-pg-AoBgdz",
-            "socketDir": "/private/tmp/agora-p0c-f1587478-ed5c-4375-9fea-d518cff85b13"
+            "runId": "18bb143e-7390-468f-8a40-b0b2d7f2dc79",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stop-failure-report-normal/agora-pg-IdWnuy",
+            "socketDir": "/private/tmp/agora-p0c-18bb143e-7390-468f-8a40-b0b2d7f2dc79"
           },
-          "starting_pid": 41129,
+          "starting_pid": 38875,
           "blocked": [
             "stop failed: Error: injected EPERM"
           ],
           "cleanup_failed": [],
-          "stdout": "[41281,41302]\n",
+          "stdout": "[38926,38927]\n",
           "residue_before_sweep": {
             "socket_dir": false,
             "socket_listing": null,
@@ -1204,7 +1200,7 @@
           "signal": null,
           "hung": false,
           "orphaned_pipes": true,
-          "elapsed_ms": 1546,
+          "elapsed_ms": 1500,
           "outcomes": [
             "allocated",
             "starting",
@@ -1213,14 +1209,14 @@
           "allocated": {
             "schema_version": "agora.test-postgres/v1",
             "outcome": "allocated",
-            "runId": "60d5faa4-d6e0-4eb9-a1a7-87bff59871b5",
-            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stop-failure-report-weakened/agora-pg-VLSEbd",
-            "socketDir": "/private/tmp/agora-p0c-60d5faa4-d6e0-4eb9-a1a7-87bff59871b5"
+            "runId": "44ae7e91-a36c-44c2-822c-c4171394ff50",
+            "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stop-failure-report-weakened/agora-pg-kIZfrv",
+            "socketDir": "/private/tmp/agora-p0c-44ae7e91-a36c-44c2-822c-c4171394ff50"
           },
-          "starting_pid": 42777,
+          "starting_pid": 39208,
           "blocked": [],
           "cleanup_failed": [],
-          "stdout": "[42945,42968]\n",
+          "stdout": "[39259,39260]\n",
           "residue_before_sweep": {
             "socket_dir": true,
             "socket_listing": [
@@ -1234,8 +1230,8 @@
         }
       ],
       "swept": [
-        "socket /private/tmp/agora-p0c-60d5faa4-d6e0-4eb9-a1a7-87bff59871b5",
-        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stop-failure-report-weakened/agora-pg-VLSEbd"
+        "socket /private/tmp/agora-p0c-44ae7e91-a36c-44c2-822c-c4171394ff50",
+        "root /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/guard-stop-failure-report-weakened/agora-pg-kIZfrv"
       ],
       "residue_after_sweep": [],
       "neighbors": {

@@ -1,24 +1,21 @@
 == git worktree list
-/Users/taylerramsay/.local/share/firstmate/projects/agent-team-workspace                                                                                               c04f560 [main]
-/private/tmp/claude-501/-Users-taylerramsay--treehouse-agent-team-workspace-50d2db-16-agent-team-workspace/91373e9a-464d-4025-b06a-fb55a9c2f6a4/scratchpad/wt-base     17fbf24 (detached HEAD)
-/private/tmp/claude-501/-Users-taylerramsay--treehouse-agent-team-workspace-50d2db-16-agent-team-workspace/91373e9a-464d-4025-b06a-fb55a9c2f6a4/scratchpad/wt-cand     4d7534b (detached HEAD)
-/private/tmp/claude-501/-Users-taylerramsay--treehouse-agent-team-workspace-50d2db-16-agent-team-workspace/91373e9a-464d-4025-b06a-fb55a9c2f6a4/scratchpad/wt-subject  52b85b2 (detached HEAD)
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace                                                                                      e23fe1b (detached HEAD)
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/10/agent-team-workspace                                                                                     d4750ba [fm/agora-local-room-agent-core]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace                                                                                     051da44 [fm/agora-ci-postgres-fixture-proof]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/12/agent-team-workspace                                                                                     c3d0d72 [fm/agora-browser-pretext-virtualization]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/13/agent-team-workspace                                                                                     7d29380 [fm/agora-web-framework-client-host]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/14/agent-team-workspace                                                                                     c5b1fd1 [fm/agora-app-architecture-boundaries]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/15/agent-team-workspace                                                                                     4d7534b [fm/agora-app-architecture-docs]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/16/agent-team-workspace                                                                                     4d7534b (detached HEAD)
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/2/agent-team-workspace                                                                                      e23fe1b (detached HEAD)
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace                                                                                      2fd3aad [fm/agora-s1-isolate-development]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace                                                                                      0b80491 [fm/agora-ci-guardrails]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/5/agent-team-workspace                                                                                      99aa4f7 [fm/agora-react-engineering-fixture]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/6/agent-team-workspace                                                                                      55269a5 [fm/agora-local-room-persistence]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace                                                                                      83029a3 [fm/agora-ci-toolchain-doctor]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace                                                                                      6e3863a [fm/agora-local-room-runtime]
-/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/9/agent-team-workspace                                                                                      60bcd79 [fm/agora-local-room-web-shell]
+/Users/taylerramsay/.local/share/firstmate/projects/agent-team-workspace            c04f560 [main]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace   e23fe1b (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/10/agent-team-workspace  d4750ba [fm/agora-local-room-agent-core]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace  8d4d42c [fm/agora-ci-postgres-fixture-proof]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/12/agent-team-workspace  c3d0d72 [fm/agora-browser-pretext-virtualization]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/13/agent-team-workspace  7d29380 [fm/agora-web-framework-client-host]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/14/agent-team-workspace  d5f12a7 [fm/agora-app-architecture-boundaries]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/15/agent-team-workspace  c54575f [fm/agora-app-architecture-docs]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/16/agent-team-workspace  c04f560 (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/2/agent-team-workspace   e23fe1b (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace   2fd3aad [fm/agora-s1-isolate-development]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace   0b80491 [fm/agora-ci-guardrails]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/5/agent-team-workspace   99aa4f7 [fm/agora-react-engineering-fixture]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/6/agent-team-workspace   55269a5 [fm/agora-local-room-persistence]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace   83029a3 [fm/agora-ci-toolchain-doctor]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace   6e3863a [fm/agora-local-room-runtime]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/9/agent-team-workspace   60bcd79 [fm/agora-local-room-web-shell]
 == /private/tmp agora-p0c directories
 none
 == agora-pg roots under TMPDIR
@@ -28,14 +25,34 @@ none
 == unix listeners naming agora-p0c
 none
 == sysv shared memory segments
-IPC status from <running system> as of Mon Sep 21 02:44:25 EDT 2026
+IPC status from <running system> as of Mon Sep 21 03:07:41 EDT 2026
 T     ID     KEY        MODE       OWNER    GROUP  CPID  LPID
 Shared Memory:
 m 327680 0x02742841 --rw------- taylerramsay    staff  84191  84191
-m 138870785 0x049677e1 --rw------- taylerramsay    staff  84780  84780
-m 163577858 0x04972177 --rw------- taylerramsay    staff  92827  92827
-m 20774916 0x049c2f60 --rw------- taylerramsay    staff  81217  81217
-m 11796485 0x049a75da --rw------- taylerramsay    staff  49835  49835
+m 142344193 0x049f4c9e --rw------- taylerramsay    staff  43834  43834
+m 8192006 0x04a0a21f --rw------- taylerramsay    staff  85659  85659
+m 8847367 0x04a2911f --rw------- taylerramsay    staff  93778  93778
+m 6094856 0x04a3a74c --rw------- taylerramsay    staff  80245  80245
 
 == git status
-?? evidence/ci/P0c/C/
+ M evidence/ci/P0c/C/check.log
+ M evidence/ci/P0c/C/cleanup-inventory.log
+ M evidence/ci/P0c/C/commands.tsv
+ M evidence/ci/P0c/C/docs-check.log
+ M evidence/ci/P0c/C/doctor.log
+ M evidence/ci/P0c/C/focused.log
+ M evidence/ci/P0c/C/green.log
+ M evidence/ci/P0c/C/guard.json
+ M evidence/ci/P0c/C/guard.log
+ M evidence/ci/P0c/C/install.log
+ M evidence/ci/P0c/C/lifecycle.log
+ M evidence/ci/P0c/C/migrations.log
+ M evidence/ci/P0c/C/no-leftovers.json
+ M evidence/ci/P0c/C/probe.log
+ M evidence/ci/P0c/C/recorder.log
+ M evidence/ci/P0c/C/red.log
+ M evidence/ci/P0c/C/replay.log
+ M evidence/ci/P0c/C/scenarios.json
+ M evidence/ci/P0c/C/test-patch.diff
+ M evidence/ci/P0c/C/test.log
+?? evidence/ci/P0c/C/ipc-before-lanes.log

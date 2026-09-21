@@ -4,7 +4,7 @@ pass command-failure              exit=255      outcomes=allocated,starting,star
 pass command-signal               exit=1        outcomes=allocated,starting,started,cleaned 
 pass missing-command              exit=70       outcomes=allocated,starting,started,blocked,cleaned 
 pass startup-failure              exit=70       outcomes=allocated,starting,blocked,cleaned 
-pass postmaster-killed-at-started exit=0        outcomes=allocated,starting,started,cleaned swept=["sysv-segment 56426499 key=0x049d04ca cpid=45327"]
+pass postmaster-killed-at-started exit=0        outcomes=allocated,starting,started,cleaned swept=["sysv-segment 87883779 key=0x04ab2e0b cpid=41352 creator-dead unattached"]
 pass startup-timeout              exit=70       outcomes=allocated,starting,blocked,blocked,cleaned 
 pass cancel-at-allocated          exit=143      outcomes=allocated,blocked,cleaned 
 pass cancel-during-initdb         exit=130      outcomes=allocated,blocked,cleaned 
@@ -13,15 +13,16 @@ pass cancel-at-started            exit=143      outcomes=allocated,starting,star
 pass signal-storm                 exit=130      outcomes=allocated,starting,started,cleaned 
 pass sigint-sweep                 exit=,,,,,130,130,130,130,130,130 outcomes=11 runs 
 pass nested-group                 exit=143      outcomes=allocated,starting,started,cleaned 
-pass foreign-process-lock         exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-e628156b-3c6c-4820-acb5-a34bf436b15d","root ./scenario-foreign-process-lock/agora-pg-rpvZIy","sysv-segment 59834371 key=0x049d32c0 cpid=50149"]
-pass foreign-listener             exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-d19a2b8e-b720-4e79-947a-95790ed40a89","root ./scenario-foreign-listener/agora-pg-5yOKoq","sysv-segment 60162051 key=0x049d55bc cpid=50480"]
-pass foreign-listener-exact-lock  exit=0        outcomes=allocated,starting,started,cleaned swept=["sysv-segment 60489731 key=0x049d5af0 cpid=50811"]
-pass foreign-socket-file          exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-5285faa9-97eb-4f59-ab57-907685d23606","root ./scenario-foreign-socket-file/agora-pg-NhOrTb","sysv-segment 60817411 key=0x049d6026 cpid=51152"]
-pass foreign-directory            exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["root ./scenario-foreign-directory/agora-pg-NeZ7Eu","root ./scenario-foreign-directory/agora-pg-NeZ7Eu.moved"]
-pass socket-dir-intruder          exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-e6e7a7ff-8018-41a0-b3c7-0f72e281574b","root ./scenario-socket-dir-intruder/agora-pg-ltFG48"]
-pass socket-dir-mode              exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-153b4180-0bb9-416d-bc29-44a6f382ecf9","root ./scenario-socket-dir-mode/agora-pg-9ixUkN"]
+pass foreign-process-lock         exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-f01ef565-2b52-413d-8439-7d833ea950ed","root ./scenario-foreign-process-lock/agora-pg-JJBaf4","sysv-segment 91422723 key=0x04ab5d19 cpid=46040 creator-dead unattached"]
+pass foreign-listener             exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-fbbb0434-30a2-44f9-994f-a14781fa08ae","root ./scenario-foreign-listener/agora-pg-Hny7rZ","sysv-segment 91750403 key=0x04ab6249 cpid=46396 creator-dead unattached"]
+pass foreign-listener-exact-lock  exit=0        outcomes=allocated,starting,started,cleaned swept=["sysv-segment 92078083 key=0x04ab6794 cpid=46714 creator-dead unattached"]
+pass foreign-socket-file          exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-762d4d66-1492-4816-a248-d4aa7d3c1bf1","root ./scenario-foreign-socket-file/agora-pg-No9cKe","sysv-segment 92405763 key=0x04ab6cc4 cpid=47013 creator-dead unattached"]
+pass foreign-directory            exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["root ./scenario-foreign-directory/agora-pg-Nt9sfL","root ./scenario-foreign-directory/agora-pg-Nt9sfL.moved"]
+pass socket-dir-intruder          exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-4e6f4c97-ebe8-4d64-9742-e89e48340fed","root ./scenario-socket-dir-intruder/agora-pg-3aRO5I"]
+pass socket-dir-mode              exit=70       outcomes=allocated,starting,started,cleanup-failed swept=["socket /private/tmp/agora-p0c-724427f1-7a0a-4e0c-9800-d2cfaa3cf685","root ./scenario-socket-dir-mode/agora-pg-NLaWDi"]
 pass concurrent-neighbor          exit=143,0    outcomes=2 runs 
 pass missing-pg-isready           exit=70       outcomes=allocated,starting,blocked,blocked,cleaned 
 pass tool-stderr                  exit=70       outcomes=allocated,starting,blocked,cleaned 
+pass forced-cancel-repeat         exit=143,143,143,143,143 outcomes=5 runs 
 pass external-url-passthrough     exit=9        outcomes= 
-{"schema_version":"agora.p0c-lifecycle-scenarios/v1","head":"051da4431f517e5906d67f51d22a7701cc61d719","outcome":"pass","scenarios":26,"identities":31,"leftovers":0}
+{"schema_version":"agora.p0c-lifecycle-scenarios/v1","head":"8d4d42c94dbe71bc3fc45a048ac8b32372bbbd53","outcome":"pass","scenarios":27,"identities":36,"leftovers":0}

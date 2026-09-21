@@ -2,16 +2,16 @@
 > agora@ test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
 > node scripts/with-test-postgres.mjs vitest run
 
-{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"fb2fe073-17ac-4107-89f9-4987e4044471","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-sOozoL","socketDir":"/private/tmp/agora-p0c-fb2fe073-17ac-4107-89f9-4987e4044471"}
-{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"fb2fe073-17ac-4107-89f9-4987e4044471","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-sOozoL","socketDir":"/private/tmp/agora-p0c-fb2fe073-17ac-4107-89f9-4987e4044471","pid":48538}
-{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"fb2fe073-17ac-4107-89f9-4987e4044471","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-sOozoL","socketDir":"/private/tmp/agora-p0c-fb2fe073-17ac-4107-89f9-4987e4044471","socket_dir":"/private/tmp/agora-p0c-fb2fe073-17ac-4107-89f9-4987e4044471","pid":48538,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"cf4adb63-f6c5-4b90-898a-217be6dd7fa6","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-CKAWaA","socketDir":"/private/tmp/agora-p0c-cf4adb63-f6c5-4b90-898a-217be6dd7fa6"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"cf4adb63-f6c5-4b90-898a-217be6dd7fa6","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-CKAWaA","socketDir":"/private/tmp/agora-p0c-cf4adb63-f6c5-4b90-898a-217be6dd7fa6","pid":73501}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"cf4adb63-f6c5-4b90-898a-217be6dd7fa6","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-CKAWaA","socketDir":"/private/tmp/agora-p0c-cf4adb63-f6c5-4b90-898a-217be6dd7fa6","socket_dir":"/private/tmp/agora-p0c-cf4adb63-f6c5-4b90-898a-217be6dd7fa6","pid":73501,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
 
  RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
 
 
  Test Files  23 passed (23)
       Tests  134 passed | 1 expected fail (135)
-   Start at  02:42:40
-   Duration  43.76s (tests 96%, import 3%, transform 1%)
+   Start at  03:06:08
+   Duration  39.49s (tests 97%, import 2%, transform 1%)
 
-{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-sOozoL","socketDir":"/private/tmp/agora-p0c-fb2fe073-17ac-4107-89f9-4987e4044471"}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-CKAWaA","socketDir":"/private/tmp/agora-p0c-cf4adb63-f6c5-4b90-898a-217be6dd7fa6"}

@@ -1,0 +1,10 @@
+before lanes Mon Sep 21 07:03:49 UTC 2026
+IPC status from <running system> as of Mon Sep 21 03:03:49 EDT 2026
+T     ID     KEY        MODE       OWNER    GROUP  CREATOR   CGROUP NATTCH  SEGSZ  CPID  LPID   ATIME    DTIME    CTIME
+Shared Memory:
+m 327680 0x02742841 --rw------- taylerramsay    staff taylerramsay    staff     15     56  84191  84191 18:03:13  3:03:44 18:03:13
+m 142344193 0x049f4c9e --rw------- taylerramsay    staff taylerramsay    staff      0     56  43834  43834  2:49:49  2:49:50  2:49:49
+m 8192006 0x04a0a21f --rw------- taylerramsay    staff taylerramsay    staff      0     56  85659  85659  2:51:00  2:51:01  2:51:00
+m 8847367 0x04a2911f --rw------- taylerramsay    staff taylerramsay    staff      0     56  93778  93778  2:53:00  2:53:01  2:53:00
+m 6094856 0x04a3a74c --rw------- taylerramsay    staff taylerramsay    staff      0     56  80245  80245  2:56:18  2:56:20  2:56:18
+

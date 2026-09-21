@@ -1,10 +1,10 @@
-{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"619e2662-4648-482a-b54f-33836024445c","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-4aYIi6","socketDir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c"}
-{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"619e2662-4648-482a-b54f-33836024445c","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-4aYIi6","socketDir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c","pid":73605}
-{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"619e2662-4648-482a-b54f-33836024445c","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-4aYIi6","socketDir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c","socket_dir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c","pid":73605,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"6ee93663-3353-4372-b328-2d7bb7ada21f","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-eFQoTU","socketDir":"/private/tmp/agora-p0c-6ee93663-3353-4372-b328-2d7bb7ada21f"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"6ee93663-3353-4372-b328-2d7bb7ada21f","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-eFQoTU","socketDir":"/private/tmp/agora-p0c-6ee93663-3353-4372-b328-2d7bb7ada21f","pid":92739}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"6ee93663-3353-4372-b328-2d7bb7ada21f","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-eFQoTU","socketDir":"/private/tmp/agora-p0c-6ee93663-3353-4372-b328-2d7bb7ada21f","socket_dir":"/private/tmp/agora-p0c-6ee93663-3353-4372-b328-2d7bb7ada21f","pid":92739,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
 {
 	"schema_version": "agora.probe/v1",
 	"target": "apps/center/src/main.ts",
-	"base": "http://127.0.0.1:15147",
+	"base": "http://127.0.0.1:6653",
 	"outcome": "pass",
 	"exit": 0,
 	"results": [
@@ -114,7 +114,7 @@
 				"status": 400,
 				"body": {
 					"reason_code": "malformed_command",
-					"correlation_id": "11262ad3-9873-4ea5-ab43-05ccdbb60fbb",
+					"correlation_id": "19d834a2-80f5-4e86-aa55-f7ad23e8f3ca",
 					"details": [
 						"$ must NOT have additional properties"
 					]
@@ -134,7 +134,7 @@
 				"status": 404,
 				"body": {
 					"reason_code": "not_found",
-					"correlation_id": "49906979-ca68-4464-8ec5-8e26029db00d"
+					"correlation_id": "1a95e8e9-b1f1-4edb-9e47-9753c5b9bf16"
 				}
 			}
 		},
@@ -151,7 +151,7 @@
 				"status": 404,
 				"body": {
 					"reason_code": "unavailable_capability",
-					"correlation_id": "f873593b-2b0d-43ca-ba04-4aa949c4a9b5",
+					"correlation_id": "7d3686f5-a095-44ed-b017-2f2b96b8db98",
 					"details": [
 						"local-room message persistence is not composed in this slice (local-room L1); the command was validated and dispatched"
 					]
@@ -174,7 +174,7 @@
 				"status": 400,
 				"body": {
 					"reason_code": "malformed_command",
-					"correlation_id": "836da94a-9a1e-496c-a877-bded57b41bd6",
+					"correlation_id": "07305c9b-56a8-4585-a0af-e5e0d8ee71b1",
 					"details": [
 						"$ must NOT have additional properties"
 					]
@@ -183,4 +183,4 @@
 		}
 	]
 }
-{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-4aYIi6","socketDir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c"}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-eFQoTU","socketDir":"/private/tmp/agora-p0c-6ee93663-3353-4372-b328-2d7bb7ada21f"}
