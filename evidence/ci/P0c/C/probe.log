@@ -1,0 +1,186 @@
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"619e2662-4648-482a-b54f-33836024445c","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-4aYIi6","socketDir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"619e2662-4648-482a-b54f-33836024445c","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-4aYIi6","socketDir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c","pid":73605}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"619e2662-4648-482a-b54f-33836024445c","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-4aYIi6","socketDir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c","socket_dir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c","pid":73605,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{
+	"schema_version": "agora.probe/v1",
+	"target": "apps/center/src/main.ts",
+	"base": "http://127.0.0.1:15147",
+	"outcome": "pass",
+	"exit": 0,
+	"results": [
+		{
+			"id": "health-liveness",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.health/v1",
+					"status": "ok",
+					"service": "agora-center"
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.health/v1",
+					"status": "ok",
+					"service": "agora-center"
+				}
+			}
+		},
+		{
+			"id": "health-readiness",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.readiness/v1",
+					"status": "ready",
+					"checks": {
+						"database": "ok"
+					}
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.readiness/v1",
+					"status": "ready",
+					"checks": {
+						"database": "ok"
+					}
+				}
+			}
+		},
+		{
+			"id": "policy-allow",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "allow",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "allow",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			}
+		},
+		{
+			"id": "policy-deny",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "deny",
+					"reason_code": "scope_mismatch",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "deny",
+					"reason_code": "scope_mismatch",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			}
+		},
+		{
+			"id": "policy-unknown-field",
+			"outcome": "pass",
+			"expected": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			},
+			"observed": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"correlation_id": "11262ad3-9873-4ea5-ab43-05ccdbb60fbb",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			}
+		},
+		{
+			"id": "unknown-route",
+			"outcome": "pass",
+			"expected": {
+				"status": 404,
+				"body": {
+					"reason_code": "not_found"
+				}
+			},
+			"observed": {
+				"status": 404,
+				"body": {
+					"reason_code": "not_found",
+					"correlation_id": "49906979-ca68-4464-8ec5-8e26029db00d"
+				}
+			}
+		},
+		{
+			"id": "local-room-send-unsupported",
+			"outcome": "pass",
+			"expected": {
+				"status": 404,
+				"body": {
+					"reason_code": "unavailable_capability"
+				}
+			},
+			"observed": {
+				"status": 404,
+				"body": {
+					"reason_code": "unavailable_capability",
+					"correlation_id": "f873593b-2b0d-43ca-ba04-4aa949c4a9b5",
+					"details": [
+						"local-room message persistence is not composed in this slice (local-room L1); the command was validated and dispatched"
+					]
+				}
+			}
+		},
+		{
+			"id": "local-room-send-unknown-field",
+			"outcome": "pass",
+			"expected": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			},
+			"observed": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"correlation_id": "836da94a-9a1e-496c-a877-bded57b41bd6",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			}
+		}
+	]
+}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0cc/tmp/agora-pg-4aYIi6","socketDir":"/private/tmp/agora-p0c-619e2662-4648-482a-b54f-33836024445c"}

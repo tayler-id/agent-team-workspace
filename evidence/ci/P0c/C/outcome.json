@@ -1,0 +1,574 @@
+{
+  "schema_version": "agora.p0c-qualification-evidence/v1",
+  "purpose": "foundation_fixture",
+  "scope": "P0c C qualification of the integrated PostgreSQL socket guard; no product feature, schema, dependency, hosted workflow or trusted-CI claim",
+  "parent": "c04f5606df49eb7976ad5cf244911c73f77dd1fb",
+  "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+  "toolchain": {
+    "node": "v24.16.0",
+    "node_executable": "/Users/taylerramsay/.local/node/bin/node",
+    "postgres": "pg_ctl (PostgreSQL) 18.4 (Homebrew)",
+    "pnpm": "10.34.1",
+    "swift": "swift-driver version: 1.148.6 Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)"
+  },
+  "credentials": "GH_TOKEN, GITHUB_TOKEN and FIRSTMATE_GH_TOKEN removed from every validation invocation, never printed",
+  "source": [
+    {
+      "file": "scripts/with-test-postgres.mjs",
+      "digest": "sha256:89a9562850c5373aa00e60301f8d20b2f535e07b501da59bb5b3362af4d95374",
+      "meaningful_added_lines": 15
+    },
+    {
+      "file": "packages/storage/test/postgres-wrapper.test.ts",
+      "digest": "sha256:8f5e09b912c62b951216c9ea050fff9d7ddf88b454ab5e8fb67b9045c6ef183b",
+      "meaningful_added_lines": 24
+    },
+    {
+      "file": "agora/feature-map.json",
+      "digest": "sha256:5b53abeafaa0b98e31bf284482d7bf8a9f911db5666c6980092b9bf277698ea6",
+      "meaningful_added_lines": 1
+    }
+  ],
+  "allocator": {
+    "file": "scripts/postgres-socket.ts",
+    "digest": "sha256:55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+    "unchanged_since": "2c94bfa (P0c A)"
+  },
+  "size": {
+    "meaningful_implementation_tracking_additions": 40,
+    "source_files": 3,
+    "drivers_and_evidence": "evidence/ci/P0c/C/driver/*.mjs are replayable proof drivers, counted with evidence, not implementation"
+  },
+  "red_green": {
+    "schema_version": "agora.red-green/v1",
+    "outcome": "pass",
+    "parent": "c04f5606df49eb7976ad5cf244911c73f77dd1fb",
+    "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+    "red_exit": 1,
+    "green_exit": 0,
+    "test_patch_digest": "sha256:ebb3df952e3081230b137a78455b34f2f1013615d92c360912113ffa6cdc01c5",
+    "out": "evidence/ci/P0c/C"
+  },
+  "guard_negatives": {
+    "outcome": "pass",
+    "guards": [
+      {
+        "guard": "short-socket-selection",
+        "file": "scripts/postgres-socket.ts",
+        "normal_exit": [
+          0
+        ],
+        "weakened_exit": [
+          70
+        ],
+        "red_assertion": "socket path short"
+      },
+      {
+        "guard": "lease-verification",
+        "file": "scripts/postgres-socket.ts",
+        "normal_exit": [
+          70
+        ],
+        "weakened_exit": [
+          0
+        ],
+        "red_assertion": "ownership denial"
+      },
+      {
+        "guard": "exact-process-group-stop",
+        "file": "scripts/with-test-postgres.mjs",
+        "normal_exit": [
+          143
+        ],
+        "weakened_exit": [
+          143
+        ],
+        "red_assertion": "descendant 20136 exited"
+      },
+      {
+        "guard": "bounded-startup",
+        "file": "scripts/with-test-postgres.mjs",
+        "normal_exit": [
+          70
+        ],
+        "weakened_exit": [
+          130
+        ],
+        "red_assertion": "startup timeout within bound"
+      },
+      {
+        "guard": "cancellation-cleanup",
+        "file": "scripts/with-test-postgres.mjs",
+        "normal_exit": [
+          130
+        ],
+        "weakened_exit": [
+          130
+        ],
+        "red_assertion": "command stopped"
+      },
+      {
+        "guard": "foreign-lock-refusal",
+        "file": "scripts/with-test-postgres.mjs",
+        "normal_exit": [
+          70
+        ],
+        "weakened_exit": [
+          0
+        ],
+        "red_assertion": "foreign lock denial"
+      },
+      {
+        "guard": "artifact-ownership-refusal",
+        "file": "scripts/with-test-postgres.mjs",
+        "normal_exit": [
+          70
+        ],
+        "weakened_exit": [
+          0
+        ],
+        "red_assertion": "substitute root denial"
+      },
+      {
+        "guard": "stderr-capture",
+        "file": "scripts/with-test-postgres.mjs",
+        "normal_exit": [
+          70
+        ],
+        "weakened_exit": [
+          70
+        ],
+        "red_assertion": "initdb stderr present"
+      },
+      {
+        "guard": "probe-spawn-failure",
+        "file": "scripts/with-test-postgres.mjs",
+        "normal_exit": [
+          70
+        ],
+        "weakened_exit": [
+          70
+        ],
+        "red_assertion": "probe failure reported once"
+      },
+      {
+        "guard": "stop-failure-report",
+        "file": "scripts/with-test-postgres.mjs",
+        "normal_exit": [
+          70
+        ],
+        "weakened_exit": [
+          1
+        ],
+        "red_assertion": "stop failure reported and cleaned"
+      }
+    ]
+  },
+  "lifecycle": {
+    "outcome": "pass",
+    "scenarios": [
+      "success",
+      "deep-tmpdir",
+      "command-failure",
+      "command-signal",
+      "missing-command",
+      "startup-failure",
+      "postmaster-killed-at-started",
+      "startup-timeout",
+      "cancel-at-allocated",
+      "cancel-during-initdb",
+      "cancel-at-starting",
+      "cancel-at-started",
+      "signal-storm",
+      "sigint-sweep",
+      "nested-group",
+      "foreign-process-lock",
+      "foreign-listener",
+      "foreign-listener-exact-lock",
+      "foreign-socket-file",
+      "foreign-directory",
+      "socket-dir-intruder",
+      "socket-dir-mode",
+      "concurrent-neighbor",
+      "missing-pg-isready",
+      "tool-stderr",
+      "external-url-passthrough"
+    ],
+    "identities_checked": 31,
+    "leftovers": 0
+  },
+  "checks": [
+    {
+      "label": "doctor",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node --version; which node; pnpm --version; pg_ctl --version; swift --version; git rev-parse HEAD; date -u"
+    },
+    {
+      "label": "install",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm install --frozen-lockfile"
+    },
+    {
+      "label": "audit",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm audit --json"
+    },
+    {
+      "label": "typecheck",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm typecheck"
+    },
+    {
+      "label": "lint",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm lint"
+    },
+    {
+      "label": "docs-check",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm docs:check"
+    },
+    {
+      "label": "recorder",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node scripts/record-red-green.mjs --parent c04f5606df49eb7976ad5cf244911c73f77dd1fb --head 051da4431f517e5906d67f51d22a7701cc61d719 --out evidence/ci/P0c/C -- pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t abort-stop-throw|initdb-stderr|psql-stderr|missing-pg-isready"
+    },
+    {
+      "label": "focused",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept"
+    },
+    {
+      "label": "contracts-check",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm contracts:check"
+    },
+    {
+      "label": "conform",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm contracts:conform -- --json"
+    },
+    {
+      "label": "replay",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm client:replay -- --json --swift"
+    },
+    {
+      "label": "boundaries",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm boundaries"
+    },
+    {
+      "label": "test",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm test"
+    },
+    {
+      "label": "scenarios",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node scripts/probe-center.mjs --scenarios"
+    },
+    {
+      "label": "probe",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node scripts/with-test-postgres.mjs node scripts/probe-center.mjs"
+    },
+    {
+      "label": "migrations",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node scripts/with-test-postgres.mjs bash -c node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts"
+    },
+    {
+      "label": "design",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node scripts/verify-design.mjs"
+    },
+    {
+      "label": "design-negatives",
+      "exit": 1,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node scripts/test-design-checks.mjs"
+    },
+    {
+      "label": "handoff-negatives",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node scripts/test-design-handoff-checks.mjs"
+    },
+    {
+      "label": "plan",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md"
+    },
+    {
+      "label": "docs-build",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm docs:build"
+    },
+    {
+      "label": "atlas",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm docs:atlas"
+    },
+    {
+      "label": "check",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "pnpm check"
+    },
+    {
+      "label": "cleanup-inventory",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "git worktree list; ls /private/tmp/agora-p0c-*/; ls $TMPDIR/agora-pg-*; ps postmasters; lsof -U agora-p0c; ipcs -mp; git status --short"
+    },
+    {
+      "label": "guard",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node evidence/ci/P0c/C/driver/guard.mjs --out evidence/ci/P0c/C"
+    },
+    {
+      "label": "lifecycle",
+      "exit": 0,
+      "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+      "command": "node evidence/ci/P0c/C/driver/scenarios.mjs --out evidence/ci/P0c/C"
+    }
+  ],
+  "known_external_failure": "Unchanged P0a test-design-checks sandbox lacks apps/center/src/app.ts, as on qualified main; recorded as exit 1, not a pass.",
+  "known_limits": [
+    "SIGKILL of the wrapper itself leaves the postmaster, socket directory and data root behind (B, unchanged).",
+    "A command descendant that deliberately leaves its process group survives (B, unchanged).",
+    "EPERM for a live command group is not reachable as this user; stop-failure reporting is proved with an injected fault in a disposable source copy (mock, named).",
+    "A never-ready live server is produced with a pg_isready shim that always exits 1; the server, roles and cleanup are real.",
+    "On macOS a SIGKILLed postmaster leaves its 56-byte System V shared memory interlock segment; kern.sysv.shmmni=32 caps the number of clusters that can start until unattached segments with dead creators are removed with ipcrm. Found during C when 31 orphans from earlier lanes blocked initdb; sysv-shm-sweep.json records the one-time removal.",
+    "A same-user listener bound at the exact dead postmaster socket path with the lock untouched is unlinked as the stale socket (foreign-listener-exact-lock); same-user hostile code is outside the accepted boundary and the model was not broadened."
+  ],
+  "artifacts": [
+    {
+      "file": "atlas.log",
+      "digest": "sha256:ec60336a2d5780dcffae9e2b23c16ad3ba28222300b70accf61532d9d7bd796d",
+      "bytes": 195
+    },
+    {
+      "file": "audit.log",
+      "digest": "sha256:53fffac9d1f4c670d03248d227edd0f8963297eced25ee4d32d6e29d5d5b7c09",
+      "bytes": 310
+    },
+    {
+      "file": "boundaries.log",
+      "digest": "sha256:62776b14b91964ce18fa300dca4fcd8a20087c580409335d1f4e76baf1a65a25",
+      "bytes": 409
+    },
+    {
+      "file": "check.log",
+      "digest": "sha256:8eb2e26888dbae46edf65c1440ccbcd95d37ca718dcc751ac1712080c0f8d171",
+      "bytes": 8967
+    },
+    {
+      "file": "cleanup-inventory.log",
+      "digest": "sha256:d8785c094ef5f413095935fc2a5b85adcc006e6ab7ee09cc11b828db0a146e10",
+      "bytes": 4851
+    },
+    {
+      "file": "commands.tsv",
+      "digest": "sha256:5915ab901a10515ee980c88fe7884eea9f697b5e6864946ede41a32e960d4928",
+      "bytes": 2900
+    },
+    {
+      "file": "conform.log",
+      "digest": "sha256:041534fc6d72e6bdd98e9dcfe987bad184d1f93bfa910ce0a5d70c3348d90921",
+      "bytes": 96764
+    },
+    {
+      "file": "contracts-check.log",
+      "digest": "sha256:c81efbc01a5eed2648c089eee100b7cabc4acda967a6dda67c7e6d09104aeb55",
+      "bytes": 2069
+    },
+    {
+      "file": "design-negatives.log",
+      "digest": "sha256:36a48e823bf2be459b707096f430c28d05b06c463778fc4f50c97d85e036537b",
+      "bytes": 1393
+    },
+    {
+      "file": "design.log",
+      "digest": "sha256:4c8b6fd38b577a823cd874802e0bfd62a0ce976a41427145112de5f6b33ead96",
+      "bytes": 549
+    },
+    {
+      "file": "docs-build.log",
+      "digest": "sha256:96f4ebcf3a68aa8bbe14478605bcd8e29bc4d5647b11d8d8bcecac0128fcda76",
+      "bytes": 213
+    },
+    {
+      "file": "docs-check.log",
+      "digest": "sha256:02c02948b5de7fd93370154d8e1a79b5d6b12ba84e7bb99c1d9be5d862eb8c3d",
+      "bytes": 4602
+    },
+    {
+      "file": "doctor.log",
+      "digest": "sha256:662be613e77a7b97b7a8882cb37fb9b21ac47e8f9b860839b32063b78312230d",
+      "bytes": 292
+    },
+    {
+      "file": "driver/guard.mjs",
+      "digest": "sha256:e55c470e06ab8a512873fde46dce8c17ff952fe3e2e28b548a4d37c97c895e9f",
+      "bytes": 12922
+    },
+    {
+      "file": "driver/lib.mjs",
+      "digest": "sha256:420c3d763f91f5d455da50d848f08c20015477ed914085e8edc0346eaa918563",
+      "bytes": 10284
+    },
+    {
+      "file": "driver/scenarios.mjs",
+      "digest": "sha256:265b204c734e96936b7b81227f6e34d78c36ab1fb15a4c512bc33a01c3bff11e",
+      "bytes": 17549
+    },
+    {
+      "file": "focused.log",
+      "digest": "sha256:96670c2d91ffb915191581c098f9ae7729a0f534b4e4c6e7c6aeb300fa6d3cda",
+      "bytes": 42741
+    },
+    {
+      "file": "green.log",
+      "digest": "sha256:47df984c5299c437e0a5c0865984ceb87a7863cf8113c01df12765ad2a141216",
+      "bytes": 1486
+    },
+    {
+      "file": "guard.json",
+      "digest": "sha256:02b58f2898700f66942b8e185dc5c1eb52de3a085c6b3cef9bcdfa24380fe510",
+      "bytes": 47863
+    },
+    {
+      "file": "guard.log",
+      "digest": "sha256:d4190a07f92115bd4d3c017f77a18b8881e34e14a21ecbec7a63aa19cd900e35",
+      "bytes": 3013
+    },
+    {
+      "file": "handoff-negatives.log",
+      "digest": "sha256:e67de277dcebd6e3ddb1b4f1d54d23db8e8e9c1dbbdd4b62dc8dddd534feee7d",
+      "bytes": 732
+    },
+    {
+      "file": "install.log",
+      "digest": "sha256:6ba9fa7065e572a4eaa78ce92592a941bd306abdc71e4e8deb113dc48036b7f5",
+      "bytes": 137
+    },
+    {
+      "file": "lifecycle.log",
+      "digest": "sha256:79bb834a224e0db622ac86f035fe8b1b56c73abb3ba12bf81afe209a1e22986f",
+      "bytes": 3588
+    },
+    {
+      "file": "lint.log",
+      "digest": "sha256:58224f07dc182fe7acc93e82f23b3152474b7d390b0c6d2fd183edd3174c8c96",
+      "bytes": 110
+    },
+    {
+      "file": "migrations.log",
+      "digest": "sha256:f5e681d273e6402f4c9f5364bd8fc98768657c41498c2525f1b16a7cd210e70e",
+      "bytes": 1878
+    },
+    {
+      "file": "no-leftovers.json",
+      "digest": "sha256:f0cba98afd38efc8b14f81a8603ab9e1f1532cbc1cfa4c5d6600cec9620dcf26",
+      "bytes": 4594
+    },
+    {
+      "file": "plan.log",
+      "digest": "sha256:6216bdb31816bccf18d3caa739eab44e68518a1c2b0feea4c111218e5c303ee0",
+      "bytes": 3522
+    },
+    {
+      "file": "probe.log",
+      "digest": "sha256:fc2d3aebd20529fb041a377763a9d6fc0057eb850b01e02e1fdd1f00935e7b29",
+      "bytes": 5496
+    },
+    {
+      "file": "recorder.log",
+      "digest": "sha256:9e0d0f94450b6cc24fcb6e97a8a35f73d138e08be8e4c109f2d7b12ac387bd1a",
+      "bytes": 307
+    },
+    {
+      "file": "red-before-edit.log",
+      "digest": "sha256:69694f7330d44cf8a32d261f2e783a2b674c09350576f1d569b0de0c6d5899a8",
+      "bytes": 22717
+    },
+    {
+      "file": "red-run-residue-sweep.txt",
+      "digest": "sha256:52c6ea8370e138f1716b2f0b6363114c71f7231c94004334dd27899901cfc8c7",
+      "bytes": 325
+    },
+    {
+      "file": "red.log",
+      "digest": "sha256:24fbcbae40b1550a4eba56401c0c7c55a7814c8faab6330d148b13122e596c9c",
+      "bytes": 34160
+    },
+    {
+      "file": "replay.log",
+      "digest": "sha256:4a38892ce90d1331b37efc87b059df400a3a0c1355d4295c333c235c4146d212",
+      "bytes": 22200
+    },
+    {
+      "file": "review.md",
+      "digest": "sha256:745b3811177b500d8f0eec85c13979959150bf66d4307dbde7613a53fd2d3b09",
+      "bytes": 7849
+    },
+    {
+      "file": "scenarios.json",
+      "digest": "sha256:f950018736472c9c72ef85aa048d6e596f20b420da5ee867931b148a4b17e2be",
+      "bytes": 52682
+    },
+    {
+      "file": "scenarios.log",
+      "digest": "sha256:78758bff7fdf1e5ead9007530e24ad4ac3dae70e95f49be13e43818c9815c45f",
+      "bytes": 1352
+    },
+    {
+      "file": "sysv-shm-own-segments.json",
+      "digest": "sha256:fec177f75b19423d48c402a87608ed6e7166a8ddd87ffc423b47faa8f3b528b8",
+      "bytes": 1226
+    },
+    {
+      "file": "sysv-shm-sweep.json",
+      "digest": "sha256:09dc551f416d04d6ff27c32bf30f4a0ddee3276cb4988f7f34820e18699131da",
+      "bytes": 9578
+    },
+    {
+      "file": "test-patch.diff",
+      "digest": "sha256:ebb3df952e3081230b137a78455b34f2f1013615d92c360912113ffa6cdc01c5",
+      "bytes": 10579
+    },
+    {
+      "file": "test.log",
+      "digest": "sha256:e5ed8e57b7dc9d9ee5bf6a4b1e9ee1741b619d2ec0d548dd86cdea0f85cedcb2",
+      "bytes": 1833
+    },
+    {
+      "file": "typecheck.log",
+      "digest": "sha256:3fb397e503accf40f3a71f1a5351fe5dd715b9cff732b36f8ecdf34921e4a474",
+      "bytes": 172
+    }
+  ]
+}

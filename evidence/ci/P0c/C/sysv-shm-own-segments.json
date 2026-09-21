@@ -1,0 +1,59 @@
+{
+  "recorded_at": "2026-09-21T06:46:23.297Z",
+  "rule": "remove only segments whose creator pid appears as a starting postmaster in this packet's own logs and is dead and unattached",
+  "removed": [
+    {
+      "id": 138870785,
+      "key": "0x049677e1",
+      "nattch": 0,
+      "cpid": 84780,
+      "ctime": "2:40:35",
+      "attributed_to": [
+        "red.log"
+      ],
+      "ipcrm_exit": 0
+    },
+    {
+      "id": 163577858,
+      "key": "0x04972177",
+      "nattch": 0,
+      "cpid": 92827,
+      "ctime": "2:40:58",
+      "creator_alive": false,
+      "attributed_to": [
+        "focused.log"
+      ],
+      "ipcrm_exit": 0
+    }
+  ],
+  "kept": [
+    {
+      "id": 327680,
+      "key": "0x02742841",
+      "nattch": 15,
+      "cpid": 84191,
+      "ctime": "18:03:13",
+      "creator_alive": true,
+      "attributed_to": []
+    },
+    {
+      "id": 20774916,
+      "key": "0x049c2f60",
+      "nattch": 0,
+      "cpid": 81217,
+      "ctime": "2:43:57",
+      "creator_alive": false,
+      "attributed_to": []
+    },
+    {
+      "id": 11796485,
+      "key": "0x049a75da",
+      "nattch": 0,
+      "cpid": 49835,
+      "ctime": "2:42:53",
+      "creator_alive": false,
+      "attributed_to": []
+    }
+  ],
+  "after": 3
+}

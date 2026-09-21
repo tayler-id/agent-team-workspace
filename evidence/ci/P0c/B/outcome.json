@@ -279,19 +279,9 @@
       "bytes": 1437
     },
     {
-      "file": "guard-run.log",
-      "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "bytes": 0
-    },
-    {
       "file": "guard.json",
       "digest": "sha256:0ee233efd5f31922c0123856d3aba3f2d43caa576d99020f2bc79569503b13fb",
       "bytes": 6556
-    },
-    {
-      "file": "guard.log",
-      "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "bytes": 0
     },
     {
       "file": "handoff-negatives.log",
@@ -398,5 +388,6 @@
     "full-check-cancellation.red.log",
     "failed-run-cleanup.json",
     "child-signal.red.log"
-  ]
+  ],
+  "placeholders_removed_by": "P0c C: zero-byte guard.log and guard-run.log dropped; guard.json carries the B guard proof"
 }

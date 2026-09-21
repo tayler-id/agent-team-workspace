@@ -1,0 +1,31 @@
+{
+  "schema_version": "agora.p0c-no-leftovers/v1",
+  "head": "051da4431f517e5906d67f51d22a7701cc61d719",
+  "scope": "Only identities recorded by this driver. No global sweep.",
+  "identities_checked": 31,
+  "leftovers": [],
+  "worktrees": [
+    "/Users/taylerramsay/.local/share/firstmate/projects/agent-team-workspace                                                                                               c04f560 [main]",
+    "/private/tmp/claude-501/-Users-taylerramsay--treehouse-agent-team-workspace-50d2db-16-agent-team-workspace/91373e9a-464d-4025-b06a-fb55a9c2f6a4/scratchpad/wt-base     17fbf24 (detached HEAD)",
+    "/private/tmp/claude-501/-Users-taylerramsay--treehouse-agent-team-workspace-50d2db-16-agent-team-workspace/91373e9a-464d-4025-b06a-fb55a9c2f6a4/scratchpad/wt-cand     4d7534b (detached HEAD)",
+    "/private/tmp/claude-501/-Users-taylerramsay--treehouse-agent-team-workspace-50d2db-16-agent-team-workspace/91373e9a-464d-4025-b06a-fb55a9c2f6a4/scratchpad/wt-subject  52b85b2 (detached HEAD)",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace                                                                                      e23fe1b (detached HEAD)",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/10/agent-team-workspace                                                                                     d4750ba [fm/agora-local-room-agent-core]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace                                                                                     051da44 [fm/agora-ci-postgres-fixture-proof]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/12/agent-team-workspace                                                                                     c3d0d72 [fm/agora-browser-pretext-virtualization]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/13/agent-team-workspace                                                                                     7d29380 [fm/agora-web-framework-client-host]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/14/agent-team-workspace                                                                                     c5b1fd1 [fm/agora-app-architecture-boundaries]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/15/agent-team-workspace                                                                                     4d7534b [fm/agora-app-architecture-docs]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/16/agent-team-workspace                                                                                     4d7534b (detached HEAD)",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/2/agent-team-workspace                                                                                      e23fe1b (detached HEAD)",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace                                                                                      2fd3aad [fm/agora-s1-isolate-development]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace                                                                                      0b80491 [fm/agora-ci-guardrails]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/5/agent-team-workspace                                                                                      99aa4f7 [fm/agora-react-engineering-fixture]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/6/agent-team-workspace                                                                                      55269a5 [fm/agora-local-room-persistence]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace                                                                                      83029a3 [fm/agora-ci-toolchain-doctor]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace                                                                                      6e3863a [fm/agora-local-room-runtime]",
+    "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/9/agent-team-workspace                                                                                      60bcd79 [fm/agora-local-room-web-shell]"
+  ],
+  "environment_diff": {},
+  "environment_diff_note": "informational; other lanes share this machine and their clusters may appear here, only leftovers decides"
+}
