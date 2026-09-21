@@ -99,11 +99,12 @@
       "id": "app-architecture",
       "title": "Application architecture boundaries",
       "status": "Built",
-      "why": "Make Feature/Client/Host import shortcuts fail in lint and tests with owner-named diagnostics (B1 import ownership).",
+      "why": "Make Feature/Client/Host and renderer shortcuts fail in lint and tests with owner-named diagnostics (B1 import ownership + B2 foot-guns).",
       "page": "app-architecture.md",
       "proof": [
         "repo:apps/web/src/reserved-owners.ts",
         "repo:scripts/boundary-policy.ts",
+        "repo:scripts/renderer-policy.ts",
         "repo:packages/client-core/test/app-architecture.test.ts",
         "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json",
         "repo:evidence/U20/agora-s1-lint-application-architecture/whole-feature-red.log",

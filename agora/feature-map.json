@@ -50,10 +50,10 @@
 		{
 			"id": "application-architecture-boundaries",
 			"documentation": "docs/site/app-architecture.md",
-			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "apps/web", "apps/web/tsconfig.json", "packages/client-core/test/app-architecture.test.ts", "package.json", "tsconfig.json"],
+			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/renderer-policy.ts", "scripts/architecture-exceptions.ts", "agora/architecture-exceptions.json", "apps/web", "apps/web/tsconfig.json", "packages/client-core/test/app-architecture.test.ts", "package.json", "tsconfig.json"],
 			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
 			"scenarios": ["packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/boundaries.test.ts"],
-			"fixtures": ["runtime owner paths; extension matrix ts/tsx/mts/cts/js/jsx/mjs/cjs; contracts js/cjs; apps/web non-src relocation; un-owned src two-hop relay; guard-weakening"],
+			"fixtures": ["runtime owner paths; extension matrix ts/tsx/mts/cts/js/jsx/mjs/cjs; contracts js/cjs; apps/web non-src relocation; un-owned src two-hop relay; string-literal effect import; declare/computed/mixed-union DOM; load-time exceptions; guard-weakening"],
 			"platforms": ["node24"],
 			"owner": "U20.B01"
 		},
