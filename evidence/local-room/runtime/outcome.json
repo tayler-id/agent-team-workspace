@@ -8,6 +8,9 @@
   "implementation_head": "671c4b8d0431b923d324808968a3a668fd8209c0",
   "code_head": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
   "code_tree": "21f329ad95eaac84cc940e72b2f69444a01c6a91",
+  "qualified_source_head": "db0bd96a15060c4c6d2ba2edc3877fc7c4472d24",
+  "qualified_source_tree": "9bf8ad77deecb26e52a16ec014d4136782049655",
+  "closing_receipt_commit": "Changes only evidence under this directory after qualified_source_head; no application, test, contract, configuration or documentation source changes.",
   "base_to_code_patch_sha256": "d6022348645ebc93a3b2fc641ec737fa5a1245fe1ace3c96d91aaaca693c42aa",
   "evidence_head": "the documentation/evidence descendants carrying this file; runtime source remains byte-identical to code_head",
   "documentation_change": "The closing docs commit refreshes atlas/mirror and stale availability prose. Its corpus test now asserts the current core label plus the L3 adapter link; docs-status.red.log and docs-final.log retain that red/green.",
@@ -39,7 +42,7 @@
     "additional_reds": ["numeric-order.red.log: cursor 8 instead of 50", "browser-csp.red.log: runtime validator compilation denied by CSP", "landmark.red.log and lighthouse-before: missing main landmark"]
   },
   "proofs": {
-    "local_full_check": "check-code-head.log: exact b2cecdf tree, lint/typecheck/docs/drift and 129 tests in 25 files pass",
+    "local_full_check": "check-code-head.log: exact b2cecdf tree; final-head-check.log: clean committed db0bd96 including final documentation and corpus test. Both pass lint/typecheck/docs/drift and all 129 tests in 25 files; final cleanup finds no task runtime roots or recorder/cluster leftovers.",
     "doctor": "doctor.log: official Node 24.16.0, pnpm 10.34.1, PostgreSQL 18.4, Swift 6.3.3; frozen install, audit and static commands",
     "contracts": "contracts-check.json: no drift; contracts-conform.json: 132 vectors, TypeScript/Swift agree; client-replay.json: six independent replay projections pass; boundaries.json: eight pass",
     "postgres": "runtime-pg.log: four public scenarios use task-owned real PostgreSQL and non-owner product role; fixture probe has sixteen passes; migrations.log applies two then zero with identical digest",
