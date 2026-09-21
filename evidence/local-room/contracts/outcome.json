@@ -1,0 +1,41 @@
+{
+	"schema_version": "agora.task-outcome/v1",
+	"task": "agora-local-room-contracts",
+	"slice": "local-room L1 of 5: conversation contracts and executable public driver baseline",
+	"parent": "421f572b02aa5bcf9fd235afe28de92004b59f96",
+	"code_head": "4af669a8799137d58a743c3f104384586f3e496f",
+	"head": "the evidence commit that carries this file, directly on top of code_head",
+	"preservation": { "inspected_read_only": ["4a77a8f1bd947668e20fa8276475f56a6ae8ec9f", "99aa4f7"], "ancestors_of_branch": false, "bytes_carried": 0, "inventory": "evidence/local-room/contracts/preservation-inventory.md" },
+	"size": {
+		"method": "evidence/local-room/contracts/size.json (git diff --unified=0 parent code_head; nonblank, non-comment-only added lines)",
+		"meaningful_added_lines": 540,
+		"meaningful_added_lines_without_fixture": 325,
+		"source_files": 13,
+		"source_files_detail": "11 code/test/schema/operation/configuration files, 1 fixture file (contracts/fixtures/vectors.json, 215 lines), 1 documentation-site test (docs/site/test/corpus.test.ts, 1 line)",
+		"approved_target": "400-650 meaningful lines, at most 16 source files",
+		"docs_files": 20,
+		"docs_added_lines": 352,
+		"generated_files": 7,
+		"generated_added_lines": 1482,
+		"excluded_visible": { "pnpm-lock.yaml": 0 }
+	},
+	"red_green": {
+		"recorder": "node scripts/record-red-green.mjs --parent 421f572b02aa5bcf9fd235afe28de92004b59f96 --head 4af669a8799137d58a743c3f104384586f3e496f --out evidence/local-room/contracts -- pnpm exec vitest run --project unit apps/center/test/local-room.test.ts --project contracts contracts/test/local-room.test.ts",
+		"red": "Tests 6 failed | 1 passed | 1 expected fail (8): the health baseline passes on the same app at the parent; the typed-404 and 400-path assertions fail as not_found/404, and the four contract assertions fail because the parent publishes no local-room component (accept vectors refused, components absent, family absent)",
+		"green": "Tests 7 passed | 1 expected fail (8)",
+		"test_patch_digest": "sha256:c159c9b7706497107b7f78a883cf3ef64114234eb4b332920f29965598692966",
+		"future_red": "evidence/local-room/contracts/future-send.red.log: the L2 receipt assertion run as a plain test at the code head fails with expected 404 to be 201; it stays in the suite as test.fails"
+	},
+	"proofs": {
+		"schema_vectors": "29 local-room-* vectors (14 accept, 15 reject) in contracts/fixtures/vectors.json; contracts-conform.json: 126 vectors, TypeScript and Swift pass, 0 disagreements",
+		"generation_drift": "contracts-check.json: outcome pass, drift []",
+		"unknown_fields_and_variants": "vectors local-room-command-unknown-field, -author-unknown-kind, -citation-unknown-kind, -event-unknown-kind, -event-unknown-field, -message-unknown-field, -snapshot-unknown-field, -command-unknown-version; center 400 paths; guard removal turns red in contracts/test/local-room.test.ts",
+		"callable_baseline": "probe-center.json: 8 scenarios pass over real HTTP, including local-room-send-unsupported 404 unavailable_capability and local-room-send-unknown-field 400; probe-scenarios.json lists the inventory without starting anything",
+		"gate_negatives": "gate-negatives.log: four break-and-restore negatives, each red then byte-identical restore",
+		"documentation": "pnpm docs:check passes with 25 pages; docs/site/local-room.md in both tracks; atlas feature local-room In progress",
+		"security": "security.md; audit.json 0 vulnerabilities",
+		"clean_build": "clean-build.log: frozen install, clean Swift build, conformance pass",
+		"full_gate": "check-code-head.log at the code head tree: lint, typecheck, docs, contract drift, 100 tests passed plus 1 expected fail; final-check.log at the evidence tree"
+	},
+	"not_claimed": ["stored messages", "room counter", "snapshot or event delivery", "local project identity", "room CLI", "browser room", "local answer", "U01b-U01d or FG04-FG08 qualification"]
+}

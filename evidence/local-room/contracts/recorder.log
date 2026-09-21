@@ -1,0 +1,2 @@
+{"schema_version":"agora.red-green/v1","outcome":"pass","parent":"421f572b02aa5bcf9fd235afe28de92004b59f96","head":"4af669a8799137d58a743c3f104384586f3e496f","red_exit":1,"green_exit":0,"test_patch_digest":"sha256:c159c9b7706497107b7f78a883cf3ef64114234eb4b332920f29965598692966","out":"evidence/local-room/contracts"}
+recorder exit=0

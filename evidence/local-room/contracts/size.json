@@ -1,0 +1,313 @@
+{
+	"parent": "421f572b02aa5bcf9fd235afe28de92004b59f96",
+	"head": "4af669a",
+	"classes": {
+		"docs_evidence": {
+			"files": 21,
+			"added_lines": 412,
+			"meaningful_lines": 353,
+			"removed_lines": 16
+		},
+		"source": {
+			"files": 11,
+			"added_lines": 353,
+			"meaningful_lines": 325,
+			"removed_lines": 4
+		},
+		"fixture": {
+			"files": 1,
+			"added_lines": 215,
+			"meaningful_lines": 215,
+			"removed_lines": 0
+		},
+		"generated": {
+			"files": 7,
+			"added_lines": 1482,
+			"meaningful_lines": 1224,
+			"removed_lines": 7
+		}
+	},
+	"files": [
+		{
+			"file": ".agents/skills/verify-agora/SKILL.md",
+			"class": "docs_evidence",
+			"added": 18,
+			"meaningful": 15,
+			"removed": 7
+		},
+		{
+			"file": "AGENTS.md",
+			"class": "docs_evidence",
+			"added": 2,
+			"meaningful": 1,
+			"removed": 0
+		},
+		{
+			"file": "agora/feature-map.json",
+			"class": "source",
+			"added": 11,
+			"meaningful": 11,
+			"removed": 0
+		},
+		{
+			"file": "apps/center/src/app.ts",
+			"class": "source",
+			"added": 20,
+			"meaningful": 18,
+			"removed": 1
+		},
+		{
+			"file": "apps/center/test/local-room.test.ts",
+			"class": "source",
+			"added": 50,
+			"meaningful": 43,
+			"removed": 0
+		},
+		{
+			"file": "contracts/fixtures/vectors.json",
+			"class": "fixture",
+			"added": 215,
+			"meaningful": 215,
+			"removed": 0
+		},
+		{
+			"file": "contracts/generated/manifest.json",
+			"class": "generated",
+			"added": 21,
+			"meaningful": 21,
+			"removed": 7
+		},
+		{
+			"file": "contracts/generated/openapi.bundled.json",
+			"class": "generated",
+			"added": 332,
+			"meaningful": 332,
+			"removed": 0
+		},
+		{
+			"file": "contracts/generated/typescript/openapi.d.ts",
+			"class": "generated",
+			"added": 136,
+			"meaningful": 114,
+			"removed": 0
+		},
+		{
+			"file": "contracts/openapi.json",
+			"class": "source",
+			"added": 12,
+			"meaningful": 12,
+			"removed": 0
+		},
+		{
+			"file": "contracts/schemas/local-room.schema.json",
+			"class": "source",
+			"added": 115,
+			"meaningful": 115,
+			"removed": 0
+		},
+		{
+			"file": "contracts/src/index.ts",
+			"class": "source",
+			"added": 2,
+			"meaningful": 2,
+			"removed": 1
+		},
+		{
+			"file": "contracts/swift/Sources/AgoraContracts/Generated/Client.swift",
+			"class": "generated",
+			"added": 113,
+			"meaningful": 109,
+			"removed": 0
+		},
+		{
+			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift",
+			"class": "generated",
+			"added": 639,
+			"meaningful": 494,
+			"removed": 0
+		},
+		{
+			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Operations.swift",
+			"class": "generated",
+			"added": 223,
+			"meaningful": 144,
+			"removed": 0
+		},
+		{
+			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types.swift",
+			"class": "generated",
+			"added": 18,
+			"meaningful": 10,
+			"removed": 0
+		},
+		{
+			"file": "contracts/swift/Sources/AgoraContractsConform/main.swift",
+			"class": "source",
+			"added": 10,
+			"meaningful": 10,
+			"removed": 0
+		},
+		{
+			"file": "contracts/test/local-room.test.ts",
+			"class": "source",
+			"added": 76,
+			"meaningful": 70,
+			"removed": 0
+		},
+		{
+			"file": "docs/decisions.tsv",
+			"class": "docs_evidence",
+			"added": 4,
+			"meaningful": 4,
+			"removed": 0
+		},
+		{
+			"file": "docs/runbooks/development.md",
+			"class": "docs_evidence",
+			"added": 5,
+			"meaningful": 2,
+			"removed": 0
+		},
+		{
+			"file": "docs/site/atlas.json",
+			"class": "docs_evidence",
+			"added": 14,
+			"meaningful": 14,
+			"removed": 1
+		},
+		{
+			"file": "docs/site/cli.md",
+			"class": "docs_evidence",
+			"added": 4,
+			"meaningful": 4,
+			"removed": 2
+		},
+		{
+			"file": "docs/site/contracts.md",
+			"class": "docs_evidence",
+			"added": 2,
+			"meaningful": 1,
+			"removed": 0
+		},
+		{
+			"file": "docs/site/faq.md",
+			"class": "docs_evidence",
+			"added": 4,
+			"meaningful": 1,
+			"removed": 0
+		},
+		{
+			"file": "docs/site/getting-started.md",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 1
+		},
+		{
+			"file": "docs/site/index.md",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 1
+		},
+		{
+			"file": "docs/site/introduction.md",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 0
+		},
+		{
+			"file": "docs/site/local-room.md",
+			"class": "docs_evidence",
+			"added": 50,
+			"meaningful": 24,
+			"removed": 0
+		},
+		{
+			"file": "docs/site/progress.md",
+			"class": "docs_evidence",
+			"added": 2,
+			"meaningful": 2,
+			"removed": 1
+		},
+		{
+			"file": "docs/site/repository.md",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 1
+		},
+		{
+			"file": "docs/site/site.json",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 0
+		},
+		{
+			"file": "docs/site/test/corpus.test.ts",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 1
+		},
+		{
+			"file": "docs/site/verification.md",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 1
+		},
+		{
+			"file": "evidence/local-room/contracts/future-send.red.log",
+			"class": "docs_evidence",
+			"added": 39,
+			"meaningful": 26,
+			"removed": 0
+		},
+		{
+			"file": "evidence/local-room/contracts/preservation-inventory.md",
+			"class": "docs_evidence",
+			"added": 20,
+			"meaningful": 11,
+			"removed": 0
+		},
+		{
+			"file": "evidence/local-room/contracts/probe-center.json",
+			"class": "docs_evidence",
+			"added": 182,
+			"meaningful": 182,
+			"removed": 0
+		},
+		{
+			"file": "evidence/local-room/contracts/probe-scenarios.json",
+			"class": "docs_evidence",
+			"added": 59,
+			"meaningful": 59,
+			"removed": 0
+		},
+		{
+			"file": "packages/domain/src/index.ts",
+			"class": "source",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 0
+		},
+		{
+			"file": "packages/domain/src/local-room/port.ts",
+			"class": "source",
+			"added": 47,
+			"meaningful": 35,
+			"removed": 0
+		},
+		{
+			"file": "scripts/probe-center.mjs",
+			"class": "source",
+			"added": 9,
+			"meaningful": 8,
+			"removed": 2
+		}
+	],
+	"method": "git diff --unified=0 PARENT HEAD per file; meaningful = added lines that are nonblank and not comment-only (leading //, #, *, /*); source = code, tests, schema, operations, configuration; fixture = contracts/fixtures; generated and lockfile reported separately"
+}

@@ -1,0 +1,54 @@
+# gate-negatives.log (local-room L1) at 4af669a
+recorded_at: 2026-09-21T00:44:38Z
+Each negative mutates one committed file, runs the guard that must go red, restores the file with git checkout and proves the tree is byte-identical (git diff --quiet exit 0).
+
+## N1 drop local-room from wireSchemaFamilies (contracts/src/index.ts)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × the wire driver accepts every literal local-room value and refuses each unknown field, variant and bound 3ms
+   × the command identity digest is the canonical digest of the command bytes and the operation is published 1ms
+   × Swift and TypeScript agree on every local-room acceptance, canonical byte sequence and digest 0ms
+   × removing the authorship, event-kind or unknown-field guard makes its denial assertion turn red 0ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected { id: 'local-room-scope-ok', …(1) } to deeply equal { id: 'local-room-scope-ok', …(1) }
+AssertionError: expected [ 'ArtifactReference', …(31) ] to include 'SendRoomMessageCommand'
+AssertionError: expected [ 'ArtifactReference', …(31) ] to include 'RoomCommandReceipt'
+AssertionError: expected undefined to be 'https://agora.invalid/schemas/local-r…' // Object.is equality
+      Tests  4 failed (4)
+exit=1
+restored: byte-identical
+
+## N2 open SendRoomMessageCommand (additionalProperties true in the authored schema)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+contracts:check fail exit 1 drift 
+   × the wire driver accepts every literal local-room value and refuses each unknown field, variant and bound 5ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected { …(2) } to deeply equal { …(2) }
+    "id": "local-room-command-unknown-field",
+      Tests  1 failed | 3 skipped (4)
+restored: byte-identical
+
+## N3 center answers not_found instead of the dispatched reason code (apps/center/src/app.ts)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × a well-formed send is validated, dispatched and answered as a typed 404 unavailable_capability, not an unknown route 4ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected { reason_code: 'not_found', …(2) } to match object { …(3) }
+      Tests  1 failed | 2 passed | 1 expected fail (4)
+restored: byte-identical
+
+## N4 probe expects 201 for local-room-send-unsupported (scripts/probe-center.mjs)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+probe fail exit 1 local-room-send-unsupported observed 404
+restored: byte-identical
+
+## final tree state
+uncommitted entries (evidence only expected):       10
+?? evidence/local-room/contracts/audit.json
+?? evidence/local-room/contracts/check-code-head.log
+?? evidence/local-room/contracts/contracts-check.json
+?? evidence/local-room/contracts/contracts-conform.json
+?? evidence/local-room/contracts/gate-negatives.log
+?? evidence/local-room/contracts/green.log
+?? evidence/local-room/contracts/recorder.log
+?? evidence/local-room/contracts/red.log
+?? evidence/local-room/contracts/size.json
+?? evidence/local-room/contracts/test-patch.diff

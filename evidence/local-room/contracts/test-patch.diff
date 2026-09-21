@@ -1,0 +1,377 @@
+diff --git a/apps/center/test/local-room.test.ts b/apps/center/test/local-room.test.ts
+new file mode 100644
+index 0000000..5a0ff29
+--- /dev/null
++++ b/apps/center/test/local-room.test.ts
+@@ -0,0 +1,50 @@
++import { expect, test } from 'vitest';
++import { createWireValidator } from '@agora/contracts';
++import { createApp } from '../src/app.ts';
++
++const app = createApp({ probeDatabase: () => Promise.reject(new Error('the local room never probes the database in this slice')) });
++const P = '11111111-1111-4111-8111-111111111111';
++const R = '22222222-2222-4222-8222-222222222222';
++const C = '33333333-3333-4333-8333-333333333333';
++const command = { schema_version: 'agora.local-room.send-message/v1', command_id: C, scope: { project_id: P, room_id: R }, body: 'hello', citations: [] };
++const send = (body: unknown) => app.request('/api/v1/local-room/messages', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
++
++test('the same app answers the health baseline before any local-room assertion', async () => {
++	const response = await app.request('/api/v1/health');
++	expect(response.status).toBe(200);
++	expect(await response.json()).toEqual({ schema_version: 'agora.health/v1', status: 'ok', service: 'agora-center' });
++});
++
++test('a well-formed send is validated, dispatched and answered as a typed 404 unavailable_capability, not an unknown route', async () => {
++	const response = await send(command);
++	expect(response.status).toBe(404);
++	expect(await response.json()).toMatchObject({ reason_code: 'unavailable_capability', correlation_id: expect.stringMatching(/^[0-9a-f-]{36}$/) as string, details: [expect.stringContaining('local-room L1') as string] });
++});
++
++test('an unknown field, an author offered by the client, a numeric sequence and a non-JSON body are each 400 malformed_command at their path', async () => {
++	for (const [body, detail] of [
++		[{ ...command, retries: 3 }, '$ must NOT have additional properties'],
++		[{ ...command, author: { kind: 'human', principal_id: P } }, '$ must NOT have additional properties'],
++		[{ ...command, citations: [{ record_kind: 'message', record_id: P, room_seq: 1 }] }, '/citations/0/room_seq must be string'],
++		[{ ...command, body: '' }, '/body must NOT have fewer than 1 characters'],
++	] as const) {
++		const response = await send(body);
++		expect(response.status).toBe(400);
++		expect(await response.json()).toMatchObject({ reason_code: 'malformed_command', details: [detail] });
++	}
++	const notJson = await app.request('/api/v1/local-room/messages', { method: 'POST', body: 'not json' });
++	expect(notJson.status).toBe(400);
++});
++
++// Retained red for local-room L2: this assertion fails today because no persistence adapter is composed. L2 turns
++// test.fails into test in the same change that composes the adapter; the recorder then shows this red against L1.
++test.fails('L2: a committed send answers 201 with a receipt whose identity names the command and whose aggregate is the room', async () => {
++	const response = await send(command);
++	expect(response.status).toBe(201);
++	const receipt = createWireValidator().validate('RoomCommandReceipt', await response.json());
++	expect(receipt.ok).toBe(true);
++	if (!receipt.ok) return;
++	expect(receipt.value.identity.command_id).toBe(C);
++	expect(receipt.value.receipt.aggregate_id).toBe(R);
++	expect(receipt.value.replayed).toBe(false);
++});
+diff --git a/contracts/fixtures/vectors.json b/contracts/fixtures/vectors.json
+index 86f77f1..8840c49 100644
+--- a/contracts/fixtures/vectors.json
++++ b/contracts/fixtures/vectors.json
+@@ -716,6 +716,221 @@
+ 			"expect": "accept",
+ 			"canonical": "{\"actor\":\"11111111-1111-4111-8111-111111111111\",\"event_id\":\"11111111-1111-4111-8111-111111111111\",\"kind\":\"fixture.run_card\",\"occurred_at\":\"2026-09-20T00:00:00Z\",\"payload\":{\"run_id\":\"11111111-1111-4111-8111-111111111111\",\"run_revision\":\"9007199254740993\",\"state\":\"running\"},\"schema_version\":\"agora.foundation-fixture.sync-event/v1\",\"seq\":\"2\",\"stream_id\":\"11111111-1111-4111-8111-111111111111\"}",
+ 			"digest": "sha256:ff1bb6afd466f9458a96d65765a60f044a4a7a275ba071893930525f396aac4c"
++		},
++		{
++			"id": "local-room-scope-ok",
++			"component": "LocalRoomScope",
++			"wire": "{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}",
++			"expect": "accept",
++			"canonical": "{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}",
++			"digest": "sha256:283e514c69d69fde75a4b84a4b8b9078d9369daede1feb95203db4c81867b4f9"
++		},
++		{
++			"id": "local-room-scope-urn-uuid",
++			"component": "LocalRoomScope",
++			"wire": "{\"project_id\":\"urn:uuid:11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}",
++			"expect": "reject",
++			"reason": "urn prefix is not the wire form of an identifier"
++		},
++		{
++			"id": "local-room-author-human",
++			"component": "RoomAuthor",
++			"wire": "{\"kind\":\"human\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"}",
++			"expect": "accept",
++			"canonical": "{\"kind\":\"human\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"}",
++			"digest": "sha256:a65c7c95afbe0a690fcdfcd394a6d03fc1e459730ca67770127794d7bb377a0e"
++		},
++		{
++			"id": "local-room-author-local-agent",
++			"component": "RoomAuthor",
++			"wire": "{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"}",
++			"expect": "accept",
++			"canonical": "{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"}",
++			"digest": "sha256:fc2493bea703675a2bff7f50f8def44db21c472de4340ad56802585e84cfa164"
++		},
++		{
++			"id": "local-room-author-unknown-kind",
++			"component": "RoomAuthor",
++			"wire": "{\"kind\":\"provider_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"}",
++			"expect": "reject",
++			"reason": "unknown authorship variant"
++		},
++		{
++			"id": "local-room-citation-ok",
++			"component": "RecordCitation",
++			"wire": "{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}",
++			"expect": "accept",
++			"canonical": "{\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"record_kind\":\"message\",\"room_seq\":\"1\"}",
++			"digest": "sha256:09321050de51ef9df1eec4d7c3a8cdd7bf93dff5fb0099cac2f617695c31ef6c"
++		},
++		{
++			"id": "local-room-citation-unknown-kind",
++			"component": "RecordCitation",
++			"wire": "{\"record_kind\":\"attachment\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}",
++			"expect": "reject",
++			"reason": "unknown record kind"
++		},
++		{
++			"id": "local-room-citation-seq-number",
++			"component": "RecordCitation",
++			"wire": "{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":1}",
++			"expect": "reject",
++			"reason": "sequence must be a decimal string"
++		},
++		{
++			"id": "local-room-body-max",
++			"component": "RoomMessageBody",
++			"wire": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
++			"expect": "accept",
++			"canonical": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
++			"digest": "sha256:8f17a3d6e7166142a52be4ae34bea31c4845ba76a02ae44a57d45e289cf1514b"
++		},
++		{
++			"id": "local-room-body-empty",
++			"component": "RoomMessageBody",
++			"wire": "\"\"",
++			"expect": "reject",
++			"reason": "body needs at least one scalar"
++		},
++		{
++			"id": "local-room-body-over-max",
++			"component": "RoomMessageBody",
++			"wire": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
++			"expect": "reject",
++			"reason": "body above 4096 scalars"
++		},
++		{
++			"id": "local-room-command-ok",
++			"component": "SendRoomMessageCommand",
++			"wire": "{\"schema_version\":\"agora.local-room.send-message/v1\",\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"body\":\"Does the migration need the owner role?\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}]}",
++			"expect": "accept",
++			"canonical": "{\"body\":\"Does the migration need the owner role?\",\"citations\":[{\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"record_kind\":\"message\",\"room_seq\":\"1\"}],\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"schema_version\":\"agora.local-room.send-message/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}}",
++			"digest": "sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6"
++		},
++		{
++			"id": "local-room-command-unknown-field",
++			"component": "SendRoomMessageCommand",
++			"wire": "{\"schema_version\":\"agora.local-room.send-message/v1\",\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"body\":\"Does the migration need the owner role?\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}],\"author\":{\"kind\":\"human\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"}}",
++			"expect": "reject",
++			"reason": "a command never carries authorship"
++		},
++		{
++			"id": "local-room-command-missing-citations",
++			"component": "SendRoomMessageCommand",
++			"wire": "{\"schema_version\":\"agora.local-room.send-message/v1\",\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"body\":\"x\"}",
++			"expect": "reject",
++			"reason": "citations is required, never synthesized"
++		},
++		{
++			"id": "local-room-command-too-many-citations",
++			"component": "SendRoomMessageCommand",
++			"wire": "{\"schema_version\":\"agora.local-room.send-message/v1\",\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"body\":\"Does the migration need the owner role?\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"},{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}]}",
++			"expect": "reject",
++			"reason": "at most ten citations"
++		},
++		{
++			"id": "local-room-command-unknown-version",
++			"component": "SendRoomMessageCommand",
++			"wire": "{\"schema_version\":\"agora.local-room.send-message/v2\",\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"body\":\"Does the migration need the owner role?\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}]}",
++			"expect": "reject",
++			"reason": "unknown schema version variant"
++		},
++		{
++			"id": "local-room-identity-ok",
++			"component": "CommandIdentity",
++			"wire": "{\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"request_digest\":\"sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"}",
++			"expect": "accept",
++			"canonical": "{\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"request_digest\":\"sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"}",
++			"digest": "sha256:957a5fbfd3c80caf8a862ba939978184c31a65058fb58174aa308c5a7881b1d6"
++		},
++		{
++			"id": "local-room-identity-untagged-digest",
++			"component": "CommandIdentity",
++			"wire": "{\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"request_digest\":\"97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"}",
++			"expect": "reject",
++			"reason": "digest must be algorithm tagged"
++		},
++		{
++			"id": "local-room-message-ok",
++			"component": "RoomMessage",
++			"wire": "{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"44444444-4444-4444-8444-444444444444\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"1\",\"author\":{\"kind\":\"human\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"body\":\"First message.\",\"citations\":[],\"created_at\":\"2026-09-20T18:00:00Z\"}",
++			"expect": "accept",
++			"canonical": "{\"author\":{\"kind\":\"human\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"body\":\"First message.\",\"citations\":[],\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"created_at\":\"2026-09-20T18:00:00Z\",\"message_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\",\"schema_version\":\"agora.local-room.message/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}}",
++			"digest": "sha256:1da8e225731a579daf6bd207e03750f0fcec029c17fbde50cc8fe2931539b418"
++		},
++		{
++			"id": "local-room-message-cited-local-agent",
++			"component": "RoomMessage",
++			"wire": "{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"2\",\"author\":{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"body\":\"Yes, see message 1.\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}],\"created_at\":\"2026-09-20T18:00:01.5Z\"}",
++			"expect": "accept",
++			"canonical": "{\"author\":{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"body\":\"Yes, see message 1.\",\"citations\":[{\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"record_kind\":\"message\",\"room_seq\":\"1\"}],\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"created_at\":\"2026-09-20T18:00:01.5Z\",\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"room_seq\":\"2\",\"schema_version\":\"agora.local-room.message/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}}",
++			"digest": "sha256:6ce748109f008fce74666af63df66f26c05361feee73305984762051f53be044"
++		},
++		{
++			"id": "local-room-message-unknown-field",
++			"component": "RoomMessage",
++			"wire": "{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"44444444-4444-4444-8444-444444444444\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"1\",\"author\":{\"kind\":\"human\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"body\":\"First message.\",\"citations\":[],\"created_at\":\"2026-09-20T18:00:00Z\",\"edited_at\":\"2026-09-20T18:00:02Z\"}",
++			"expect": "reject",
++			"reason": "messages are immutable; no edit field exists"
++		},
++		{
++			"id": "local-room-message-missing-author",
++			"component": "RoomMessage",
++			"wire": "{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"44444444-4444-4444-8444-444444444444\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"1\",\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"body\":\"First message.\",\"citations\":[],\"created_at\":\"2026-09-20T18:00:00Z\"}",
++			"expect": "reject",
++			"reason": "author is required"
++		},
++		{
++			"id": "local-room-event-ok",
++			"component": "RoomMessageCreatedEvent",
++			"wire": "{\"schema_version\":\"agora.local-room.event/v1\",\"stream_id\":\"22222222-2222-4222-8222-222222222222\",\"seq\":\"2\",\"event_id\":\"66666666-6666-4666-8666-666666666666\",\"kind\":\"local_room.message_created\",\"actor\":\"55555555-5555-4555-8555-555555555555\",\"occurred_at\":\"2026-09-20T18:00:01.5Z\",\"payload\":{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"2\",\"author\":{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"body\":\"Yes, see message 1.\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}],\"created_at\":\"2026-09-20T18:00:01.5Z\"}}",
++			"expect": "accept",
++			"canonical": "{\"actor\":\"55555555-5555-4555-8555-555555555555\",\"event_id\":\"66666666-6666-4666-8666-666666666666\",\"kind\":\"local_room.message_created\",\"occurred_at\":\"2026-09-20T18:00:01.5Z\",\"payload\":{\"author\":{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"body\":\"Yes, see message 1.\",\"citations\":[{\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"record_kind\":\"message\",\"room_seq\":\"1\"}],\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"created_at\":\"2026-09-20T18:00:01.5Z\",\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"room_seq\":\"2\",\"schema_version\":\"agora.local-room.message/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}},\"schema_version\":\"agora.local-room.event/v1\",\"seq\":\"2\",\"stream_id\":\"22222222-2222-4222-8222-222222222222\"}",
++			"digest": "sha256:7bc107d207d13ba5e59da7e62fcc73d8e68d52f208ecf9b6000f441e04fe2e87"
++		},
++		{
++			"id": "local-room-event-unknown-kind",
++			"component": "RoomMessageCreatedEvent",
++			"wire": "{\"schema_version\":\"agora.local-room.event/v1\",\"stream_id\":\"22222222-2222-4222-8222-222222222222\",\"seq\":\"2\",\"event_id\":\"66666666-6666-4666-8666-666666666666\",\"kind\":\"local_room.message_edited\",\"actor\":\"55555555-5555-4555-8555-555555555555\",\"occurred_at\":\"2026-09-20T18:00:01.5Z\",\"payload\":{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"2\",\"author\":{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"body\":\"Yes, see message 1.\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}],\"created_at\":\"2026-09-20T18:00:01.5Z\"}}",
++			"expect": "reject",
++			"reason": "unknown event kind"
++		},
++		{
++			"id": "local-room-event-unknown-field",
++			"component": "RoomMessageCreatedEvent",
++			"wire": "{\"schema_version\":\"agora.local-room.event/v1\",\"stream_id\":\"22222222-2222-4222-8222-222222222222\",\"seq\":\"2\",\"event_id\":\"66666666-6666-4666-8666-666666666666\",\"kind\":\"local_room.message_created\",\"actor\":\"55555555-5555-4555-8555-555555555555\",\"occurred_at\":\"2026-09-20T18:00:01.5Z\",\"payload\":{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"2\",\"author\":{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"body\":\"Yes, see message 1.\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}],\"created_at\":\"2026-09-20T18:00:01.5Z\"},\"authority\":\"owner\"}",
++			"expect": "reject",
++			"reason": "unknown envelope field"
++		},
++		{
++			"id": "local-room-snapshot-ok",
++			"component": "RoomSnapshot",
++			"wire": "{\"schema_version\":\"agora.local-room.snapshot/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"cursor\":{\"stream_id\":\"22222222-2222-4222-8222-222222222222\",\"committed_seq\":\"2\"},\"messages\":[{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"44444444-4444-4444-8444-444444444444\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"1\",\"author\":{\"kind\":\"human\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"body\":\"First message.\",\"citations\":[],\"created_at\":\"2026-09-20T18:00:00Z\"},{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"2\",\"author\":{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"body\":\"Yes, see message 1.\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}],\"created_at\":\"2026-09-20T18:00:01.5Z\"}]}",
++			"expect": "accept",
++			"canonical": "{\"cursor\":{\"committed_seq\":\"2\",\"stream_id\":\"22222222-2222-4222-8222-222222222222\"},\"messages\":[{\"author\":{\"kind\":\"human\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"body\":\"First message.\",\"citations\":[],\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"created_at\":\"2026-09-20T18:00:00Z\",\"message_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\",\"schema_version\":\"agora.local-room.message/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}},{\"author\":{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"body\":\"Yes, see message 1.\",\"citations\":[{\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"record_kind\":\"message\",\"room_seq\":\"1\"}],\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"created_at\":\"2026-09-20T18:00:01.5Z\",\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"room_seq\":\"2\",\"schema_version\":\"agora.local-room.message/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}}],\"schema_version\":\"agora.local-room.snapshot/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"}}",
++			"digest": "sha256:50690c4a36c265b1c217bdc8669464acdfe24b620a19ad9a57578e369c222290"
++		},
++		{
++			"id": "local-room-snapshot-unknown-field",
++			"component": "RoomSnapshot",
++			"wire": "{\"schema_version\":\"agora.local-room.snapshot/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"cursor\":{\"stream_id\":\"22222222-2222-4222-8222-222222222222\",\"committed_seq\":\"2\"},\"messages\":[{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"44444444-4444-4444-8444-444444444444\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"1\",\"author\":{\"kind\":\"human\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"body\":\"First message.\",\"citations\":[],\"created_at\":\"2026-09-20T18:00:00Z\"},{\"schema_version\":\"agora.local-room.message/v1\",\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"room_seq\":\"2\",\"author\":{\"kind\":\"local_agent\",\"principal_id\":\"55555555-5555-4555-8555-555555555555\"},\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"body\":\"Yes, see message 1.\",\"citations\":[{\"record_kind\":\"message\",\"record_id\":\"44444444-4444-4444-8444-444444444444\",\"room_seq\":\"1\"}],\"created_at\":\"2026-09-20T18:00:01.5Z\"}],\"tombstones\":[]}",
++			"expect": "reject",
++			"reason": "L1 has no tombstones"
++		},
++		{
++			"id": "local-room-receipt-ok",
++			"component": "RoomCommandReceipt",
++			"wire": "{\"schema_version\":\"agora.local-room.receipt/v1\",\"identity\":{\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"request_digest\":\"sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"},\"receipt\":{\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"aggregate_id\":\"22222222-2222-4222-8222-222222222222\",\"revision\":\"2\",\"event_cursors\":[{\"stream_id\":\"22222222-2222-4222-8222-222222222222\",\"committed_seq\":\"2\"}],\"receipt_id\":\"77777777-7777-4777-8777-777777777777\"},\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"replayed\":false}",
++			"expect": "accept",
++			"canonical": "{\"identity\":{\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"request_digest\":\"sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"},\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"receipt\":{\"aggregate_id\":\"22222222-2222-4222-8222-222222222222\",\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"event_cursors\":[{\"committed_seq\":\"2\",\"stream_id\":\"22222222-2222-4222-8222-222222222222\"}],\"receipt_id\":\"77777777-7777-4777-8777-777777777777\",\"revision\":\"2\"},\"replayed\":false,\"schema_version\":\"agora.local-room.receipt/v1\"}",
++			"digest": "sha256:c1e189e555a8f79db6f82600d000c3475caad773b1f4051f2906d86eb981104d"
++		},
++		{
++			"id": "local-room-receipt-replayed-null",
++			"component": "RoomCommandReceipt",
++			"wire": "{\"schema_version\":\"agora.local-room.receipt/v1\",\"identity\":{\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"request_digest\":\"sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"},\"receipt\":{\"command_id\":\"33333333-3333-4333-8333-333333333333\",\"aggregate_id\":\"22222222-2222-4222-8222-222222222222\",\"revision\":\"2\",\"event_cursors\":[{\"stream_id\":\"22222222-2222-4222-8222-222222222222\",\"committed_seq\":\"2\"}],\"receipt_id\":\"77777777-7777-4777-8777-777777777777\"},\"message_id\":\"66666666-6666-4666-8666-666666666666\",\"replayed\":null}",
++			"expect": "reject",
++			"reason": "null is not absent and not boolean"
+ 		}
+ 	]
+ }
+diff --git a/contracts/test/local-room.test.ts b/contracts/test/local-room.test.ts
+new file mode 100644
+index 0000000..77ceef3
+--- /dev/null
++++ b/contracts/test/local-room.test.ts
+@@ -0,0 +1,76 @@
++import { readFileSync } from 'node:fs';
++import { Ajv2020 } from 'ajv/dist/2020.js';
++import { expect, test } from 'vitest';
++import { createWireValidator, wireSchemaFamilies } from '@agora/contracts';
++import { runSwiftConsumer } from '../src/conform-cli.ts';
++import { compareConsumers, runTypeScriptConsumer, type VectorFile } from '../src/conformance.ts';
++
++const file = JSON.parse(readFileSync(new URL('../fixtures/vectors.json', import.meta.url), 'utf8')) as VectorFile;
++const vectors = file.vectors.filter((v) => v.id.startsWith('local-room-'));
++const validator = createWireValidator();
++const vector = (id: string) => {
++	const found = vectors.find((v) => v.id === id);
++	if (!found) throw new Error(`missing vector ${id}`);
++	return found;
++};
++// A component the driver does not publish is a behavioral refusal at the parent, never a missing runner.
++const validate = (component: (typeof vectors)[number]['component'], wire: string) => (validator.components.includes(component) ? validator.validate(component, JSON.parse(wire)) : { ok: false as const, details: [`unknown component ${component}`] });
++const details = (component: (typeof vectors)[number]['component'], wire: string): string[] => { const result = validate(component, wire); return result.ok ? [] : result.details; };
++
++test('the wire driver accepts every literal local-room value and refuses each unknown field, variant and bound', () => {
++	expect(vectors.length).toBeGreaterThanOrEqual(29);
++	for (const v of vectors) expect({ id: v.id, accepted: validate(v.component, v.wire).ok }).toEqual({ id: v.id, accepted: v.expect === 'accept' });
++	expect(details('SendRoomMessageCommand', vector('local-room-command-unknown-field').wire)).toEqual(['$ must NOT have additional properties']);
++	expect(details('RoomAuthor', vector('local-room-author-unknown-kind').wire)).toEqual(['/kind must be equal to one of the allowed values']);
++	expect(details('RoomMessageCreatedEvent', vector('local-room-event-unknown-kind').wire)).toEqual(['/kind must be equal to one of the allowed values']);
++	expect(details('RecordCitation', vector('local-room-citation-seq-number').wire)[0]).toBe('/room_seq must be string');
++	expect(details('RoomMessageBody', vector('local-room-body-over-max').wire)).toEqual(['$ must NOT have more than 4096 characters']);
++});
++
++test('the command identity digest is the canonical digest of the command bytes and the operation is published', () => {
++	expect(validator.components).toContain('SendRoomMessageCommand');
++	const typescript = runTypeScriptConsumer({ ...file, vectors });
++	const command = typescript.vectors.find((v) => v.id === 'local-room-command-ok');
++	const identity = JSON.parse(vector('local-room-identity-ok').wire) as { request_digest: string };
++	expect(command?.digest).toBe(identity.request_digest);
++	expect(command?.canonical).toBe(vector('local-room-command-ok').canonical);
++	const operations = readFileSync(new URL('../openapi.json', import.meta.url), 'utf8');
++	expect(operations).toContain('"/api/v1/local-room/messages"');
++	expect(operations).toContain('#/components/schemas/SendRoomMessageCommand');
++	expect(operations).toContain('#/components/schemas/RoomCommandReceipt');
++});
++
++test('Swift and TypeScript agree on every local-room acceptance, canonical byte sequence and digest', () => {
++	expect(validator.components).toContain('RoomCommandReceipt');
++	const swift = runSwiftConsumer();
++	expect(swift.message ?? swift.outcome).toBe('pass');
++	if (!swift.report) throw new Error('Swift did not return a report');
++	const joint = compareConsumers({ ...file, vectors }, runTypeScriptConsumer({ ...file, vectors }), swift.report);
++	expect(joint.filter((r) => r.outcome !== 'pass').map((r) => `${r.id}: ${r.disagreements.join(' | ')}`)).toEqual([]);
++	for (const id of ['local-room-command-unknown-field', 'local-room-author-unknown-kind', 'local-room-event-unknown-kind', 'local-room-citation-seq-number', 'local-room-receipt-replayed-null']) {
++		expect(`${id}: ${swift.report.vectors.find((v) => v.id === id)?.generated_decode ?? 'missing'}`).toMatch(new RegExp(`^${id}: refused`));
++	}
++});
++
++test('removing the authorship, event-kind or unknown-field guard makes its denial assertion turn red', () => {
++	const family = wireSchemaFamilies.find((f) => f.$id.endsWith('/local-room.schema.json'));
++	expect(family?.$id).toBe('https://agora.invalid/schemas/local-room.schema.json');
++	if (!family) return;
++	interface Mutable { $id: string; $defs: Record<string, { additionalProperties: boolean; properties: Record<string, { enum?: string[] }> }> }
++	for (const [id, component, disable] of [
++		['local-room-author-unknown-kind', 'RoomAuthor', (schema: Mutable['$defs'][string]) => { delete schema.properties['kind']?.enum; }],
++		['local-room-event-unknown-kind', 'RoomMessageCreatedEvent', (schema: Mutable['$defs'][string]) => { delete schema.properties['kind']?.enum; }],
++		['local-room-command-unknown-field', 'SendRoomMessageCommand', (schema: Mutable['$defs'][string]) => { schema.additionalProperties = true; }],
++	] as const) {
++		const payload: unknown = JSON.parse(vector(id).wire);
++		expect(validate(component, vector(id).wire).ok).toBe(false);
++		const weakened = structuredClone(family) as unknown as Mutable;
++		const schema = weakened.$defs[component];
++		if (!schema) throw new Error(`missing ${component}`);
++		disable(schema);
++		const ajv = new Ajv2020({ strict: true });
++		for (const source of wireSchemaFamilies) ajv.addSchema(source.$id === family.$id ? weakened : source);
++		const check = ajv.compile({ $ref: `${family.$id}#/$defs/${component}` });
++		expect(() => { expect(check(payload)).toBe(false); }).toThrow('expected true to be false');
++	}
++});
+diff --git a/docs/site/test/corpus.test.ts b/docs/site/test/corpus.test.ts
+index 45ef683..03101d6 100644
+--- a/docs/site/test/corpus.test.ts
++++ b/docs/site/test/corpus.test.ts
+@@ -9,7 +9,7 @@ const root = path.resolve(import.meta.dirname, '../../../.docs-dist');
+ const html = file => existsSync(path.join(root, file)) ? readFileSync(path.join(root, file), 'utf8') : '';
+ test('the same public build driver produces a valid baseline before corpus assertions', () => assert.equal(result.outcome, 'pass'));
+ test('the complete corpus has 24 pages and both audience tracks', () => {
+-	assert.equal(result.pages, 24, 'complete audience corpus');
++	assert.equal(result.pages, 25, 'complete audience corpus');
+ 	assert.match(html('test-first.html'), /FG01.red-required/);
+ 	assert.match(html('test-first.html'), /foundation_fixture/);
+ 	assert.match(html('index.html'), /Use Agora/);

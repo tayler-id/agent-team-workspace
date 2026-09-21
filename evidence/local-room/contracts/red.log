@@ -1,0 +1,138 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-21T00:44:14.334Z
+parent: 421f572b02aa5bcf9fd235afe28de92004b59f96
+head: 4af669a8799137d58a743c3f104384586f3e496f
+subject_revision: 421f572b02aa5bcf9fd235afe28de92004b59f96
+test_patch_applied_to_subject: true
+test_patch_files: apps/center/test/local-room.test.ts, contracts/fixtures/vectors.json, contracts/test/local-room.test.ts, docs/site/test/corpus.test.ts
+test_patch_digest: sha256:c159c9b7706497107b7f78a883cf3ef64114234eb4b332920f29965598692966
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:d82c9826462aa31f1d03a7b999743501692e932f2f98def7afec27e1f71be131"},{"file":"contracts/openapi.json","digest":"sha256:5571f62fe31149a0fa365309495fa017ebb22ad2193ced3474b943be7c90d2f7"},{"file":"contracts/schemas/local-room.schema.json","digest":"sha256:abbf5cf183ce5f1afa492be954b4b3d55d58104ba8df89738cd4d1db1a70d5b4"},{"file":"contracts/src/index.ts","digest":"sha256:3670c1fe7023a7eb999560e6ba43a425f38e1ba89cd9b6a8ffb76a1bedefdaab"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:e627d269d37cfa73c354838a5ad9f8758231f4bab510b51e45de4df80d5a7371"},{"file":"contracts/test/local-room.test.ts","digest":"sha256:f8bb60fc6b9c489b6d9bac98854a0be609e9304961fdd74ab1d7bf2ea4a3a6d8"}]}
+configuration: {"command":"pnpm exec vitest run --project unit apps/center/test/local-room.test.ts --project contracts contracts/test/local-room.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-zVLL8y
+
+ ❯ |unit| apps/center/test/local-room.test.ts (4 tests | 2 failed) 14ms
+   × a well-formed send is validated, dispatched and answered as a typed 404 unavailable_capability, not an unknown route 4ms
+   × an unknown field, an author offered by the client, a numeric sequence and a non-JSON body are each 400 malformed_command at their path 1ms
+ ❯ |contracts| contracts/test/local-room.test.ts (4 tests | 4 failed) 5ms
+   × the wire driver accepts every literal local-room value and refuses each unknown field, variant and bound 3ms
+   × the command identity digest is the canonical digest of the command bytes and the operation is published 1ms
+   × Swift and TypeScript agree on every local-room acceptance, canonical byte sequence and digest 0ms
+   × removing the authorship, event-kind or unknown-field guard makes its denial assertion turn red 0ms
+
+ Test Files  2 failed (2)
+      Tests  6 failed | 1 passed | 1 expected fail (8)
+   Start at  20:43:54
+   Duration  304ms (import 67%, transform 21%, tests 10%, worker 2%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| contracts/test/local-room.test.ts > the wire driver accepts every literal local-room value and refuses each unknown field, variant and bound
+AssertionError: expected { id: 'local-room-scope-ok', …(1) } to deeply equal { id: 'local-room-scope-ok', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "accepted": true,
++   "accepted": false,
+    "id": "local-room-scope-ok",
+  }
+
+ ❯ contracts/test/local-room.test.ts:22:92
+     20| test('the wire driver accepts every literal local-room value and refus…
+     21|  expect(vectors.length).toBeGreaterThanOrEqual(29);
+     22|  for (const v of vectors) expect({ id: v.id, accepted: validate(v.comp…
+       |                                                                                            ^
+     23|  expect(details('SendRoomMessageCommand', vector('local-room-command-u…
+     24|  expect(details('RoomAuthor', vector('local-room-author-unknown-kind')…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  |contracts| contracts/test/local-room.test.ts > the command identity digest is the canonical digest of the command bytes and the operation is published
+AssertionError: expected [ 'ArtifactReference', …(31) ] to include 'SendRoomMessageCommand'
+ ❯ contracts/test/local-room.test.ts:31:31
+     29|
+     30| test('the command identity digest is the canonical digest of the comma…
+     31|  expect(validator.components).toContain('SendRoomMessageCommand');
+       |                               ^
+     32|  const typescript = runTypeScriptConsumer({ ...file, vectors });
+     33|  const command = typescript.vectors.find((v) => v.id === 'local-room-c…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  |contracts| contracts/test/local-room.test.ts > Swift and TypeScript agree on every local-room acceptance, canonical byte sequence and digest
+AssertionError: expected [ 'ArtifactReference', …(31) ] to include 'RoomCommandReceipt'
+ ❯ contracts/test/local-room.test.ts:44:31
+     42|
+     43| test('Swift and TypeScript agree on every local-room acceptance, canon…
+     44|  expect(validator.components).toContain('RoomCommandReceipt');
+       |                               ^
+     45|  const swift = runSwiftConsumer();
+     46|  expect(swift.message ?? swift.outcome).toBe('pass');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  |contracts| contracts/test/local-room.test.ts > removing the authorship, event-kind or unknown-field guard makes its denial assertion turn red
+AssertionError: expected undefined to be 'https://agora.invalid/schemas/local-r…' // Object.is equality
+
+- Expected:
+"https://agora.invalid/schemas/local-room.schema.json"
+
++ Received:
+undefined
+
+ ❯ contracts/test/local-room.test.ts:57:22
+     55| test('removing the authorship, event-kind or unknown-field guard makes…
+     56|  const family = wireSchemaFamilies.find((f) => f.$id.endsWith('/local-…
+     57|  expect(family?.$id).toBe('https://agora.invalid/schemas/local-room.sc…
+       |                      ^
+     58|  if (!family) return;
+     59|  interface Mutable { $id: string; $defs: Record<string, { additionalPr…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  |unit| apps/center/test/local-room.test.ts > a well-formed send is validated, dispatched and answered as a typed 404 unavailable_capability, not an unknown route
+AssertionError: expected { reason_code: 'not_found', …(1) } to match object { …(3) }
+
+- Expected
++ Received
+
+  {
+    "correlation_id": "851e3843-409f-474a-97a6-1275aa3e44e1",
+-   "details": [
+-     StringContaining "local-room L1",
+-   ],
+-   "reason_code": "unavailable_capability",
++   "reason_code": "not_found",
+  }
+
+ ❯ apps/center/test/local-room.test.ts:21:32
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  |unit| apps/center/test/local-room.test.ts > an unknown field, an author offered by the client, a numeric sequence and a non-JSON body are each 400 malformed_command at their path
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ apps/center/test/local-room.test.ts:32:27
+     30|  ] as const) {
+     31|   const response = await send(body);
+     32|   expect(response.status).toBe(400);
+       |                           ^
+     33|   expect(await response.json()).toMatchObject({ reason_code: 'malforme…
+     34|  }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+

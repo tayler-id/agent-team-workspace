@@ -1,0 +1,17 @@
+# clean-build.log at 4af669a8799137d58a743c3f104384586f3e496f
+recorded_at: 2026-09-21T00:45:46Z
+## pnpm install --frozen-lockfile
+Scope: all 6 workspace projects
+Lockfile is up to date, resolution step is skipped
+Already up to date
+
+Done in 220ms using pnpm v10.34.1
+exit=0
+## swift package clean; swift build (contracts/swift)
+[110/112] Linking agora-contracts-conform
+[111/112] Applying agora-contracts-conform
+Build complete! (10.47s)
+swift build 2>&1  16.48s user 7.54s system 209% cpu 11.453 total
+tail -3  0.00s user 0.00s system 0% cpu 11.453 total
+## contracts:conform after the clean Swift build
+outcome pass exit 0 swift pass vectors 126 failing 0

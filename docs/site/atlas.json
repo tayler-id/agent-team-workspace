@@ -1,5 +1,5 @@
 {
-  "revision": "b9c65c4487b9c08237d22cb4be4ae92999308bc4",
+  "revision": "4af669a8799137d58a743c3f104384586f3e496f",
   "date": "2026-09-20",
   "features": [
     {
@@ -64,7 +64,8 @@
         "repo:contracts/schemas/local-room.schema.json",
         "repo:packages/domain/src/local-room/port.ts",
         "repo:apps/center/test/local-room.test.ts",
-        "repo:contracts/test/local-room.test.ts"
+        "repo:contracts/test/local-room.test.ts",
+        "repo:evidence/local-room/contracts/outcome.json"
       ]
     },
     {
