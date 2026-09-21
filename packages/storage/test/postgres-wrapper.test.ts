@@ -93,7 +93,10 @@ test.each(['deep-success', 'child-failure', 'child-signal', 'missing-command', '
 		// A red run must not leave this run's own recorded identities behind; the liveness assertions above already reported them.
 		for (const pid of [...descendants, ...receipts.filter(record => record.outcome === 'starting').map(record => record.pid)]) for (const target of [-pid, pid]) { try { process.kill(target, 'SIGKILL'); } catch { /* already gone */ } }
 		for (const record of receipts.filter(record => record.outcome === 'allocated')) rmSync(record.socketDir, { recursive: true, force: true });
-		reclaimSegments(receipts.filter(record => record.outcome === 'starting').map(record => record.pid));
+		// A postmaster killed just now is a zombie until launchd reaps it; reclaim only once it is gone.
+		const killed = receipts.filter(record => record.outcome === 'starting').map(record => record.pid);
+		for (let waited = 0; waited < 2_000 && killed.some(alive); waited += 50) await new Promise(resolve => setTimeout(resolve, 50));
+		reclaimSegments(killed);
 		rmSync(artifacts, { recursive: true });
 	}
 }, 45_000);
