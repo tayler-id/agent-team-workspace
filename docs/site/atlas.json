@@ -3,6 +3,11 @@
   "date": "2026-09-20",
   "features": [
     {
+      "id": "ci-toolchain", "title": "Toolchain and native readiness", "status": "In progress",
+      "why": "P0b prerequisite diagnosis only; mandatory CI and hosted enforcement remain unimplemented.",
+      "page": "ci.md", "proof": ["repo:scripts/test/ci-doctor.test.ts"]
+    },
+    {
       "id": "task-proof",
       "title": "Task proof admission",
       "status": "Built",

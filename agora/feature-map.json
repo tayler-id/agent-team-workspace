@@ -4,6 +4,15 @@
 	"task": "agora-s1-enforce-test-first",
 	"features": [
 		{
+			"id": "ci-toolchain-native", "documentation": "docs/site/ci.md", "owner": "CI P0b",
+			"paths": ["scripts/ci-doctor.mjs", "scripts/test/ci-doctor.test.ts", ".node-version", "package.json", ".npmrc", "pnpm-workspace.yaml", "pnpm-lock.yaml", "vitest.config.ts"],
+			"public": ["node scripts/ci-doctor.mjs --json"],
+			"scenarios": ["node --test scripts/test/ci-doctor.test.ts"],
+			"fixtures": ["disposable doctor copies; actual locked native import; wrong runtime; unavailable binding; omitted probes"],
+			"platforms": ["node24.21.0", "pnpm10.34.1", "darwin-arm64"],
+			"invalidation": "Any mapped input or runtime/native installation change requires a fresh doctor and test pass."
+		},
+		{
 			"id": "foundation-admission",
 			"documentation": "docs/site/test-first.md",
 			"paths": ["scripts/foundation-policy.mjs", "scripts/foundation-replay.mjs", "scripts/foundation.mjs", "scripts/record-red-green.mjs", "packages/verification/test", "contracts/schemas/foundation.schema.json"],
