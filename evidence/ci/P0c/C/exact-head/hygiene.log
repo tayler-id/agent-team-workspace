@@ -1,7 +1,7 @@
-head 1f850581c54c9cdc2ce7f0ef7ab3e4c05afafcb6
+head fd274b3a44451264edc8a80753cf9c2c072906a7
 main c04f5606df49eb7976ad5cf244911c73f77dd1fb
 fast-forward: main is an ancestor of HEAD
-tree 7abf409db9f2a2d82608bb7bccb9abfb88379642
+tree a4983fd64a27613e665e526d52ec4ffc564dc523
 status: 0 dirty entries
 == git diff --check
 whitespace clean
@@ -33,12 +33,20 @@ A	evidence/ci/P0c/C/doctor.log
 A	evidence/ci/P0c/C/driver/guard.mjs
 A	evidence/ci/P0c/C/driver/lib.mjs
 A	evidence/ci/P0c/C/driver/scenarios.mjs
+A	evidence/ci/P0c/C/exact-head/atlas.log
+A	evidence/ci/P0c/C/exact-head/check.log
+A	evidence/ci/P0c/C/exact-head/commands.tsv
+A	evidence/ci/P0c/C/exact-head/docs-build.log
+A	evidence/ci/P0c/C/exact-head/focused.log
+A	evidence/ci/P0c/C/exact-head/hygiene.log
+A	evidence/ci/P0c/C/exact-head/plan.log
 A	evidence/ci/P0c/C/focused.log
 A	evidence/ci/P0c/C/green.log
 A	evidence/ci/P0c/C/guard.json
 A	evidence/ci/P0c/C/guard.log
 A	evidence/ci/P0c/C/handoff-negatives.log
 A	evidence/ci/P0c/C/install.log
+A	evidence/ci/P0c/C/ipc-before-lanes.log
 A	evidence/ci/P0c/C/lifecycle.log
 A	evidence/ci/P0c/C/lint.log
 A	evidence/ci/P0c/C/migrations.log
@@ -54,35 +62,33 @@ A	evidence/ci/P0c/C/replay.log
 A	evidence/ci/P0c/C/review.md
 A	evidence/ci/P0c/C/scenarios.json
 A	evidence/ci/P0c/C/scenarios.log
+A	evidence/ci/P0c/C/segments-green-repeat.log
+A	evidence/ci/P0c/C/segments-red-before-edit.log
 A	evidence/ci/P0c/C/sysv-shm-own-segments.json
 A	evidence/ci/P0c/C/sysv-shm-sweep.json
 A	evidence/ci/P0c/C/test-patch.diff
 A	evidence/ci/P0c/C/test.log
 A	evidence/ci/P0c/C/typecheck.log
+A	evidence/ci/P0c/C/validated-head.txt
 M	packages/storage/test/postgres-wrapper.test.ts
 M	scripts/with-test-postgres.mjs
 == forbidden paths
-grep: repetition-operator operand invalid
 none
 == allocator identical to main
 yes
 == source lines vs parent
 scripts/with-test-postgres.mjs 15
-packages/storage/test/postgres-wrapper.test.ts 24
+packages/storage/test/postgres-wrapper.test.ts 32
 agora/feature-map.json 3
 AGENTS.md 1
 == digests at head
 scripts/with-test-postgres.mjs sha256:89a9562850c5373aa00e60301f8d20b2f535e07b501da59bb5b3362af4d95374
 scripts/postgres-socket.ts sha256:55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf
-packages/storage/test/postgres-wrapper.test.ts sha256:8f5e09b912c62b951216c9ea050fff9d7ddf88b454ab5e8fb67b9045c6ef183b
+packages/storage/test/postgres-wrapper.test.ts sha256:506fff2f7aeae17281fd3c7a3a9858a3b663d2ddce0b148876fae6ebe2bae2e7
 agora/feature-map.json sha256:83bfbded2eb98c5178a5a09563b6d010663e27183c4b2cac152de9e97657cc9d
-docs/site/atlas.json sha256:47d838bc5a7320cbf0f23819e1324bd6f6af82bd9b27c8d69000da8ce26a0ac2
-evidence/ci/P0c/C/driver/lib.mjs sha256:420c3d763f91f5d455da50d848f08c20015477ed914085e8edc0346eaa918563
+docs/site/atlas.json sha256:704c32f73a4772174bcadfc12efe01d6f16717858ab5c6a1030161384becbf3a
+evidence/ci/P0c/C/driver/lib.mjs sha256:b8aecc010ff6ca9e7ba91a4097c879af0a1ee58e64f31d4f8c358d1587da1366
 evidence/ci/P0c/C/driver/guard.mjs sha256:e55c470e06ab8a512873fde46dce8c17ff952fe3e2e28b548a4d37c97c895e9f
-evidence/ci/P0c/C/driver/scenarios.mjs sha256:265b204c734e96936b7b81227f6e34d78c36ab1fb15a4c512bc33a01c3bff11e
+evidence/ci/P0c/C/driver/scenarios.mjs sha256:6c48badae1c4de30a039223bc6cadac1150232aa50c5a98c27bbf5b6e1bfcb7a
 == atlas revision
-"revision": "f960bebc9e405718f5a5ad2b4555f4b10ea3ca41"
-== forbidden paths (rerun, BSD-compatible)
-none
-== evidence/ci/P0c paths outside B/ and C/
-none
+"revision": "df5b499fd770941b36b63af3cbce4e57fa204f13"
