@@ -154,6 +154,44 @@
 				}
 			}
 		},
+		"/api/v1/local-room/events": {
+			"get": {
+				"operationId": "replayLocalRoom",
+				"summary": "Read up to 50 committed events strictly after a room cursor; repeat to resume",
+				"parameters": [
+					{
+						"name": "after",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/Revision"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Ordered committed events",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoomEventBatch"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Malformed cursor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorReport"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/v1/local-room/snapshot": {
 			"get": {
 				"operationId": "getLocalRoomSnapshot",
@@ -1026,6 +1064,82 @@
 					}
 				}
 			},
+			"LocalRuntimeReport": {
+				"description": "Local-only lifecycle CLI receipt. launch is a public UUID, never its secret challenge key. Optional data is the same public room contract as HTTP. Resource metadata is diagnostic, never PID-only cleanup authority.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"schema_version",
+					"command",
+					"outcome",
+					"detail"
+				],
+				"properties": {
+					"schema_version": {
+						"type": "string",
+						"enum": [
+							"agora.local-runtime/v1"
+						]
+					},
+					"command": {
+						"type": "string",
+						"enum": [
+							"doctor",
+							"start",
+							"status",
+							"send",
+							"history",
+							"replay",
+							"evidence",
+							"stop",
+							"reset",
+							"unknown"
+						]
+					},
+					"outcome": {
+						"$ref": "#/components/schemas/CliOutcome"
+					},
+					"detail": {
+						"type": "string",
+						"maxLength": 4096
+					},
+					"launch": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"url": {
+						"type": "string",
+						"maxLength": 128
+					},
+					"root": {
+						"type": "string",
+						"maxLength": 4096
+					},
+					"center_pid": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 2147483647
+					},
+					"postgres_pid": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 2147483647
+					},
+					"postgres_port": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 65535
+					},
+					"snapshot": {
+						"$ref": "#/components/schemas/RoomSnapshot"
+					},
+					"receipt": {
+						"$ref": "#/components/schemas/RoomCommandReceipt"
+					},
+					"events": {
+						"$ref": "#/components/schemas/RoomEventBatch"
+					}
+				}
+			},
 			"ReadinessReport": {
 				"description": "Answer of GET /api/v1/health/ready. 200 when ready, 503 when not_ready.",
 				"type": "object",
@@ -1161,6 +1275,14 @@
 					"replayed": {
 						"type": "boolean"
 					}
+				}
+			},
+			"RoomEventBatch": {
+				"description": "Committed events strictly after the requested cursor, ascending, at most 50 per HTTP poll. Empty means caught up, not end of stream. No event compaction in this disposable local runtime.",
+				"type": "array",
+				"maxItems": 50,
+				"items": {
+					"$ref": "#/components/schemas/RoomMessageCreatedEvent"
 				}
 			},
 			"RoomMessage": {

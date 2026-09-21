@@ -1,6 +1,6 @@
 # Installation and first checks
 
-Today you install a contributor checkout, not an Agora product. There is no supported production installer or downloadable worker yet.
+Today you install a contributor checkout with a local-room development harness, not a production deployment. There is no supported production installer or downloadable worker yet.
 
 ## Prerequisites
 
@@ -18,6 +18,17 @@ pnpm docs:dev
 ```
 
 Open `http://127.0.0.1:4173`. The server rebuilds on page requests. Stop it with Ctrl+C. Set `DOCS_PORT` if that port is occupied. For static output, run `pnpm docs:build`; deploy the contents of `.docs-dist/` to any ordinary static host. See [docs operations](operations.md#documentation-deployment).
+
+## Open the local room harness
+
+```sh
+node scripts/local-room.ts doctor
+node scripts/local-room.ts start
+```
+
+Open the printed `url`, type a message and send it. The JSON projection shows only committed messages. Disconnect and reconnect to observe cursor replay. `node scripts/local-room.ts send --body 'From the CLI'` uses the same room and command path. Stop with `node scripts/local-room.ts stop`; starting again keeps the messages and URL. This is L3's deliberately minimal harness, not the L4 room interface. [Local room](local-room.md) explains its limits and the separately confirmed destructive reset.
+
+This branch is a stacked candidate on L2 `55269a5`; it is not landable before L2 and mandatory CI. No production credentials, model account or shared developer database are used.
 
 ## Prove the actual foundation
 

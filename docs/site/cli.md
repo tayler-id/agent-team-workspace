@@ -40,6 +40,26 @@ The Swift executable `agora-contracts-conform` lives in `contracts/swift`. The p
 
 This driver landed after the atlas seed. It proves fixture convergence, not a browser transport or production conversation flow. [Synchronization](synchronization.md) explains its scope and proof.
 
+## Local room runtime
+
+The project-owned driver is `node scripts/local-room.ts COMMAND`. Output is always schema-validated `agora.local-runtime/v1` JSON, with `outcome`, `detail`, and available launch/path/listener inventory. Credentials are never printed. `--help` and `--version` start nothing. Unknown flags or missing values are refused. Run from the owning checkout root.
+
+| Command | Effect and flags |
+| --- | --- |
+| `doctor` | Read-only Node 24/PostgreSQL 18 availability report |
+| `start` | Allocate private cluster and center, migrate as owner, run queries as `agora_app`, build minimal harness and print its `url`; optional `--port PORT` |
+| `status` | Challenge the running launch, or prove its listeners absent when stopped |
+| `send --body TEXT` | Same validated HTTP send as the browser; optional `--command-id UUID` for an explicit same-command retry |
+| `history` | Public snapshot, latest 1000 messages plus consistent cursor |
+| `replay --after CURSOR` | One public batch of at most 50 committed events, default cursor `0`; repeat after the last event's `seq` |
+| `evidence` | Fresh authenticated inventory and public snapshot; redirect JSON outside the instance directory to retain it |
+| `stop` | Authenticate exact launch, request owned shutdown, prove both listeners absent; retain database |
+| `reset --confirm-disposable` | Only while stopped: validate exact owned paths, refuse symlinks and remove disposable data |
+
+Every command accepts `--instance NAME`, default `development`; names are 1-60 lowercase letters, digits or hyphens. Files live in `.scratch/local-room-NAME`. Start refuses an already running or ambiguous instance, even if its process appears familiar. Ordinary restart keeps its URL but uses a fresh launch identity. Reset never implicitly stops anything. Exit 0 means pass, 2 blocked/refused prerequisite or operation, 64 usage error, 70 invalid internal report. HTTP failures become a blocked CLI report, never a successful partial send.
+
+[Local room](local-room.md) explains lifecycle and replay; [operator guidance](operations.md#local-room-lifecycle) explains retained data and uncertain cleanup. This is not the universal U01b project CLI or production identity.
+
 ## Center and database
 
 `node apps/center/src/main.ts` requires `AGORA_DATABASE_URL` and listens on `127.0.0.1`, `PORT` default 3000. Missing database configuration exits 64. It prints an `agora.center-start/v1` startup line. This fixture is not a public production service.
@@ -61,6 +81,7 @@ Migrate exits 0 pass, 2 blocked prerequisite, 64 usage error, or 70 infrastructu
 - `POST /api/v1/fixture/policy/decisions`: scope decision, 200; malformed input 400.
 - `POST /api/v1/local-room/messages`: send to the fixed local room, committed in one transaction; 201 receipt, replay returns the original receipt, changed body 409 `command_conflict`, other scope or unknown citation 404, malformed input 400. [Local room](local-room.md) explains the slice.
 - `GET /api/v1/local-room/snapshot`: ordered history and cursor of the fixed room from one repeatable read, at most the latest 1000 messages.
+- `GET /api/v1/local-room/events?after=CURSOR`: up to 50 committed events in numeric order, strictly after the cursor. Invalid cursor is 400; an empty page means caught up.
 - Other routes: JSON 404 `not_found`. Each error has a reason code and correlation ID.
 
 See [the runnable recipe](cookbook.md) and [configuration](configuration.md). Do not invent production authorization from fixture actor input.

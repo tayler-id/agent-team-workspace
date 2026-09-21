@@ -135,6 +135,17 @@
 			"owner": "local-room L1"
 		},
 		{
+			"id": "local-room-runtime",
+			"documentation": "docs/site/local-room.md",
+			"paths": ["scripts/local-room.ts", "scripts/local-room-owner.ts", "scripts/local-room-service.ts", "scripts/local-room-client.ts", "scripts/local-room-browser.ts", "scripts/local-room-harness.html", "contracts/tools/browser-validator.ts", "apps/center/src/app.ts", "apps/center/src/local-room-wire.ts", "packages/domain/src/local-room/port.ts", "packages/storage/src/local-room.ts", "contracts/schemas/local-room.schema.json", "contracts/openapi.json"],
+			"public": ["node scripts/local-room.ts doctor|start|status|send|history|replay|evidence|stop|reset", "GET /api/v1/local-room/events?after=CURSOR", "GET / (local runtime harness)"],
+			"contracts": ["contracts/schemas/local-room.schema.json"],
+			"fixtures": ["worktree-owned disposable PostgreSQL 18, product role agora_app", "private launch challenge and exact path identity"],
+			"scenarios": ["apps/center/test/runtime.pg.test.ts", "apps/center/test/runtime.test.ts"],
+			"platforms": ["node24", "postgresql18", "browser"],
+			"owner": "local-room L3"
+		},
+		{
 			"id": "local-room-persistence",
 			"documentation": "docs/site/local-room.md",
 			"paths": ["contracts/schemas/errors.schema.json", "contracts/openapi.json", "contracts/fixtures/vectors.json", "packages/domain/src/local-room/port.ts", "packages/domain/src/local-room/events.ts", "packages/domain/src/index.ts", "packages/storage/drizzle/0001_local_room.sql", "packages/storage/drizzle/meta/_journal.json", "packages/storage/src/local-room.ts", "packages/storage/src/database.ts", "packages/storage/src/index.ts", "apps/center/src/app.ts", "apps/center/src/main.ts", "scripts/probe-center.mjs"],

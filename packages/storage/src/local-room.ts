@@ -15,6 +15,10 @@ interface MessageRow { message_id: MessageId; room_id: RoomId; room_seq: string;
 export function bindLocalRoomStore(client: PoolClient, projectId: string): LocalRoomStore {
 	const toRecord = (row: MessageRow): RoomMessageRecord => ({ messageId: row.message_id, projectId: projectId as RoomMessageRecord['projectId'], roomId: row.room_id, roomSeq: row.room_seq, author: { kind: row.author_kind, principalId: row.author_principal_id as RoomMessageRecord['author']['principalId'] }, commandId: row.command_id as RoomMessageRecord['commandId'], body: row.body, citations: row.citations, createdAt: row.created_at });
 	return {
+		async readEvents(roomId, after, limit) {
+			const rows = await client.query<{ event_id: string; seq: string; payload: RoomMessageRecord }>('select event_id, seq::text, payload from local_room.event e where stream_id = $1 and seq > $2::numeric order by e.seq limit $3', [roomId, after, limit]);
+			return rows.rows.map((r) => ({ eventId: r.event_id, streamId: roomId, seq: r.seq, kind: 'local_room.message_created', actor: r.payload.author.principalId, occurredAt: r.payload.createdAt, payload: r.payload }));
+		},
 		async lockRoom(roomId) {
 			const result = await client.query('select 1 from local_room.room where room_id = $1 for update', [roomId]);
 			return (result.rowCount ?? 0) === 1;
@@ -53,6 +57,7 @@ export const SNAPSHOT_LIMIT = 1000;
 
 export function createPostgresLocalRoom(database: Database, identity: LocalRoomIdentity): LocalRoomPort {
 	return {
+		events: (after) => database.withLocalRoom(identity.projectId, (store) => store.readEvents(identity.roomId, after, 50), { readOnly: true }),
 		send: (command) => database.withLocalRoom(identity.projectId, (store) => sendRoomMessage(store, identity, command)),
 		snapshot: async () => ({ outcome: 'ok', snapshot: await database.withLocalRoom(identity.projectId, (store) => store.readSnapshot(identity.roomId, SNAPSHOT_LIMIT), { readOnly: true }) }),
 	};

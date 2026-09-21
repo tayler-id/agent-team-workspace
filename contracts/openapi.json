@@ -51,6 +51,17 @@
 				}
 			}
 		},
+		"/api/v1/local-room/events": {
+			"get": {
+				"operationId": "replayLocalRoom",
+				"summary": "Read up to 50 committed events strictly after a room cursor; repeat to resume",
+				"parameters": [{ "name": "after", "in": "query", "required": true, "schema": { "$ref": "#/components/schemas/Revision" } }],
+				"responses": {
+					"200": { "description": "Ordered committed events", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoomEventBatch" } } } },
+					"400": { "description": "Malformed cursor", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } }
+				}
+			}
+		},
 		"/api/v1/local-room/snapshot": {
 			"get": {
 				"operationId": "getLocalRoomSnapshot",

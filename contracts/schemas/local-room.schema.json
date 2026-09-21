@@ -99,6 +99,30 @@
 				"messages": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/RoomMessage" } }
 			}
 		},
+		"RoomEventBatch": {
+			"description": "Committed events strictly after the requested cursor, ascending, at most 50 per HTTP poll. Empty means caught up, not end of stream. No event compaction in this disposable local runtime.",
+			"type": "array", "maxItems": 50, "items": { "$ref": "#/$defs/RoomMessageCreatedEvent" }
+		},
+		"LocalRuntimeReport": {
+			"description": "Local-only lifecycle CLI receipt. launch is a public UUID, never its secret challenge key. Optional data is the same public room contract as HTTP. Resource metadata is diagnostic, never PID-only cleanup authority.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "command", "outcome", "detail"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.local-runtime/v1"] },
+				"command": { "type": "string", "enum": ["doctor", "start", "status", "send", "history", "replay", "evidence", "stop", "reset", "unknown"] },
+				"outcome": { "$ref": "cli.schema.json#/$defs/CliOutcome" },
+				"detail": { "type": "string", "maxLength": 4096 },
+				"launch": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"url": { "type": "string", "maxLength": 128 },
+				"root": { "type": "string", "maxLength": 4096 },
+				"center_pid": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
+				"postgres_pid": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
+				"postgres_port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+				"snapshot": { "$ref": "#/$defs/RoomSnapshot" },
+				"receipt": { "$ref": "#/$defs/RoomCommandReceipt" },
+				"events": { "$ref": "#/$defs/RoomEventBatch" }
+			}
+		},
 		"RoomCommandReceipt": {
 			"description": "201 answer of a committed send. receipt is the reusable R07 receipt (aggregate_id is the room, revision its room_seq after the append). replayed is true when identity matched an earlier command and the original receipt was returned without a second message.",
 			"type": "object", "additionalProperties": false,

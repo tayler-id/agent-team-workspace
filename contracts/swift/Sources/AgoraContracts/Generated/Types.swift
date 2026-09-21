@@ -31,6 +31,11 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `POST /api/v1/local-room/messages`.
     /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)`.
     func sendLocalRoomMessage(_ input: Operations.sendLocalRoomMessage.Input) async throws -> Operations.sendLocalRoomMessage.Output
+    /// Read up to 50 committed events strictly after a room cursor; repeat to resume
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/events`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/events/get(replayLocalRoom)`.
+    func replayLocalRoom(_ input: Operations.replayLocalRoom.Input) async throws -> Operations.replayLocalRoom.Output
     /// Ordered history and cursor of the fixed local-development room from one repeatable read; at most the latest 1000 messages
     ///
     /// - Remark: HTTP `GET /api/v1/local-room/snapshot`.
@@ -78,6 +83,19 @@ extension APIProtocol {
         try await sendLocalRoomMessage(Operations.sendLocalRoomMessage.Input(
             headers: headers,
             body: body
+        ))
+    }
+    /// Read up to 50 committed events strictly after a room cursor; repeat to resume
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/events`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/events/get(replayLocalRoom)`.
+    public func replayLocalRoom(
+        query: Operations.replayLocalRoom.Input.Query,
+        headers: Operations.replayLocalRoom.Input.Headers = .init()
+    ) async throws -> Operations.replayLocalRoom.Output {
+        try await replayLocalRoom(Operations.replayLocalRoom.Input(
+            query: query,
+            headers: headers
         ))
     }
     /// Ordered history and cursor of the fixed local-development room from one repeatable read; at most the latest 1000 messages
