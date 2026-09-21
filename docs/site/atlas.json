@@ -60,6 +60,20 @@
       ]
     },
     {
+      "id": "app-architecture",
+      "title": "Application architecture boundaries",
+      "status": "Built",
+      "why": "Make Feature/Client/Host shortcuts fail in lint and tests with owner-named diagnostics.",
+      "page": "app-architecture.md",
+      "proof": [
+        "repo:apps/web/src/framework/index.ts",
+        "repo:scripts/boundary-policy.ts",
+        "repo:scripts/renderer-policy.ts",
+        "repo:packages/client-core/test/app-architecture.test.ts",
+        "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json"
+      ]
+    },
+    {
       "id": "local-room",
       "title": "Local room contracts",
       "status": "In progress",
@@ -88,7 +102,7 @@
     {
       "id": "browser",
       "title": "Browser and client core",
-      "availability": "S1 planned UI; core in progress",
+      "availability": "S1 planned UI; core built; app boundary lint built",
       "page": "architecture.md",
       "why": "Show shared conversation without owning authority."
     },

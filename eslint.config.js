@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import { importBoundaryRule } from './scripts/boundary-policy.ts';
 import { publicTypesRule } from './scripts/public-types.ts';
+import { rendererFootgunRule } from './scripts/renderer-policy.ts';
 
 export default tseslint.config(
 	{ ignores: ['node_modules/', '.docs-dist/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/swift/'] },
@@ -21,10 +22,22 @@ export default tseslint.config(
 		},
 	},
 	{
-		files: ['contracts/**/*.ts', 'packages/*/src/**/*.ts', 'apps/*/src/**/*.ts'],
+		files: ['contracts/**/*.ts', 'packages/*/src/**/*.ts', 'apps/*/src/**/*.ts', 'apps/*/src/**/*.tsx'],
 		ignores: ['contracts/test/**'],
-		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule, 'public-types': publicTypesRule } } },
-		rules: { 'agora/import-boundary': 'error', 'agora/public-types': 'error' },
+		plugins: {
+			agora: {
+				rules: {
+					'import-boundary': importBoundaryRule,
+					'public-types': publicTypesRule,
+					'renderer-footgun': rendererFootgunRule,
+				},
+			},
+		},
+		rules: {
+			'agora/import-boundary': 'error',
+			'agora/public-types': 'error',
+			'agora/renderer-footgun': 'error',
+		},
 	},
 	{
 		files: ['contracts/**/*.mjs'],

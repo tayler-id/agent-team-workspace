@@ -35,6 +35,18 @@ The API, scanner and outbox are intended to run in one Node process. It must nev
 
 Existing roots and planned modules have [discoverable homes](repository.md). The current [client isolation](synchronization.md) slice enforces import forms, export maps, transitive public-type boundaries and platform-free compilation. These guards do not prove future adapters or product authorization.
 
+## Application owners inside apps/web
+
+Agora names five application nouns: Feature, Entrypoint, Timeline Card, Client and Host. The first mechanical slice reserves distinct owners under `apps/web/src/{framework,client,host,features}` and enforces them with the existing Agora ESLint plugin on both `.ts` and `.tsx`. See [application architecture boundaries](app-architecture.md).
+
+```flow
+Feature code | Product capability files under apps/web/src/features/<name>.
+Framework | Shared rendering primitives and the only raw effect owner.
+Client | Durable browser-state commands and hooks through public entrypoints.
+Host | Typed wrappers for window, document, fetch, sockets and durable browser storage.
+Lint gate | Rejects cross-owner shortcuts and names the supported path in the diagnostic.
+```
+
 ## Command and event flow
 
 A production mutation will validate a command ID and expected revision, commit current state, event, audit and receipt together, and deliver only committed events. A duplicate command with identical input returns its original receipt. Reusing the ID with different input is a conflict. Sequence counters are per stream, not timestamps or a global clock.

@@ -1,0 +1,24 @@
+{
+  "schema_version": "agora.task-outcome/v1",
+  "task": "agora-s1-lint-application-architecture",
+  "unit": "U20",
+  "parent": "7c6038ca1a9fb221037a3cd76704384057dcd03e",
+  "head": "85a908e1a3dc69158ea4ec43230ceebfe3e52521",
+  "result": "pass",
+  "summary": "Application architecture boundary lint covers .ts/.tsx, apps/web owners, renderer foot-guns and architecture exceptions with guard negatives.",
+  "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
+  "green": "evidence/U20/agora-s1-lint-application-architecture/green.log",
+  "red_assertions": "Tests 8 failed (8) with expected false to be true",
+  "green_assertions": "Tests 8 passed (8)",
+  "commands": [
+    "pnpm boundaries",
+    "pnpm lint",
+    "pnpm check"
+  ],
+  "limits": [
+    "No Client/Host runtime",
+    "No Feature discovery",
+    "No product Features",
+    "Fixture Feature entrypoints only"
+  ]
+}
