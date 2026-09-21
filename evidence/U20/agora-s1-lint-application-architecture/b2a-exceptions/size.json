@@ -1,0 +1,113 @@
+{
+	"parent": "d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef",
+	"head": "70fe483edb81f77723c92108b0356d5eafd11bd9",
+	"method": "git diff parent..head; meaningful = added lines that are non-blank and not comment-only (//, /*, *, #); classes: source (code, config, tests, exception file), docs_evidence (docs/, evidence/, AGENTS.md, .agents/), generated (docs/site/progress.md mirror)",
+	"captain_target": "at most 400 meaningful source lines and 12 source files (D85)",
+	"classes": {
+		"docs_evidence": {
+			"files": 7,
+			"added_lines": 26,
+			"meaningful_lines": 25,
+			"removed_lines": 10
+		},
+		"source": {
+			"files": 6,
+			"added_lines": 216,
+			"meaningful_lines": 200,
+			"removed_lines": 5
+		}
+	},
+	"files": [
+		{
+			"file": ".agents/skills/verify-agora/SKILL.md",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 1
+		},
+		{
+			"file": "AGENTS.md",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 1
+		},
+		{
+			"file": "agora/architecture-exceptions.json",
+			"class": "source",
+			"added": 4,
+			"meaningful": 4,
+			"removed": 0
+		},
+		{
+			"file": "agora/feature-map.json",
+			"class": "source",
+			"added": 2,
+			"meaningful": 2,
+			"removed": 2
+		},
+		{
+			"file": "docs/decisions.tsv",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 0
+		},
+		{
+			"file": "docs/runbooks/development.md",
+			"class": "docs_evidence",
+			"added": 1,
+			"meaningful": 1,
+			"removed": 1
+		},
+		{
+			"file": "docs/site/app-architecture.md",
+			"class": "docs_evidence",
+			"added": 7,
+			"meaningful": 6,
+			"removed": 5
+		},
+		{
+			"file": "docs/site/atlas.json",
+			"class": "docs_evidence",
+			"added": 7,
+			"meaningful": 7,
+			"removed": 2
+		},
+		{
+			"file": "docs/site/site.json",
+			"class": "docs_evidence",
+			"added": 8,
+			"meaningful": 8,
+			"removed": 0
+		},
+		{
+			"file": "eslint.config.js",
+			"class": "source",
+			"added": 4,
+			"meaningful": 2,
+			"removed": 0
+		},
+		{
+			"file": "packages/client-core/test/app-architecture.test.ts",
+			"class": "source",
+			"added": 133,
+			"meaningful": 124,
+			"removed": 1
+		},
+		{
+			"file": "scripts/architecture-exceptions.ts",
+			"class": "source",
+			"added": 70,
+			"meaningful": 65,
+			"removed": 0
+		},
+		{
+			"file": "scripts/boundary-policy.ts",
+			"class": "source",
+			"added": 3,
+			"meaningful": 3,
+			"removed": 2
+		}
+	]
+}

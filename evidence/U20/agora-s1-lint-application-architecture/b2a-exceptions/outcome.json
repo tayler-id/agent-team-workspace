@@ -1,0 +1,46 @@
+{
+  "schema_version": "agora.task-outcome/v1",
+  "task": "agora-s1-lint-application-architecture",
+  "unit": "U20",
+  "slice": "B2a",
+  "parent": "d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef",
+  "head": "70fe483edb81f77723c92108b0356d5eafd11bd9",
+  "result": "pass",
+  "summary": "B2a lands the architecture-exception registry split from the reconciled B2 candidate 09b619e (D86): scripts/architecture-exceptions.ts, the empty agora/architecture-exceptions.json, the import-boundary hook at both report sites and the eslint.config.js load-time assert. The guard list holds only agora/import-boundary because it is the only rule that consults the registry; renderer-policy.ts, renderer foot-gun rules, mixed-union DOM rules and their tests stay on fm/agora-app-architecture-boundaries-b2-reconcile for B2b.",
+  "red": "evidence/U20/agora-s1-lint-application-architecture/b2a-exceptions/red.log",
+  "green": "evidence/U20/agora-s1-lint-application-architecture/b2a-exceptions/green.log",
+  "red_assertions": "B2a head tests fail on parent d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef (Tests 6 failed | 7 passed (13)): owner tables, validator rejections, exact-row allows, live-rule row, load-time fail-closed and weakened-validator cases fail; the seven B1 import cases stay green",
+  "green_assertions": "Tests 13 passed (13)",
+  "guard_negatives": [
+    "Removing the exceptionAllows call from the import check in scripts/boundary-policy.ts turned the live-rule test and the owner-tables call-site count red (2 failed) before the file was restored byte for byte",
+    "The weakened-validator test copies scripts/architecture-exceptions.ts without the self-approval line into a throwaway root and proves that copy accepts a self-approved row",
+    "The load-time test runs the exported assert against a throwaway root with a self-approved row in a separate node process and requires a nonzero exit naming self-approved"
+  ],
+  "commands": [
+    "node scripts/record-red-green.mjs --parent d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef --head 70fe483edb81f77723c92108b0356d5eafd11bd9 --out evidence/U20/agora-s1-lint-application-architecture/b2a-exceptions -- pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts",
+    "pnpm boundaries",
+    "pnpm lint",
+    "pnpm typecheck",
+    "pnpm docs:check",
+    "pnpm check"
+  ],
+  "size": {
+    "receipt": "evidence/U20/agora-s1-lint-application-architecture/b2a-exceptions/size.json",
+    "source_files": 6,
+    "source_meaningful_lines": 200,
+    "implementation_meaningful_lines": 76,
+    "test_meaningful_lines": 124,
+    "captain_target": "400 meaningful lines / 12 source files (D85)",
+    "note": "Counted with the same method as the preserved B2 size.json; under the cap with or without the test file."
+  },
+  "limits": [
+    "No renderer-policy.ts, renderer foot-gun rules or mixed-union DOM rules; those stay in the preserved B2 candidate for B2b",
+    "No Client/Host runtime, Feature discovery or product Features",
+    "The committed registry is empty; the live-rule fixture writes rows into it during the test and restores it byte for byte, and no other test file lints the paths those rows name",
+    "agora/public-types does not consult the registry, so it is not a valid guard until a slice wires it",
+    "The eslint.config.js call site is proven by the top-level source regex plus the exported assert in a separate process; the ESLint CLI is not run against an invalid committed file because boundaries.test.ts loads the same config in parallel",
+    "whole-feature-red.log, red.log and green.log one level up are the retained B1 receipts (cacbd06 to ef70dcd)"
+  ],
+  "test_patch_digest": "ad8d3520630d77d6e231260339cb2d394bda849fc7780f46cce8591b49a39a27",
+  "lockfile_digest": "e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"
+}

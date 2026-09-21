@@ -1,0 +1,133 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-21T22:49:31.346Z
+parent: d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef
+head: 70fe483edb81f77723c92108b0356d5eafd11bd9
+subject_revision: d46c19f96d7ed3fcbae3cb8e0b269a2da21dadef
+test_patch_applied_to_subject: true
+test_patch_files: packages/client-core/test/app-architecture.test.ts
+test_patch_digest: sha256:ad8d3520630d77d6e231260339cb2d394bda849fc7780f46cce8591b49a39a27
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-fP12dk
+
+ ❯ |unit| packages/client-core/test/app-architecture.test.ts (13 tests | 6 failed) 23379ms
+   × owner tables are explicit and test-visible architecture policy 3ms
+   × architecture exceptions reject wildcard expired unknown broadened and self-approved rows and accept the committed file 19ms
+   × exact architecture exceptions allow one path symbol and guard without broadening 3ms
+   × a committed exception row lets exactly one import through the live import-boundary rule 0ms
+   × eslint config load path fails closed on invalid architecture exceptions 25ms
+   × weakening the exception validator lets a self-approved row load 0ms
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 7 passed (13)
+   Start at  18:48:37
+   Duration  23.57s (tests 99%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > owner tables are explicit and test-visible architecture policy
+Error: ENOENT: no such file or directory, open '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-fP12dk/scripts/architecture-exceptions.ts'
+ ❯ packages/client-core/test/app-architecture.test.ts:44:12
+     42| test('owner tables are explicit and test-visible architecture policy',…
+     43|  const b = readFileSync(path.join(root, 'scripts/boundary-policy.ts'),…
+     44|  const x = readFileSync(path.join(root, 'scripts/architecture-exceptio…
+       |            ^
+     45|  const e = readFileSync(path.join(root, 'eslint.config.js'), 'utf8');
+     46|  expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'pac…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > architecture exceptions reject wildcard expired unknown broadened and self-approved rows and accept the committed file
+Error: Cannot find module '/scripts/architecture-exceptions.ts' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-fP12dk/packages/client-core/test/app-architecture.test.ts
+ ❯ packages/client-core/test/app-architecture.test.ts:182:14
+    180|
+    181| test('architecture exceptions reject wildcard expired unknown broadene…
+    182|  const mod = await exceptionsModule();
+       |              ^
+    183|  mod.clearArchitectureExceptionCache();
+    184|  expect(() => { mod.assertArchitectureExceptionsValid(root); }).not.to…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > exact architecture exceptions allow one path symbol and guard without broadening
+Error: Cannot find module '/scripts/architecture-exceptions.ts' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-fP12dk/packages/client-core/test/app-architecture.test.ts
+ ❯ packages/client-core/test/app-architecture.test.ts:206:14
+    204|
+    205| test('exact architecture exceptions allow one path symbol and guard wi…
+    206|  const mod = await exceptionsModule();
+       |              ^
+    207|  const tempRoot = exceptionRoot([exceptionRow]);
+    208|  try {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > a committed exception row lets exactly one import through the live import-boundary rule
+Error: ENOENT: no such file or directory, open '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-fP12dk/agora/architecture-exceptions.json'
+ ❯ packages/client-core/test/app-architecture.test.ts:230:19
+    228| test('a committed exception row lets exactly one import through the li…
+    229|  const registry = path.join(root, 'agora/architecture-exceptions.json'…
+    230|  const original = readFileSync(registry);
+       |                   ^
+    231|  const leak = "import type { Database } from '@agora/storage'; export …
+    232|  expect(await has(leak, feature, 'agora/import-boundary', 'renderer'))…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > eslint config load path fails closed on invalid architecture exceptions
+AssertionError: expected '\nnode:internal/modules/esm/resolve:2…' to contain 'self-approved'
+
+- Expected
++ Received
+
+- self-approved
++
++ node:internal/modules/esm/resolve:271
++     throw new ERR_MODULE_NOT_FOUND(
++           ^
++
++ Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-fP12dk/scripts/architecture-exceptions.ts' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-arch-ex-zy8TPt/load-assert.mjs
++     at finalizeResolution (node:internal/modules/esm/resolve:271:11)
++     at moduleResolve (node:internal/modules/esm/resolve:865:10)
++     at defaultResolve (node:internal/modules/esm/resolve:992:11)
++     at #cachedDefaultResolve (node:internal/modules/esm/loader:691:20)
++     at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:708:38)
++     at ModuleLoader.resolveSync (node:internal/modules/esm/loader:740:52)
++     at #resolve (node:internal/modules/esm/loader:673:17)
++     at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:593:35)
++     at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
++     at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
++   code: 'ERR_MODULE_NOT_FOUND',
++   url: 'file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-fP12dk/scripts/architecture-exceptions.ts'
++ }
++
++ Node.js v24.16.0
++
+
+ ❯ packages/client-core/test/app-architecture.test.ts:259:15
+    257|   const { status, out } = runNode(loader);
+    258|   expect(status).not.toBe(0);
+    259|   expect(out).toContain('self-approved');
+       |               ^
+    260|  } finally {
+    261|   rmSync(tempRoot, { recursive: true, force: true });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > weakening the exception validator lets a self-approved row load
+Error: ENOENT: no such file or directory, open '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-fP12dk/scripts/architecture-exceptions.ts'
+ ❯ packages/client-core/test/app-architecture.test.ts:271:17
+    269|
+    270| test('weakening the exception validator lets a self-approved row load'…
+    271|  const source = readFileSync(path.join(root, 'scripts/architecture-exc…
+       |                 ^
+    272|  const guard = "if (typeof e.owner === 'string' && e.owner === e.appro…
+    273|  expect(source).toContain(guard);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
