@@ -1,11 +1,11 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-21T05:06:14.504Z
-parent: d7b192ee5a8a1cffb8b3b770f389d6f7575dc81e
-head: 3da32d379b55fbde21daec3470ace2efb7845664
-subject_revision: d7b192ee5a8a1cffb8b3b770f389d6f7575dc81e
+recorded_at: 2026-09-21T05:15:17.270Z
+parent: f1584f849778d05139361dbc976177e2818fc76c
+head: b9c63192faac41add7f9710cede5e548bdbd83f6
+subject_revision: f1584f849778d05139361dbc976177e2818fc76c
 test_patch_applied_to_subject: true
 test_patch_files: packages/client-core/test/app-architecture.test.ts
-test_patch_digest: sha256:f6bf9797a69ed46f3824d7892b62b5f4673ce67ceb8fa6194c236bd25b64b02c
+test_patch_digest: sha256:8607cef608e79f85cdbd038ed754f11d2e132284d6dd5c2b6a0cc61cbfe5489d
 fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
 configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"}
 toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
@@ -13,75 +13,19 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-ojpjqM
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-7m9wOe
 
- ❯ |unit| packages/client-core/test/app-architecture.test.ts (8 tests | 8 failed) 1605ms
-   × owner tables are explicit and test-visible architecture policy 2ms
-   × tsx renderer rejects server imports with owner-named diagnostics across import forms 1364ms
-   × framework client and host never import features; features use public entrypoints only 45ms
-   × renderer footguns: effects only in framework; browser APIs only in host or framework 43ms
-   × inline agora disables and bare ts-ignore rejected; described ts-expect-error allowed 36ms
-   × portable client-core rejects application and storage edges 83ms
-   × architecture exceptions reject wildcard expired unknown broadened and self-approved records 0ms
-   × removing app-architecture protections makes denial assertions turn red 32ms
+ ❯ |unit| packages/client-core/test/app-architecture.test.ts (8 tests | 2 failed) 2254ms
+   × renderer footguns: effects only in framework; browser APIs only in host or framework 69ms
+   × removing app-architecture protections makes denial assertions turn red 78ms
 
  Test Files  1 failed (1)
-      Tests  8 failed (8)
-   Start at  01:06:04
-   Duration  1.75s (tests 95%, import 4%, transform 1%)
+      Tests  2 failed | 6 passed (8)
+   Start at  01:15:06
+   Duration  2.39s (tests 97%, import 3%)
 
 
-⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
-
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > owner tables are explicit and test-visible architecture policy
-Error: ENOENT: no such file or directory, open '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-ojpjqM/scripts/architecture-exceptions.ts'
- ❯ packages/client-core/test/app-architecture.test.ts:26:21
-     24| test('owner tables are explicit and test-visible architecture policy',…
-     25|  const boundary = readFileSync(path.join(root, 'scripts/boundary-polic…
-     26|  const exceptions = readFileSync(path.join(root, 'scripts/architecture…
-       |                     ^
-     27|  expect(boundary).toContain("export const PACKAGE_OWNERS = ['contracts…
-     28|  expect(boundary).toContain("framework: 'apps/web/src/framework'");
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
-
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > tsx renderer rejects server imports with owner-named diagnostics across import forms
-AssertionError: expected false to be true // Object.is equality
-
-- Expected
-+ Received
-
-- true
-+ false
-
- ❯ packages/client-core/test/app-architecture.test.ts:44:82
-     42|  for (const module of ['@agora/storage', '@agora/domain', '@agora/cent…
-     43|   for (const form of forms) {
-     44|    expect(await has(form(module), feature, 'agora/import-boundary', 'r…
-       |                                                                                  ^
-     45|    expect(await has(form(module), feature, 'agora/import-boundary', ow…
-     46|   }
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
-
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > framework client and host never import features; features use public entrypoints only
-AssertionError: expected false to be true // Object.is equality
-
-- Expected
-+ Received
-
-- true
-+ false
-
- ❯ packages/client-core/test/app-architecture.test.ts:53:157
-     51| test('framework client and host never import features; features use pu…
-     52|  for (const file of [framework, client, host]) {
-     53|   expect(await has("import { x } from '../features/room/private'; expo…
-       |                                                                                                                                                             ^
-     54|  }
-     55|  expect(await has("import { x } from '../notes/secret'; export const y…
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  |unit| packages/client-core/test/app-architecture.test.ts > renderer footguns: effects only in framework; browser APIs only in host or framework
 AssertionError: expected false to be true // Object.is equality
@@ -92,67 +36,15 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:63:81
-     61| test('renderer footguns: effects only in framework; browser APIs only …
-     62|  const effect = "import { useEffect } from 'react'; export function Ca…
-     63|  expect(await has(effect, feature, 'agora/renderer-footgun', owners.fr…
-       |                                                                                 ^
+ ❯ packages/client-core/test/app-architecture.test.ts:66:77
      64|  expect(await has(effect, framework, 'agora/renderer-footgun')).toBe(f…
-     65|  const browser = 'export function read(): string { return window.local…
+     65|  const aliased = "import { useEffect as sideEffect } from 'react'; exp…
+     66|  expect(await has(aliased, feature, 'agora/renderer-footgun', 'useEffe…
+       |                                                                             ^
+     67|  expect(await has(aliased, framework, 'agora/renderer-footgun')).toBe(…
+     68|  const namespaced = "import * as React from 'react'; export function C…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
-
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > inline agora disables and bare ts-ignore rejected; described ts-expect-error allowed
-AssertionError: expected false to be true // Object.is equality
-
-- Expected
-+ Received
-
-- true
-+ false
-
- ❯ packages/client-core/test/app-architecture.test.ts:77:193
-
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
-
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > portable client-core rejects application and storage edges
-AssertionError: expected false to be true // Object.is equality
-
-- Expected
-+ Received
-
-- true
-+ false
-
- ❯ packages/client-core/test/app-architecture.test.ts:85:160
-     83| test('portable client-core rejects application and storage edges', asy…
-     84|  const file = 'packages/client-core/src/model.ts';
-     85|  expect(await has("import type { X } from '../../../apps/web/src/clien…
-       |                                                                                                                                                                ^
-     86|  expect(await has("import type { Database } from '@agora/storage'; exp…
-     87| }, 120_000);
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
-
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > architecture exceptions reject wildcard expired unknown broadened and self-approved records
-AssertionError: expected false to be true // Object.is equality
-
-- Expected
-+ Received
-
-- true
-+ false
-
- ❯ packages/client-core/test/app-architecture.test.ts:90:76
-     88|
-     89| test('architecture exceptions reject wildcard expired unknown broadene…
-     90|  expect(existsSync(path.join(root, 'scripts/architecture-exceptions.ts…
-       |                                                                            ^
-     91|  const mod = await import('../../../scripts/architecture-exceptions.ts…
-     92|  const base = {
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
  FAIL  |unit| packages/client-core/test/app-architecture.test.ts > removing app-architecture protections makes denial assertions turn red
 AssertionError: expected false to be true // Object.is equality
@@ -163,13 +55,13 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:118:68
-    116|   ['agora/renderer-footgun', feature, 'export const read = (): string …
-    117|  ] as const) {
-    118|   expect((await agora(code, file)).some((m) => m.ruleId === rule)).toB…
+ ❯ packages/client-core/test/app-architecture.test.ts:130:68
+    128|   ['agora/renderer-footgun', feature, 'export const read = (): string …
+    129|  ] as const) {
+    130|   expect((await agora(code, file)).some((m) => m.ruleId === rule)).toB…
        |                                                                    ^
-    119|   const messages = await agora(code, file, new ESLint({ cwd: root, ign…
-    120|   expect(messages.filter((m) => m.ruleId === rule)).toEqual([]);
+    131|   const messages = await agora(code, file, new ESLint({ cwd: root, ign…
+    132|   expect(messages.filter((m) => m.ruleId === rule)).toEqual([]);
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
 
