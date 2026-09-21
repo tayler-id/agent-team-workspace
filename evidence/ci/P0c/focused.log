@@ -1,0 +1,26 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+
+{"guard":"short-selection","weakened":false,"source":"55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf","input":"886a0c08b1b3aed013a07e7147f6a45da81edb1fcce42d1a6a5b01b2453cdabc","exit":0,"identity":"{\"runId\":\"b34b0e0a-c5bd-409c-ab17-6fb05ca6ac27\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-iPZ6Cz\",\"socketDir\":\"/private/tmp/agora-p0c-b34b0e0a-c5bd-409c-ab17-6fb05ca6ac27\"}\n","diagnostic":""}
+{"guard":"short-selection","weakened":true,"source":"3518b355692ac373ae072f92d8a5076f70cf34a09e1e49092e4d608a8061cb0d","input":"886a0c08b1b3aed013a07e7147f6a45da81edb1fcce42d1a6a5b01b2453cdabc","exit":1,"identity":"{\"runId\":\"b34b0e0a-c5bd-409c-ab17-6fb05ca6ac27\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-iPZ6Cz\",\"socketDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-iPZ6Cz/agora-p0c-b34b0e0a-c5bd-409c-ab17-6fb05ca6ac27\"}\n","diagnostic":"node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: short selection denial\n    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/[eval1]:4:14\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:230:26\n    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.16.0\n"}
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > allocation baseline: creates a private directory without touching artifacts 3ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > short socket denial, collision and idempotent cleanup 2ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: runId 1ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: artifactDir 1ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: socketDir 0ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: directory-mode 0ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: record-mode 0ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: neighbor 0ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: symlink 1ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: directory-symlink 1ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > refuses invalid run identity before allocation 0ms
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > guard disabled: short-selection denial assertion turns red 93ms
+{"guard":"ownership","weakened":false,"source":"55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf","input":"95e1a204b20687cdface84f33c1b74cc9d4dbc7248b69398a6187cb9ad6252ea","exit":0,"identity":"{\"runId\":\"454d6739-a995-40b0-9b49-aeda5242dcbc\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-iPZ6Cz\",\"socketDir\":\"/private/tmp/agora-p0c-454d6739-a995-40b0-9b49-aeda5242dcbc\"}\n","diagnostic":""}
+{"guard":"ownership","weakened":true,"source":"faa2b6f2aea7493d9f01d8608d33340433535e8e50b1c9ce0d29af3aae167be1","input":"95e1a204b20687cdface84f33c1b74cc9d4dbc7248b69398a6187cb9ad6252ea","exit":1,"identity":"{\"runId\":\"454d6739-a995-40b0-9b49-aeda5242dcbc\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-iPZ6Cz\",\"socketDir\":\"/private/tmp/agora-p0c-454d6739-a995-40b0-9b49-aeda5242dcbc\"}\n","diagnostic":"node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected exception: ownership denial\n    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/[eval1]:4:75\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:230:26\n    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: /socket ownership/,\n  operator: 'throws',\n  diff: 'simple'\n}\n\nNode.js v24.16.0\n"}
+ ✓ |unit| packages/storage/test/postgres-socket.test.ts > guard disabled: ownership denial assertion turns red 98ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  23:19:23
+   Duration  284ms (tests 89%, transform 7%, import 4%, worker 1%)
+

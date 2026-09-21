@@ -36,7 +36,7 @@ node scripts/with-test-postgres.mjs <command>
 CI P0c A is allocation-only, not wrapper/lifecycle readiness. Its direct driver requires Node 24, installed Vitest and a writable local temporary root; no PostgreSQL server or Swift is needed for this focused scenario. Retain its output under `evidence/ci/P0c/`; integration and process cleanup remain slices B/C.
 
 ```sh
-pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts
+pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts --disableConsoleIntercept
 ```
 
 ```sh
@@ -109,7 +109,15 @@ pnpm verify:foundation -- --parent PARENT --head HEAD --evidence DIR --json
 
 The first four commands require exit 0. `task_outcome: pass` never qualifies the unit or authorizes features. Inspect exact `FG01.red-required` red cause, baseline pass, same-subject green, guard normal/disabled assertions, and retained artifact hashes. No receipt is accepted without fresh replay. The [driver reference](../../../docs/site/test-first.md) documents scope and trust limits.
 
+For P0c A, replay the test-only allocation parent with the focused baseline and short-location assertion; other scenarios run unfiltered in Drive. Native guard receipts include source/input digests and expected assertion failures.
+
+```sh
+node scripts/record-red-green.mjs --parent c9e6fe16c1f107da95d77f35d092e0a923781783 --head HEAD --out .scratch/p0c-replay -- pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts -t 'allocation baseline|short socket denial'
+```
+
 ## Cleanup
+
+P0c A's driver allocates and releases only its recorded socket directories; its native assertions verify removal while retaining artifact neighbors. It never starts a process. For this slice, do not globally sweep temporary directories or prune other tasks' worktrees. Wrapper cancellation, timeout and process cleanup are explicitly unimplemented until B/C.
 
 `with-test-postgres.mjs` stops and deletes its cluster on exit, including on SIGINT. `record-red-green.mjs` removes its worktrees. `generate.mjs --check` and the contract tests remove their temporary trees. `contracts/swift/.build/` is an ignored build cache and may stay. Confirm nothing else is left behind:
 

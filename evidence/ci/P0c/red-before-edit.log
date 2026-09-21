@@ -1,0 +1,35 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+
+ ❯ |unit| packages/storage/test/postgres-socket.test.ts (11 tests | 1 failed | 9 skipped) 5ms
+   × short socket denial, collision and idempotent cleanup 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/storage/test/postgres-socket.test.ts > short socket denial, collision and idempotent cleanup
+AssertionError: deny long artifact socket location: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/storage/test/postgres-socket.test.ts:24:123
+     22|  writeFileSync(`${artifacts}/evidence`, 'retained');
+     23|  try {
+     24|   expect(lease.identity.socketDir.startsWith(`${realpathSync('/tmp')}/…
+       |                                                                                                                           ^
+     25|   expect(Buffer.byteLength(`${lease.identity.socketDir}/.s.PGSQL.5432`…
+     26|   expect(readFileSync(`${lease.identity.socketDir}/owner.json`, 'utf8'…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 9 skipped (11)
+   Start at  23:12:31
+   Duration  102ms (transform 53%, import 24%, tests 17%, worker 6%)
+
+
+observed exit: 1
