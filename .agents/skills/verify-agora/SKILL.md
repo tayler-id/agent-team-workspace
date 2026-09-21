@@ -119,7 +119,7 @@ node scripts/record-red-green.mjs --parent c9e6fe16c1f107da95d77f35d092e0a923781
 
 For P0c B, replay qualified parent `17fbf24609fb3cbcb25c052ae7ecee124bc0bc87` against the committed implementation head with the recorder and focused command `pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t deep-success`. Red is PostgreSQL's native long-socket failure (exit 70 versus expected 0); green connects as `agora_app` and verifies removal. Set `TMPDIR` to a private directory inside the task worktree for recorder worktrees, data and logs; only allocator-owned short sockets live outside it.
 
-For P0c C, replay qualified parent `c04f5606df49eb7976ad5cf244911c73f77dd1fb` against code head `051da4431f517e5906d67f51d22a7701cc61d719` with the focused command `pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t 'abort-stop-throw|initdb-stderr|psql-stderr|missing-pg-isready'`. Red shows the abort-path crash (`expected 1 to be 70`), empty tool diagnostics (`initdb failed (1)` without the tool's words) and the probe flood (62 `blocked` receipts against 2); green shows `Tests 4 passed`.
+For P0c C, replay qualified parent `c04f5606df49eb7976ad5cf244911c73f77dd1fb` against code head `8d4d42c94dbe71bc3fc45a048ac8b32372bbbd53` with the focused command `pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.ts -t 'abort-stop-throw|initdb-stderr|psql-stderr|missing-pg-isready'`. Red shows the abort-path crash (`expected 1 to be 70`), empty tool diagnostics (`initdb failed (1)` without the tool's words) and the probe flood (63 `blocked` receipts against 2); green shows `Tests 4 passed`.
 
 ## Cleanup
 
