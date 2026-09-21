@@ -148,6 +148,20 @@ Prerequisites name earlier task closures. Unit gates name completed external mil
 - Plan unit: U20, establish application-architecture boundary lint.
 - Specification requirements: R21, R22, R25. Release criteria AC16.
 
+### agora-s1-declare-feature-dependencies
+
+- Title: Enforce declared Feature-to-Feature dependencies and the framework edge.
+- Stage: S1.
+- Prerequisites: `agora-s1-lint-application-architecture`.
+- Unit gates: U01c, U01d.
+- Close gate: task.
+- Build box: U20.B02.
+- Outcome: Implement the reserved per-Feature `dependencies.json` declaration, reject an import naming a Feature absent from it, and reject a framework-layer file that imports any Feature, each naming the supported owner and sanctioned alternative.
+- Acceptance: A Feature importing an undeclared Feature fails lint naming the missing declaration; a framework-layer file importing any Feature fails lint naming Framework as the non-importing owner.
+- Verification evidence: Task-local probes for U20 lanes 6, 9, 10; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U20/agora-s1-declare-feature-dependencies/`. These task receipts do not claim the later milestone verdict.
+- Plan unit: U20, establish application-architecture boundary lint.
+- Specification requirements: R21, R22, R25. Release criteria AC16.
+
 ### agora-s1-discover-features
 
 - Title: Discover Features from reserved files.
@@ -178,15 +192,29 @@ Prerequisites name earlier task closures. Unit gates name completed external mil
 
 ### agora-s1-migrate-application-architecture
 
-- Title: Migrate local-room work into a Feature folder.
+- Title: Relocate the local-room server entrypoint into a Feature folder.
 - Stage: S1.
 - Prerequisites: None.
 - Unit gates: U20, U21, U22.
 - Close gate: task.
 - Build box: U23.B01.
-- Outcome: Move the existing local-room contracts, domain port, route, and paused browser-shell fixture into their own Feature-owned folder with reserved Entrypoint and Timeline Card files, with every existing test passing unchanged before and after the move.
-- Acceptance: Every pre-move passing test still passes post-move with an unchanged assertion, the generated inventory owns the local-room entry, and no reference to the pre-move location remains.
-- Verification evidence: Task-local probes for U23 lanes 1, 2, 3, 4, 5, 6, 7, 8, 9, 10; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U23/agora-s1-migrate-application-architecture/`. These task receipts do not claim the later milestone verdict.
+- Outcome: Move `apps/center`'s local-room adapter-selection into its Feature-owned Entrypoint, a pure path/import change, with every existing test passing unchanged before and after.
+- Acceptance: Every pre-move passing test still passes post-move with an unchanged assertion, the generated inventory owns the local-room entrypoint entry, and no reference to the pre-move location remains; the contracts schema and domain port are byte-identical at their original paths.
+- Verification evidence: Task-local probes for U23 lanes 1, 2, 3, 7, 9; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U23/agora-s1-migrate-application-architecture/`. These task receipts do not claim the later milestone verdict.
+- Plan unit: U23, migrate existing work into the agora application architecture.
+- Specification requirements: R21, R25. Release criteria AC16.
+
+### agora-s1-rewrite-local-room-renderer
+
+- Title: Rewrite the paused local-room renderer onto the Client and Host.
+- Stage: S1.
+- Prerequisites: `agora-s1-migrate-application-architecture`.
+- Unit gates: U20, U21, U22.
+- Close gate: task.
+- Build box: U23.B02.
+- Outcome: Move the paused browser-shell fixture into `apps/web`'s Feature-owned folder, rewriting its direct browser-global and unmediated-effect calls onto the Client's named hooks and the Host's typed interface so it passes U20's rules it previously failed.
+- Acceptance: The renderer lives in one discovered Feature folder with no remaining direct browser-global or unmediated-effect call, and it passes the widened boundary lint it previously failed.
+- Verification evidence: Task-local probes for U23 lanes 1, 4, 5, 6, 8, 10; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U23/agora-s1-rewrite-local-room-renderer/`. These task receipts do not claim the later milestone verdict.
 - Plan unit: U23, migrate existing work into the agora application architecture.
 - Specification requirements: R21, R25. Release criteria AC16.
 
@@ -864,17 +892,73 @@ Prerequisites name earlier task closures. Unit gates name completed external mil
 - Plan unit: U19, deliver the native swift client without worker authority.
 - Specification requirements: R02, R04, R07, R12, R18, R21, R24. Release criteria AC26.
 
-### agora-s2-create-agents-conversationally
+### agora-s2-propose-agent-identity
 
-- Title: Propose and confirm agents from a room.
+- Title: Propose and confirm a created agent's identity and plan.
 - Stage: S2 later-stage.
 - Prerequisites: None.
 - Unit gates: U06, U11, U13, U14.
 - Close gate: task.
 - Build box: U24.B01.
-- Outcome: Implement the propose/confirm agent-creation flow with its exact plan/permission/cost/lifecycle preview, one isolated persistent environment per created agent, explicit provision/pause/resume/snapshot/reset/archive/destroy states, and signed-manifest routine-pack installation that cannot expand a creation approval's granted authority.
-- Acceptance: Confirmation is blocked until the exact plan is shown; two agents never share an environment; an over-broad or unsigned routine pack is rejected; every lifecycle transition is explicit and auditable.
-- Verification evidence: Task-local probes for U24 lanes 1, 2, 3, 4, 5, 6, 7, 8, 9, 10; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U24/agora-s2-create-agents-conversationally/`. These task receipts do not claim the later milestone verdict.
+- Outcome: Implement the propose/confirm agent-creation flow, its stable identity, role, project/room scope, resource/spend limits, and the exact plan/permission/cost/lifecycle preview a second eligible human must see before confirming, with self-confirmation rejected.
+- Acceptance: Confirmation is blocked until the exact plan is shown; self-confirmation by the proposer is rejected.
+- Verification evidence: Task-local probes for U24 lanes 1, 2, 9; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U24/agora-s2-propose-agent-identity/`. These task receipts do not claim the later milestone verdict.
+- Plan unit: U24, enable conversational agent creation with isolated environments.
+- Specification requirements: R04, R06, R08, R09, R14, R16, R26. Release criteria AC27.
+
+### agora-s2-provision-agent-environment
+
+- Title: Provision and control a created agent's isolated environment.
+- Stage: S2 later-stage.
+- Prerequisites: `agora-s2-propose-agent-identity`.
+- Unit gates: U06, U11, U13, U14.
+- Close gate: task.
+- Build box: U24.B02.
+- Outcome: Implement one isolated persistent environment per created agent and its explicit provision/pause/resume/snapshot/reset/archive/destroy states, distinct from R09's per-attempt microVM.
+- Acceptance: Two agents never share an environment; every lifecycle transition is explicit and auditable with no state inferred from a missing heartbeat.
+- Verification evidence: Task-local probes for U24 lanes 3, 6; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U24/agora-s2-provision-agent-environment/`. These task receipts do not claim the later milestone verdict.
+- Plan unit: U24, enable conversational agent creation with isolated environments.
+- Specification requirements: R04, R06, R08, R09, R14, R16, R26. Release criteria AC27.
+
+### agora-s2-install-signed-routine-packs
+
+- Title: Install signed routine packs within an agent's granted scope.
+- Stage: S2 later-stage.
+- Prerequisites: `agora-s2-propose-agent-identity`.
+- Unit gates: U06, U11, U13, U14.
+- Close gate: task.
+- Build box: U24.B03.
+- Outcome: Implement signed-manifest routine-pack installation that diffs the pack's permission manifest against the agent's current grant and rejects an unsigned or over-broad pack.
+- Acceptance: An unsigned pack is rejected; a pack requesting a wider tool or network scope than the agent's approval is rejected without a fresh approval.
+- Verification evidence: Task-local probes for U24 lanes 4, 5; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U24/agora-s2-install-signed-routine-packs/`. These task receipts do not claim the later milestone verdict.
+- Plan unit: U24, enable conversational agent creation with isolated environments.
+- Specification requirements: R04, R06, R08, R09, R14, R16, R26. Release criteria AC27.
+
+### agora-s2-automate-agent-routines
+
+- Title: Trigger and control manual, event, and scheduled automations.
+- Stage: S2 later-stage.
+- Prerequisites: `agora-s2-provision-agent-environment`, `agora-s2-install-signed-routine-packs`.
+- Unit gates: U06, U11, U13, U14.
+- Close gate: task.
+- Build box: U24.B04.
+- Outcome: Implement manual, event-triggered, and scheduled automations, plus human inspect/edit/disable/immediate-stop controls, none of which can expand the agent's authority beyond its creation approval.
+- Acceptance: Each trigger kind fires its automation exactly once and records which kind fired it; a disabled automation does not fire under any trigger kind; a human can inspect, edit, and immediately stop any automation.
+- Verification evidence: Task-local probes for U24 lanes 7, 8, 10; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U24/agora-s2-automate-agent-routines/`. These task receipts do not claim the later milestone verdict.
+- Plan unit: U24, enable conversational agent creation with isolated environments.
+- Specification requirements: R04, R06, R08, R09, R14, R16, R26. Release criteria AC27.
+
+### agora-s2-render-agent-creation-surface
+
+- Title: Render the room-based agent creation and control surface.
+- Stage: S2 later-stage.
+- Prerequisites: `agora-s2-propose-agent-identity`, `agora-s2-provision-agent-environment`, `agora-s2-install-signed-routine-packs`, `agora-s2-automate-agent-routines`.
+- Unit gates: U06, U11, U13, U14.
+- Close gate: task.
+- Build box: U24.B05.
+- Outcome: Implement the room-based creation, lifecycle, and automation-control surface in Web that drives the propose/confirm, environment, routine-pack, and automation commands through no other path.
+- Acceptance: Every creation, lifecycle, and automation control reachable from a room resolves to one of the underlying commands; no direct route bypasses them.
+- Verification evidence: Task-local probes for U24 lanes 1, 2, 10; red.log, green.log, guard/feature-map/contract/evidence results, public transcript/artifacts, security/performance and independent exact-head review under `evidence/U24/agora-s2-render-agent-creation-surface/`. These task receipts do not claim the later milestone verdict.
 - Plan unit: U24, enable conversational agent creation with isolated environments.
 - Specification requirements: R04, R06, R08, R09, R14, R16, R26. Release criteria AC27.
 
@@ -1028,10 +1112,10 @@ Prerequisites name earlier task closures. Unit gates name completed external mil
 | U01b | S1 | R03, R11, R12, R16, R21, R22 | AC00, AC08 | 3 |
 | U01c | S1 | R12, R15, R17, R22 | AC00, AC11 | 1 |
 | U01d | S1 | R02, R18, R22, R23 | AC00, AC13 | 1 |
-| U20 | S1 | R21, R22, R25 | AC16 | 1 |
+| U20 | S1 | R21, R22, R25 | AC16 | 2 |
 | U21 | S1 | R21, R22, R25 | AC16 | 1 |
 | U22 | S1 | R21, R22, R25 | AC16 | 1 |
-| U23 | S1 | R21, R25 | AC16 | 1 |
+| U23 | S1 | R21, R25 | AC16 | 2 |
 | U02 | S1 | R01, R02, R04, R05, R14, R21, R22, R24 | AC01, AC02, AC15 | 5 |
 | U03 | S1 | R02, R05, R07, R18, R13, R21 | AC02, AC03 | 4 |
 | U04 | S1 | R02, R04, R05, R06, R16, R21, R22, R24 | AC04, AC10 | 3 |
@@ -1045,7 +1129,7 @@ Prerequisites name earlier task closures. Unit gates name completed external mil
 | U12 | S2 | R06, R07, R09, R15, R16, R17 | AC21, AC24 | 3 |
 | U13 | S2 | R04, R05, R10, R13, R14, R24 | AC22 | 3 |
 | U14 | S2 | R08, R09, R11, R12, R15, R19 | AC23, AC24 | 3 |
-| U24 | S2 | R04, R06, R08, R09, R14, R16, R26 | AC27 | 1 |
+| U24 | S2 | R04, R06, R08, R09, R14, R16, R26 | AC27 | 5 |
 | U18 | S2 | R08, R11, R12, R16, R21, R24 | AC25 | 3 |
 | U19 | S2 | R02, R04, R07, R12, R18, R21, R24 | AC26 | 3 |
 | U15 | S3 | R05, R13, R14, R16 | AC30 | 3 |

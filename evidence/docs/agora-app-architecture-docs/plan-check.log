@@ -20,11 +20,10 @@ Deliver the native Swift client without worker authority (U19)  boxes=28  files=
 Capture observer proposals and promote reviewed knowledge (U15)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
 Harden operations and prove governed deletion (U16)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
 Add an opt-in notification-only Slack bridge (U17)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Establish application-architecture boundary lint (U20)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Establish application-architecture boundary lint (U20)  boxes=28  files=1 build=2 you-see=2 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
 Establish Feature and Entrypoint discovery (U21)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
 Establish the Client and Host boundary (U22)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Migrate existing work into the Agora application architecture (U23)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
-Enable conversational agent creation with isolated environments (U24)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Migrate existing work into the Agora application architecture (U23)  boxes=28  files=1 build=2 you-see=2 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Enable conversational agent creation with isolated environments (U24)  boxes=34  files=1 build=5 you-see=5 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
 Deliver the built-in Bug Agent role (U25)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
 28 PR sections, 0 problems
-exit=0

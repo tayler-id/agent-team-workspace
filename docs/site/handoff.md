@@ -4,6 +4,10 @@ A shareable entrance for the team designing Agora's product experience. Start he
 
 > The detailed portable packet under `docs/design-handoff/` landed independently at revision `57b9db6` and is linked below as ordinary documentation pages. Its own product snapshot remains `606cba2`. The site renders the committed packet without copying its content into a second authoring tree; no product screen is implied to be built.
 
+## Design results: the approved starting direction
+
+[The committed design results](repo:docs/design-handoff/results/README.md) are the **approved starting direction for implementation**, not a finished or final design. They fix real choices, a light-only theme, a token set and font pair, agent-identity colors, and a neutral-chip state language, that the earlier packet had left open. Preserve them as the working baseline rather than reopening choices they already made. They still need browser, accessibility, comprehension, and product-owner review before any of it is final acceptance; [the component and state matrix](repo:docs/design-handoff/results/state-matrix.md) lists coverage, and the results README's own "Not done" section names the outstanding review steps. Nothing here edits the specification, plan, task breakdown, or decision trail; product behavior stays owned by [the technical specification](repo:docs/technical-spec.md).
+
 ## Read in this order
 
 1. [Introduction](introduction.md): the product's purpose, audience and honest availability.
@@ -13,6 +17,7 @@ A shareable entrance for the team designing Agora's product experience. Start he
 5. [Mental model and terminology](concepts.md): task/run/session/approval distinctions that visual language must preserve.
 6. [Authorization and agent hierarchy](authorization.md): workspace center versus isolated project-main identities.
 7. [Verification contract](verification.md): literal public behavior and proof, not screenshots alone.
+8. [Design results](repo:docs/design-handoff/results/README.md): the approved starting visual direction, above, and what it still needs before final acceptance.
 
 ## Product information architecture
 
@@ -37,7 +42,9 @@ Agent cards distinguish status, action, question, result and error. A task in re
 
 **Fixed:** human ownership and merge, explicit scope/placement/budget, no authority by chat text, no private-room leaks, keyboard and screen-reader operation, reduced motion, narrow-screen comprehension, and clear evidence/availability labels.
 
-**Open visual choices:** product typography, palette, icon language, density, component styling and diagram treatment. The field guide's restrained green/neutral style is a documentation choice, not a pre-approved product design system. A design-system proposal must preserve state distinctions and test comprehension, not copy Noodle branding or this site's chrome blindly.
+**Approved as a starting direction, not yet final:** [the design results](repo:docs/design-handoff/results/README.md) already fix typography (Cal Sans UI/Text plus IBM Plex Mono), a light-only theme, agent-identity colors, and the neutral state-chip language described there. Treat these as the working baseline to refine through browser, accessibility, comprehension, and product-owner review, not as choices still open for a fresh proposal.
+
+**Still open:** icon language, a comfortable/compact density toggle, run board versus rail, dark mode, and diagram treatment remain undecided; [the results README's "Decisions the packet did not make" and "Not done" sections](repo:docs/design-handoff/results/README.md) name most of these, though icon language and diagram treatment are absent from the packet entirely rather than listed as open. The field guide's restrained green/neutral style is a documentation choice, not a pre-approved product design system. A design-system proposal must preserve state distinctions and test comprehension, not copy Noodle branding or this site's chrome blindly.
 
 ## Shareable research
 

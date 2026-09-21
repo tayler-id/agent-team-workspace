@@ -1,5 +1,7 @@
 # Agora application architecture
 
+**Planned, not implemented.** Every noun and rule on this page is a specified contract, not running code; see [Implementation status](#implementation-status) below for exactly what exists today.
+
 ## What it is
 
 Agora's application architecture organizes product code as owned Features, each discovered from reserved files instead of registered by hand, rendered through named Client hooks and one typed Host boundary. It has five nouns: Feature, Entrypoint, Timeline Card, Client, and Host. [The technical specification](repo:docs/technical-spec.md) fixes the mechanical contract those nouns satisfy; this page explains it for a developer adding a Feature.
@@ -35,11 +37,26 @@ apps/web/src/framework/
   host.ts               the one Host: the typed browser/transport boundary
 ```
 
-The framework layer and the package layer under [portable contracts](contracts.md) never import a Feature. A Feature may import the framework layer, generated contracts, and its own declared dependencies on another Feature. [Client synchronization](synchronization.md) already isolates replay and import boundaries at the package level; this architecture extends the same discipline to product features and the renderer, and does not replace that package-level table.
+The framework layer and the package layer under [portable contracts](contracts.md) never import a Feature. A Feature may import the framework layer, generated contracts, and its own declared dependencies on another Feature, named in a reserved `dependencies.json` file inside that Feature's own directory. [Client synchronization](synchronization.md) already isolates replay and import boundaries at the package level; this architecture extends the same discipline to product features and the renderer, and does not replace that package-level table.
+
+## Where existing work lands
+
+Moving a capability into a Feature folder relocates its consumer wiring, not its schema or domain authority. Local room's contracts and domain port keep their existing package homes; only the call sites that use them move:
+
+```text
+contracts/schemas/local-room.schema.json   stays in Contracts; a Feature imports only its generated types
+packages/domain/src/local-room/port.ts     stays in Domain; the browser Feature never imports it directly
+apps/center/src/features/local-room/       new: the server Entrypoint that replaces one hand-wired route line
+apps/web/src/features/local-room/          new: the renderer, rewritten onto the Client and Host, not just moved
+```
+
+[The technical specification](repo:docs/technical-spec.md) fixes this ownership map (R25, "Ownership map for existing work") as authoritative for this table.
 
 ## Implementation status
 
-**Not implemented.** `.ts` import boundaries and the framework/package-never-imports-application rule are enforced today at the package level; see [synchronization](synchronization.md). `.tsx` coverage, Feature/Entrypoint/Timeline Card discovery, the Client's one-writer boundary, and a typed Host interface do not exist yet. [The implementation plan](repo:docs/implementation-plan.md) sequences four migration units, U20 boundary lint, U21 feature discovery, U22 the Client/Host boundary, then U23 moving existing local-room work into the new layout, each independently reviewable.
+**Not implemented.** `.ts` import boundaries and the framework/package-never-imports-application rule are enforced today at the package level; see [synchronization](synchronization.md). `.tsx` coverage, Feature/Entrypoint/Timeline Card discovery, declared Feature-to-Feature dependencies, the Client's one-writer boundary, and a typed Host interface do not exist yet. [The implementation plan](repo:docs/implementation-plan.md) sequences four migration units, U20 boundary lint (including the Feature-dependency and framework-edge checks), U21 feature discovery, U22 the Client/Host boundary, then U23 moving existing local-room work into the new layout, each independently reviewable.
+
+This architecture also governs where a future [created agent](authorization.md#created-agents) and the built-in [Bug Agent](authorization.md#created-agents) would render their own room-facing surfaces, once R26's own milestone lands; neither exists yet, and neither depends on R25 to be specified.
 
 ## Verification and proof
 

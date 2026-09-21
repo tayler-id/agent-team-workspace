@@ -36,7 +36,9 @@ export function build({ check = false, mirror = false } = {}) {
 	const packages = ['apps', 'packages'].flatMap(dir => readdirSync(path.join(root, dir)).filter(p => existsSync(path.join(root, dir, p, 'package.json'))).map(p => `${dir}/${p}`));
 	const inventory = ['contracts', ...packages, ...readdirSync(path.join(root, 'scripts')).filter(p => /\.(mjs|ts)$/.test(p)).map(p => `scripts/${p}`), ...readdirSync(source).filter(p => p.endsWith('.mjs')).map(p => `docs/site/${p}`)];
 	const handoff = path.join(root, 'docs/design-handoff');
-	const handoffFiles = existsSync(handoff) ? readdirSync(handoff).filter(p => p.endsWith('.md')).map(p => `docs/design-handoff/${p}`) : [];
+	const results = path.join(handoff, 'results');
+	const resultsFiles = existsSync(results) ? ['README.md', 'state-matrix.md'].filter(f => existsSync(path.join(results, f))).map(f => `docs/design-handoff/results/${f}`) : [];
+	const handoffFiles = [...(existsSync(handoff) ? readdirSync(handoff).filter(p => p.endsWith('.md')).map(p => `docs/design-handoff/${p}`) : []), ...resultsFiles];
 	const handoffRefs = handoffFiles.flatMap(file => links(read(file)).filter(href => !/^https?:\/\//.test(href)).map(href => `repo:${path.posix.normalize(path.posix.join(path.posix.dirname(file), href.split('#')[0] || path.posix.basename(file)))}`));
 	const refs = [...new Set([...pages.flatMap(p => links(p.content)), ...atlas.features.flatMap(f => f.proof), 'repo:docs/implementation-plan.md', ...handoffFiles.map(f => `repo:${f}`), ...handoffRefs].filter(p => p.startsWith('repo:')).map(p => p.slice(5)))];
 	const sources = refs.filter(p => !p.includes('..') && /^(docs|apps|packages|contracts|scripts|evidence|agora)\/|^(AGENTS.md|package.json|\.agents\/skills\/verify-agora\/SKILL.md)$/.test(p) && existsSync(path.join(root, p)));

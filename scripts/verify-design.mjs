@@ -42,7 +42,23 @@ for (const file of documents) {
 }
 const duneAllowed = new Set(['docs/research-basis.md', 'docs/site/research.md']);
 const duneFiles = [...documents, ...fs.readdirSync('docs/site').filter(f => f.endsWith('.md')).map(f => `docs/site/${f}`)];
-for (const file of duneFiles) if (!duneAllowed.has(file)) assert(!/\bDune\b/.test(read(file)), `${file}: architecture must not be labeled Dune`);
+for (const file of duneFiles) if (!duneAllowed.has(file)) assert(!/\bdune\b/iu.test(read(file)), `${file}: architecture must not be labeled Dune`);
+// Design-check fixtures under scripts/test-design-checks.mjs copy only docs/, scripts/ and a few
+// named root files, not the workspace tree; skip this block there rather than crash on ENOENT.
+if (fs.existsSync('pnpm-workspace.yaml')) {
+	const workspaceSection = read('pnpm-workspace.yaml').split(/^overrides:/m)[0];
+	const workspacePackageDirs = ['.', ...[...workspaceSection.matchAll(/^\s*-\s*(\S+)\s*$/gm)].map(m => m[1]).flatMap(glob => {
+		if (!glob.endsWith('/*')) return [glob];
+		const base = glob.slice(0, -2);
+		return fs.existsSync(base) ? fs.readdirSync(base, { withFileTypes: true }).filter(e => e.isDirectory()).map(e => `${base}/${e.name}`) : [];
+	})];
+	for (const dir of workspacePackageDirs) {
+		const pkgPath = path.join(dir, 'package.json');
+		if (!fs.existsSync(pkgPath)) continue;
+		const name = JSON.parse(read(pkgPath)).name;
+		assert(!/dune/iu.test(name), `${pkgPath}: package name must not reference Dune`);
+	}
+}
 const spec = read('docs/technical-spec.md');
 const plan = read('docs/implementation-plan.md');
 const breakdown = read('docs/task-breakdown.md');
@@ -145,7 +161,7 @@ for (const m of breakdown.matchAll(/^### (agora-s[123]-[a-z0-9-]+)\n([\s\S]*?)(?
 	graph.get(unitId).push(name);
 	graph.set(name, [...parents, ...gates]);
 }
-assert.equal(tasks.size, 72, 'task inventory');
+assert.equal(tasks.size, 78, 'task inventory');
 for (const [id, build] of builds) assert.equal(build.owners.length, 1, `${id}: Build must have exactly one task owner`);
 for (const [id, unit] of units) assert(unit.tasks.length, `${id}: no tasks`);
 for (const [name, task] of tasks) for (const parent of task.parents) {

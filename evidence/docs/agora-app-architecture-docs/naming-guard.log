@@ -1,0 +1,10 @@
+PASS accepts baseline
+PASS rejects lowercase-dune-in-spec
+PASS rejects uppercase-dune-in-spec
+PASS rejects dune-in-site-page
+PASS rejects lowercase-dune-package-name
+PASS rejects mixed-case-dune-package-name
+PASS rejects root-package-dune-name
+PASS accepts allowed-provenance-page-unaffected
+PASS disabled-guard: naming rejection turns red when the check is removed, proving the guard is real
+PASS 8 naming-guard cases plus one disabled-guard proof; D83 scope only

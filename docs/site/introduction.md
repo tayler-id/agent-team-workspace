@@ -26,8 +26,8 @@ Agora does not replace GitHub, become an IDE, automatically merge changes, or al
 | Foundation in S1 | Fixture endpoints, schema generation and cross-language vectors | U01a milestone qualified; U01b, U01c and U01d not started |
 | Local-development room | One project room on your own machine, opted into explicitly | Contracts and a typed unsupported send exist (L1 of 5); no message can be stored yet |
 | S1 release | Hosted browser, invitations, rooms, cited answers, owner-machine work and review | Not released |
-| S2 | Project creation, cloud attempts, reviewed knowledge, project-main agents, external adapter, native client | Specified only |
-| S3 | Observer proposals, hardening, optional one-way Slack notifications | Specified only |
+| S2 | Project creation, cloud attempts, reviewed knowledge, project-main agents, external adapter, native client, [conversational agent creation](authorization.md#created-agents) | Specified only |
+| S3 | Observer proposals, hardening, optional one-way Slack notifications, the [Bug Agent](authorization.md#created-agents) role | Specified only |
 
 You can [run the foundation checks](getting-started.md) without model, email, GitHub, or sandbox credentials. You cannot yet invite a teammate or launch a coding task. [The atlas](atlas.md) keeps this boundary visible.
 

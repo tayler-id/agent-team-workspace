@@ -1,5 +1,5 @@
 {
-  "revision": "d85add4cfab5a5f2ce6c1bd268410f2bb7fc3d61",
+  "revision": "c54575fe7d8cc442fdf2ec929637d8c210154b44",
   "date": "2026-09-21",
   "features": [
     {
@@ -267,7 +267,7 @@
       "title": "Migrate existing work into the Agora application architecture",
       "stage": "S1",
       "status": "Not started",
-      "outcome": "The local-room feature now lives in one discovered Feature folder, its generated inventory entry replaces its old hand-edited rows, and every test that passed before the move still passes after it."
+      "outcome": "The local-room feature's server entrypoint now lives in one discovered Feature folder, its generated inventory entry replaces the old hand-edited route registration, and every test that passed before the move still passes after it with an unchanged assertion."
     },
     {
       "id": "U02",
@@ -365,7 +365,7 @@
       "title": "Enable conversational agent creation with isolated environments",
       "stage": "S2",
       "status": "Not started",
-      "outcome": "A maintainer proposes an agent from a room, a second eligible human confirms its exact plan before any spend, the agent receives its own isolated environment, and installing an over-broad or unsigned routine pack is rejected."
+      "outcome": "A maintainer proposes an agent from a room and a second eligible human confirms its exact plan before any spend; self-confirmation and confirmation without the preview are both rejected."
     },
     {
       "id": "U18",
