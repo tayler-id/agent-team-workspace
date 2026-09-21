@@ -1,0 +1,36 @@
+== repeat 1
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+
+{"scenario":"forced-cancel","code":143,"elapsed_ms":1529,"output":"[87233,87234]\n","diagnostic":"{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"allocated\",\"runId\":\"6f16407c-1703-4393-a4bb-9012f35c3bc3\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-uo9SgC/agora-pg-IRxLjm\",\"socketDir\":\"/private/tmp/agora-p0c-6f16407c-1703-4393-a4bb-9012f35c3bc3\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"starting\",\"runId\":\"6f16407c-1703-4393-a4bb-9012f35c3bc3\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-uo9SgC/agora-pg-IRxLjm\",\"socketDir\":\"/private/tmp/agora-p0c-6f16407c-1703-4393-a4bb-9012f35c3bc3\",\"pid\":87212}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"started\",\"runId\":\"6f16407c-1703-4393-a4bb-9012f35c3bc3\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-uo9SgC/agora-pg-IRxLjm\",\"socketDir\":\"/private/tmp/agora-p0c-6f16407c-1703-4393-a4bb-9012f35c3bc3\",\"socket_dir\":\"/private/tmp/agora-p0c-6f16407c-1703-4393-a4bb-9012f35c3bc3\",\"pid\":87212,\"database\":\"agora_test\",\"owner_role\":\"agora_owner\",\"app_role\":\"agora_app\",\"bypass_role\":\"agora_bypass\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"cleaned\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-uo9SgC/agora-pg-IRxLjm\",\"socketDir\":\"/private/tmp/agora-p0c-6f16407c-1703-4393-a4bb-9012f35c3bc3\"}\n","descendants":[87233,87234],"neighbor":{"runId":"860adc94-1958-4343-a602-bcf35e1d9b77","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-uo9SgC","socketDir":"/private/tmp/agora-p0c-860adc94-1958-4343-a602-bcf35e1d9b77"},"foreign":87199}
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 17 skipped (18)
+   Start at  02:56:59
+   Duration  1.62s (tests 98%, transform 1%, import 1%)
+
+exit=0
+== repeat 2
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+
+{"scenario":"forced-cancel","code":143,"elapsed_ms":1524,"output":"[87654,87655]\n","diagnostic":"{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"allocated\",\"runId\":\"3bc4e241-a570-45ce-ad21-da1c65549573\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-Ow2l1d/agora-pg-ErkqCn\",\"socketDir\":\"/private/tmp/agora-p0c-3bc4e241-a570-45ce-ad21-da1c65549573\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"starting\",\"runId\":\"3bc4e241-a570-45ce-ad21-da1c65549573\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-Ow2l1d/agora-pg-ErkqCn\",\"socketDir\":\"/private/tmp/agora-p0c-3bc4e241-a570-45ce-ad21-da1c65549573\",\"pid\":87633}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"started\",\"runId\":\"3bc4e241-a570-45ce-ad21-da1c65549573\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-Ow2l1d/agora-pg-ErkqCn\",\"socketDir\":\"/private/tmp/agora-p0c-3bc4e241-a570-45ce-ad21-da1c65549573\",\"socket_dir\":\"/private/tmp/agora-p0c-3bc4e241-a570-45ce-ad21-da1c65549573\",\"pid\":87633,\"database\":\"agora_test\",\"owner_role\":\"agora_owner\",\"app_role\":\"agora_app\",\"bypass_role\":\"agora_bypass\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"cleaned\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-Ow2l1d/agora-pg-ErkqCn\",\"socketDir\":\"/private/tmp/agora-p0c-3bc4e241-a570-45ce-ad21-da1c65549573\"}\n","descendants":[87654,87655],"neighbor":{"runId":"07cadd6a-500b-494d-9dcb-33f27575a918","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-Ow2l1d","socketDir":"/private/tmp/agora-p0c-07cadd6a-500b-494d-9dcb-33f27575a918"},"foreign":87619}
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 17 skipped (18)
+   Start at  02:57:01
+   Duration  1.61s (tests 98%, transform 1%, import 1%)
+
+exit=0
+== repeat 3
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+
+{"scenario":"forced-cancel","code":143,"elapsed_ms":1540,"output":"[87780,87781]\n","diagnostic":"{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"allocated\",\"runId\":\"58e69a5f-941b-476c-990e-b9eaa8191602\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-PIiiFT/agora-pg-zSAICE\",\"socketDir\":\"/private/tmp/agora-p0c-58e69a5f-941b-476c-990e-b9eaa8191602\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"starting\",\"runId\":\"58e69a5f-941b-476c-990e-b9eaa8191602\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-PIiiFT/agora-pg-zSAICE\",\"socketDir\":\"/private/tmp/agora-p0c-58e69a5f-941b-476c-990e-b9eaa8191602\",\"pid\":87759}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"started\",\"runId\":\"58e69a5f-941b-476c-990e-b9eaa8191602\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-PIiiFT/agora-pg-zSAICE\",\"socketDir\":\"/private/tmp/agora-p0c-58e69a5f-941b-476c-990e-b9eaa8191602\",\"socket_dir\":\"/private/tmp/agora-p0c-58e69a5f-941b-476c-990e-b9eaa8191602\",\"pid\":87759,\"database\":\"agora_test\",\"owner_role\":\"agora_owner\",\"app_role\":\"agora_app\",\"bypass_role\":\"agora_bypass\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"cleaned\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-PIiiFT/agora-pg-zSAICE\",\"socketDir\":\"/private/tmp/agora-p0c-58e69a5f-941b-476c-990e-b9eaa8191602\"}\n","descendants":[87780,87781],"neighbor":{"runId":"f0bfa3be-6830-47dc-ab6b-591e77a875db","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-PIiiFT","socketDir":"/private/tmp/agora-p0c-f0bfa3be-6830-47dc-ab6b-591e77a875db"},"foreign":87746}
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 17 skipped (18)
+   Start at  02:57:03
+   Duration  1.63s (tests 98%, transform 1%, import 1%)
+
+exit=0

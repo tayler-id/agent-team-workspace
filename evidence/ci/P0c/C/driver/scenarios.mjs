@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
-import { BIN, HOLD, QUERY, ROOT, alive, diff, fakeBin, git, killAt, neighbors, ownResidue, psList, residue, runWrapper, scratch, sha256, sleep, snapshot, sweepOwned } from './lib.mjs';
+import { BIN, HOLD, QUERY, ROOT, alive, diff, fakeBin, git, killAt, neighbors, ownResidue, psList, residue, runWrapper, scratch, sha256, sleep, snapshot, sweepOwned, sysvSegments } from './lib.mjs';
 
 const out = process.argv.includes('--out') ? process.argv[process.argv.indexOf('--out') + 1] : 'evidence/ci/P0c/C';
 const only = process.argv.slice(2).filter((arg, i, all) => !arg.startsWith('--') && all[i - 1] !== '--out');
@@ -113,6 +113,24 @@ const scenarios = {
 	async 'tool-stderr'(run, ctx) {
 		const bin = fakeBin(`${ctx.tmp}/bin`, { psql: `#!/bin/sh\nexec "${BIN}/psql" --definitely-not-a-flag "$@"\n` }); const r = await run({ command: ['true'], env: { AGORA_PG_BIN: bin } });
 		assert.equal(r.code, 70, 'exit 70'); assert.ok(r.blocked.some(m => m.includes("psql: unrecognized option `--definitely-not-a-flag'")), "psql's own words in the diagnostic"); isRemoved(r);
+	},
+	async 'forced-cancel-repeat'(run, ctx) {
+		// Five forced stops in a row: the SIGSTOPped postmaster dies by the wrapper's SIGKILL fallback, leaves its Darwin interlock
+		// segment, and the run-owned reclaim removes exactly that segment each time while every other segment on the machine survives.
+		const foreignIds = () => sysvSegments().map(s => s.id);
+		const rounds = [];
+		for (let round = 1; round <= 5; round++) {
+			const before = foreignIds();
+			const r = await run({ command: [process.execPath, '-e', HOLD], tmp: scratch(ctx.tmp, `round-${round}`), hooks: { onReceipt: (x, child) => { if (x.outcome === 'started') { process.kill(x.pid, 'SIGSTOP'); child.kill('SIGTERM'); } } } });
+			const leaked = sysvSegments().filter(s => s.cpid === r.starting?.pid);
+			assert.equal(r.code, 143, `round ${round} exit 143`); assert.equal(alive(r.starting.pid), false, `round ${round} postmaster dead`);
+			assert.ok(leaked.length === 1 && leaked[0].nattch === 0 && process.platform === 'darwin', `round ${round} left exactly one unattached run-owned segment`);
+			const swept = sweepOwned(r, ctx.tmp);
+			assert.deepEqual(sysvSegments().filter(s => s.cpid === r.starting.pid), [], `round ${round} run-owned segment reclaimed`);
+			assert.deepEqual(foreignIds().filter(id => id !== leaked[0].id).sort(), before.filter(id => id !== leaked[0].id).sort(), `round ${round} unrelated segments untouched`);
+			rounds.push({ round, postmaster: r.starting.pid, leaked_segment: leaked[0].id, swept });
+		}
+		return { rounds };
 	},
 	async 'external-url-passthrough'(run) {
 		const url = 'postgresql://x@/x'; const env = { AGORA_TEST_DATABASE_URL: url, AGORA_TEST_OWNER_DATABASE_URL: url, AGORA_TEST_BYPASS_DATABASE_URL: url, AGORA_TEST_SUPERUSER_DATABASE_URL: url };

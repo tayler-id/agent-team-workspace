@@ -44,7 +44,7 @@ After the seeded `606cba2` snapshot, U01a.B03 landed a deeply immutable client s
 
 ### PostgreSQL socket ownership and lifecycle (CI P0c A/B/C)
 
-For contributors, the existing PostgreSQL wrapper now uses the qualified allocator without shortening data or evidence paths. B adds bounded startup, cancellation and owned process-group cleanup, not user-facing room behavior. C qualifies the integrated guard: ten source-copy guard negatives, twenty-six real lifecycle scenarios and a no-leftover inventory, all recorded in the [C receipts](repo:evidence/ci/P0c/C/review.md).
+For contributors, the existing PostgreSQL wrapper now uses the qualified allocator without shortening data or evidence paths. B adds bounded startup, cancellation and owned process-group cleanup, not user-facing room behavior. C qualifies the integrated guard: ten source-copy guard negatives, twenty-seven real lifecycle scenarios and a no-leftover inventory, all recorded in the [C receipts](repo:evidence/ci/P0c/C/review.md).
 
 ```flow
 Long task paths | Keep data, logs and retained evidence inside the worktree.

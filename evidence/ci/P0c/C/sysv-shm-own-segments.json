@@ -35,25 +35,98 @@
       "ctime": "18:03:13",
       "creator_alive": true,
       "attributed_to": []
-    },
-    {
-      "id": 20774916,
-      "key": "0x049c2f60",
-      "nattch": 0,
-      "cpid": 81217,
-      "ctime": "2:43:57",
-      "creator_alive": false,
-      "attributed_to": []
-    },
-    {
-      "id": 11796485,
-      "key": "0x049a75da",
-      "nattch": 0,
-      "cpid": 49835,
-      "ctime": "2:42:53",
-      "creator_alive": false,
-      "attributed_to": []
     }
   ],
-  "after": 3
+  "after": 3,
+  "second_pass": {
+    "recorded_at": "2026-09-21T06:56:24.705Z",
+    "removed": [
+      {
+        "id": 167378946,
+        "key": "0x049f9430",
+        "nattch": 0,
+        "cpid": 80567,
+        "ctime": "2:50:33",
+        "attributed_by": "exact-head/focused.log starting receipt (pid match)",
+        "creator_alive": false,
+        "ipcrm_exit": 0
+      },
+      {
+        "id": 20774916,
+        "key": "0x049c2f60",
+        "nattch": 0,
+        "cpid": 81217,
+        "ctime": "2:43:57",
+        "attributed_by": "check lane window 02:43:31-02:44:25 EDT (atlas.log to check.log mtimes), the lane's single forced-cancel; same reporter limit",
+        "creator_alive": false,
+        "ipcrm_exit": 0
+      },
+      {
+        "id": 11796485,
+        "key": "0x049a75da",
+        "nattch": 0,
+        "cpid": 49835,
+        "ctime": "2:42:53",
+        "attributed_by": "test lane window 02:42:39-02:43:24 EDT (boundaries.log to test.log mtimes), the lane's single forced-cancel; no pid in log because vitest ran without --disableConsoleIntercept",
+        "creator_alive": false,
+        "ipcrm_exit": 0
+      }
+    ],
+    "left": [
+      {
+        "id": 327680,
+        "key": "0x02742841",
+        "nattch": 15,
+        "cpid": 84191,
+        "ctime": "18:03:13",
+        "creator_alive": true,
+        "reason": "live Homebrew server"
+      },
+      {
+        "id": 142344193,
+        "key": "0x049f4c9e",
+        "nattch": 0,
+        "cpid": 43834,
+        "ctime": "2:49:49",
+        "creator_alive": false,
+        "reason": "creator dead and unattached but not attributable to a recorded run of this task by pid or lane window; left in place, ipcrm is the documented recovery"
+      },
+      {
+        "id": 65273859,
+        "key": "0x04a2ae4b",
+        "nattch": 9,
+        "cpid": 78809,
+        "ctime": "2:56:04",
+        "creator_alive": true,
+        "reason": "creator dead and unattached but not attributable to a recorded run of this task by pid or lane window; left in place, ipcrm is the documented recovery"
+      },
+      {
+        "id": 8192006,
+        "key": "0x04a0a21f",
+        "nattch": 0,
+        "cpid": 85659,
+        "ctime": "2:51:00",
+        "creator_alive": false,
+        "reason": "creator dead and unattached but not attributable to a recorded run of this task by pid or lane window; left in place, ipcrm is the documented recovery"
+      },
+      {
+        "id": 8847367,
+        "key": "0x04a2911f",
+        "nattch": 0,
+        "cpid": 93778,
+        "ctime": "2:53:00",
+        "creator_alive": false,
+        "reason": "creator dead and unattached but not attributable to a recorded run of this task by pid or lane window; left in place, ipcrm is the documented recovery"
+      },
+      {
+        "id": 6094856,
+        "key": "0x04a3a74c",
+        "nattch": 0,
+        "cpid": 80245,
+        "ctime": "2:56:18",
+        "creator_alive": false,
+        "reason": "creator dead and unattached but not attributable to a recorded run of this task by pid or lane window; left in place, ipcrm is the documented recovery"
+      }
+    ]
+  }
 }
