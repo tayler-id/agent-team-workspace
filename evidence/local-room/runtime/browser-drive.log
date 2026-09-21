@@ -1,0 +1,404 @@
+code_head: 671c4b8d0431b923d324808968a3a668fd8209c0
+driver: chrome-devtools-axi direct commands, isolated session agora-l3-8
+result: "{\"focus\":\"body\",\"userAgent\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+page:
+  title: Agora local runtime harness
+  refs: 12
+snapshot:
+uid=g10:7_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:61863/"
+  uid=g10:7_1 heading "Local room runtime harness" level="1"
+  uid=g10:7_2 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+  uid=g10:7_3 button "Disconnect"
+  uid=g10:7_4 status atomic live="polite" relevant="additions text"
+    uid=g10:7_5 StaticText "Connected: committed events applied"
+  uid=g10:7_6 form
+    uid=g10:7_7 StaticText "Message text"
+    uid=g10:7_8 textbox "Message text" focusable focused multiline required value="Browser keyboard message <img src=x onerror=alert(1)>"
+    uid=g10:7_9 button "Send or retry pending command"
+  uid=g10:7_10 heading "Client-core committed projection" level="2"
+  uid=g10:7_11 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "2",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "10ce0ca0-1dcf-43d0-be06-16d645099e44",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verification message"
+          }
+        },
+        {
+          "id": "e0e07bbe-5e9f-4c55-ba2a-6969549469a5",
+          "createdSeq": "2",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "CLI message while browser disconnected"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 2,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g10:7_8 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g10:7_3` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+page:
+  title: Agora local runtime harness
+  refs: 12
+snapshot:
+uid=g11:7_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:61863/"
+  uid=g11:7_1 heading "Local room runtime harness" level="1"
+  uid=g11:7_2 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+  uid=g11:7_3 button "Disconnect"
+  uid=g11:7_4 status atomic live="polite" relevant="additions text"
+    uid=g11:7_5 StaticText "Connected: committed events applied"
+  uid=g11:7_6 form
+    uid=g11:7_7 StaticText "Message text"
+    uid=g11:7_8 textbox "Message text" multiline required value="Browser keyboard message <img src=x onerror=alert(1)>"
+    uid=g11:7_9 button "Send or retry pending command" focusable focused
+  uid=g11:7_10 heading "Client-core committed projection" level="2"
+  uid=g11:7_11 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "2",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "10ce0ca0-1dcf-43d0-be06-16d645099e44",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verification message"
+          }
+        },
+        {
+          "id": "e0e07bbe-5e9f-4c55-ba2a-6969549469a5",
+          "createdSeq": "2",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "CLI message while browser disconnected"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 2,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g11:7_8 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g11:7_3` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+result: "\"keyboard send focused\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+page:
+  title: Agora local runtime harness
+  refs: 12
+snapshot:
+uid=g12:7_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:61863/"
+  uid=g12:7_1 heading "Local room runtime harness" level="1"
+  uid=g12:7_2 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+  uid=g12:7_3 button "Disconnect"
+  uid=g12:7_4 status atomic live="polite" relevant="additions text"
+    uid=g12:12_0 StaticText "Connected: committed events applied"
+  uid=g12:7_6 form
+    uid=g12:7_7 StaticText "Message text"
+    uid=g12:7_8 textbox "Message text" multiline required
+    uid=g12:7_9 button "Send or retry pending command" focusable focused
+  uid=g12:7_10 heading "Client-core committed projection" level="2"
+  uid=g12:12_1 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "3",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "10ce0ca0-1dcf-43d0-be06-16d645099e44",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verification message"
+          }
+        },
+        {
+          "id": "e0e07bbe-5e9f-4c55-ba2a-6969549469a5",
+          "createdSeq": "2",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "CLI message while browser disconnected"
+          }
+        },
+        {
+          "id": "aecdc40a-a35e-46e2-97d2-ce45162aaa17",
+          "createdSeq": "3",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Browser keyboard message <img src=x onerror=alert(1)>"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 3,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [
+    {
+      "commandId": "c69d0222-00f8-4407-a236-1fe9a4d6a6c5",
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "requestDigest": "sha256:0030a229154a568d0465fc5cdb28f79609be0a1addd9f18c606d90a301e3afb4",
+      "tag": "received",
+      "receipt": {
+        "command_id": "c69d0222-00f8-4407-a236-1fe9a4d6a6c5",
+        "aggregate_id": "a0000000-0000-4000-8000-000000000002",
+        "revision": "3",
+        "event_cursors": [
+          {
+            "stream_id": "a0000000-0000-4000-8000-000000000002",
+            "committed_seq": "3"
+          }
+        ],
+        "receipt_id": "7be711dd-bf37-42e5-a6a7-2de178bd3813"
+      }
+    }
+  ],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g12:7_8 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g12:7_3` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+result: "{\"outcome\":\"pass\",\"safe_text\":true,\"state\":{\"rooms\":[{\"streamId\":\"a0000000-0000-4000-8000-000000000002\",\"cursor\":\"3\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"10ce0ca0-1dcf-43d0-be06-16d645099e44\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"Verification message\"}},{\"id\":\"e0e07bbe-5e9f-4c55-ba2a-6969549469a5\",\"createdSeq\":\"2\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"CLI message while browser disconnected\"}},{\"id\":\"aecdc40a-a35e-46e2-97d2-ce45162aaa17\",\"createdSeq\":\"3\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"Browser keyboard message <img src=x onerror=alert(1)>\"}}],\"runs\":[],\"unread\":3,\"mode\":\"live\",\"pending\":[]}],\"commands\":[{\"commandId\":\"c69d0222-00f8-4407-a236-1fe9a4d6a6c5\",\"streamId\":\"a0000000-0000-4000-8000-000000000002\",\"requestDigest\":\"sha256:0030a229154a568d0465fc5cdb28f79609be0a1addd9f18c606d90a301e3afb4\",\"tag\":\"received\",\"receipt\":{\"command_id\":\"c69d0222-00f8-4407-a236-1fe9a4d6a6c5\",\"aggregate_id\":\"a0000000-0000-4000-8000-000000000002\",\"revision\":\"3\",\"event_cursors\":[{\"stream_id\":\"a0000000-0000-4000-8000-000000000002\",\"committed_seq\":\"3\"}],\"receipt_id\":\"7be711dd-bf37-42e5-a6a7-2de178bd3813\"}}],\"drafts\":[]}}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"status\":\"Disconnected\",\"cursor\":\"3\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "\"reconnecting at cursor 3\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"reconnect\":\"pass\",\"state\":{\"rooms\":[{\"streamId\":\"a0000000-0000-4000-8000-000000000002\",\"cursor\":\"4\",\"lastSeen\":\"0\",\"messages\":[{\"id\":\"10ce0ca0-1dcf-43d0-be06-16d645099e44\",\"createdSeq\":\"1\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"Verification message\"}},{\"id\":\"e0e07bbe-5e9f-4c55-ba2a-6969549469a5\",\"createdSeq\":\"2\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"CLI message while browser disconnected\"}},{\"id\":\"aecdc40a-a35e-46e2-97d2-ce45162aaa17\",\"createdSeq\":\"3\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"Browser keyboard message <img src=x onerror=alert(1)>\"}},{\"id\":\"cfafa80e-a860-4418-9492-937d77516ac5\",\"createdSeq\":\"4\",\"revision\":\"1\",\"content\":{\"tag\":\"visible\",\"body\":\"Verified offline CLI message\"}}],\"runs\":[],\"unread\":4,\"mode\":\"live\",\"pending\":[]}],\"commands\":[{\"commandId\":\"c69d0222-00f8-4407-a236-1fe9a4d6a6c5\",\"streamId\":\"a0000000-0000-4000-8000-000000000002\",\"requestDigest\":\"sha256:0030a229154a568d0465fc5cdb28f79609be0a1addd9f18c606d90a301e3afb4\",\"tag\":\"received\",\"receipt\":{\"command_id\":\"c69d0222-00f8-4407-a236-1fe9a4d6a6c5\",\"aggregate_id\":\"a0000000-0000-4000-8000-000000000002\",\"revision\":\"3\",\"event_cursors\":[{\"stream_id\":\"a0000000-0000-4000-8000-000000000002\",\"committed_seq\":\"3\"}],\"receipt_id\":\"7be711dd-bf37-42e5-a6a7-2de178bd3813\"}}],\"drafts\":[]}}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"status\":\"Connected: committed events applied\",\"cursor\":\"4\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+error: "Error: restart convergence"
+code: UNKNOWN
+page:
+  title: Agora local runtime harness
+  url: "http://127.0.0.1:61863"
+  refs: 12
+snapshot:
+uid=g13:13_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:61863/"
+  uid=g13:13_1 heading "Local room runtime harness" level="1"
+  uid=g13:13_2 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+  uid=g13:13_3 button "Disconnect"
+  uid=g13:13_4 status atomic live="polite" relevant="additions text"
+    uid=g13:13_5 StaticText "Connected: committed events applied"
+  uid=g13:13_6 form
+    uid=g13:13_7 StaticText "Message text"
+    uid=g13:13_8 textbox "Message text" multiline required
+    uid=g13:13_9 button "Send or retry pending command"
+  uid=g13:13_10 heading "Client-core committed projection" level="2"
+  uid=g13:13_11 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "5",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "10ce0ca0-1dcf-43d0-be06-16d645099e44",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verification message"
+          }
+        },
+        {
+          "id": "e0e07bbe-5e9f-4c55-ba2a-6969549469a5",
+          "createdSeq": "2",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "CLI message while browser disconnected"
+          }
+        },
+        {
+          "id": "aecdc40a-a35e-46e2-97d2-ce45162aaa17",
+          "createdSeq": "3",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Browser keyboard message <img src=x onerror=alert(1)>"
+          }
+        },
+        {
+          "id": "cfafa80e-a860-4418-9492-937d77516ac5",
+          "createdSeq": "4",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verified offline CLI message"
+          }
+        },
+        {
+          "id": "7bc2d53b-044f-4ac1-a0cf-6b77208a051a",
+          "createdSeq": "5",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Message after service restart"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 5,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g13:13_8 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g13:13_3` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+result: "{\"reload\":\"pass\",\"cursor\":\"5\",\"ordered_ids\":[\"10ce0ca0-1dcf-43d0-be06-16d645099e44\",\"e0e07bbe-5e9f-4c55-ba2a-6969549469a5\",\"aecdc40a-a35e-46e2-97d2-ce45162aaa17\",\"cfafa80e-a860-4418-9492-937d77516ac5\",\"7bc2d53b-044f-4ac1-a0cf-6b77208a051a\"]}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"viewport\":[500,844],\"overflow\":false,\"images\":0}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+
+Final code_head: b2cecdf7d4ce518574972158d64719f3b20eae7e (same runtime code, added main landmark and assertion)
+page:
+  title: Agora local runtime harness
+  url: "http://127.0.0.1:61863"
+  refs: 13
+snapshot:
+uid=g14:14_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:61863/"
+  uid=g14:14_1 main
+    uid=g14:14_2 heading "Local room runtime harness" level="1"
+    uid=g14:14_3 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+    uid=g14:14_4 button "Disconnect"
+    uid=g14:14_5 status atomic live="polite" relevant="additions text"
+      uid=g14:14_6 StaticText "Connected: committed events applied"
+    uid=g14:14_7 form
+      uid=g14:14_8 StaticText "Message text"
+      uid=g14:14_9 textbox "Message text" multiline required
+      uid=g14:14_10 button "Send or retry pending command"
+    uid=g14:14_11 heading "Client-core committed projection" level="2"
+    uid=g14:14_12 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "5",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "10ce0ca0-1dcf-43d0-be06-16d645099e44",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verification message"
+          }
+        },
+        {
+          "id": "e0e07bbe-5e9f-4c55-ba2a-6969549469a5",
+          "createdSeq": "2",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "CLI message while browser disconnected"
+          }
+        },
+        {
+          "id": "aecdc40a-a35e-46e2-97d2-ce45162aaa17",
+          "createdSeq": "3",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Browser keyboard message <img src=x onerror=alert(1)>"
+          }
+        },
+        {
+          "id": "cfafa80e-a860-4418-9492-937d77516ac5",
+          "createdSeq": "4",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verified offline CLI message"
+          }
+        },
+        {
+          "id": "7bc2d53b-044f-4ac1-a0cf-6b77208a051a",
+          "createdSeq": "5",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Message after service restart"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 5,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g14:14_9 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g14:14_4` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+result: "{\"viewport\":[390,844],\"landmark\":true,\"overflow\":false,\"cursor\":\"5\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "{\"viewport\":[1440,900],\"motion\":false,\"animations\":0}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+error: "Error: bounded convergence deadline\npptr:evaluateHandle;performEvaluation%20(file%3A%2F%2F%2FUsers%2Ftaylerramsay%2F.npm%2F_npx%2F15c61037b1978c83%2Fnode_modules%2Fchrome-devtools-mcp%2Fbuild%2Fsrc%2Ftools%2Fscript.js%3A182%3A69):1:523"
+code: UNKNOWN
+result: "{\"video_replay\":\"pass\",\"cursor\":\"8\"}"
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state

@@ -1,0 +1,16 @@
+{
+  "code_head": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+  "credential_pattern_matches": {
+    "private_key": [],
+    "github_token": [],
+    "postgres_uri_password": []
+  },
+  "audit_vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0
+  },
+  "lockfile_unchanged": true
+}

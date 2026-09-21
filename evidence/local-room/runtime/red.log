@@ -1,0 +1,45 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-21T03:44:20.818Z
+parent: 661b4c5e012be8b851d271f063d3d53738c15ebf
+head: b2cecdf7d4ce518574972158d64719f3b20eae7e
+subject_revision: 661b4c5e012be8b851d271f063d3d53738c15ebf
+test_patch_applied_to_subject: true
+test_patch_files: apps/center/test/runtime.pg.test.ts, apps/center/test/runtime.test.ts, contracts/fixtures/vectors.json
+test_patch_digest: sha256:00f827d8760eaff57ef208acc596f09f445b7974d66b7fcd4ca05eb18bb49674
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:e54d3ab6ebd3f17d014081f8d162ea98d00587e087c99f21629e568653df576f"},{"file":"contracts/openapi.json","digest":"sha256:634b80eb469cc61163879a4e2dd637b4c6da2d8dc5ff7843b364d0d3f2c6fa11"},{"file":"contracts/schemas/local-room.schema.json","digest":"sha256:ccf8deda4b7a805f7b7a9e23a7f266a4c81cd1aedf372bdadafe0e03c3f0f241"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:a1ab75ea1ed0653f552949fcd0adbf275d79be73250420fe1f2ead0bca0c1e65"},{"file":"contracts/tools/browser-validator.ts","digest":"sha256:9a3b12007fbca8d94f3872a54a705c874ff686aab2020bfaabc0274e0d800bc6"}]}
+configuration: {"command":"pnpm exec node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t public runtime owns","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-y9clGR
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 87ms
+   × public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 87ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:44:03
+   Duration  252ms (tests 46%, import 40%, transform 13%, worker 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NfyHd7","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources
+AssertionError: expected 'unavailable' to be 'pass' // Object.is equality
+
+Expected: "pass"
+Received: "unavailable"
+
+ ❯ apps/center/test/runtime.pg.test.ts:32:31
+     30|  expect((await cli('doctor')).exit).toBe(0);
+     31|  const start = (await cli('start'));
+     32|  expect(start.report.outcome).toBe('pass'); // R22: the executable par…
+       |                               ^
+     33|  let url = start.report.url;
+     34|  try {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

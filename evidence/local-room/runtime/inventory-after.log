@@ -1,0 +1,9 @@
+$ ps -p 99362,99374 -o pid,ppid,pgid,lstart,command
+  PID  PPID  PGID STARTED                      COMMAND
+exit: 1
+$ lsof -nP -a -p 99362,99374 -iTCP -sTCP:LISTEN
+exit: 1
+owned root absent; evidence directory retained
+Initial Python bind without SO_REUSEADDR was refused by TCP TIME_WAIT after shutdown; repeat uses the same reuse semantics as Node listener allocation, without SO_REUSEPORT.
+exclusive loopback listen succeeds after cleanup: 61863
+exclusive loopback listen succeeds after cleanup: 61864

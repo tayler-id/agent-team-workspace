@@ -1,5 +1,5 @@
 {
-  "revision": "d2e213153ce0ac8b0ec7309f68ac2e1509273875",
+  "revision": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
   "date": "2026-09-21",
   "features": [
     {
@@ -58,7 +58,7 @@
       "id": "local-room",
       "title": "Local room",
       "status": "In progress",
-      "why": "One fixed local room whose sends commit transactionally and read back in order after a restart; L2 of 5.",
+      "why": "Owned local runtime, persistent messages and cursor replay through a minimal browser harness; L3 of 5 stacked candidate, not landable before L2 and CI.",
       "page": "local-room.md",
       "proof": [
         "repo:contracts/schemas/local-room.schema.json",
@@ -67,7 +67,12 @@
         "repo:packages/storage/drizzle/0001_local_room.sql",
         "repo:apps/center/test/local-room.pg.test.ts",
         "repo:packages/storage/test/local-room.pg.test.ts",
-        "repo:evidence/local-room/persistence/outcome.json"
+        "repo:evidence/local-room/persistence/outcome.json",
+        "repo:scripts/local-room.ts",
+        "repo:scripts/local-room-client.ts",
+        "repo:apps/center/test/runtime.pg.test.ts",
+        "repo:apps/center/test/runtime.test.ts",
+        "repo:evidence/local-room/runtime/outcome.json"
       ]
     },
     {

@@ -1,0 +1,96 @@
+
+> agora@ verify:foundation /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+> node scripts/foundation.mjs -- --parent 661b4c5e012be8b851d271f063d3d53738c15ebf --head b2cecdf7d4ce518574972158d64719f3b20eae7e --evidence evidence/local-room/runtime/foundation --json
+
+{
+  "schema_version": "agora.foundation/v1",
+  "authority": "foundation_fixture",
+  "task": "agora-s1-enforce-test-first",
+  "scope": "foundation",
+  "parent": "661b4c5e012be8b851d271f063d3d53738c15ebf",
+  "head": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+  "outcome": "blocked",
+  "task_outcome": "blocked",
+  "unit_outcome": "blocked",
+  "foundation_outcome": "blocked",
+  "proofs": [
+    {
+      "id": "FG01",
+      "subject": "agora-s1-enforce-test-first:FG01",
+      "revision": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+      "outcome": "blocked",
+      "denials": [
+        "U01a_integration_unqualified"
+      ]
+    },
+    {
+      "id": "FG02",
+      "subject": "agora-s1-enforce-test-first:FG02",
+      "revision": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+      "outcome": "blocked",
+      "denials": [
+        "U01a_integration_unqualified"
+      ]
+    },
+    {
+      "id": "FG03",
+      "subject": "agora-s1-enforce-test-first:FG03",
+      "revision": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+      "outcome": "blocked",
+      "denials": [
+        "U01a_integration_unqualified"
+      ]
+    },
+    {
+      "id": "FG04",
+      "subject": "agora-s1-enforce-test-first:FG04",
+      "revision": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+      "outcome": "blocked",
+      "denials": [
+        "FG04_missing"
+      ]
+    },
+    {
+      "id": "FG05",
+      "subject": "agora-s1-enforce-test-first:FG05",
+      "revision": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+      "outcome": "blocked",
+      "denials": [
+        "FG05_missing"
+      ]
+    },
+    {
+      "id": "FG06",
+      "subject": "agora-s1-enforce-test-first:FG06",
+      "revision": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+      "outcome": "blocked",
+      "denials": [
+        "FG06_missing"
+      ]
+    },
+    {
+      "id": "FG07",
+      "subject": "agora-s1-enforce-test-first:FG07",
+      "revision": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+      "outcome": "blocked",
+      "denials": [
+        "FG07_missing"
+      ]
+    },
+    {
+      "id": "FG08",
+      "subject": "agora-s1-enforce-test-first:FG08",
+      "revision": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+      "outcome": "blocked",
+      "denials": [
+        "FG08_missing"
+      ]
+    }
+  ],
+  "denials": [
+    "red_green_replay_failed"
+  ],
+  "artifacts": []
+}
+ ELIFECYCLE  Command failed with exit code 2.
+observed_exit: 2

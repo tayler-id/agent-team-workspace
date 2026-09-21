@@ -1,0 +1,73 @@
+{
+  "code_head": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+  "instrument": "chrome-devtools-axi viewport screenshots encoded locally with ffmpeg",
+  "sampled": true,
+  "limitation": "About one screenshot per two seconds, held until the next observed frame. Not native full-frame-rate recording or performance proof.",
+  "wall_seconds": 32.00046500004828,
+  "frames": [
+    {
+      "at_seconds": 0.14416720811277628,
+      "sha256": "87faca4786e31571454191f6ef6b3c327c88821fb74c7b0c021b7705e1c2db58"
+    },
+    {
+      "at_seconds": 2.077917542308569,
+      "sha256": "87faca4786e31571454191f6ef6b3c327c88821fb74c7b0c021b7705e1c2db58"
+    },
+    {
+      "at_seconds": 4.8236100832000375,
+      "sha256": "41bd02e438c938435e4f51e9204f3362eba4a01396fe09ec6b79c9b1d6e0d402"
+    },
+    {
+      "at_seconds": 6.075018958188593,
+      "sha256": "16e67674db02a51047824998efba0563668502376b9837fa84b38b7f8a76aa92"
+    },
+    {
+      "at_seconds": 8.075279083102942,
+      "sha256": "16e67674db02a51047824998efba0563668502376b9837fa84b38b7f8a76aa92"
+    },
+    {
+      "at_seconds": 11.074176874943078,
+      "sha256": "32aaf7b1d8d64a05c6dd92c5d99ab91bf5c999b7d57b06be8d7f1dbdf3cc02fc"
+    },
+    {
+      "at_seconds": 12.075507041998208,
+      "sha256": "32aaf7b1d8d64a05c6dd92c5d99ab91bf5c999b7d57b06be8d7f1dbdf3cc02fc"
+    },
+    {
+      "at_seconds": 14.096206292510033,
+      "sha256": "32aaf7b1d8d64a05c6dd92c5d99ab91bf5c999b7d57b06be8d7f1dbdf3cc02fc"
+    },
+    {
+      "at_seconds": 16.339745624922216,
+      "sha256": "5ae9bdbeee48a0b52fa30b83fce1cc33e9c7fc41f110ae008ca5e65e496ff112"
+    },
+    {
+      "at_seconds": 18.07651820871979,
+      "sha256": "5ae9bdbeee48a0b52fa30b83fce1cc33e9c7fc41f110ae008ca5e65e496ff112"
+    },
+    {
+      "at_seconds": 20.302423333749175,
+      "sha256": "5ae9bdbeee48a0b52fa30b83fce1cc33e9c7fc41f110ae008ca5e65e496ff112"
+    },
+    {
+      "at_seconds": 22.093923167325556,
+      "sha256": "5ae9bdbeee48a0b52fa30b83fce1cc33e9c7fc41f110ae008ca5e65e496ff112"
+    },
+    {
+      "at_seconds": 24.32283191755414,
+      "sha256": "070d17f05fec90f10cd6077e4bb90af131bd77e2aadae9c248e7ba93aa742377"
+    },
+    {
+      "at_seconds": 26.084509417414665,
+      "sha256": "070d17f05fec90f10cd6077e4bb90af131bd77e2aadae9c248e7ba93aa742377"
+    },
+    {
+      "at_seconds": 28.09296050015837,
+      "sha256": "070d17f05fec90f10cd6077e4bb90af131bd77e2aadae9c248e7ba93aa742377"
+    },
+    {
+      "at_seconds": 30.095787375234067,
+      "sha256": "070d17f05fec90f10cd6077e4bb90af131bd77e2aadae9c248e7ba93aa742377"
+    }
+  ]
+}

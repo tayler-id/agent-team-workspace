@@ -1,0 +1,17 @@
+code_head: b2cecdf7d4ce518574972158d64719f3b20eae7e
+$ ps -p 99362,99374 -o pid,ppid,pgid,lstart,command
+  PID  PPID  PGID STARTED                      COMMAND
+99362     1 99362 Sun Sep 20 23:43:53 2026     /Users/taylerramsay/.local/node/bin/node scripts/local-room-service.ts /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829
+99374 99362 99362 Sun Sep 20 23:43:53 2026     postgres -D /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829/data -k  -h 127.0.0.1 -p 61864 -c cluster_name=304446ba-cde9-4e95-b74a-382a4ed0640b -c statement_timeout=5000
+$ lsof -nP -a -p 99362,99374 -iTCP -sTCP:LISTEN
+COMMAND    PID         USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node     99362 taylerramsay   15u  IPv4 0xffb40a31125cdd7c      0t0  TCP 127.0.0.1:61863 (LISTEN)
+postgres 99374 taylerramsay    5u  IPv4 0xc0416c660ccc9c7f      0t0  TCP 127.0.0.1:61864 (LISTEN)
+owned paths:
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829/password
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829/owner.json
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829/validator.cjs
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829/harness
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829/validator.mjs
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829/runtime.log
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829/data

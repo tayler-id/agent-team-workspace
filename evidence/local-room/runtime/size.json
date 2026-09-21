@@ -1,0 +1,338 @@
+{
+  "base": "55269a5103656a63cc6f246c00ebb1efa6785866",
+  "code_head": "b2cecdf7d4ce518574972158d64719f3b20eae7e",
+  "method": "git diff --unified=0 exact L2 base..code_head; count added nonblank, non-standalone-comment lines, not net additions; all file counts visible",
+  "totals": {
+    "docs": {
+      "files": 10,
+      "added": 155,
+      "removed": 24,
+      "meaningful_added": 113
+    },
+    "source": {
+      "files": 17,
+      "added": 713,
+      "removed": 22,
+      "meaningful_added": 690
+    },
+    "fixtures": {
+      "files": 1,
+      "added": 37,
+      "removed": 0,
+      "meaningful_added": 37
+    },
+    "generated": {
+      "files": 7,
+      "added": 668,
+      "removed": 8,
+      "meaningful_added": 549
+    },
+    "evidence": {
+      "files": 6,
+      "added": 146,
+      "removed": 0,
+      "meaningful_added": 101
+    }
+  },
+  "entries": [
+    {
+      "path": ".agents/skills/verify-agora/SKILL.md",
+      "category": "docs",
+      "added": 47,
+      "removed": 1,
+      "meaningful_added": 33
+    },
+    {
+      "path": "AGENTS.md",
+      "category": "docs",
+      "added": 1,
+      "removed": 1,
+      "meaningful_added": 1
+    },
+    {
+      "path": "agora/feature-map.json",
+      "category": "source",
+      "added": 11,
+      "removed": 0,
+      "meaningful_added": 11
+    },
+    {
+      "path": "apps/center/src/app.ts",
+      "category": "source",
+      "added": 8,
+      "removed": 21,
+      "meaningful_added": 8
+    },
+    {
+      "path": "apps/center/src/local-room-wire.ts",
+      "category": "source",
+      "added": 23,
+      "removed": 0,
+      "meaningful_added": 20
+    },
+    {
+      "path": "apps/center/test/runtime.pg.test.ts",
+      "category": "source",
+      "added": 163,
+      "removed": 0,
+      "meaningful_added": 158
+    },
+    {
+      "path": "apps/center/test/runtime.test.ts",
+      "category": "source",
+      "added": 70,
+      "removed": 0,
+      "meaningful_added": 64
+    },
+    {
+      "path": "contracts/fixtures/vectors.json",
+      "category": "fixtures",
+      "added": 37,
+      "removed": 0,
+      "meaningful_added": 37
+    },
+    {
+      "path": "contracts/generated/manifest.json",
+      "category": "generated",
+      "added": 10,
+      "removed": 8,
+      "meaningful_added": 10
+    },
+    {
+      "path": "contracts/generated/openapi.bundled.json",
+      "category": "generated",
+      "added": 122,
+      "removed": 0,
+      "meaningful_added": 122
+    },
+    {
+      "path": "contracts/generated/typescript/openapi.d.ts",
+      "category": "generated",
+      "added": 68,
+      "removed": 0,
+      "meaningful_added": 61
+    },
+    {
+      "path": "contracts/openapi.json",
+      "category": "source",
+      "added": 11,
+      "removed": 0,
+      "meaningful_added": 11
+    },
+    {
+      "path": "contracts/schemas/local-room.schema.json",
+      "category": "source",
+      "added": 24,
+      "removed": 0,
+      "meaningful_added": 24
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContracts/Generated/Client.swift",
+      "category": "generated",
+      "added": 89,
+      "removed": 0,
+      "meaningful_added": 85
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift",
+      "category": "generated",
+      "added": 182,
+      "removed": 0,
+      "meaningful_added": 145
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContracts/Generated/Types+Operations.swift",
+      "category": "generated",
+      "added": 179,
+      "removed": 0,
+      "meaningful_added": 116
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContracts/Generated/Types.swift",
+      "category": "generated",
+      "added": 18,
+      "removed": 0,
+      "meaningful_added": 10
+    },
+    {
+      "path": "contracts/swift/Sources/AgoraContractsConform/main.swift",
+      "category": "source",
+      "added": 2,
+      "removed": 0,
+      "meaningful_added": 2
+    },
+    {
+      "path": "contracts/tools/browser-validator.ts",
+      "category": "source",
+      "added": 23,
+      "removed": 0,
+      "meaningful_added": 21
+    },
+    {
+      "path": "docs/decisions.tsv",
+      "category": "docs",
+      "added": 3,
+      "removed": 0,
+      "meaningful_added": 3
+    },
+    {
+      "path": "docs/runbooks/development.md",
+      "category": "docs",
+      "added": 14,
+      "removed": 2,
+      "meaningful_added": 8
+    },
+    {
+      "path": "docs/site/cli.md",
+      "category": "docs",
+      "added": 21,
+      "removed": 0,
+      "meaningful_added": 16
+    },
+    {
+      "path": "docs/site/configuration.md",
+      "category": "docs",
+      "added": 4,
+      "removed": 0,
+      "meaningful_added": 2
+    },
+    {
+      "path": "docs/site/getting-started.md",
+      "category": "docs",
+      "added": 12,
+      "removed": 1,
+      "meaningful_added": 8
+    },
+    {
+      "path": "docs/site/local-room.md",
+      "category": "docs",
+      "added": 37,
+      "removed": 19,
+      "meaningful_added": 31
+    },
+    {
+      "path": "docs/site/operations.md",
+      "category": "docs",
+      "added": 10,
+      "removed": 0,
+      "meaningful_added": 5
+    },
+    {
+      "path": "docs/site/site.json",
+      "category": "docs",
+      "added": 6,
+      "removed": 0,
+      "meaningful_added": 6
+    },
+    {
+      "path": "evidence/local-room/runtime/README.md",
+      "category": "evidence",
+      "added": 21,
+      "removed": 0,
+      "meaningful_added": 11
+    },
+    {
+      "path": "evidence/local-room/runtime/browser-csp.red.log",
+      "category": "evidence",
+      "added": 3,
+      "removed": 0,
+      "meaningful_added": 3
+    },
+    {
+      "path": "evidence/local-room/runtime/initial-red.log",
+      "category": "evidence",
+      "added": 31,
+      "removed": 0,
+      "meaningful_added": 21
+    },
+    {
+      "path": "evidence/local-room/runtime/landmark.green.log",
+      "category": "evidence",
+      "added": 10,
+      "removed": 0,
+      "meaningful_added": 6
+    },
+    {
+      "path": "evidence/local-room/runtime/landmark.red.log",
+      "category": "evidence",
+      "added": 50,
+      "removed": 0,
+      "meaningful_added": 39
+    },
+    {
+      "path": "evidence/local-room/runtime/numeric-order.red.log",
+      "category": "evidence",
+      "added": 31,
+      "removed": 0,
+      "meaningful_added": 21
+    },
+    {
+      "path": "packages/domain/src/local-room/port.ts",
+      "category": "source",
+      "added": 3,
+      "removed": 1,
+      "meaningful_added": 3
+    },
+    {
+      "path": "packages/storage/src/local-room.ts",
+      "category": "source",
+      "added": 5,
+      "removed": 0,
+      "meaningful_added": 5
+    },
+    {
+      "path": "scripts/local-room-browser.ts",
+      "category": "source",
+      "added": 41,
+      "removed": 0,
+      "meaningful_added": 40
+    },
+    {
+      "path": "scripts/local-room-client.ts",
+      "category": "source",
+      "added": 61,
+      "removed": 0,
+      "meaningful_added": 59
+    },
+    {
+      "path": "scripts/local-room-harness.html",
+      "category": "source",
+      "added": 17,
+      "removed": 0,
+      "meaningful_added": 17
+    },
+    {
+      "path": "scripts/local-room-owner.ts",
+      "category": "source",
+      "added": 56,
+      "removed": 0,
+      "meaningful_added": 55
+    },
+    {
+      "path": "scripts/local-room-service.ts",
+      "category": "source",
+      "added": 111,
+      "removed": 0,
+      "meaningful_added": 109
+    },
+    {
+      "path": "scripts/local-room.ts",
+      "category": "source",
+      "added": 84,
+      "removed": 0,
+      "meaningful_added": 83
+    }
+  ],
+  "unchanged_lockfile": true,
+  "approved_target": {
+    "meaningful_authored_lines": [
+      650,
+      900
+    ],
+    "source_files_maximum": 20
+  },
+  "hard_limit": {
+    "meaningful_lines": 1000,
+    "source_files": 25
+  }
+}
