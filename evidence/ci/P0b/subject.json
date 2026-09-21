@@ -1,0 +1,282 @@
+{
+  "schema_version": "agora.p0b-record/v1",
+  "recorded_at": "2026-09-21T03:08:01.244194+00:00",
+  "trust": "local worker receipts, not trusted CI or publication authority",
+  "base": "95f35277fbfc821be148029521222f0de617d7de",
+  "test_only_parent": "f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec",
+  "executable_head": "5437b32941aa92a72c8d2ebec0be58302b88a46a",
+  "executable_tree": "a6e6b25fec0e7b55619a67f58f379f71ce2c4534",
+  "test_patch_sha256": "d6fafd45ebb259c3024e781e8f1adb4516f19e5dc439252ae100b4a590440e7b",
+  "configuration": {
+    ".node-version": "73fb1b615e2043a933be1c0895cde4358036acc28d785692509b822aa53c761f",
+    ".npmrc": "3b88d1057add6f92ec23dc22dd017e312ded13a042deb0ba6f08bad85d936456",
+    "package.json": "6b908b6d6f19c8097db9edf4540dee5f417abc1d051cb7af18e3c232e507138b",
+    "pnpm-workspace.yaml": "49ce7cc525851bdd0e7431653c8c9596e7a23118a951121a1db9960c0841aa66",
+    "pnpm-lock.yaml": "5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d",
+    "vitest.config.ts": "69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e",
+    "scripts/ci-doctor.mjs": "6433f4a9f9ca881e09c1f73508e8e30ebee9f30db70dbda805af141effefa3fb",
+    "scripts/test/ci-doctor.test.ts": "f42e72bd65e012c2ee4a75cc8c7b4f6c547a927a1e95f74a8f7971b601fead6a"
+  },
+  "harness_slice": {
+    "authored_paths": [
+      ".node-version",
+      "agora/feature-map.json",
+      "docs/site/atlas.json",
+      "docs/site/ci.md",
+      "docs/site/site.json",
+      "docs/site/test/corpus.test.ts",
+      "scripts/ci-doctor.mjs",
+      "scripts/test/ci-doctor.test.ts",
+      "tsconfig.json"
+    ],
+    "source_paths": [
+      ".node-version",
+      "agora/feature-map.json",
+      "docs/site/atlas.json",
+      "docs/site/site.json",
+      "docs/site/test/corpus.test.ts",
+      "scripts/ci-doctor.mjs",
+      "scripts/test/ci-doctor.test.ts",
+      "tsconfig.json"
+    ],
+    "source_count": 8,
+    "nonempty_added_and_deleted_lines": 57,
+    "raw_numstat": "1\t0\t.node-version\n9\t0\tagora/feature-map.json\n5\t0\tdocs/site/atlas.json\n29\t0\tdocs/site/ci.md\n1\t0\tdocs/site/progress.md\n2\t0\tdocs/site/site.json\n3\t2\tdocs/site/test/corpus.test.ts\n8\t0\tscripts/ci-doctor.mjs\n9\t0\tscripts/test/ci-doctor.test.ts\n1\t1\ttsconfig.json"
+  },
+  "implementation_slice": {
+    "authored_paths": [
+      ".agents/skills/verify-agora/SKILL.md",
+      "docs/runbooks/development.md",
+      "docs/site/atlas.json",
+      "docs/site/ci.md",
+      "docs/site/cli.md",
+      "scripts/ci-doctor.mjs",
+      "scripts/test/ci-doctor.test.ts"
+    ],
+    "source_paths": [
+      "docs/site/atlas.json",
+      "scripts/ci-doctor.mjs",
+      "scripts/test/ci-doctor.test.ts"
+    ],
+    "source_count": 3,
+    "nonempty_added_and_deleted_lines": 128,
+    "raw_numstat": "5\t1\t.agents/skills/verify-agora/SKILL.md\n7\t3\tdocs/runbooks/development.md\n3\t3\tdocs/site/atlas.json\n2\t2\tdocs/site/ci.md\n2\t0\tdocs/site/cli.md\n2\t2\tdocs/site/progress.md\n19\t0\tevidence/ci/P0b/README.md\n44\t3\tscripts/ci-doctor.mjs\n56\t1\tscripts/test/ci-doctor.test.ts"
+  },
+  "combined_visible_counts": {
+    "authored_paths": [
+      ".agents/skills/verify-agora/SKILL.md",
+      ".node-version",
+      "agora/feature-map.json",
+      "docs/runbooks/development.md",
+      "docs/site/atlas.json",
+      "docs/site/ci.md",
+      "docs/site/cli.md",
+      "docs/site/site.json",
+      "docs/site/test/corpus.test.ts",
+      "scripts/ci-doctor.mjs",
+      "scripts/test/ci-doctor.test.ts",
+      "tsconfig.json"
+    ],
+    "source_paths": [
+      ".node-version",
+      "agora/feature-map.json",
+      "docs/site/atlas.json",
+      "docs/site/site.json",
+      "docs/site/test/corpus.test.ts",
+      "scripts/ci-doctor.mjs",
+      "scripts/test/ci-doctor.test.ts",
+      "tsconfig.json"
+    ],
+    "source_count": 8,
+    "nonempty_added_and_deleted_lines": 169,
+    "raw_numstat": "5\t1\t.agents/skills/verify-agora/SKILL.md\n1\t0\t.node-version\n9\t0\tagora/feature-map.json\n7\t3\tdocs/runbooks/development.md\n6\t1\tdocs/site/atlas.json\n29\t0\tdocs/site/ci.md\n2\t0\tdocs/site/cli.md\n2\t1\tdocs/site/progress.md\n2\t0\tdocs/site/site.json\n3\t2\tdocs/site/test/corpus.test.ts\n19\t0\tevidence/ci/P0b/README.md\n49\t0\tscripts/ci-doctor.mjs\n64\t0\tscripts/test/ci-doctor.test.ts\n1\t1\ttsconfig.json"
+  },
+  "risk": "R2 verification/toolchain policy",
+  "scope_result": "pass: exact Node/pnpm/native prerequisites and all three omitted-probe guards",
+  "not_passed": [
+    "pnpm check: separate PostgreSQL launcher exit 70; server log removed by unchanged helper, long-path cause not freshly confirmed",
+    "standalone design negatives: pre-existing missing apps sandbox closure, owned by unlanded P0a",
+    "PG tests/public probe/migration replay not executed after blocked launch; no borrowed PG evidence",
+    "mandatory CI, browser, React guards, hosted enforcement and exact PG/Swift qualification absent"
+  ],
+  "cleanup": "owned doctor and replay trees absent; no running task-owned service; task-local runtime/store and ignored Swift cache retained for review",
+  "artifacts": [
+    {
+      "path": "evidence/ci/P0b/README.md",
+      "bytes": 4049,
+      "sha256": "e431749e8c35b40a2641d81ad8197ba0a68ca6057816ccdcb2542f382d121947"
+    },
+    {
+      "path": "evidence/ci/P0b/atlas-prequalification.log",
+      "bytes": 3888,
+      "sha256": "c002857d72eebb2e59805533ab062702b9204558e4f819173c8a715f8101a288"
+    },
+    {
+      "path": "evidence/ci/P0b/check.log",
+      "bytes": 7631,
+      "sha256": "0bb05507dbdbb74abcb4a2140abe16263e1d80a155fc6a8b3b1d9577b2f7c6be"
+    },
+    {
+      "path": "evidence/ci/P0b/cleanup.log",
+      "bytes": 319,
+      "sha256": "8a6510a03927132fa4c8c5ac6b6ced1588e38bec7f2c5c9da2ad8ece4f34afa9"
+    },
+    {
+      "path": "evidence/ci/P0b/design-negatives.log",
+      "bytes": 2240,
+      "sha256": "bf046998cdb2450f0cef5938c21b334dff213f754061d86a47e746e659aa9fbb"
+    },
+    {
+      "path": "evidence/ci/P0b/docs.log",
+      "bytes": 5010,
+      "sha256": "96247a5fc6d04a8debd45ee092b2045d2c6730dc86c295393fce7548d0bb083a"
+    },
+    {
+      "path": "evidence/ci/P0b/doctor-host-blocked.json",
+      "bytes": 3847,
+      "sha256": "0750a87692d0812c68c2e80ee95a6e4c20360233d9b01d7fb1b3ee99b35c7ef3"
+    },
+    {
+      "path": "evidence/ci/P0b/doctor-supported.json",
+      "bytes": 620,
+      "sha256": "1a42caa19633273be373ce22f5ba29e2118cc0c0614f125c3b4b53ad1184aac9"
+    },
+    {
+      "path": "evidence/ci/P0b/doctor-wrong-runtime.json",
+      "bytes": 755,
+      "sha256": "37ac19bf1fe916f79141ecdc99b320a735069b563017b5004a1ab388df5299f2"
+    },
+    {
+      "path": "evidence/ci/P0b/environment.log",
+      "bytes": 468,
+      "sha256": "2351e37031d0db1fad215a5379faf5e09dde181fbef128ee728addf0aaeaae7b"
+    },
+    {
+      "path": "evidence/ci/P0b/exact-environment.log",
+      "bytes": 2176,
+      "sha256": "83de2d49ea36c61615fc619cef3eaa0f4167bfec4a0167ee2194ffaec5e4ef31"
+    },
+    {
+      "path": "evidence/ci/P0b/exact-head-checks.log",
+      "bytes": 137575,
+      "sha256": "3b7e0320bc25c9f2ed87ee713be9ed8fcec6205b2ce5d21b29036f56dbb22845"
+    },
+    {
+      "path": "evidence/ci/P0b/final-docs.log",
+      "bytes": 5020,
+      "sha256": "ca20778dd5c2305fa1752614e8a6375956f41177784cd1d86e7e9c48a7191136"
+    },
+    {
+      "path": "evidence/ci/P0b/green-before-commit.log",
+      "bytes": 7386,
+      "sha256": "0fe233da96b6637a43d4d5a1ecacb3d2bd8b98bfc0e0c7971c791f1f46d758de"
+    },
+    {
+      "path": "evidence/ci/P0b/green.log",
+      "bytes": 8681,
+      "sha256": "e6fcc6602cd0dda167cae9c8a3c50b7df4bbd1c3f333193304a9f8eb1308e18a"
+    },
+    {
+      "path": "evidence/ci/P0b/harness.log",
+      "bytes": 160,
+      "sha256": "19cb019c004ca1851eaaa8c78f406aa12d181f65c351fb62d9dda71e25cf83e4"
+    },
+    {
+      "path": "evidence/ci/P0b/host-runtime.log",
+      "bytes": 532,
+      "sha256": "49b72d9bd6cd63c2cf7d022f21c5b082971f752ebb120939cb20578fff424555"
+    },
+    {
+      "path": "evidence/ci/P0b/install-before.log",
+      "bytes": 771,
+      "sha256": "31ec982dbf45b5d4854238392412b4b89af51254cedb09586b41be9269a2136d"
+    },
+    {
+      "path": "evidence/ci/P0b/install-exact-head.log",
+      "bytes": 9282,
+      "sha256": "e9c8987ae21ff97eea88f84c446d82ec5678fbebc199f0fdfb29a1fa9ce0391b"
+    },
+    {
+      "path": "evidence/ci/P0b/install-supported.log",
+      "bytes": 757,
+      "sha256": "f6ab8f2c3fe6bb4388b8be9dbfa70cfa6fadc6cd37c13a136a4abc591b6c3539"
+    },
+    {
+      "path": "evidence/ci/P0b/lint.log",
+      "bytes": 109,
+      "sha256": "0eb386957925f0ec764512b19108226f0cf393caae9ad57bc609bc90d268d380"
+    },
+    {
+      "path": "evidence/ci/P0b/native-before.log",
+      "bytes": 2704,
+      "sha256": "f8e0a1d884e19712376cd529f6ea124f766cdb38431b004fd2748aabc5ee5b83"
+    },
+    {
+      "path": "evidence/ci/P0b/native-diagnosis.log",
+      "bytes": 3379,
+      "sha256": "26e31afa41cc729348a87e2f034f399c0b2fdfcbd8e6f42a650f2b6ceff41163"
+    },
+    {
+      "path": "evidence/ci/P0b/pg-limitation.log",
+      "bytes": 572,
+      "sha256": "fdf4de64cf2f76943066e7e40c97076e79dbbf5fe0299af112a8bcaf07b4478d"
+    },
+    {
+      "path": "evidence/ci/P0b/red-before.log",
+      "bytes": 5583,
+      "sha256": "1712585f6a19775cf1432a0f2fdbb8497b4b693b6c890d3fea266d1833c55213"
+    },
+    {
+      "path": "evidence/ci/P0b/red.log",
+      "bytes": 6916,
+      "sha256": "bcd07ae22c3d623e3e067667f0c1df3a16b419ab1df3a743ce28dd1e1fe16354"
+    },
+    {
+      "path": "evidence/ci/P0b/replay.json",
+      "bytes": 305,
+      "sha256": "7585f3da5fe31bcf9212c578faa8085ecc24324859a0e6478fdefab3d76104b1"
+    },
+    {
+      "path": "evidence/ci/P0b/replay.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/ci/P0b/runtime-archives.log",
+      "bytes": 334,
+      "sha256": "3c0630b3b02defcc5130f4fdd2a72530d5a2565fe6546bb59ee000ce8976d10c"
+    },
+    {
+      "path": "evidence/ci/P0b/runtime-counterfactual.log",
+      "bytes": 712,
+      "sha256": "f0d4b66848710c3e8fa479e90255a418c00fe1ff7e30967c96026787200d0fd6"
+    },
+    {
+      "path": "evidence/ci/P0b/test-first.patch",
+      "bytes": 3970,
+      "sha256": "3389ae2d5f71bc91ccd3cf4d72d2f1f7758597318d9202932ffac8a7a4e990f0"
+    },
+    {
+      "path": "evidence/ci/P0b/test-patch.diff",
+      "bytes": 4406,
+      "sha256": "d6fafd45ebb259c3024e781e8f1adb4516f19e5dc439252ae100b4a590440e7b"
+    },
+    {
+      "path": "evidence/ci/P0b/typecheck.log",
+      "bytes": 171,
+      "sha256": "47a6bd55a5e4248cdbee0ebf2f1570b8185ef114fdb10132b2c5fe74c99994a4"
+    },
+    {
+      "path": "evidence/ci/P0b/verifier-doctor.log",
+      "bytes": 14053,
+      "sha256": "89fb8ab203969493ad1edd8610cca182b8749295394a77c69fdf22a6701087e5"
+    },
+    {
+      "path": "evidence/ci/P0b/verifier-drive.log",
+      "bytes": 123470,
+      "sha256": "b0a1350f828940fa64c39df0b4f580a87b69c06d2dcc3a5c7f1b82e966346485"
+    }
+  ],
+  "final_check_record": "exact-head-checks.log: 18 commands, every exit 0; fresh empty-store frozen install and replay also pass at this head",
+  "evidence_only_followup": "The delivery commit adds receipts and this record only. Re-run doctor, negatives and docs on that final head; no behavioral source changes after executable_head."
+}

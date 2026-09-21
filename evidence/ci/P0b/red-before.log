@@ -1,0 +1,106 @@
+✔ doctor public help baseline (26.576625ms)
+✖ G01 real locked native import and exact toolchain are ready (22.471291ms)
+✖ G01 node denial and omitted-probe guard (25.344917ms)
+✖ G01 pnpm denial and omitted-probe guard (24.4715ms)
+✖ G01 rolldown denial and omitted-probe guard (26.943334ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 1
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 220.986416
+
+✖ failing tests:
+
+test at scripts/test/ci-doctor.test.ts:16:7
+✖ G01 real locked native import and exact toolchain are ready (22.471291ms)
+  AssertionError [ERR_ASSERTION]: {"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}
+  
+  
+  2 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/test/ci-doctor.test.ts:18:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/test/ci-doctor.test.ts:16:7 {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/test/ci-doctor.test.ts:24:54
+✖ G01 node denial and omitted-probe guard (25.344917ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /"id":"node","outcome":"blocked"/. Input:
+  
+  '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n'
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/test/ci-doctor.test.ts:47:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/test/ci-doctor.test.ts:24:54 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n',
+    expected: /"id":"node","outcome":"blocked"/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at scripts/test/ci-doctor.test.ts:24:54
+✖ G01 pnpm denial and omitted-probe guard (24.4715ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /"id":"pnpm","outcome":"blocked"/. Input:
+  
+  '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n'
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/test/ci-doctor.test.ts:47:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/test/ci-doctor.test.ts:24:54 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n',
+    expected: /"id":"pnpm","outcome":"blocked"/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at scripts/test/ci-doctor.test.ts:24:54
+✖ G01 rolldown denial and omitted-probe guard (26.943334ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /"id":"rolldown","outcome":"blocked"/. Input:
+  
+  '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n'
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/test/ci-doctor.test.ts:47:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/test/ci-doctor.test.ts:24:54 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n',
+    expected: /"id":"rolldown","outcome":"blocked"/,
+    operator: 'match',
+    diff: 'simple'
+  }
+test_exit=1
+f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec

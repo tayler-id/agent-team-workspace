@@ -1,0 +1,24 @@
+Scope: all 6 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +261
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 261, reused 0, downloaded 250, added 127
+Progress: resolved 261, reused 0, downloaded 261, added 254
+Progress: resolved 261, reused 0, downloaded 261, added 261, done
+
+devDependencies:
++ @agora/client-core <- packages/client-core
++ @agora/contracts 0.0.0 <- contracts
++ @eslint/js 10.0.1
++ @types/node 24.10.1
++ @typescript-eslint/utils 8.70.0
++ eslint 10.11.0
++ markdown-it 14.3.0
++ markdownlint-cli2 0.23.2
++ typescript 5.9.3
++ typescript-eslint 8.70.0
++ vitest 5.0.1
+
+Done in 2.9s using pnpm v10.34.1
+install_exit=0

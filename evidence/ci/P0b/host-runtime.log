@@ -1,0 +1,5 @@
+-rwxr-xr-x  1 taylerramsay  wheel  120573328 May 20 20:07 /Users/taylerramsay/.local/node/bin/node
+/Applications/Automic Vault/node.app/Contents/Resources/payload
+Executable=/Applications/Automic Vault/node.app/Contents/MacOS/launcher
+warning: Specifying ':' in the path is deprecated and will not work in a future release
+.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/rolldown-binding.darwin-arm64.node: Mach-O 64-bit dynamically linked shared library arm64

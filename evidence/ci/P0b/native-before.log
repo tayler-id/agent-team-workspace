@@ -1,0 +1,27 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Startup Error ⎯⎯⎯⎯⎯⎯⎯⎯
+Error: Cannot find native binding. npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). Please try `npm i` again after removing both package-lock.json and node_modules directory.
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs:602:34
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs:9:49
+    ... 4 lines matching cause stack trace ...
+    at async CAC.run (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/cac.fSuRXrAx.js:2346:2) {
+  cause: Error: Cannot find module '@rolldown/binding-wasm32-wasi'
+  Require stack:
+  - /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs:497:18
+      ... 8 lines matching cause stack trace ...
+      at async CAC.run (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/cac.fSuRXrAx.js:2346:2) {
+    cause: Error: Cannot find module './rolldown-binding.wasi.cjs'
+    Require stack:
+    - /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs
+        at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs:497:18
+        ... 8 lines matching cause stack trace ...
+        at async CAC.run (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/cac.fSuRXrAx.js:2346:2) {
+      cause: [Error]
+    }
+  }
+}
+
+
+
+vitest_exit=1

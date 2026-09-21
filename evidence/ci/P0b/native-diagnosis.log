@@ -1,0 +1,24 @@
+total 32000
+drwxr-xr-x  5 taylerramsay  staff       160 Sep 20 22:45 .
+drwxr-xr-x  3 taylerramsay  staff        96 Sep 20 22:45 ..
+-rw-r--r--  2 taylerramsay  staff       854 Sep 20 22:45 package.json
+-rw-r--r--  2 taylerramsay  staff       104 Sep 20 22:45 README.md
+-rw-r--r--  2 taylerramsay  staff  16372640 Sep 20 22:45 rolldown-binding.darwin-arm64.node
+.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/README.md
+.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/package.json
+.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/rolldown-binding.darwin-arm64.node
+{ node: 'v24.16.0', arch: 'arm64', platform: 'darwin' }
+Error: dlopen(/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/rolldown-binding.darwin-arm64.node, 0x0001): tried: '/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/rolldown-binding.darwin-arm64.node' (code signature in <55C4916B-FB84-3FAC-8AFD-7B7A9EF736EC> '/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/rolldown-binding.darwin-arm64.node' not valid for use in process: mapping process and mapped file (non-platform) have different Team IDs), '/System/Volumes/Preboot/Cryptexes/OS/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/rolldown-binding.darwin-arm64.node' (no such file), '/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/rolldown-binding.darwin-arm64.node' (code signature in <55C4916B-FB84-3FAC-8AFD-7B7A9EF736EC> '/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean/node_modules/.pnpm/@rolldown+binding-darwin-arm64@1.2.9/node_modules/@rolldown/binding-darwin-arm64/rolldown-binding.darwin-arm64.node' not valid for use in process: mapping process and mapped file (non-platform) have different Team IDs)
+    at Object..node (node:internal/modules/cjs/loader:2012:18)
+    at Module.load (node:internal/modules/cjs/loader:1577:32)
+    at Module._load (node:internal/modules/cjs/loader:1379:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.require (node:internal/modules/cjs/loader:1600:12)
+    at require (node:internal/modules/helpers:153:16)
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/[eval1]:5:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:230:26 {
+  code: 'ERR_DLOPEN_FAILED'
+}
+{}

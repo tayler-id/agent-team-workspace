@@ -1,0 +1,4 @@
+Literal Launch/Drive limitation: pnpm check ran pnpm test and the unchanged PG launcher, exiting 70 before Vitest.
+Do not repeat the known blocked launch: public PG probe, migrations and PostgreSQL suites did not run. No PG pass or product red is claimed.
+The launch helper deleted its postgres.log, so this receipt proves pg_ctl startup failure, not the exact server-side message. The known long-path cause remains P0c diagnosis.
+{"tmpdir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp","prospectiveSocketBytes":128}

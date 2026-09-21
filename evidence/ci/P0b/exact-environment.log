@@ -1,0 +1,20 @@
+executable_subject=5437b32941aa92a72c8d2ebec0be58302b88a46a
+base=95f35277fbfc821be148029521222f0de617d7de
+PATH=/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/runtime/node-v24.21.0-darwin-arm64/bin:/Users/taylerramsay/.pi/agent/bin:/Users/taylerramsay/.local/share/firstmate-tools/bin:/usr/local/bin:/Users/taylerramsay/.fly/bin:/Users/taylerramsay/.local/node/bin:/Users/taylerramsay/.fly/bin:/Users/taylerramsay/.local/node/bin:/Users/taylerramsay/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin
+TMPDIR=/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp
+npm_config_store_dir=/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/store
+optional=undefined
+ignore-scripts=undefined
+supportedArchitectures=undefined
+ignoredOptionalDependencies=undefined
+onlyBuiltDependencies=undefined
+registry=https://registry.npmjs.org/
+{"version":"v24.21.0","execPath":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/runtime/node-v24.21.0-darwin-arm64/bin/node","platform":"darwin","arch":"arm64"}
+73fb1b615e2043a933be1c0895cde4358036acc28d785692509b822aa53c761f  .node-version
+3b88d1057add6f92ec23dc22dd017e312ded13a042deb0ba6f08bad85d936456  .npmrc
+6b908b6d6f19c8097db9edf4540dee5f417abc1d051cb7af18e3c232e507138b  package.json
+49ce7cc525851bdd0e7431653c8c9596e7a23118a951121a1db9960c0841aa66  pnpm-workspace.yaml
+5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d  pnpm-lock.yaml
+69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e  vitest.config.ts
+6433f4a9f9ca881e09c1f73508e8e30ebee9f30db70dbda805af141effefa3fb  scripts/ci-doctor.mjs
+f42e72bd65e012c2ee4a75cc8c7b4f6c547a927a1e95f74a8f7971b601fead6a  scripts/test/ci-doctor.test.ts

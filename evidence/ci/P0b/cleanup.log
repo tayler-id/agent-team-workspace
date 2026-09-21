@@ -1,0 +1,5 @@
+0
+worktrees: clean
+tmp: clean
+No service started successfully; PG helper removed its failed-start cluster. Doctor children exited synchronously.
+Removed owned clean archives/store-exact/home and temporary Swift trees. Retained task-local Node runtime, pnpm store and ignored Swift build cache for review; not evidence.

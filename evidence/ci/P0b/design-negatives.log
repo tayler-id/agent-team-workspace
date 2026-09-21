@@ -1,0 +1,69 @@
+
+$ node scripts/test-design-checks.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: baseline: unexpected exit
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: index.md: missing link apps/center/src/app.ts
+    at checkLink (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/verify-design.mjs:18:2)
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/verify-design.mjs:189:47
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+
+
+1 !== 0
+
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/scripts/test-design-checks.mjs:68:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+observed_exit=1
+
+$ node scripts/test-design-handoff-checks.mjs
+PASS accepts baseline
+PASS rejects missing-required-section
+PASS rejects missing-readme-part-link
+PASS rejects broken-relative-link
+PASS rejects missing-anchor
+PASS rejects link-escapes-project
+PASS rejects missing-mermaid-diagram
+PASS rejects unknown-mermaid-type
+PASS rejects unknown-stage-label
+PASS rejects unknown-status-label
+PASS rejects private-path
+PASS rejects long-dash
+PASS rejects placeholder
+PASS rejects unclosed-fence
+PASS rejects skipped-heading-level
+PASS rejects packet-over-line-limit
+PASS rejects unlisted-packet-file
+PASS rejects manifest-lists-missing-file
+PASS rejects manifest-without-revision
+PASS rejects readme-order-drift
+PASS 20 behavioral design-handoff check cases; no application acceptance implied
+observed_exit=0
