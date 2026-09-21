@@ -1,0 +1,83 @@
+page:
+  title: Agora local runtime harness
+  refs: 13
+snapshot:
+uid=g15:15_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:61863/"
+  uid=g15:15_1 main
+    uid=g15:15_2 heading "Local room runtime harness" level="1"
+    uid=g15:15_3 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+    uid=g15:15_4 button "Disconnect"
+    uid=g15:15_5 status atomic live="polite" relevant="additions text"
+      uid=g15:15_6 StaticText "Connected: committed events applied"
+    uid=g15:15_7 form
+      uid=g15:15_8 StaticText "Message text"
+      uid=g15:15_9 textbox "Message text" multiline required
+      uid=g15:15_10 button "Send or retry pending command"
+    uid=g15:15_11 heading "Client-core committed projection" level="2"
+    uid=g15:15_12 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "5",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "10ce0ca0-1dcf-43d0-be06-16d645099e44",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verification message"
+          }
+        },
+        {
+          "id": "e0e07bbe-5e9f-4c55-ba2a-6969549469a5",
+          "createdSeq": "2",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "CLI message while browser disconnected"
+          }
+        },
+        {
+          "id": "aecdc40a-a35e-46e2-97d2-ce45162aaa17",
+          "createdSeq": "3",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Browser keyboard message <img src=x onerror=alert(1)>"
+          }
+        },
+        {
+          "id": "cfafa80e-a860-4418-9492-937d77516ac5",
+          "createdSeq": "4",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verified offline CLI message"
+          }
+        },
+        {
+          "id": "7bc2d53b-044f-4ac1-a0cf-6b77208a051a",
+          "createdSeq": "5",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Message after service restart"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 5,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g15:15_9 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g15:15_4` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`

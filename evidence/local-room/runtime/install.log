@@ -1,0 +1,11 @@
+ WARN  using --force I sure hope you know what you are doing
+Scope: all 6 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +285
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 285, reused 261, downloaded 2, added 211
+Progress: resolved 285, reused 261, downloaded 23, added 283
+Progress: resolved 285, reused 261, downloaded 24, added 285, done
+
+Done in 2.5s using pnpm v10.34.1

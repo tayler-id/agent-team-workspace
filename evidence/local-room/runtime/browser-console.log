@@ -1,0 +1,7 @@
+console:
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+## Console messages
+<no console messages found>
+help[2]:
+  Run `chrome-devtools-axi console-get <id>` to see a specific message
+  Run `chrome-devtools-axi console --type error` to filter by type

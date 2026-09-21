@@ -1,0 +1,42 @@
+2026-09-20 23:37:10.186 EDT [56551] LOG:  starting PostgreSQL 18.4 (Homebrew) on aarch64-apple-darwin25.6.0, compiled by Apple clang version 21.0.0 (clang-2100.1.1.101), 64-bit
+2026-09-20 23:37:10.186 EDT [56551] LOG:  listening on IPv4 address "127.0.0.1", port 61864
+2026-09-20 23:37:10.190 EDT [56567] LOG:  database system was shut down at 2026-09-20 23:37:10 EDT
+2026-09-20 23:37:10.191 EDT [56551] LOG:  database system is ready to accept connections
+2026-09-20 23:39:58.151 EDT [56551] LOG:  received fast shutdown request
+2026-09-20 23:39:58.152 EDT [56551] LOG:  aborting any active transactions
+2026-09-20 23:39:58.154 EDT [56551] LOG:  background worker "logical replication launcher" (PID 56570) exited with exit code 1
+2026-09-20 23:39:58.154 EDT [56565] LOG:  shutting down
+2026-09-20 23:39:58.155 EDT [56565] LOG:  checkpoint starting: shutdown immediate
+2026-09-20 23:39:58.209 EDT [56565] LOG:  checkpoint complete: wrote 1052 buffers (6.4%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.047 s, sync=0.007 s, total=0.055 s; sync files=351, longest=0.001 s, average=0.001 s; distance=5035 kB, estimate=5035 kB; lsn=0/1C76208, redo lsn=0/1C76208
+2026-09-20 23:39:58.213 EDT [56551] LOG:  database system is shut down
+2026-09-20 23:39:58.991 EDT [17824] LOG:  starting PostgreSQL 18.4 (Homebrew) on aarch64-apple-darwin25.6.0, compiled by Apple clang version 21.0.0 (clang-2100.1.1.101), 64-bit
+2026-09-20 23:39:58.992 EDT [17824] LOG:  listening on IPv4 address "127.0.0.1", port 61864
+2026-09-20 23:39:58.996 EDT [17840] LOG:  database system was shut down at 2026-09-20 23:39:58 EDT
+2026-09-20 23:39:58.997 EDT [17841] FATAL:  the database system is starting up
+2026-09-20 23:39:59.001 EDT [17824] LOG:  database system is ready to accept connections
+2026-09-20 23:42:49.938 EDT [17824] LOG:  received fast shutdown request
+2026-09-20 23:42:49.939 EDT [17824] LOG:  aborting any active transactions
+2026-09-20 23:42:49.941 EDT [17824] LOG:  background worker "logical replication launcher" (PID 17844) exited with exit code 1
+2026-09-20 23:42:49.941 EDT [17838] LOG:  shutting down
+2026-09-20 23:42:49.941 EDT [17838] LOG:  checkpoint starting: shutdown immediate
+2026-09-20 23:42:49.944 EDT [17838] LOG:  checkpoint complete: wrote 9 buffers (0.1%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.003 s; sync files=11, longest=0.001 s, average=0.001 s; distance=8 kB, estimate=8 kB; lsn=0/1C78538, redo lsn=0/1C78538
+2026-09-20 23:42:49.948 EDT [17824] LOG:  database system is shut down
+2026-09-20 23:42:50.675 EDT [78351] LOG:  starting PostgreSQL 18.4 (Homebrew) on aarch64-apple-darwin25.6.0, compiled by Apple clang version 21.0.0 (clang-2100.1.1.101), 64-bit
+2026-09-20 23:42:50.676 EDT [78351] LOG:  listening on IPv4 address "127.0.0.1", port 61864
+2026-09-20 23:42:50.682 EDT [78391] LOG:  database system was shut down at 2026-09-20 23:42:49 EDT
+2026-09-20 23:42:50.683 EDT [78392] FATAL:  the database system is starting up
+2026-09-20 23:42:50.685 EDT [78351] LOG:  database system is ready to accept connections
+2026-09-20 23:43:52.774 EDT [78351] LOG:  received fast shutdown request
+2026-09-20 23:43:52.774 EDT [78351] LOG:  aborting any active transactions
+2026-09-20 23:43:52.775 EDT [78351] LOG:  background worker "logical replication launcher" (PID 78399) exited with exit code 1
+2026-09-20 23:43:52.775 EDT [78389] LOG:  shutting down
+2026-09-20 23:43:52.775 EDT [78389] LOG:  checkpoint starting: shutdown immediate
+2026-09-20 23:43:52.776 EDT [78389] LOG:  checkpoint complete: wrote 0 buffers (0.0%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.002 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/1C785E8, redo lsn=0/1C785E8
+2026-09-20 23:43:52.779 EDT [78351] LOG:  database system is shut down
+2026-09-20 23:43:53.335 EDT [99374] LOG:  starting PostgreSQL 18.4 (Homebrew) on aarch64-apple-darwin25.6.0, compiled by Apple clang version 21.0.0 (clang-2100.1.1.101), 64-bit
+2026-09-20 23:43:53.335 EDT [99374] LOG:  listening on IPv4 address "127.0.0.1", port 61864
+2026-09-20 23:43:53.341 EDT [99390] LOG:  database system was shut down at 2026-09-20 23:43:52 EDT
+2026-09-20 23:43:53.343 EDT [99391] FATAL:  the database system is starting up
+2026-09-20 23:43:53.343 EDT [99374] LOG:  database system is ready to accept connections
+2026-09-20 23:48:53.307 EDT [99388] LOG:  checkpoint starting: time
+2026-09-20 23:48:54.227 EDT [99388] LOG:  checkpoint complete: wrote 9 buffers (0.1%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.916 s, sync=0.001 s, total=0.920 s; sync files=11, longest=0.001 s, average=0.001 s; distance=14 kB, estimate=14 kB; lsn=0/1C7BF50, redo lsn=0/1C7BEF8

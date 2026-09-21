@@ -1,0 +1,18 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ✓ |unit| apps/center/test/runtime.test.ts > projection rejects unknown and mismatched frames, preserves newer revisions and ignores stale snapshots 2ms
+ ✓ |unit| apps/center/test/runtime.test.ts > cancellation is bounded before any request and leaves the committed cursor unchanged 1ms
+ ✓ |unit| apps/center/test/runtime.test.ts > a stalled HTTP read times out within a bounded wall interval without cursor movement 5006ms
+ ✓ |unit| apps/center/test/runtime.test.ts > guard negative: wire validation 209ms
+ ✓ |unit| apps/center/test/runtime.test.ts > guard negative: event identity 210ms
+ ✓ |unit| apps/center/test/runtime.test.ts > guard negative: snapshot scope 206ms
+ ✓ |unit| apps/center/test/runtime.test.ts > guard negative: launch challenge 99ms
+ ✓ |unit| apps/center/test/runtime.test.ts > guard negative: foreign symlink 84ms
+ ✓ |unit| apps/center/test/runtime.test.ts > guard negative: running reset 88ms
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Start at  23:50:32
+   Duration  6.09s (tests 98%, import 1%, transform 1%)
+

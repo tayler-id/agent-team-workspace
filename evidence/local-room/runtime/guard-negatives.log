@@ -1,0 +1,384 @@
+code_head: b2cecdf7d4ce518574972158d64719f3b20eae7e
+recorded_at: 2026-09-21T03:49:35.581469+00:00
+
+## Host/Origin
+source: scripts/local-room-service.ts
+sha256_before: 0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81
+command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t public runtime owns
+disable: if (request.headers.host !== new URL(owner.url).host || request.headers.origin && request.headers.origin !== owner.url) -> if (false)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-Yy7YGp","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 2665ms
+   × public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 2664ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources
+AssertionError: expected 200 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 200
+
+ ❯ apps/center/test/runtime.pg.test.ts:73:127
+     71|   expect((await cli('replay')).exit).toBe(0);
+     72|   expect((await client.request('events?after=1') as Schema<'RoomMessag…
+     73|   for (const headers of [{ host: 'evil.invalid' }, { origin: 'https://…
+       |                                                                                                                               ^
+     74|   expect((await fetch(`${url}/api/v1/local-room/messages`, { method: '…
+     75|   expect((await fetch(`${url}/api/v1/local-room/events?after=-1`)).sta…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:49:36
+   Duration  2.89s (tests 95%, import 4%, transform 1%)
+
+
+exit: 1
+restored_sha256: 0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81
+
+## body bound
+source: scripts/local-room-service.ts
+sha256_before: 0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81
+command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t public runtime owns
+disable: if (size > 131072) -> if (size > 262144)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-a3PK1D","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 2596ms
+   × public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 2596ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources
+AssertionError: expected 400 to be 413 // Object.is equality
+
+- Expected
++ Received
+
+- 413
++ 400
+
+ ❯ apps/center/test/runtime.pg.test.ts:74:164
+     72|   expect((await client.request('events?after=1') as Schema<'RoomMessag…
+     73|   for (const headers of [{ host: 'evil.invalid' }, { origin: 'https://…
+     74|   expect((await fetch(`${url}/api/v1/local-room/messages`, { method: '…
+       |                                                                                                                                                                    ^
+     75|   expect((await fetch(`${url}/api/v1/local-room/events?after=-1`)).sta…
+     76|   expect(await (await fetch(`${url}/api/v1/local-room/events?after=184…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:49:40
+   Duration  2.76s (tests 96%, import 3%, transform 1%)
+
+
+exit: 1
+restored_sha256: 0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81
+
+## rate bound
+source: scripts/local-room-service.ts
+sha256_before: 0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81
+command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t bounded committed pump
+disable: if (tokens < 1) -> if (false)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-TeAF94","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 1673ms
+   × bounded committed pump resumes between batches, receipt alone never advances, and rate denial stores nothing 1672ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > bounded committed pump resumes between batches, receipt alone never advances, and rate denial stores nothing
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ apps/center/test/runtime.pg.test.ts:127:51
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:49:44
+   Duration  1.82s (tests 95%, import 4%, transform 1%)
+
+
+exit: 1
+restored_sha256: 0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81
+
+## stop capability
+source: scripts/local-room-service.ts
+sha256_before: 0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81
+command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t public runtime owns
+disable: if (request.headers.authorization !== `Bearer ${owner.secret}`) -> if (false)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-1Kynpz","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 2372ms
+   × public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 2371ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources
+AssertionError: expected 200 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 200
+
+ ❯ apps/center/test/runtime.pg.test.ts:77:76
+     75|   expect((await fetch(`${url}/api/v1/local-room/events?after=-1`)).sta…
+     76|   expect(await (await fetch(`${url}/api/v1/local-room/events?after=184…
+     77|   expect((await fetch(`${url}/_runtime/stop`, { method: 'POST' })).sta…
+       |                                                                            ^
+     78|   expect((await cli('reset', '--confirm-disposable')).exit).toBe(2);
+     79|   const ownerPath = `${root}/owner.json`, owned = readFileSync(ownerPa…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:49:46
+   Duration  2.52s (tests 96%, import 3%, transform 1%)
+
+
+exit: 1
+restored_sha256: 0b66f36843c5d6ae0e5d52a9bfc46f5f8b2024ef4fe9c59e1259ddf71e055d81
+
+## cursor validation
+source: apps/center/src/app.ts
+sha256_before: 6f57cbe08ad258b8aedeb053b9602d75cda9caec01e910bdfda7474bfae9e5b0
+command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t public runtime owns
+disable: if (!after.ok) return c.json<ErrorReport>({ reason_code: 'malformed_command', correlation_id: randomUUID() }, 400); -> 
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-fJyCcR","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 2586ms
+   × public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 2585ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources
+AssertionError: expected 200 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 200
+
+ ❯ apps/center/test/runtime.pg.test.ts:75:76
+     73|   for (const headers of [{ host: 'evil.invalid' }, { origin: 'https://…
+     74|   expect((await fetch(`${url}/api/v1/local-room/messages`, { method: '…
+     75|   expect((await fetch(`${url}/api/v1/local-room/events?after=-1`)).sta…
+       |                                                                            ^
+     76|   expect(await (await fetch(`${url}/api/v1/local-room/events?after=184…
+     77|   expect((await fetch(`${url}/_runtime/stop`, { method: 'POST' })).sta…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:49:50
+   Duration  2.74s (tests 96%, import 3%, transform 1%)
+
+
+exit: 1
+restored_sha256: 6f57cbe08ad258b8aedeb053b9602d75cda9caec01e910bdfda7474bfae9e5b0
+
+## strict cursor boundary
+source: packages/storage/src/local-room.ts
+sha256_before: 2f23914801c8c9940a8c252557143a9e9c587113d7b167ed945f36e3e24d12fc
+command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t public runtime owns
+disable: and seq > $2::numeric -> and seq >= $2::numeric
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-PQsomF","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 2509ms
+   × public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 2509ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources
+AssertionError: expected [ '1', '2', '3' ] to deeply equal [ '2', '3' ]
+
+- Expected
++ Received
+
+  [
++   "1",
+    "2",
+    "3",
+  ]
+
+ ❯ apps/center/test/runtime.pg.test.ts:72:109
+     70|   expect(client.state.rooms[0]?.messages).toHaveLength(3);
+     71|   expect((await cli('replay')).exit).toBe(0);
+     72|   expect((await client.request('events?after=1') as Schema<'RoomMessag…
+       |                                                                                                             ^
+     73|   for (const headers of [{ host: 'evil.invalid' }, { origin: 'https://…
+     74|   expect((await fetch(`${url}/api/v1/local-room/messages`, { method: '…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:49:54
+   Duration  2.67s (tests 96%, import 3%, transform 1%)
+
+
+exit: 1
+restored_sha256: 2f23914801c8c9940a8c252557143a9e9c587113d7b167ed945f36e3e24d12fc
+
+## numeric event order
+source: packages/storage/src/local-room.ts
+sha256_before: 2f23914801c8c9940a8c252557143a9e9c587113d7b167ed945f36e3e24d12fc
+command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t bounded committed pump
+disable: order by e.seq limit $3 -> order by seq limit $3
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-RfzNjl","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 1663ms
+   × bounded committed pump resumes between batches, receipt alone never advances, and rate denial stores nothing 1663ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > bounded committed pump resumes between batches, receipt alone never advances, and rate denial stores nothing
+AssertionError: expected '8' to be '50' // Object.is equality
+
+Expected: "50"
+Received: "8"
+
+ ❯ apps/center/test/runtime.pg.test.ts:121:36
+    119|   const batch = await c.request('events?after=0') as Schema<'RoomMessa…
+    120|   expect(batch).toHaveLength(50); c.events(batch);
+    121|   expect(c.state.rooms[0]?.cursor).toBe('50');
+       |                                    ^
+    122|   const cancel = new AbortController(); cancel.abort();
+    123|   await expect(c.resume(cancel.signal)).rejects.toThrow();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:49:57
+   Duration  1.83s (tests 94%, import 4%, transform 2%)
+
+
+exit: 1
+restored_sha256: 2f23914801c8c9940a8c252557143a9e9c587113d7b167ed945f36e3e24d12fc
+
+## root filesystem identity
+source: scripts/local-room-owner.ts
+sha256_before: 150750641c4c669b283d051ee633a3c0f2a2823ceb07f157d728a0533aa6d725
+command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t public runtime owns
+disable: o.rootId !== fileId(root) -> false
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-slIwxh","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 3712ms
+   × public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 3711ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources
+AssertionError: expected +0 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 0
+
+ ❯ apps/center/test/runtime.pg.test.ts:83:43
+     81|    const forged = JSON.parse(owned) as Record<string, unknown>; forged…
+     82|    writeFileSync(ownerPath, JSON.stringify(forged));
+     83|    try { expect((await cli('stop')).exit).toBe(2); expect((await cli('…
+       |                                           ^
+     84|    finally {
+     85|     const current = JSON.parse(readFileSync(ownerPath, 'utf8')) as { s…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:50:00
+   Duration  3.86s (tests 98%, import 2%, transform 1%)
+
+
+exit: 1
+restored_sha256: 150750641c4c669b283d051ee633a3c0f2a2823ceb07f157d728a0533aa6d725
+
+## database filesystem identity
+source: scripts/local-room-owner.ts
+sha256_before: 150750641c4c669b283d051ee633a3c0f2a2823ceb07f157d728a0533aa6d725
+command: node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t public runtime owns
+disable: o.dataId !== fileId(`${root}/data`) -> false
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-dHYn1k","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 4016ms
+   × public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 4015ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources
+AssertionError: expected +0 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 0
+
+ ❯ apps/center/test/runtime.pg.test.ts:83:43
+     81|    const forged = JSON.parse(owned) as Record<string, unknown>; forged…
+     82|    writeFileSync(ownerPath, JSON.stringify(forged));
+     83|    try { expect((await cli('stop')).exit).toBe(2); expect((await cli('…
+       |                                           ^
+     84|    finally {
+     85|     const current = JSON.parse(readFileSync(ownerPath, 'utf8')) as { s…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:50:05
+   Duration  4.20s (tests 97%, import 2%, transform 1%)
+
+
+exit: 1
+restored_sha256: 150750641c4c669b283d051ee633a3c0f2a2823ceb07f157d728a0533aa6d725

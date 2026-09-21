@@ -1,0 +1,17 @@
+lighthouse:
+## Lighthouse Audit Results
+Mode: snapshot
+Device: mobile
+URL: undefined
+### Category Scores
+- Accessibility: 98 (accessibility)
+- Best Practices: 100 (best-practices)
+- SEO: 75 (seo)
+- Agentic Browsing: 100 (agentic-browsing)
+### Audit Summary
+Passed: 25
+Failed: 2
+Total Timing: 1196.25ms
+### Reports
+- /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/evidence/local-room/runtime/lighthouse/report.json
+- /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/evidence/local-room/runtime/lighthouse/report.html

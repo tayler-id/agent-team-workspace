@@ -1,0 +1,14 @@
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-b0A1JD","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ✓ |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 8053ms
+ ✓ |pg| apps/center/test/runtime.pg.test.ts > bounded committed pump resumes between batches, receipt alone never advances, and rate denial stores nothing 1566ms
+ ✓ |pg| apps/center/test/runtime.pg.test.ts > concurrent startup has one owner and cancellation cleans only its own pending launch 3251ms
+ ✓ |pg| apps/center/test/runtime.pg.test.ts > foreign listener and symlink collisions are refused without touching their owner 417ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  23:50:39
+   Duration  13.45s (tests 99%, import 1%)
+

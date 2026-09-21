@@ -1,0 +1,423 @@
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/00.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/00.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/01.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/01.png
+
+$ chrome-devtools-axi eval () => { document.querySelector("textarea").focus(); return "composer focused"; }
+result: "\"composer focused\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+
+$ chrome-devtools-axi type Recorded harness interaction
+page:
+  title: Agora local runtime harness
+  refs: 13
+snapshot:
+uid=g16:15_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:61863/"
+  uid=g16:15_1 main
+    uid=g16:15_2 heading "Local room runtime harness" level="1"
+    uid=g16:15_3 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+    uid=g16:15_4 button "Disconnect"
+    uid=g16:15_5 status atomic live="polite" relevant="additions text"
+      uid=g16:16_0 StaticText "Connected: committed events applied"
+    uid=g16:15_7 form
+      uid=g16:15_8 StaticText "Message text"
+      uid=g16:15_9 textbox "Message text" focusable focused multiline required value="Recorded harness interaction"
+      uid=g16:15_10 button "Send or retry pending command"
+    uid=g16:15_11 heading "Client-core committed projection" level="2"
+    uid=g16:16_1 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "6",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "10ce0ca0-1dcf-43d0-be06-16d645099e44",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verification message"
+          }
+        },
+        {
+          "id": "e0e07bbe-5e9f-4c55-ba2a-6969549469a5",
+          "createdSeq": "2",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "CLI message while browser disconnected"
+          }
+        },
+        {
+          "id": "aecdc40a-a35e-46e2-97d2-ce45162aaa17",
+          "createdSeq": "3",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Browser keyboard message <img src=x onerror=alert(1)>"
+          }
+        },
+        {
+          "id": "cfafa80e-a860-4418-9492-937d77516ac5",
+          "createdSeq": "4",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verified offline CLI message"
+          }
+        },
+        {
+          "id": "7bc2d53b-044f-4ac1-a0cf-6b77208a051a",
+          "createdSeq": "5",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Message after service restart"
+          }
+        },
+        {
+          "id": "1d918e5c-ad29-42a5-a4b9-3df1f2883411",
+          "createdSeq": "6",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Exact-head automatic restart convergence"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 6,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g16:15_9 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g16:15_4` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/02.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/02.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/03.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/03.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/04.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/04.png
+
+$ chrome-devtools-axi press Tab
+page:
+  title: Agora local runtime harness
+  refs: 13
+snapshot:
+uid=g17:15_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:61863/"
+  uid=g17:15_1 main
+    uid=g17:15_2 heading "Local room runtime harness" level="1"
+    uid=g17:15_3 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+    uid=g17:15_4 button "Disconnect"
+    uid=g17:15_5 status atomic live="polite" relevant="additions text"
+      uid=g17:16_0 StaticText "Connected: committed events applied"
+    uid=g17:15_7 form
+      uid=g17:15_8 StaticText "Message text"
+      uid=g17:15_9 textbox "Message text" multiline required value="Recorded harness interaction"
+      uid=g17:15_10 button "Send or retry pending command" focusable focused
+    uid=g17:15_11 heading "Client-core committed projection" level="2"
+    uid=g17:16_1 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "6",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "10ce0ca0-1dcf-43d0-be06-16d645099e44",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verification message"
+          }
+        },
+        {
+          "id": "e0e07bbe-5e9f-4c55-ba2a-6969549469a5",
+          "createdSeq": "2",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "CLI message while browser disconnected"
+          }
+        },
+        {
+          "id": "aecdc40a-a35e-46e2-97d2-ce45162aaa17",
+          "createdSeq": "3",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Browser keyboard message <img src=x onerror=alert(1)>"
+          }
+        },
+        {
+          "id": "cfafa80e-a860-4418-9492-937d77516ac5",
+          "createdSeq": "4",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verified offline CLI message"
+          }
+        },
+        {
+          "id": "7bc2d53b-044f-4ac1-a0cf-6b77208a051a",
+          "createdSeq": "5",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Message after service restart"
+          }
+        },
+        {
+          "id": "1d918e5c-ad29-42a5-a4b9-3df1f2883411",
+          "createdSeq": "6",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Exact-head automatic restart convergence"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 6,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g17:15_9 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g17:15_4` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+
+$ chrome-devtools-axi press Enter
+page:
+  title: Agora local runtime harness
+  refs: 13
+snapshot:
+uid=g18:15_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:61863/"
+  uid=g18:15_1 main
+    uid=g18:15_2 heading "Local room runtime harness" level="1"
+    uid=g18:15_3 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+    uid=g18:15_4 button "Disconnect"
+    uid=g18:15_5 status atomic live="polite" relevant="additions text"
+      uid=g18:18_0 StaticText "Connected: committed events applied"
+    uid=g18:15_7 form
+      uid=g18:15_8 StaticText "Message text"
+      uid=g18:15_9 textbox "Message text" multiline required
+      uid=g18:15_10 button "Send or retry pending command" focusable focused
+    uid=g18:15_11 heading "Client-core committed projection" level="2"
+    uid=g18:18_1 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "7",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "10ce0ca0-1dcf-43d0-be06-16d645099e44",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verification message"
+          }
+        },
+        {
+          "id": "e0e07bbe-5e9f-4c55-ba2a-6969549469a5",
+          "createdSeq": "2",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "CLI message while browser disconnected"
+          }
+        },
+        {
+          "id": "aecdc40a-a35e-46e2-97d2-ce45162aaa17",
+          "createdSeq": "3",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Browser keyboard message <img src=x onerror=alert(1)>"
+          }
+        },
+        {
+          "id": "cfafa80e-a860-4418-9492-937d77516ac5",
+          "createdSeq": "4",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Verified offline CLI message"
+          }
+        },
+        {
+          "id": "7bc2d53b-044f-4ac1-a0cf-6b77208a051a",
+          "createdSeq": "5",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Message after service restart"
+          }
+        },
+        {
+          "id": "1d918e5c-ad29-42a5-a4b9-3df1f2883411",
+          "createdSeq": "6",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Exact-head automatic restart convergence"
+          }
+        },
+        {
+          "id": "abcba19e-bc0f-4546-ab30-db1e13fbbdcf",
+          "createdSeq": "7",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Recorded harness interaction"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 7,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [
+    {
+      "commandId": "11f8e737-a0eb-401f-b781-58fdae3f526a",
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "requestDigest": "sha256:17975125195b57d03def80b3cf9d401e6f2e15fdd7f72dc9d7ac2b574abfaf45",
+      "tag": "received",
+      "receipt": {
+        "command_id": "11f8e737-a0eb-401f-b781-58fdae3f526a",
+        "aggregate_id": "a0000000-0000-4000-8000-000000000002",
+        "revision": "7",
+        "event_cursors": [
+          {
+            "stream_id": "a0000000-0000-4000-8000-000000000002",
+            "committed_seq": "7"
+          }
+        ],
+        "receipt_id": "6adecfa2-9f9b-48f3-9a55-1d3bcd933371"
+      }
+    }
+  ],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g18:15_9 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g18:15_4` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/05.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/05.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/06.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/06.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/07.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/07.png
+
+$ chrome-devtools-axi eval () => { document.querySelector("#connection").click(); return document.querySelector("[role=status]").textContent; }
+result: "\"Disconnected\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/08.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/08.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/09.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/09.png
+
+$ node scripts/local-room.ts send (during disconnect)
+{"schema_version":"agora.local-runtime/v1","command":"send","outcome":"pass","detail":"running; loopback-only development harness","root":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/local-room-verify-l3-1789961829","launch":"304446ba-cde9-4e95-b74a-382a4ed0640b","url":"http://127.0.0.1:61863","center_pid":99362,"postgres_pid":99374,"postgres_port":61864,"receipt":{"schema_version":"agora.local-room.receipt/v1","identity":{"command_id":"00c10570-fa63-48c5-b60e-3c0bed0507a1","request_digest":"sha256:275008926ab7c39fb6b6fc54ad4beea56eca895d8e01cc1c29ee12bcee16041e"},"receipt":{"command_id":"00c10570-fa63-48c5-b60e-3c0bed0507a1","aggregate_id":"a0000000-0000-4000-8000-000000000002","revision":"8","event_cursors":[{"stream_id":"a0000000-0000-4000-8000-000000000002","committed_seq":"8"}],"receipt_id":"60fc4996-fe86-42d7-8e84-e201120ce4b8"},"message_id":"7da5a3e3-f45f-414f-bd8c-a607fd55e4d8","replayed":false}}
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/10.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/10.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/11.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/11.png
+
+$ chrome-devtools-axi eval () => { document.querySelector("#connection").click(); return "resume requested"; }
+result: "\"resume requested\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/12.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/12.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/13.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/13.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/14.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/14.png
+
+$ chrome-devtools-axi screenshot /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/15.png
+screenshot: /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace/.scratch/runtime-video/15.png
+
+ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers
+  built with Apple clang version 21.0.0 (clang-2100.0.123.102)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.1.2_1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gpl --enable-libsvtav1 --enable-libopus --enable-libx264 --enable-libmp3lame --enable-libdav1d --enable-libvmaf --enable-libvpx --enable-libx265 --enable-openssl --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60. 26.102 / 60. 26.102
+  libavcodec     62. 28.102 / 62. 28.102
+  libavformat    62. 12.102 / 62. 12.102
+  libavdevice    62.  3.102 / 62.  3.102
+  libavfilter    11. 14.102 / 11. 14.102
+  libswscale      9.  5.102 /  9.  5.102
+  libswresample   6.  3.102 /  6.  3.102
+Input #0, concat, from '.scratch/runtime-video/frames.txt':
+  Duration: N/A, start: 0.000000, bitrate: N/A
+  Stream #0:0: Video: png, rgb24(pc, gbr/unknown/unknown), 1440x900, 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0xbf6c45180] using cpu capabilities: ARMv8 NEON DotProd I8MM
+[libx264 @ 0xbf6c45180] profile High, level 4.0, 4:2:0, 8-bit
+[libx264 @ 0xbf6c45180] 264 - core 165 r3222 b35605a - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=27 lookahead_threads=4 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=10 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=26.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'evidence/local-room/runtime/harness-interaction.mp4':
+  Metadata:
+    encoder         : Lavf62.12.102
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1440x900, q=2-31, 10 fps, 10240 tbn
+    Metadata:
+      encoder         : Lavc62.28.102 libx264
+    Side data:
+      CPB properties: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[mp4 @ 0xbf6c1c500] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0xbf70440c0] video:101KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 4.738466%
+frame=  337 fps=0.0 q=-1.0 Lsize=     106KiB time=00:00:33.50 bitrate=  25.9kbits/s speed=91.6x elapsed=0:00:00.36    
+[libx264 @ 0xbf6c45180] frame I:2     Avg QP:14.77  size: 36816
+[libx264 @ 0xbf6c45180] frame P:85    Avg QP:10.88  size:   148
+[libx264 @ 0xbf6c45180] frame B:250   Avg QP:12.67  size:    66
+[libx264 @ 0xbf6c45180] consecutive B-frames:  0.9%  0.6%  0.0% 98.5%
+[libx264 @ 0xbf6c45180] mb I  I16..4: 38.6% 49.9% 11.5%
+[libx264 @ 0xbf6c45180] mb P  I16..4:  0.1%  0.1%  0.0%  P16..4:  0.0%  0.0%  0.0%  0.0%  0.0%    skip:99.8%
+[libx264 @ 0xbf6c45180] mb B  I16..4:  0.0%  0.0%  0.0%  B16..8:  0.4%  0.0%  0.0%  direct: 0.0%  skip:99.6%  L0:60.9% L1:39.1% BI: 0.0%
+[libx264 @ 0xbf6c45180] 8x8 transform intra:48.0% inter:11.2%
+[libx264 @ 0xbf6c45180] coded y,uvDC,uvAC intra: 6.5% 0.4% 0.2% inter: 0.0% 0.0% 0.0%
+[libx264 @ 0xbf6c45180] i16 v,h,dc,p: 80% 16%  4%  0%
+[libx264 @ 0xbf6c45180] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 72%  3% 25%  0%  0%  0%  0%  0%  0%
+[libx264 @ 0xbf6c45180] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 43% 24% 15%  2%  4%  3%  4%  2%  4%
+[libx264 @ 0xbf6c45180] i8c dc,h,v,p: 94%  5%  1%  0%
+[libx264 @ 0xbf6c45180] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0xbf6c45180] ref P L0: 95.0%  2.5%  2.5%
+[libx264 @ 0xbf6c45180] ref B L0: 46.2% 53.7%  0.0%
+[libx264 @ 0xbf6c45180] ref B L1: 99.9%  0.1%
+[libx264 @ 0xbf6c45180] kb/s:24.38

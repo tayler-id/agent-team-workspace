@@ -1,0 +1,65 @@
+page:
+  title: Agora local runtime harness
+  refs: 12
+snapshot:
+uid=g6:5_0 RootWebArea "Agora local runtime harness" url="http://127.0.0.1:59541/"
+  uid=g6:5_1 heading "Local room runtime harness" level="1"
+  uid=g6:5_2 StaticText "Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents."
+  uid=g6:5_3 button "Disconnect"
+  uid=g6:5_4 status atomic live="polite" relevant="additions text"
+    uid=g6:6_0 StaticText "Connected: committed events applied"
+  uid=g6:5_6 form
+    uid=g6:5_7 StaticText "Message text"
+    uid=g6:5_8 textbox "Message text" multiline required
+    uid=g6:5_9 button "Send or retry pending command"
+  uid=g6:5_10 heading "Client-core committed projection" level="2"
+  uid=g6:6_1 StaticText "{
+  "rooms": [
+    {
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "cursor": "1",
+      "lastSeen": "0",
+      "messages": [
+        {
+          "id": "7edf20a1-a903-4bdb-a5a5-5c2831c3b76c",
+          "createdSeq": "1",
+          "revision": "1",
+          "content": {
+            "tag": "visible",
+            "body": "Browser-persisted <img src=x onerror=alert(1)>"
+          }
+        }
+      ],
+      "runs": [],
+      "unread": 1,
+      "mode": "live",
+      "pending": []
+    }
+  ],
+  "commands": [
+    {
+      "commandId": "86d5c2f2-c58b-4290-ab94-20315c612ea5",
+      "streamId": "a0000000-0000-4000-8000-000000000002",
+      "requestDigest": "sha256:6709b2ec2691a6ac866c37d487804b63c75dde69970162856531d284b066b2cc",
+      "tag": "received",
+      "receipt": {
+        "command_id": "86d5c2f2-c58b-4290-ab94-20315c612ea5",
+        "aggregate_id": "a0000000-0000-4000-8000-000000000002",
+        "revision": "1",
+        "event_cursors": [
+          {
+            "stream_id": "a0000000-0000-4000-8000-000000000002",
+            "committed_seq": "1"
+          }
+        ],
+        "receipt_id": "63a9c90c-29bb-46f9-9fb2-8c81379e019e"
+      }
+    }
+  ],
+  "drafts": []
+}"
+help[4]:
+  Run `chrome-devtools-axi fill @g6:5_8 "text"` to fill the "Message text" field
+  Run `chrome-devtools-axi click @g6:5_3` to click the "Disconnect" button
+  Run `chrome-devtools-axi scroll down` to scroll down
+  Use `chrome-devtools-axi eval <expr>` for JS expressions. For multi-statement code, pass a function: `eval "() => { ...; return result }"`

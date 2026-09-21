@@ -159,7 +159,7 @@ The first four commands require exit 0. `task_outcome: pass` never qualifies the
 L3's executable test-only parent is `661b4c5`, directly on exact L2 `55269a5`. Its doctor works and start returns typed `unavailable`. Use the committed implementation head, never a moving branch name:
 
 ```sh
-node scripts/record-red-green.mjs --parent 661b4c5 --head CODE_HEAD --out evidence/local-room/runtime -- pnpm exec node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t 'public runtime owns'
+node scripts/record-red-green.mjs --parent 661b4c5e012be8b851d271f063d3d53738c15ebf --head b2cecdf7d4ce518574972158d64719f3b20eae7e --out evidence/local-room/runtime -- pnpm exec node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t 'public runtime owns'
 ```
 
 The selected red must be `expected 'unavailable' to be 'pass'` after doctor passes, not a missing runner or import. Run the complete runtime suites separately at head, without selection. Record the test-patch digest, stack bindings, source/line categories, native outputs, PostgreSQL/replay evidence, guard negatives and owned inventory before/after cleanup. CI and independent review remain distinct prerequisites; local green does not authorize landing the unlanded L3 stack.
