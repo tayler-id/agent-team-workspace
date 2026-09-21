@@ -1,0 +1,6 @@
+label	exit	head	command
+focused	0	1f850581c54c9cdc2ce7f0ef7ab3e4c05afafcb6	pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts packages/storage/test/postgres-wrapper.test.ts --disableConsoleIntercept
+atlas	0	1f850581c54c9cdc2ce7f0ef7ab3e4c05afafcb6	pnpm docs:atlas
+docs-build	0	1f850581c54c9cdc2ce7f0ef7ab3e4c05afafcb6	pnpm docs:build
+plan	0	1f850581c54c9cdc2ce7f0ef7ab3e4c05afafcb6	node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md
+check	0	1f850581c54c9cdc2ce7f0ef7ab3e4c05afafcb6	pnpm check

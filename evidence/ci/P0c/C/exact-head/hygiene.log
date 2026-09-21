@@ -1,0 +1,88 @@
+head 1f850581c54c9cdc2ce7f0ef7ab3e4c05afafcb6
+main c04f5606df49eb7976ad5cf244911c73f77dd1fb
+fast-forward: main is an ancestor of HEAD
+tree 7abf409db9f2a2d82608bb7bccb9abfb88379642
+status: 0 dirty entries
+== git diff --check
+whitespace clean
+== changed files
+M	.agents/skills/verify-agora/SKILL.md
+M	AGENTS.md
+M	agora/feature-map.json
+M	docs/runbooks/development.md
+M	docs/site/atlas.json
+M	docs/site/cli.md
+M	docs/site/foundation.md
+M	docs/site/progress.md
+D	evidence/ci/P0c/B/guard-run.log
+D	evidence/ci/P0c/B/guard.log
+M	evidence/ci/P0c/B/outcome.json
+A	evidence/ci/P0c/C/atlas.log
+A	evidence/ci/P0c/C/audit.log
+A	evidence/ci/P0c/C/boundaries.log
+A	evidence/ci/P0c/C/check.log
+A	evidence/ci/P0c/C/cleanup-inventory.log
+A	evidence/ci/P0c/C/commands.tsv
+A	evidence/ci/P0c/C/conform.log
+A	evidence/ci/P0c/C/contracts-check.log
+A	evidence/ci/P0c/C/design-negatives.log
+A	evidence/ci/P0c/C/design.log
+A	evidence/ci/P0c/C/docs-build.log
+A	evidence/ci/P0c/C/docs-check.log
+A	evidence/ci/P0c/C/doctor.log
+A	evidence/ci/P0c/C/driver/guard.mjs
+A	evidence/ci/P0c/C/driver/lib.mjs
+A	evidence/ci/P0c/C/driver/scenarios.mjs
+A	evidence/ci/P0c/C/focused.log
+A	evidence/ci/P0c/C/green.log
+A	evidence/ci/P0c/C/guard.json
+A	evidence/ci/P0c/C/guard.log
+A	evidence/ci/P0c/C/handoff-negatives.log
+A	evidence/ci/P0c/C/install.log
+A	evidence/ci/P0c/C/lifecycle.log
+A	evidence/ci/P0c/C/lint.log
+A	evidence/ci/P0c/C/migrations.log
+A	evidence/ci/P0c/C/no-leftovers.json
+A	evidence/ci/P0c/C/outcome.json
+A	evidence/ci/P0c/C/plan.log
+A	evidence/ci/P0c/C/probe.log
+A	evidence/ci/P0c/C/recorder.log
+A	evidence/ci/P0c/C/red-before-edit.log
+A	evidence/ci/P0c/C/red-run-residue-sweep.txt
+A	evidence/ci/P0c/C/red.log
+A	evidence/ci/P0c/C/replay.log
+A	evidence/ci/P0c/C/review.md
+A	evidence/ci/P0c/C/scenarios.json
+A	evidence/ci/P0c/C/scenarios.log
+A	evidence/ci/P0c/C/sysv-shm-own-segments.json
+A	evidence/ci/P0c/C/sysv-shm-sweep.json
+A	evidence/ci/P0c/C/test-patch.diff
+A	evidence/ci/P0c/C/test.log
+A	evidence/ci/P0c/C/typecheck.log
+M	packages/storage/test/postgres-wrapper.test.ts
+M	scripts/with-test-postgres.mjs
+== forbidden paths
+grep: repetition-operator operand invalid
+none
+== allocator identical to main
+yes
+== source lines vs parent
+scripts/with-test-postgres.mjs 15
+packages/storage/test/postgres-wrapper.test.ts 24
+agora/feature-map.json 3
+AGENTS.md 1
+== digests at head
+scripts/with-test-postgres.mjs sha256:89a9562850c5373aa00e60301f8d20b2f535e07b501da59bb5b3362af4d95374
+scripts/postgres-socket.ts sha256:55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf
+packages/storage/test/postgres-wrapper.test.ts sha256:8f5e09b912c62b951216c9ea050fff9d7ddf88b454ab5e8fb67b9045c6ef183b
+agora/feature-map.json sha256:83bfbded2eb98c5178a5a09563b6d010663e27183c4b2cac152de9e97657cc9d
+docs/site/atlas.json sha256:47d838bc5a7320cbf0f23819e1324bd6f6af82bd9b27c8d69000da8ce26a0ac2
+evidence/ci/P0c/C/driver/lib.mjs sha256:420c3d763f91f5d455da50d848f08c20015477ed914085e8edc0346eaa918563
+evidence/ci/P0c/C/driver/guard.mjs sha256:e55c470e06ab8a512873fde46dce8c17ff952fe3e2e28b548a4d37c97c895e9f
+evidence/ci/P0c/C/driver/scenarios.mjs sha256:265b204c734e96936b7b81227f6e34d78c36ab1fb15a4c512bc33a01c3bff11e
+== atlas revision
+"revision": "f960bebc9e405718f5a5ad2b4555f4b10ea3ca41"
+== forbidden paths (rerun, BSD-compatible)
+none
+== evidence/ci/P0c paths outside B/ and C/
+none
