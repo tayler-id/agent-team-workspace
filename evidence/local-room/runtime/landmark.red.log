@@ -1,0 +1,50 @@
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-s78V70","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace
+
+ ❯ |pg| apps/center/test/runtime.pg.test.ts (4 tests | 1 failed | 3 skipped) 3018ms
+   × public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources 3018ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/runtime.pg.test.ts > public runtime owns its lifecycle, retains history, replays committed events and refuses foreign resources
+AssertionError: expected '<!doctype html>\n<html lang="en"><met…' to contain '<main>'
+
+- Expected
++ Received
+
+- <main>
++ <!doctype html>
++ <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
++ <title>Agora local runtime harness</title>
++ <style>
++ body { font: 1rem/1.5 system-ui; max-width: 70rem; margin: auto; padding: 1.5rem; color: #202124; background: #fff; }
++ textarea { display: block; box-sizing: border-box; width: 100%; min-height: 6rem; font: inherit; }
++ button { font: inherit; padding: .6rem 1rem; margin: .5rem .5rem .5rem 0; }
++ pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #f3f4f6; padding: 1rem; }
++ :focus-visible { outline: 3px solid #1456c0; outline-offset: 3px; }
++ </style>
++ <h1>Local room runtime harness</h1>
++ <p>Disposable development data, one fixed human and room. Not the finished room UI. Stop retains messages; explicit CLI reset deletes them. No models or agents.</p>
++ <button id="connection" type="button">Disconnect</button><p role="status">Connecting</p>
++ <form><label for="body">Message text</label><textarea id="body" required maxlength="4096"></textarea><button type="submit">Send or retry pending command</button></form>
++ <h2>Client-core committed projection</h2><pre aria-label="Room projection">Loading</pre>
++ <script type="module" src="/harness.js"></script></html>
++
+
+ ❯ apps/center/test/runtime.pg.test.ts:40:32
+     38|   const harness = await fetch(url);
+     39|   expect(harness.headers.get('content-security-policy')).not.toContain…
+     40|   expect(await harness.text()).toContain('<main>');
+       |                                ^
+     41|   const before = await snapshot(url);
+     42|   const command = { schema_version: 'agora.local-room.send-message/v1'…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  23:41:04
+   Duration  3.22s (tests 96%, import 3%, transform 1%)
+
