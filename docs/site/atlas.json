@@ -70,7 +70,8 @@
         "repo:scripts/boundary-policy.ts",
         "repo:scripts/renderer-policy.ts",
         "repo:packages/client-core/test/app-architecture.test.ts",
-        "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json"
+        "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json",
+        "repo:evidence/U20/agora-s1-lint-application-architecture/whole-feature-red.log"
       ]
     },
     {
