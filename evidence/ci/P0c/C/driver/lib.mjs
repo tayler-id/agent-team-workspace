@@ -15,7 +15,7 @@ export const alive = (pid) => { try { process.kill(pid, 0); return true; } catch
 export const psList = () => spawnSync('ps', ['-A', '-o', 'pid=,pgid=,ppid=,stat=,command='], { encoding: 'utf8' }).stdout.split('\n').map(line => line.trim()).filter(Boolean).map(line => { const [pid, pgid, ppid, stat, ...command] = line.split(/\s+/); return { pid: Number(pid), pgid: Number(pgid), ppid: Number(ppid), stat, command: command.join(' ') }; });
 export const git = (...argv) => spawnSync('git', argv, { cwd: ROOT, encoding: 'utf8' }).stdout;
 // PostgreSQL keeps one small System V interlock segment per postmaster; a SIGKILLed postmaster leaves it behind on Darwin.
-export const sysvSegments = () => spawnSync('ipcs', ['-mp'], { encoding: 'utf8' }).stdout.split('\n').filter(line => line.startsWith('m ')).map(line => { const f = line.trim().split(/\s+/); return { id: Number(f[1]), key: f[2], cpid: Number(f[6]) }; });
+export const sysvSegments = () => process.platform !== 'darwin' ? [] : spawnSync('ipcs', ['-ma'], { encoding: 'utf8' }).stdout.split('\n').filter(line => line.startsWith('m ')).map(line => { const f = line.trim().split(/\s+/); return { id: Number(f[1]), key: f[2], nattch: Number(f[8]), cpid: Number(f[10]) }; });
 
 export function scratch(root, name) { const dir = path.join(root, name); rmSync(dir, { recursive: true, force: true }); mkdirSync(dir, { recursive: true }); return dir; }
 
@@ -111,7 +111,8 @@ export function sweepOwned(run, tmp, extraPids = []) {
 		else swept.push(`refused ${socketDir}`);
 	}
 	for (const dir of [artifactDir, `${artifactDir}.moved`]) if (dir.startsWith(tmp) && existsSync(dir)) { rmSync(dir, { recursive: true, force: true }); swept.push(`root ${dir}`); }
-	if (run.starting) for (const segment of sysvSegments().filter(s => s.cpid === run.starting.pid)) { spawnSync('ipcrm', ['-m', String(segment.id)]); swept.push(`sysv-segment ${segment.id} key=${segment.key} cpid=${segment.cpid}`); }
+	// Only the segment whose creator is this run's recorded postmaster, and only once that creator is dead and nothing is attached.
+	if (run.starting && !alive(run.starting.pid)) for (const segment of sysvSegments().filter(s => s.cpid === run.starting.pid && s.nattch === 0)) { spawnSync('ipcrm', ['-m', String(segment.id)]); swept.push(`sysv-segment ${segment.id} key=${segment.key} cpid=${segment.cpid} creator-dead unattached`); }
 	return swept;
 }
 

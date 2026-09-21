@@ -1,0 +1,37 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+
+{"scenario":"forced-cancel","code":143,"elapsed_ms":1870,"output":"[79955,79956]\n","diagnostic":"{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"allocated\",\"runId\":\"e6261b2b-64d1-4465-90f9-83a0609e401e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-wLd1oi/agora-pg-T65Gtz\",\"socketDir\":\"/private/tmp/agora-p0c-e6261b2b-64d1-4465-90f9-83a0609e401e\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"starting\",\"runId\":\"e6261b2b-64d1-4465-90f9-83a0609e401e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-wLd1oi/agora-pg-T65Gtz\",\"socketDir\":\"/private/tmp/agora-p0c-e6261b2b-64d1-4465-90f9-83a0609e401e\",\"pid\":79914}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"started\",\"runId\":\"e6261b2b-64d1-4465-90f9-83a0609e401e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-wLd1oi/agora-pg-T65Gtz\",\"socketDir\":\"/private/tmp/agora-p0c-e6261b2b-64d1-4465-90f9-83a0609e401e\",\"socket_dir\":\"/private/tmp/agora-p0c-e6261b2b-64d1-4465-90f9-83a0609e401e\",\"pid\":79914,\"database\":\"agora_test\",\"owner_role\":\"agora_owner\",\"app_role\":\"agora_app\",\"bypass_role\":\"agora_bypass\"}\n{\"schema_version\":\"agora.test-postgres/v1\",\"outcome\":\"cleaned\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-wLd1oi/agora-pg-T65Gtz\",\"socketDir\":\"/private/tmp/agora-p0c-e6261b2b-64d1-4465-90f9-83a0609e401e\"}\n","descendants":[79955,79956],"neighbor":{"runId":"17656362-2caa-4a12-aa40-1d0cd9541c74","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-wLd1oi","socketDir":"/private/tmp/agora-p0c-17656362-2caa-4a12-aa40-1d0cd9541c74"},"foreign":79874}
+ ❯ |unit| packages/storage/test/postgres-wrapper.test.ts (18 tests | 1 failed | 17 skipped) 1897ms
+   × wrapper: forced-cancel 1897ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/storage/test/postgres-wrapper.test.ts > wrapper: forced-cancel
+AssertionError: run-owned shared memory segments: expected [ 655369 ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   655369,
++ ]
+
+ ❯ packages/storage/test/postgres-wrapper.test.ts:88:121
+     86|   for (const pid of [...descendants, ...postmasters]) expect(alive(pid…
+     87|   // Repeatable: every run, forced or not, ends with zero segments cre…
+     88|   expect(postmasters.flatMap(pid => ownedSegments(pid).map(segment => …
+       |                                                                                                                         ^
+     89|   neighbor.verify(); expect(statSync(neighbor.identity.socketDir).mode…
+     90|   expect(alive(foreign.pid ?? 0)).toBe(true); expect(readFileSync(`${a…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 17 skipped (18)
+   Start at  02:56:15
+   Duration  2.01s (tests 98%, transform 1%, import 1%)
+
+exit=1

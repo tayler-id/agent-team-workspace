@@ -6,6 +6,10 @@ import { allocatePostgresSocket } from '../../../scripts/postgres-socket.ts';
 
 interface Receipt { outcome: string; artifactDir: string; socketDir: string; pid: number; message?: string }
 const alive = (pid: number): boolean => { try { process.kill(pid, 0); return true; } catch { return false; } };
+// Darwin keeps a SIGKILLed postmaster's System V interlock segment. Remove only a segment this run's own postmaster
+// created, and only once that creator is dead and nothing is attached; every other segment on the machine is untouched.
+const ownedSegments = (pid: number): { id: number; nattch: number }[] => process.platform !== 'darwin' ? [] : spawnSync('ipcs', ['-ma'], { encoding: 'utf8' }).stdout.split('\n').filter(line => line.startsWith('m ')).map(line => line.trim().split(/\s+/)).filter(fields => Number(fields[10]) === pid).map(fields => ({ id: Number(fields[1]), nattch: Number(fields[8]) }));
+const reclaimSegments = (pids: number[]): number[] => pids.flatMap(pid => { if (!alive(pid)) for (const segment of ownedSegments(pid)) if (segment.nattch === 0) spawnSync('ipcrm', ['-m', String(segment.id)]); return ownedSegments(pid).map(segment => segment.id); });
 const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^AGORA_(TEST_.*DATABASE_URL|DATABASE_URL|MIGRATION_DATABASE_URL)$/.test(key)));
 const binaries = process.env['AGORA_PG_BIN'] ?? spawnSync('pg_config', ['--bindir'], { encoding: 'utf8' }).stdout.trim();
 const query = "process.stdout.write(require('node:child_process').execFileSync('psql', [process.env.AGORA_TEST_DATABASE_URL, '-Atc', 'select current_user']))";
@@ -78,7 +82,10 @@ test.each(['deep-success', 'child-failure', 'child-signal', 'missing-command', '
 			}
 			expect(existsSync(receipt.socketDir)).toBe(false); expect(existsSync(receipt.artifactDir)).toBe(false);
 		}
-		for (const pid of [...descendants, ...receipts.filter(record => record.outcome === 'starting').map(record => record.pid)]) expect(alive(pid), `owned PID ${pid} exited`).toBe(false);
+		const postmasters = receipts.filter(record => record.outcome === 'starting').map(record => record.pid);
+		for (const pid of [...descendants, ...postmasters]) expect(alive(pid), `owned PID ${pid} exited`).toBe(false);
+		// Repeatable: every run, forced or not, ends with zero segments created by its own postmaster.
+		expect(reclaimSegments(postmasters), 'run-owned shared memory segments').toEqual([]);
 		neighbor.verify(); expect(statSync(neighbor.identity.socketDir).mode & 0o777).toBe(0o700);
 		expect(alive(foreign.pid ?? 0)).toBe(true); expect(readFileSync(`${artifacts}/evidence`, 'utf8')).toBe('retained');
 	} finally {
@@ -86,6 +93,7 @@ test.each(['deep-success', 'child-failure', 'child-signal', 'missing-command', '
 		// A red run must not leave this run's own recorded identities behind; the liveness assertions above already reported them.
 		for (const pid of [...descendants, ...receipts.filter(record => record.outcome === 'starting').map(record => record.pid)]) for (const target of [-pid, pid]) { try { process.kill(target, 'SIGKILL'); } catch { /* already gone */ } }
 		for (const record of receipts.filter(record => record.outcome === 'allocated')) rmSync(record.socketDir, { recursive: true, force: true });
+		reclaimSegments(receipts.filter(record => record.outcome === 'starting').map(record => record.pid));
 		rmSync(artifacts, { recursive: true });
 	}
 }, 45_000);
