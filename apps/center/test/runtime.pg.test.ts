@@ -35,7 +35,9 @@ test('public runtime owns its lifecycle, retains history, replays committed even
 		expect((await fetch(`${url}/api/v1/health`)).status).toBe(200);
 		expect((await cli('start')).exit).toBe(2);
 		expect((await cli('status')).report.launch).toBe(start.report.launch);
-		expect(await (await fetch(url)).text()).toContain('Local room runtime harness');
+		const harness = await fetch(url);
+		expect(harness.headers.get('content-security-policy')).not.toContain('unsafe-eval');
+		expect(await harness.text()).toContain('<main>');
 		const before = await snapshot(url);
 		const command = { schema_version: 'agora.local-room.send-message/v1', command_id: randomUUID(), scope: before.scope, body: '<img src=x onerror=alert(1)> persisted', citations: [] };
 		const accepted = await fetch(`${url}/api/v1/local-room/messages`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(command) });
