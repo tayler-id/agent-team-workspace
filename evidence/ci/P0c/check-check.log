@@ -18,7 +18,7 @@ exit: 0
 
 markdownlint-cli2 v0.23.2 (markdownlint v0.41.1)
 Finding: AGENTS.md docs/**/*.md evidence/**/*.md .agents/skills/verify-agora/SKILL.md
-Linting: 66 files
+Linting: 110 files
 Summary: 0 issues in 0 files
 PASS authored structure: 7 documents; 24 requirements; 26 live-scenario mappings
 PASS semantic readiness: 22 milestones; 66 independently gated tasks; 66 exactly owned Build outcomes
@@ -37,37 +37,37 @@ SCOPE packet structure only; it cannot verify that prose is true or that any scr
 > agora@ docs:test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
 > node --test docs/site/test/*.test.ts
 
-✔ the same public build driver produces a valid baseline before corpus assertions (0.278375ms)
-✔ the complete corpus has 25 pages and both audience tracks (0.234667ms)
-✔ the atlas explains all nine system nodes and eight connections (0.162458ms)
-✔ the committed design packet is readable as linked documentation, not a source-code dump (0.159292ms)
-✔ current commands and planned product availability have separate references (0.180416ms)
-✔ disabling only the private path guard makes its behavioral assertion fail (107.202041ms)
-✔ disabling only the : section guard makes its behavioral assertion fail (96.754041ms)
-✔ disabling only the : visual guard makes its behavioral assertion fail (95.319583ms)
-✔ disabling only the : link guard makes its behavioral assertion fail (95.972708ms)
-✔ disabling only the : source guard makes its behavioral assertion fail (96.2645ms)
-✔ disabling only the snapshot revision guard makes its behavioral assertion fail (93.857583ms)
-✔ disabling only the invalid status guard makes its behavioral assertion fail (95.114209ms)
-✔ disabling only the Built proof guard makes its behavioral assertion fail (93.373125ms)
-✔ disabling only the milestone coverage guard makes its behavioral assertion fail (93.624917ms)
-✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (98.940375ms)
-✔ disabling only the : outcome guard makes its behavioral assertion fail (94.500583ms)
-✔ disabling only the : stage guard makes its behavioral assertion fail (94.89175ms)
-✔ disabling only the inventory missing guard makes its behavioral assertion fail (95.210417ms)
-✔ disabling only the feature documentation guard makes its behavioral assertion fail (96.002166ms)
-✔ public documentation guard accepts the complete valid fixture (3.254666ms)
-✔ broken internal page and anchor links fail (1.608708ms)
-✔ feature explanations and visual flows are mandatory (0.473458ms)
-✔ progress statuses are closed and Built requires source test and evidence (0.479958ms)
-✔ all milestones must occur exactly once with an outcome and release stage (0.469208ms)
-✔ milestone outcomes mirror the authoritative plan instead of drifting (0.193292ms)
-✔ every executable and package must have a documentation home (0.242959ms)
-✔ every feature-map entry requires a validated feature page (0.15275ms)
-✔ private absolute paths and unsafe links never enter the site (0.261667ms)
-✔ production links include generated navigation, fragment, stylesheet and nested source views (1.351417ms)
-✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (2.434459ms)
-✔ Mermaid mirror carries the same status and relationships as the data owner (0.211791ms)
+✔ the same public build driver produces a valid baseline before corpus assertions (0.278458ms)
+✔ the complete corpus has 25 pages and both audience tracks (0.273708ms)
+✔ the atlas explains all nine system nodes and eight connections (0.165458ms)
+✔ the committed design packet is readable as linked documentation, not a source-code dump (0.154208ms)
+✔ current commands and planned product availability have separate references (0.184042ms)
+✔ disabling only the private path guard makes its behavioral assertion fail (98.067ms)
+✔ disabling only the : section guard makes its behavioral assertion fail (96.156125ms)
+✔ disabling only the : visual guard makes its behavioral assertion fail (97.134833ms)
+✔ disabling only the : link guard makes its behavioral assertion fail (97.17325ms)
+✔ disabling only the : source guard makes its behavioral assertion fail (95.577292ms)
+✔ disabling only the snapshot revision guard makes its behavioral assertion fail (106.712167ms)
+✔ disabling only the invalid status guard makes its behavioral assertion fail (99.497291ms)
+✔ disabling only the Built proof guard makes its behavioral assertion fail (100.228958ms)
+✔ disabling only the milestone coverage guard makes its behavioral assertion fail (98.026084ms)
+✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (103.906541ms)
+✔ disabling only the : outcome guard makes its behavioral assertion fail (102.050291ms)
+✔ disabling only the : stage guard makes its behavioral assertion fail (97.261708ms)
+✔ disabling only the inventory missing guard makes its behavioral assertion fail (100.90275ms)
+✔ disabling only the feature documentation guard makes its behavioral assertion fail (100.789791ms)
+✔ public documentation guard accepts the complete valid fixture (2.672333ms)
+✔ broken internal page and anchor links fail (1.255875ms)
+✔ feature explanations and visual flows are mandatory (0.342625ms)
+✔ progress statuses are closed and Built requires source test and evidence (0.351ms)
+✔ all milestones must occur exactly once with an outcome and release stage (0.372667ms)
+✔ milestone outcomes mirror the authoritative plan instead of drifting (0.126083ms)
+✔ every executable and package must have a documentation home (0.103208ms)
+✔ every feature-map entry requires a validated feature page (0.101875ms)
+✔ private absolute paths and unsafe links never enter the site (0.196084ms)
+✔ production links include generated navigation, fragment, stylesheet and nested source views (0.6715ms)
+✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (1.833334ms)
+✔ Mermaid mirror carries the same status and relationships as the data owner (0.149375ms)
 ℹ tests 31
 ℹ suites 0
 ℹ pass 31
@@ -75,7 +75,7 @@ SCOPE packet structure only; it cannot verify that prose is true or that any scr
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 1412.915125
+ℹ duration_ms 1448.704875
 
 > agora@ contracts:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
 > node contracts/tools/generate.mjs --check
@@ -91,6 +91,6 @@ SCOPE packet structure only; it cannot verify that prose is true or that any scr
 
  Test Files  22 passed (22)
       Tests  116 passed | 1 expected fail (117)
-   Start at  00:01:19
-   Duration  39.79s (tests 95%, import 3%, transform 1%)
+   Start at  00:49:37
+   Duration  36.46s (tests 96%, import 3%, transform 1%)
 

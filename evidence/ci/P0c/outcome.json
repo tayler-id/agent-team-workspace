@@ -2,10 +2,10 @@
   "scope": "CI P0c A allocation only",
   "outcome": "pass",
   "trust": "owner-observed, not trusted CI",
-  "base": "95f35277fbfc821be148029521222f0de617d7de",
-  "parent": "c9e6fe16c1f107da95d77f35d092e0a923781783",
-  "head": "b76440030fa3b9f95ba3c8a93b1e6c74a725d7a3",
-  "tree": "df48c803542576f6d7b5a633cfbd4314c11414e6",
+  "base": "2d947dce434db392305d98af5abf3627e1caad2f",
+  "parent": "5960324a46df49aae96d98639bf3e6ff86e53b52",
+  "head": "f63eeabb24023ef088031f4e38c8231050d6987a",
+  "tree": "7d7b4f2f1e76c3a62ef3b89e9591e63a7b8c0d3f",
   "test_patch_digest": "sha256:8c342c5eb58c2f36a752e8565a739be0a06a6547c56e7dc8d40220b0698b1401",
   "counts": {
     "authored": {
@@ -22,9 +22,9 @@
     },
     "receipts": {
       "files": 33,
-      "raw": 2327,
-      "nonblank": 2234,
-      "meaningful": 1782
+      "raw": 2330,
+      "nonblank": 2235,
+      "meaningful": 1783
     },
     "evidence-prose": {
       "files": 2,
@@ -86,43 +86,43 @@
       "guard": "short-selection",
       "weakened": false,
       "source": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
-      "input": "4ec2611efe63ee5118e18672d9d5742e4a68ccb922984754b5ae023e1496ec31",
+      "input": "04096b284752f701db7e3ac3e37a121de8185191b68c517bfb988462655a60e1",
       "exit": 0,
-      "identity": "{\"runId\":\"6c2e82fb-182f-45ae-a472-7bac21cb610d\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ybTJMc\",\"socketDir\":\"/private/tmp/agora-p0c-6c2e82fb-182f-45ae-a472-7bac21cb610d\"}\n",
+      "identity": "{\"runId\":\"ce1cb8e5-c7b9-46ec-8b51-acf111f76723\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ZIvXe3\",\"socketDir\":\"/private/tmp/agora-p0c-ce1cb8e5-c7b9-46ec-8b51-acf111f76723\"}\n",
       "diagnostic": ""
     },
     {
       "guard": "short-selection",
       "weakened": true,
       "source": "3518b355692ac373ae072f92d8a5076f70cf34a09e1e49092e4d608a8061cb0d",
-      "input": "4ec2611efe63ee5118e18672d9d5742e4a68ccb922984754b5ae023e1496ec31",
+      "input": "04096b284752f701db7e3ac3e37a121de8185191b68c517bfb988462655a60e1",
       "exit": 1,
-      "identity": "{\"runId\":\"6c2e82fb-182f-45ae-a472-7bac21cb610d\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ybTJMc\",\"socketDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ybTJMc/agora-p0c-6c2e82fb-182f-45ae-a472-7bac21cb610d\"}\n",
+      "identity": "{\"runId\":\"ce1cb8e5-c7b9-46ec-8b51-acf111f76723\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ZIvXe3\",\"socketDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ZIvXe3/agora-p0c-ce1cb8e5-c7b9-46ec-8b51-acf111f76723\"}\n",
       "diagnostic": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: short selection denial\n    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/[eval1]:4:14\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:230:26\n    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.16.0\n"
     },
     {
       "guard": "ownership",
       "weakened": false,
       "source": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
-      "input": "24328dd638542f553c7774a5dea0b699a5b51c092129ae995eb7fa72d89b378b",
+      "input": "f22a142cdd161bfb1264f361c7449b8bb1e1907e894e21180d307c8dd4c172bf",
       "exit": 0,
-      "identity": "{\"runId\":\"4d740df5-2c89-468c-b3f1-8a43eecd7e0e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ybTJMc\",\"socketDir\":\"/private/tmp/agora-p0c-4d740df5-2c89-468c-b3f1-8a43eecd7e0e\"}\n",
+      "identity": "{\"runId\":\"2f622007-2bfe-48aa-9912-2b1bc5ccf16e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ZIvXe3\",\"socketDir\":\"/private/tmp/agora-p0c-2f622007-2bfe-48aa-9912-2b1bc5ccf16e\"}\n",
       "diagnostic": ""
     },
     {
       "guard": "ownership",
       "weakened": true,
       "source": "faa2b6f2aea7493d9f01d8608d33340433535e8e50b1c9ce0d29af3aae167be1",
-      "input": "24328dd638542f553c7774a5dea0b699a5b51c092129ae995eb7fa72d89b378b",
+      "input": "f22a142cdd161bfb1264f361c7449b8bb1e1907e894e21180d307c8dd4c172bf",
       "exit": 1,
-      "identity": "{\"runId\":\"4d740df5-2c89-468c-b3f1-8a43eecd7e0e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ybTJMc\",\"socketDir\":\"/private/tmp/agora-p0c-4d740df5-2c89-468c-b3f1-8a43eecd7e0e\"}\n",
+      "identity": "{\"runId\":\"2f622007-2bfe-48aa-9912-2b1bc5ccf16e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/socket-test-deep-artifacts-ZIvXe3\",\"socketDir\":\"/private/tmp/agora-p0c-2f622007-2bfe-48aa-9912-2b1bc5ccf16e\"}\n",
       "diagnostic": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected exception: ownership denial\n    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/[eval1]:4:75\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:230:26\n    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: /socket ownership/,\n  operator: 'throws',\n  diff: 'simple'\n}\n\nNode.js v24.16.0\n"
     }
   ],
   "mutation_count": 18,
   "wrapper_sha256": "sha256:7a0a68ad738eec74603581abe0d61484b023c5d8917d84586ffd62b826b70d04",
   "cleanup": {
-    "runId": "2f9e1d74-2805-4d3a-9209-224bc1f44409",
+    "runId": "2586faa4-b3bf-4b0a-be13-35f6b727c898",
     "socketRemoved": true,
     "dataRemoved": true,
     "logsRetained": true,
@@ -149,12 +149,12 @@
     {
       "path": "evidence/ci/P0c/check-check.log",
       "bytes": 7558,
-      "digest": "sha256:ec407901a43f7dd58fe4104a4766cc9b83831e3c10b9b397ecd2d20cebaba636"
+      "digest": "sha256:994491a48e75ca73c3a043af598f49597e10f1e6af9f18950b9f1fa3d7601ba5"
     },
     {
       "path": "evidence/ci/P0c/check-client_replay------json---swift.log",
-      "bytes": 22245,
-      "digest": "sha256:664cc3870b49bb313f39ad90bb729175aa79ea3988c6b8eefe5085eb6121d503"
+      "bytes": 22252,
+      "digest": "sha256:568d1465656cecac47296dee141ea848efeb1bd6ae422b3044f7d64875e46ddb"
     },
     {
       "path": "evidence/ci/P0c/check-contracts_conform------json.log",
@@ -173,8 +173,8 @@
     },
     {
       "path": "evidence/ci/P0c/check-scripts_test-design-checks_mjs.log",
-      "bytes": 1393,
-      "digest": "sha256:36a48e823bf2be459b707096f430c28d05b06c463778fc4f50c97d85e036537b"
+      "bytes": 1411,
+      "digest": "sha256:dc0b6dc3647efc2678b3e89c67cdee515fae975db61effb66e81fb619ad5ea97"
     },
     {
       "path": "evidence/ci/P0c/check-scripts_test-design-handoff-checks_mjs.log",
@@ -194,47 +194,47 @@
     {
       "path": "evidence/ci/P0c/check-scripts_with-test-postgres_mjs-node-scripts_probe-center_mjs.log",
       "bytes": 4140,
-      "digest": "sha256:3ceab39f6fab181f2e7aed0373b9a66feebd80328aedc0db2e4505e01de1bd82"
+      "digest": "sha256:9db7c4ba8718b0d7dd70adb935718aa80cc3eda9196a064b484707fffdbf0519"
     },
     {
       "path": "evidence/ci/P0c/check-test_pg.log",
       "bytes": 418,
-      "digest": "sha256:09e9e1690d0bc2b1133bdbdc5d00c8fe60cd95e78dab5f2692543a7543d236c4"
+      "digest": "sha256:b4f86b7bd63d7325aaca63a469fd212a1e50a58c5fb7a11c109274df70a1d206"
     },
     {
       "path": "evidence/ci/P0c/counterfactual-cleanup.json",
       "bytes": 158,
-      "digest": "sha256:6d9296c732bd40e5a42fbec540ba94aedece981e3399c76d8a9b1c725350c3c0"
+      "digest": "sha256:eee045fff720d6c9b3bba0ab59f562f2f92d334a3d2ff55e74d9c67a4d085298"
     },
     {
       "path": "evidence/ci/P0c/counterfactual-identity.json",
       "bytes": 910,
-      "digest": "sha256:55448d621744c6c4669834687d1732869e7ad66e382b4e9bb5f108763999b0dd"
+      "digest": "sha256:785a0206473a9a0dbddc10fd0c39754c29bcb05ace8fc454f46a083c1f1f1b27"
     },
     {
       "path": "evidence/ci/P0c/counterfactual-postgres.log",
       "bytes": 5003,
-      "digest": "sha256:ddc0746da2a48cb0418eb7418a6ae3cdedb39e6f18851de01159a617955793e5"
+      "digest": "sha256:658487b6a956bbd1f4f288175a266a4250967fea4ca2679ed200e746b661380a"
     },
     {
       "path": "evidence/ci/P0c/counterfactual-transcript.json",
-      "bytes": 125724,
-      "digest": "sha256:8de28597a0f2e8bb62ba15f03c635beef6a6ac143ba9153993187db45f2c8c95"
+      "bytes": 125731,
+      "digest": "sha256:4fe3a7bd2ff9b81eefd06d5a24e5a270545148c920f96d136ce2ecc51fbe2877"
     },
     {
       "path": "evidence/ci/P0c/docs-check.log",
-      "bytes": 4596,
-      "digest": "sha256:d08178368affa4d1294bfc59f3148960f6c637d46e4cff0e1a5bfcb567989a73"
+      "bytes": 4595,
+      "digest": "sha256:6e9b8bcd03330f7030d0e01e99670c5545e04b86bffcca6c57218adb1279830a"
     },
     {
       "path": "evidence/ci/P0c/doctor.log",
-      "bytes": 192,
-      "digest": "sha256:4f2c89b611b5e66d55240a9124f223d7b58d8614dae8b4ad72a99eee902370a1"
+      "bytes": 181,
+      "digest": "sha256:f8a64d23f81db44c0ef33b29a89cc9c61b89f32ea2d37f47eab5aba3581cfc23"
     },
     {
       "path": "evidence/ci/P0c/focused.log",
-      "bytes": 8437,
-      "digest": "sha256:26304e79da286e37e21a8698205df1d1c4aa456f23d824af5051a042924b459f"
+      "bytes": 8448,
+      "digest": "sha256:9020e3c5831004209c07a9ed37f7b3a5706f558af53d86ce4d8441948f1f0c60"
     },
     {
       "path": "evidence/ci/P0c/harness.log",
@@ -248,18 +248,18 @@
     },
     {
       "path": "evidence/ci/P0c/mutations.json",
-      "bytes": 87819,
-      "digest": "sha256:2a8869894ceae8cf258d31cc9f74e3f61f201a3887decada16036c9f7788a8ba"
+      "bytes": 87836,
+      "digest": "sha256:73f82e47f6c78522276a4b7b10bd2b8caf7274708e027a4ead73102447da8579"
     },
     {
       "path": "evidence/ci/P0c/plan-check.log",
-      "bytes": 3522,
-      "digest": "sha256:6216bdb31816bccf18d3caa739eab44e68518a1c2b0feea4c111218e5c303ee0"
+      "bytes": 3540,
+      "digest": "sha256:5e38a7ac5dd99a820084522939b330a2149a9a9bb04dd307a255b86cfb0dc5da"
     },
     {
       "path": "evidence/ci/P0c/recorder.log",
       "bytes": 312,
-      "digest": "sha256:8c643ab9f73d29474c3cc6f49af2571240019ee7689723639bc5acbc5ea03531"
+      "digest": "sha256:bc85665ce16fab83a2445c34d2186acadb1adee10e72dcd00b9db2198a37f956"
     },
     {
       "path": "evidence/ci/P0c/red-before-edit.log",
@@ -268,13 +268,13 @@
     },
     {
       "path": "evidence/ci/P0c/replay/green.log",
-      "bytes": 1480,
-      "digest": "sha256:2fd9ab5ecd6b41a7790b94d89a122c0d2d0e1a9695502e8f442e49f47b6aa05c"
+      "bytes": 1479,
+      "digest": "sha256:db3d67e5e1c55192f4496a0d426f9a327c63cdd39d553facdc47030f841d76a0"
     },
     {
       "path": "evidence/ci/P0c/replay/red.log",
-      "bytes": 3359,
-      "digest": "sha256:4f22d5df74cc25b9b206f5c0ab49f48d9fe90e80eaef70601097868bf0913596"
+      "bytes": 3360,
+      "digest": "sha256:9962482e630a135d17e2da40c90b3bae3233ad78166bf54413dac3d2d8508ab9"
     },
     {
       "path": "evidence/ci/P0c/replay/test-patch.diff",
@@ -293,8 +293,8 @@
     },
     {
       "path": "evidence/ci/P0c/review.md",
-      "bytes": 3679,
-      "digest": "sha256:524b9717461d37b527bb10ac5929dc8b4e2e9ea8574531eabda34ba2038fa121"
+      "bytes": 3950,
+      "digest": "sha256:b0b7f1ed441657e9b567f4a7cabc3134d64a4ca22e15a1452d781f2a8d1346b6"
     },
     {
       "path": "evidence/ci/P0c/scope-proposal.md",
@@ -309,8 +309,18 @@
     {
       "path": "evidence/ci/P0c/validated-head.txt",
       "bytes": 41,
-      "digest": "sha256:418ef1f8cfce3ca3ebaebf97ddc205a9823241ae921ccc113bf27912af790d32"
+      "digest": "sha256:677ca5d57430af89ea7565e6a4d673e798e7f0970b980682979683027ac925a4"
     }
   ],
-  "artifact_bytes": 367099
+  "rebase": {
+    "accepted_head": "4f4bc74f8f9bec3a3f5430922705ba94adae44e6",
+    "onto": "2d947dce434db392305d98af5abf3627e1caad2f",
+    "source_equal": {
+      "scripts/postgres-socket.ts": "sha256:55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+      "packages/storage/test/postgres-socket.test.ts": "sha256:7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "scripts/with-test-postgres.mjs": "sha256:7a0a68ad738eec74603581abe0d61484b023c5d8917d84586ffd62b826b70d04"
+    },
+    "provisional_design_tree": "74e7125d399dddbe95873233c35c94748116c048"
+  },
+  "artifact_bytes": 367436
 }

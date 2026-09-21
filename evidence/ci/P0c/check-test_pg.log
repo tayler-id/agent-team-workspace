@@ -10,6 +10,6 @@ exit: 0
 
  Test Files  3 passed (3)
       Tests  16 passed (16)
-   Start at  00:01:59
-   Duration  1.13s (import 67%, tests 27%, transform 6%)
+   Start at  00:50:13
+   Duration  976ms (import 70%, tests 25%, transform 5%)
 

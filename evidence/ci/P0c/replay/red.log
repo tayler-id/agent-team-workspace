@@ -1,8 +1,8 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-21T04:02:39.688Z
-parent: c9e6fe16c1f107da95d77f35d092e0a923781783
-head: b76440030fa3b9f95ba3c8a93b1e6c74a725d7a3
-subject_revision: c9e6fe16c1f107da95d77f35d092e0a923781783
+recorded_at: 2026-09-21T04:49:33.047Z
+parent: 5960324a46df49aae96d98639bf3e6ff86e53b52
+head: f63eeabb24023ef088031f4e38c8231050d6987a
+subject_revision: 5960324a46df49aae96d98639bf3e6ff86e53b52
 test_patch_applied_to_subject: true
 test_patch_files: packages/storage/test/postgres-socket.test.ts
 test_patch_digest: sha256:8c342c5eb58c2f36a752e8565a739be0a06a6547c56e7dc8d40220b0698b1401
@@ -13,21 +13,21 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-zs35M7
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-Skh7Dj
 
- ❯ |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 14 skipped) 4ms
-   × short socket denial, collision and idempotent cleanup 2ms
+ ❯ |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 14 skipped) 5ms
+   × short socket denial, collision and idempotent cleanup 3ms
 
  Test Files  1 failed (1)
       Tests  1 failed | 1 passed | 14 skipped (16)
-   Start at  00:02:34
-   Duration  95ms (transform 44%, import 39%, tests 12%, worker 5%)
+   Start at  00:49:27
+   Duration  103ms (transform 43%, import 39%, tests 13%, worker 5%)
 
 stderr | packages/storage/test/postgres-socket.test.ts > short socket denial, collision and idempotent cleanup
-{"allocated":{"runId":"74168adf-dcdc-42b7-8aa6-1dca044c4852","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-zs35M7/.scratch/socket-test-deep-artifacts-R8HSh5","socketDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-zs35M7/.scratch/socket-test-deep-artifacts-R8HSh5/agora-p0c-74168adf-dcdc-42b7-8aa6-1dca044c4852"},"mode":448}
+{"allocated":{"runId":"6c4959ba-c0ef-48d0-9adb-2d58d759dbc7","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-Skh7Dj/.scratch/socket-test-deep-artifacts-nmPXFC","socketDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-Skh7Dj/.scratch/socket-test-deep-artifacts-nmPXFC/agora-p0c-6c4959ba-c0ef-48d0-9adb-2d58d759dbc7"},"mode":448}
 
 stderr | packages/storage/test/postgres-socket.test.ts
-{"cleanup":true,"runs":["715eeece-3316-41b2-a612-21799b1908ec","74168adf-dcdc-42b7-8aa6-1dca044c4852"]}
+{"cleanup":true,"runs":["68b9d0c4-466a-436a-82c4-867b93e47bd8","6c4959ba-c0ef-48d0-9adb-2d58d759dbc7"]}
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯

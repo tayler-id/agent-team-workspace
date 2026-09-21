@@ -1,8 +1,8 @@
 # green.log (agora.red-green/v1)
-recorded_at: 2026-09-21T04:02:39.689Z
-parent: c9e6fe16c1f107da95d77f35d092e0a923781783
-head: b76440030fa3b9f95ba3c8a93b1e6c74a725d7a3
-subject_revision: b76440030fa3b9f95ba3c8a93b1e6c74a725d7a3
+recorded_at: 2026-09-21T04:49:33.047Z
+parent: 5960324a46df49aae96d98639bf3e6ff86e53b52
+head: f63eeabb24023ef088031f4e38c8231050d6987a
+subject_revision: f63eeabb24023ef088031f4e38c8231050d6987a
 test_patch_applied_to_subject: false
 test_patch_files: packages/storage/test/postgres-socket.test.ts
 test_patch_digest: sha256:8c342c5eb58c2f36a752e8565a739be0a06a6547c56e7dc8d40220b0698b1401
@@ -13,11 +13,11 @@ expected: every assertion passes at the head (exit 0)
 observed_exit: 0
 
 
- RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-green-UhFX1r
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-green-opYI7V
 
 
  Test Files  1 passed (1)
       Tests  2 passed | 14 skipped (16)
-   Start at  00:02:38
-   Duration  92ms (transform 45%, import 40%, tests 10%, worker 5%)
+   Start at  00:49:31
+   Duration  98ms (transform 46%, import 40%, tests 9%, worker 5%)
 

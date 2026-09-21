@@ -21,3 +21,5 @@ Capture observer proposals and promote reviewed knowledge (U15)  boxes=28  files
 Harden operations and prove governed deletion (U16)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
 Add an opt-in notification-only Slack bridge (U17)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
 22 PR sections, 0 problems
+
+observed_exit: 0
