@@ -2,7 +2,6 @@
 
 The target is one hosted modular center, not a fleet of microservices. PostgreSQL owns the shared state. Workers execute elsewhere and send bounded facts back. Current implementation is limited to [foundation fixtures](foundation.md), [portable contracts](contracts.md), and a [renderer-independent core](synchronization.md), not this production topology.
 
-
 Agora names five application nouns: Feature, Entrypoint, Timeline Card, Client and Host. The B1 mechanical slice reserves distinct owners under `apps/web/src/{framework,client,host,features}` and enforces import ownership with the existing Agora ESLint plugin across guarded source extensions. See [application architecture boundaries](app-architecture.md).
 
 ## End-to-end shape
