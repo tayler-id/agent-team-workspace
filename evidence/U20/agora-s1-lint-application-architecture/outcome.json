@@ -2,24 +2,26 @@
   "schema_version": "agora.task-outcome/v1",
   "task": "agora-s1-lint-application-architecture",
   "unit": "U20",
-  "parent": "e28957d7508447e2f209c8a9e1f94b28c29ef843",
-  "head": "6f4976bd58bf1c5d2458715a62da9a18b041256a",
+  "parent": "c5b1fd11bd46aede7e620d390317495a4a9b4141",
+  "head": "54b5e907712b0fa4c6bfc3f35036b5e4b9afc0a1",
   "result": "pass",
-  "summary": "Correction closes noInlineConfig bypasses, guarded-extension gaps, browser-global false positives, DOM-mutation name matching, React effect alias/barrel bypasses and lazy exception validation. Whole-feature red retained beside correction-delta red/green.",
+  "summary": "Rereview correction closes ambient declare shadows, computed DOM mutator keys, .jsx coverage, contracts js/cjs diagnostics, apps/web typecheck gating and load-time exception validation while generating extension fixtures at runtime under the R11 file block.",
   "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
   "green": "evidence/U20/agora-s1-lint-application-architecture/green.log",
-  "red_assertions": "Correction-delta: head tests fail on parent e28957d (bypass/false-positive cases); whole-feature-red.log retains original 8-failed slice red",
-  "green_assertions": "Tests 13 passed (13)",
+  "red_assertions": "Correction-delta: head tests fail on parent c5b1fd1 (declare/computed/jsx/contracts/load-time cases); whole-feature-red.log retains original slice red",
+  "green_assertions": "Tests 15 passed (15)",
   "commands": [
     "pnpm boundaries",
     "pnpm lint",
+    "pnpm typecheck",
     "pnpm check"
   ],
   "limits": [
     "No Client/Host runtime",
     "No Feature discovery",
     "No product Features",
-    "R11 target overage recorded in D83; under block thresholds",
-    "Whole-feature red preserved in whole-feature-red.log"
+    "Source-file delta below R11 block via runtime fixtures (D84); no size exception",
+    "Whole-feature red preserved in whole-feature-red.log",
+    "JSDoc import types, property-assignment mutators and untyped ambiguous mutators deferred"
   ]
 }

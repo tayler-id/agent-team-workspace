@@ -1,11 +1,21 @@
 {
-  "revision": "d85add4cfab5a5f2ce6c1bd268410f2bb7fc3d61",
+  "revision": "097714ede2e13fd37c740e706f8627152a744731",
   "date": "2026-09-21",
   "features": [
     {
-      "id": "postgres-socket", "title": "PostgreSQL socket ownership", "status": "In progress",
-      "why": "P0c A ownership and B bounded wrapper lifecycle proved; C qualification remains pending.", "page": "foundation.md",
-      "proof": ["repo:scripts/postgres-socket.ts", "repo:scripts/with-test-postgres.mjs", "repo:packages/storage/test/postgres-wrapper.test.ts", "repo:evidence/ci/P0c/B/outcome.json", "repo:evidence/ci/P0c/B/red.log", "repo:evidence/ci/P0c/B/green.log"]
+      "id": "postgres-socket",
+      "title": "PostgreSQL socket ownership",
+      "status": "In progress",
+      "why": "P0c A ownership and B bounded wrapper lifecycle proved; C qualification remains pending.",
+      "page": "foundation.md",
+      "proof": [
+        "repo:scripts/postgres-socket.ts",
+        "repo:scripts/with-test-postgres.mjs",
+        "repo:packages/storage/test/postgres-wrapper.test.ts",
+        "repo:evidence/ci/P0c/B/outcome.json",
+        "repo:evidence/ci/P0c/B/red.log",
+        "repo:evidence/ci/P0c/B/green.log"
+      ]
     },
     {
       "id": "task-proof",
@@ -67,11 +77,11 @@
       "page": "app-architecture.md",
       "proof": [
         "repo:apps/web/src/framework/index.ts",
-        "repo:scripts/boundary-policy.ts",
         "repo:scripts/renderer-policy.ts",
         "repo:packages/client-core/test/app-architecture.test.ts",
         "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json",
-        "repo:evidence/U20/agora-s1-lint-application-architecture/whole-feature-red.log"
+        "repo:evidence/U20/agora-s1-lint-application-architecture/whole-feature-red.log",
+        "repo:evidence/U20/agora-s1-lint-application-architecture/green.log"
       ]
     },
     {
