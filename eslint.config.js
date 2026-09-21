@@ -7,11 +7,17 @@ import { rendererFootgunRule } from './scripts/renderer-policy.ts';
 
 assertArchitectureExceptionsValid();
 
-const guarded = [
-	'contracts/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
-	'packages/*/src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
-	'apps/*/src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
-];
+const exts = '{ts,tsx,mts,cts,js,jsx,mjs,cjs}';
+const agoraPlugin = {
+	agora: {
+		rules: {
+			'import-boundary': importBoundaryRule,
+			'public-types': publicTypesRule,
+			'renderer-footgun': rendererFootgunRule,
+		},
+	},
+};
+const noInline = { noInlineConfig: true };
 
 export default tseslint.config(
 	{ ignores: ['node_modules/', '.docs-dist/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/swift/'] },
@@ -19,9 +25,7 @@ export default tseslint.config(
 	...tseslint.configs.strictTypeChecked,
 	...tseslint.configs.stylisticTypeChecked,
 	{
-		languageOptions: {
-			parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname },
-		},
+		languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
 		rules: {
 			'@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
 			'@typescript-eslint/explicit-module-boundary-types': 'error',
@@ -31,57 +35,31 @@ export default tseslint.config(
 		},
 	},
 	{
-		files: guarded,
+		// Guard apps/*/src and the entire apps/web tree so non-src relocation (test/, lib/) cannot bypass Agora rules.
+		files: [`contracts/**/*.${exts}`, `packages/*/src/**/*.${exts}`, `apps/*/src/**/*.${exts}`, `apps/web/**/*.${exts}`],
 		ignores: ['contracts/test/**', '**/*.{mjs,cjs}'],
-		linterOptions: {
-			// Configuration-level owner: inline eslint-disable cannot suppress Agora architecture rules.
-			noInlineConfig: true,
-		},
-		plugins: {
-			agora: {
-				rules: {
-					'import-boundary': importBoundaryRule,
-					'public-types': publicTypesRule,
-					'renderer-footgun': rendererFootgunRule,
-				},
-			},
-		},
+		linterOptions: noInline,
+		plugins: agoraPlugin,
 		rules: {
 			'agora/import-boundary': 'error',
 			'agora/public-types': 'error',
 			'agora/renderer-footgun': 'error',
 		},
 	},
-	// .mjs/.cjs under apps/packages: same Agora owners without type-aware project service.
 	{
-		files: ['apps/*/src/**/*.{mjs,cjs}', 'packages/*/src/**/*.{mjs,cjs}'],
+		files: [`apps/*/src/**/*.{mjs,cjs}`, `packages/*/src/**/*.{mjs,cjs}`, `apps/web/**/*.{mjs,cjs}`],
 		extends: [tseslint.configs.disableTypeChecked],
-		linterOptions: { noInlineConfig: true },
-		plugins: {
-			agora: {
-				rules: {
-					'import-boundary': importBoundaryRule,
-					'renderer-footgun': rendererFootgunRule,
-				},
-			},
-		},
-		rules: {
-			'agora/import-boundary': 'error',
-			'agora/renderer-footgun': 'error',
-		},
+		linterOptions: noInline,
+		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule, 'renderer-footgun': rendererFootgunRule } } },
+		rules: { 'agora/import-boundary': 'error', 'agora/renderer-footgun': 'error' },
 	},
-	// contracts plain JS keeps import-boundary from the guarded block but drops type-info-only public-types.
 	{
 		files: ['contracts/**/*.js'],
-		rules: {
-			'agora/public-types': 'off',
-			'agora/renderer-footgun': 'off',
-		},
+		rules: { 'agora/public-types': 'off', 'agora/renderer-footgun': 'off' },
 	},
-	// contracts mjs/cjs are ignored by the guarded block; attach import-boundary without redefining plugins on .js.
 	{
 		files: ['contracts/**/*.{mjs,cjs}'],
-		linterOptions: { noInlineConfig: true },
+		linterOptions: noInline,
 		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule } } },
 		rules: { 'agora/import-boundary': 'error' },
 	},
@@ -91,15 +69,13 @@ export default tseslint.config(
 	},
 	{
 		files: ['**/*.mjs', '**/*.js', 'docs/site/test/*.test.ts'],
-		// Keep type-aware lint for JS under apps/packages src; tooling JS and contracts scripts stay untyped.
-		ignores: ['apps/*/src/**', 'packages/*/src/**'],
+		ignores: ['apps/*/src/**', 'packages/*/src/**', 'apps/web/**'],
 		extends: [tseslint.configs.disableTypeChecked],
 		languageOptions: { globals: { console: 'readonly', fetch: 'readonly', process: 'readonly' } },
 		rules: { 'no-console': 'off' },
 	},
 	{
 		files: ['docs/site/*.mjs', 'scripts/foundation*.mjs'],
-		// JavaScript build tools have no TypeScript annotation syntax.
 		rules: { '@typescript-eslint/explicit-module-boundary-types': 'off' },
 	},
 );

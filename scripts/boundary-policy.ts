@@ -9,6 +9,7 @@ export const projectRoot = path.resolve(import.meta.dirname, '..');
 export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker'] as const;
 /** Reserved apps/web owners. Folders may arrive in later slices. */
 export const WEB_OWNERS = { framework: 'apps/web/src/framework', client: 'apps/web/src/client', host: 'apps/web/src/host', features: 'apps/web/src/features' } as const;
+const WEB_SRC = 'apps/web/src';
 
 const inside = (root: string, file: string): boolean => !path.relative(root, file).startsWith('..') && !path.isAbsolute(path.relative(root, file));
 const physical = (file: string): string => (existsSync(file) ? realpathSync(file) : file);
@@ -20,8 +21,7 @@ export function webLayer(file: string): WebLayer | undefined {
 	if (rel.startsWith(`${WEB_OWNERS.framework}/`)) return { kind: 'framework' };
 	if (rel.startsWith(`${WEB_OWNERS.client}/`)) return { kind: 'client' };
 	if (rel.startsWith(`${WEB_OWNERS.host}/`)) return { kind: 'host' };
-	const match = /^apps\/web\/src\/features\/([^/]+)\//.exec(rel);
-	const name = match?.[1];
+	const name = /^apps\/web\/src\/features\/([^/]+)\//.exec(rel)?.[1];
 	return name ? { kind: 'feature', name } : { kind: 'other' };
 }
 const isPublicEntrypoint = (target: string, ownerRoot: string): boolean => {
@@ -62,6 +62,13 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 		}
 		const boundary = file.includes('/contracts/generated/') ? 'contracts/generated' : owner;
 		if (!inside(physical(path.join(projectRoot, boundary)), resolvedTarget)) return `relative import escapes ${supportedOwner(file)}; keep paths inside ${boundary}`;
+		// apps/web code may only relative-import inside apps/web/src (blocks test/lib relocation bypass).
+		if (owner === 'apps/web' || layer) {
+			const targetRel = relPosix(resolvedTarget);
+			if (!targetRel.startsWith(`${WEB_SRC}/`) && !targetRel.includes('node_modules')) {
+				return `relative import escapes ${WEB_SRC}; renderer code stays under ${WEB_SRC}/{framework,client,host,features} (not apps/web/test or other non-src paths)`;
+			}
+		}
 		if (layer && target) {
 			const targetLayer = webLayer(target);
 			if ((layer.kind === 'framework' || layer.kind === 'client' || layer.kind === 'host') && targetLayer?.kind === 'feature') {

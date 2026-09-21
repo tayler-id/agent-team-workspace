@@ -5,10 +5,9 @@ import { WEB_OWNERS, domGlobals, webLayer } from './boundary-policy.ts';
 
 const effects = new Set(['useEffect', 'useLayoutEffect', 'useInsertionEffect']);
 const reactSources = new Set(['react', 'react/index.js', 'react/index']);
-/** Method names that only make sense as DOM node mutation. */
 const exclusiveMutators = new Set(['appendChild', 'removeChild', 'replaceChild', 'insertBefore', 'replaceChildren', 'replaceWith', 'insertAdjacentElement', 'insertAdjacentHTML', 'writeln']);
-/** Method names that exist on non-DOM objects too; require a DOM-node receiver. */
 const ambiguousMutators = new Set(['append', 'prepend', 'remove', 'write']);
+const allMutators = new Set([...exclusiveMutators, ...ambiguousMutators]);
 const domMutationHosts = new Set(['Node', 'ParentNode', 'ChildNode', 'Element', 'HTMLElement', 'SVGElement', 'Document', 'DocumentFragment', 'CharacterData', 'Text', 'Comment', 'Range']);
 
 const hostOrFramework = (file: string): boolean => {
@@ -21,9 +20,18 @@ const report = (context: TSESLint.RuleContext<'forbidden', []>, node: TSESTree.N
 	if (exceptionAllows(context.filename, symbol, 'agora/renderer-footgun')) return;
 	context.report({ node, messageId: 'forbidden', data: { reason } });
 };
-const importedName = (spec: TSESTree.ImportSpecifier): string | undefined => (spec.imported.type === AST_NODE_TYPES.Identifier ? spec.imported.name : undefined);
+/** Named or string-literal import (`import { 'useEffect' as ue }`). */
+const importedName = (spec: TSESTree.ImportSpecifier): string | undefined => {
+	const imported = spec.imported;
+	if (imported.type === AST_NODE_TYPES.Identifier) return imported.name;
+	return typeof imported.value === 'string' ? imported.value : undefined;
+};
+const exportLocalName = (spec: TSESTree.ExportSpecifier): string | undefined => {
+	const local = spec.local;
+	if (local.type === AST_NODE_TYPES.Identifier) return local.name;
+	return typeof local.value === 'string' ? local.value : undefined;
+};
 const isDomHostName = (name: string): boolean => domMutationHosts.has(name) || /^(HTML|SVG)[A-Za-z0-9]*Element$/.test(name);
-
 const isDomLibFile = (fileName: string): boolean => fileName.endsWith('lib.dom.d.ts');
 
 function typeIsDomMutationHost(checker: ts.TypeChecker, type: ts.Type, seen = new Set<ts.Type>()): boolean {
@@ -38,15 +46,14 @@ function typeIsDomMutationHost(checker: ts.TypeChecker, type: ts.Type, seen = ne
 	if (type.flags & ts.TypeFlags.Object) {
 		try {
 			for (const base of checker.getBaseTypes(type as ts.InterfaceType)) if (typeIsDomMutationHost(checker, base, seen)) return true;
-		} catch { /* non-interface object types */ }
+		} catch { /* non-interface */ }
 	}
 	return false;
 }
 
 function propertyFromDomMutationHost(checker: ts.TypeChecker, receiver: ts.Type, method: string): boolean {
 	const apparent = checker.getApparentType(receiver);
-	const parts = apparent.isUnionOrIntersection() ? apparent.types : [apparent];
-	for (const part of parts) {
+	for (const part of apparent.isUnionOrIntersection() ? apparent.types : [apparent]) {
 		if (typeIsDomMutationHost(checker, part)) return true;
 		const prop = checker.getPropertyOfType(part, method);
 		for (const decl of prop?.getDeclarations() ?? []) {
@@ -77,25 +84,27 @@ function isDomMutationCall(context: TSESLint.RuleContext<'forbidden', []>, membe
 	return false;
 }
 
-/** Resolve MemberExpression method name, including computed string-literal keys (`n['appendChild']`, `n[k]` when k is a string literal type). */
-function memberMethodName(context: TSESLint.RuleContext<'forbidden', []>, member: TSESTree.MemberExpression): string | undefined {
-	if (!member.computed && member.property.type === AST_NODE_TYPES.Identifier) return member.property.name;
-	if (member.computed && member.property.type === AST_NODE_TYPES.Literal && typeof member.property.value === 'string') return member.property.value;
-	if (!member.computed) return undefined;
+/** Resolve method name including computed keys and all-mutator unions (`'append' | 'prepend'`). */
+function memberMethodNames(context: TSESLint.RuleContext<'forbidden', []>, member: TSESTree.MemberExpression): string[] {
+	if (!member.computed && member.property.type === AST_NODE_TYPES.Identifier) return [member.property.name];
+	if (member.computed && member.property.type === AST_NODE_TYPES.Literal && typeof member.property.value === 'string') return [member.property.value];
+	if (!member.computed) return [];
 	try {
 		const services = ESLintUtils.getParserServices(context, true);
-		const program = services.program;
-		if (program === null) return undefined;
-		const checker = program.getTypeChecker();
-		const tsProp = services.esTreeNodeToTSNodeMap.get(member.property);
-		const type = checker.getTypeAtLocation(tsProp);
-		if (type.isStringLiteral()) return type.value;
+		if (services.program === null) return [];
+		const checker = services.program.getTypeChecker();
+		const type = checker.getTypeAtLocation(services.esTreeNodeToTSNodeMap.get(member.property));
+		if (type.isStringLiteral()) return allMutators.has(type.value) ? [type.value] : [];
 		if (type.isUnion()) {
 			const literals = type.types.filter((part): part is ts.StringLiteralType => part.isStringLiteral());
-			if (literals.length === 1) return literals[0]?.value;
+			if (literals.length === 0) return [];
+			// Report when every alternate is a known mutator (union of mutator keys).
+			if (literals.every((part) => allMutators.has(part.value))) return literals.map((part) => part.value);
+			// Or when any exclusive mutator appears among the literals.
+			return literals.map((part) => part.value).filter((name) => exclusiveMutators.has(name));
 		}
-	} catch { return undefined; }
-	return undefined;
+	} catch { return []; }
+	return [];
 }
 
 function nodeIsDeclare(node: TSESTree.Node | null | undefined): boolean {
@@ -103,82 +112,52 @@ function nodeIsDeclare(node: TSESTree.Node | null | undefined): boolean {
 	const flag: unknown = Reflect.get(node, 'declare');
 	return flag === true;
 }
-
-/** Ambient `declare` bindings shadow globals without a runtime binding; treat them as unresolved. */
 function defsAreOnlyAmbient(defs: readonly { type: string; node: TSESTree.Node; parent?: TSESTree.Node | null }[]): boolean {
-	if (defs.length === 0) return true;
-	return defs.every((def) => nodeIsDeclare(def.parent) || nodeIsDeclare(def.node));
+	return defs.length === 0 || defs.every((def) => nodeIsDeclare(def.parent) || nodeIsDeclare(def.node));
 }
 
-function importDeclarationOf(identifier: TSESTree.Identifier, context: TSESLint.RuleContext<'forbidden', []>): TSESTree.ImportDeclaration | undefined {
+function importBinding(identifier: TSESTree.Identifier, context: TSESLint.RuleContext<'forbidden', []>): { decl: TSESTree.ImportDeclaration | undefined; spec: TSESTree.ImportSpecifier | undefined; nsOrDefault: boolean } {
 	let current: ReturnType<TSESLint.SourceCode['getScope']> | null = context.sourceCode.getScope(identifier);
 	while (current) {
 		const variable = current.set.get(identifier.name);
 		if (variable) {
 			const def = variable.defs[0];
-			if (def === undefined || (def.type as string) !== 'ImportBinding') return undefined;
+			if (def === undefined || (def.type as string) !== 'ImportBinding') return { decl: undefined, spec: undefined, nsOrDefault: false };
 			const parent = def.parent as TSESTree.Node | null | undefined;
-			return parent?.type === AST_NODE_TYPES.ImportDeclaration ? parent : undefined;
+			return {
+				decl: parent?.type === AST_NODE_TYPES.ImportDeclaration ? parent : undefined,
+				spec: def.node.type === AST_NODE_TYPES.ImportSpecifier ? def.node : undefined,
+				nsOrDefault: def.node.type === AST_NODE_TYPES.ImportNamespaceSpecifier || def.node.type === AST_NODE_TYPES.ImportDefaultSpecifier,
+			};
 		}
 		current = current.upper;
 	}
-	return undefined;
-}
-
-function importSpecifierNamed(identifier: TSESTree.Identifier, context: TSESLint.RuleContext<'forbidden', []>): TSESTree.ImportSpecifier | undefined {
-	let current: ReturnType<TSESLint.SourceCode['getScope']> | null = context.sourceCode.getScope(identifier);
-	while (current) {
-		const variable = current.set.get(identifier.name);
-		if (variable) {
-			const def = variable.defs[0];
-			if (def === undefined || (def.type as string) !== 'ImportBinding') return undefined;
-			return def.node.type === AST_NODE_TYPES.ImportSpecifier ? def.node : undefined;
-		}
-		current = current.upper;
-	}
-	return undefined;
-}
-
-function importNamespaceOrDefault(identifier: TSESTree.Identifier, context: TSESLint.RuleContext<'forbidden', []>): boolean {
-	let current: ReturnType<TSESLint.SourceCode['getScope']> | null = context.sourceCode.getScope(identifier);
-	while (current) {
-		const variable = current.set.get(identifier.name);
-		if (variable) {
-			const def = variable.defs[0];
-			if (def === undefined || (def.type as string) !== 'ImportBinding') return false;
-			return def.node.type === AST_NODE_TYPES.ImportNamespaceSpecifier || def.node.type === AST_NODE_TYPES.ImportDefaultSpecifier;
-		}
-		current = current.upper;
-	}
-	return false;
+	return { decl: undefined, spec: undefined, nsOrDefault: false };
 }
 
 function reactEffectFromCallee(context: TSESLint.RuleContext<'forbidden', []>, callee: TSESTree.Expression): string | undefined {
 	if (callee.type === AST_NODE_TYPES.Identifier) {
-		const decl = importDeclarationOf(callee, context);
-		const spec = importSpecifierNamed(callee, context);
+		const { decl, spec } = importBinding(callee, context);
 		if (!decl || !spec || typeof decl.source.value !== 'string' || !isReactSource(decl.source.value)) return undefined;
 		const original = importedName(spec);
 		return original && effects.has(original) ? original : undefined;
 	}
-	if (
-		callee.type === AST_NODE_TYPES.MemberExpression
-		&& callee.object.type === AST_NODE_TYPES.Identifier
-		&& ((callee.computed && callee.property.type === AST_NODE_TYPES.Literal && typeof callee.property.value === 'string' && effects.has(callee.property.value))
-			|| (!callee.computed && callee.property.type === AST_NODE_TYPES.Identifier && effects.has(callee.property.name)))
-	) {
-		const hook = callee.computed && callee.property.type === AST_NODE_TYPES.Literal ? callee.property.value : (callee.property as TSESTree.Identifier).name;
-		const decl = importDeclarationOf(callee.object, context);
-		if (!decl || typeof decl.source.value !== 'string' || !isReactSource(decl.source.value)) return undefined;
-		if (!importNamespaceOrDefault(callee.object, context)) return undefined;
+	if (callee.type === AST_NODE_TYPES.MemberExpression && callee.object.type === AST_NODE_TYPES.Identifier) {
+		const hook = !callee.computed && callee.property.type === AST_NODE_TYPES.Identifier && effects.has(callee.property.name)
+			? callee.property.name
+			: callee.computed && callee.property.type === AST_NODE_TYPES.Literal && typeof callee.property.value === 'string' && effects.has(callee.property.value)
+				? callee.property.value
+				: undefined;
+		if (!hook) return undefined;
+		const { decl, nsOrDefault } = importBinding(callee.object, context);
+		if (!decl || !nsOrDefault || typeof decl.source.value !== 'string' || !isReactSource(decl.source.value)) return undefined;
 		return hook;
 	}
 	return undefined;
 }
 
 function reactModuleFromSource(source: TSESTree.Node | null | undefined): string | undefined {
-	if (source?.type === AST_NODE_TYPES.Literal && typeof source.value === 'string' && isReactSource(source.value)) return source.value;
-	return undefined;
+	return source?.type === AST_NODE_TYPES.Literal && typeof source.value === 'string' && isReactSource(source.value) ? source.value : undefined;
 }
 
 function denyReactEdge(context: TSESLint.RuleContext<'forbidden', []>, node: TSESTree.Node, source: TSESTree.Node | null | undefined, kind: string): void {
@@ -214,10 +193,8 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 			ExportNamedDeclaration(node) {
 				if (!node.source || isFramework(file) || node.exportKind === 'type') return;
 				if (!reactModuleFromSource(node.source)) return;
-				const valueSpecs = node.specifiers.filter((spec) => spec.exportKind !== 'type');
-				if (valueSpecs.length === 0) return;
-				for (const spec of valueSpecs) {
-					const name = spec.local.type === AST_NODE_TYPES.Identifier ? spec.local.name : undefined;
+				for (const spec of node.specifiers.filter((s) => s.exportKind !== 'type')) {
+					const name = exportLocalName(spec);
 					if (name && effects.has(name)) denyEffectImport(spec, name);
 					else report(context, spec, 'react', `React re-export is allowed only in framework owner ${WEB_OWNERS.framework}; keep Feature barrels free of raw React surfaces`);
 				}
@@ -231,19 +208,14 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 				if (node.moduleReference.type === AST_NODE_TYPES.TSExternalModuleReference) denyReactEdge(context, node, node.moduleReference.expression, 'import');
 			},
 			CallExpression(node) {
-				if (node.callee.type === AST_NODE_TYPES.Identifier && node.callee.name === 'require') {
-					denyReactEdge(context, node, node.arguments[0], 'require');
-				}
+				if (node.callee.type === AST_NODE_TYPES.Identifier && node.callee.name === 'require') denyReactEdge(context, node, node.arguments[0], 'require');
 				if (isFramework(file)) return;
 				const hook = reactEffectFromCallee(context, node.callee);
-				if (!hook) return;
-				report(context, node, hook, `${hook} is allowed only in framework owner ${WEB_OWNERS.framework}; expose a named framework hook instead of raw effects in ${layer?.kind ?? 'renderer'} code`);
+				if (hook) report(context, node, hook, `${hook} is allowed only in framework owner ${WEB_OWNERS.framework}; expose a named framework hook instead of raw effects in ${layer?.kind ?? 'renderer'} code`);
 			},
 			Identifier(node) {
 				if (!domGlobals.has(node.name) || hostOrFramework(file)) return;
 				const reference = context.sourceCode.getScope(node).references.find((r) => r.identifier === node);
-				// Value references only: type names, keys, members and Host-port bindings stay allowed.
-				// Ambient declare shadows do not count as runtime bindings.
 				if (!reference?.isValueReference) return;
 				const defs = reference.resolved?.defs ?? [];
 				if (defs.length > 0 && !defsAreOnlyAmbient(defs)) return;
@@ -251,9 +223,9 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 			},
 			MemberExpression(node) {
 				if (hostOrFramework(file)) return;
-				const method = memberMethodName(context, node);
-				if (!method || (!exclusiveMutators.has(method) && !ambiguousMutators.has(method))) return;
-				if (!isDomMutationCall(context, node, method)) return;
+				const methods = memberMethodNames(context, node);
+				const method = methods.find((name) => allMutators.has(name) && isDomMutationCall(context, node, name));
+				if (!method) return;
 				report(context, node.property, method, `DOM mutation via ${method} is allowed only in Host/framework adapters (${WEB_OWNERS.host}); keep Feature UI declarative`);
 			},
 			JSXAttribute(node) {
