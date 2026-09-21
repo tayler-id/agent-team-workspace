@@ -152,7 +152,7 @@ test('renderer footguns: effects only in framework; browser APIs only in host or
 }, 120_000);
 
 test('effect ownership closes aliases barrels dynamic imports and re-exports without rejecting locals', async () => {
-	const deny = async (code: string, needle = owners.framework) => expect(await has(code, feature, 'agora/renderer-footgun', needle)).toBe(true);
+	const deny = async (code: string, needle: string = owners.framework): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun', needle)).toBe(true); };
 	await deny("import React from 'react'; const { useEffect } = React; export function Card(): null { useEffect(() => undefined, []); return null; }");
 	await deny("import * as R from 'react'; const { useLayoutEffect } = R; export function Card(): null { useLayoutEffect(() => undefined, []); return null; }");
 	await deny(effectCard("import { useEffect } from 'react'; const eff = useEffect;", 'eff'), 'useEffect');
@@ -167,7 +167,7 @@ test('effect ownership closes aliases barrels dynamic imports and re-exports wit
 }, 120_000);
 
 test('browser globals require unresolved references; Host ports and ordinary names stay allowed', async () => {
-	const allow = async (code: string) => expect(await has(code, feature, 'agora/renderer-footgun')).toBe(false);
+	const allow = async (code: string): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun')).toBe(false); };
 	await allow('export const read = (props: { location: string }): string => props.location;');
 	await allow('export const read = (props: { location: string }): string => { const { location } = props; return location; };');
 	await allow('export const ports = { fetch: (u: string): string => u };');
@@ -194,8 +194,8 @@ test('ambient declare shadows cannot hide browser globals', async () => {
 }, 120_000);
 
 test('DOM mutation is receiver-aware including computed and union keys; ordinary writers stay allowed', async () => {
-	const allow = async (code: string) => expect(await has(code, feature, 'agora/renderer-footgun')).toBe(false);
-	const deny = async (code: string) => expect(await has(code, feature, 'agora/renderer-footgun', 'DOM mutation')).toBe(true);
+	const allow = async (code: string): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun')).toBe(false); };
+	const deny = async (code: string): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun', 'DOM mutation')).toBe(true); };
 	await allow('export const q = (p: URLSearchParams, v: string): void => { p.append("q", v); };');
 	await allow('export const h = (x: Headers): void => { x.append("a", "b"); };');
 	await allow('export const drop = (store: { remove: (id: string) => void }, id: string): void => { store.remove(id); };');

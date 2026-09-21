@@ -100,7 +100,8 @@ function memberMethodNames(context: TSESLint.RuleContext<'forbidden', []>, membe
 
 function nodeIsDeclare(node: TSESTree.Node | null | undefined): boolean {
 	if (!node || !('declare' in node)) return false;
-	return Reflect.get(node, 'declare') === true;
+	const flag: unknown = Reflect.get(node, 'declare');
+	return typeof flag === 'boolean' ? flag : false;
 }
 function defsAreOnlyAmbient(defs: readonly { type: string; node: TSESTree.Node; parent?: TSESTree.Node | null }[]): boolean {
 	return defs.length === 0 || defs.every((def) => nodeIsDeclare(def.parent) || nodeIsDeclare(def.node));
