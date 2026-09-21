@@ -40,3 +40,5 @@ Existing roots and planned modules have [discoverable homes](repository.md). The
 A production mutation will validate a command ID and expected revision, commit current state, event, audit and receipt together, and deliver only committed events. A duplicate command with identical input returns its original receipt. Reusing the ID with different input is a conflict. Sequence counters are per stream, not timestamps or a global clock.
 
 Those production routes are planned. The fixture proves only scoped counter/event transactions and one-winner claims. Read [data boundaries](memory.md), [authorization](authorization.md), and [operations](operations.md) before treating the map as a deployment recipe.
+
+This page describes the service topology. [The Agora application architecture](app-architecture.md) is a separate, narrower contract for how product code inside the Browser row above is organized into Features, not a replacement for this table.

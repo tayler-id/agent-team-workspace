@@ -14,9 +14,9 @@ The first audience is a trusted team of two to five developers. One deployment h
 
 | Stage | Authorized scope | Release boundary |
 | --- | --- | --- |
-| S1, first runnable release | Executable test-first foundation, portable contracts, hosted browser center, invitations, registered existing projects, rooms and threads, selected-record answers, bounded owner-machine work, evidence, approved draft publication, human review and merge | AC00 and AC13 through AC15 qualify the foundation/boundaries; two real accounts on two machines complete AC01 through AC12 |
-| S2, later stage | Create projects from conversation, GitHub provisioning, declarative image builds, E2B microVM adapter, active persistent project-main agents, reviewed project knowledge, local/cloud parity, one external coding-agent adapter, native Swift client | AC20 through AC26 |
-| S3, later stage | Observer capture and knowledge proposals, cross-project promotion, operational hardening, optional one-way Slack notifications | AC30 through AC32 |
+| S1, first runnable release | Executable test-first foundation, portable contracts, hosted browser center, invitations, registered existing projects, rooms and threads, selected-record answers, bounded owner-machine work, evidence, approved draft publication, human review and merge | AC00 and AC13 through AC15 qualify the foundation/boundaries; AC16 qualifies the Agora application architecture's feature-discovery and Client/Host boundaries; two real accounts on two machines complete AC01 through AC12 |
+| S2, later stage | Create projects from conversation, GitHub provisioning, declarative image builds, E2B microVM adapter, active persistent project-main agents, reviewed project knowledge, local/cloud parity, one external coding-agent adapter, native Swift client, conversational agent creation with per-agent isolated environments | AC20 through AC27 |
+| S3, later stage | Observer capture and knowledge proposals, cross-project promotion, operational hardening, optional one-way Slack notifications, the built-in Bug Agent role | AC30 through AC33 |
 
 Foundation work is part of S1, not a separate product release. U01a through U01d qualify repository/contracts/gates, fixture/trusted checks, backup/restore, and the selected React client in separate reviewable milestones. No substantive feature or write-enabled agent work starts before the R22 foundation gate passes. Only code needed to build and test this foundation may precede that gate. No task after the S1 release gate belongs in the initial queue.
 
@@ -150,6 +150,10 @@ An operator bootstraps the first workspace owner through a one-use command on th
 | Observer | Project-scoped service principal, S3 | Read opted-in project conversations and propose claims/knowledge. No task execution or knowledge activation |
 | Worker machine | Device principal bound to one human, or a cloud pool service principal | Claim only eligible assigned runs, upload evidence, report facts |
 | Native client device | Revocable public-client session of a human, separate from worker identity | Same human actions and current-role checks as browser, with scoped tokens and recent-auth proof; no execution authority from client installation |
+| Created agent | Stable identity scoped to one project/room, with its own isolated environment, S2 | Run its approved routine packs and automations inside its granted tools, network policy, and credentials; no authority beyond its creation approval |
+| Bug Agent | Built-in created-agent role, read-only by default, S3 | Reproduce and report defects with cited evidence; propose a bounded repair task; cannot approve, merge, or authorize its own fix |
+
+R26 defines the conversational creation flow, per-agent environment, and the Bug Agent role in full; this table only fixes their principal identity and boundary.
 
 An agent has an audit identity but no interactive login and no independent ambient authority. Effective reads are the intersection of caller access, agent grants, selected scope, and the destination room audience. A center answer posted in a general room cannot reveal project-only records, even if its requester can read those records. Such a question must move to the project room.
 
@@ -528,6 +532,7 @@ This matrix owns consequential-action boundaries. Chat text, agent messages, web
 | Register existing repository | Workspace owner and verified repository maintainer | Exact immutable repository identity and policy read-back |
 | Create repository/install App | Workspace owner and GitHub organization administrator | Exact proposal and permission set, separate integration consent |
 | Change policy, egress, template, provider, secret, or budget | Project maintainer within platform caps; workspace owner for platform changes; credential owner for their account | Versioned preview. R2 review for code/config changes. No agent activation |
+| Propose/confirm new agent | Project maintainer proposes; a second eligible human within the requested scope confirms | Exact routine packs, automations, tools, network policy, credential references, limits, and recurring cost preview under R26; no provisioning or spend before confirmation |
 | Activate knowledge | Project maintainer | Evidence, scope, version, conflicts, review date |
 | Enable observer | Project maintainer | Room audience, budget, stop behavior, visible notice |
 | Cross-project promotion | Source maintainer and workspace owner | New redacted record and target audience |
@@ -654,6 +659,7 @@ No criterion is currently claimed as passed. Each row is a future release gate. 
 | AC13 | Selected React client meets ordinary production fitness budgets | LV13. Run the R23 fixture with virtualization, keyboard, VoiceOver, both viewports, reconnect, memory/update-isolation and production bundle/latency probes; retain defect counts and fix all gate failures | U01d, U09 |
 | AC14 | Language-neutral contracts and standalone worker are real boundaries | LV14. Generate/compile TypeScript and Swift consumers, run golden HTTP/event/CLI/signature vectors and drift negatives; install worker on clean supported hosts without Node and reject a forbidden center import | U01a, U06 |
 | AC15 | Native human sessions cannot borrow worker authority | LV15. Use the Swift client fixture to authorize through the system browser, poll/slow-down, refresh/replay, revoke, reject wrong audience and worker token approval, then require fresh exact-action step-up | U02 |
+| AC16 | The Agora application architecture's feature-discovery and Client/Host boundaries are mechanical | LV16. Add a Feature outside its owned directory, hand-edit the generated Entrypoint/Timeline Card inventory instead of adding the reserved file, import one Feature from another without a declared contract, write durable timeline state from a component, and call a browser global outside the Host; each attempt fails at lint or compile with an error naming the supported owner, then disabling the guard turns the same assertion red | U20, U21, U22, U23 |
 | AC20 | Project creation converges under crash and least privilege | LV20. Approve disposable private project; interrupt after remote create; resume to one repository/room/main-agent; wrong installation and occupied name fail closed | U10 |
 | AC21 | Declarative environment cold build and sandbox isolation work | LV21. Cold-build OCI, run in fresh E2B guest, deny host hooks/secrets/egress, destroy guest, delete snapshot cache and rebuild | U11, U12 |
 | AC22 | Persistent main agent reconstructs approved project context | LV22. Create decision and active lesson, restart service, ask project main agent for cited rationale; dispute/invalidate lesson and prove it is absent from new context | U13 |
@@ -661,9 +667,11 @@ No criterion is currently claimed as passed. Each row is a future release gate. 
 | AC24 | Cloud recovery has no abandoned authority or unlimited bill | LV24. Interrupt allocation, lose runner, expire budget, and make destroy unavailable; reconcile exact IDs, show unconfirmed resources, enforce provider TTL and fresh-run recovery | U12, U14 |
 | AC25 | A real external coding agent obeys the common contract | LV25. Complete a bounded fixture change through the pinned external CLI; force cancellation, malformed events, attempted host/credential/network bypass and stale evidence; require denials, preserved proof and unchanged publication approval | U18 |
 | AC26 | Native client delivers the human workflow without host authority | LV26. Two accounts use signed test SwiftUI builds on Apple hardware for login, conversation/replay, evidence and subject-bound approval; verify keyboard/VoiceOver, revoke, bridge denial, packaging and parity against browser vectors | U19 |
+| AC27 | Conversational agent creation previews its plan and isolates each agent | LV27. Propose an agent from a room, confirm with a second eligible human, and inspect the exact permissions/provider/cost/lifecycle preview before any spend; two agents never share a mutable environment; pause/resume/snapshot/reset/archive/destroy each leave an auditable state; installing an unsigned or over-broad marketplace routine denies | U24 |
 | AC30 | Observer and promotion preserve provenance and human authority | LV30. Enable observer, replay batch, edit source, preserve disagreement, activate with human review, promote a redacted multi-project lesson, revoke and prove retrieval exclusion | U15 |
 | AC31 | Operations and deletion are recoverable and auditable | LV31. Restore, migrate/rollback-compatible deploy, export audit, archive, delete approved fixture data with hold test, reconcile external resources, verify tombstones and alerts | U16 |
 | AC32 | Optional bridge is a notification path, never authority | LV32. Explicitly install Slack bot, mirror one approved card/link, duplicate delivery, revoke installation, and prove Slack text/buttons cannot launch, approve, or expose another project | U17 |
+| AC33 | The Bug Agent finds and cites defects without gaining write authority | LV33. Reproduce a seeded defect and post a finding citing exact revision, environment, routine version, reproduction steps, logs, a screenshot, affected path, severity and confidence; repeat the same defect and observe deduplication; confirm no administration, production, merge or broad GitHub credential is held; a human approves a bounded repair task through the ordinary evidence and review path with the Bug Agent excluded as approver and reviewer | U25 |
 
 ## R20. Deferred capabilities and promotion triggers
 
@@ -777,3 +785,79 @@ Worker claims match every `required_capabilities` entry and exact `execution_tar
 S2 U18 qualifies one real external coding-agent CLI through a process adapter, starting with Codex CLI's structured noninteractive stream. The public contract is AgentAdapter, not that vendor's output format. U01a/U04 test a fake external process against the same adapter semantics before model writes. Map versioned text/action/elicitation/result/error events, require bounded tools and output, cooperative cancellation plus forced process-tree cleanup, exact-head evidence and explicit capability negotiation. The conformance suite must prove no host-shell, credential, delegation, network or publication bypass. An external CLI may run only inside a qualified environment using a run-scoped outside-guest credential broker; if its supported authentication/tool controls cannot satisfy this, the adapter remains unavailable and AC25 blocks rather than weakening policy. User-configured native CLI paths and automatic updates are forbidden. Pin and verify the exact distribution before each enrollment/upgrade.
 
 Knowledge U13 depends on S1 conversation/decisions and review, not a cloud account or newly provisioned repository. Observer U15 depends on U13, with separate S3 authorization. Provisioning/cloud U10-U12/U14 and knowledge/native/adapters can advance on separate later-stage tracks. Local and cloud execution still share one human-owned RunSpec and evidence authority.
+
+## R25. Agora application architecture
+
+Agora's product code follows one application architecture with five owned nouns: Feature, Entrypoint, Timeline Card, Client, and Host. This section is the mechanical contract those nouns satisfy. It governs `apps/web`, `apps/center` route composition, and any future renderer; it does not replace R21's package-level import table, which still governs Contracts, Domain, Client core, Worker, and Storage. [The research basis](research-basis.md#agora-application-architecture-provenance) records where the five-noun shape came from and why Rust is not part of it.
+
+### The five nouns
+
+| Noun | Owns | Discovered from | Must not own |
+| --- | --- | --- | --- |
+| Feature | One directory holding everything that implements one product capability | Nothing outside its own directory; a Feature is a filesystem fact, not a registry row | Another Feature's files; a direct Host or transport call |
+| Entrypoint | One reserved file naming how its Feature is reached: a route, a command, or an agent-mention target | A build-time scan for the reserved filename inside each Feature directory | A hand-edited router or command table outside the Feature |
+| Timeline Card | One reserved file naming how its Feature renders into the room timeline | The same build-time scan, a separate reserved filename | Durable writes; direct DOM or browser-global access |
+| Client | The one writer of durable browser-side state for the whole application, exposed only through named hooks and named commands | Not discovered; there is exactly one, outside any Feature directory | A second copy of the same durable value held in component-local state |
+| Host | The one typed boundary wrapping every browser global and transport call the application makes | Not discovered; there is exactly one, outside any Feature directory | Feature code calling `fetch`, a WebSocket, `document`, or `window` directly |
+
+A Feature is the unit R11 sizes a change against and the unit R22's feature map already requires paths and scenarios for. Entrypoint and Timeline Card make that map generatable instead of hand-maintained: a task that adds a Feature without its reserved files fails discovery before it fails review.
+
+### Mechanical contract
+
+- Feature paths follow one conventional shape, a package-relative `features/<name>/` directory; a Feature outside that shape is a build error, not a style comment.
+- Entrypoints and Timeline Cards are discovered at build time from each Feature's reserved filenames. A generated, drift-checked inventory replaces hand-edited per-feature rows in the site inventory and feature map; a manually added row that disagrees with the generated inventory fails the same way schema drift already fails under R21.
+- The framework layer (Client, Host, and shared rendering primitives) and the package layer under R21 never import a Feature. A Feature may import the framework layer, generated contracts, and its own declared dependencies on another Feature; an undeclared Feature-to-Feature import fails the same mechanical check that already rejects a domain-to-Hono import.
+- A component cannot write durable timeline state directly or call a browser global or the transport layer directly. Both paths run only through the Client's named hooks and commands, or through the Host's one typed interface.
+- `.ts` and `.tsx` files receive the same import-boundary coverage; a renderer file is not exempt because it has no server counterpart.
+- Every check above fails with an error naming the file's supported owner and the sanctioned alternative, not only the violated rule ID.
+- An exception is a narrow, explicit record naming the exact path and symbol, its rationale, its owner, an approver who did not author the change, an expiry date, and a compensating test that fails if the exception is silently widened. It is reviewed as an architecture change, not merged as an ordinary diff.
+- Every rule above registers a guard-negative fixture under R22: the denied input must turn red when its guard is disabled, the same evidence R22 already requires for existing boundaries.
+- These checks run at the exact head under CI, not only on a contributor's machine; a stale local pass does not satisfy the contract.
+- A Bugbot-class reviewer may flag a violation but is a non-author reviewer like any other under R11. It cannot waive the compiler, lint, tests, CI, or the human merge authority in R14.
+
+### Illustrative shapes
+
+The Client and Host are the two singular nouns; sketch their shape the way R03 sketches `Control` and `ExecutionAdapter`. These are specification signatures, not source files.
+
+```ts
+interface Client {
+	useRoom(id: RoomId): RoomSnapshot;      // named hook, read-only projection
+	useDraft(id: RoomId): DraftState;
+	sendMessage(command: SendMessage): Promise<CommandReceipt>; // named command, the only write path
+}
+interface Host {
+	fetch(request: HostRequest): Promise<HostResponse>;
+	subscribe(topic: HostTopic, handler: HostEventHandler): HostUnsubscribe;
+	now(): HostClock;
+}
+```
+
+A concrete Feature directory example and the reserved filenames themselves belong in the living documentation site, so a developer sees real names next to the rule; this section fixes the contract those names must satisfy.
+
+### Current state and stack
+
+No part of this architecture is implemented. `.ts` import boundaries and the framework/package-never-imports-application rule are enforced today under R21's existing table; `.tsx` coverage, Feature/Entrypoint/Timeline Card discovery, the Client's one-writer boundary, and a typed Host interface are not. Naming this architecture, closing its stack choice, and sequencing its migration is this design task's whole scope; the migration units in [the reading and dependency reference](implementation-plan.md#appendix-d-reading-and-dependency-reference) build it.
+
+This architecture is built in React 19, TypeScript, and Node 24, over the existing PostgreSQL 18 record and the R21 portable contracts; the wider system already selects these and this section selects nothing new for them. Rust is not part of the application architecture and none is planned. [The research basis](research-basis.md#client-language-and-contract-review) records Rust as a viable narrow component for a later, concretely justified case, not a rejected or disparaged option.
+
+## R26. Conversational agent creation and the Bug Agent role
+
+This is a named, specified S2/S3 capability with its own acceptance criteria, not an open-ended R20 deferred trigger. No part of it is implemented.
+
+### Conversational agent creation
+
+From a room, a human proposes a new agent and a second eligible human confirms it, following R14's approval pattern. A proposal fixes a stable identity, its role, project and room scope, one or more selected versioned routine packs, its automations (manual, event-triggered, or scheduled), an environment template, its tool allowlist, network policy, credential references, resource and spend limits, a persistence/lifetime policy, and a notification policy. Before provisioning or spending anything, Agora shows the exact plan: permissions granted, the resource provider, recurring cost, and any destructive lifecycle effect, the same explicit confirmation R14 already requires for cloud execution and project creation.
+
+Every created agent receives its own isolated, persistent environment, a Linux desktop VM or an equivalent dedicated environment, with its own browser, filesystem, terminal, and only its approved tools. Agents never share a mutable computer, the same rule R08 already applies to human worker machines. Provision, pause, resume, snapshot, reset, archive, and destroy are explicit, auditable states on that environment, following the same state-machine discipline as R06's other lifecycles: no state is inferred from a missing heartbeat.
+
+A human can inspect, edit, disable, and immediately stop every routine and automation assigned to an agent. An automation cannot expand the agent's authority beyond what its creation approval granted; a routine that requests a wider tool, network, or credential scope requires a fresh approval under R14, not a silent grant at run time. A marketplace routine pack carries signed provenance and a permission manifest diffed against the agent's current grant before installation; an unsigned or over-broad pack is rejected the same way an unapproved provider is rejected under R16.
+
+This depends on the existing worker (R08), environment (R09), and agent-identity (R04) work, plus a routine-pack marketplace and the S2 cloud/local execution parity (R09, U14), none of which exist yet. The marketplace itself has no milestone yet; this section records that dependency honestly rather than scheduling a capability that has not been specified.
+
+### The Bug Agent role
+
+The Bug Agent is a built-in created-agent role, distinct from the trusted CI reviewer already defined in R11 and R22: CI proves a candidate's own checks; the Bug Agent looks for defects nobody asked it to find. It is read-only by default. It receives no central-administration, production, merge, or broad GitHub credential; the creation contract above already forbids granting authority beyond an approval, and this role's default approval grants none of those.
+
+Every finding cites the exact revision, environment, and routine version it ran against, its reproduction steps, its logs, and a screenshot or recording of the affected user path, plus its own severity and confidence. A finding is deduplicated against prior findings for the same project before it is posted; a repeated report of the same defect updates the existing record instead of creating a duplicate one. The Bug Agent cannot hide a failure it observed or authorize its own fix. A human may approve a bounded repair task from a Bug Agent's finding; that task follows the ordinary R11 evidence and independent-review path like any other task, with the Bug Agent barred from being that task's approver or its independent reviewer.
+
+This depends on conversational agent creation above and the same worker/environment/agent-identity/marketplace/parity milestones, and is not scheduled ahead of them.

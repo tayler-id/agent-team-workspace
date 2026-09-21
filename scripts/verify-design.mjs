@@ -40,13 +40,16 @@ for (const file of documents) {
 	assert(!fence, `${file}: unclosed fence`);
 	for (const m of text.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) checkLink(file, m[1]);
 }
+const duneAllowed = new Set(['docs/research-basis.md', 'docs/site/research.md']);
+const duneFiles = [...documents, ...fs.readdirSync('docs/site').filter(f => f.endsWith('.md')).map(f => `docs/site/${f}`)];
+for (const file of duneFiles) if (!duneAllowed.has(file)) assert(!/\bDune\b/.test(read(file)), `${file}: architecture must not be labeled Dune`);
 const spec = read('docs/technical-spec.md');
 const plan = read('docs/implementation-plan.md');
 const breakdown = read('docs/task-breakdown.md');
 const requirements = new Set([...spec.matchAll(/^## (R\d{2})\./gm)].map(m => m[1]));
-assert.equal(requirements.size, 24, 'requirement inventory');
+assert.equal(requirements.size, 26, 'requirement inventory');
 const criteria = new Map([...spec.matchAll(/^\| (AC\d{2}) \| (.+)$/gm)].map(m => [m[1], m[2]]));
-assert.equal(criteria.size, 26, 'acceptance inventory');
+assert.equal(criteria.size, 29, 'acceptance inventory');
 for (const [id, row] of criteria) assert(row.includes(`LV${id.slice(2)}.`), `${id}: no live scenario`);
 const units = new Map();
 const builds = new Map();
@@ -79,7 +82,7 @@ for (const m of plan.matchAll(/^## (.+) \((U\d{2}[a-d]?)\)\n([\s\S]*?)(?=^## )/g
 		proofOwners.set(proof, id);
 	}
 }
-assert.equal(units.size, 22, 'unit inventory');
+assert.equal(units.size, 28, 'unit inventory');
 const graph = new Map();
 for (const [id, unit] of units) {
 	for (const dependency of unit.deps) {
@@ -142,7 +145,7 @@ for (const m of breakdown.matchAll(/^### (agora-s[123]-[a-z0-9-]+)\n([\s\S]*?)(?
 	graph.get(unitId).push(name);
 	graph.set(name, [...parents, ...gates]);
 }
-assert.equal(tasks.size, 66, 'task inventory');
+assert.equal(tasks.size, 72, 'task inventory');
 for (const [id, build] of builds) assert.equal(build.owners.length, 1, `${id}: Build must have exactly one task owner`);
 for (const [id, unit] of units) assert(unit.tasks.length, `${id}: no tasks`);
 for (const [name, task] of tasks) for (const parent of task.parents) {

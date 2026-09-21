@@ -1,0 +1,28 @@
+{
+	"schema_version": "agora.evidence/v1",
+	"task": "agora-app-architecture-docs",
+	"purpose": "foundation_fixture",
+	"scope": "documentation and governing-contract only; no application source, dependency, or package rename",
+	"changed_files": 16,
+	"meaningful_lines_added": 709,
+	"meaningful_lines_removed": 22,
+	"r11_note": "crosses the 200-line/8-file default scope-rationale threshold; stays well below the 1000-line/25-file block threshold; risk class R0, documentation",
+	"checks": {
+		"pnpm docs:check": "pass, see docs-check.log",
+		"node scripts/verify-design.mjs": "pass, see verify-design.log",
+		"node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md": "pass, see plan-check.log",
+		"git diff --check": "pass, no whitespace errors"
+	},
+	"pre_existing_failure_not_fixed": {
+		"command": "node scripts/test-design-checks.mjs",
+		"case": "baseline",
+		"reason": "its isolated fixture does not copy the apps/ tree, and decision D78 (dated 2026-09-21, before this task) cites apps/center/src/app.ts as evidence; reproduces identically on unmodified HEAD 95f3527",
+		"disposition": "left unmodified per instruction; scripts/test-design-checks.mjs is byte-identical to HEAD in this change",
+		"log": "pre-existing-test-design-checks.log"
+	},
+	"not_in_scope": [
+		"eslint.config.js / scripts/boundary-policy.ts changes (U20-U23 define the future contract only)",
+		"application source, new dependencies, package renames",
+		"final enforcement of the R25 mechanical contract"
+	]
+}

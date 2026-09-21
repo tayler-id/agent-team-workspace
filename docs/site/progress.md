@@ -56,6 +56,7 @@ flowchart TD
 - **Client synchronization isolation - Built**: Keep replay, ordering and retry decisions independent of the renderer. [Scope](synchronization.md). [packages/client-core/src/index.ts](../../packages/client-core/src/index.ts); [packages/client-core/test/sync.test.ts](../../packages/client-core/test/sync.test.ts); [packages/client-core/test/boundaries.test.ts](../../packages/client-core/test/boundaries.test.ts); [evidence/U01a/agora-s1-isolate-client-core/2-core/green.log](../../evidence/U01a/agora-s1-isolate-client-core/2-core/green.log)
 - **Local room contracts - In progress**: Fix the meaning of every room byte before any byte is stored; L1 of 5. [Scope](local-room.md). [contracts/schemas/local-room.schema.json](../../contracts/schemas/local-room.schema.json); [packages/domain/src/local-room/port.ts](../../packages/domain/src/local-room/port.ts); [apps/center/test/local-room.test.ts](../../apps/center/test/local-room.test.ts); [contracts/test/local-room.test.ts](../../contracts/test/local-room.test.ts); [evidence/local-room/contracts/outcome.json](../../evidence/local-room/contracts/outcome.json)
 - **Living documentation and progress atlas - In progress**: Make the system explain itself as each verified part lands. [Scope](authoring.md). [docs/implementation-plan.md](../../docs/implementation-plan.md)
+- **Agora application architecture - Planned**: Give every product Feature an owned folder, discovered rather than registered, behind a one-writer Client and a typed Host. [Scope](app-architecture.md). [docs/technical-spec.md](../../docs/technical-spec.md); [docs/research-basis.md](../../docs/research-basis.md)
 
 ## Release roadmap
 
@@ -71,6 +72,10 @@ flowchart LR
 - **U01b - Not started**: An engineer drives both real applications through their CLIs and cannot obtain a passing trusted result from forged or missing proof.
 - **U01c - Not started**: An operator restores the foundation on a separate host, proves its data and fences the old instance.
 - **U01d - Not started**: A user navigates a large room and failure/recovery cards in a responsive accessible client without authority confusion.
+- **U20 - Not started**: A renderer file that imports a storage or domain type, calls a browser global directly, or uses an unmediated effect fails lint with an error naming its supported owner.
+- **U21 - Not started**: Adding a Feature with its reserved files makes it appear in the generated inventory automatically, and hand-editing that inventory instead of adding the reserved file fails the same way schema drift already fails.
+- **U22 - Not started**: A component that holds durable timeline state in local state, or calls a browser global or transport directly, fails to build with an error naming the Client hook or Host method to use instead.
+- **U23 - Not started**: The local-room feature now lives in one discovered Feature folder, its generated inventory entry replaces its old hand-edited rows, and every test that passed before the move still passes after it.
 - **U02 - Not started**: Two invited humans sign in and see only rooms they may read; an owner can revoke a member and see active access end.
 - **U03 - Not started**: Two developers converse and search the same ordered history after reconnecting without duplicate messages or lost edits.
 - **U04 - Not started**: A developer asks the center about a recorded decision and receives a cited answer without giving the agent execution or private-room authority.
@@ -87,6 +92,7 @@ flowchart LR
 - **U12 - Not started**: A human launches a cloud task in a fresh microVM and sees evidence and confirmed destruction, or a precise unresolved cleanup state.
 - **U13 - Not started**: A project main agent answers after restart with cited approved decisions, and stale/disputed knowledge no longer enters operational context.
 - **U14 - Not started**: A developer chooses local or cloud explicitly and receives the same trustworthy review contract, while placement-specific trust and cost remain visible.
+- **U24 - Not started**: A maintainer proposes an agent from a room, a second eligible human confirms its exact plan before any spend, the agent receives its own isolated environment, and installing an over-broad or unsigned routine pack is rejected.
 - **U18 - Not started**: A developer can use one qualified existing coding agent without granting it new authority.
 - **U19 - Not started**: Two developers use a real native Mac client for the same human-governed workflow without acquiring local execution authority.
 
@@ -95,5 +101,6 @@ flowchart LR
 - **U15 - Not started**: A project conversation produces reviewable, attributed knowledge proposals without automatic truth or cross-project disclosure.
 - **U16 - Not started**: An operator can recover the center and explain every retained, deleted, or unresolved resource without hidden authority.
 - **U17 - Not started**: A requested Slack channel receives one approved notification linking to the authoritative Agora record, without becoming another control plane.
+- **U25 - Not started**: A Bug Agent reproduces a seeded defect, posts one cited finding, a repeat of the same defect updates that finding instead of duplicating it, and a human-approved repair task closes through the ordinary independent-review path.
 
 [Milestone authority](../implementation-plan.md). Status is owned only by `atlas.json`; the site and this companion are rendered from it.

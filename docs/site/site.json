@@ -25,6 +25,7 @@
       "title": "Build and operate",
       "pages": [
         {"id": "architecture", "title": "System architecture", "kind": "guide"},
+        {"id": "app-architecture", "title": "Agora application architecture", "kind": "feature"},
         {"id": "repository", "title": "Repository and tools", "kind": "guide"},
         {"id": "foundation", "title": "Repository foundation", "kind": "feature"},
         {"id": "test-first", "title": "Task proof admission", "kind": "feature"},

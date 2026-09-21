@@ -147,6 +147,16 @@
 			"scenarios": ["contracts/test/local-room.test.ts", "apps/center/test/local-room.test.ts", "scripts/probe-center.mjs"],
 			"platforms": ["node24", "swift6-macos"],
 			"owner": "local-room L1"
+		},
+		{
+			"id": "agora-application-architecture",
+			"documentation": "docs/site/app-architecture.md",
+			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "docs/technical-spec.md"],
+			"public": ["pnpm lint"],
+			"scenarios": ["packages/client-core/test/boundaries.test.ts"],
+			"fixtures": ["package-level import-boundary fixtures only; Feature/Entrypoint/Timeline Card discovery and the Client/Host boundary are not yet implemented"],
+			"platforms": ["node24"],
+			"owner": "U20"
 		}
 	]
 }

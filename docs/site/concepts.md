@@ -33,6 +33,11 @@ These are design concepts. Only the [fixture and contracts](atlas.md) exist at t
 | Context bundle | Authorized selected revisions with sources and omissions | Unbounded private agent memory |
 | Knowledge | Human-reviewed claim with applicability and expiry | Any sentence in chat |
 | Milestone | Task outcomes plus integration qualification | One completed task |
+| Feature | One owned directory implementing one product capability, discovered from reserved files | A shared root touched by many capabilities |
+| Entrypoint | A Feature's reserved file naming how it is reached | A hand-edited router entry |
+| Timeline Card | A Feature's reserved file naming how it renders into the room timeline | A component with unrestricted DOM access |
+| Client | The one writer of durable browser state, reached only through named hooks and commands | Component-local state holding the same value twice |
+| Host | The one typed boundary around every browser global and transport call | A component calling `fetch` or `document` directly |
 
 ## Think in attempts, not restarts
 
