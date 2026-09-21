@@ -123,7 +123,8 @@ const globals = domGlobals;
 export const importBoundaryRule: TSESLint.RuleModule<'forbidden'> = {
 	meta: { type: 'problem', schema: [], messages: { forbidden: '{{reason}}' } }, defaultOptions: [],
 	create(context) {
-		const { program } = ESLintUtils.getParserServices(context, true);
+		let program: ts.Program | null = null;
+		try { program = ESLintUtils.getParserServices(context, true).program; } catch { program = null; }
 		const file = context.filename;
 		const check = (node: TSESTree.Node, source: TSESTree.Node | null | undefined, typesOnly: boolean): void => {
 			const specifier = source?.type === AST_NODE_TYPES.Literal && typeof source.value === 'string' ? source.value : undefined;

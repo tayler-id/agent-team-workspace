@@ -77,6 +77,39 @@ function isDomMutationCall(context: TSESLint.RuleContext<'forbidden', []>, membe
 	return false;
 }
 
+/** Resolve MemberExpression method name, including computed string-literal keys (`n['appendChild']`, `n[k]` when k is a string literal type). */
+function memberMethodName(context: TSESLint.RuleContext<'forbidden', []>, member: TSESTree.MemberExpression): string | undefined {
+	if (!member.computed && member.property.type === AST_NODE_TYPES.Identifier) return member.property.name;
+	if (member.computed && member.property.type === AST_NODE_TYPES.Literal && typeof member.property.value === 'string') return member.property.value;
+	if (!member.computed) return undefined;
+	try {
+		const services = ESLintUtils.getParserServices(context, true);
+		const program = services.program;
+		if (program === null) return undefined;
+		const checker = program.getTypeChecker();
+		const tsProp = services.esTreeNodeToTSNodeMap.get(member.property);
+		const type = checker.getTypeAtLocation(tsProp);
+		if (type.isStringLiteral()) return type.value;
+		if (type.isUnion()) {
+			const literals = type.types.filter((part): part is ts.StringLiteralType => part.isStringLiteral());
+			if (literals.length === 1) return literals[0]?.value;
+		}
+	} catch { return undefined; }
+	return undefined;
+}
+
+function nodeIsDeclare(node: TSESTree.Node | null | undefined): boolean {
+	if (!node || !('declare' in node)) return false;
+	const flag: unknown = Reflect.get(node, 'declare');
+	return flag === true;
+}
+
+/** Ambient `declare` bindings shadow globals without a runtime binding; treat them as unresolved. */
+function defsAreOnlyAmbient(defs: readonly { type: string; node: TSESTree.Node; parent?: TSESTree.Node | null }[]): boolean {
+	if (defs.length === 0) return true;
+	return defs.every((def) => nodeIsDeclare(def.parent) || nodeIsDeclare(def.node));
+}
+
 function importDeclarationOf(identifier: TSESTree.Identifier, context: TSESLint.RuleContext<'forbidden', []>): TSESTree.ImportDeclaration | undefined {
 	let current: ReturnType<TSESLint.SourceCode['getScope']> | null = context.sourceCode.getScope(identifier);
 	while (current) {
@@ -210,14 +243,16 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 				if (!domGlobals.has(node.name) || hostOrFramework(file)) return;
 				const reference = context.sourceCode.getScope(node).references.find((r) => r.identifier === node);
 				// Value references only: type names, keys, members and Host-port bindings stay allowed.
-				if (!(reference && reference.isValueReference && !reference.resolved?.defs.length)) return;
+				// Ambient declare shadows do not count as runtime bindings.
+				if (!reference?.isValueReference) return;
+				const defs = reference.resolved?.defs ?? [];
+				if (defs.length > 0 && !defsAreOnlyAmbient(defs)) return;
 				report(context, node, node.name, `direct ${node.name} is allowed only in Host/framework adapters (${WEB_OWNERS.host}, ${WEB_OWNERS.framework}); Features and Client use Host ports`);
 			},
 			MemberExpression(node) {
-				if (node.property.type !== AST_NODE_TYPES.Identifier || hostOrFramework(file)) return;
-				const method = node.property.name;
-				if (!exclusiveMutators.has(method) && !ambiguousMutators.has(method)) return;
-				if (node.computed) return;
+				if (hostOrFramework(file)) return;
+				const method = memberMethodName(context, node);
+				if (!method || (!exclusiveMutators.has(method) && !ambiguousMutators.has(method))) return;
 				if (!isDomMutationCall(context, node, method)) return;
 				report(context, node.property, method, `DOM mutation via ${method} is allowed only in Host/framework adapters (${WEB_OWNERS.host}); keep Feature UI declarative`);
 			},

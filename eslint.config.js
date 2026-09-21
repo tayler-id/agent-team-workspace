@@ -8,9 +8,9 @@ import { rendererFootgunRule } from './scripts/renderer-policy.ts';
 assertArchitectureExceptionsValid();
 
 const guarded = [
-	'contracts/**/*.{ts,tsx,mts,cts,js,mjs,cjs}',
-	'packages/*/src/**/*.{ts,tsx,mts,cts,js,mjs,cjs}',
-	'apps/*/src/**/*.{ts,tsx,mts,cts,js,mjs,cjs}',
+	'contracts/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
+	'packages/*/src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
+	'apps/*/src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
 ];
 
 export default tseslint.config(
@@ -70,8 +70,17 @@ export default tseslint.config(
 			'agora/renderer-footgun': 'error',
 		},
 	},
+	// contracts plain JS keeps import-boundary from the guarded block but drops type-info-only public-types.
 	{
-		files: ['contracts/**/*.mjs'],
+		files: ['contracts/**/*.js'],
+		rules: {
+			'agora/public-types': 'off',
+			'agora/renderer-footgun': 'off',
+		},
+	},
+	// contracts mjs/cjs are ignored by the guarded block; attach import-boundary without redefining plugins on .js.
+	{
+		files: ['contracts/**/*.{mjs,cjs}'],
 		linterOptions: { noInlineConfig: true },
 		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule } } },
 		rules: { 'agora/import-boundary': 'error' },
