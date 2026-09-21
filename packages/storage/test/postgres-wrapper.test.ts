@@ -46,8 +46,8 @@ test.each(['deep-success', 'child-failure', 'missing-command', 'initdb-failure',
 		});
 		const code = await new Promise<number | null>(resolve => child.once('close', resolve));
 		console.error(JSON.stringify({ scenario, code, elapsed_ms: Date.now() - begin, output, diagnostic, descendants, neighbor: neighbor.identity, foreign: foreign.pid }));
+		expect(code, diagnostic).toBe(scenario === 'deep-success' ? 0 : scenario === 'child-failure' ? 7 : ['SIGINT', 'startup-cancel'].includes(scenario) ? 130 : ['SIGTERM', 'forced-cancel'].includes(scenario) ? 143 : 70);
 		expect(receipts.filter(record => record.outcome === 'allocated')).toHaveLength(1);
-		expect(code).toBe(scenario === 'deep-success' ? 0 : scenario === 'child-failure' ? 7 : ['SIGINT', 'startup-cancel'].includes(scenario) ? 130 : ['SIGTERM', 'forced-cancel'].includes(scenario) ? 143 : 70);
 		if (scenario === 'deep-success') expect(output.trim()).toBe('agora_app');
 		if (scenario.endsWith('timeout')) { expect(diagnostic).toContain('startup timeout'); expect(Date.now() - begin).toBeLessThan(5_000); }
 		if (scenario === 'initdb-timeout') expect(alive(Number(readFileSync(`${artifacts}/tool.pid`, 'utf8')))).toBe(false);
