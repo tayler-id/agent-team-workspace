@@ -3,14 +3,19 @@
   "task": "agora-s1-lint-application-architecture",
   "unit": "U20",
   "parent": "dc38b1078d797afb87744436a2a0c3f4ccb67950",
-  "head": "PENDING_B2_HEAD",
+  "head": "b0278725bfa7285304405e278fa4709ceca47669",
   "result": "pass",
   "summary": "B2 adds renderer foot-guns, architecture exceptions and residual mixed-union DOM mutation denials on top of B1 import ownership (D86/D87). Framework aliased-effect control restored. M14/M15 recorded as explicit limits.",
   "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
   "green": "evidence/U20/agora-s1-lint-application-architecture/green.log",
   "red_assertions": "B2 head tests fail on B1 parent dc38b1078d797afb87744436a2a0c3f4ccb67950 (12 failed renderer/exception cases; 4 B1 import cases still green)",
   "green_assertions": "Tests 16 passed (16)",
-  "commands": ["pnpm boundaries", "pnpm lint", "pnpm typecheck", "pnpm check"],
+  "commands": [
+    "pnpm boundaries",
+    "pnpm lint",
+    "pnpm typecheck",
+    "pnpm check"
+  ],
   "limits": [
     "No Client/Host runtime",
     "No Feature discovery",
