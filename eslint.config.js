@@ -1,7 +1,11 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import { assertArchitectureExceptionsValid } from './scripts/architecture-exceptions.ts';
 import { importBoundaryRule } from './scripts/boundary-policy.ts';
 import { publicTypesRule } from './scripts/public-types.ts';
+
+// Fail closed at config load: an invalid exceptions file must stop every lint run, not only runs that hit a violation.
+assertArchitectureExceptionsValid();
 
 const exts = '{ts,tsx,mts,cts,js,jsx,mjs,cjs}';
 const agoraPlugin = {

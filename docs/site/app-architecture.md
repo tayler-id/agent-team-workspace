@@ -2,11 +2,11 @@
 
 ## What it is
 
-The first landable mechanical slice of Agora's application architecture: Feature, Client, Host and framework **import ownership** enforced through the existing ESLint boundary owner rather than a second lint framework. It extends package import rules across guarded source extensions and reserves `apps/web` owners. Renderer foot-guns and structured architecture exceptions land in the follow-up B2 slice.
+Agora's application architecture mechanical boundaries: Feature, Client, Host and framework **import ownership** enforced through the existing ESLint boundary owner rather than a second lint framework. B1 extends package import rules across guarded source extensions and reserves `apps/web` owners. B2a adds a structured **architecture-exception registry**: the only way to let a named path import a named symbol past a guard. Renderer foot-guns land in the follow-up B2b slice.
 
 ## What it does
 
-`agora/import-boundary` rejects renderer imports of storage, domain implementation, server packages, `pg`, Hono and Drizzle, blocks every non-Feature importer (framework/client/host and un-owned `apps/web/src` folders) from importing product Features, requires Feature-to-Feature and Feature-or-other-to-framework/client/host edges to use public `index.ts` entrypoints so a two-hop relay through `apps/web/src/util` cannot bypass owners, keeps portable client-core free of application code, and rejects relative imports that leave `apps/web/src` (so `apps/web/test` or `apps/web/lib` relocation cannot bypass owner rules). Diagnostics name the supported owner or path. Guarded roots cover `.ts`, `.tsx`, `.mts`, `.cts`, `.js`, `.jsx`, `.mjs` and `.cjs` under packages/contracts/apps src trees and the entire `apps/web/**` tree, including contracts plain JS/CJS. `linterOptions.noInlineConfig` owns disable suppression so a comment cannot silence Agora import rules. `pnpm typecheck` includes `apps/web/tsconfig.json` and excludes `apps/web` from the root program so the DOM-aware lane is the only lane that compiles web sources.
+`agora/import-boundary` rejects renderer imports of storage, domain implementation, server packages, `pg`, Hono and Drizzle, blocks every non-Feature importer (framework/client/host and un-owned `apps/web/src` folders) from importing product Features, requires Feature-to-Feature and Feature-or-other-to-framework/client/host edges to use public `index.ts` entrypoints so a two-hop relay through `apps/web/src/util` cannot bypass owners, keeps portable client-core free of application code, and rejects relative imports that leave `apps/web/src` (so `apps/web/test` or `apps/web/lib` relocation cannot bypass owner rules). Diagnostics name the supported owner or path. Guarded roots cover `.ts`, `.tsx`, `.mts`, `.cts`, `.js`, `.jsx`, `.mjs` and `.cjs` under packages/contracts/apps src trees and the entire `apps/web/**` tree, including contracts plain JS/CJS. `linterOptions.noInlineConfig` owns disable suppression so a comment cannot silence Agora import rules. `pnpm typecheck` includes `apps/web/tsconfig.json` and excludes `apps/web` from the root program so the DOM-aware lane is the only lane that compiles web sources. Exceptions live only in `agora/architecture-exceptions.json`. A row names one exact file path, one exact symbol (a package, a relative target, an ambient global name or `dynamic-import`), one guard, a rationale, an owner, a different approver, a `YYYY-MM-DD` expiry and an existing compensating test. Wildcards, directories, expired rows, unknown guards and self-approval are rejected, and ESLint refuses to load at all while the committed file is invalid. A row covers every literal import form of its symbol on its path and nothing else.
 
 ## Why it exists
 
@@ -16,19 +16,21 @@ Unsafe Feature/Client/Host import shortcuts must fail in lint and tests, not in 
 
 ```flow
 Authoring | Write Feature, Client, Host or framework code under its reserved apps/web owner.
+Load | eslint.config.js validates agora/architecture-exceptions.json before any rule runs and fails closed on a bad row.
 Lint | ESLint runs agora/import-boundary on .ts/.tsx/.mts/.cts/.js/.jsx/.mjs/.cjs under guarded roots.
+Exception | Only a reviewed row with an exact path, symbol and guard lets one import through.
 Diagnostic | A rejection names the supported owner or public entrypoint, not only a rule id.
 Proof | packages/client-core/test/app-architecture.test.ts keeps positive, negative and guard-weakening fixtures.
 ```
 
-This B1 slice does not implement renderer foot-guns, architecture exceptions, Client/Host runtime, Feature discovery, product UI, Pretext or browser-shell migration. Owner paths are reserved in policy constants; extension and adversarial fixtures are generated at test runtime.
+These slices do not implement renderer foot-guns, Client/Host runtime, Feature discovery, product UI, Pretext or browser-shell migration. Owner paths are reserved in policy constants; extension and adversarial fixtures are generated at test runtime. The committed exception file is empty; the live-rule fixture writes rows into it and restores it byte for byte.
 
 ## Implementation status
 
-**Built for import-boundary ownership only.** Renderer foot-gun and exception rows follow in B2. No product Feature behavior ships here.
+**Built for import-boundary ownership (B1) and the exception registry (B2a).** Renderer foot-guns follow in B2b. No product Feature behavior ships here.
 
 ## Verification and proof
 
-Inspect [boundary policy](repo:scripts/boundary-policy.ts) and [fixtures](repo:packages/client-core/test/app-architecture.test.ts). Run `pnpm boundaries` and `pnpm lint`. Retained receipts live under `evidence/U20/agora-s1-lint-application-architecture/`.
+Inspect [boundary policy](repo:scripts/boundary-policy.ts), [exception validator](repo:scripts/architecture-exceptions.ts), [exceptions file](repo:agora/architecture-exceptions.json) and [fixtures](repo:packages/client-core/test/app-architecture.test.ts). Run `pnpm boundaries` and `pnpm lint`. B1 receipts live under `evidence/U20/agora-s1-lint-application-architecture/`; B2a receipts under its `b2a-exceptions/` folder.
 
 Next: [system architecture](architecture.md), [client synchronization](synchronization.md), and [development runbook](repo:docs/runbooks/development.md).
