@@ -2,10 +2,10 @@
   "schema_version": "agora.task-outcome/v1",
   "task": "agora-s1-lint-application-architecture",
   "unit": "U20",
-  "parent": "7c6038ca1a9fb221037a3cd76704384057dcd03e",
-  "head": "93104f72c5e2149ddee9d0040ef665c3dcf5a332",
+  "parent": "d7b192ee5a8a1cffb8b3b770f389d6f7575dc81e",
+  "head": "3da32d379b55fbde21daec3470ace2efb7845664",
   "result": "pass",
-  "summary": "Application architecture boundary lint covers .ts/.tsx, apps/web owners, renderer foot-guns and architecture exceptions with guard negatives.",
+  "summary": "Application architecture boundary lint covers .ts/.tsx, apps/web owners, renderer foot-guns and architecture exceptions with guard negatives. Rebased onto main 17fbf24 preserving P0c.",
   "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
   "green": "evidence/U20/agora-s1-lint-application-architecture/green.log",
   "red_assertions": "Tests 8 failed (8) with expected false to be true",
@@ -19,6 +19,7 @@
     "No Client/Host runtime",
     "No Feature discovery",
     "No product Features",
-    "Fixture Feature entrypoints only"
+    "Fixture Feature entrypoints only",
+    "Preserves P0c socket ownership"
   ]
 }

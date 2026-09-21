@@ -1,8 +1,8 @@
 # green.log (agora.red-green/v1)
-recorded_at: 2026-09-21T04:59:57.500Z
-parent: 7c6038ca1a9fb221037a3cd76704384057dcd03e
-head: 353d9af7754454c54ac8d802025f8c425e6c945b
-subject_revision: 353d9af7754454c54ac8d802025f8c425e6c945b
+recorded_at: 2026-09-21T05:06:14.504Z
+parent: d7b192ee5a8a1cffb8b3b770f389d6f7575dc81e
+head: 3da32d379b55fbde21daec3470ace2efb7845664
+subject_revision: 3da32d379b55fbde21daec3470ace2efb7845664
 test_patch_applied_to_subject: false
 test_patch_files: packages/client-core/test/app-architecture.test.ts
 test_patch_digest: sha256:f6bf9797a69ed46f3824d7892b62b5f4673ce67ceb8fa6194c236bd25b64b02c
@@ -13,11 +13,11 @@ expected: every assertion passes at the head (exit 0)
 observed_exit: 0
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-U2qC9z
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-zBah5g
 
 
  Test Files  1 passed (1)
       Tests  8 passed (8)
-   Start at  00:59:53
-   Duration  2.64s (tests 97%, import 2%)
+   Start at  01:06:10
+   Duration  2.79s (tests 97%, import 2%)
 
