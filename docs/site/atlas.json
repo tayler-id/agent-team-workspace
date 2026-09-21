@@ -1,11 +1,19 @@
 {
-  "revision": "541f2212403f13aef3d9d6623fc1e19b6778f514",
+  "revision": "b7a709f8be61afedf9ae4824c277c08d47a96f00",
   "date": "2026-09-21",
   "features": [
     {
-      "id": "postgres-socket", "title": "PostgreSQL socket ownership", "status": "In progress",
-      "why": "P0c A allocation and ownership proved; wrapper integration and lifecycle proof remain B/C.", "page": "foundation.md",
-      "proof": ["repo:scripts/postgres-socket.ts", "repo:packages/storage/test/postgres-socket.test.ts", "repo:evidence/ci/P0c/focused.log", "repo:evidence/ci/P0c/replay/green.log"]
+      "id": "postgres-socket",
+      "title": "PostgreSQL socket ownership",
+      "status": "In progress",
+      "why": "P0c A allocation and ownership proved; wrapper integration and lifecycle proof remain B/C.",
+      "page": "foundation.md",
+      "proof": [
+        "repo:scripts/postgres-socket.ts",
+        "repo:packages/storage/test/postgres-socket.test.ts",
+        "repo:evidence/ci/P0c/focused.log",
+        "repo:evidence/ci/P0c/replay/green.log"
+      ]
     },
     {
       "id": "task-proof",

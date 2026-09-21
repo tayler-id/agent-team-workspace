@@ -115,7 +115,6 @@ For P0c A, replay the test-only allocation parent with the focused baseline and 
 node scripts/record-red-green.mjs --parent c9e6fe16c1f107da95d77f35d092e0a923781783 --head HEAD --out .scratch/p0c-replay -- pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts -t 'allocation baseline|short socket denial'
 ```
 
-
 ## Web framework Client and Host
 
 Scope: **browser shell and `@agora/web-framework` available; persistence not connected.** Coding stream independent of L1-L3 storage. Fixture is `agora.web-fixture.room/v1`.

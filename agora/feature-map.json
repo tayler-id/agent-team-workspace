@@ -4,11 +4,32 @@
 	"task": "agora-s1-enforce-test-first",
 	"features": [
 		{
-			"id": "postgres-socket-ownership", "documentation": "docs/site/foundation.md",
-			"paths": ["scripts/postgres-socket.ts", "packages/storage/test/postgres-socket.test.ts"],
-			"public": ["pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts"],
-			"scenarios": ["allocation baseline", "short socket denial", "collision", "foreign ownership", "unsafe permissions", "cleanup", "guard-disabled denial"],
-			"fixtures": ["P0c A allocation only; wrapper integration deferred"], "platforms": ["node24", "posix"], "owner": "CI P0c A"
+			"id": "postgres-socket-ownership",
+			"documentation": "docs/site/foundation.md",
+			"paths": [
+				"scripts/postgres-socket.ts",
+				"packages/storage/test/postgres-socket.test.ts"
+			],
+			"public": [
+				"pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts"
+			],
+			"scenarios": [
+				"allocation baseline",
+				"short socket denial",
+				"collision",
+				"foreign ownership",
+				"unsafe permissions",
+				"cleanup",
+				"guard-disabled denial"
+			],
+			"fixtures": [
+				"P0c A allocation only; wrapper integration deferred"
+			],
+			"platforms": [
+				"node24",
+				"posix"
+			],
+			"owner": "CI P0c A"
 		},
 		{
 			"id": "foundation-admission",
