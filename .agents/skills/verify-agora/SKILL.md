@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 and L2) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1/L2 and L5 pure-core preparation only; no response posting or browser qualification.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 and L2) and read-only deterministic local-answer core from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1/L2 and L5 pure-core preparation only; no response posting or browser qualification.
 ---
 
 # Verify Agora
@@ -105,7 +105,7 @@ Red shows `Tests 6 failed (6)`: every HTTP assertion fails against the parent's 
 For local-room L5 pure-core preparation, use its committed test-only harness on exact L2 `55269a5103656a63cc6f246c00ebb1efa6785866` as the behavioral parent. The harness loads the public package and denies capability; the baseline denial test stays green. Use the code head recorded in `evidence/local-room/agent-core/outcome.json`:
 
 ```sh
-node scripts/record-red-green.mjs --parent c221c808e6841c57d016b3d22e8c55f5335ed811 --head CORE_HEAD --out evidence/local-room/agent-core -- pnpm exec vitest run --project unit packages/domain/test/local-answer.test.ts
+node scripts/record-red-green.mjs --parent c221c808e6841c57d016b3d22e8c55f5335ed811 --head 4aaf74802507af3e14d33113a2e9d9696a8af2e7 --out evidence/local-room/agent-core -- pnpm exec vitest run --project unit packages/domain/test/local-answer.test.ts
 ```
 
 Red must be `9 failed | 1 passed`, with value assertions against `unavailable_capability`, not module errors. Green must be `10 passed`. Guard mutations and cross-boundary negatives run separately at the head through the Drive command. The candidate remains stacked, not landable before L2 and applicable CI protections, a rebase, fresh exact-head validation and independent review. No pipeline or remote action belongs to this local-only preparation.
@@ -132,6 +132,6 @@ git worktree list | grep -c 'agora-red-\|agora-green-\|agora-clean-' || echo "wo
 ls "${TMPDIR:-/tmp}" | grep agora- || echo "tmp: clean"
 ```
 
-Both greps must find nothing. For the pure-core driver also run `find .scratch -maxdepth 1 -name 'answer-guard-*' -print`; no matching directory may remain. In parallel development, a shared temp/worktree match may belong to another lane: report it without deleting or inspecting its contents; prove this task's exact owned paths were removed.
+Both greps must find nothing. For the pure-core driver also run `find .scratch -maxdepth 1 -name 'answer-guard-*' -print`; no matching directory may remain. Remove its disposable reporter cache with `rm -f .vitest/json/output.json; rmdir .vitest/json .vitest` after retaining the report under evidence. In parallel development, a shared temp/worktree match may belong to another lane: report it without deleting or inspecting its contents; prove this task's exact owned paths were removed.
 
 Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.

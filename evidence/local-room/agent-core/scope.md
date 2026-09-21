@@ -20,6 +20,14 @@ The 250-450-line requested budget is above R11's default 200-line target because
 
 All local task checks are required. Trusted CI protections remain an external landing prerequisite, not a skipped-success result. This delivery has no pipeline, push, hosted review or merge. Rebase/reapply after L2 and applicable CI protections land, rerun all applicable gates at that exact final head and obtain independent implementation and documentation review before landing. Docs rendering tests are not an accessibility or full-room qualification.
 
+## Ancillary verifier repair
+
+The literal `node scripts/test-design-checks.mjs` failed its baseline because its isolated fixture copied packages/contracts/evidence but omitted `apps`, even though retained decisions cite center source. `design-fixture.red.log` reproduces that missing-link failure before repair. Adding the omitted source root changes fixture completeness only, not the authoritative validator or product behavior; `design-fixture.green.log` records all 23 existing positive/negative cases passing. This is a test-harness repair, not the pure core's behavioral red. Both files and the feature-map linkage are included in the size count. No validation assertion was weakened.
+
+## Documentation inspection
+
+The approved `chrome-devtools-axi` route inspected the selected-record visual at 1440x900 and at an actual emulated 390x844 viewport. Both reported no horizontal overflow. Desktop and mobile screenshots show readable sequential steps, aligned text and clear separation from the posting boundary; the native accessibility snapshot exposes the ordered flow and headings. A Tab operation focused the labelled context-compiler source link. Chrome's window resize alone stopped at 500 pixels; that observation is retained separately, not passed off as the 390-pixel proof. Mobile emulation supplied the correct viewport. No product browser interaction, screen-reader certification, contrast audit or video qualification is claimed. No CSS, branding or final visual design changed. The owned docs process and named browser bridge were stopped.
+
 ## Toolchain recovery
 
 The supplied shell initially could not load rolldown's native binding, even after a successful frozen install. That infrastructure failure was not accepted as red. Firstmate instructed unsetting `GH_TOKEN`, `GITHUB_TOKEN` and `FIRSTMATE_GH_TOKEN` without printing values, and placing the approved Node tools first on PATH. With that environment the unchanged dependencies loaded; the retained behavioral red is nine failed assertions and one passing baseline. No dependency rebuild, lockfile edit or token value was recorded.

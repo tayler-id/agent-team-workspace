@@ -1,0 +1,32 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/10/agent-team-workspace
+
+ ✓ |unit| packages/domain/test/local-answer.test.ts > the public pure-core harness loads and explicitly denies unsupported input 1ms
+ ✓ |unit| packages/domain/test/local-answer.test.ts > bounded selection uses exact selected records, numeric chronology, never timestamps or input order 1ms
+ ✓ |unit| packages/domain/test/local-answer.test.ts > empty and unbounded selection or input deny rather than truncate 1ms
+ ✓ |unit| packages/domain/test/local-answer.test.ts > Unicode scalar context limit is exact; oversized input records and aggregate context deny 0ms
+ ✓ |unit| packages/domain/test/local-answer.test.ts > missing, duplicate and foreign records deny, including ambiguous room sequence 0ms
+ ✓ |unit| packages/domain/test/local-answer.test.ts > unknown message variants and event inputs deny rather than acknowledge or interpret 47ms
+ ✓ |unit| packages/domain/test/local-answer.test.ts > citations are exact stored IDs at exact sequences; missing, foreign and unselected references deny 1ms
+ ✓ |unit| packages/domain/test/local-answer.test.ts > proposal has only exact attributed quotes and stable canonical digests, with no inferred claims 0ms
+ ✓ |unit| packages/domain/test/local-answer.test.ts > duplicate identity binds requester, request ID, scope and selected content, without storing dedupe state 1ms
+ ✓ |unit| packages/domain/test/local-answer.test.ts > injection-shaped message text and embedded citations remain inert quoted data, not transitive authority 0ms
+stderr | packages/domain/test/local-answer-guards.test.ts > unbounded-selector: isolated guard removal must turn the public assertion red
+{"guard":"unbounded-selector","normal":0,"weakened":1,"assertion":"guard unbounded-selector","original_unchanged":true}
+
+ ✓ |unit| packages/domain/test/local-answer-guards.test.ts > unbounded-selector: isolated guard removal must turn the public assertion red 104ms
+stderr | packages/domain/test/local-answer-guards.test.ts > outside-citation: isolated guard removal must turn the public assertion red
+{"guard":"outside-citation","normal":0,"weakened":1,"assertion":"guard outside-citation","original_unchanged":true}
+
+stderr | packages/domain/test/local-answer-guards.test.ts > injected-command: isolated guard removal must turn the public assertion red
+{"guard":"injected-command","normal":0,"weakened":1,"assertion":"guard injected-command","original_unchanged":true}
+
+ ✓ |unit| packages/domain/test/local-answer-guards.test.ts > outside-citation: isolated guard removal must turn the public assertion red 96ms
+ ✓ |unit| packages/domain/test/local-answer-guards.test.ts > injected-command: isolated guard removal must turn the public assertion red 95ms
+ ✓ |unit| packages/domain/test/local-answer-guards.test.ts > no ambient authority: public surface has no effect handle and core rejects execution, platform and SDK edges 1778ms
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  23:27:23
+   Duration  2.25s (tests 91%, import 5%, transform 3%)
+
