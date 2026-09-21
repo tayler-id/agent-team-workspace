@@ -10,6 +10,7 @@ export default defineConfig({
 				// Contract tests drive SwiftPM; one build directory cannot serve two concurrent runs, so files run one at a time.
 				test: { name: 'contracts', include: ['contracts/test/**/*.test.ts'], fileParallelism: false, testTimeout: 600_000 },
 			},
+			'./apps/web/vitest.config.ts',
 			{
 				test: {
 					name: 'pg',

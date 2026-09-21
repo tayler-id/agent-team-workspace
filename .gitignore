@@ -7,3 +7,5 @@ contracts/swift/.build/
 .docs-dist/
 .scratch*/
 .scratch-noodle.txt
+
+apps/web/dist/

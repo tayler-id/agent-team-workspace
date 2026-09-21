@@ -1,0 +1,53 @@
+/* Engineering fixture - visual design pending. Neutral diagnostic presentation only: system fonts, spacing to test
+   behavior, and state distinctions that do not rely on color. No brand tokens live here; a design system replaces this file. */
+:root { color-scheme: light dark; font-family: system-ui, sans-serif; line-height: 1.4; }
+body { margin: 0; }
+.shell { display: grid; grid-template-columns: 12rem minmax(0, 1fr) minmax(0, 24rem); grid-template-areas: "header header header" "rail main pane" "fixture fixture fixture"; min-height: 100vh; }
+.room-header { grid-area: header; padding: 0.75rem 1rem; border-bottom: 1px solid GrayText; }
+.rail { grid-area: rail; padding: 0.75rem; border-right: 1px solid GrayText; }
+.rail ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.main { grid-area: main; padding: 0.75rem 1rem; min-width: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+.pane { grid-area: pane; padding: 0.75rem 1rem; border-left: 1px solid GrayText; min-width: 0; }
+.pane[hidden], .main[hidden] { display: none; }
+.fixture-controls { grid-area: fixture; padding: 0.75rem 1rem; border-top: 1px solid GrayText; }
+h1 { font-size: 1.25rem; margin: 0.25rem 0; }
+h2 { font-size: 1rem; margin: 0.5rem 0; }
+.kicker { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.8; }
+.meta { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; align-items: center; margin: 0.25rem 0; }
+.status { padding: 0.5rem 0; }
+.alert, .banner { border: 1px solid GrayText; border-radius: 0.25rem; padding: 0.5rem 0.75rem; }
+.rows { list-style: none; margin: 0; padding: 0; }
+.row { border-top: 1px solid GrayText; }
+.message { padding: 0.5rem 0.25rem; overflow-wrap: anywhere; }
+.message:focus-visible, button:focus-visible, textarea:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.message.unread { font-weight: 600; }
+.message p { margin: 0.25rem 0; }
+.message pre, .card .digest { overflow-x: auto; overflow-wrap: anywhere; max-width: 100%; }
+.tombstone { font-style: italic; }
+.unread-boundary { border-top: 2px dashed currentColor; text-align: right; font-size: 0.75rem; text-transform: uppercase; }
+.card { border: 1px solid GrayText; border-radius: 0.25rem; padding: 0.5rem 0.75rem; margin: 0.5rem 0; }
+.card dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.125rem 0.75rem; margin: 0.5rem 0; }
+.card dt { font-weight: 600; }
+.card dd { margin: 0; }
+.badge { display: inline-block; border: 1px solid GrayText; border-radius: 0.25rem; padding: 0 0.375rem; font-size: 0.8125rem; }
+.badge.live { font-weight: 700; text-decoration: underline; }
+.provisional { opacity: 0.7; font-style: italic; }
+.citations { padding-left: 1.25rem; }
+.composer { display: grid; gap: 0.375rem; border-top: 1px solid GrayText; padding-top: 0.5rem; margin-top: auto; }
+.composer textarea { font: inherit; width: 100%; box-sizing: border-box; }
+.composer-actions, .button-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+button { font: inherit; min-height: 24px; min-width: 24px; }
+button.unavailable { text-decoration: line-through; }
+.empty { padding: 1rem 0; }
+.count { font-variant-numeric: tabular-nums; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip-link { position: absolute; left: -100vw; top: 0; padding: 0.5rem; background: Canvas; }
+.skip-link:focus { left: 0; }
+.load-older { margin: 0.5rem 0; }
+.pane { transition: opacity 150ms ease; }
+@media (prefers-reduced-motion: reduce) { .pane { transition: none; } * { scroll-behavior: auto !important; } }
+@media (max-width: 700px) {
+	.shell { grid-template-columns: minmax(0, 1fr); grid-template-areas: "header" "main" "pane" "rail" "fixture"; }
+	.rail, .pane { border: 0; border-top: 1px solid GrayText; }
+	.card dl { grid-template-columns: minmax(0, 1fr); }
+}
