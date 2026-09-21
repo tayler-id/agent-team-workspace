@@ -95,6 +95,21 @@ real window:
   covers the narrower case; nothing in the stylesheet introduces a fixed width that could
   overflow only below 700px.
 
+## Correction addendum: fixture trim re-check
+
+After this pass, `apps/web/src/fixture/room.json` was reformatted denser (161 to 48 lines,
+identical structure, shortened non-asserted message bodies) to bring the slice's meaningful
+line count under R11's 1,000-line hard gate once the fixture was correctly included in that
+count (see `evidence/local-room/web-shell/size.json`'s `correction` field). Screenshots 1-12
+above show the pre-trim fixture text (for example "Long body for wrapping checks. Digests
+wrap at any character: sha256:...") and remain valid evidence of the mechanisms they
+document; only the fixture's prose changed, not the room shell's behavior. `13-post-
+fixture-trim-resync-check.jpg` re-confirms live, after the trim: the tombstone row, the
+edited-revision label, the unread boundary, and the long-body wrapping row (now reading
+"Long body for wrapping checks: sha256:...apps/web/src/components/Timeline.tsx" with no
+horizontal overflow) all still render correctly, and `read_console_messages` reported no
+errors. `pnpm web:test` (17/17) and `pnpm typecheck` were re-run clean after the trim.
+
 ## Reduced motion: honest limitation
 
 `prefers-reduced-motion` cannot be toggled from page-level JavaScript (it reflects a real OS
