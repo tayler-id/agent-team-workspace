@@ -128,5 +128,21 @@
         "reason": "creator dead and unattached but not attributable to a recorded run of this task by pid or lane window; left in place, ipcrm is the documented recovery"
       }
     ]
+  },
+  "third_pass": {
+    "recorded_at": "2026-09-21T07:03:04.487Z",
+    "cause": "recorder red run at the parent (abort-stop-throw): the test finally SIGKILLed the leaked postmaster and reclaimed before the zombie was reaped, so alive() still answered true; the test now waits for the kill to land before reclaiming",
+    "removed": [
+      {
+        "id": 71303171,
+        "key": "0x04a47b5b",
+        "nattch": 0,
+        "cpid": 36683,
+        "ctime": "2:58:31",
+        "attributed_by": "red.log starting receipt pid 36683",
+        "creator_alive": false,
+        "ipcrm_exit": 0
+      }
+    ]
   }
 }
