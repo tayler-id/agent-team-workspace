@@ -1,0 +1,1049 @@
+{
+  "subject": "b76440030fa3b9f95ba3c8a93b1e6c74a725d7a3",
+  "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+  "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+  "mutations": [
+    {
+      "guard": "short-selection",
+      "before": "path.join(temporaryRoot, `agora-p0c-${runId}`)",
+      "after": "path.join(artifactDir, `agora-p0c-${runId}`)",
+      "scenario": "short socket denial",
+      "expected_diagnostic": "deny long artifact socket location",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "short socket denial"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:50\n   Duration  94ms (transform 47%, import 40%, tests 9%, worker 3%)\n\n{\"allocated\":{\"runId\":\"c3bbed93-4372-4fdf-a120-6606192e04a4\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-9h9Mqv\",\"socketDir\":\"/private/tmp/agora-p0c-c3bbed93-4372-4fdf-a120-6606192e04a4\"},\"mode\":448}\n{\"allocated\":{\"runId\":\"940f6283-d4ab-4b14-bc21-c12eeb23824d\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-9h9Mqv\",\"socketDir\":\"/private/tmp/agora-p0c-940f6283-d4ab-4b14-bc21-c12eeb23824d\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"c3bbed93-4372-4fdf-a120-6606192e04a4\",\"940f6283-d4ab-4b14-bc21-c12eeb23824d\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "c3bbed93-4372-4fdf-a120-6606192e04a4",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-9h9Mqv",
+                "socketDir": "/private/tmp/agora-p0c-c3bbed93-4372-4fdf-a120-6606192e04a4"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            },
+            {
+              "identity": {
+                "runId": "940f6283-d4ab-4b14-bc21-c12eeb23824d",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-9h9Mqv",
+                "socketDir": "/private/tmp/agora-p0c-940f6283-d4ab-4b14-bc21-c12eeb23824d"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "3518b355692ac373ae072f92d8a5076f70cf34a09e1e49092e4d608a8061cb0d",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 short socket denial, collision and idempotent cleanup 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:50\n   Duration  84ms (transform 46%, import 39%, tests 12%, worker 2%)\n\n{\"allocated\":{\"runId\":\"f8609703-176e-4758-92f0-4da2c3601db2\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-IJlHEr\",\"socketDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-IJlHEr/agora-p0c-f8609703-176e-4758-92f0-4da2c3601db2\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"f8609703-176e-4758-92f0-4da2c3601db2\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > short socket denial, collision and idempotent cleanup\nAssertionError: deny long artifact socket location: expected false to be true // Object.is equality\n\n- Expected\n+ Received\n\n- true\n+ false\n\n \u276f packages/storage/test/postgres-socket.test.ts:36:123\n     34|  writeFileSync(`${artifacts}/evidence`, 'retained');\n     35|  try {\n     36|   expect(lease.identity.socketDir.startsWith(`${realpathSync('/tmp')}/\u2026\n       |                                                                                                                           ^\n     37|   expect(Buffer.byteLength(`${lease.identity.socketDir}/.s.PGSQL.5432`\u2026\n     38|   expect(readFileSync(`${lease.identity.socketDir}/owner.json`, 'utf8'\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "f8609703-176e-4758-92f0-4da2c3601db2",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-IJlHEr",
+                "socketDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-IJlHEr/agora-p0c-f8609703-176e-4758-92f0-4da2c3601db2"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "ownership",
+      "before": "if (!owned())",
+      "after": "if (false)",
+      "scenario": "refuses unsafe ownership: runId",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: runId"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:50\n   Duration  79ms (transform 48%, import 41%, tests 8%, worker 3%)\n\n{\"allocated\":{\"runId\":\"870129d8-b603-499f-93df-0b484ccedab0\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-9Kko4v\",\"socketDir\":\"/private/tmp/agora-p0c-870129d8-b603-499f-93df-0b484ccedab0\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"870129d8-b603-499f-93df-0b484ccedab0\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "870129d8-b603-499f-93df-0b484ccedab0",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-9Kko4v",
+                "socketDir": "/private/tmp/agora-p0c-870129d8-b603-499f-93df-0b484ccedab0"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "faa2b6f2aea7493d9f01d8608d33340433535e8e50b1c9ce0d29af3aae167be1",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses unsafe ownership: runId 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:51\n   Duration  89ms (transform 47%, import 40%, tests 10%, worker 3%)\n\n{\"allocated\":{\"runId\":\"c88dd475-bbe3-49e9-ac2c-ef6c782ebc0a\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-SSblam\",\"socketDir\":\"/private/tmp/agora-p0c-c88dd475-bbe3-49e9-ac2c-ef6c782ebc0a\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"c88dd475-bbe3-49e9-ac2c-ef6c782ebc0a\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: runId\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "c88dd475-bbe3-49e9-ac2c-ef6c782ebc0a",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-SSblam",
+                "socketDir": "/private/tmp/agora-p0c-c88dd475-bbe3-49e9-ac2c-ef6c782ebc0a"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "runId-binding",
+      "before": "&& readFileSync(record, 'utf8') === bytes",
+      "after": "&& Object.entries(identity).every(([key, value]) => key === 'runId' || JSON.parse(readFileSync(record, 'utf8'))[key] === value)",
+      "scenario": "refuses unsafe ownership: runId",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: runId"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:51\n   Duration  79ms (transform 48%, import 41%, tests 8%, worker 3%)\n\n{\"allocated\":{\"runId\":\"80e5a795-16bb-407b-b370-e4f98855b874\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-0dVEA2\",\"socketDir\":\"/private/tmp/agora-p0c-80e5a795-16bb-407b-b370-e4f98855b874\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"80e5a795-16bb-407b-b370-e4f98855b874\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "80e5a795-16bb-407b-b370-e4f98855b874",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-0dVEA2",
+                "socketDir": "/private/tmp/agora-p0c-80e5a795-16bb-407b-b370-e4f98855b874"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "b31531513e4a41a5c3324ea999b2c2061c42ddad06610d0633c382b1ddeb009b",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 5ms\n   \u00d7 refuses unsafe ownership: runId 4ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:51\n   Duration  90ms (transform 47%, import 39%, tests 11%, worker 3%)\n\n{\"allocated\":{\"runId\":\"abfbbd3e-9988-44c2-82b5-46593862b3ea\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-3zM0Qf\",\"socketDir\":\"/private/tmp/agora-p0c-abfbbd3e-9988-44c2-82b5-46593862b3ea\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"abfbbd3e-9988-44c2-82b5-46593862b3ea\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: runId\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "abfbbd3e-9988-44c2-82b5-46593862b3ea",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-3zM0Qf",
+                "socketDir": "/private/tmp/agora-p0c-abfbbd3e-9988-44c2-82b5-46593862b3ea"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "artifactDir-binding",
+      "before": "&& readFileSync(record, 'utf8') === bytes",
+      "after": "&& Object.entries(identity).every(([key, value]) => key === 'artifactDir' || JSON.parse(readFileSync(record, 'utf8'))[key] === value)",
+      "scenario": "refuses unsafe ownership: artifactDir",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: artifactDir"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:52\n   Duration  84ms (transform 47%, import 40%, tests 9%, worker 3%)\n\n{\"allocated\":{\"runId\":\"0468645b-c964-4dde-8401-44333c96ee1c\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-CZRCCT\",\"socketDir\":\"/private/tmp/agora-p0c-0468645b-c964-4dde-8401-44333c96ee1c\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"0468645b-c964-4dde-8401-44333c96ee1c\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "0468645b-c964-4dde-8401-44333c96ee1c",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-CZRCCT",
+                "socketDir": "/private/tmp/agora-p0c-0468645b-c964-4dde-8401-44333c96ee1c"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "ce3eb3550caa1a292c06ac8592ed4f69fb665a3ba245ed684814f1b9ad71dc13",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses unsafe ownership: artifactDir 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:52\n   Duration  84ms (transform 47%, import 39%, tests 10%, worker 3%)\n\n{\"allocated\":{\"runId\":\"deb0bca0-2bbd-4040-987b-7443d6e16d9b\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-Gc1gPi\",\"socketDir\":\"/private/tmp/agora-p0c-deb0bca0-2bbd-4040-987b-7443d6e16d9b\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"deb0bca0-2bbd-4040-987b-7443d6e16d9b\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: artifactDir\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "deb0bca0-2bbd-4040-987b-7443d6e16d9b",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-Gc1gPi",
+                "socketDir": "/private/tmp/agora-p0c-deb0bca0-2bbd-4040-987b-7443d6e16d9b"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "socketDir-binding",
+      "before": "&& readFileSync(record, 'utf8') === bytes",
+      "after": "&& Object.entries(identity).every(([key, value]) => key === 'socketDir' || JSON.parse(readFileSync(record, 'utf8'))[key] === value)",
+      "scenario": "refuses unsafe ownership: socketDir",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: socketDir"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:53\n   Duration  82ms (transform 50%, import 39%, tests 8%, worker 3%)\n\n{\"allocated\":{\"runId\":\"17a402fe-c85d-4a10-be62-807586f0806a\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-EieQLe\",\"socketDir\":\"/private/tmp/agora-p0c-17a402fe-c85d-4a10-be62-807586f0806a\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"17a402fe-c85d-4a10-be62-807586f0806a\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "17a402fe-c85d-4a10-be62-807586f0806a",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-EieQLe",
+                "socketDir": "/private/tmp/agora-p0c-17a402fe-c85d-4a10-be62-807586f0806a"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "32f41701a77f390bf79127e764dfcb65bf3dacb73c8cea1dba09e211c79f964e",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses unsafe ownership: socketDir 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:53\n   Duration  84ms (transform 47%, import 40%, tests 11%, worker 3%)\n\n{\"allocated\":{\"runId\":\"b63c0a3f-f8e0-48e1-ab84-236ce82fe9e3\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-xEwbnT\",\"socketDir\":\"/private/tmp/agora-p0c-b63c0a3f-f8e0-48e1-ab84-236ce82fe9e3\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"b63c0a3f-f8e0-48e1-ab84-236ce82fe9e3\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: socketDir\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "b63c0a3f-f8e0-48e1-ab84-236ce82fe9e3",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-xEwbnT",
+                "socketDir": "/private/tmp/agora-p0c-b63c0a3f-f8e0-48e1-ab84-236ce82fe9e3"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "inode",
+      "before": "directory.ino === allocated.ino",
+      "after": "true",
+      "scenario": "refuses unsafe ownership: directory-replacement",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: directory-replacement"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:53\n   Duration  81ms (transform 47%, import 40%, tests 10%, worker 3%)\n\n{\"allocated\":{\"runId\":\"fad7e630-1375-4afa-bcb2-2561dea99b47\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-AXFGaI\",\"socketDir\":\"/private/tmp/agora-p0c-fad7e630-1375-4afa-bcb2-2561dea99b47\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"fad7e630-1375-4afa-bcb2-2561dea99b47\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "fad7e630-1375-4afa-bcb2-2561dea99b47",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-AXFGaI",
+                "socketDir": "/private/tmp/agora-p0c-fad7e630-1375-4afa-bcb2-2561dea99b47"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "7244dce1bed0a04e35f4e65301b32e6802c2079b9fa73b452e10c7b892bd902d",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses unsafe ownership: directory-replacement 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:54\n   Duration  86ms (transform 47%, import 39%, tests 12%, worker 3%)\n\n{\"allocated\":{\"runId\":\"c85eaf9e-d8f9-4954-b194-e2496946a937\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-7qxLjF\",\"socketDir\":\"/private/tmp/agora-p0c-c85eaf9e-d8f9-4954-b194-e2496946a937\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"c85eaf9e-d8f9-4954-b194-e2496946a937\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: directory-replacement\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "c85eaf9e-d8f9-4954-b194-e2496946a937",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-7qxLjF",
+                "socketDir": "/private/tmp/agora-p0c-c85eaf9e-d8f9-4954-b194-e2496946a937"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "device",
+      "before": "directory.dev === allocated.dev",
+      "after": "true",
+      "scenario": "refuses substituted device identity",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses substituted device identity"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:54\n   Duration  84ms (transform 48%, import 42%, tests 7%, worker 3%)\n\n{\"allocated\":{\"runId\":\"c9f4b37d-70c9-420b-84e5-8f03e2927b3e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-uNKCnT\",\"socketDir\":\"/private/tmp/agora-p0c-c9f4b37d-70c9-420b-84e5-8f03e2927b3e\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"c9f4b37d-70c9-420b-84e5-8f03e2927b3e\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "c9f4b37d-70c9-420b-84e5-8f03e2927b3e",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-uNKCnT",
+                "socketDir": "/private/tmp/agora-p0c-c9f4b37d-70c9-420b-84e5-8f03e2927b3e"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "598a9ad15493a374ba9e52cf200c76432142add56c9ba6455f7f7c9f7493b335",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses substituted device identity without privileged mounts 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:55\n   Duration  99ms (transform 46%, import 41%, tests 9%, worker 3%)\n\n{\"allocated\":{\"runId\":\"5ccde71a-2f8f-4c92-b893-a7b369752a4e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-8AJ5Ac\",\"socketDir\":\"/private/tmp/agora-p0c-5ccde71a-2f8f-4c92-b893-a7b369752a4e\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"5ccde71a-2f8f-4c92-b893-a7b369752a4e\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses substituted device identity without privileged mounts\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:100:22\n     98|    const directory = lstatSync(lease.identity.socketDir);\n     99|    vi.mocked(lstatSync).mockReturnValueOnce(Object.assign(directory, {\u2026\n    100|    expect(operation).toThrow(new Error('socket ownership mismatch'));\n       |                      ^\n    101|    expect(existsSync(`${lease.identity.socketDir}/owner.json`)).toBe(t\u2026\n    102|   }\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "5ccde71a-2f8f-4c92-b893-a7b369752a4e",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-8AJ5Ac",
+                "socketDir": "/private/tmp/agora-p0c-5ccde71a-2f8f-4c92-b893-a7b369752a4e"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "directory-no-follow",
+      "before": "const directory = lstatSync(socketDir);",
+      "after": "const directory = lstatSync(realpathSync(socketDir));",
+      "scenario": "refuses unsafe ownership: directory-symlink",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: directory-symlink"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:55\n   Duration  85ms (transform 47%, import 41%, tests 9%, worker 3%)\n\n{\"allocated\":{\"runId\":\"550eddc7-9ad5-4de0-af24-42b5a8f9f084\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-k4zMVp\",\"socketDir\":\"/private/tmp/agora-p0c-550eddc7-9ad5-4de0-af24-42b5a8f9f084\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"550eddc7-9ad5-4de0-af24-42b5a8f9f084\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "550eddc7-9ad5-4de0-af24-42b5a8f9f084",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-k4zMVp",
+                "socketDir": "/private/tmp/agora-p0c-550eddc7-9ad5-4de0-af24-42b5a8f9f084"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "bbcce3254c8cfd3a410b8a6ca9da555e1f732d2d32fdf7d036a4d09cb9840680",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses unsafe ownership: directory-symlink 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:55\n   Duration  90ms (transform 46%, import 40%, tests 11%, worker 3%)\n\n{\"allocated\":{\"runId\":\"a7d498ce-417f-44ca-9f1e-ec55adf210ce\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-faXSWv\",\"socketDir\":\"/private/tmp/agora-p0c-a7d498ce-417f-44ca-9f1e-ec55adf210ce\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"a7d498ce-417f-44ca-9f1e-ec55adf210ce\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: directory-symlink\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "a7d498ce-417f-44ca-9f1e-ec55adf210ce",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-faXSWv",
+                "socketDir": "/private/tmp/agora-p0c-a7d498ce-417f-44ca-9f1e-ec55adf210ce"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "record-no-follow",
+      "before": "const marker = lstatSync(record);",
+      "after": "const marker = lstatSync(realpathSync(record));",
+      "scenario": "refuses unsafe ownership: symlink",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: symlink"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:56\n   Duration  85ms (transform 48%, import 40%, tests 9%, worker 3%)\n\n{\"allocated\":{\"runId\":\"d4bfdb3c-cf60-4962-8380-d5452c00459d\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-pDT4Mz\",\"socketDir\":\"/private/tmp/agora-p0c-d4bfdb3c-cf60-4962-8380-d5452c00459d\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"d4bfdb3c-cf60-4962-8380-d5452c00459d\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "d4bfdb3c-cf60-4962-8380-d5452c00459d",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-pDT4Mz",
+                "socketDir": "/private/tmp/agora-p0c-d4bfdb3c-cf60-4962-8380-d5452c00459d"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "4ff9dd9802412cd198c269a57c3602c8b7c96d181bc26a02af3afe11b8ef0929",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 8ms\n   \u00d7 refuses unsafe ownership: symlink 6ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:56\n   Duration  147ms (transform 44%, import 41%, tests 12%, worker 3%)\n\n{\"allocated\":{\"runId\":\"726e4782-2fa5-46cc-9998-fb1aea4ae79a\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-6CGLni\",\"socketDir\":\"/private/tmp/agora-p0c-726e4782-2fa5-46cc-9998-fb1aea4ae79a\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"726e4782-2fa5-46cc-9998-fb1aea4ae79a\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: symlink\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "726e4782-2fa5-46cc-9998-fb1aea4ae79a",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-6CGLni",
+                "socketDir": "/private/tmp/agora-p0c-726e4782-2fa5-46cc-9998-fb1aea4ae79a"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "directory-mode",
+      "before": "(directory.mode & 0o777) === 0o700",
+      "after": "true",
+      "scenario": "refuses unsafe ownership: directory-mode",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: directory-mode"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:57\n   Duration  88ms (transform 48%, import 41%, tests 8%, worker 3%)\n\n{\"allocated\":{\"runId\":\"8cf20a47-b03d-41cf-a06c-a2e730b8d800\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-17Izm0\",\"socketDir\":\"/private/tmp/agora-p0c-8cf20a47-b03d-41cf-a06c-a2e730b8d800\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"8cf20a47-b03d-41cf-a06c-a2e730b8d800\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "8cf20a47-b03d-41cf-a06c-a2e730b8d800",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-17Izm0",
+                "socketDir": "/private/tmp/agora-p0c-8cf20a47-b03d-41cf-a06c-a2e730b8d800"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "73e3ea3b3d91e2629cce4153561bb79528ef9a5c407b12467169da0e3f73ffc6",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses unsafe ownership: directory-mode 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:57\n   Duration  92ms (transform 47%, import 39%, tests 11%, worker 3%)\n\n{\"allocated\":{\"runId\":\"44b6bcea-8d0b-4261-abcf-da51b2bdbdc0\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-Qhj13Z\",\"socketDir\":\"/private/tmp/agora-p0c-44b6bcea-8d0b-4261-abcf-da51b2bdbdc0\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"44b6bcea-8d0b-4261-abcf-da51b2bdbdc0\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: directory-mode\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "44b6bcea-8d0b-4261-abcf-da51b2bdbdc0",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-Qhj13Z",
+                "socketDir": "/private/tmp/agora-p0c-44b6bcea-8d0b-4261-abcf-da51b2bdbdc0"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "record-mode",
+      "before": "(marker.mode & 0o777) === 0o600",
+      "after": "true",
+      "scenario": "refuses unsafe ownership: record-mode",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: record-mode"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:58\n   Duration  88ms (transform 48%, import 41%, tests 8%, worker 3%)\n\n{\"allocated\":{\"runId\":\"6d7b94a1-c882-4ca4-a30e-667ba90b5b00\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-gm0ZEi\",\"socketDir\":\"/private/tmp/agora-p0c-6d7b94a1-c882-4ca4-a30e-667ba90b5b00\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"6d7b94a1-c882-4ca4-a30e-667ba90b5b00\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "6d7b94a1-c882-4ca4-a30e-667ba90b5b00",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-gm0ZEi",
+                "socketDir": "/private/tmp/agora-p0c-6d7b94a1-c882-4ca4-a30e-667ba90b5b00"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "76c894461ea965c6494ad0a2b8b45e2d88a2748b34961f255f62d3b36d06fddc",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses unsafe ownership: record-mode 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:58\n   Duration  92ms (transform 46%, import 40%, tests 11%, worker 3%)\n\n{\"allocated\":{\"runId\":\"a3a46f24-2e66-4718-8c87-b9b10599e9b7\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-081pWW\",\"socketDir\":\"/private/tmp/agora-p0c-a3a46f24-2e66-4718-8c87-b9b10599e9b7\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"a3a46f24-2e66-4718-8c87-b9b10599e9b7\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: record-mode\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "a3a46f24-2e66-4718-8c87-b9b10599e9b7",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-081pWW",
+                "socketDir": "/private/tmp/agora-p0c-a3a46f24-2e66-4718-8c87-b9b10599e9b7"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "hard-link",
+      "before": "marker.nlink === 1",
+      "after": "true",
+      "scenario": "refuses unsafe ownership: hard-link",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: hard-link"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:58\n   Duration  85ms (transform 48%, import 40%, tests 9%, worker 3%)\n\n{\"allocated\":{\"runId\":\"05811615-7e42-410a-acab-82a00b43a468\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-kI0XV4\",\"socketDir\":\"/private/tmp/agora-p0c-05811615-7e42-410a-acab-82a00b43a468\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"05811615-7e42-410a-acab-82a00b43a468\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "05811615-7e42-410a-acab-82a00b43a468",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-kI0XV4",
+                "socketDir": "/private/tmp/agora-p0c-05811615-7e42-410a-acab-82a00b43a468"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "7e2230ab866952b34dc71c7cd4aeac4a482b32a741a42b8e79df8c466f7e2f96",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses unsafe ownership: hard-link 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:02:59\n   Duration  90ms (transform 48%, import 38%, tests 11%, worker 3%)\n\n{\"allocated\":{\"runId\":\"1c921776-a6a3-4859-8d76-6c6cdc9c2953\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-3OcXn0\",\"socketDir\":\"/private/tmp/agora-p0c-1c921776-a6a3-4859-8d76-6c6cdc9c2953\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"1c921776-a6a3-4859-8d76-6c6cdc9c2953\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: hard-link\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:71:64\n     69|   else writeFileSync(record, JSON.stringify({ ...lease.identity, [chan\u2026\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n       |                                                                ^\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "1c921776-a6a3-4859-8d76-6c6cdc9c2953",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-3OcXn0",
+                "socketDir": "/private/tmp/agora-p0c-1c921776-a6a3-4859-8d76-6c6cdc9c2953"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "invalid-run",
+      "before": "if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(runId))",
+      "after": "if (false)",
+      "scenario": "refuses invalid run identity",
+      "expected_diagnostic": "invalid run identity",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses invalid run identity"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:02:59\n   Duration  83ms (transform 49%, import 42%, tests 6%, worker 3%)\n\n{\"cleanup\":true,\"runs\":[]}\n",
+          "cleanup": []
+        },
+        {
+          "weakened": true,
+          "source_digest": "2908d32f013ec5eac64608c4523de257e2c8030703d8cfb1b71420d685546fd8",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 refuses invalid run identity before allocation 3ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:03:00\n   Duration  91ms (transform 46%, import 40%, tests 12%, worker 3%)\n\n{\"cleanup\":true,\"runs\":[]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses invalid run identity before allocation\nAssertionError: expected [Function] to throw error including 'invalid run identity' but got 'ENOENT: no such file or directory, mk\u2026'\n\nExpected: \"invalid run identity\"\nReceived: \"ENOENT: no such file or directory, mkdir '/private/tmp/agora-p0c-../foreign'\"\n\n \u276f packages/storage/test/postgres-socket.test.ts:107:64\n    105|\n    106| test('refuses invalid run identity before allocation', () => {\n    107|  expect(() => allocatePostgresSocket(artifacts, '../foreign')).toThrow\u2026\n       |                                                                ^\n    108| });\n    109|\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": []
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "collision",
+      "before": "mkdirSync(socketDir, { mode: 0o700 });",
+      "after": "mkdirSync(socketDir, { mode: 0o700, recursive: true });",
+      "scenario": "short socket denial",
+      "expected_diagnostic": "EEXIST",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "short socket denial"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:03:00\n   Duration  86ms (transform 47%, import 40%, tests 10%, worker 3%)\n\n{\"allocated\":{\"runId\":\"2be3062f-8868-43f4-b15e-3c5862d847e6\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wNfEvk\",\"socketDir\":\"/private/tmp/agora-p0c-2be3062f-8868-43f4-b15e-3c5862d847e6\"},\"mode\":448}\n{\"allocated\":{\"runId\":\"3f77a02f-3f76-49cf-8fa2-141d10907f6e\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wNfEvk\",\"socketDir\":\"/private/tmp/agora-p0c-3f77a02f-3f76-49cf-8fa2-141d10907f6e\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"2be3062f-8868-43f4-b15e-3c5862d847e6\",\"3f77a02f-3f76-49cf-8fa2-141d10907f6e\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "2be3062f-8868-43f4-b15e-3c5862d847e6",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wNfEvk",
+                "socketDir": "/private/tmp/agora-p0c-2be3062f-8868-43f4-b15e-3c5862d847e6"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            },
+            {
+              "identity": {
+                "runId": "3f77a02f-3f76-49cf-8fa2-141d10907f6e",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wNfEvk",
+                "socketDir": "/private/tmp/agora-p0c-3f77a02f-3f76-49cf-8fa2-141d10907f6e"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "705b497520e0f7439af34084103931a02e9efa2e1a1f89080d5ef4f9d0f27299",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 5ms\n   \u00d7 short socket denial, collision and idempotent cleanup 4ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:03:00\n   Duration  100ms (transform 46%, import 38%, tests 13%, worker 3%)\n\n{\"allocated\":{\"runId\":\"968b7fa3-7420-4c23-9cc0-f177dc76ebc0\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-DNkv40\",\"socketDir\":\"/private/tmp/agora-p0c-968b7fa3-7420-4c23-9cc0-f177dc76ebc0\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"968b7fa3-7420-4c23-9cc0-f177dc76ebc0\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > short socket denial, collision and idempotent cleanup\nAssertionError: expected [Function] to throw error including 'EEXIST' but got 'ENOTEMPTY: directory not empty, rmdir\u2026'\n\nExpected: \"EEXIST\"\nReceived: \"ENOTEMPTY: directory not empty, rmdir '/private/tmp/agora-p0c-968b7fa3-7420-4c23-9cc0-f177dc76ebc0'\"\n\n \u276f packages/storage/test/postgres-socket.test.ts:39:73\n     37|   expect(Buffer.byteLength(`${lease.identity.socketDir}/.s.PGSQL.5432`\u2026\n     38|   expect(readFileSync(`${lease.identity.socketDir}/owner.json`, 'utf8'\u2026\n     39|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n       |                                                                         ^\n     40|   const other = allocatePostgresSocket(artifacts);\n     41|   try { expect(other.identity.socketDir).not.toBe(lease.identity.socke\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "968b7fa3-7420-4c23-9cc0-f177dc76ebc0",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-DNkv40",
+                "socketDir": "/private/tmp/agora-p0c-968b7fa3-7420-4c23-9cc0-f177dc76ebc0"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "cleanup-ownership",
+      "before": "\n\t\tverify();",
+      "after": "\n\t\t// guard removed",
+      "scenario": "refuses unsafe ownership: runId",
+      "expected_diagnostic": "expected function to throw an error, but it didn't",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: runId"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:03:01\n   Duration  100ms (transform 59%, import 32%, tests 6%, worker 2%)\n\n{\"allocated\":{\"runId\":\"ceb0323a-37ab-48b5-beef-4d1bc5bae254\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wjuh7k\",\"socketDir\":\"/private/tmp/agora-p0c-ceb0323a-37ab-48b5-beef-4d1bc5bae254\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"ceb0323a-37ab-48b5-beef-4d1bc5bae254\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "ceb0323a-37ab-48b5-beef-4d1bc5bae254",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wjuh7k",
+                "socketDir": "/private/tmp/agora-p0c-ceb0323a-37ab-48b5-beef-4d1bc5bae254"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "56aadc0fbd4747f3e3911e3d39526d7b0231bf6f04c01c8494174bde1ac017d9",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 5ms\n   \u00d7 refuses unsafe ownership: runId 4ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:03:01\n   Duration  109ms (transform 50%, import 38%, tests 9%, worker 3%)\n\n{\"allocated\":{\"runId\":\"12130ac3-dba2-474e-b5b2-29c57bf45ea1\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-lRF3eK\",\"socketDir\":\"/private/tmp/agora-p0c-12130ac3-dba2-474e-b5b2-29c57bf45ea1\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"12130ac3-dba2-474e-b5b2-29c57bf45ea1\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: runId\nAssertionError: expected function to throw an error, but it didn't\n \u276f packages/storage/test/postgres-socket.test.ts:72:38\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n       |                                      ^\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n     74|   if (change === 'neighbor') expect(readFileSync(`${lease.identity.soc\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "12130ac3-dba2-474e-b5b2-29c57bf45ea1",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-lRF3eK",
+                "socketDir": "/private/tmp/agora-p0c-12130ac3-dba2-474e-b5b2-29c57bf45ea1"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "neighbor",
+      "before": "if (readdirSync(socketDir).some(name => name !== 'owner.json'))",
+      "after": "if (false)",
+      "scenario": "refuses unsafe ownership: neighbor",
+      "expected_diagnostic": "socket not empty",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "refuses unsafe ownership: neighbor"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:03:02\n   Duration  89ms (transform 48%, import 40%, tests 8%, worker 3%)\n\n{\"allocated\":{\"runId\":\"a596c716-13fb-47e2-a425-6a02bb746bf0\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-URZsAB\",\"socketDir\":\"/private/tmp/agora-p0c-a596c716-13fb-47e2-a425-6a02bb746bf0\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"a596c716-13fb-47e2-a425-6a02bb746bf0\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "a596c716-13fb-47e2-a425-6a02bb746bf0",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-URZsAB",
+                "socketDir": "/private/tmp/agora-p0c-a596c716-13fb-47e2-a425-6a02bb746bf0"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "3fb9dbff8d3eeb39e221f65348812c4a7e0549fc12227e4cd186801b08d962b7",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 6ms\n   \u00d7 refuses unsafe ownership: neighbor 5ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:03:02\n   Duration  93ms (transform 45%, import 38%, tests 14%, worker 2%)\n\n{\"allocated\":{\"runId\":\"cf40233e-1231-48c2-b6ab-1cc371801b0d\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-EPtWdl\",\"socketDir\":\"/private/tmp/agora-p0c-cf40233e-1231-48c2-b6ab-1cc371801b0d\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"cf40233e-1231-48c2-b6ab-1cc371801b0d\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > refuses unsafe ownership: neighbor\nAssertionError: expected a thrown error to be Error: socket not empty\n\n- Expected\n+ Received\n\n  Error {\n-   \"message\": \"socket not empty\",\n+   \"message\": \"ENOTEMPTY: directory not empty, rmdir '/private/tmp/agora-p0c-cf40233e-1231-48c2-b6ab-1cc371801b0d'\",\n+   \"errno\": -66,\n+   \"code\": \"ENOTEMPTY\",\n+   \"syscall\": \"rmdir\",\n+   \"path\": \"/private/tmp/agora-p0c-cf40233e-1231-48c2-b6ab-1cc371801b0d\",\n  }\n\n \u276f packages/storage/test/postgres-socket.test.ts:72:38\n     70|   expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)\u2026\n     71|   if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow\u2026\n     72|   expect(() => { lease.cleanup(); }).toThrow(new Error(change === 'nei\u2026\n       |                                      ^\n     73|   if (change === 'hard-link') expect(readFileSync(`${artifacts}/owner-\u2026\n     74|   if (change === 'neighbor') expect(readFileSync(`${lease.identity.soc\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "cf40233e-1231-48c2-b6ab-1cc371801b0d",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-EPtWdl",
+                "socketDir": "/private/tmp/agora-p0c-cf40233e-1231-48c2-b6ab-1cc371801b0d"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "idempotence",
+      "before": "if (removed) return;",
+      "after": "if (false) return;",
+      "scenario": "short socket denial",
+      "expected_diagnostic": "socket ownership mismatch",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "short socket denial"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:03:02\n   Duration  86ms (transform 47%, import 42%, tests 9%, worker 3%)\n\n{\"allocated\":{\"runId\":\"9d7ef368-7498-4234-bc0a-6e518a0e9be9\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-uO66sJ\",\"socketDir\":\"/private/tmp/agora-p0c-9d7ef368-7498-4234-bc0a-6e518a0e9be9\"},\"mode\":448}\n{\"allocated\":{\"runId\":\"47fc3723-b4e2-4e62-bdd8-568198eb83fc\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-uO66sJ\",\"socketDir\":\"/private/tmp/agora-p0c-47fc3723-b4e2-4e62-bdd8-568198eb83fc\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"9d7ef368-7498-4234-bc0a-6e518a0e9be9\",\"47fc3723-b4e2-4e62-bdd8-568198eb83fc\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "9d7ef368-7498-4234-bc0a-6e518a0e9be9",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-uO66sJ",
+                "socketDir": "/private/tmp/agora-p0c-9d7ef368-7498-4234-bc0a-6e518a0e9be9"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            },
+            {
+              "identity": {
+                "runId": "47fc3723-b4e2-4e62-bdd8-568198eb83fc",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-uO66sJ",
+                "socketDir": "/private/tmp/agora-p0c-47fc3723-b4e2-4e62-bdd8-568198eb83fc"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "44a3fbb2d1f050371e12c2bc96e9beeb48658f3272ab6c79e4eb9d84f337a534",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 5ms\n   \u00d7 short socket denial, collision and idempotent cleanup 4ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:03:03\n   Duration  90ms (transform 45%, import 41%, tests 12%, worker 3%)\n\n{\"allocated\":{\"runId\":\"976d585f-8b0a-43b0-aaf2-5d945221f074\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wswlnN\",\"socketDir\":\"/private/tmp/agora-p0c-976d585f-8b0a-43b0-aaf2-5d945221f074\"},\"mode\":448}\n{\"allocated\":{\"runId\":\"7e73d54f-937e-4bb4-83c5-6508e49972fe\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wswlnN\",\"socketDir\":\"/private/tmp/agora-p0c-7e73d54f-937e-4bb4-83c5-6508e49972fe\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"976d585f-8b0a-43b0-aaf2-5d945221f074\",\"7e73d54f-937e-4bb4-83c5-6508e49972fe\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > short socket denial, collision and idempotent cleanup\nError: socket ownership mismatch\n \u276f verify scripts/postgres-socket.ts:36:23\n     34|  };\n     35|  const verify = (): void => {\n     36|   if (!owned()) throw new Error('socket ownership mismatch');\n       |                       ^\n     37|  };\n     38|  let removed = false;\n \u276f Object.cleanup scripts/postgres-socket.ts:41:3\n \u276f packages/storage/test/postgres-socket.test.ts:46:20\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "976d585f-8b0a-43b0-aaf2-5d945221f074",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wswlnN",
+                "socketDir": "/private/tmp/agora-p0c-976d585f-8b0a-43b0-aaf2-5d945221f074"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            },
+            {
+              "identity": {
+                "runId": "7e73d54f-937e-4bb4-83c5-6508e49972fe",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-wswlnN",
+                "socketDir": "/private/tmp/agora-p0c-7e73d54f-937e-4bb4-83c5-6508e49972fe"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    },
+    {
+      "guard": "private-allocation",
+      "before": "mkdirSync(socketDir, { mode: 0o700 });",
+      "after": "mkdirSync(socketDir, { mode: 0o755 });",
+      "scenario": "allocation baseline",
+      "expected_diagnostic": "socket ownership mismatch",
+      "test_digest": "7f578999cff0d3150d28f34d701b95de1cc9ba22c796fe83e9d4a100f6aa6a1a",
+      "command": [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "--project",
+        "unit",
+        "packages/storage/test/postgres-socket.test.ts",
+        "--disableConsoleIntercept",
+        "-t",
+        "allocation baseline"
+      ],
+      "runs": [
+        {
+          "weakened": false,
+          "source_digest": "55226cbcb7d5b57a03779c7db1691bdbf22408d34c69b5e55bdf4cf38e9ee6cf",
+          "exit": 0,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n\n Test Files  1 passed (1)\n      Tests  1 passed | 15 skipped (16)\n   Start at  00:03:03\n   Duration  82ms (transform 50%, import 41%, tests 6%, worker 3%)\n\n{\"allocated\":{\"runId\":\"8602f8b3-ed28-4c85-95df-74df5b250a09\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-uGwhWm\",\"socketDir\":\"/private/tmp/agora-p0c-8602f8b3-ed28-4c85-95df-74df5b250a09\"},\"mode\":448}\n{\"cleanup\":true,\"runs\":[\"8602f8b3-ed28-4c85-95df-74df5b250a09\"]}\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "8602f8b3-ed28-4c85-95df-74df5b250a09",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-uGwhWm",
+                "socketDir": "/private/tmp/agora-p0c-8602f8b3-ed28-4c85-95df-74df5b250a09"
+              },
+              "harness_cleanup_needed": false,
+              "removed": true
+            }
+          ]
+        },
+        {
+          "weakened": true,
+          "source_digest": "4089118319dd0ae3c3b6101e0bf61f97194f8d5f452f3a1206caa001c6066f10",
+          "exit": 1,
+          "output": "\n RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy\n\n \u276f |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 15 skipped) 4ms\n   \u00d7 allocation baseline: creates a private directory without touching artifacts 2ms\n\n Test Files  1 failed (1)\n      Tests  1 failed | 15 skipped (16)\n   Start at  00:03:04\n   Duration  85ms (transform 46%, import 39%, tests 12%, worker 3%)\n\n{\"allocated\":{\"runId\":\"c99d30ac-c352-47e6-9a37-c2eb7d8b5614\",\"artifactDir\":\"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-tW2Sqj\",\"socketDir\":\"/private/tmp/agora-p0c-c99d30ac-c352-47e6-9a37-c2eb7d8b5614\"},\"mode\":493}\n{\"cleanup\":false,\"runs\":[\"c99d30ac-c352-47e6-9a37-c2eb7d8b5614\"]}\n\n\u23af\u23af\u23af\u23af\u23af\u23af Failed Suites 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts [ packages/storage/test/postgres-socket.test.ts ]\nAssertionError: expected false to be true // Object.is equality\n\n- Expected\n+ Received\n\n- true\n+ false\n\n \u276f packages/storage/test/postgres-socket.test.ts:19:18\n     17|  const removed = leases.every(lease => !existsSync(lease.identity.sock\u2026\n     18|  console.error(JSON.stringify({ cleanup: removed, runs: leases.map(lea\u2026\n     19|  expect(removed).toBe(true);\n       |                  ^\n     20|  rmSync(artifacts, { recursive: true });\n     21| });\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/2]\u23af\n\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |unit| packages/storage/test/postgres-socket.test.ts > allocation baseline: creates a private directory without touching artifacts\nError: socket ownership mismatch\n \u276f verify scripts/postgres-socket.ts:36:23\n     34|  };\n     35|  const verify = (): void => {\n     36|   if (!owned()) throw new Error('socket ownership mismatch');\n       |                       ^\n     37|  };\n     38|  let removed = false;\n \u276f Object.cleanup scripts/postgres-socket.ts:41:3\n \u276f packages/storage/test/postgres-socket.test.ts:29:20\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[2/2]\u23af\n\n",
+          "cleanup": [
+            {
+              "identity": {
+                "runId": "c99d30ac-c352-47e6-9a37-c2eb7d8b5614",
+                "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/mutation-copy/.scratch/socket-test-deep-artifacts-tW2Sqj",
+                "socketDir": "/private/tmp/agora-p0c-c99d30ac-c352-47e6-9a37-c2eb7d8b5614"
+              },
+              "harness_cleanup_needed": true,
+              "removed": true
+            }
+          ]
+        }
+      ],
+      "copy_removed": true
+    }
+  ]
+}

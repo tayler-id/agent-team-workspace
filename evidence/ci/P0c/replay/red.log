@@ -1,11 +1,11 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-21T03:29:33.299Z
+recorded_at: 2026-09-21T04:02:39.688Z
 parent: c9e6fe16c1f107da95d77f35d092e0a923781783
-head: 9797eb15e34a72116b1802c5bc5efeb3fffa5c62
+head: b76440030fa3b9f95ba3c8a93b1e6c74a725d7a3
 subject_revision: c9e6fe16c1f107da95d77f35d092e0a923781783
 test_patch_applied_to_subject: true
 test_patch_files: packages/storage/test/postgres-socket.test.ts
-test_patch_digest: sha256:6bda9a7fc89c15df797d94e89c2df61cc17c6a609d4eb93d477a3d63b70413af
+test_patch_digest: sha256:8c342c5eb58c2f36a752e8565a739be0a06a6547c56e7dc8d40220b0698b1401
 fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
 configuration: {"command":"pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts -t allocation baseline|short socket denial","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
 toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
@@ -13,21 +13,21 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-hVvfS5
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-zs35M7
 
- ❯ |unit| packages/storage/test/postgres-socket.test.ts (13 tests | 1 failed | 11 skipped) 5ms
+ ❯ |unit| packages/storage/test/postgres-socket.test.ts (16 tests | 1 failed | 14 skipped) 4ms
    × short socket denial, collision and idempotent cleanup 2ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 1 passed | 11 skipped (13)
-   Start at  23:29:27
-   Duration  86ms (transform 48%, import 26%, tests 19%, worker 7%)
+      Tests  1 failed | 1 passed | 14 skipped (16)
+   Start at  00:02:34
+   Duration  95ms (transform 44%, import 39%, tests 12%, worker 5%)
 
 stderr | packages/storage/test/postgres-socket.test.ts > short socket denial, collision and idempotent cleanup
-{"allocated":{"runId":"58818424-2018-439c-bb02-6e3faf69e2ab","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-hVvfS5/.scratch/socket-test-deep-artifacts-H5iBCP","socketDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-hVvfS5/.scratch/socket-test-deep-artifacts-H5iBCP/agora-p0c-58818424-2018-439c-bb02-6e3faf69e2ab"},"mode":448}
+{"allocated":{"runId":"74168adf-dcdc-42b7-8aa6-1dca044c4852","artifactDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-zs35M7/.scratch/socket-test-deep-artifacts-R8HSh5","socketDir":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/replay-tmp/agora-red-zs35M7/.scratch/socket-test-deep-artifacts-R8HSh5/agora-p0c-74168adf-dcdc-42b7-8aa6-1dca044c4852"},"mode":448}
 
 stderr | packages/storage/test/postgres-socket.test.ts
-{"cleanup":true,"runs":["93231ea3-0132-4d80-acb5-14f67551a85b","58818424-2018-439c-bb02-6e3faf69e2ab"]}
+{"cleanup":true,"runs":["715eeece-3316-41b2-a612-21799b1908ec","74168adf-dcdc-42b7-8aa6-1dca044c4852"]}
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯

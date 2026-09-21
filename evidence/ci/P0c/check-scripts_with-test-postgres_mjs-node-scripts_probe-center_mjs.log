@@ -3,7 +3,7 @@ exit: 0
 {
 	"schema_version": "agora.probe/v1",
 	"target": "apps/center/src/main.ts",
-	"base": "http://127.0.0.1:10959",
+	"base": "http://127.0.0.1:21821",
 	"outcome": "pass",
 	"exit": 0,
 	"results": [
@@ -113,7 +113,7 @@ exit: 0
 				"status": 400,
 				"body": {
 					"reason_code": "malformed_command",
-					"correlation_id": "60430fbb-a1b7-4b23-9f19-21c43284d464",
+					"correlation_id": "76662555-0069-4257-98b8-b250753b0c61",
 					"details": [
 						"$ must NOT have additional properties"
 					]
@@ -133,7 +133,7 @@ exit: 0
 				"status": 404,
 				"body": {
 					"reason_code": "not_found",
-					"correlation_id": "d6073123-71a1-44d7-abbf-49ac011bb70c"
+					"correlation_id": "0a31cb83-65f5-4c8f-9450-7b0989b7fd97"
 				}
 			}
 		},
@@ -150,7 +150,7 @@ exit: 0
 				"status": 404,
 				"body": {
 					"reason_code": "unavailable_capability",
-					"correlation_id": "e04cb15e-acba-440a-8baa-2af2d51b39da",
+					"correlation_id": "cf50541e-eb8b-4415-8394-31f3f55d621b",
 					"details": [
 						"local-room message persistence is not composed in this slice (local-room L1); the command was validated and dispatched"
 					]
@@ -173,7 +173,7 @@ exit: 0
 				"status": 400,
 				"body": {
 					"reason_code": "malformed_command",
-					"correlation_id": "b6d8fb5d-6d89-403f-bce1-f6767506c920",
+					"correlation_id": "fa7acdd0-1804-4e40-89a2-fe5a680c859f",
 					"details": [
 						"$ must NOT have additional properties"
 					]
