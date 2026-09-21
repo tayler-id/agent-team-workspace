@@ -1,0 +1,36 @@
+
+> agora@ check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test
+
+
+> agora@ lint /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> eslint .
+
+
+> agora@ typecheck /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json
+
+
+> agora@ docs:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs && node scripts/verify-design-handoff.mjs && pnpm docs:validate && pnpm docs:test
+
+markdownlint-cli2 v0.23.2 (markdownlint v0.41.1)
+Finding: AGENTS.md docs/**/*.md evidence/**/*.md .agents/skills/verify-agora/SKILL.md
+Linting: 113 files
+Summary: 0 issues in 0 files
+PASS authored structure: 7 documents; 24 requirements; 26 live-scenario mappings
+PASS semantic readiness: 22 milestones; 66 independently gated tasks; 66 exactly owned Build outcomes
+PASS combined dependency graph; 8 foundation proofs; evidence/canary before model writes; cloud-independent later tracks
+PASS 47 official skills; 80 append-only decisions; 201 local links; authored style/privacy checks
+SCOPE static design readiness only; no runtime foundation or product acceptance has run; upstream format/model literals are not semantic authority
+PASS packet structure: 14 files; 744 meaningful lines; required sections present
+PASS 90 relative links and anchors; 6 Mermaid diagrams; stage/status vocabularies; no private paths, placeholders or long dashes
+SCOPE packet structure only; it cannot verify that prose is true or that any screen exists; base revision 606cba2
+
+> agora@ docs:validate /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace
+> node docs/site/build.mjs --check
+
+cli: source repo:docs/runbooks/development.md#postgresql-test-path
+ ELIFECYCLE  Command failed with exit code 1.
+ ELIFECYCLE  Command failed with exit code 1.
+ ELIFECYCLE  Command failed with exit code 1.

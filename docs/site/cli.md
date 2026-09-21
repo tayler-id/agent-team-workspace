@@ -48,7 +48,7 @@ This driver landed after the atlas seed. It proves fixture convergence, not a br
 | --- | --- |
 | `pnpm migrate` | Owner connection via `AGORA_MIGRATION_DATABASE_URL`; JSON `applied`, `total`, `schema_digest` and server version |
 | `pnpm migrate:ephemeral` | Same migration on a throwaway cluster |
-| `node scripts/with-test-postgres.mjs COMMAND ARGS...` | Owned short socket, bounded startup (`AGORA_PG_STARTUP_TIMEOUT_MS`, default 30000), NDJSON lifecycle identities and exact cleanup; [limits and exits](repo:docs/runbooks/development.md#postgresql-test-path) |
+| `node scripts/with-test-postgres.mjs COMMAND ARGS...` | Owned short socket, bounded startup (`AGORA_PG_STARTUP_TIMEOUT_MS`, default 30000), NDJSON lifecycle identities and exact cleanup; [limits and exits](repo:docs/runbooks/development.md) |
 | `node scripts/probe-center.mjs --json` | Requires database URL; launches center and checks eight literal HTTP outcomes, then stops center |
 | `node scripts/probe-center.mjs --scenarios [--json]` | Prints the `agora.probe-scenarios/v1` inventory (id, method, path, expected status and reason code); starts nothing and needs no database |
 
