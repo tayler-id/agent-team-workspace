@@ -1,0 +1,115 @@
+
+> agora@ check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test
+
+
+> agora@ lint /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> eslint .
+
+
+> agora@ typecheck /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json
+
+
+> agora@ docs:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs && node scripts/verify-design-handoff.mjs && pnpm docs:validate && pnpm docs:test
+
+markdownlint-cli2 v0.23.2 (markdownlint v0.41.1)
+Finding: AGENTS.md docs/**/*.md evidence/**/*.md .agents/skills/verify-agora/SKILL.md
+Linting: 65 files
+Summary: 0 issues in 0 files
+PASS authored structure: 7 documents; 24 requirements; 26 live-scenario mappings
+PASS semantic readiness: 22 milestones; 66 independently gated tasks; 66 exactly owned Build outcomes
+PASS combined dependency graph; 8 foundation proofs; evidence/canary before model writes; cloud-independent later tracks
+PASS 47 official skills; 81 append-only decisions; 205 local links; authored style/privacy checks
+SCOPE static design readiness only; no runtime foundation or product acceptance has run; upstream format/model literals are not semantic authority
+PASS packet structure: 14 files; 744 meaningful lines; required sections present
+PASS 90 relative links and anchors; 6 Mermaid diagrams; stage/status vocabularies; no private paths, placeholders or long dashes
+SCOPE packet structure only; it cannot verify that prose is true or that any screen exists; base revision 606cba2
+
+> agora@ docs:validate /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> node docs/site/build.mjs --check
+
+{"outcome":"pass","pages":26,"milestones":22}
+
+> agora@ docs:test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> node --test docs/site/test/*.test.ts
+
+✔ the same public build driver produces a valid baseline before corpus assertions (0.276708ms)
+✔ the complete corpus has 26 pages and both audience tracks (0.297375ms)
+✔ the atlas explains all nine system nodes and eight connections (0.158584ms)
+✔ the committed design packet is readable as linked documentation, not a source-code dump (0.159833ms)
+✔ current commands and planned product availability have separate references (0.175875ms)
+✔ disabling only the private path guard makes its behavioral assertion fail (131.234417ms)
+✔ disabling only the : section guard makes its behavioral assertion fail (98.967458ms)
+✔ disabling only the : visual guard makes its behavioral assertion fail (100.433958ms)
+✔ disabling only the : link guard makes its behavioral assertion fail (101.214583ms)
+✔ disabling only the : source guard makes its behavioral assertion fail (103.505667ms)
+✔ disabling only the snapshot revision guard makes its behavioral assertion fail (112.674709ms)
+✔ disabling only the invalid status guard makes its behavioral assertion fail (108.939417ms)
+✔ disabling only the Built proof guard makes its behavioral assertion fail (122.109334ms)
+✔ disabling only the milestone coverage guard makes its behavioral assertion fail (110.591458ms)
+✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (103.953959ms)
+✔ disabling only the : outcome guard makes its behavioral assertion fail (120.781ms)
+✔ disabling only the : stage guard makes its behavioral assertion fail (105.35975ms)
+✔ disabling only the inventory missing guard makes its behavioral assertion fail (100.202292ms)
+✔ disabling only the feature documentation guard makes its behavioral assertion fail (94.22775ms)
+✔ public documentation guard accepts the complete valid fixture (4.538375ms)
+✔ broken internal page and anchor links fail (1.612083ms)
+✔ feature explanations and visual flows are mandatory (0.394959ms)
+✔ progress statuses are closed and Built requires source test and evidence (0.40375ms)
+✔ all milestones must occur exactly once with an outcome and release stage (0.403958ms)
+✔ milestone outcomes mirror the authoritative plan instead of drifting (0.134125ms)
+✔ every executable and package must have a documentation home (0.115708ms)
+✔ every feature-map entry requires a validated feature page (0.201792ms)
+✔ private absolute paths and unsafe links never enter the site (0.212292ms)
+✔ production links include generated navigation, fragment, stylesheet and nested source views (1.143167ms)
+✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (2.872208ms)
+✔ Mermaid mirror carries the same status and relationships as the data owner (0.30225ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1587.904083
+
+> agora@ contracts:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> node contracts/tools/generate.mjs --check
+
+{"schema_version":"agora.contract-generation-run/v1","mode":"check","outcome":"pass","exit":0,"outputs":[{"file":"contracts/generated/openapi.bundled.json","digest":"sha256:b4d0995df6c2e3678dd9f33c3af5910c35ef5a7d0e2f4be96cda0a8eb680d3ef"},{"file":"contracts/generated/typescript/openapi.d.ts","digest":"sha256:84a047df5d192b18e1120d274513fe136f3f0b633edd02f934c02476cc7a6adb"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Client.swift","digest":"sha256:a319b0c3e4b69a907f8c7373cdf75e2fa20f86e32bdbf937b9ab4dccdc5b186c"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Headers.swift","digest":"sha256:b98a3f97c4cb97176fe979d198d2a3705972f99e4346887f0af4a266c6de8365"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Parameters.swift","digest":"sha256:d595dcdbd4f83d327e4c2ac0afd0c24e1f480a8a51080b3317e3705ecfc805d4"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+RequestBodies.swift","digest":"sha256:00a9569f70ba89057fd5fd14b4ecbbad8a34d6941e8bb905c57dc198873116d5"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Responses.swift","digest":"sha256:9398591b37a3141b09b726fcf5612eabf46e641bb56e0da6d7f0a098d307b348"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift","digest":"sha256:ec6966cd2b6a90f3be5acdddb4f405b54e40bf0f90175068a2a2e9c792aeaa03"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components.swift","digest":"sha256:a823627f9eccdb71d20853743709c54609c76fe51096cd751aa2493f3f828a38"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Operations.swift","digest":"sha256:a8cf4d9376d7869e1dfd1d71e09820129d97ac8844b29c83550895807593a100"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types.swift","digest":"sha256:9d9109d4d6ff07079683f632c17c3a6dca1dbfd9fe8a3d54aeb02459b42c1368"}],"drift":[]}
+
+> agora@ test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace
+> node scripts/with-test-postgres.mjs vitest run
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NXbJ4y","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Startup Error ⎯⎯⎯⎯⎯⎯⎯⎯
+Error: Cannot find native binding. npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). Please try `npm i` again after removing both package-lock.json and node_modules directory.
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs:602:34
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs:9:49
+    ... 4 lines matching cause stack trace ...
+    at async CAC.run (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/cac.fSuRXrAx.js:2346:2) {
+  cause: Error: Cannot find module '@rolldown/binding-wasm32-wasi'
+  Require stack:
+  - /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs:497:18
+      ... 8 lines matching cause stack trace ...
+      at async CAC.run (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/cac.fSuRXrAx.js:2346:2) {
+    cause: Error: Cannot find module './rolldown-binding.wasi.cjs'
+    Require stack:
+    - /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs
+        at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/binding-BbrDfv1x.mjs:497:18
+        ... 8 lines matching cause stack trace ...
+        at async CAC.run (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/cac.fSuRXrAx.js:2346:2) {
+      cause: [Error]
+    }
+  }
+}
+
+
+
+ ELIFECYCLE  Test failed. See above for more details.
+ ELIFECYCLE  Command failed with exit code 1.
+EXIT:1

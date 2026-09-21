@@ -1,6 +1,6 @@
 {
-  "revision": "4af669a8799137d58a743c3f104384586f3e496f",
-  "date": "2026-09-20",
+  "revision": "e7dd9a8170540b5c1835432cc82e3eae86fee6f9",
+  "date": "2026-09-21",
   "features": [
     {
       "id": "task-proof",
@@ -76,6 +76,18 @@
       "page": "authoring.md",
       "proof": [
         "repo:docs/implementation-plan.md"
+      ]
+    },
+    {
+      "id": "ci-design-negatives",
+      "title": "Design-negative source closure",
+      "status": "In progress",
+      "why": "P0a repaired the design-negative sandbox source closure; mandatory aggregate CI and hosted enforcement are not present yet.",
+      "page": "ci.md",
+      "proof": [
+        "repo:scripts/test-design-checks.mjs",
+        "repo:docs/validation/design-check-tests.txt",
+        "repo:evidence/ci/p0a/outcome.json"
       ]
     }
   ],

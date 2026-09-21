@@ -8,10 +8,13 @@ const workspace = path.join(root, '.scratch', 'design-check-tests');
 fs.mkdirSync(workspace, { recursive: true });
 const runRoot = fs.mkdtempSync(path.join(workspace, 'run-'));
 const change = (file, mutate) => ({ file, mutate });
+const omit = (file) => ({ file, omit: true });
 const task = (text, name, mutate) => text.replace(new RegExp(`(^### ${name}\\n)([\\s\\S]*?)(?=^### |^## )`, 'm'), (_, title, body) => title + mutate(body));
 const unit = (text, id, mutate) => text.replace(new RegExp(`(^## .+ \\(${id}\\)\\n)([\\s\\S]*?)(?=^## )`, 'm'), (_, title, body) => title + mutate(body));
 const cases = [
 	{ name: 'baseline', changes: [], expected: 0 },
+	// Guard G20 source-closure: omitting cited application source must surface the legitimate decision link, not a silent green.
+	{ name: 'omitted-application-source', changes: [omit('apps/center/src/app.ts')], reason: 'missing link apps/center/src/app.ts' },
 	{ name: 'independent-reviewer-without-model-literal', changes: [change('docs/implementation-plan.md', t => t.replaceAll('grok-4.6-fast-xhigh', 'approved-independent-reviewer'))], expected: 0 },
 	{ name: 'missing-requirement', changes: [change('docs/task-breakdown.md', t => t.replace('- Specification requirements: R03', '- Specification requirements: R99'))], reason: 'unknown requirement R99' },
 	{ name: 'dependency-cycle', changes: [change('docs/task-breakdown.md', t => t.replace('- Prerequisites: None.', '- Prerequisites: `agora-s1-bootstrap-repository`.'))], reason: 'combined task/milestone cycle' },
@@ -54,13 +57,19 @@ for (const test of cases) {
 	fs.cpSync(path.join(root, 'scripts'), path.join(fixture, 'scripts'), { recursive: true });
 	for (const file of ['AGENTS.md', 'CLAUDE.md', 'skills-lock.json']) fs.copyFileSync(path.join(root, file), path.join(fixture, file));
 	fs.symlinkSync(path.join(root, '.agents'), path.join(fixture, '.agents'), 'dir');
-	// Decision rows cite evidence receipts and reviewed migration files; copy them so a mutation can never reach the real tree.
-	for (const cited of ['evidence', 'packages', 'contracts']) fs.cpSync(path.join(root, cited), path.join(fixture, cited), { recursive: true, filter: source => !source.split(path.sep).some(part => ['node_modules', '.build'].includes(part)) });
-	for (const { file, mutate } of test.changes) {
-		const target = path.join(fixture, file);
+	// Decision rows cite evidence, packages, contracts and application sources; copy them so a mutation can never reach the real tree.
+	for (const cited of ['evidence', 'packages', 'contracts', 'apps']) fs.cpSync(path.join(root, cited), path.join(fixture, cited), { recursive: true, filter: source => !source.split(path.sep).some(part => ['node_modules', '.build'].includes(part)) });
+	for (const step of test.changes) {
+		const target = path.join(fixture, step.file);
+		if (step.omit) {
+			assert.ok(fs.existsSync(target), `${test.name}: omit target missing before removal ${step.file}`);
+			fs.rmSync(target, { recursive: true, force: true });
+			assert.ok(!fs.existsSync(target), `${test.name}: omit mutation did not remove ${step.file}`);
+			continue;
+		}
 		const before = fs.readFileSync(target, 'utf8');
-		const after = mutate(before);
-		assert.notEqual(before, after, `${test.name}: mutation did not apply to ${file}`);
+		const after = step.mutate(before);
+		assert.notEqual(before, after, `${test.name}: mutation did not apply to ${step.file}`);
 		fs.writeFileSync(target, after);
 	}
 	const result = spawnSync(process.execPath, [path.join(root, 'scripts/verify-design.mjs')], { cwd: fixture, encoding: 'utf8' });

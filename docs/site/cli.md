@@ -72,7 +72,7 @@ See [the runnable recipe](cookbook.md) and [configuration](configuration.md). Do
 
 `node scripts/record-red-green.mjs --parent SHA --head SHA --out DIR -- COMMAND ARGS...` creates disposable worktrees, carries head test files onto the parent, installs locked dependencies and records both results and digests. Nonzero red alone is not adequate: inspect that it is the intended assertion, not a missing tool. It removes its worktrees and preserves receipts.
 
-`node scripts/verify-design.mjs` checks semantic design consistency. `node scripts/test-design-checks.mjs` runs its negative cases. `node scripts/verify-design-handoff.mjs` checks the portable design packet; `node scripts/test-design-handoff-checks.mjs` proves its rejection fixtures. `scripts/require-test-postgres.ts` is the Vitest prerequisite hook, not a standalone service. The unchanged pstack plan checker is informational; [verification](verification.md) provides its command.
+`node scripts/verify-design.mjs` checks semantic design consistency. `node scripts/test-design-checks.mjs` runs its negative cases on a disposable sandbox that copies decision-cited `apps` sources; it is not yet part of `pnpm check`. See [mechanical CI guardrails](ci.md) for P0a scope. `node scripts/verify-design-handoff.mjs` checks the portable design packet; `node scripts/test-design-handoff-checks.mjs` proves its rejection fixtures. `scripts/require-test-postgres.ts` is the Vitest prerequisite hook, not a standalone service. The unchanged pstack plan checker is informational; [verification](verification.md) provides its command.
 
 ## Planned product CLI: unavailable
 

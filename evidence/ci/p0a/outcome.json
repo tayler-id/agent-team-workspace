@@ -1,0 +1,70 @@
+{
+  "schema": "agora.ci-p0a/v1",
+  "slice": "P0a",
+  "title": "design-negative sandbox source closure",
+  "parent": "95f35277fbfc821be148029521222f0de617d7de",
+  "head": "e7dd9a8170540b5c1835432cc82e3eae86fee6f9",
+  "red": {
+    "command": "node scripts/test-design-checks.mjs",
+    "exit": 1,
+    "cause": "baseline unexpected exit; index.md: missing link apps/center/src/app.ts because sandbox omitted apps/",
+    "log": "evidence/ci/p0a/red.log",
+    "detail": "11:AssertionError [ERR_ASSERTION]: index.md: missing link apps/center/src/app.ts"
+  },
+  "green": {
+    "command": "node scripts/test-design-checks.mjs",
+    "exit": 0,
+    "cases": 24,
+    "log": "evidence/ci/p0a/green.log",
+    "named_mutations": "evidence/ci/p0a/mutations.txt"
+  },
+  "fix": {
+    "sandbox_copies": [
+      "docs",
+      "scripts",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "skills-lock.json",
+      ".agents",
+      "evidence",
+      "packages",
+      "contracts",
+      "apps"
+    ],
+    "omit_negative": "omitted-application-source removes apps/center/src/app.ts",
+    "omit_reason": "missing link apps/center/src/app.ts",
+    "mutation_applied_asserted": true
+  },
+  "digests": {
+    "test_patch_sha256": "sha256:beacf7f77bf58fdf8113af3319308ae3219426e091f38afb9f9ad6135fb042bf",
+    "test_design_checks_mjs_sha256": "sha256:3ad1beabca8290ff0d02aa9e394449b10d446bea217f9d11c84cebd0e464b73c"
+  },
+  "scope_owned_checks": {
+    "verify-design": "pass",
+    "test-design-checks": "pass 24 cases",
+    "test-design-handoff-checks": "pass 20 cases",
+    "lint": "pass",
+    "typecheck": "pass",
+    "docs:check": "pass",
+    "contracts:check": "pass"
+  },
+  "pnpm_check": {
+    "exit": 1,
+    "log": "evidence/ci/p0a/pnpm-check.log",
+    "classification": "blocked prerequisite, not product red",
+    "detail": "lint/typecheck/docs/contracts passed; Vitest failed at startup: Cannot find native binding (rolldown optional native / missing @rolldown/binding-wasm32-wasi). PostgreSQL fixture started successfully before Vitest. No dependency repair in this slice."
+  },
+  "scope_limits": [
+    "not wired into pnpm check aggregate",
+    "no toolchain doctor",
+    "no hosted CI or branch protection",
+    "no React lint or web lane",
+    "no PostgreSQL socket changes",
+    "no dependency or lockfile changes"
+  ],
+  "cleanup": {
+    "design_check_scratch": "removed by suite",
+    "worktrees": "none",
+    "test_postgres": "with-test-postgres exit trap removed cluster after Vitest startup failure"
+  }
+}

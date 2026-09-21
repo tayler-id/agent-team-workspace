@@ -10,7 +10,7 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `pnpm typecheck` | Strict workspace compilation, then a separate ES2024-only client-core compile with no Node or DOM globals |
 | `pnpm lint` | Strict typed lint plus import and transitive public-type boundaries |
 | `pnpm boundaries` | Lane 8: forbidden import forms, public SDK/DOM leaks, private-path exports and no-platform compile negatives |
-| `pnpm docs:check` | markdownlint over authored Markdown, then the semantic design gate |
+| `pnpm docs:check` | markdownlint over authored Markdown, then the semantic design gate and handoff validator |
 | `pnpm contracts:generate` | Bundles the schema families with the OpenAPI operations and regenerates the TypeScript and Swift consumers |
 | `pnpm contracts:check` | Regenerates into a clean directory and fails on any byte of drift or any schema keyword outside the tested subset |
 | `pnpm contracts:conform` | Runs the golden vectors through the TypeScript and Swift consumers and prints the joint report |
@@ -19,7 +19,11 @@ Runs from TypeScript source under Node 24 type stripping. There is no build step
 | `pnpm test:unit` | Unit tests only, no database |
 | `pnpm test:pg` | PostgreSQL tests only, throwaway cluster |
 | `pnpm migrate` | Applies pending migrations as the owner in `AGORA_MIGRATION_DATABASE_URL` and prints a JSON report |
-| `pnpm check` | All of the above gates in sequence |
+| `pnpm check` | lint, typecheck, docs:check, contracts:check and test in sequence |
+| `node scripts/test-design-checks.mjs` | Disposable design-negative suite (baseline plus named mutations); not yet wired into `pnpm check` |
+| `node scripts/test-design-handoff-checks.mjs` | Disposable handoff-negative suite; also outside `pnpm check` |
+
+`pnpm test:unit` runs both the `unit` and `contracts` Vitest projects, so it is not Swift-free. `pnpm check` does not yet run the standalone design/handoff negative scripts, red/green replay, the public center probe, web build/test or hosted CI. The design-negative sandbox copies decision-cited `apps` sources so legitimate links such as `apps/center/src/app.ts` resolve; omitting that file in a disposable copy must reject with the named missing-link diagnostic ([evidence/ci/p0a](../../evidence/ci/p0a/)).
 
 The documentation tool's TOML parser is pinned to `smol-toml` 1.7.1 through a narrow workspace override. Its upstream 1.7.0 pin hangs on a malformed trailing comment (CVE-2026-85730); a bounded public-CLI regression test and full dependency audit cover this repair.
 

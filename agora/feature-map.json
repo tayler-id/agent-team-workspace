@@ -124,6 +124,16 @@
 			"documentation": "docs/site/authoring.md"
 		},
 		{
+			"id": "design-negative-source-closure",
+			"documentation": "docs/site/ci.md",
+			"paths": ["scripts/test-design-checks.mjs", "scripts/verify-design.mjs", "docs/validation/design-validation.md"],
+			"public": ["node scripts/verify-design.mjs", "node scripts/test-design-checks.mjs"],
+			"scenarios": ["scripts/test-design-checks.mjs", "evidence/ci/p0a"],
+			"fixtures": ["disposable design-check sandbox copies docs/scripts/evidence/packages/contracts/apps", "omitted-application-source removes apps/center/src/app.ts"],
+			"platforms": ["node24"],
+			"owner": "ci P0a"
+		},
+		{
 			"id": "local-room-contracts",
 			"documentation": "docs/site/local-room.md",
 			"paths": ["contracts/schemas/local-room.schema.json", "contracts/openapi.json", "contracts/src/index.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift", "packages/domain/src/local-room/port.ts", "packages/domain/src/index.ts", "apps/center/src/app.ts", "scripts/probe-center.mjs"],

@@ -9,7 +9,7 @@ Revalidated on 2026-09-20 after two independent specification reviews. The packa
 | Project-owned semantic design gate | 24 requirements, 26 live-scenario mappings, 22 milestones, 66 tasks and 66 exactly owned Build outcomes; combined task/milestone graph acyclic | [Design check](design-check.txt) |
 | Foundation sequencing | Eight proofs owned by foundation units; all features depend on the full foundation; evidence/trusted checks/scripted canary precede model writes | Design check |
 | Later-stage independence | Knowledge, observer, external-agent and native-client tracks have no unjustified cloud dependency | Design check |
-| Behavioral validator suite | 23 cases pass, including two valid inputs and 21 rejected mutations | [Validator tests](design-check-tests.txt) |
+| Behavioral validator suite | 24 cases pass, including two valid inputs and 22 rejected mutations; baseline copies cited application sources so legitimate decision links resolve | [Validator tests](design-check-tests.txt) |
 | Red-before-green regression | Old checker accepted an unrelated task Outcome; repaired checker rejects it. A second regression moved a foundation proof into dependent feature work; the missing ownership guard was observed red, then fixed | [Red/green record](validator-red-green.txt) |
 | Unchanged pstack format checker | 22 sections, zero problems. Informational only; the semantic gate also accepts a plan with the literal model name removed | [Plan check](plan-check.txt) |
 | Markdown lint | Six authored Markdown files, zero issues | [Markdown check](markdown-check.txt) |
@@ -20,9 +20,9 @@ Revalidated on 2026-09-20 after two independent specification reviews. The packa
 | Authored checks | Local links/anchors, heading/fence structure, private paths, placeholders, long dashes, canonical contributor pointer, JavaScript syntax and incremental diff whitespace pass | Design check and diff review |
 | Dated version evidence | Current supported majors and direct registry engine/peer metadata checked; no application compatibility trial claimed | [Research basis](../research-basis.md#dated-foundation-compatibility-check) |
 
-The 23 validator cases preserve the original style/link/requirement/cycle tests and add missing/unowned/duplicate Build ownership, Outcome mismatch, task self-milestone deadlock, wrong close gate, missing/misplaced foundation proof, missing live coverage, premature model writes, foundation bypass, cloud-coupled memory, and historical decision rewriting. The positive model-neutral case proves the project gate does not depend on the pstack model literal. Each rejection asserts the intended diagnostic, not merely any nonzero exit.
+The 24 validator cases preserve the original style/link/requirement/cycle tests and add missing/unowned/duplicate Build ownership, Outcome mismatch, task self-milestone deadlock, wrong close gate, missing/misplaced foundation proof, missing live coverage, premature model writes, foundation bypass, cloud-coupled memory, historical decision rewriting, and omitted application source. The positive model-neutral case proves the project gate does not depend on the pstack model literal. Each rejection asserts the intended diagnostic, not merely any nonzero exit. Every intended mutation asserts that it actually changed the disposable copy, so a no-op cannot count as a negative.
 
-A fixture setup failure after adding script citations to the decision trail was not counted as behavioral red. The test fixture was corrected to include those source files, then the foundation-owner regression failed for the intended acceptance bug. The retained red/green record distinguishes the valid behavior failures from setup errors.
+A fixture setup failure after adding script citations to the decision trail was not counted as behavioral red. The test fixture was corrected to include those source files, then the foundation-owner regression failed for the intended acceptance bug. A later baseline failure after decision rows cited `apps/center/src/app.ts` was the same class of setup error: the sandbox omitted application sources while the link remained legitimate. The fixture now copies `apps` beside evidence, packages and contracts, and the `omitted-application-source` case proves that removing that cited file rejects with `missing link apps/center/src/app.ts`. The retained red/green record distinguishes the valid behavior failures from setup errors. See [evidence/ci/p0a](../../evidence/ci/p0a/).
 
 ## Reproduction
 
@@ -43,7 +43,7 @@ git diff --cached --check
 
 The project gate is authoritative for document semantics only. It cannot infer whether prose is true, a screenshot shows success, or a runtime exists. R22 specifies the future executable foundation runner and its trusted evidence checks. The pstack checker remains unchanged and informational. Its annotations do not require ten model sessions or authorize unavailable tooling.
 
-Negative tests create isolated document/source fixtures under ignored `.scratch/design-check-tests`. They never alter installed metadata or source documents. They preserve the same original decision-prefix digest and deliberately corrupt copies to prove refusal.
+Negative tests create isolated document/source fixtures under ignored `.scratch/design-check-tests`. They copy `docs`, `scripts`, contributor pointers, decision-cited `evidence`/`packages`/`contracts`/`apps`, and a read-only `.agents` link. They never alter installed metadata or source documents. They preserve the same original decision-prefix digest and deliberately corrupt copies to prove refusal. This P0a source-closure repair is not hosted CI, not `pnpm check` coverage of every standalone negative, and not product acceptance.
 
 The existing upstream tests ran again in a fresh ignored copy:
 

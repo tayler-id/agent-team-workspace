@@ -37,6 +37,15 @@ node scripts/verify-design.mjs
 node scripts/test-design-checks.mjs
 ```
 
+```flow
+Baseline sandbox | Copy docs, scripts, evidence, packages, contracts and apps into a disposable tree so legitimate decision links resolve.
+Unchanged accept | verify-design exits 0 on the intact copy.
+Isolated mutation | Change one document or omit one cited application source; assert the mutation actually applied.
+Named rejection | Require the intended diagnostic text, not merely any nonzero exit.
+```
+
+The design-negative fixture is repaired at P0a: its baseline passes because cited application sources are present, and `omitted-application-source` fails with `missing link apps/center/src/app.ts` when that file is removed from a disposable copy. Mandatory CI aggregation, hosted enforcement and the broader guard catalog are not yet present; do not treat a green design-negative suite as landing protection. Receipts live under [evidence/ci/p0a](repo:evidence/ci/p0a/outcome.json).
+
 `node scripts/verify-design-handoff.mjs` validates the independently owned design packet's sections, source links, diagrams, privacy and vocabularies. `node scripts/test-design-handoff-checks.mjs` runs its rejection fixtures. The site ingests those same committed Markdown files without becoming their content owner.
 
 The unchanged upstream format checker is informational only:

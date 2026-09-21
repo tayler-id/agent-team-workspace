@@ -1,4 +1,5 @@
 PASS accepts baseline
+PASS rejects omitted-application-source
 PASS accepts independent-reviewer-without-model-literal
 PASS rejects missing-requirement
 PASS rejects dependency-cycle
@@ -21,4 +22,4 @@ PASS rejects missing-integration-scenario
 PASS rejects model-write-before-canary
 PASS rejects feature-bypasses-foundation
 PASS rejects memory-unnecessarily-needs-cloud
-PASS 23 behavioral design-check cases; no application acceptance implied
+PASS 24 behavioral design-check cases; no application acceptance implied

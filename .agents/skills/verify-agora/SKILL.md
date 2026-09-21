@@ -21,7 +21,11 @@ pnpm audit --json
 pnpm typecheck
 pnpm lint
 pnpm docs:check
+node scripts/verify-design.mjs
+node scripts/test-design-checks.mjs
 ```
+
+Design-negative P0a pass predicates: `verify-design` exits 0 on the real tree; `test-design-checks` prints `PASS accepts baseline`, `PASS rejects omitted-application-source`, every other named mutation rejection with its reason, and `PASS 24 behavioral design-check cases`. The disposable sandbox must copy `apps` so legitimate decision evidence such as `apps/center/src/app.ts` resolves. This is fixture honesty only - it is not hosted CI, not full `pnpm check` coverage of every standalone negative, and not product acceptance. Receipts: `evidence/ci/p0a/`.
 
 ## Launch
 
