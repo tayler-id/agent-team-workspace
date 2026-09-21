@@ -5,11 +5,11 @@
   "parent": "f1584f849778d05139361dbc976177e2818fc76c",
   "head": "b9c63192faac41add7f9710cede5e548bdbd83f6",
   "result": "pass",
-  "summary": "Renderer footgun resolves React effect hooks by import/member origin (aliased named imports and namespace/default members); local same-name functions are not rejected. Guard-weakening and full app-architecture fixtures pass.",
+  "summary": "Correction closes noInlineConfig bypasses, guarded-extension gaps, browser-global false positives, DOM-mutation name matching, React effect alias/barrel bypasses and lazy exception validation. Whole-feature red retained beside correction-delta red/green.",
   "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
   "green": "evidence/U20/agora-s1-lint-application-architecture/green.log",
-  "red_assertions": "Tests 2 failed | 6 passed (8) with expected false to be true on aliased/namespace effect origin cases",
-  "green_assertions": "Tests 8 passed (8)",
+  "red_assertions": "Correction-delta: head tests fail on parent e28957d (bypass/false-positive cases); whole-feature-red.log retains original 8-failed slice red",
+  "green_assertions": "Tests 13 passed (13)",
   "commands": [
     "pnpm boundaries",
     "pnpm lint",
@@ -19,6 +19,7 @@
     "No Client/Host runtime",
     "No Feature discovery",
     "No product Features",
-    "Scope limited to renderer hook-origin correction"
+    "R11 target overage recorded in D83; under block thresholds",
+    "Whole-feature red preserved in whole-feature-red.log"
   ]
 }
