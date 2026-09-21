@@ -95,10 +95,10 @@ Red shows `Tests 6 failed | 1 passed | 1 expected fail (8)`: the health baseline
 For local-room L2, the behavioral parent is the L1 head on main and the head is the L2 code commit:
 
 ```sh
-node scripts/record-red-green.mjs --parent 95f3527 --head <L2-code-head> --out evidence/local-room/persistence -- pnpm exec node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/local-room.pg.test.ts packages/storage/test/local-room.pg.test.ts
+node scripts/record-red-green.mjs --parent 95f35277fbfc821be148029521222f0de617d7de --head d2e213153ce0ac8b0ec7309f68ac2e1509273875 --out evidence/local-room/persistence -- pnpm exec node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/local-room.pg.test.ts
 ```
 
-Red shows the six HTTP assertions failing against the parent's running process for behavioral reasons (`expected 404 to be 201` and a 404 where the snapshot should answer 200) and the storage file failing to load because the parent exports no adapter; green shows `Tests 16 passed (16)`. `evidence/local-room/persistence/outcome.json` binds the revisions, sizes and receipts.
+Red shows `Tests 6 failed (6)`: every HTTP assertion fails against the parent's running process for a behavioral reason (`expected 404 to be 201`, `expected 404 to be 200` for the snapshot, `expected 404 to be 409` for the changed body). Green shows `Tests 6 passed (6)`. The storage-level test cannot load at the parent, which exports no adapter, so it is retained head-only in `evidence/local-room/persistence/storage-pg.green.log`; its reds are the guard negatives in `gate-negatives.log`. `evidence/local-room/persistence/outcome.json` binds the revisions, sizes and receipts.
 
 For U01a.B04, use full committed parent/head SHAs and the task evidence directory. The public driver invokes the same recorder with the fixed native-assertion command, then captures the isolated guard mutation. Run both lanes and task admission. The final foundation command must exit 2 with FG04-FG08 missing and U01a integration unqualified; that expected denial is not task failure.
 

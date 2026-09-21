@@ -1,0 +1,17 @@
+# cleanup.log (local-room L2)
+recorded_at: 2026-09-21T02:20:14Z
+git worktree list:
+/Users/taylerramsay/.local/share/firstmate/projects/agent-team-workspace            95f3527 [main]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace   e23fe1b (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/10/agent-team-workspace  95f3527 (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace  95f3527 (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/2/agent-team-workspace   e23fe1b (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace   2fd3aad [fm/agora-s1-isolate-development]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace   95f3527 (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/5/agent-team-workspace   99aa4f7 [fm/agora-react-engineering-fixture]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/6/agent-team-workspace   d2e2131 [fm/agora-local-room-persistence]
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace   95f3527 (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/8/agent-team-workspace   95f3527 (detached HEAD)
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/9/agent-team-workspace   60bcd79 [fm/agora-local-room-web-shell]
+tmp entries matching agora-: 0
+pg clusters left running: 0

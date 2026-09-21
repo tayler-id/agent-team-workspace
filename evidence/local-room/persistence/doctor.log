@@ -1,0 +1,9 @@
+# doctor.log (local-room L2) at d2e213153ce0ac8b0ec7309f68ac2e1509273875
+recorded_at: 2026-09-21T02:17:50Z
+v24.16.0
+10.34.1
+pg_ctl (PostgreSQL) 18.4 (Homebrew)
+swift-driver version: 1.148.6 Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)
+   ╰──────────────────────────────────────────────╯
+
+install exit=0

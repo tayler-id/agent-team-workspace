@@ -1,0 +1,7 @@
+# migrations.log (local-room L2): two consecutive runs of the migration CLI as the owner on one throwaway cluster
+recorded_at: 2026-09-21T02:13:20Z
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-XLjupW","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.migration-report/v1","applied":2,"total":2,"schema_digest":"sha256:adec65e7575062e8afb43ad293bca76e426fd9516ff36315ed825802b5063638","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}
+exit=0
+{"schema_version":"agora.migration-report/v1","applied":0,"total":2,"schema_digest":"sha256:adec65e7575062e8afb43ad293bca76e426fd9516ff36315ed825802b5063638","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}
+exit=0

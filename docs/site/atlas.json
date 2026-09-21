@@ -1,6 +1,6 @@
 {
-  "revision": "4af669a8799137d58a743c3f104384586f3e496f",
-  "date": "2026-09-20",
+  "revision": "d2e213153ce0ac8b0ec7309f68ac2e1509273875",
+  "date": "2026-09-21",
   "features": [
     {
       "id": "task-proof",
@@ -66,7 +66,8 @@
         "repo:packages/storage/src/local-room.ts",
         "repo:packages/storage/drizzle/0001_local_room.sql",
         "repo:apps/center/test/local-room.pg.test.ts",
-        "repo:packages/storage/test/local-room.pg.test.ts"
+        "repo:packages/storage/test/local-room.pg.test.ts",
+        "repo:evidence/local-room/persistence/outcome.json"
       ]
     },
     {

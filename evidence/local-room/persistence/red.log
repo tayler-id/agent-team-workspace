@@ -1,0 +1,159 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-21T02:15:29.042Z
+parent: 95f35277fbfc821be148029521222f0de617d7de
+head: d2e213153ce0ac8b0ec7309f68ac2e1509273875
+subject_revision: 95f35277fbfc821be148029521222f0de617d7de
+test_patch_applied_to_subject: true
+test_patch_files: apps/center/test/local-room.pg.test.ts, apps/center/test/local-room.test.ts, contracts/fixtures/vectors.json, packages/client-core/test/boundaries.test.ts, packages/storage/test/local-room.pg.test.ts
+test_patch_digest: sha256:cc0fdcc86187121db27d7477932fdb585ce5f1da7fa84431f0da6505365fbebd
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[{"file":"packages/storage/drizzle/0001_local_room.sql","digest":"sha256:e4951baeea37ab42d00f8d9624ce1f7c2ff8b60cbb43f2f9e0fc3e1136723723"}],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:a758134ee8a99374604d9ec1fbce985565c87b2d7b094a362d9e8beb8b5f263b"},{"file":"contracts/openapi.json","digest":"sha256:8ee37f5f1e9663aefe869e31b6e827fa53ee2ee409ccefb6d551f2b3592e9ce3"},{"file":"contracts/schemas/errors.schema.json","digest":"sha256:dcd40308cda18d1689cdaae95081e5e15c67174bb49371672cb20b1177ec10fc"}]}
+configuration: {"command":"pnpm exec node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/local-room.pg.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-BOEQNa
+
+ ❯ |pg| apps/center/test/local-room.pg.test.ts (6 tests | 6 failed) 368ms
+   × an accepted send answers 201 with a schema-valid receipt whose identity digest is the canonical digest of the command and whose revision is the next room sequence 18ms
+   × replaying the same command returns the original receipt with replayed: true and no second message 4ms
+   × reusing the command id with a changed body is 409 command_conflict naming the committed digest 1ms
+   × another project or room is 404 scope_mismatch and a citation to no persisted record is 404 not_found; nothing is stored 2ms
+   × a citation to the persisted message commits at the next sequence, and validation failures are 400 before storage 0ms
+   × the snapshot after a service restart is identical, a replay still returns the original receipt, and the next send continues the sequence 1ms
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  22:15:20
+   Duration  773ms (tests 53%, import 41%, transform 5%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-rNDdLE","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/local-room.pg.test.ts > an accepted send answers 201 with a schema-valid receipt whose identity digest is the canonical digest of the command and whose revision is the next room sequence
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ snapshot apps/center/test/local-room.pg.test.ts:32:26
+     30| const snapshot = async (): Promise<Schema<'RoomSnapshot'>> => {
+     31|  const response = await fetch(`${base}/api/v1/local-room/snapshot`);
+     32|  expect(response.status).toBe(200);
+       |                          ^
+     33|  const result = validator.validate('RoomSnapshot', await response.json…
+     34|  if (!result.ok) throw new Error(result.details.join('; '));
+ ❯ apps/center/test/local-room.pg.test.ts:51:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  |pg| apps/center/test/local-room.pg.test.ts > replaying the same command returns the original receipt with replayed: true and no second message
+AssertionError: expected { status: 404, body: { …(3) } } to deeply equal { status: 201, …(1) }
+
+- Expected
++ Received
+
+  {
+    "body": {
+-     "replayed": true,
++     "correlation_id": "96ad1fbe-d49e-4e1a-a7e8-9e01162b3110",
++     "details": [
++       "local-room message persistence is not composed in this slice (local-room L1); the command was validated and dispatched",
++     ],
++     "reason_code": "unavailable_capability",
+    },
+-   "status": 201,
++   "status": 404,
+  }
+
+ ❯ apps/center/test/local-room.pg.test.ts:62:28
+     60|
+     61| test('replaying the same command returns the original receipt with rep…
+     62|  expect(await send(first)).toEqual({ status: 201, body: { ...firstRece…
+       |                            ^
+     63|  expect((await snapshot()).messages.filter((m) => m.command_id === fir…
+     64| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  |pg| apps/center/test/local-room.pg.test.ts > reusing the command id with a changed body is 409 command_conflict naming the committed digest
+AssertionError: expected 404 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 404
+
+ ❯ apps/center/test/local-room.pg.test.ts:68:17
+     66| test('reusing the command id with a changed body is 409 command_confli…
+     67|  const { status, body } = await send({ ...first, body: 'Changed body u…
+     68|  expect(status).toBe(409);
+       |                 ^
+     69|  expect(body).toMatchObject({ reason_code: 'command_conflict', details…
+     70| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  |pg| apps/center/test/local-room.pg.test.ts > another project or room is 404 scope_mismatch and a citation to no persisted record is 404 not_found; nothing is stored
+AssertionError: expected { status: 404, body: { …(3) } } to match object { status: 404, …(1) }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "body": {
+-     "reason_code": "scope_mismatch",
++     "reason_code": "unavailable_capability",
+    },
+    "status": 404,
+  }
+
+ ❯ apps/center/test/local-room.pg.test.ts:73:97
+     71|
+     72| test('another project or room is 404 scope_mismatch and a citation to …
+     73|  expect(await send({ ...command('elsewhere'), scope: { ...scope, proje…
+       |                                                                                                 ^
+     74|  expect(await send({ ...command('elsewhere'), scope: { ...scope, room_…
+     75|  expect(await send(command('cites nothing', [{ record_kind: 'message',…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  |pg| apps/center/test/local-room.pg.test.ts > a citation to the persisted message commits at the next sequence, and validation failures are 400 before storage
+TypeError: Cannot read properties of undefined (reading 'message_id')
+ ❯ apps/center/test/local-room.pg.test.ts:80:119
+     78|
+     79| test('a citation to the persisted message commits at the next sequence…
+     80|  const cited = await send(command('Replies to the first message.', [{ …
+       |                                                                                                                       ^
+     81|  expect(cited).toMatchObject({ status: 201, body: { receipt: { revisio…
+     82|  expect(await send(command('x'.repeat(4097)))).toMatchObject({ status:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  |pg| apps/center/test/local-room.pg.test.ts > the snapshot after a service restart is identical, a replay still returns the original receipt, and the next send continues the sequence
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ snapshot apps/center/test/local-room.pg.test.ts:32:26
+     30| const snapshot = async (): Promise<Schema<'RoomSnapshot'>> => {
+     31|  const response = await fetch(`${base}/api/v1/local-room/snapshot`);
+     32|  expect(response.status).toBe(200);
+       |                          ^
+     33|  const result = validator.validate('RoomSnapshot', await response.json…
+     34|  if (!result.ok) throw new Error(result.details.join('; '));
+ ❯ apps/center/test/local-room.pg.test.ts:88:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+

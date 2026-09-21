@@ -1,0 +1,24 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-09-21T02:15:29.043Z
+parent: 95f35277fbfc821be148029521222f0de617d7de
+head: d2e213153ce0ac8b0ec7309f68ac2e1509273875
+subject_revision: d2e213153ce0ac8b0ec7309f68ac2e1509273875
+test_patch_applied_to_subject: false
+test_patch_files: apps/center/test/local-room.pg.test.ts, apps/center/test/local-room.test.ts, contracts/fixtures/vectors.json, packages/client-core/test/boundaries.test.ts, packages/storage/test/local-room.pg.test.ts
+test_patch_digest: sha256:cc0fdcc86187121db27d7477932fdb585ce5f1da7fa84431f0da6505365fbebd
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[{"file":"packages/storage/drizzle/0001_local_room.sql","digest":"sha256:e4951baeea37ab42d00f8d9624ce1f7c2ff8b60cbb43f2f9e0fc3e1136723723"}],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:a758134ee8a99374604d9ec1fbce985565c87b2d7b094a362d9e8beb8b5f263b"},{"file":"contracts/openapi.json","digest":"sha256:8ee37f5f1e9663aefe869e31b6e827fa53ee2ee409ccefb6d551f2b3592e9ce3"},{"file":"contracts/schemas/errors.schema.json","digest":"sha256:dcd40308cda18d1689cdaae95081e5e15c67174bb49371672cb20b1177ec10fc"}]}
+configuration: {"command":"pnpm exec node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/local-room.pg.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-0Fuz1Y
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  22:15:26
+   Duration  1.13s (tests 66%, import 28%, transform 5%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-af8FL1","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}

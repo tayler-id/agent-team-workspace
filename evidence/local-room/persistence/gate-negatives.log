@@ -1,0 +1,107 @@
+# gate-negatives.log (local-room L2) at d2e2131
+recorded_at: 2026-09-21T02:15:47Z
+Each negative mutates one committed file, runs the guard that must go red, restores the file with git checkout and proves the tree is byte-identical (git diff --quiet exit 0).
+
+## N1 lockRoom no longer takes the row lock (packages/storage/src/local-room.ts)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-HJpd9W","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+     × eight concurrent sends of one command commit one message; the others replay its exact receipt 3ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 9 passed (10)
+exit=1
+restored: byte-identical
+
+## N2 message immutability trigger removed from the migration (packages/storage/drizzle/0001_local_room.sql)
+ 1 file changed, 2 deletions(-)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-boju8A","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+     × messages, events and receipts cannot be updated or deleted by the service role or by the schema owner 13ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected [Function] to throw error including 'local_room.message is immutable' but got 'update or delete on table "message" v…'
+      Tests  1 failed | 9 passed (10)
+exit=1
+restored: byte-identical
+
+## N3 row-level security not enabled or forced on local_room.room (packages/storage/drizzle/0001_local_room.sql)
+ 1 file changed, 4 deletions(-)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-WnbsPq","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+     × another project sees no room and cannot forge a row into the fixed project; a BYPASSRLS role sees the room, so the denial is the policy 2ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected true to be false // Object.is equality
+      Tests  1 failed | 9 passed (10)
+exit=1
+restored: byte-identical
+
+## N4 body length check removed from local_room.message (packages/storage/drizzle/0001_local_room.sql)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NzTelh","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+     × 4096 two-byte scalars commit; 4097 scalars and eleven citations are refused by the table and roll back 4ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: promise resolved "{ outcome: 'committed', …(2) }" instead of rejecting
++   "outcome": "committed",
+      Tests  1 failed | 9 passed (10)
+exit=1
+restored: byte-identical
+
+## N5 send replays a reused command even when the digest differs (packages/domain/src/local-room/port.ts)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-CBQmXL","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+     × the same command identity and digest replays the original receipt; a changed body under the same command is command_conflict 4ms
+   × reusing the command id with a changed body is 409 command_conflict naming the committed digest 3ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 201 to be 409 // Object.is equality
+AssertionError: expected { outcome: 'committed', …(2) } to match object { outcome: 'denied', …(2) }
+-   "outcome": "denied",
++   "outcome": "committed",
+      Tests  2 failed | 14 passed (16)
+exit=1
+restored: byte-identical
+
+## N6a center maps command_conflict to 404 (center process test) (apps/center/src/app.ts)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-iMidIe","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+   × reusing the command id with a changed body is 409 command_conflict naming the committed digest 3ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 404 to be 409 // Object.is equality
+      Tests  1 failed | 5 passed (6)
+exit=1
+restored: byte-identical
+
+## N6b center maps command_conflict to 404 (public probe) (apps/center/src/app.ts)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-2zvGL7","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+probe outcome=fail exit=1 results=16 failing: local-room-send-changed-body observed 404 expected 409
+exit=1
+restored: byte-identical
+
+## N7 main.ts composes no persistence adapter (apps/center/src/main.ts)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-A69cwc","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+   × an accepted send answers 201 with a schema-valid receipt whose identity digest is the canonical digest of the command and whose revision is the next room sequence 20ms
+   × replaying the same command returns the original receipt with replayed: true and no second message 5ms
+   × reusing the command id with a changed body is 409 command_conflict naming the committed digest 1ms
+   × another project or room is 404 scope_mismatch and a citation to no persisted record is 404 not_found; nothing is stored 2ms
+   × a citation to the persisted message commits at the next sequence, and validation failures are 400 before storage 0ms
+   × the snapshot after a service restart is identical, a replay still returns the original receipt, and the next send continues the sequence 1ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 404 to be 200 // Object.is equality
+AssertionError: expected { status: 404, body: { …(3) } } to deeply equal { status: 201, …(1) }
+AssertionError: expected 404 to be 409 // Object.is equality
+AssertionError: expected { status: 404, body: { …(3) } } to match object { status: 404, …(1) }
+TypeError: Cannot read properties of undefined (reading 'message_id')
+AssertionError: expected 404 to be 200 // Object.is equality
+exit=1
+restored: byte-identical
+
+## N8 boundary test no longer restores consumer sources after the forbidden-import loop (packages/client-core/test/boundaries.test.ts)
+ 1 file changed, 1 deletion(-)
+   × removing either boundary rule makes its denial assertion turn red 136ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected [ { …(8) }, { …(8) }, { …(8) } ] to deeply equal []
+      Tests  1 failed | 6 passed (7)
+exit=1
+restored: byte-identical
+?? evidence/local-room/persistence/gate-negatives.log
+?? evidence/local-room/persistence/green.log
+?? evidence/local-room/persistence/red.log
+?? evidence/local-room/persistence/size.json
+?? evidence/local-room/persistence/test-patch.diff

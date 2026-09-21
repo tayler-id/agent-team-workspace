@@ -2,7 +2,48 @@
 	"schema_version": "agora.task-outcome/v1",
 	"task": "agora-local-room-persistence",
 	"slice": "local-room L2 of 5: transactional PostgreSQL persistence of one fixed local-development room",
-	"parent": "95f3527",
-	"code_head": "the code commit that carries this provisional file; the evidence commit directly on top of it replaces this file with the exact revisions, sizes and receipts",
-	"status": "provisional"
+	"parent": "95f35277fbfc821be148029521222f0de617d7de",
+	"code_head": "d2e213153ce0ac8b0ec7309f68ac2e1509273875",
+	"head": "the evidence commit that carries this file, directly on top of code_head",
+	"preservation": { "inspected_read_only": ["4a77a8f", "99aa4f7"], "ancestors_of_branch": false, "bytes_carried": 0 },
+	"size": {
+		"method": "evidence/local-room/persistence/size.json (git diff --unified=0 parent code_head; nonblank, non-comment-only added lines)",
+		"meaningful_added_lines": 530,
+		"source_files": 16,
+		"source_files_detail": "2 contract files (errors schema, operations), 3 domain files, 3 storage files, 2 center files, 2 pg tests, 1 center unit test, 1 lint-harness test, the probe and the feature map",
+		"approved_target": "400-650 meaningful lines, at most 16 source files",
+		"migration_files": 2,
+		"migration_added_lines": 106,
+		"fixture_files": 1,
+		"fixture_added_lines": 8,
+		"docs_files": 18,
+		"docs_added_lines": 94,
+		"generated_files": 7,
+		"generated_added_lines": 444,
+		"excluded_visible": { "pnpm-lock.yaml": 0 }
+	},
+	"red_green": {
+		"recorder": "node scripts/record-red-green.mjs --parent 95f3527 --head d2e2131 --out evidence/local-room/persistence -- pnpm exec node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/local-room.pg.test.ts",
+		"red": "Tests 6 failed (6): against the parent's real center process the send answers 404 where 201 is expected, the snapshot 404 where 200 is expected and the changed body 404 where 409 is expected; every failure is an HTTP assertion, not a missing runner",
+		"green": "Tests 6 passed (6)",
+		"test_patch_digest": "sha256:cc0fdcc86187121db27d7477932fdb585ce5f1da7fa84431f0da6505365fbebd",
+		"storage_tests": "packages/storage/test/local-room.pg.test.ts cannot load at the parent (no adapter is exported there), so it is retained head-only in storage-pg.green.log (Tests 10 passed); its reds are the guard negatives N1-N5 in gate-negatives.log, each turning exactly the intended test red"
+	},
+	"proofs": {
+		"transaction": "storage test: rollback after the append leaves the snapshot identical and the next send takes the next sequence; eight concurrent sends receive contiguous sequences and the event rows carry the same sequences",
+		"idempotency": "storage and center tests plus probe: same command and digest replays the byte-identical receipt (replayed: true); eight concurrent copies of one command commit one message; changed body is command_conflict / 409",
+		"restart": "center test stops and restarts the real process and proves an identical snapshot, a working replay and a continued sequence; probe scenario local-room-snapshot-after-restart does the same over the public surface",
+		"scope_and_rls": "scope_mismatch before any row is read; another project sees no room and cannot forge rows (42501); BYPASSRLS guard negative sees the room",
+		"immutability": "update and delete refused for agora_app (42501) and for the owner (trigger) on message, event and command_receipt",
+		"bounds": "400 at the wire before storage; 23514 at the table for 4097 scalars and eleven citations; 4096 two-byte scalars commit",
+		"contracts": "contracts-check.json: pass, drift []; contracts-conform.json: 127 vectors, TypeScript and Swift pass, 0 disagreements; client-replay.json: pass with Swift",
+		"public_surface": "probe-center.json: 16 scenarios pass over real HTTP including one process restart; probe-scenarios.json lists the inventory without starting anything",
+		"migrations": "migrations.log: applied 2 then applied 0 with the same schema_digest",
+		"gate_negatives": "gate-negatives.log: eight break-and-restore negatives (row lock, immutability trigger, row security, table bound, digest comparison, 409 mapping via test and via probe, adapter composition, lint-harness restore), each red then byte-identical restore",
+		"boundaries": "boundaries.json: 8 passed",
+		"documentation": "pnpm docs:check passes with 25 pages; docs/site/local-room.md rewritten for L2 with a transaction flow visual; atlas feature local-room In progress at L2",
+		"security": "security.md; audit.json 0 vulnerabilities",
+		"full_gate": "check-code-head.log at the code head tree: lint, typecheck, docs, contract drift, 116 tests passed; final-check.log at the evidence tree; doctor.log records the toolchain and frozen install"
+	},
+	"not_claimed": ["login or project provisioning", "a second room or a second principal", "realtime event delivery or cursor reconnect (L3)", "a CLI that starts or stops the service (L3)", "snapshot paging beyond the latest 1000 messages", "a browser room (L4)", "a local answer (L5)", "Host/Origin checks, request-size or rate limits", "U01b-U01d or FG04-FG08 qualification"]
 }

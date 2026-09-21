@@ -1,0 +1,13 @@
+# storage-pg.green.log (local-room L2) at d2e213153ce0ac8b0ec7309f68ac2e1509273875: head-only run of the storage-level PostgreSQL tests; their reds are the guard negatives in gate-negatives.log
+recorded_at: 2026-09-21T02:17:38Z
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-lQklV3","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/6/agent-team-workspace
+
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  22:17:39
+   Duration  390ms (import 60%, tests 31%, transform 9%)
+
+exit=0
