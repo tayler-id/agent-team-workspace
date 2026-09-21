@@ -28,11 +28,6 @@ afterEach(() => {
 		try { rmSync(path.join(root, rel), { force: true }); } catch { /* already gone */ }
 	}
 	probePaths.clear();
-	const exceptionsPath = path.join(root, 'agora/architecture-exceptions.json');
-	if (existsSync(`${exceptionsPath}.bak-test`)) {
-		writeFileSync(exceptionsPath, readFileSync(`${exceptionsPath}.bak-test`));
-		rmSync(`${exceptionsPath}.bak-test`, { force: true });
-	}
 });
 
 const agora = async (code: string, file: string, lint = engine) =>
@@ -320,35 +315,40 @@ test('exact architecture exceptions cover scoped relative and dynamic symbols wi
 	}
 }, 120_000);
 
-test('public CLI fails closed when architecture exceptions are invalid at config load', () => {
-	const exceptionsPath = path.join(root, 'agora/architecture-exceptions.json');
-	const original = readFileSync(exceptionsPath);
-	writeFileSync(`${exceptionsPath}.bak-test`, original);
+test('eslint config load path fails closed on invalid architecture exceptions', () => {
+	// Parallel-safe: never rewrite the committed exceptions file. Prove the config-owned call exists
+	// and that assertArchitectureExceptionsValid fails closed for a disposable root (M7 behavioral).
+	const eslintConfig = readFileSync(path.join(root, 'eslint.config.js'), 'utf8');
+	expect(eslintConfig).toMatch(/^assertArchitectureExceptionsValid\s*\(\s*\)\s*;/m);
+	const tempRoot = mkdtempSync(path.join(tmpdir(), 'agora-arch-load-'));
+	mkdirSync(path.join(tempRoot, 'agora'), { recursive: true });
+	mkdirSync(path.join(tempRoot, 'packages/client-core/test'), { recursive: true });
+	writeFileSync(path.join(tempRoot, 'packages/client-core/test/app-architecture.test.ts'), '// compensating fixture\n');
+	writeFileSync(path.join(tempRoot, 'agora/architecture-exceptions.json'), JSON.stringify({
+		schema_version: 'agora.architecture-exceptions/v1',
+		exceptions: [{
+			path: feature,
+			symbol: 'window',
+			guard: 'agora/renderer-footgun',
+			rationale: 'invalid self-approved fixture',
+			owner: 'same',
+			approver: 'same',
+			expires: '2099-01-01',
+			compensatingTest: 'packages/client-core/test/app-architecture.test.ts',
+		}],
+	}));
+	const loader = path.join(tempRoot, 'load-assert.mjs');
+	writeFileSync(loader, `import { assertArchitectureExceptionsValid } from ${JSON.stringify(path.join(root, 'scripts/architecture-exceptions.ts'))};\nassertArchitectureExceptionsValid(${JSON.stringify(tempRoot)});\n`);
 	try {
-		writeFileSync(exceptionsPath, JSON.stringify({
-			schema_version: 'agora.architecture-exceptions/v1',
-			exceptions: [{
-				path: feature,
-				symbol: 'window',
-				guard: 'agora/renderer-footgun',
-				rationale: 'invalid self-approved fixture',
-				owner: 'same',
-				approver: 'same',
-				expires: '2099-01-01',
-				compensatingTest: 'packages/client-core/test/app-architecture.test.ts',
-			}],
-		}));
-		// File outside guarded roots: only config-load validation should fail.
-		const result = spawnSync('pnpm', ['exec', 'eslint', 'docs/site/build.mjs'], {
+		const result = spawnSync(process.execPath, [loader], {
 			cwd: root,
 			encoding: 'utf8',
 			env: { ...process.env, GH_TOKEN: undefined, GITHUB_TOKEN: undefined, FIRSTMATE_GH_TOKEN: undefined },
 		});
 		expect(result.status ?? 1).not.toBe(0);
-		expect(`${result.stdout}\n${result.stderr}`).toMatch(/self-approved|architecture exceptions|Error/i);
+		expect(`${result.stdout}\n${result.stderr}`).toMatch(/self-approved/);
 	} finally {
-		writeFileSync(exceptionsPath, original);
-		rmSync(`${exceptionsPath}.bak-test`, { force: true });
+		rmSync(tempRoot, { recursive: true, force: true });
 	}
 }, 120_000);
 
