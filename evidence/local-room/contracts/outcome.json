@@ -27,7 +27,7 @@
 		"future_red": "evidence/local-room/contracts/future-send.red.log: the L2 receipt assertion run as a plain test at the code head fails with expected 404 to be 201; it stays in the suite as test.fails"
 	},
 	"proofs": {
-		"schema_vectors": "29 local-room-* vectors (14 accept, 15 reject) in contracts/fixtures/vectors.json; contracts-conform.json: 126 vectors, TypeScript and Swift pass, 0 disagreements",
+		"schema_vectors": "29 local-room-* vectors (12 accept, 17 reject) in contracts/fixtures/vectors.json; contracts-conform.json: 126 vectors, TypeScript and Swift pass, 0 disagreements",
 		"generation_drift": "contracts-check.json: outcome pass, drift []",
 		"unknown_fields_and_variants": "vectors local-room-command-unknown-field, -author-unknown-kind, -citation-unknown-kind, -event-unknown-kind, -event-unknown-field, -message-unknown-field, -snapshot-unknown-field, -command-unknown-version; center 400 paths; guard removal turns red in contracts/test/local-room.test.ts",
 		"callable_baseline": "probe-center.json: 8 scenarios pass over real HTTP, including local-room-send-unsupported 404 unavailable_capability and local-room-send-unknown-field 400; probe-scenarios.json lists the inventory without starting anything",
