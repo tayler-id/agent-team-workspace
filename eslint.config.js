@@ -21,7 +21,7 @@ export default tseslint.config(
 		},
 	},
 	{
-		files: ['contracts/**/*.ts', 'packages/*/src/**/*.ts', 'apps/*/src/**/*.ts'],
+		files: ['contracts/**/*.ts', 'packages/*/src/**/*.ts', 'apps/*/src/**/*.ts', 'apps/*/src/**/*.tsx'],
 		ignores: ['contracts/test/**'],
 		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule, 'public-types': publicTypesRule } } },
 		rules: { 'agora/import-boundary': 'error', 'agora/public-types': 'error' },

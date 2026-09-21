@@ -38,7 +38,7 @@ this toolchain, and none of the three contains application, fixture or product l
 | `apps/web/src/fixture/adapter.ts` | 87 |
 | `apps/web/src/components/App.tsx` | 122 |
 | `apps/web/test/adapter.test.ts` | 141 |
-| `apps/web/src/fixture/room.json` | 373 |
+| `apps/web/src/fixture/room.json` | 425 (this branch shortened it to 48 lines for R11, so the diff against the preservation commit's 406-line fixture grew, not shrank) |
 | `apps/web/test/app.test.tsx` | 227 |
 
 Every file in this table shares a name and a general responsibility with its preservation-
