@@ -49,6 +49,10 @@ The core imports only its own utilities and generated types through `@agora/cont
 
 `created_seq` identifies the first visible message position and stays fixed across edits. `last_seen_room_seq` covers the whole room stream, but unread counts only visible positions created after it. Edits, tombstones and run updates do not create unread positions; delivery never advances reading state. Cross-record consistency and replay are core transitions, not JSON Schema validation. These fixtures establish no production conversation schema or authorization.
 
+### Local room family
+
+`local-room.schema.json` (`agora.local-room/v1`) holds the conversation contracts of the loopback-only local-development room: `LocalRoomScope`, `RoomAuthor` (`human` or `local_agent`), `RecordCitation`, `RoomMessageBody` (1 to 4096 scalars), `SendRoomMessageCommand`, `CommandIdentity` (`command_id` plus the canonical `request_digest`), `RoomMessage`, `RoomMessageCreatedEvent`, `RoomSnapshot` and `RoomCommandReceipt`. It reuses `StreamCursor` and `CommandReceipt` from `sync.schema.json` and `ErrorReport` from `errors.schema.json`. `POST /api/v1/local-room/messages` is its one authored operation. The domain port and the unsupported adapter live in `packages/domain/src/local-room/port.ts`; `node scripts/probe-center.mjs --scenarios` prints the probe inventory without starting anything. `docs/site/local-room.md` is the feature page.
+
 ### Framework-independent client core
 
 `@agora/client-core` exports `initialState` and `synchronize(state, input)`. Inputs are internal, transport-neutral projections using generated UUID, revision, digest and receipt values through the types-only `@agora/contracts/values` export. They are not a second wire schema. `scripts/client-fixture.ts` validates the fixture wire values before translating them; neither fixture names nor generated fixture types enter the core API.
@@ -82,5 +86,6 @@ The foundation fixture schema `foundation_fixture` is a non-production namespace
 | `GET /api/v1/health` | Liveness, never touches a dependency |
 | `GET /api/v1/health/ready` | 200 when the database answers `select 1`, else 503 |
 | `POST /api/v1/fixture/policy/decisions` | Validates `FixturePolicyCommand` through the shared wire validator (Ajv 2020-12, no coercion, defaults or removal), answers the pure scope decision |
+| `POST /api/v1/local-room/messages` | Validates `SendRoomMessageCommand`, converts it to domain values and dispatches to the composed `LocalRoomPort`; in local-room L1 the only adapter is `unsupportedLocalRoom`, so a valid command answers 404 `unavailable_capability` with a detail naming the slice |
 
 Unknown routes and malformed commands answer JSON with a stable `reason_code` and a `correlation_id`.

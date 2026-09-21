@@ -26,6 +26,11 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `POST /api/v1/fixture/policy/decisions`.
     /// - Remark: Generated from `#/paths//api/v1/fixture/policy/decisions/post(decideFixturePolicy)`.
     func decideFixturePolicy(_ input: Operations.decideFixturePolicy.Input) async throws -> Operations.decideFixturePolicy.Output
+    /// Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it
+    ///
+    /// - Remark: HTTP `POST /api/v1/local-room/messages`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)`.
+    func sendLocalRoomMessage(_ input: Operations.sendLocalRoomMessage.Input) async throws -> Operations.sendLocalRoomMessage.Output
 }
 
 /// Convenience overloads for operation inputs.
@@ -53,6 +58,19 @@ extension APIProtocol {
         body: Operations.decideFixturePolicy.Input.Body
     ) async throws -> Operations.decideFixturePolicy.Output {
         try await decideFixturePolicy(Operations.decideFixturePolicy.Input(
+            headers: headers,
+            body: body
+        ))
+    }
+    /// Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it
+    ///
+    /// - Remark: HTTP `POST /api/v1/local-room/messages`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)`.
+    public func sendLocalRoomMessage(
+        headers: Operations.sendLocalRoomMessage.Input.Headers = .init(),
+        body: Operations.sendLocalRoomMessage.Input.Body
+    ) async throws -> Operations.sendLocalRoomMessage.Output {
+        try await sendLocalRoomMessage(Operations.sendLocalRoomMessage.Input(
             headers: headers,
             body: body
         ))

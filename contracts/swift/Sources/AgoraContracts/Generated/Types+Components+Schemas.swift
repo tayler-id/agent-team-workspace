@@ -432,6 +432,46 @@ extension Components {
                 ])
             }
         }
+        /// Idempotency identity of one command as R07 defines it: the same (actor, command_id) with the same request_digest replays the original receipt; a different digest is a conflict. The actor is not on the wire because the service derives it.
+        ///
+        /// - Remark: Generated from `#/components/schemas/CommandIdentity`.
+        public struct CommandIdentity: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/CommandIdentity/command_id`.
+            public var command_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/CommandIdentity/request_digest`.
+            public var request_digest: Components.Schemas.Digest
+            /// Creates a new `CommandIdentity`.
+            ///
+            /// - Parameters:
+            ///   - command_id:
+            ///   - request_digest:
+            public init(
+                command_id: Components.Schemas.Uuid,
+                request_digest: Components.Schemas.Digest
+            ) {
+                self.command_id = command_id
+                self.request_digest = request_digest
+            }
+            public enum CodingKeys: String, CodingKey {
+                case command_id
+                case request_digest
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.command_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .command_id
+                )
+                self.request_digest = try container.decode(
+                    Components.Schemas.Digest.self,
+                    forKey: .request_digest
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "command_id",
+                    "request_digest"
+                ])
+            }
+        }
         /// R07 committed mutation receipt. It confirms a command, not that its events have been applied by a client. Duplicate actor/command/request digests return the original receipt.
         ///
         /// - Remark: Generated from `#/components/schemas/CommandReceipt`.
@@ -1724,6 +1764,46 @@ extension Components {
                 ])
             }
         }
+        /// Project and room identity of one local room. Both are opaque UUIDs fixed by the local development service (L2), never chosen from a hosted workspace.
+        ///
+        /// - Remark: Generated from `#/components/schemas/LocalRoomScope`.
+        public struct LocalRoomScope: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/LocalRoomScope/project_id`.
+            public var project_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/LocalRoomScope/room_id`.
+            public var room_id: Components.Schemas.Uuid
+            /// Creates a new `LocalRoomScope`.
+            ///
+            /// - Parameters:
+            ///   - project_id:
+            ///   - room_id:
+            public init(
+                project_id: Components.Schemas.Uuid,
+                room_id: Components.Schemas.Uuid
+            ) {
+                self.project_id = project_id
+                self.room_id = room_id
+            }
+            public enum CodingKeys: String, CodingKey {
+                case project_id
+                case room_id
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.project_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .project_id
+                )
+                self.room_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .room_id
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "project_id",
+                    "room_id"
+                ])
+            }
+        }
         /// Answer of GET /api/v1/health/ready. 200 when ready, 503 when not_ready.
         ///
         /// - Remark: Generated from `#/components/schemas/ReadinessReport`.
@@ -1826,10 +1906,492 @@ extension Components {
             case usage_error = "usage_error"
             case infrastructure_failure = "infrastructure_failure"
         }
+        /// Reference to a record already persisted in the same room. record_kind is closed; L1 knows only messages. room_seq repeats the cited message's sequence so a reader can locate it without a lookup; adapters check that the record exists at or below the citing message.
+        ///
+        /// - Remark: Generated from `#/components/schemas/RecordCitation`.
+        public struct RecordCitation: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/RecordCitation/record_kind`.
+            @frozen public enum record_kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case message = "message"
+            }
+            /// - Remark: Generated from `#/components/schemas/RecordCitation/record_kind`.
+            public var record_kind: Components.Schemas.RecordCitation.record_kindPayload
+            /// - Remark: Generated from `#/components/schemas/RecordCitation/record_id`.
+            public var record_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/RecordCitation/room_seq`.
+            public var room_seq: Components.Schemas.Revision
+            /// Creates a new `RecordCitation`.
+            ///
+            /// - Parameters:
+            ///   - record_kind:
+            ///   - record_id:
+            ///   - room_seq:
+            public init(
+                record_kind: Components.Schemas.RecordCitation.record_kindPayload,
+                record_id: Components.Schemas.Uuid,
+                room_seq: Components.Schemas.Revision
+            ) {
+                self.record_kind = record_kind
+                self.record_id = record_id
+                self.room_seq = room_seq
+            }
+            public enum CodingKeys: String, CodingKey {
+                case record_kind
+                case record_id
+                case room_seq
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.record_kind = try container.decode(
+                    Components.Schemas.RecordCitation.record_kindPayload.self,
+                    forKey: .record_kind
+                )
+                self.record_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .record_id
+                )
+                self.room_seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .room_seq
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "record_kind",
+                    "record_id",
+                    "room_seq"
+                ])
+            }
+        }
         /// Nonnegative 64-bit integer as a decimal string without sign, leading zeros or exponent; the pattern is the exact bound 18446744073709551615.
         ///
         /// - Remark: Generated from `#/components/schemas/Revision`.
         public typealias Revision = Swift.String
+        /// Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent is the bounded local center response (L5), labelled explicitly and never a live model provider.
+        ///
+        /// - Remark: Generated from `#/components/schemas/RoomAuthor`.
+        public struct RoomAuthor: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/RoomAuthor/kind`.
+            @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case human = "human"
+                case local_agent = "local_agent"
+            }
+            /// - Remark: Generated from `#/components/schemas/RoomAuthor/kind`.
+            public var kind: Components.Schemas.RoomAuthor.kindPayload
+            /// - Remark: Generated from `#/components/schemas/RoomAuthor/principal_id`.
+            public var principal_id: Components.Schemas.Uuid
+            /// Creates a new `RoomAuthor`.
+            ///
+            /// - Parameters:
+            ///   - kind:
+            ///   - principal_id:
+            public init(
+                kind: Components.Schemas.RoomAuthor.kindPayload,
+                principal_id: Components.Schemas.Uuid
+            ) {
+                self.kind = kind
+                self.principal_id = principal_id
+            }
+            public enum CodingKeys: String, CodingKey {
+                case kind
+                case principal_id
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.kind = try container.decode(
+                    Components.Schemas.RoomAuthor.kindPayload.self,
+                    forKey: .kind
+                )
+                self.principal_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .principal_id
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "kind",
+                    "principal_id"
+                ])
+            }
+        }
+        /// 201 answer of a committed send. receipt is the reusable R07 receipt (aggregate_id is the room, revision its room_seq after the append). replayed is true when identity matched an earlier command and the original receipt was returned without a second message.
+        ///
+        /// - Remark: Generated from `#/components/schemas/RoomCommandReceipt`.
+        public struct RoomCommandReceipt: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/RoomCommandReceipt/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_local_hyphen_room_period_receipt_sol_v1 = "agora.local-room.receipt/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/RoomCommandReceipt/schema_version`.
+            public var schema_version: Components.Schemas.RoomCommandReceipt.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/RoomCommandReceipt/identity`.
+            public var identity: Components.Schemas.CommandIdentity
+            /// - Remark: Generated from `#/components/schemas/RoomCommandReceipt/receipt`.
+            public var receipt: Components.Schemas.CommandReceipt
+            /// - Remark: Generated from `#/components/schemas/RoomCommandReceipt/message_id`.
+            public var message_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/RoomCommandReceipt/replayed`.
+            public var replayed: Swift.Bool
+            /// Creates a new `RoomCommandReceipt`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - identity:
+            ///   - receipt:
+            ///   - message_id:
+            ///   - replayed:
+            public init(
+                schema_version: Components.Schemas.RoomCommandReceipt.schema_versionPayload,
+                identity: Components.Schemas.CommandIdentity,
+                receipt: Components.Schemas.CommandReceipt,
+                message_id: Components.Schemas.Uuid,
+                replayed: Swift.Bool
+            ) {
+                self.schema_version = schema_version
+                self.identity = identity
+                self.receipt = receipt
+                self.message_id = message_id
+                self.replayed = replayed
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case identity
+                case receipt
+                case message_id
+                case replayed
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.RoomCommandReceipt.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.identity = try container.decode(
+                    Components.Schemas.CommandIdentity.self,
+                    forKey: .identity
+                )
+                self.receipt = try container.decode(
+                    Components.Schemas.CommandReceipt.self,
+                    forKey: .receipt
+                )
+                self.message_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .message_id
+                )
+                self.replayed = try container.decode(
+                    Swift.Bool.self,
+                    forKey: .replayed
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "identity",
+                    "receipt",
+                    "message_id",
+                    "replayed"
+                ])
+            }
+        }
+        /// One immutable persisted message. room_seq is the room stream's per-room counter allocated in the same transaction as the message; a snapshot lists messages in ascending room_seq. L1 defines no edit or tombstone: a correction is a new message. command_id names the command that created it.
+        ///
+        /// - Remark: Generated from `#/components/schemas/RoomMessage`.
+        public struct RoomMessage: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_local_hyphen_room_period_message_sol_v1 = "agora.local-room.message/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/schema_version`.
+            public var schema_version: Components.Schemas.RoomMessage.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/message_id`.
+            public var message_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/scope`.
+            public var scope: Components.Schemas.LocalRoomScope
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/room_seq`.
+            public var room_seq: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/author`.
+            public var author: Components.Schemas.RoomAuthor
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/command_id`.
+            public var command_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/body`.
+            public var body: Components.Schemas.RoomMessageBody
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/citations`.
+            public var citations: [Components.Schemas.RecordCitation]
+            /// - Remark: Generated from `#/components/schemas/RoomMessage/created_at`.
+            public var created_at: Components.Schemas.Timestamp
+            /// Creates a new `RoomMessage`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - message_id:
+            ///   - scope:
+            ///   - room_seq:
+            ///   - author:
+            ///   - command_id:
+            ///   - body:
+            ///   - citations:
+            ///   - created_at:
+            public init(
+                schema_version: Components.Schemas.RoomMessage.schema_versionPayload,
+                message_id: Components.Schemas.Uuid,
+                scope: Components.Schemas.LocalRoomScope,
+                room_seq: Components.Schemas.Revision,
+                author: Components.Schemas.RoomAuthor,
+                command_id: Components.Schemas.Uuid,
+                body: Components.Schemas.RoomMessageBody,
+                citations: [Components.Schemas.RecordCitation],
+                created_at: Components.Schemas.Timestamp
+            ) {
+                self.schema_version = schema_version
+                self.message_id = message_id
+                self.scope = scope
+                self.room_seq = room_seq
+                self.author = author
+                self.command_id = command_id
+                self.body = body
+                self.citations = citations
+                self.created_at = created_at
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case message_id
+                case scope
+                case room_seq
+                case author
+                case command_id
+                case body
+                case citations
+                case created_at
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.RoomMessage.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.message_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .message_id
+                )
+                self.scope = try container.decode(
+                    Components.Schemas.LocalRoomScope.self,
+                    forKey: .scope
+                )
+                self.room_seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .room_seq
+                )
+                self.author = try container.decode(
+                    Components.Schemas.RoomAuthor.self,
+                    forKey: .author
+                )
+                self.command_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .command_id
+                )
+                self.body = try container.decode(
+                    Components.Schemas.RoomMessageBody.self,
+                    forKey: .body
+                )
+                self.citations = try container.decode(
+                    [Components.Schemas.RecordCitation].self,
+                    forKey: .citations
+                )
+                self.created_at = try container.decode(
+                    Components.Schemas.Timestamp.self,
+                    forKey: .created_at
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "message_id",
+                    "scope",
+                    "room_seq",
+                    "author",
+                    "command_id",
+                    "body",
+                    "citations",
+                    "created_at"
+                ])
+            }
+        }
+        /// Message text: 1 to 4096 Unicode scalars (at most 16 KiB UTF-8). Rendered as text, never as markup.
+        ///
+        /// - Remark: Generated from `#/components/schemas/RoomMessageBody`.
+        public typealias RoomMessageBody = Swift.String
+        /// R07 envelope for the one L1 event kind. stream_id is the room_id and seq equals the payload's room_seq. actor is the historical principal, not caller authority. An unknown kind is refused on the wire, so a client never acknowledges an event it cannot apply.
+        ///
+        /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent`.
+        public struct RoomMessageCreatedEvent: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_local_hyphen_room_period_event_sol_v1 = "agora.local-room.event/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/schema_version`.
+            public var schema_version: Components.Schemas.RoomMessageCreatedEvent.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/stream_id`.
+            public var stream_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/seq`.
+            public var seq: Components.Schemas.Revision
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/event_id`.
+            public var event_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/kind`.
+            @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case local_room_period_message_created = "local_room.message_created"
+            }
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/kind`.
+            public var kind: Components.Schemas.RoomMessageCreatedEvent.kindPayload
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/actor`.
+            public var actor: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/occurred_at`.
+            public var occurred_at: Components.Schemas.Timestamp
+            /// - Remark: Generated from `#/components/schemas/RoomMessageCreatedEvent/payload`.
+            public var payload: Components.Schemas.RoomMessage
+            /// Creates a new `RoomMessageCreatedEvent`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - stream_id:
+            ///   - seq:
+            ///   - event_id:
+            ///   - kind:
+            ///   - actor:
+            ///   - occurred_at:
+            ///   - payload:
+            public init(
+                schema_version: Components.Schemas.RoomMessageCreatedEvent.schema_versionPayload,
+                stream_id: Components.Schemas.Uuid,
+                seq: Components.Schemas.Revision,
+                event_id: Components.Schemas.Uuid,
+                kind: Components.Schemas.RoomMessageCreatedEvent.kindPayload,
+                actor: Components.Schemas.Uuid,
+                occurred_at: Components.Schemas.Timestamp,
+                payload: Components.Schemas.RoomMessage
+            ) {
+                self.schema_version = schema_version
+                self.stream_id = stream_id
+                self.seq = seq
+                self.event_id = event_id
+                self.kind = kind
+                self.actor = actor
+                self.occurred_at = occurred_at
+                self.payload = payload
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case stream_id
+                case seq
+                case event_id
+                case kind
+                case actor
+                case occurred_at
+                case payload
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.RoomMessageCreatedEvent.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.stream_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .stream_id
+                )
+                self.seq = try container.decode(
+                    Components.Schemas.Revision.self,
+                    forKey: .seq
+                )
+                self.event_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .event_id
+                )
+                self.kind = try container.decode(
+                    Components.Schemas.RoomMessageCreatedEvent.kindPayload.self,
+                    forKey: .kind
+                )
+                self.actor = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .actor
+                )
+                self.occurred_at = try container.decode(
+                    Components.Schemas.Timestamp.self,
+                    forKey: .occurred_at
+                )
+                self.payload = try container.decode(
+                    Components.Schemas.RoomMessage.self,
+                    forKey: .payload
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "stream_id",
+                    "seq",
+                    "event_id",
+                    "kind",
+                    "actor",
+                    "occurred_at",
+                    "payload"
+                ])
+            }
+        }
+        /// Room state and cursor from one repeatable read. Subscription starts strictly after cursor.committed_seq; messages are ascending by room_seq and bounded so a reader never receives an unbounded history in one answer.
+        ///
+        /// - Remark: Generated from `#/components/schemas/RoomSnapshot`.
+        public struct RoomSnapshot: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/RoomSnapshot/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_local_hyphen_room_period_snapshot_sol_v1 = "agora.local-room.snapshot/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/RoomSnapshot/schema_version`.
+            public var schema_version: Components.Schemas.RoomSnapshot.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/RoomSnapshot/scope`.
+            public var scope: Components.Schemas.LocalRoomScope
+            /// - Remark: Generated from `#/components/schemas/RoomSnapshot/cursor`.
+            public var cursor: Components.Schemas.StreamCursor
+            /// - Remark: Generated from `#/components/schemas/RoomSnapshot/messages`.
+            public var messages: [Components.Schemas.RoomMessage]
+            /// Creates a new `RoomSnapshot`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - scope:
+            ///   - cursor:
+            ///   - messages:
+            public init(
+                schema_version: Components.Schemas.RoomSnapshot.schema_versionPayload,
+                scope: Components.Schemas.LocalRoomScope,
+                cursor: Components.Schemas.StreamCursor,
+                messages: [Components.Schemas.RoomMessage]
+            ) {
+                self.schema_version = schema_version
+                self.scope = scope
+                self.cursor = cursor
+                self.messages = messages
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case scope
+                case cursor
+                case messages
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.RoomSnapshot.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.scope = try container.decode(
+                    Components.Schemas.LocalRoomScope.self,
+                    forKey: .scope
+                )
+                self.cursor = try container.decode(
+                    Components.Schemas.StreamCursor.self,
+                    forKey: .cursor
+                )
+                self.messages = try container.decode(
+                    [Components.Schemas.RoomMessage].self,
+                    forKey: .messages
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "scope",
+                    "cursor",
+                    "messages"
+                ])
+            }
+        }
         /// - Remark: Generated from `#/components/schemas/ScopeReference`.
         public struct ScopeReference: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/ScopeReference/scope_id`.
@@ -1852,6 +2414,83 @@ extension Components {
                 )
                 try decoder.ensureNoAdditionalProperties(knownKeys: [
                     "scope_id"
+                ])
+            }
+        }
+        /// Body of POST /api/v1/local-room/messages. command_id is the client's idempotency key; the service derives the actor and computes request_digest over these canonical bytes (see CommandIdentity). citations is required so absent and empty never differ in the digest.
+        ///
+        /// - Remark: Generated from `#/components/schemas/SendRoomMessageCommand`.
+        public struct SendRoomMessageCommand: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SendRoomMessageCommand/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_local_hyphen_room_period_send_hyphen_message_sol_v1 = "agora.local-room.send-message/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/SendRoomMessageCommand/schema_version`.
+            public var schema_version: Components.Schemas.SendRoomMessageCommand.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/SendRoomMessageCommand/command_id`.
+            public var command_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/SendRoomMessageCommand/scope`.
+            public var scope: Components.Schemas.LocalRoomScope
+            /// - Remark: Generated from `#/components/schemas/SendRoomMessageCommand/body`.
+            public var body: Components.Schemas.RoomMessageBody
+            /// - Remark: Generated from `#/components/schemas/SendRoomMessageCommand/citations`.
+            public var citations: [Components.Schemas.RecordCitation]
+            /// Creates a new `SendRoomMessageCommand`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - command_id:
+            ///   - scope:
+            ///   - body:
+            ///   - citations:
+            public init(
+                schema_version: Components.Schemas.SendRoomMessageCommand.schema_versionPayload,
+                command_id: Components.Schemas.Uuid,
+                scope: Components.Schemas.LocalRoomScope,
+                body: Components.Schemas.RoomMessageBody,
+                citations: [Components.Schemas.RecordCitation]
+            ) {
+                self.schema_version = schema_version
+                self.command_id = command_id
+                self.scope = scope
+                self.body = body
+                self.citations = citations
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case command_id
+                case scope
+                case body
+                case citations
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.SendRoomMessageCommand.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.command_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .command_id
+                )
+                self.scope = try container.decode(
+                    Components.Schemas.LocalRoomScope.self,
+                    forKey: .scope
+                )
+                self.body = try container.decode(
+                    Components.Schemas.RoomMessageBody.self,
+                    forKey: .body
+                )
+                self.citations = try container.decode(
+                    [Components.Schemas.RecordCitation].self,
+                    forKey: .citations
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "command_id",
+                    "scope",
+                    "body",
+                    "citations"
                 ])
             }
         }

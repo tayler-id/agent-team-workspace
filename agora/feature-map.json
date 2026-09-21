@@ -122,6 +122,17 @@
 			"platforms": ["node24", "static-html"],
 			"owner": "agora-visual-progress",
 			"documentation": "docs/site/authoring.md"
+		},
+		{
+			"id": "local-room-contracts",
+			"documentation": "docs/site/local-room.md",
+			"paths": ["contracts/schemas/local-room.schema.json", "contracts/openapi.json", "contracts/src/index.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift", "packages/domain/src/local-room/port.ts", "packages/domain/src/index.ts", "apps/center/src/app.ts", "scripts/probe-center.mjs"],
+			"public": ["POST /api/v1/local-room/messages", "node scripts/probe-center.mjs --scenarios", "pnpm contracts:conform"],
+			"contracts": ["contracts/schemas/local-room.schema.json", "contracts/schemas/sync.schema.json", "contracts/schemas/errors.schema.json"],
+			"fixtures": ["agora.local-room/v1 golden vectors (local-room-*)", "unsupported local-room adapter: validated, dispatched, typed 404"],
+			"scenarios": ["contracts/test/local-room.test.ts", "apps/center/test/local-room.test.ts", "scripts/probe-center.mjs"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "local-room L1"
 		}
 	]
 }

@@ -1,0 +1,39 @@
+# future-send.red.log (local-room L1)
+recorded_at: 2026-09-21T00:41:44Z
+subject: working tree of the L1 code commit (parent 421f572b02aa5bcf9fd235afe28de92004b59f96); identical to apps/center/test/local-room.test.ts with test.fails replaced by test
+expected: the L2 receipt assertion fails with 'expected 404 to be 201' because the composed adapter is unsupportedLocalRoom; the three L1 assertions pass
+
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/6/agent-team-workspace
+
+ ❯ |unit| apps/center/test/local-room-future.scratch.test.ts (4 tests | 1 failed) 13ms
+   × L2: a committed send answers 201 with a receipt whose identity names the command and whose aggregate is the room 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| apps/center/test/local-room-future.scratch.test.ts > L2: a committed send answers 201 with a receipt whose identity names the command and whose aggregate is the room
+AssertionError: expected 404 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 404
+
+ ❯ apps/center/test/local-room-future.scratch.test.ts:43:26
+     41| test('L2: a committed send answers 201 with a receipt whose identity n…
+     42|  const response = await send(command);
+     43|  expect(response.status).toBe(201);
+       |                          ^
+     44|  const receipt = createWireValidator().validate('RoomCommandReceipt', …
+     45|  expect(receipt.ok).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed (4)
+   Start at  20:41:44
+   Duration  175ms (import 61%, transform 27%, tests 11%, worker 1%)
+
+observed_exit: 1

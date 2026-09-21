@@ -6,6 +6,10 @@ Use failure states as information. A missing tool or unqualified milestone must 
 
 Not yet. You can read this site and run foundation checks. There is no product login, invitation, room timeline, worker installer or hosted deployment. [The atlas](atlas.md) distinguishes the two landed foundation tasks from the unfinished 22 milestones.
 
+## Can I send a message to a room?
+
+Not yet. The [local room contracts](local-room.md) fix what a message, command, event, snapshot and receipt mean, and the center already validates and dispatches a send. The answer today is a typed 404 `unavailable_capability`, because no persistence adapter is composed. Four further slices add storage, lifecycle, a browser room and a bounded local answer.
+
 ## The site says Built. Why is S1 still incomplete?
 
 Built applies to the named scope only. A health fixture or contract generator can be built while the containing milestone still lacks replay, guards, integration lanes or independent qualification. “Two tasks landed” is not a percentage of product completion.

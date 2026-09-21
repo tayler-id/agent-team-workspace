@@ -9,7 +9,7 @@ const root = path.resolve(import.meta.dirname, '../../../.docs-dist');
 const html = file => existsSync(path.join(root, file)) ? readFileSync(path.join(root, file), 'utf8') : '';
 test('the same public build driver produces a valid baseline before corpus assertions', () => assert.equal(result.outcome, 'pass'));
 test('the complete corpus has 24 pages and both audience tracks', () => {
-	assert.equal(result.pages, 24, 'complete audience corpus');
+	assert.equal(result.pages, 25, 'complete audience corpus');
 	assert.match(html('test-first.html'), /FG01.red-required/);
 	assert.match(html('test-first.html'), /foundation_fixture/);
 	assert.match(html('index.html'), /Use Agora/);

@@ -29,6 +29,7 @@
         {"id": "foundation", "title": "Repository foundation", "kind": "feature"},
         {"id": "test-first", "title": "Task proof admission", "kind": "feature"},
         {"id": "contracts", "title": "Portable contracts", "kind": "feature"},
+        {"id": "local-room", "title": "Local room contracts", "kind": "feature"},
         {"id": "synchronization", "title": "Client synchronization", "kind": "feature"},
         {"id": "memory", "title": "Data and memory", "kind": "guide"},
         {"id": "authorization", "title": "Authorization and agents", "kind": "guide"},

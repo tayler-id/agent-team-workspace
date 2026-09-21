@@ -26,6 +26,6 @@ This is the intended product flow, not functionality available in the fixture. R
 
 ## What you can inspect today
 
-The [repository foundation](foundation.md) exposes health, readiness, and a scope-policy fixture. [Portable contracts](contracts.md) make TypeScript and Swift agree on wire values. Those are useful engineering foundations, not invitations, conversations, or agent execution.
+The [repository foundation](foundation.md) exposes health, readiness, and a scope-policy fixture. [Portable contracts](contracts.md) make TypeScript and Swift agree on wire values. The [local room contracts](local-room.md) fix the shape of the first conversation and answer a validated send with a typed unsupported result. Those are useful engineering foundations, not invitations, conversations, or agent execution.
 
 Start with [installation and first checks](getting-started.md), or read [why this architecture was selected](research.md). Documentation grows in the same change as implementation; [the authoring contract](authoring.md) is part of completion.

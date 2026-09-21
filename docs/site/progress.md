@@ -19,7 +19,7 @@ No milestone is qualified and no usable communication center exists at this snap
 ```mermaid
 flowchart TD
   browser["Browser and client core: S1 planned UI; core in progress"]
-  center["Center service: Fixture only built"]
+  center["Center service: Fixture built; local room L1 contracts only"]
   postgres["PostgreSQL 18: Fixture only built"]
   artifacts["Artifact store: S1 planned"]
   local["Local worker: S1 planned"]
@@ -53,6 +53,7 @@ flowchart TD
 - **Repository foundation - Built**: Prove real decisions and database isolation before product authority exists. [Scope](foundation.md). [apps/center/src/app.ts](../../apps/center/src/app.ts); [packages/storage/src/fixture.ts](../../packages/storage/src/fixture.ts); [apps/center/test/policy.test.ts](../../apps/center/test/policy.test.ts); [packages/storage/test/fixture.pg.test.ts](../../packages/storage/test/fixture.pg.test.ts); [evidence/U01a/agora-s1-bootstrap-repository/outcome.json](../../evidence/U01a/agora-s1-bootstrap-repository/outcome.json)
 - **Portable wire contracts - Built**: Make the same bytes mean the same thing in TypeScript and Swift. [Scope](contracts.md). [contracts/src/conformance.ts](../../contracts/src/conformance.ts); [contracts/test/conformance.test.ts](../../contracts/test/conformance.test.ts); [evidence/U01a/agora-s1-publish-portable-contracts/outcome.json](../../evidence/U01a/agora-s1-publish-portable-contracts/outcome.json)
 - **Client synchronization isolation - Built**: Keep replay, ordering and retry decisions independent of the renderer. [Scope](synchronization.md). [packages/client-core/src/index.ts](../../packages/client-core/src/index.ts); [packages/client-core/test/sync.test.ts](../../packages/client-core/test/sync.test.ts); [packages/client-core/test/boundaries.test.ts](../../packages/client-core/test/boundaries.test.ts); [evidence/U01a/agora-s1-isolate-client-core/2-core/green.log](../../evidence/U01a/agora-s1-isolate-client-core/2-core/green.log)
+- **Local room contracts - In progress**: Fix the meaning of every room byte before any byte is stored; L1 of 5. [Scope](local-room.md). [contracts/schemas/local-room.schema.json](../../contracts/schemas/local-room.schema.json); [packages/domain/src/local-room/port.ts](../../packages/domain/src/local-room/port.ts); [apps/center/test/local-room.test.ts](../../apps/center/test/local-room.test.ts); [contracts/test/local-room.test.ts](../../contracts/test/local-room.test.ts)
 - **Living documentation and progress atlas - In progress**: Make the system explain itself as each verified part lands. [Scope](authoring.md). [docs/implementation-plan.md](../../docs/implementation-plan.md)
 
 ## Release roadmap

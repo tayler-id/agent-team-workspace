@@ -37,6 +37,18 @@
 					"400": { "description": "Malformed command; details name the offending paths", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } }
 				}
 			}
+		},
+		"/api/v1/local-room/messages": {
+			"post": {
+				"operationId": "sendLocalRoomMessage",
+				"summary": "Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it",
+				"requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SendRoomMessageCommand" } } } },
+				"responses": {
+					"201": { "description": "Committed; identity, receipt and message id", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoomCommandReceipt" } } } },
+					"400": { "description": "Malformed command; details name the offending paths", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } },
+					"404": { "description": "unavailable_capability: the room path is dispatched but no persistence adapter is composed in this slice", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } }
+				}
+			}
 		}
 	},
 	"components": { "schemas": {} }

@@ -1,0 +1,115 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://agora.invalid/schemas/local-room.schema.json",
+	"title": "agora.local-room/v1",
+	"description": "Conversation contracts of the explicit opt-in, loopback-only local-development room (local-room L1). One project room: command identity, human or explicitly local-agent authorship, immutable messages, an ordered per-room sequence, citations to persisted records, snapshots and receipts. Cursors and the base receipt reuse sync.schema.json; errors reuse errors.schema.json. Nothing here defines production identity, transport authority, search, uploads, task authority or a model provider, and nothing here authorizes a hosted operation.",
+	"$defs": {
+		"LocalRoomScope": {
+			"description": "Project and room identity of one local room. Both are opaque UUIDs fixed by the local development service (L2), never chosen from a hosted workspace.",
+			"type": "object", "additionalProperties": false,
+			"required": ["project_id", "room_id"],
+			"properties": {
+				"project_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"room_id": { "$ref": "primitives.schema.json#/$defs/Uuid" }
+			}
+		},
+		"RoomAuthor": {
+			"description": "Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent is the bounded local center response (L5), labelled explicitly and never a live model provider.",
+			"type": "object", "additionalProperties": false,
+			"required": ["kind", "principal_id"],
+			"properties": {
+				"kind": { "type": "string", "enum": ["human", "local_agent"] },
+				"principal_id": { "$ref": "primitives.schema.json#/$defs/Uuid" }
+			}
+		},
+		"RecordCitation": {
+			"description": "Reference to a record already persisted in the same room. record_kind is closed; L1 knows only messages. room_seq repeats the cited message's sequence so a reader can locate it without a lookup; adapters check that the record exists at or below the citing message.",
+			"type": "object", "additionalProperties": false,
+			"required": ["record_kind", "record_id", "room_seq"],
+			"properties": {
+				"record_kind": { "type": "string", "enum": ["message"] },
+				"record_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"room_seq": { "$ref": "primitives.schema.json#/$defs/Revision" }
+			}
+		},
+		"RoomMessageBody": {
+			"description": "Message text: 1 to 4096 Unicode scalars (at most 16 KiB UTF-8). Rendered as text, never as markup.",
+			"type": "string", "minLength": 1, "maxLength": 4096
+		},
+		"SendRoomMessageCommand": {
+			"description": "Body of POST /api/v1/local-room/messages. command_id is the client's idempotency key; the service derives the actor and computes request_digest over these canonical bytes (see CommandIdentity). citations is required so absent and empty never differ in the digest.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "command_id", "scope", "body", "citations"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.local-room.send-message/v1"] },
+				"command_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"scope": { "$ref": "#/$defs/LocalRoomScope" },
+				"body": { "$ref": "#/$defs/RoomMessageBody" },
+				"citations": { "type": "array", "maxItems": 10, "items": { "$ref": "#/$defs/RecordCitation" } }
+			}
+		},
+		"CommandIdentity": {
+			"description": "Idempotency identity of one command as R07 defines it: the same (actor, command_id) with the same request_digest replays the original receipt; a different digest is a conflict. The actor is not on the wire because the service derives it.",
+			"type": "object", "additionalProperties": false,
+			"required": ["command_id", "request_digest"],
+			"properties": {
+				"command_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"request_digest": { "$ref": "primitives.schema.json#/$defs/Digest" }
+			}
+		},
+		"RoomMessage": {
+			"description": "One immutable persisted message. room_seq is the room stream's per-room counter allocated in the same transaction as the message; a snapshot lists messages in ascending room_seq. L1 defines no edit or tombstone: a correction is a new message. command_id names the command that created it.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "message_id", "scope", "room_seq", "author", "command_id", "body", "citations", "created_at"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.local-room.message/v1"] },
+				"message_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"scope": { "$ref": "#/$defs/LocalRoomScope" },
+				"room_seq": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"author": { "$ref": "#/$defs/RoomAuthor" },
+				"command_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"body": { "$ref": "#/$defs/RoomMessageBody" },
+				"citations": { "type": "array", "maxItems": 10, "items": { "$ref": "#/$defs/RecordCitation" } },
+				"created_at": { "$ref": "primitives.schema.json#/$defs/Timestamp" }
+			}
+		},
+		"RoomMessageCreatedEvent": {
+			"description": "R07 envelope for the one L1 event kind. stream_id is the room_id and seq equals the payload's room_seq. actor is the historical principal, not caller authority. An unknown kind is refused on the wire, so a client never acknowledges an event it cannot apply.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "stream_id", "seq", "event_id", "kind", "actor", "occurred_at", "payload"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.local-room.event/v1"] },
+				"stream_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"seq": { "$ref": "primitives.schema.json#/$defs/Revision" },
+				"event_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"kind": { "type": "string", "enum": ["local_room.message_created"] },
+				"actor": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"occurred_at": { "$ref": "primitives.schema.json#/$defs/Timestamp" },
+				"payload": { "$ref": "#/$defs/RoomMessage" }
+			}
+		},
+		"RoomSnapshot": {
+			"description": "Room state and cursor from one repeatable read. Subscription starts strictly after cursor.committed_seq; messages are ascending by room_seq and bounded so a reader never receives an unbounded history in one answer.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "scope", "cursor", "messages"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.local-room.snapshot/v1"] },
+				"scope": { "$ref": "#/$defs/LocalRoomScope" },
+				"cursor": { "$ref": "sync.schema.json#/$defs/StreamCursor" },
+				"messages": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/RoomMessage" } }
+			}
+		},
+		"RoomCommandReceipt": {
+			"description": "201 answer of a committed send. receipt is the reusable R07 receipt (aggregate_id is the room, revision its room_seq after the append). replayed is true when identity matched an earlier command and the original receipt was returned without a second message.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "identity", "receipt", "message_id", "replayed"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.local-room.receipt/v1"] },
+				"identity": { "$ref": "#/$defs/CommandIdentity" },
+				"receipt": { "$ref": "sync.schema.json#/$defs/CommandReceipt" },
+				"message_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"replayed": { "type": "boolean" }
+			}
+		}
+	}
+}

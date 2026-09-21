@@ -55,6 +55,19 @@
       ]
     },
     {
+      "id": "local-room",
+      "title": "Local room contracts",
+      "status": "In progress",
+      "why": "Fix the meaning of every room byte before any byte is stored; L1 of 5.",
+      "page": "local-room.md",
+      "proof": [
+        "repo:contracts/schemas/local-room.schema.json",
+        "repo:packages/domain/src/local-room/port.ts",
+        "repo:apps/center/test/local-room.test.ts",
+        "repo:contracts/test/local-room.test.ts"
+      ]
+    },
+    {
       "id": "documentation",
       "title": "Living documentation and progress atlas",
       "status": "In progress",
@@ -76,7 +89,7 @@
     {
       "id": "center",
       "title": "Center service",
-      "availability": "Fixture only built",
+      "availability": "Fixture built; local room L1 contracts only",
       "page": "foundation.md",
       "why": "Validate commands; later own policy and ordered events."
     },

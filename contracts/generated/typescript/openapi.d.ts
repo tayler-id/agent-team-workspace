@@ -51,6 +51,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/local-room/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it */
+        post: operations["sendLocalRoomMessage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -103,6 +120,11 @@ export interface components {
             started_at: components["schemas"]["Timestamp"];
             finished_at: components["schemas"]["Timestamp"];
             cleanup?: components["schemas"]["CleanupReceipt"];
+        };
+        /** @description Idempotency identity of one command as R07 defines it: the same (actor, command_id) with the same request_digest replays the original receipt; a different digest is a conflict. The actor is not on the wire because the service derives it. */
+        CommandIdentity: {
+            command_id: components["schemas"]["Uuid"];
+            request_digest: components["schemas"]["Digest"];
         };
         /** @description R07 committed mutation receipt. It confirms a command, not that its events have been applied by a client. Duplicate actor/command/request digests return the original receipt. */
         CommandReceipt: {
@@ -262,6 +284,11 @@ export interface components {
             /** @enum {string} */
             service: "agora-center";
         };
+        /** @description Project and room identity of one local room. Both are opaque UUIDs fixed by the local development service (L2), never chosen from a hosted workspace. */
+        LocalRoomScope: {
+            project_id: components["schemas"]["Uuid"];
+            room_id: components["schemas"]["Uuid"];
+        };
         /** @description Answer of GET /api/v1/health/ready. 200 when ready, 503 when not_ready. */
         ReadinessReport: {
             /** @enum {string} */
@@ -278,10 +305,77 @@ export interface components {
          * @enum {string}
          */
         ReasonCode: "malformed_command" | "not_found" | "scope_mismatch" | "blocked_prerequisite" | "unavailable_capability" | "usage_error" | "infrastructure_failure";
+        /** @description Reference to a record already persisted in the same room. record_kind is closed; L1 knows only messages. room_seq repeats the cited message's sequence so a reader can locate it without a lookup; adapters check that the record exists at or below the citing message. */
+        RecordCitation: {
+            /** @enum {string} */
+            record_kind: "message";
+            record_id: components["schemas"]["Uuid"];
+            room_seq: components["schemas"]["Revision"];
+        };
         /** @description Nonnegative 64-bit integer as a decimal string without sign, leading zeros or exponent; the pattern is the exact bound 18446744073709551615. */
         Revision: string;
+        /** @description Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent is the bounded local center response (L5), labelled explicitly and never a live model provider. */
+        RoomAuthor: {
+            /** @enum {string} */
+            kind: "human" | "local_agent";
+            principal_id: components["schemas"]["Uuid"];
+        };
+        /** @description 201 answer of a committed send. receipt is the reusable R07 receipt (aggregate_id is the room, revision its room_seq after the append). replayed is true when identity matched an earlier command and the original receipt was returned without a second message. */
+        RoomCommandReceipt: {
+            /** @enum {string} */
+            schema_version: "agora.local-room.receipt/v1";
+            identity: components["schemas"]["CommandIdentity"];
+            receipt: components["schemas"]["CommandReceipt"];
+            message_id: components["schemas"]["Uuid"];
+            replayed: boolean;
+        };
+        /** @description One immutable persisted message. room_seq is the room stream's per-room counter allocated in the same transaction as the message; a snapshot lists messages in ascending room_seq. L1 defines no edit or tombstone: a correction is a new message. command_id names the command that created it. */
+        RoomMessage: {
+            /** @enum {string} */
+            schema_version: "agora.local-room.message/v1";
+            message_id: components["schemas"]["Uuid"];
+            scope: components["schemas"]["LocalRoomScope"];
+            room_seq: components["schemas"]["Revision"];
+            author: components["schemas"]["RoomAuthor"];
+            command_id: components["schemas"]["Uuid"];
+            body: components["schemas"]["RoomMessageBody"];
+            citations: components["schemas"]["RecordCitation"][];
+            created_at: components["schemas"]["Timestamp"];
+        };
+        /** @description Message text: 1 to 4096 Unicode scalars (at most 16 KiB UTF-8). Rendered as text, never as markup. */
+        RoomMessageBody: string;
+        /** @description R07 envelope for the one L1 event kind. stream_id is the room_id and seq equals the payload's room_seq. actor is the historical principal, not caller authority. An unknown kind is refused on the wire, so a client never acknowledges an event it cannot apply. */
+        RoomMessageCreatedEvent: {
+            /** @enum {string} */
+            schema_version: "agora.local-room.event/v1";
+            stream_id: components["schemas"]["Uuid"];
+            seq: components["schemas"]["Revision"];
+            event_id: components["schemas"]["Uuid"];
+            /** @enum {string} */
+            kind: "local_room.message_created";
+            actor: components["schemas"]["Uuid"];
+            occurred_at: components["schemas"]["Timestamp"];
+            payload: components["schemas"]["RoomMessage"];
+        };
+        /** @description Room state and cursor from one repeatable read. Subscription starts strictly after cursor.committed_seq; messages are ascending by room_seq and bounded so a reader never receives an unbounded history in one answer. */
+        RoomSnapshot: {
+            /** @enum {string} */
+            schema_version: "agora.local-room.snapshot/v1";
+            scope: components["schemas"]["LocalRoomScope"];
+            cursor: components["schemas"]["StreamCursor"];
+            messages: components["schemas"]["RoomMessage"][];
+        };
         ScopeReference: {
             scope_id: components["schemas"]["Uuid"];
+        };
+        /** @description Body of POST /api/v1/local-room/messages. command_id is the client's idempotency key; the service derives the actor and computes request_digest over these canonical bytes (see CommandIdentity). citations is required so absent and empty never differ in the digest. */
+        SendRoomMessageCommand: {
+            /** @enum {string} */
+            schema_version: "agora.local-room.send-message/v1";
+            command_id: components["schemas"]["Uuid"];
+            scope: components["schemas"]["LocalRoomScope"];
+            body: components["schemas"]["RoomMessageBody"];
+            citations: components["schemas"]["RecordCitation"][];
         };
         /** @description Last committed and applied sequence for one stream. Streams have no global order. */
         StreamCursor: {
@@ -374,6 +468,48 @@ export interface operations {
             };
             /** @description Malformed command; details name the offending paths */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+        };
+    };
+    sendLocalRoomMessage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SendRoomMessageCommand"];
+            };
+        };
+        responses: {
+            /** @description Committed; identity, receipt and message id */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomCommandReceipt"];
+                };
+            };
+            /** @description Malformed command; details name the offending paths */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+            /** @description unavailable_capability: the room path is dispatched but no persistence adapter is composed in this slice */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

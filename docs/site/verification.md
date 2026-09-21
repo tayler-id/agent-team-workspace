@@ -14,7 +14,7 @@ Independent review | Inspect the committed implementation and proof, not the imp
 Cleanup | Remove only owned resources and prove evidence survives.
 ```
 
-Use [the current commands](cli.md) and [getting started](getting-started.md). The future `agora project` runner is not yet available.
+Use [the current commands](cli.md) and [getting started](getting-started.md). The future `agora project` runner is not yet available; `node scripts/probe-center.mjs --scenarios` is the current structured scenario inventory for the center probe.
 
 ## Red before green
 

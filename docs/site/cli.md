@@ -49,7 +49,8 @@ This driver landed after the atlas seed. It proves fixture convergence, not a br
 | `pnpm migrate` | Owner connection via `AGORA_MIGRATION_DATABASE_URL`; JSON `applied`, `total`, `schema_digest` and server version |
 | `pnpm migrate:ephemeral` | Same migration on a throwaway cluster |
 | `node scripts/with-test-postgres.mjs COMMAND ARGS...` | Starts socket-only PostgreSQL for one command, passes exit, stops and removes its cluster |
-| `node scripts/probe-center.mjs --json` | Requires database URL; launches center and checks six literal HTTP outcomes, then stops center |
+| `node scripts/probe-center.mjs --json` | Requires database URL; launches center and checks eight literal HTTP outcomes, then stops center |
+| `node scripts/probe-center.mjs --scenarios [--json]` | Prints the `agora.probe-scenarios/v1` inventory (id, method, path, expected status and reason code); starts nothing and needs no database |
 
 Migrate exits 0 pass, 2 blocked prerequisite, 64 usage error, or 70 infrastructure failure. Probe exits 0 pass, 1 observed failure, 2 blocked prerequisite or 70 infrastructure failure. Its report is `agora.probe/v1`, not the future universal CLI envelope.
 
@@ -58,7 +59,8 @@ Migrate exits 0 pass, 2 blocked prerequisite, 64 usage error, or 70 infrastructu
 - `GET /api/v1/health`: liveness, 200.
 - `GET /api/v1/health/ready`: database reachability, 200 or 503.
 - `POST /api/v1/fixture/policy/decisions`: scope decision, 200; malformed input 400.
-- Other routes: JSON 404. Each error has a reason code and correlation ID.
+- `POST /api/v1/local-room/messages`: validated and dispatched local-room send; 404 `unavailable_capability` in L1, malformed input 400. [Local room contracts](local-room.md) explains the slice.
+- Other routes: JSON 404 `not_found`. Each error has a reason code and correlation ID.
 
 See [the runnable recipe](cookbook.md) and [configuration](configuration.md). Do not invent production authorization from fixture actor input.
 
