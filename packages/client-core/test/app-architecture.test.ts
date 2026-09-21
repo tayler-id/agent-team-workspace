@@ -98,6 +98,23 @@ test('framework client and host never import features; features use public entry
 	expect(await has("import { x } from '../../framework/internal'; export const y = x;", feature, 'agora/import-boundary', 'public entrypoint')).toBe(true);
 	expect(await has("import { x } from '../../framework/index.ts'; export const y = x;", feature, 'agora/import-boundary')).toBe(false);
 	expect(await has("import { x } from '../room/index.tsx'; export const y = x;", notes, 'agora/import-boundary')).toBe(false);
+	// Two-hop relay through un-owned apps/web/src folders must fail at the intermediate file (public CLI).
+	const stamp = `relay${Date.now().toString(36)}`;
+	writeProbe(`apps/web/src/features/room/${stamp}-private.ts`, 'export const secret = 1;\n');
+	writeProbe(`apps/web/src/framework/${stamp}-internal.ts`, 'export const x = 1;\n');
+	writeProbe(`apps/web/src/util/${stamp}-leak.ts`, `export { secret } from '../features/room/${stamp}-private.ts';\n`);
+	writeProbe(`apps/web/src/util/${stamp}-leak2.ts`, `export { x } from '../framework/${stamp}-internal.ts';\n`);
+	writeProbe(`apps/web/src/util/${stamp}-ok.ts`, "export * from '../framework/index.ts';\n");
+	for (const [rel, needle] of [[`apps/web/src/util/${stamp}-leak.ts`, 'other must not import product Features'], [`apps/web/src/util/${stamp}-leak2.ts`, 'other must import framework only through']] as const) {
+		const { status, out } = publicEslint(rel);
+		expect(status, rel).toBe(1);
+		expect(out, rel).toContain('agora/import-boundary');
+		expect(out, rel).toContain(needle);
+	}
+	expect(publicEslint(`apps/web/src/util/${stamp}-ok.ts`).out).not.toContain('agora/import-boundary');
+	// Positive: Feature may import react / react-dom published prefixes.
+	expect(await has("import { jsx } from 'react/jsx-runtime'; export const j = jsx;", feature, 'agora/import-boundary')).toBe(false);
+	expect(await has("import { createRoot } from 'react-dom/client'; export const r = createRoot;", feature, 'agora/import-boundary')).toBe(false);
 }, 120_000);
 
 test('apps/web non-src relocation cannot bypass import boundaries', () => {
@@ -142,4 +159,15 @@ test('removing import-boundary protection makes denial assertions turn red', asy
 	const messages = await agora(code, feature, new ESLint({ cwd: root, ignore: false, overrideConfig: [{ rules: { 'agora/import-boundary': 'off' } }] }));
 	expect(messages.filter((m) => m.ruleId === 'agora/import-boundary')).toEqual([]);
 	expect(() => { expect(messages.some((m) => m.ruleId === 'agora/import-boundary')).toBe(true); }).toThrow('expected false to be true');
+	// Guard-weakening: narrowing the non-feature→Feature check back to framework/client/host only lets the util relay pass.
+	const policy = readFileSync(path.join(root, 'scripts/boundary-policy.ts'), 'utf8');
+	expect(policy).toContain("layer.kind !== 'feature' && targetLayer?.kind === 'feature'");
+	expect(policy).toContain("(layer.kind === 'feature' || layer.kind === 'other')");
+	const weakened = policy
+		.replace("layer.kind !== 'feature' && targetLayer?.kind === 'feature'", "(layer.kind === 'framework' || layer.kind === 'client' || layer.kind === 'host') && targetLayer?.kind === 'feature'")
+		.replace("(layer.kind === 'feature' || layer.kind === 'other')", "layer.kind === 'feature'");
+	expect(weakened).not.toContain("layer.kind !== 'feature' && targetLayer?.kind === 'feature'");
+	expect(() => {
+		expect(weakened).toContain("layer.kind !== 'feature' && targetLayer?.kind === 'feature'");
+	}).toThrow();
 }, 120_000);

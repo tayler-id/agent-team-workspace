@@ -70,16 +70,21 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 		}
 		if (layer && target) {
 			const targetLayer = webLayer(target);
-			if ((layer.kind === 'framework' || layer.kind === 'client' || layer.kind === 'host') && targetLayer?.kind === 'feature') {
+			// Non-feature importers (framework/client/host/other) cannot reach Features, closing un-owned src relays.
+			if (layer.kind !== 'feature' && targetLayer?.kind === 'feature') {
 				return `${layer.kind} must not import product Features; Features live under ${WEB_OWNERS.features}/<name>`;
 			}
 			if (layer.kind === 'feature' && targetLayer?.kind === 'feature' && targetLayer.name !== layer.name) {
 				const featureRoot = `${WEB_OWNERS.features}/${targetLayer.name}`;
 				if (!isPublicEntrypoint(target, featureRoot)) return `Feature ${layer.name} cannot import private files of Feature ${targetLayer.name}; use ${featureRoot}/index.ts public entrypoint`;
 			}
-			if (layer.kind === 'feature' && targetLayer && targetLayer.kind !== 'feature' && targetLayer.kind !== 'other') {
+			// Features and un-owned src files must use public framework/client/host entrypoints only.
+			if ((layer.kind === 'feature' || layer.kind === 'other') && targetLayer && targetLayer.kind !== 'feature' && targetLayer.kind !== 'other') {
 				const ownerRoot = WEB_OWNERS[targetLayer.kind];
-				if (!isPublicEntrypoint(target, ownerRoot)) return `Feature ${layer.name} must import ${targetLayer.kind} only through ${ownerRoot}/index.ts public entrypoint`;
+				if (!isPublicEntrypoint(target, ownerRoot)) {
+					const who = layer.kind === 'feature' ? `Feature ${layer.name}` : 'other';
+					return `${who} must import ${targetLayer.kind} only through ${ownerRoot}/index.ts public entrypoint`;
+				}
 			}
 		}
 		return undefined;
