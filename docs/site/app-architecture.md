@@ -2,7 +2,7 @@
 
 ## What it is
 
-Agora's application architecture mechanical boundaries: Feature, Client, Host and framework **import ownership** enforced through the existing ESLint boundary owner rather than a second lint framework. B1 extends package import rules across guarded source extensions and reserves `apps/web` owners. B2a adds a structured **architecture-exception registry**: the only way to let a named path import a named symbol past a guard. Renderer foot-guns land in the follow-up B2b slice.
+Agora's application architecture mechanical boundaries: Feature, Client, Host and framework **import ownership** enforced through the existing ESLint boundary owner rather than a second lint framework. B1 extends package import rules across guarded source extensions and reserves `apps/web` owners. B2a adds a structured **architecture-exception registry**, the only way to let a named path import a named symbol past a guard. Renderer foot-guns land in the follow-up B2b slice.
 
 ## What it does
 
