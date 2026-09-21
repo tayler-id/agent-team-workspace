@@ -1,5 +1,5 @@
 {
-  "revision": "d85add4cfab5a5f2ce6c1bd268410f2bb7fc3d61",
+  "revision": "bc27cff7731082982245fa54944fd4ddea6f49cb",
   "date": "2026-09-21",
   "features": [
     {
@@ -71,7 +71,8 @@
         "repo:packages/storage/src/local-room.ts",
         "repo:packages/storage/drizzle/0001_local_room.sql",
         "repo:apps/center/test/local-room.pg.test.ts",
-        "repo:packages/storage/test/local-room.pg.test.ts"
+        "repo:packages/storage/test/local-room.pg.test.ts",
+        "repo:evidence/local-room/persistence/outcome.json"
       ]
     },
     {

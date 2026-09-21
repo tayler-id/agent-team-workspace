@@ -1,0 +1,343 @@
+diff --git a/apps/center/test/local-room.pg.test.ts b/apps/center/test/local-room.pg.test.ts
+new file mode 100644
+index 0000000..5b7c02e
+--- /dev/null
++++ b/apps/center/test/local-room.pg.test.ts
+@@ -0,0 +1,96 @@
++import { spawn, type ChildProcessByStdio } from 'node:child_process';
++import type { Readable } from 'node:stream';
++import { once } from 'node:events';
++import { randomUUID } from 'node:crypto';
++import { afterAll, beforeAll, expect, test } from 'vitest';
++import { createWireValidator, digestCanonical, type Schema } from '@agora/contracts';
++import { openDatabase } from '@agora/storage';
++
++// Drives the real center process over HTTP against the test cluster, as the non-owner service role. The ids are the
++// fixed room migration 0001 seeds (LOCAL_ROOM in @agora/domain), written literally so the test depends only on the public surface.
++const LOCAL_ROOM = { projectId: 'a0000000-0000-4000-8000-000000000001', roomId: 'a0000000-0000-4000-8000-000000000002', principalId: 'a0000000-0000-4000-8000-000000000003' };
++const owner = openDatabase(process.env['AGORA_TEST_OWNER_DATABASE_URL'] ?? '');
++const validator = createWireValidator();
++const port = 3000 + Math.floor(Math.random() * 20000);
++const base = `http://127.0.0.1:${port}`;
++let center: ChildProcessByStdio<null, Readable, null>;
++
++async function start(): Promise<void> {
++	center = spawn(process.execPath, ['apps/center/src/main.ts'], { cwd: new URL('../../..', import.meta.url), env: { ...process.env, PORT: String(port), AGORA_DATABASE_URL: process.env['AGORA_TEST_DATABASE_URL'] }, stdio: ['ignore', 'pipe', 'inherit'] });
++	await once(center.stdout, 'data');
++}
++async function stop(): Promise<void> {
++	center.kill();
++	await once(center, 'exit');
++}
++const send = async (body: unknown) => {
++	const response = await fetch(`${base}/api/v1/local-room/messages`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
++	return { status: response.status, body: (await response.json()) as Record<string, unknown> };
++};
++const snapshot = async (): Promise<Schema<'RoomSnapshot'>> => {
++	const response = await fetch(`${base}/api/v1/local-room/snapshot`);
++	expect(response.status).toBe(200);
++	const result = validator.validate('RoomSnapshot', await response.json());
++	if (!result.ok) throw new Error(result.details.join('; '));
++	return result.value;
++};
++const scope = { project_id: LOCAL_ROOM.projectId, room_id: LOCAL_ROOM.roomId };
++const command = (body: string, citations: Schema<'RecordCitation'>[] = [], command_id = randomUUID()): Schema<'SendRoomMessageCommand'> => ({ schema_version: 'agora.local-room.send-message/v1', command_id, scope, body, citations });
++const first = command('First persisted message.');
++let firstReceipt: Schema<'RoomCommandReceipt'>;
++let baseSeq: number;
++
++beforeAll(async () => {
++	await owner.migrate();
++	await owner.close();
++	await start();
++});
++afterAll(stop);
++
++test('an accepted send answers 201 with a schema-valid receipt whose identity digest is the canonical digest of the command and whose revision is the next room sequence', async () => {
++	baseSeq = Number((await snapshot()).cursor.committed_seq);
++	const { status, body } = await send(first);
++	expect(status).toBe(201);
++	const receipt = validator.validate('RoomCommandReceipt', body);
++	expect(receipt).toMatchObject({ ok: true });
++	if (!receipt.ok) return;
++	firstReceipt = receipt.value;
++	expect(firstReceipt).toMatchObject({ identity: { command_id: first.command_id, request_digest: digestCanonical(first) }, receipt: { command_id: first.command_id, aggregate_id: LOCAL_ROOM.roomId, revision: String(baseSeq + 1), event_cursors: [{ stream_id: LOCAL_ROOM.roomId, committed_seq: String(baseSeq + 1) }] }, replayed: false });
++});
++
++test('replaying the same command returns the original receipt with replayed: true and no second message', async () => {
++	expect(await send(first)).toEqual({ status: 201, body: { ...firstReceipt, replayed: true } });
++	expect((await snapshot()).messages.filter((m) => m.command_id === first.command_id)).toHaveLength(1);
++});
++
++test('reusing the command id with a changed body is 409 command_conflict naming the committed digest', async () => {
++	const { status, body } = await send({ ...first, body: 'Changed body under the same command id.' });
++	expect(status).toBe(409);
++	expect(body).toMatchObject({ reason_code: 'command_conflict', details: [expect.stringContaining(firstReceipt.identity.request_digest) as string] });
++});
++
++test('another project or room is 404 scope_mismatch and a citation to no persisted record is 404 not_found; nothing is stored', async () => {
++	expect(await send({ ...command('elsewhere'), scope: { ...scope, project_id: randomUUID() } })).toMatchObject({ status: 404, body: { reason_code: 'scope_mismatch' } });
++	expect(await send({ ...command('elsewhere'), scope: { ...scope, room_id: randomUUID() } })).toMatchObject({ status: 404, body: { reason_code: 'scope_mismatch' } });
++	expect(await send(command('cites nothing', [{ record_kind: 'message', record_id: randomUUID(), room_seq: '1' }]))).toMatchObject({ status: 404, body: { reason_code: 'not_found' } });
++	expect((await snapshot()).cursor.committed_seq).toBe(String(baseSeq + 1));
++});
++
++test('a citation to the persisted message commits at the next sequence, and validation failures are 400 before storage', async () => {
++	const cited = await send(command('Replies to the first message.', [{ record_kind: 'message', record_id: firstReceipt.message_id, room_seq: firstReceipt.receipt.revision }]));
++	expect(cited).toMatchObject({ status: 201, body: { receipt: { revision: String(baseSeq + 2) }, replayed: false } });
++	expect(await send(command('x'.repeat(4097)))).toMatchObject({ status: 400, body: { reason_code: 'malformed_command', details: ['/body must NOT have more than 4096 characters'] } });
++	expect(await send({ ...command('forged author'), author: { kind: 'human', principal_id: LOCAL_ROOM.principalId } })).toMatchObject({ status: 400, body: { reason_code: 'malformed_command' } });
++	expect((await snapshot()).cursor.committed_seq).toBe(String(baseSeq + 2));
++});
++
++test('the snapshot after a service restart is identical, a replay still returns the original receipt, and the next send continues the sequence', async () => {
++	const before = await snapshot();
++	expect(before.messages.slice(-2).map((m) => [m.room_seq, m.body, m.citations.length])).toEqual([[String(baseSeq + 1), 'First persisted message.', 0], [String(baseSeq + 2), 'Replies to the first message.', 1]]);
++	await stop();
++	await start();
++	expect(await snapshot()).toEqual(before);
++	expect(await send(first)).toEqual({ status: 201, body: { ...firstReceipt, replayed: true } });
++	expect(await send(command('After restart.'))).toMatchObject({ status: 201, body: { receipt: { revision: String(baseSeq + 3) } } });
++	expect((await snapshot()).messages.at(-1)).toMatchObject({ room_seq: String(baseSeq + 3), body: 'After restart.', author: { kind: 'human', principal_id: LOCAL_ROOM.principalId } });
++});
+diff --git a/apps/center/test/local-room.test.ts b/apps/center/test/local-room.test.ts
+index 5a0ff29..067f5de 100644
+--- a/apps/center/test/local-room.test.ts
++++ b/apps/center/test/local-room.test.ts
+@@ -1,8 +1,8 @@
+ import { expect, test } from 'vitest';
+-import { createWireValidator } from '@agora/contracts';
+ import { createApp } from '../src/app.ts';
+ 
+-const app = createApp({ probeDatabase: () => Promise.reject(new Error('the local room never probes the database in this slice')) });
++// No localRoom adapter is composed here; the persisted path is apps/center/test/local-room.pg.test.ts against the real process.
++const app = createApp({ probeDatabase: () => Promise.reject(new Error('the local room never probes the database')) });
+ const P = '11111111-1111-4111-8111-111111111111';
+ const R = '22222222-2222-4222-8222-222222222222';
+ const C = '33333333-3333-4333-8333-333333333333';
+@@ -15,10 +15,13 @@ test('the same app answers the health baseline before any local-room assertion',
+ 	expect(await response.json()).toEqual({ schema_version: 'agora.health/v1', status: 'ok', service: 'agora-center' });
+ });
+ 
+-test('a well-formed send is validated, dispatched and answered as a typed 404 unavailable_capability, not an unknown route', async () => {
++test('without a persistence adapter composed, a well-formed send and the snapshot are typed 404 unavailable_capability, not an unknown route', async () => {
+ 	const response = await send(command);
+ 	expect(response.status).toBe(404);
+-	expect(await response.json()).toMatchObject({ reason_code: 'unavailable_capability', correlation_id: expect.stringMatching(/^[0-9a-f-]{36}$/) as string, details: [expect.stringContaining('local-room L1') as string] });
++	expect(await response.json()).toMatchObject({ reason_code: 'unavailable_capability', correlation_id: expect.stringMatching(/^[0-9a-f-]{36}$/) as string, details: [expect.stringContaining('not composed') as string] });
++	const snapshot = await app.request('/api/v1/local-room/snapshot');
++	expect(snapshot.status).toBe(404);
++	expect(await snapshot.json()).toMatchObject({ reason_code: 'unavailable_capability' });
+ });
+ 
+ test('an unknown field, an author offered by the client, a numeric sequence and a non-JSON body are each 400 malformed_command at their path', async () => {
+@@ -35,16 +38,3 @@ test('an unknown field, an author offered by the client, a numeric sequence and
+ 	const notJson = await app.request('/api/v1/local-room/messages', { method: 'POST', body: 'not json' });
+ 	expect(notJson.status).toBe(400);
+ });
+-
+-// Retained red for local-room L2: this assertion fails today because no persistence adapter is composed. L2 turns
+-// test.fails into test in the same change that composes the adapter; the recorder then shows this red against L1.
+-test.fails('L2: a committed send answers 201 with a receipt whose identity names the command and whose aggregate is the room', async () => {
+-	const response = await send(command);
+-	expect(response.status).toBe(201);
+-	const receipt = createWireValidator().validate('RoomCommandReceipt', await response.json());
+-	expect(receipt.ok).toBe(true);
+-	if (!receipt.ok) return;
+-	expect(receipt.value.identity.command_id).toBe(C);
+-	expect(receipt.value.receipt.aggregate_id).toBe(R);
+-	expect(receipt.value.replayed).toBe(false);
+-});
+diff --git a/contracts/fixtures/vectors.json b/contracts/fixtures/vectors.json
+index 8840c49..20e69ad 100644
+--- a/contracts/fixtures/vectors.json
++++ b/contracts/fixtures/vectors.json
+@@ -207,6 +207,14 @@
+ 			"expect": "reject",
+ 			"reason": "array item type"
+ 		},
++		{
++			"id": "error-command-conflict",
++			"component": "ErrorReport",
++			"wire": "{\"reason_code\":\"command_conflict\",\"correlation_id\":\"11111111-1111-4111-8111-111111111111\",\"details\":[\"command 33333333-3333-4333-8333-333333333333 was committed with request_digest sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"]}",
++			"expect": "accept",
++			"canonical": "{\"correlation_id\":\"11111111-1111-4111-8111-111111111111\",\"details\":[\"command 33333333-3333-4333-8333-333333333333 was committed with request_digest sha256:97019c3e094311496eaa36ee48d6625580f5f2e3826275ab46c65ad9e3ab18f6\"],\"reason_code\":\"command_conflict\"}",
++			"digest": "sha256:c37680d971b076189507135fdacfe7f49a85a8b1f6ab15ad45358c7b3cd65bf5"
++		},
+ 		{
+ 			"id": "revision-zero",
+ 			"component": "Revision",
+diff --git a/packages/client-core/test/boundaries.test.ts b/packages/client-core/test/boundaries.test.ts
+index 810f901..3050117 100644
+--- a/packages/client-core/test/boundaries.test.ts
++++ b/packages/client-core/test/boundaries.test.ts
+@@ -28,6 +28,8 @@ test.each(consumers)('%s rejects framework, provider, storage and transport impo
+ 		const messages = await boundary(form(module), file);
+ 		expect(messages.some((m) => m.ruleId === 'agora/import-boundary'), `${file}: ${form(module)}`).toBe(true);
+ 	}
++	// The shared type-aware project keeps the last text linted for a path; restore the committed source so later lints of its importers see real exports.
++	expect(await boundary(readFileSync(path.join(root, file), 'utf8'), file)).toEqual([]);
+ }, 120_000);
+ 
+ test('private relative paths, unknown dynamic targets and facade values cannot enter core', async () => {
+diff --git a/packages/storage/test/local-room.pg.test.ts b/packages/storage/test/local-room.pg.test.ts
+new file mode 100644
+index 0000000..5122f54
+--- /dev/null
++++ b/packages/storage/test/local-room.pg.test.ts
+@@ -0,0 +1,155 @@
++import { randomUUID } from 'node:crypto';
++import { afterAll, beforeAll, describe, expect, test } from 'vitest';
++import { Pool } from 'pg';
++import { asCommandId, asMessageId, asProjectId, digestCanonical, LOCAL_ROOM, type MessageCitation, type RoomReceipt, type SendRoomMessage, sendRoomMessage } from '@agora/domain';
++import { openDatabase, type Database } from '@agora/storage';
++
++const ownerUrl = process.env['AGORA_TEST_OWNER_DATABASE_URL'] ?? '';
++const appUrl = process.env['AGORA_TEST_DATABASE_URL'] ?? '';
++const owner = openDatabase(ownerUrl);
++const bypass = openDatabase(process.env['AGORA_TEST_BYPASS_DATABASE_URL'] ?? '');
++let app = openDatabase(appUrl);
++const otherProject = asProjectId(randomUUID());
++
++const command = (body: string, citations: MessageCitation[] = [], commandId = asCommandId(randomUUID())): SendRoomMessage => ({ commandId, projectId: LOCAL_ROOM.projectId, roomId: LOCAL_ROOM.roomId, body, citations, requestDigest: digestCanonical({ command_id: commandId, body }) });
++const send = (db: Database, c: SendRoomMessage) => db.withLocalRoom(LOCAL_ROOM.projectId, (store) => sendRoomMessage(store, LOCAL_ROOM, c));
++const snapshot = (db: Database = app) => db.withLocalRoom(LOCAL_ROOM.projectId, (store) => store.readSnapshot(LOCAL_ROOM.roomId, 1000), { readOnly: true });
++const committed = async (db: Database, c: SendRoomMessage): Promise<RoomReceipt> => {
++	const result = await send(db, c);
++	if (result.outcome !== 'committed') throw new Error(`expected committed, got ${JSON.stringify(result)}`);
++	return result.receipt;
++};
++// Test-only raw statements as a given role inside one scoped transaction, for what the store refuses to express.
++async function rawAs(url: string, scope: string, sql: string, params: unknown[] = []): Promise<unknown[]> {
++	const pool = new Pool({ connectionString: url });
++	const client = await pool.connect();
++	try {
++		await client.query('begin');
++		await client.query('select set_config($1, $2, true)', ['agora.scope_id', scope]);
++		const result = await client.query(sql, params);
++		await client.query('commit');
++		return result.rows as unknown[];
++	} catch (error) {
++		await client.query('rollback');
++		throw error;
++	} finally {
++		client.release();
++		await pool.end();
++	}
++}
++
++beforeAll(async () => {
++	await owner.migrate();
++});
++afterAll(async () => {
++	await app.close();
++	await bypass.close();
++	await owner.close();
++});
++
++test('the migration seeds exactly the fixed room the domain names, and a fresh adapter reads it back after the pool is closed and reopened', async () => {
++	expect(await app.withLocalRoom(LOCAL_ROOM.projectId, (store) => store.lockRoom(LOCAL_ROOM.roomId))).toBe(true);
++	const receipt = await committed(app, command('survives a reopened pool'));
++	await app.close();
++	app = openDatabase(appUrl);
++	const after = await snapshot();
++	expect(after.committedSeq).toBe(receipt.revision);
++	expect(after.messages.at(-1)).toMatchObject({ messageId: receipt.messageId, roomSeq: receipt.revision, body: 'survives a reopened pool', author: { kind: 'human', principalId: LOCAL_ROOM.principalId } });
++	expect(after.messages.at(-1)?.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
++});
++
++describe('ordering', () => {
++	test('eight concurrent distinct sends receive unique contiguous room sequences and event sequences equal to them', async () => {
++		const base = Number((await snapshot()).committedSeq);
++		let begun = 0;
++		let release = (): void => undefined;
++		const everyTransactionOpen = new Promise<void>((resolve) => { release = resolve; });
++		const receipts = await Promise.all(Array.from({ length: 8 }, (_, i) => app.withLocalRoom(LOCAL_ROOM.projectId, async (store) => {
++			if (++begun === 8) release();
++			await everyTransactionOpen;
++			return sendRoomMessage(store, LOCAL_ROOM, command(`concurrent ${i}`));
++		})));
++		const revisions = receipts.map((r) => (r.outcome === 'committed' ? Number(r.receipt.revision) : NaN)).sort((x, y) => x - y);
++		expect(revisions).toEqual(Array.from({ length: 8 }, (_, i) => base + 1 + i));
++		const events = await rawAs(appUrl, LOCAL_ROOM.projectId, "select e.seq::text as seq, e.payload->>'roomSeq' as room_seq, e.kind from local_room.event e where e.stream_id = $1 and e.seq > $2 order by e.seq", [LOCAL_ROOM.roomId, base]);
++		expect(events).toEqual(revisions.map((seq) => ({ seq: String(seq), room_seq: String(seq), kind: 'local_room.message_created' })));
++		expect((await snapshot()).messages.slice(-8).map((m) => Number(m.roomSeq))).toEqual(revisions);
++	});
++
++	test('eight concurrent sends of one command commit one message; the others replay its exact receipt', async () => {
++		const base = Number((await snapshot()).committedSeq);
++		const same = command('sent eight times at once');
++		const results = await Promise.all(Array.from({ length: 8 }, () => send(app, same)));
++		const receipts = results.map((r) => (r.outcome === 'committed' ? r : undefined));
++		expect(receipts.filter((r) => r?.replayed === false)).toHaveLength(1);
++		expect(receipts.filter((r) => r?.replayed === true)).toHaveLength(7);
++		for (const r of receipts) expect(r?.receipt).toEqual(receipts[0]?.receipt);
++		expect(Number((await snapshot()).committedSeq)).toBe(base + 1);
++	});
++
++	test('a transaction rolled back after the append consumes no visible sequence and leaves no message', async () => {
++		const before = await snapshot();
++		await expect(app.withLocalRoom(LOCAL_ROOM.projectId, async (store) => {
++			await sendRoomMessage(store, LOCAL_ROOM, command('never committed'));
++			throw new Error('simulated failure after append');
++		})).rejects.toThrow('simulated failure after append');
++		expect(await snapshot()).toEqual(before);
++		expect(Number((await committed(app, command('next after rollback'))).revision)).toBe(Number(before.committedSeq) + 1);
++	});
++});
++
++describe('idempotency and citations', () => {
++	test('the same command identity and digest replays the original receipt; a changed body under the same command is command_conflict', async () => {
++		const first = command('original body');
++		const receipt = await committed(app, first);
++		expect(await send(app, first)).toEqual({ outcome: 'committed', receipt, replayed: true });
++		const changed = { ...first, body: 'changed body', requestDigest: digestCanonical({ command_id: first.commandId, body: 'changed body' }) };
++		expect(await send(app, changed)).toMatchObject({ outcome: 'denied', reasonCode: 'command_conflict', detail: expect.stringContaining(first.requestDigest) as string });
++		expect((await snapshot()).messages.filter((m) => m.commandId === first.commandId)).toHaveLength(1);
++	});
++
++	test('a citation must name a persisted message at its sequence; an unknown id or a wrong sequence is not_found', async () => {
++		const cited = await committed(app, command('to be cited'));
++		expect(await send(app, command('cites it', [{ recordId: cited.messageId, roomSeq: cited.revision }]))).toMatchObject({ outcome: 'committed', replayed: false });
++		expect(await send(app, command('unknown id', [{ recordId: asMessageId(randomUUID()), roomSeq: cited.revision }]))).toMatchObject({ outcome: 'denied', reasonCode: 'not_found' });
++		expect(await send(app, command('wrong seq', [{ recordId: cited.messageId, roomSeq: String(Number(cited.revision) + 1) }]))).toMatchObject({ outcome: 'denied', reasonCode: 'not_found' });
++	});
++});
++
++describe('bounds at the store', () => {
++	test('4096 two-byte scalars commit; 4097 scalars and eleven citations are refused by the table and roll back', async () => {
++		const before = await snapshot();
++		const max = await committed(app, command('é'.repeat(4096)));
++		expect(max.revision).toBe(String(Number(before.committedSeq) + 1));
++		await expect(send(app, command('x'.repeat(4097)))).rejects.toMatchObject({ code: '23514' });
++		const cite: MessageCitation = { recordId: max.messageId, roomSeq: max.revision };
++		await expect(send(app, command('too many', Array.from({ length: 11 }, () => cite)))).rejects.toMatchObject({ code: '23514' });
++		expect((await snapshot()).committedSeq).toBe(max.revision);
++	});
++});
++
++describe('scope and immutability', () => {
++	test('a command for another project or room is scope_mismatch before any row is read', async () => {
++		expect(await send(app, { ...command('elsewhere'), projectId: otherProject })).toMatchObject({ outcome: 'denied', reasonCode: 'scope_mismatch' });
++		expect(await send(app, { ...command('elsewhere'), roomId: otherProject as unknown as SendRoomMessage['roomId'] })).toMatchObject({ outcome: 'denied', reasonCode: 'scope_mismatch' });
++	});
++
++	test('another project sees no room and cannot forge a row into the fixed project; a BYPASSRLS role sees the room, so the denial is the policy', async () => {
++		expect(await app.withLocalRoom(otherProject, (store) => store.lockRoom(LOCAL_ROOM.roomId))).toBe(false);
++		await expect(rawAs(appUrl, otherProject, 'insert into local_room.command_receipt (project_id, actor, command_id, request_digest, receipt) values ($1, $2, $3, $4, $5)', [LOCAL_ROOM.projectId, LOCAL_ROOM.principalId, randomUUID(), digestCanonical({}), '{}'])).rejects.toMatchObject({ code: '42501' });
++		await expect(rawAs(appUrl, otherProject, 'insert into local_room.room (project_id, room_id) values ($1, $2)', [otherProject, randomUUID()])).rejects.toMatchObject({ code: '42501' });
++		expect(await bypass.withLocalRoom(otherProject, (store) => store.lockRoom(LOCAL_ROOM.roomId))).toBe(true);
++	});
++
++	test('messages, events and receipts cannot be updated or deleted by the service role or by the schema owner', async () => {
++		const receipt = await committed(app, command('immutable'));
++		for (const [table, key] of [['message', 'message_id'], ['event', 'event_id'], ['command_receipt', 'command_id']] as const) {
++			const where = table === 'command_receipt' ? `command_id = '${receipt.commandId}'` : `${key} is not null`;
++			await expect(rawAs(appUrl, LOCAL_ROOM.projectId, `delete from local_room.${table} where ${where}`)).rejects.toMatchObject({ code: '42501' });
++			await expect(rawAs(ownerUrl, LOCAL_ROOM.projectId, `delete from local_room.${table} where ${where}`)).rejects.toThrow(`local_room.${table} is immutable`);
++		}
++		await expect(rawAs(appUrl, LOCAL_ROOM.projectId, 'update local_room.message set body = $1 where message_id = $2', ['edited', receipt.messageId])).rejects.toMatchObject({ code: '42501' });
++		await expect(rawAs(ownerUrl, LOCAL_ROOM.projectId, 'update local_room.message set body = $1 where message_id = $2', ['edited', receipt.messageId])).rejects.toThrow('local_room.message is immutable');
++		expect((await snapshot()).messages.find((m) => m.messageId === receipt.messageId)?.body).toBe('immutable');
++	});
++});

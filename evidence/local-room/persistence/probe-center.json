@@ -1,0 +1,428 @@
+{
+	"schema_version": "agora.probe/v1",
+	"target": "apps/center/src/main.ts",
+	"base": "http://127.0.0.1:6361",
+	"outcome": "pass",
+	"exit": 0,
+	"results": [
+		{
+			"id": "health-liveness",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.health/v1",
+					"status": "ok",
+					"service": "agora-center"
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.health/v1",
+					"status": "ok",
+					"service": "agora-center"
+				}
+			}
+		},
+		{
+			"id": "health-readiness",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.readiness/v1",
+					"status": "ready",
+					"checks": {
+						"database": "ok"
+					}
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.readiness/v1",
+					"status": "ready",
+					"checks": {
+						"database": "ok"
+					}
+				}
+			}
+		},
+		{
+			"id": "policy-allow",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "allow",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "allow",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			}
+		},
+		{
+			"id": "policy-deny",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "deny",
+					"reason_code": "scope_mismatch",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "deny",
+					"reason_code": "scope_mismatch",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			}
+		},
+		{
+			"id": "policy-unknown-field",
+			"outcome": "pass",
+			"expected": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			},
+			"observed": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"correlation_id": "8720c619-7832-475e-87bf-54d65a210e72",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			}
+		},
+		{
+			"id": "unknown-route",
+			"outcome": "pass",
+			"expected": {
+				"status": 404,
+				"body": {
+					"reason_code": "not_found"
+				}
+			},
+			"observed": {
+				"status": 404,
+				"body": {
+					"reason_code": "not_found",
+					"correlation_id": "af59a8d6-ce91-4ccb-b4e0-746a852ba94d"
+				}
+			}
+		},
+		{
+			"id": "local-room-snapshot-before",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.local-room.snapshot/v1",
+					"scope": {
+						"project_id": "a0000000-0000-4000-8000-000000000001",
+						"room_id": "a0000000-0000-4000-8000-000000000002"
+					}
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.local-room.snapshot/v1",
+					"scope": {
+						"project_id": "a0000000-0000-4000-8000-000000000001",
+						"room_id": "a0000000-0000-4000-8000-000000000002"
+					},
+					"cursor": {
+						"stream_id": "a0000000-0000-4000-8000-000000000002",
+						"committed_seq": "0"
+					},
+					"messages": []
+				}
+			}
+		},
+		{
+			"id": "local-room-send-committed",
+			"outcome": "pass",
+			"expected": {
+				"status": 201,
+				"body": {
+					"schema_version": "agora.local-room.receipt/v1",
+					"identity": {
+						"command_id": "11111111-1111-4111-8111-111111111111",
+						"request_digest": "sha256:32be56c0626e097c74d18b190ab20ce99c0be52c8e346c7c3279f8866a21bb28"
+					},
+					"replayed": false
+				}
+			},
+			"observed": {
+				"status": 201,
+				"body": {
+					"schema_version": "agora.local-room.receipt/v1",
+					"identity": {
+						"command_id": "11111111-1111-4111-8111-111111111111",
+						"request_digest": "sha256:32be56c0626e097c74d18b190ab20ce99c0be52c8e346c7c3279f8866a21bb28"
+					},
+					"receipt": {
+						"command_id": "11111111-1111-4111-8111-111111111111",
+						"aggregate_id": "a0000000-0000-4000-8000-000000000002",
+						"revision": "1",
+						"event_cursors": [
+							{
+								"stream_id": "a0000000-0000-4000-8000-000000000002",
+								"committed_seq": "1"
+							}
+						],
+						"receipt_id": "ea748839-49a8-4ac2-a085-3d97e0727a49"
+					},
+					"message_id": "c388da74-8b82-4917-a870-d9f76c471f46",
+					"replayed": false
+				}
+			}
+		},
+		{
+			"id": "local-room-send-replayed",
+			"outcome": "pass",
+			"expected": {
+				"status": 201,
+				"body": {
+					"replayed": true
+				}
+			},
+			"observed": {
+				"status": 201,
+				"body": {
+					"schema_version": "agora.local-room.receipt/v1",
+					"identity": {
+						"command_id": "11111111-1111-4111-8111-111111111111",
+						"request_digest": "sha256:32be56c0626e097c74d18b190ab20ce99c0be52c8e346c7c3279f8866a21bb28"
+					},
+					"receipt": {
+						"command_id": "11111111-1111-4111-8111-111111111111",
+						"aggregate_id": "a0000000-0000-4000-8000-000000000002",
+						"revision": "1",
+						"event_cursors": [
+							{
+								"stream_id": "a0000000-0000-4000-8000-000000000002",
+								"committed_seq": "1"
+							}
+						],
+						"receipt_id": "ea748839-49a8-4ac2-a085-3d97e0727a49"
+					},
+					"message_id": "c388da74-8b82-4917-a870-d9f76c471f46",
+					"replayed": true
+				}
+			}
+		},
+		{
+			"id": "local-room-send-changed-body",
+			"outcome": "pass",
+			"expected": {
+				"status": 409,
+				"body": {
+					"reason_code": "command_conflict"
+				}
+			},
+			"observed": {
+				"status": 409,
+				"body": {
+					"reason_code": "command_conflict",
+					"correlation_id": "3164a025-e6a1-40f5-8518-87477799865e",
+					"details": [
+						"command 11111111-1111-4111-8111-111111111111 was committed with request_digest sha256:32be56c0626e097c74d18b190ab20ce99c0be52c8e346c7c3279f8866a21bb28"
+					]
+				}
+			}
+		},
+		{
+			"id": "local-room-send-other-scope",
+			"outcome": "pass",
+			"expected": {
+				"status": 404,
+				"body": {
+					"reason_code": "scope_mismatch"
+				}
+			},
+			"observed": {
+				"status": 404,
+				"body": {
+					"reason_code": "scope_mismatch",
+					"correlation_id": "24d80bbf-8629-47be-b571-eab36fb3ae08",
+					"details": [
+						"the command names a project or room other than the fixed local-development room"
+					]
+				}
+			}
+		},
+		{
+			"id": "local-room-send-unknown-citation",
+			"outcome": "pass",
+			"expected": {
+				"status": 404,
+				"body": {
+					"reason_code": "not_found"
+				}
+			},
+			"observed": {
+				"status": 404,
+				"body": {
+					"reason_code": "not_found",
+					"correlation_id": "f27a307c-7ea6-4f14-9a96-e9f54840cb20",
+					"details": [
+						"citation 22222222-2222-4222-8222-222222222222 names no persisted message at room_seq 1"
+					]
+				}
+			}
+		},
+		{
+			"id": "local-room-send-empty-body",
+			"outcome": "pass",
+			"expected": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"details": [
+						"/body must NOT have fewer than 1 characters"
+					]
+				}
+			},
+			"observed": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"correlation_id": "150bcab5-54a6-4be2-be8b-b2fdde3e0df1",
+					"details": [
+						"/body must NOT have fewer than 1 characters"
+					]
+				}
+			}
+		},
+		{
+			"id": "local-room-send-unknown-field",
+			"outcome": "pass",
+			"expected": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			},
+			"observed": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"correlation_id": "1a118e5f-0c00-47c1-bd7d-b6d02004b8fd",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			}
+		},
+		{
+			"id": "local-room-snapshot-after-restart",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.local-room.snapshot/v1",
+					"scope": {
+						"project_id": "a0000000-0000-4000-8000-000000000001",
+						"room_id": "a0000000-0000-4000-8000-000000000002"
+					}
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.local-room.snapshot/v1",
+					"scope": {
+						"project_id": "a0000000-0000-4000-8000-000000000001",
+						"room_id": "a0000000-0000-4000-8000-000000000002"
+					},
+					"cursor": {
+						"stream_id": "a0000000-0000-4000-8000-000000000002",
+						"committed_seq": "1"
+					},
+					"messages": [
+						{
+							"schema_version": "agora.local-room.message/v1",
+							"message_id": "c388da74-8b82-4917-a870-d9f76c471f46",
+							"scope": {
+								"project_id": "a0000000-0000-4000-8000-000000000001",
+								"room_id": "a0000000-0000-4000-8000-000000000002"
+							},
+							"room_seq": "1",
+							"author": {
+								"kind": "human",
+								"principal_id": "a0000000-0000-4000-8000-000000000003"
+							},
+							"command_id": "11111111-1111-4111-8111-111111111111",
+							"body": "hello",
+							"citations": [],
+							"created_at": "2026-09-21T02:13:13.371Z"
+						}
+					]
+				}
+			}
+		},
+		{
+			"id": "local-room-replay-after-restart",
+			"outcome": "pass",
+			"expected": {
+				"status": 201,
+				"body": {
+					"replayed": true
+				}
+			},
+			"observed": {
+				"status": 201,
+				"body": {
+					"schema_version": "agora.local-room.receipt/v1",
+					"identity": {
+						"command_id": "11111111-1111-4111-8111-111111111111",
+						"request_digest": "sha256:32be56c0626e097c74d18b190ab20ce99c0be52c8e346c7c3279f8866a21bb28"
+					},
+					"receipt": {
+						"command_id": "11111111-1111-4111-8111-111111111111",
+						"aggregate_id": "a0000000-0000-4000-8000-000000000002",
+						"revision": "1",
+						"event_cursors": [
+							{
+								"stream_id": "a0000000-0000-4000-8000-000000000002",
+								"committed_seq": "1"
+							}
+						],
+						"receipt_id": "ea748839-49a8-4ac2-a085-3d97e0727a49"
+					},
+					"message_id": "c388da74-8b82-4917-a870-d9f76c471f46",
+					"replayed": true
+				}
+			}
+		}
+	]
+}
