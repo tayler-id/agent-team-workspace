@@ -1,11 +1,11 @@
 # green.log (agora.red-green/v1)
-recorded_at: 2026-09-21T06:51:43.701Z
-parent: c5b1fd11bd46aede7e620d390317495a4a9b4141
-head: 54b5e907712b0fa4c6bfc3f35036b5e4b9afc0a1
-subject_revision: 54b5e907712b0fa4c6bfc3f35036b5e4b9afc0a1
+recorded_at: 2026-09-21T13:48:31.437Z
+parent: d5f12a79f4a6b4c2fa99eed8ef952604659fd82d
+head: b6ff43cd0d55bd98ad8a846c1237ea124af4f123
+subject_revision: b6ff43cd0d55bd98ad8a846c1237ea124af4f123
 test_patch_applied_to_subject: false
 test_patch_files: packages/client-core/test/app-architecture.test.ts
-test_patch_digest: sha256:7d129dc7fd0a959d2f963880966f9c2eaee5ebb2abc21988a734c115641e2f31
+test_patch_digest: sha256:54b6947b7b5715649555869e776b226b661c0e0e2569c6151cfd5b99ec18c90f
 fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
 configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"}
 toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
@@ -13,11 +13,11 @@ expected: every assertion passes at the head (exit 0)
 observed_exit: 0
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-m4O02m
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-T1QvId
 
 
  Test Files  1 passed (1)
-      Tests  15 passed (15)
-   Start at  02:51:25
-   Duration  16.38s (tests 99%)
+      Tests  16 passed (16)
+   Start at  09:48:11
+   Duration  18.05s (tests 100%)
 

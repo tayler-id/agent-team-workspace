@@ -1,11 +1,11 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-21T06:51:43.700Z
-parent: c5b1fd11bd46aede7e620d390317495a4a9b4141
-head: 54b5e907712b0fa4c6bfc3f35036b5e4b9afc0a1
-subject_revision: c5b1fd11bd46aede7e620d390317495a4a9b4141
+recorded_at: 2026-09-21T13:48:31.435Z
+parent: d5f12a79f4a6b4c2fa99eed8ef952604659fd82d
+head: b6ff43cd0d55bd98ad8a846c1237ea124af4f123
+subject_revision: d5f12a79f4a6b4c2fa99eed8ef952604659fd82d
 test_patch_applied_to_subject: true
 test_patch_files: packages/client-core/test/app-architecture.test.ts
-test_patch_digest: sha256:7d129dc7fd0a959d2f963880966f9c2eaee5ebb2abc21988a734c115641e2f31
+test_patch_digest: sha256:54b6947b7b5715649555869e776b226b661c0e0e2569c6151cfd5b99ec18c90f
 fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
 configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"}
 toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
@@ -13,30 +13,31 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-aiDqrf
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-OdEJ5W
 
- ❯ |unit| packages/client-core/test/app-architecture.test.ts (15 tests | 5 failed) 8011ms
-   × owner tables are explicit and test-visible architecture policy 6ms
-   × every guarded source extension keeps import-boundary diagnostics via public CLI 6370ms
-   × ambient declare shadows cannot hide browser globals 7ms
-   × DOM mutation is receiver-aware including computed keys; ordinary writers stay allowed 31ms
-   × removing app-architecture protections makes denial assertions turn red 71ms
+ ❯ |unit| packages/client-core/test/app-architecture.test.ts (16 tests | 6 failed) 16499ms
+   × owner tables are explicit and test-visible architecture policy 4ms
+   × apps/web non-src relocation cannot bypass renderer footguns or import boundaries 937ms
+   × renderer footguns: effects only in framework; browser APIs only in host or framework 28ms
+   × effect ownership closes aliases barrels dynamic imports and re-exports without rejecting locals 39ms
+   × DOM mutation is receiver-aware including computed and union keys; ordinary writers stay allowed 34ms
+   × removing app-architecture protections makes denial assertions turn red 22ms
 
  Test Files  1 failed (1)
-      Tests  5 failed | 10 passed (15)
-   Start at  02:51:12
-   Duration  8.18s (tests 99%, import 1%)
+      Tests  6 failed | 10 passed (16)
+   Start at  09:47:50
+   Duration  16.63s (tests 100%)
 
 
-⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  |unit| packages/client-core/test/app-architecture.test.ts > owner tables are explicit and test-visible architecture policy
-AssertionError: expected 'import js from \'@eslint/js\';\nimpor…' to contain 'ts,tsx,mts,cts,js,jsx,mjs,cjs'
+AssertionError: expected 'import js from \'@eslint/js\';\nimpor…' to contain 'apps/web/**'
 
 - Expected
 + Received
 
-- ts,tsx,mts,cts,js,jsx,mjs,cjs
+- apps/web/**
 + import js from '@eslint/js';
 + import tseslint from 'typescript-eslint';
 + import { assertArchitectureExceptionsValid } from './scripts/architecture-exceptions.ts';
@@ -47,9 +48,9 @@ AssertionError: expected 'import js from \'@eslint/js\';\nimpor…' to contain '
 + assertArchitectureExceptionsValid();
 +
 + const guarded = [
-+ 	'contracts/**/*.{ts,tsx,mts,cts,js,mjs,cjs}',
-+ 	'packages/*/src/**/*.{ts,tsx,mts,cts,js,mjs,cjs}',
-+ 	'apps/*/src/**/*.{ts,tsx,mts,cts,js,mjs,cjs}',
++ 	'contracts/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
++ 	'packages/*/src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
++ 	'apps/*/src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
 + ];
 +
 + export default tseslint.config(
@@ -109,8 +110,17 @@ AssertionError: expected 'import js from \'@eslint/js\';\nimpor…' to contain '
 + 			'agora/renderer-footgun': 'error',
 + 		},
 + 	},
++ 	// contracts plain JS keeps import-boundary from the guarded block but drops type-info-only public-types.
 + 	{
-+ 		files: ['contracts/**/*.mjs'],
++ 		files: ['contracts/**/*.js'],
++ 		rules: {
++ 			'agora/public-types': 'off',
++ 			'agora/renderer-footgun': 'off',
++ 		},
++ 	},
++ 	// contracts mjs/cjs are ignored by the guarded block; attach import-boundary without redefining plugins on .js.
++ 	{
++ 		files: ['contracts/**/*.{mjs,cjs}'],
 + 		linterOptions: { noInlineConfig: true },
 + 		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule } } },
 + 		rules: { 'agora/import-boundary': 'error' },
@@ -135,18 +145,18 @@ AssertionError: expected 'import js from \'@eslint/js\';\nimpor…' to contain '
 + );
 +
 
- ❯ packages/client-core/test/app-architecture.test.ts:67:23
-     65|  expect(eslintConfig).toContain('noInlineConfig: true');
-     66|  expect(eslintConfig).toMatch(/assertArchitectureExceptionsValid\s*\(/…
-     67|  expect(eslintConfig).toContain('ts,tsx,mts,cts,js,jsx,mjs,cjs');
+ ❯ packages/client-core/test/app-architecture.test.ts:55:23
+     53|  expect(eslintConfig).toMatch(/assertArchitectureExceptionsValid\s*\(/…
+     54|  expect(eslintConfig).toContain('ts,tsx,mts,cts,js,jsx,mjs,cjs');
+     55|  expect(eslintConfig).toContain('apps/web/**');
        |                       ^
-     68|  expect(eslintConfig).toContain("contracts/**/*.js");
-     69|  expect(eslintConfig).toContain('contracts/**/*.{mjs,cjs}');
+     56|  expect(eslintConfig).toContain('contracts/**/*.js');
+     57|  expect(eslintConfig).toContain('contracts/**/*.{mjs,cjs}');
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
 
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > every guarded source extension keeps import-boundary diagnostics via public CLI
-AssertionError: apps/web/src/features/room/extmuavznbf-jsx.jsx: expected +0 to be 1 // Object.is equality
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > apps/web non-src relocation cannot bypass renderer footguns or import boundaries
+AssertionError: apps/web/test/relocmubavqcn-leak.ts: expected +0 to be 1 // Object.is equality
 
 - Expected
 + Received
@@ -154,17 +164,17 @@ AssertionError: apps/web/src/features/room/extmuavznbf-jsx.jsx: expected +0 to b
 - 1
 + 0
 
- ❯ packages/client-core/test/app-architecture.test.ts:115:27
-    113|   writeProbe(row.rel, row.body);
-    114|   const { status, out } = publicEslint(row.rel);
-    115|   expect(status, row.rel).toBe(1);
-       |                           ^
-    116|   expect(out, row.rel).toContain('agora/import-boundary');
-    117|   expect(out, row.rel).toContain(row.needle);
+ ❯ packages/client-core/test/app-architecture.test.ts:141:23
+    139|  for (const rel of [`apps/web/test/${stamp}-leak.ts`, `apps/web/lib/${…
+    140|   const { status, out } = publicEslint(rel);
+    141|   expect(status, rel).toBe(1);
+       |                       ^
+    142|   expect(out, rel).toContain('agora/renderer-footgun');
+    143|  }
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
 
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > ambient declare shadows cannot hide browser globals
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > renderer footguns: effects only in framework; browser APIs only in host or framework
 AssertionError: expected false to be true // Object.is equality
 
 - Expected
@@ -173,17 +183,17 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:203:71
-    201|   'export const f = (u: string): Promise<Response> => fetch(u);',
-    202|  ].join('\n');
-    203|  expect(await has(code, feature, 'agora/renderer-footgun', 'window')).…
-       |                                                                       ^
-    204|  expect(await has(code, feature, 'agora/renderer-footgun', 'document')…
-    205|  expect(await has(code, feature, 'agora/renderer-footgun', 'fetch')).t…
+ ❯ packages/client-core/test/app-architecture.test.ts:157:82
+    155|  expect(await has(aliased, feature, 'agora/renderer-footgun', 'useEffe…
+    156|  const literalAlias = "import { 'useEffect' as ue } from 'react'; expo…
+    157|  expect(await has(literalAlias, feature, 'agora/renderer-footgun', 'us…
+       |                                                                                  ^
+    158|  const namespaced = "import * as React from 'react'; export function C…
+    159|  expect(await has(namespaced, feature, 'agora/renderer-footgun', owner…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
 
- FAIL  |unit| packages/client-core/test/app-architecture.test.ts > DOM mutation is receiver-aware including computed keys; ordinary writers stay allowed
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > effect ownership closes aliases barrels dynamic imports and re-exports without rejecting locals
 AssertionError: expected false to be true // Object.is equality
 
 - Expected
@@ -192,15 +202,29 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:222:161
-    220|  expect(await has('export const detach = (node: Element): void => { no…
-    221|  expect(await has('export const mount = (node: Element, child: Node): …
-    222|  expect(await has("export const mount = (node: Element, child: Node): …
+ ❯ packages/client-core/test/app-architecture.test.ts:182:114
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > DOM mutation is receiver-aware including computed and union keys; ordinary writers stay allowed
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:232:161
+    230|  expect(await has("export const mount = (node: Element, child: Node): …
+    231|  expect(await has("const k = 'appendChild' as const; export const moun…
+    232|  expect(await has("export const a = (n: Element, c: Node, k: 'append' …
        |                                                                                                                                                                 ^
-    223|  expect(await has("const k = 'appendChild' as const; export const moun…
-    224|  const stamp = `mut${Date.now().toString(36)}`;
+    233|  expect(await has("export const b = (n: Element, c: Node, flag: boolea…
+    234|  const stamp = `mut${Date.now().toString(36)}`;
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
 
  FAIL  |unit| packages/client-core/test/app-architecture.test.ts > removing app-architecture protections makes denial assertions turn red
 AssertionError: expected false to be true // Object.is equality
@@ -211,13 +235,13 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:366:68
-    364|   ['agora/renderer-footgun', feature, 'declare const window: Window; e…
-    365|  ] as const) {
-    366|   expect((await agora(code, file)).some((m) => m.ruleId === rule)).toB…
+ ❯ packages/client-core/test/app-architecture.test.ts:357:68
+    355|   ['agora/renderer-footgun', feature, 'declare const window: Window; e…
+    356|  ] as const) {
+    357|   expect((await agora(code, file)).some((m) => m.ruleId === rule)).toB…
        |                                                                    ^
-    367|   const messages = await agora(code, file, new ESLint({ cwd: root, ign…
-    368|   expect(messages.filter((m) => m.ruleId === rule)).toEqual([]);
+    358|   const messages = await agora(code, file, new ESLint({ cwd: root, ign…
+    359|   expect(messages.filter((m) => m.ruleId === rule)).toEqual([]);
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
 

@@ -2,14 +2,14 @@
   "schema_version": "agora.task-outcome/v1",
   "task": "agora-s1-lint-application-architecture",
   "unit": "U20",
-  "parent": "c5b1fd11bd46aede7e620d390317495a4a9b4141",
-  "head": "54b5e907712b0fa4c6bfc3f35036b5e4b9afc0a1",
+  "parent": "d5f12a79f4a6b4c2fa99eed8ef952604659fd82d",
+  "head": "b6ff43cd0d55bd98ad8a846c1237ea124af4f123",
   "result": "pass",
-  "summary": "Rereview correction closes ambient declare shadows, computed DOM mutator keys, .jsx coverage, contracts js/cjs diagnostics, apps/web typecheck gating and load-time exception validation while generating extension fixtures at runtime under the R11 file block.",
+  "summary": "Final residual correction closes apps/web non-src relocation, string-literal React effect imports and all-mutator union computed DOM keys; guards apps/web/**; excludes apps/web from the root typecheck program; correction delta stays under the original 400/12 task cap.",
   "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
   "green": "evidence/U20/agora-s1-lint-application-architecture/green.log",
-  "red_assertions": "Correction-delta: head tests fail on parent c5b1fd1 (declare/computed/jsx/contracts/load-time cases); whole-feature-red.log retains original slice red",
-  "green_assertions": "Tests 15 passed (15)",
+  "red_assertions": "Correction-delta: head tests fail on parent d5f12a7 (relocation, literal-effect, union-DOM cases); whole-feature-red.log retains original slice red",
+  "green_assertions": "Tests 16 passed (16)",
   "commands": [
     "pnpm boundaries",
     "pnpm lint",
@@ -20,8 +20,8 @@
     "No Client/Host runtime",
     "No Feature discovery",
     "No product Features",
-    "Source-file delta below R11 block via runtime fixtures (D84); no size exception",
+    "Correction delta under original 400-line/12-file task cap (D85); whole branch under R11 block via prior D84 runtime fixtures",
     "Whole-feature red preserved in whole-feature-red.log",
-    "JSDoc import types, property-assignment mutators and untyped ambiguous mutators deferred"
+    "JSDoc import types, property-assignment mutators, untyped ambiguous mutators and Reflect.get deferred"
   ]
 }
