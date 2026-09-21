@@ -2,6 +2,7 @@ import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
 import { AST_NODE_TYPES, ESLintUtils, type TSESLint, type TSESTree } from '@typescript-eslint/utils';
+import { exceptionAllows } from './architecture-exceptions.ts';
 
 export const projectRoot = path.resolve(import.meta.dirname, '..');
 /** Test-visible owner table. Widening it is an architecture-policy change. */
@@ -135,7 +136,7 @@ export const importBoundaryRule: TSESLint.RuleModule<'forbidden'> = {
 		const check = (node: TSESTree.Node, source: TSESTree.Node | null | undefined, typesOnly: boolean): void => {
 			const specifier = source?.type === AST_NODE_TYPES.Literal && typeof source.value === 'string' ? source.value : undefined;
 			const reason = violation(file, specifier, typesOnly, program);
-			if (!reason) return;
+			if (!reason || exceptionAllows(file, specifier ?? 'dynamic-import', 'agora/import-boundary')) return;
 			context.report({ node, messageId: 'forbidden', data: { reason } });
 		};
 		return {
@@ -152,7 +153,7 @@ export const importBoundaryRule: TSESLint.RuleModule<'forbidden'> = {
 				if (file.includes('/contracts/') && ['process', 'global', 'require'].includes(node.name)) return;
 				if (!globals.has(node.name)) return;
 				const reference = context.sourceCode.getScope(node).references.find((r) => r.identifier === node);
-				if (reference && !reference.resolved?.defs.length) {
+				if (reference && !reference.resolved?.defs.length && !exceptionAllows(file, node.name, 'agora/import-boundary')) {
 					context.report({ node, messageId: 'forbidden', data: { reason: `ambient ${node.name} is outside the portable boundary; keep DOM and browser APIs in ${WEB_OWNERS.host}` } });
 				}
 			},

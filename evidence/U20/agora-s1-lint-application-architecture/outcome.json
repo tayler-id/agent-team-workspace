@@ -2,28 +2,24 @@
   "schema_version": "agora.task-outcome/v1",
   "task": "agora-s1-lint-application-architecture",
   "unit": "U20",
-  "parent": "cacbd069052fc60a591e0895eec3f0c5ac7a25b5",
-  "head": "9bb746277d5ec608cfbd614a54111f5de34a472e",
+  "parent": "dc38b1078d797afb87744436a2a0c3f4ccb67950",
+  "head": "PENDING_B2_HEAD",
   "result": "pass",
-  "summary": "B1 import-boundary slice extends Agora owners to apps/web Feature/Client/Host across guarded extensions under the captain 400-line/12-file target; renderer foot-guns and exceptions deferred to B2 (D84/D85).",
+  "summary": "B2 adds renderer foot-guns, architecture exceptions and residual mixed-union DOM mutation denials on top of B1 import ownership (D86/D87). Framework aliased-effect control restored. M14/M15 recorded as explicit limits.",
   "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
   "green": "evidence/U20/agora-s1-lint-application-architecture/green.log",
-  "red_assertions": "Whole-feature red: head tests fail on parent cacbd069052fc60a591e0895eec3f0c5ac7a25b5 (8 failed); owner tables, server imports, extensions, entrypoints, relocation, client-core, noInlineConfig, guard-weakening",
-  "green_assertions": "Tests 8 passed (8)",
-  "commands": [
-    "pnpm boundaries",
-    "pnpm lint",
-    "pnpm typecheck",
-    "pnpm check"
-  ],
+  "red_assertions": "B2 head tests fail on B1 parent dc38b1078d797afb87744436a2a0c3f4ccb67950 (12 failed renderer/exception cases; 4 B1 import cases still green)",
+  "green_assertions": "Tests 16 passed (16)",
+  "commands": ["pnpm boundaries", "pnpm lint", "pnpm typecheck", "pnpm check"],
   "limits": [
     "No Client/Host runtime",
     "No Feature discovery",
     "No product Features",
-    "B1 only: no renderer-footgun, no architecture-exceptions file",
-    "B2 follow-up preserves renderer foot-guns, exceptions, mixed-union DOM, adversarial effect fixtures",
-    "Captain 400-line/12-file target met on B1 without size waiver (D85)"
+    "Stacked on B1 import-ownership under captain 400/12 (D85)",
+    "M14 drop portable-host escapes from domGlobals not red-proven in focused suite",
+    "M15 remove noInlineConfig from mjs/cjs block not red-proven in focused suite",
+    "JSDoc import types, property-assignment mutators, untyped ambiguous mutators and Reflect.get deferred"
   ],
-  "test_patch_digest": "2011b490bcd21b2a3fd967dbf1cfecc744127a5038a76fe031f504576fb26670",
+  "test_patch_digest": "b8ec05bfda85f4b257fab2fb4705fa3673cebabfe8900f962ae394a32a5bb717",
   "lockfile_digest": "e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"
 }
