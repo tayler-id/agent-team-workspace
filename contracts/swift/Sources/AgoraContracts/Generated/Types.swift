@@ -26,11 +26,16 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `POST /api/v1/fixture/policy/decisions`.
     /// - Remark: Generated from `#/paths//api/v1/fixture/policy/decisions/post(decideFixturePolicy)`.
     func decideFixturePolicy(_ input: Operations.decideFixturePolicy.Input) async throws -> Operations.decideFixturePolicy.Output
-    /// Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it
+    /// Send one immutable message to the fixed local-development room; committed in one PostgreSQL transaction with the room counter, event and receipt (local-room L2)
     ///
     /// - Remark: HTTP `POST /api/v1/local-room/messages`.
     /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)`.
     func sendLocalRoomMessage(_ input: Operations.sendLocalRoomMessage.Input) async throws -> Operations.sendLocalRoomMessage.Output
+    /// Ordered history and cursor of the fixed local-development room from one repeatable read; at most the latest 1000 messages
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/snapshot`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/snapshot/get(getLocalRoomSnapshot)`.
+    func getLocalRoomSnapshot(_ input: Operations.getLocalRoomSnapshot.Input) async throws -> Operations.getLocalRoomSnapshot.Output
 }
 
 /// Convenience overloads for operation inputs.
@@ -62,7 +67,7 @@ extension APIProtocol {
             body: body
         ))
     }
-    /// Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it
+    /// Send one immutable message to the fixed local-development room; committed in one PostgreSQL transaction with the room counter, event and receipt (local-room L2)
     ///
     /// - Remark: HTTP `POST /api/v1/local-room/messages`.
     /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)`.
@@ -74,6 +79,13 @@ extension APIProtocol {
             headers: headers,
             body: body
         ))
+    }
+    /// Ordered history and cursor of the fixed local-development room from one repeatable read; at most the latest 1000 messages
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/snapshot`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/snapshot/get(getLocalRoomSnapshot)`.
+    public func getLocalRoomSnapshot(headers: Operations.getLocalRoomSnapshot.Input.Headers = .init()) async throws -> Operations.getLocalRoomSnapshot.Output {
+        try await getLocalRoomSnapshot(Operations.getLocalRoomSnapshot.Input(headers: headers))
     }
 }
 

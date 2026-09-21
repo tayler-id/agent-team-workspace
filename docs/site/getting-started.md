@@ -31,7 +31,7 @@ pnpm contracts:conform -- --json
 node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
 ```
 
-The last command starts a temporary database and a real center process, drives the public routes, stops its process, and preserves the printed result. Expected: health and readiness 200, scope allow and deny decisions, unknown field 400, unknown route 404, a validated local-room send 404 `unavailable_capability`, and a local-room send with an unknown field 400. Run `node scripts/probe-center.mjs --scenarios` to list those eight scenarios without starting anything. `pnpm check` includes real PostgreSQL tests. A missing prerequisite blocks, never silently skips.
+The last command starts a temporary database and a real center process, drives the public routes, stops its process, and preserves the printed result. Expected: health and readiness 200, scope allow and deny decisions, unknown field 400, unknown route 404, a local-room send committed as a 201 receipt, its replay, a 409 for a changed body, 404s for another scope and an unknown citation, 400s for an empty body and an unknown field, and the same snapshot and replay after the process is stopped and started again. Run `node scripts/probe-center.mjs --scenarios` to list those sixteen scenarios without starting anything. `pnpm check` includes real PostgreSQL tests. A missing prerequisite blocks, never silently skips.
 
 ```flow
 Install locked tools | Confirm runtime majors; fetch declared dependencies.

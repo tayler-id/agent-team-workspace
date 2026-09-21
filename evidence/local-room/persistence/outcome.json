@@ -1,0 +1,8 @@
+{
+	"schema_version": "agora.task-outcome/v1",
+	"task": "agora-local-room-persistence",
+	"slice": "local-room L2 of 5: transactional PostgreSQL persistence of one fixed local-development room",
+	"parent": "95f3527",
+	"code_head": "the code commit that carries this provisional file; the evidence commit directly on top of it replaces this file with the exact revisions, sizes and receipts",
+	"status": "provisional"
+}

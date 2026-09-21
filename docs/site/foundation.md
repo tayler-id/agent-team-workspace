@@ -6,14 +6,15 @@ The first landed task, U01a.B01, is a small, non-production walking fixture. It 
 
 ## What it does
 
-`apps/center` composes four Hono routes. `packages/domain` decides whether two fixture scope IDs match. `packages/storage` owns connection handling, reviewed migrations, scoped transactions, stream counters, events and claims. The root scripts give contributors repeatable verification commands.
+`apps/center` composes five Hono routes. `packages/domain` decides whether two fixture scope IDs match. `packages/storage` owns connection handling, reviewed migrations, scoped transactions, stream counters, events and claims. The root scripts give contributors repeatable verification commands.
 
 | Public route | Literal behavior |
 | --- | --- |
 | `GET /api/v1/health` | 200 with `status: ok`, no dependency access |
 | `GET /api/v1/health/ready` | 200 when PostgreSQL answers, 503 otherwise |
 | `POST /api/v1/fixture/policy/decisions` | Validated scope input produces allow or `scope_mismatch` denial |
-| `POST /api/v1/local-room/messages` | Validated send command answers a typed 404 `unavailable_capability` in local-room L1; [Local room contracts](local-room.md) explains the slice |
+| `POST /api/v1/local-room/messages` | Send to the fixed local room, committed in one PostgreSQL transaction; [Local room](local-room.md) explains the slice |
+| `GET /api/v1/local-room/snapshot` | Ordered history and cursor of the fixed local room from one repeatable read |
 
 Unknown routes return JSON 404 with `not_found`. Unknown input fields return 400 with `malformed_command`. A denial is a successful policy evaluation (HTTP 200), not a successful product action.
 

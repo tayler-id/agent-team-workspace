@@ -8,6 +8,13 @@
 			"when": 1758333600000,
 			"tag": "0000_foundation_fixture",
 			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1758420000000,
+			"tag": "0001_local_room",
+			"breakpoints": true
 		}
 	]
 }

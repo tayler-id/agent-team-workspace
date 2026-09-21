@@ -147,6 +147,17 @@
 			"scenarios": ["contracts/test/local-room.test.ts", "apps/center/test/local-room.test.ts", "scripts/probe-center.mjs"],
 			"platforms": ["node24", "swift6-macos"],
 			"owner": "local-room L1"
+		},
+		{
+			"id": "local-room-persistence",
+			"documentation": "docs/site/local-room.md",
+			"paths": ["contracts/schemas/errors.schema.json", "contracts/openapi.json", "contracts/fixtures/vectors.json", "packages/domain/src/local-room/port.ts", "packages/domain/src/local-room/events.ts", "packages/domain/src/index.ts", "packages/storage/drizzle/0001_local_room.sql", "packages/storage/drizzle/meta/_journal.json", "packages/storage/src/local-room.ts", "packages/storage/src/database.ts", "packages/storage/src/index.ts", "apps/center/src/app.ts", "apps/center/src/main.ts", "scripts/probe-center.mjs"],
+			"public": ["POST /api/v1/local-room/messages", "GET /api/v1/local-room/snapshot", "pnpm migrate", "pnpm test:pg", "node scripts/probe-center.mjs"],
+			"contracts": ["contracts/schemas/local-room.schema.json", "contracts/schemas/sync.schema.json", "contracts/schemas/errors.schema.json"],
+			"fixtures": ["local_room schema with one seeded fixed room (LOCAL_ROOM)", "agora_app non-owner role under forced row-level security", "error-command-conflict vector"],
+			"scenarios": ["packages/storage/test/local-room.pg.test.ts", "apps/center/test/local-room.pg.test.ts", "apps/center/test/local-room.test.ts", "contracts/test/local-room.test.ts", "scripts/probe-center.mjs"],
+			"platforms": ["node24", "postgresql18", "swift6-macos"],
+			"owner": "local-room L2"
 		}
 	]
 }

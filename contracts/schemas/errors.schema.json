@@ -5,9 +5,9 @@
 	"description": "Stable reason codes and the JSON error body of every non-2xx HTTP answer (R07).",
 	"$defs": {
 		"ReasonCode": {
-			"description": "Closed set of stable reason codes in use on the foundation surface. A new code is a contract change.",
+			"description": "Closed set of stable reason codes in use on the foundation surface. A new code is a contract change. command_conflict is the R07 409: the same actor and command_id reused with a different request digest.",
 			"type": "string",
-			"enum": ["malformed_command", "not_found", "scope_mismatch", "blocked_prerequisite", "unavailable_capability", "usage_error", "infrastructure_failure"]
+			"enum": ["malformed_command", "not_found", "scope_mismatch", "command_conflict", "blocked_prerequisite", "unavailable_capability", "usage_error", "infrastructure_failure"]
 		},
 		"ErrorReport": {
 			"description": "Error body. Carries a reason code and a correlation id, never a secret value. details lists validator paths and messages for malformed_command.",

@@ -454,7 +454,7 @@ public enum Operations {
             }
         }
     }
-    /// Send one immutable message to the local-development room; L1 validates the command and answers a typed 404 until L2 persists it
+    /// Send one immutable message to the fixed local-development room; committed in one PostgreSQL transaction with the room counter, event and receipt (local-room L2)
     ///
     /// - Remark: HTTP `POST /api/v1/local-room/messages`.
     /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)`.
@@ -623,7 +623,7 @@ public enum Operations {
                     self.body = body
                 }
             }
-            /// unavailable_capability: the room path is dispatched but no persistence adapter is composed in this slice
+            /// scope_mismatch when the command names another project or room; not_found when a citation names no persisted message; unavailable_capability when no persistence adapter is composed
             ///
             /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)/responses/404`.
             ///
@@ -634,6 +634,218 @@ public enum Operations {
             /// - Throws: An error if `self` is not `.notFound`.
             /// - SeeAlso: `.notFound`.
             public var notFound: Operations.sendLocalRoomMessage.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/messages/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/messages/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ErrorReport)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ErrorReport {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.sendLocalRoomMessage.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.sendLocalRoomMessage.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// command_conflict: the same command_id was already committed with a different request digest
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.sendLocalRoomMessage.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.sendLocalRoomMessage.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// Ordered history and cursor of the fixed local-development room from one repeatable read; at most the latest 1000 messages
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/snapshot`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/snapshot/get(getLocalRoomSnapshot)`.
+    public enum getLocalRoomSnapshot {
+        public static let id: Swift.String = "getLocalRoomSnapshot"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/api/v1/local-room/snapshot/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getLocalRoomSnapshot.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getLocalRoomSnapshot.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.getLocalRoomSnapshot.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            public init(headers: Operations.getLocalRoomSnapshot.Input.Headers = .init()) {
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/snapshot/GET/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/snapshot/GET/responses/200/content/application\/json`.
+                    case json(Components.Schemas.RoomSnapshot)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.RoomSnapshot {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.getLocalRoomSnapshot.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.getLocalRoomSnapshot.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// Snapshot
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/snapshot/get(getLocalRoomSnapshot)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.getLocalRoomSnapshot.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.getLocalRoomSnapshot.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/snapshot/GET/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/snapshot/GET/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ErrorReport)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ErrorReport {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.getLocalRoomSnapshot.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.getLocalRoomSnapshot.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// unavailable_capability: no persistence adapter is composed
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/snapshot/get(getLocalRoomSnapshot)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.getLocalRoomSnapshot.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.getLocalRoomSnapshot.Output.NotFound {
                 get throws {
                     switch self {
                     case let .notFound(response):

@@ -61,16 +61,17 @@
     },
     {
       "id": "local-room",
-      "title": "Local room contracts",
+      "title": "Local room",
       "status": "In progress",
-      "why": "Fix the meaning of every room byte before any byte is stored; L1 of 5.",
+      "why": "One fixed local room whose sends commit transactionally and read back in order after a restart; L2 of 5.",
       "page": "local-room.md",
       "proof": [
         "repo:contracts/schemas/local-room.schema.json",
         "repo:packages/domain/src/local-room/port.ts",
-        "repo:apps/center/test/local-room.test.ts",
-        "repo:contracts/test/local-room.test.ts",
-        "repo:evidence/local-room/contracts/outcome.json"
+        "repo:packages/storage/src/local-room.ts",
+        "repo:packages/storage/drizzle/0001_local_room.sql",
+        "repo:apps/center/test/local-room.pg.test.ts",
+        "repo:packages/storage/test/local-room.pg.test.ts"
       ]
     },
     {
@@ -95,7 +96,7 @@
     {
       "id": "center",
       "title": "Center service",
-      "availability": "Fixture built; local room L1 contracts only",
+      "availability": "Fixture built; local room L2 persists one fixed room",
       "page": "foundation.md",
       "why": "Validate commands; later own policy and ordered events."
     },
