@@ -1,6 +1,6 @@
 // One command, one private socket lease and one directly owned PostgreSQL process group.
 // All four AGORA_TEST_*_DATABASE_URL values opt into an externally managed server instead.
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { closeSync, existsSync, lstatSync, mkdtempSync, openSync, readFileSync, rmSync, unlinkSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -30,7 +30,13 @@ const launch = (file, args, options = {}, signal = 'SIGTERM') => {
 	const child = spawn(file, args, { detached: true, stdio: 'ignore', ...options });
 	const kill = (sig) => {
 		try { if (child.pid) process.kill(-child.pid, sig); }
-		catch (error) { if (error.code !== 'ESRCH') throw error; }
+		catch (error) {
+			if (error.code === 'ESRCH') return;
+			// Darwin can return EPERM for a group containing only exiting zombies.
+			const census = spawnSync('ps', ['-A', '-o', 'pgid=,stat='], { encoding: 'utf8', timeout: 1_000 });
+			const live = census.stdout?.split('\n').some(line => { const [group, state] = line.trim().split(/\s+/); return group === String(child.pid) && !state?.startsWith('Z'); });
+			if (error.code !== 'EPERM' || census.status !== 0 || live) throw error;
+		}
 	};
 	const done = new Promise(resolve => {
 		child.once('error', error => { report('blocked', { message: String(error) }); resolve(70); });

@@ -33,6 +33,7 @@ test.each(['deep-success', 'child-failure', 'missing-command', 'initdb-failure',
 			diagnostic += bytes.toString(); pending += bytes.toString();
 			while (pending.includes('\n')) {
 				const end = pending.indexOf('\n'), line = pending.slice(0, end); pending = pending.slice(end + 1);
+				if (!line.startsWith('{"schema_version":')) continue;
 				const receipt = JSON.parse(line) as Receipt; receipts.push(receipt);
 				if (receipt.outcome === 'starting' && scenario === 'startup-cancel') child.kill('SIGINT');
 				if (receipt.outcome === 'started' && scenario === 'forced-cancel') process.kill(receipt.pid, 'SIGSTOP');
@@ -62,5 +63,9 @@ test.each(['deep-success', 'child-failure', 'missing-command', 'initdb-failure',
 		for (const pid of [...descendants, ...receipts.filter(record => record.outcome === 'starting').map(record => record.pid)]) expect(alive(pid), `owned PID ${pid} exited`).toBe(false);
 		neighbor.verify(); expect(statSync(neighbor.identity.socketDir).mode & 0o777).toBe(0o700);
 		expect(alive(foreign.pid ?? 0)).toBe(true); expect(readFileSync(`${artifacts}/evidence`, 'utf8')).toBe('retained');
-	} finally { foreign.kill(); await new Promise(resolve => foreign.once('close', resolve)); neighbor.cleanup(); rmSync(artifacts, { recursive: true }); }
+	} finally {
+		foreign.kill(); await new Promise(resolve => foreign.once('close', resolve)); neighbor.cleanup();
+		expect(receipts.some(record => record.outcome === 'starting' && alive(record.pid)), `live owned server retained at ${artifacts}`).toBe(false);
+		rmSync(artifacts, { recursive: true });
+	}
 }, 45_000);

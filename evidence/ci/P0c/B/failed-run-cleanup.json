@@ -1,0 +1,24 @@
+[
+  {
+    "identity": {
+      "runId": "5bb4c1ab-25f7-4e14-a8fd-7a4646d1ad1f",
+      "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-TyqidA/agora-pg-Exv21k",
+      "socketDir": "/private/tmp/agora-p0c-5bb4c1ab-25f7-4e14-a8fd-7a4646d1ad1f"
+    },
+    "pid": 80446,
+    "process": "absent",
+    "socket": "removed",
+    "artifacts": "absent"
+  },
+  {
+    "identity": {
+      "runId": "7c6ad1bd-3113-40cb-ae5e-a872933e590b",
+      "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/wrapper deep artifacts-wi3ETH/agora-pg-QK0inZ",
+      "socketDir": "/private/tmp/agora-p0c-7c6ad1bd-3113-40cb-ae5e-a872933e590b"
+    },
+    "pid": 81145,
+    "process": "absent",
+    "socket": "removed",
+    "artifacts": "absent"
+  }
+]
