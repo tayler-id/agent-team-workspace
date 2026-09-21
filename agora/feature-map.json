@@ -50,10 +50,10 @@
 		{
 			"id": "application-architecture-boundaries",
 			"documentation": "docs/site/app-architecture.md",
-			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/renderer-policy.ts", "scripts/architecture-exceptions.ts", "agora/architecture-exceptions.json", "apps/web", "packages/client-core/test/app-architecture.test.ts", "package.json", "tsconfig.json"],
+			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/renderer-policy.ts", "scripts/architecture-exceptions.ts", "agora/architecture-exceptions.json", "apps/web", "apps/web/tsconfig.json", "packages/client-core/test/app-architecture.test.ts", "package.json", "tsconfig.json"],
 			"public": ["pnpm lint", "pnpm boundaries"],
 			"scenarios": ["packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/boundaries.test.ts"],
-			"fixtures": ["apps/web owner stubs", "tsx/type-only/dynamic/re-export negatives", "architecture-exception validator negatives", "isolated disabled-rule configurations"],
+			"fixtures": ["apps/web owner stubs and extension fixtures", "tsx/mts/cts/js/mjs/cjs/type-only/dynamic/re-export negatives", "effect import/barrel/alias bypass negatives", "browser global near-miss positives and DOM receiver-aware mutation", "noInlineConfig disable adversarial negatives", "architecture-exception validator and exact-symbol positives", "isolated disabled-rule configurations"],
 			"platforms": ["node24"],
 			"owner": "U20.B01"
 		},

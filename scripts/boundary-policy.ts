@@ -87,8 +87,14 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 		if (rendererForbidden.some((name) => specifier === name || specifier.startsWith(`${name}/`))) {
 			return `renderer code cannot import ${specifier}; use ${WEB_OWNERS.client} / ${WEB_OWNERS.host} adapters instead of storage, domain implementation, or server packages`;
 		}
-		if (specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core'].includes(specifier) && !specifier.startsWith('@agora/contracts/')) {
+		if (specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core'].includes(specifier) && !specifier.startsWith('@agora/contracts/') && !specifier.startsWith('@agora/client-core/')) {
 			return `renderer cannot import server package ${specifier}; supported imports are @agora/contracts, @agora/client-core and the selected renderer under ${supportedOwner(file)}`;
+		}
+		if (specifier.startsWith('@agora/client-core/')) {
+			return `renderer must import @agora/client-core only through its public entrypoint; private path ${specifier} is closed under ${supportedOwner(file)}`;
+		}
+		if (specifier.startsWith('@agora/contracts/') && specifier !== '@agora/contracts/canonical' && !specifier.startsWith('@agora/contracts/values')) {
+			return `renderer must import contracts through published entrypoints; private path ${specifier} is closed under ${supportedOwner(file)}`;
 		}
 	}
 	if (owner === 'apps/worker' && specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core'].includes(specifier)) {
@@ -106,11 +112,13 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 
 const domFile = path.join(path.dirname(ts.getDefaultLibFilePath({})), 'lib.dom.d.ts');
 const dom = ts.createSourceFile(domFile, readFileSync(domFile, 'utf8'), ts.ScriptTarget.Latest, true);
-const globals = new Set(['globalThis', 'global', 'process', 'require', 'eval', 'Function']);
+/** Authoritative browser/DOM globals from TypeScript's lib.dom.d.ts plus portable-host escapes. */
+export const domGlobals = new Set(['globalThis', 'global', 'process', 'require', 'eval', 'Function']);
 for (const statement of dom.statements) {
-	if ('name' in statement && statement.name && ts.isIdentifier(statement.name as ts.Node)) globals.add((statement.name as ts.Identifier).text);
-	if (ts.isVariableStatement(statement)) for (const declaration of statement.declarationList.declarations) if (ts.isIdentifier(declaration.name)) globals.add(declaration.name.text);
+	if ('name' in statement && statement.name && ts.isIdentifier(statement.name as ts.Node)) domGlobals.add((statement.name as ts.Identifier).text);
+	if (ts.isVariableStatement(statement)) for (const declaration of statement.declarationList.declarations) if (ts.isIdentifier(declaration.name)) domGlobals.add(declaration.name.text);
 }
+const globals = domGlobals;
 
 export const importBoundaryRule: TSESLint.RuleModule<'forbidden'> = {
 	meta: { type: 'problem', schema: [], messages: { forbidden: '{{reason}}' } }, defaultOptions: [],

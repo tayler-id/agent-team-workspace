@@ -1,8 +1,17 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import { assertArchitectureExceptionsValid } from './scripts/architecture-exceptions.ts';
 import { importBoundaryRule } from './scripts/boundary-policy.ts';
 import { publicTypesRule } from './scripts/public-types.ts';
 import { rendererFootgunRule } from './scripts/renderer-policy.ts';
+
+assertArchitectureExceptionsValid();
+
+const guarded = [
+	'contracts/**/*.{ts,tsx,mts,cts,js,mjs,cjs}',
+	'packages/*/src/**/*.{ts,tsx,mts,cts,js,mjs,cjs}',
+	'apps/*/src/**/*.{ts,tsx,mts,cts,js,mjs,cjs}',
+];
 
 export default tseslint.config(
 	{ ignores: ['node_modules/', '.docs-dist/', '.scratch/', '.agents/', 'agent/', 'data/', 'skills/', '.*/', 'evidence/', 'scripts/verify-design.mjs', 'scripts/test-design-checks.mjs', 'contracts/swift/'] },
@@ -22,8 +31,12 @@ export default tseslint.config(
 		},
 	},
 	{
-		files: ['contracts/**/*.ts', 'packages/*/src/**/*.ts', 'apps/*/src/**/*.ts', 'apps/*/src/**/*.tsx'],
-		ignores: ['contracts/test/**'],
+		files: guarded,
+		ignores: ['contracts/test/**', '**/*.{mjs,cjs}'],
+		linterOptions: {
+			// Configuration-level owner: inline eslint-disable cannot suppress Agora architecture rules.
+			noInlineConfig: true,
+		},
 		plugins: {
 			agora: {
 				rules: {
@@ -39,8 +52,27 @@ export default tseslint.config(
 			'agora/renderer-footgun': 'error',
 		},
 	},
+	// .mjs/.cjs under apps/packages: same Agora owners without type-aware project service.
+	{
+		files: ['apps/*/src/**/*.{mjs,cjs}', 'packages/*/src/**/*.{mjs,cjs}'],
+		extends: [tseslint.configs.disableTypeChecked],
+		linterOptions: { noInlineConfig: true },
+		plugins: {
+			agora: {
+				rules: {
+					'import-boundary': importBoundaryRule,
+					'renderer-footgun': rendererFootgunRule,
+				},
+			},
+		},
+		rules: {
+			'agora/import-boundary': 'error',
+			'agora/renderer-footgun': 'error',
+		},
+	},
 	{
 		files: ['contracts/**/*.mjs'],
+		linterOptions: { noInlineConfig: true },
 		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule } } },
 		rules: { 'agora/import-boundary': 'error' },
 	},
@@ -50,6 +82,8 @@ export default tseslint.config(
 	},
 	{
 		files: ['**/*.mjs', '**/*.js', 'docs/site/test/*.test.ts'],
+		// Keep type-aware lint for JS under apps/packages src; tooling JS and contracts scripts stay untyped.
+		ignores: ['apps/*/src/**', 'packages/*/src/**'],
 		extends: [tseslint.configs.disableTypeChecked],
 		languageOptions: { globals: { console: 'readonly', fetch: 'readonly', process: 'readonly' } },
 		rules: { 'no-console': 'off' },

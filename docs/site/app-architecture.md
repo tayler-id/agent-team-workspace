@@ -6,7 +6,7 @@ The first mechanical slice of Agora's application architecture: Feature, Entrypo
 
 ## What it does
 
-`agora/import-boundary` rejects renderer imports of storage, domain implementation, server packages, `pg`, Hono and Drizzle, blocks framework/client/host from importing product Features, requires Feature-to-Feature and Feature-to-framework edges to use public `index.ts` entrypoints, and keeps portable client-core free of application code. `agora/renderer-footgun` allows raw `useEffect` families only under `apps/web/src/framework`, browser globals and durable storage only under Host/framework adapters, and forbids `dangerouslySetInnerHTML`, inline Agora rule disables and bare `@ts-ignore`. Diagnostics name the supported owner or path. Exceptions live only in `agora/architecture-exceptions.json` with exact path, symbol, guard, rationale, owner, independent approver, expiry and compensating test.
+`agora/import-boundary` rejects renderer imports of storage, domain implementation, server packages, `pg`, Hono and Drizzle, blocks framework/client/host from importing product Features, requires Feature-to-Feature and Feature-to-framework edges to use public `index.ts` entrypoints, and keeps portable client-core free of application code. `agora/renderer-footgun` allows raw React effect imports and default/namespace React surfaces only under `apps/web/src/framework`, treats browser capabilities from TypeScript's `lib.dom.d.ts` as Host/framework-only value references, denies DOM-node mutation while allowing ordinary writers such as `URLSearchParams.append`, and forbids `dangerouslySetInnerHTML`, bare `@ts-ignore` and inline ESLint disables. `linterOptions.noInlineConfig` owns disable suppression so a comment cannot silence Agora rules. Diagnostics name the supported owner or path. Guarded roots cover `.ts`, `.tsx`, `.mts`, `.cts`, `.js`, `.mjs` and `.cjs`. Exceptions live only in `agora/architecture-exceptions.json` with exact path, symbol (including scoped packages, relative targets and `dynamic-import`), guard, rationale, owner, independent approver, expiry and compensating test; the committed file is validated when ESLint loads.
 
 ## Why it exists
 
@@ -16,7 +16,7 @@ Unsafe renderer shortcuts must fail in lint and tests, not in prose review. Rese
 
 ```flow
 Authoring | Write Feature, Client, Host or framework code under its reserved apps/web owner.
-Lint | ESLint runs agora/import-boundary and agora/renderer-footgun on .ts and .tsx.
+Lint | ESLint runs agora/import-boundary and agora/renderer-footgun on .ts/.tsx/.mts/.cts/.js/.mjs/.cjs under guarded roots.
 Diagnostic | A rejection names the supported owner or public entrypoint, not only a rule id.
 Exception | Only a reviewed agora/architecture-exceptions.json row can allow a named path and symbol.
 Proof | packages/client-core/test/app-architecture.test.ts keeps positive, negative and guard-weakening fixtures.
