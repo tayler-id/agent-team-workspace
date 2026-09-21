@@ -1,19 +1,35 @@
-subject_parent=cacbd069052fc60a591e0895eec3f0c5ac7a25b5
-command=pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts
-note=parent implementation with B1 head tests; expected 8 failed
----
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-21T15:25:58.431Z
+parent: cacbd069052fc60a591e0895eec3f0c5ac7a25b5
+head: ef70dcd77cccad7b53c68069434aa2ff25625000
+subject_revision: cacbd069052fc60a591e0895eec3f0c5ac7a25b5
+test_patch_applied_to_subject: true
+test_patch_files: docs/site/test/corpus.test.ts, packages/client-core/test/app-architecture.test.ts
+test_patch_digest: sha256:62f8ce5a6087c6b5f6d193819c434b91f61630446f51ad2dacdadd1135b45cdb
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
 
- RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/14/agent-team-workspace
 
- ❯ |unit| packages/client-core/test/app-architecture.test.ts (8 tests | 8 failed) 3601ms
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-os8ZjO
+
+ ❯ |unit| packages/client-core/test/app-architecture.test.ts (8 tests | 8 failed) 3979ms
    × owner tables are explicit and test-visible architecture policy 7ms
-   × tsx renderer rejects server imports with owner-named diagnostics across import forms 1121ms
-   × every guarded source extension keeps import-boundary diagnostics via public CLI 1269ms
-   × framework client and host never import features; features use public entrypoints only 38ms
-   × apps/web non-src relocation cannot bypass import boundaries 1055ms
-   × portable client-core rejects application and storage edges 92ms
-   × inline eslint disables cannot suppress import-boundary under noInlineConfig 10ms
+   × tsx renderer rejects server imports with owner-named diagnostics across import forms 1099ms
+   × every guarded source extension keeps import-boundary diagnostics via public CLI 1620ms
+   × framework client and host never import features; features use public entrypoints only 40ms
+   × apps/web non-src relocation cannot bypass import boundaries 1106ms
+   × portable client-core rejects application and storage edges 89ms
+   × inline eslint disables cannot suppress import-boundary under noInlineConfig 9ms
    × removing import-boundary protection makes denial assertions turn red 8ms
+
+ Test Files  1 failed (1)
+      Tests  8 failed (8)
+   Start at  11:25:27
+   Duration  4.12s (tests 98%, import 2%)
+
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -132,13 +148,13 @@ AssertionError: expected false to be true // Object.is equality
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
 
  FAIL  |unit| packages/client-core/test/app-architecture.test.ts > every guarded source extension keeps import-boundary diagnostics via public CLI
-AssertionError: apps/web/src/features/room/extmubd6x7j-ts.ts: expected '[{"filePath":"/Users/taylerramsay/.tr…' to contain 'renderer'
+AssertionError: apps/web/src/features/room/extmubeczj8-ts.ts: expected '[{"filePath":"/private/var/folders/h7…' to contain 'renderer'
 
 - Expected
 + Received
 
 - renderer
-+ [{"filePath":"/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/14/agent-team-workspace/apps/web/src/features/room/extmubd6x7j-ts.ts","messages":[{"ruleId":"agora/import-boundary","severity":2,"message":"client imports a server package","line":1,"column":1,"messageId":"forbidden","endLine":1,"endColumn":48}],"suppressedMessages":[],"errorCount":1,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0,"source":"import type { Database } from '@agora/storage';\nexport type Leak = keyof Database;\n","usedDeprecatedRules":[]}]
++ [{"filePath":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-os8ZjO/apps/web/src/features/room/extmubeczj8-ts.ts","messages":[{"ruleId":"agora/import-boundary","severity":2,"message":"client imports a server package","line":1,"column":1,"messageId":"forbidden","endLine":1,"endColumn":48}],"suppressedMessages":[],"errorCount":1,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0,"source":"import type { Database } from '@agora/storage';\nexport type Leak = keyof Database;\n","usedDeprecatedRules":[]}]
 +
 +
 
@@ -172,7 +188,7 @@ AssertionError: expected false to be true // Object.is equality
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
 
  FAIL  |unit| packages/client-core/test/app-architecture.test.ts > apps/web non-src relocation cannot bypass import boundaries
-AssertionError: apps/web/test/relocmubd6y7t-leak.ts: expected +0 to be 1 // Object.is equality
+AssertionError: apps/web/test/relocmubed0tc-leak.ts: expected +0 to be 1 // Object.is equality
 
 - Expected
 + Received
@@ -180,13 +196,13 @@ AssertionError: apps/web/test/relocmubd6y7t-leak.ts: expected +0 to be 1 // Obje
 - 1
 + 0
 
- ❯ packages/client-core/test/app-architecture.test.ts:117:23
-    115|  for (const rel of [`apps/web/test/${stamp}-leak.ts`, `apps/web/lib/${…
-    116|   const { status, out } = publicEslint(rel);
-    117|   expect(status, rel).toBe(1);
+ ❯ packages/client-core/test/app-architecture.test.ts:134:23
+    132|  for (const rel of [`apps/web/test/${stamp}-leak.ts`, `apps/web/lib/${…
+    133|   const { status, out } = publicEslint(rel);
+    134|   expect(status, rel).toBe(1);
        |                       ^
-    118|   expect(out, rel).toContain('agora/import-boundary');
-    119|  }
+    135|   expect(out, rel).toContain('agora/import-boundary');
+    136|  }
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
 
@@ -199,13 +215,13 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:128:160
-    126| test('portable client-core rejects application and storage edges', asy…
-    127|  const file = 'packages/client-core/src/model.ts';
-    128|  expect(await has("import type { X } from '../../../apps/web/src/clien…
+ ❯ packages/client-core/test/app-architecture.test.ts:145:160
+    143| test('portable client-core rejects application and storage edges', asy…
+    144|  const file = 'packages/client-core/src/model.ts';
+    145|  expect(await has("import type { X } from '../../../apps/web/src/clien…
        |                                                                                                                                                                ^
-    129|  expect(await has("import type { Database } from '@agora/storage'; exp…
-    130| }, 120_000);
+    146|  expect(await has("import type { Database } from '@agora/storage'; exp…
+    147| }, 120_000);
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
 
@@ -218,13 +234,13 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:134:99
-    132| test('inline eslint disables cannot suppress import-boundary under noI…
-    133|  const leak = "import type { Database } from '@agora/storage'; export …
-    134|  expect(await has(`/* eslint-disable */\n${leak}`, feature, 'agora/imp…
+ ❯ packages/client-core/test/app-architecture.test.ts:151:99
+    149| test('inline eslint disables cannot suppress import-boundary under noI…
+    150|  const leak = "import type { Database } from '@agora/storage'; export …
+    151|  expect(await has(`/* eslint-disable */\n${leak}`, feature, 'agora/imp…
        |                                                                                                   ^
-    135|  expect(await has(`/* eslint-disable agora/import-boundary */\n${leak}…
-    136|  expect(await has(`${leak} // eslint-disable-line agora/import-boundar…
+    152|  expect(await has(`/* eslint-disable agora/import-boundary */\n${leak}…
+    153|  expect(await has(`${leak} // eslint-disable-line agora/import-boundar…
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
 
@@ -237,19 +253,13 @@ AssertionError: expected false to be true // Object.is equality
 - true
 + false
 
- ❯ packages/client-core/test/app-architecture.test.ts:141:89
-    139| test('removing import-boundary protection makes denial assertions turn…
-    140|  const code = "import type { Database } from '@agora/storage'; export …
-    141|  expect((await agora(code, feature)).some((m) => m.ruleId === 'agora/i…
+ ❯ packages/client-core/test/app-architecture.test.ts:158:89
+    156| test('removing import-boundary protection makes denial assertions turn…
+    157|  const code = "import type { Database } from '@agora/storage'; export …
+    158|  expect((await agora(code, feature)).some((m) => m.ruleId === 'agora/i…
        |                                                                                         ^
-    142|  const messages = await agora(code, feature, new ESLint({ cwd: root, i…
-    143|  expect(messages.filter((m) => m.ruleId === 'agora/import-boundary')).…
+    159|  const messages = await agora(code, feature, new ESLint({ cwd: root, i…
+    160|  expect(messages.filter((m) => m.ruleId === 'agora/import-boundary')).…
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
-
-
- Test Files  1 failed (1)
-      Tests  8 failed (8)
-   Start at  10:52:44
-   Duration  3.74s (tests 98%, import 2%)
 
