@@ -48,4 +48,4 @@ Two facts surfaced during C and are documented in the runbook rather than fixed,
 
 ## Housekeeping
 
-The zero-byte `evidence/ci/P0c/B/guard.log` and `guard-run.log` placeholders are removed and dropped from B's artifact list; B's `guard.json` carries that proof. Size: 15 wrapper, 33 test and 3 feature-map meaningful added lines in three source files; the drivers under `driver/` are replayable proof and count with evidence. Independent review and guarded local landing remain firstmate's responsibility.
+The zero-byte `evidence/ci/P0c/B/guard.log` and `guard-run.log` placeholders are removed and dropped from B's artifact list; B's `guard.json` carries that proof. Size: 15 wrapper, 32 test and 3 feature-map meaningful added lines in three source files; the drivers under `driver/` are replayable proof and count with evidence. Independent review and guarded local landing remain firstmate's responsibility.
