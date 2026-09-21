@@ -3,7 +3,7 @@
   "task": "agora-s1-lint-application-architecture",
   "unit": "U20",
   "parent": "7c6038ca1a9fb221037a3cd76704384057dcd03e",
-  "head": "85a908e1a3dc69158ea4ec43230ceebfe3e52521",
+  "head": "93104f72c5e2149ddee9d0040ef665c3dcf5a332",
   "result": "pass",
   "summary": "Application architecture boundary lint covers .ts/.tsx, apps/web owners, renderer foot-guns and architecture exceptions with guard negatives.",
   "red": "evidence/U20/agora-s1-lint-application-architecture/red.log",
