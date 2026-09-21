@@ -1,0 +1,61 @@
+node scripts/probe-center.mjs --scenarios
+exit: 0
+{
+	"schema_version": "agora.probe-scenarios/v1",
+	"target": "apps/center/src/main.ts",
+	"scenarios": [
+		{
+			"id": "health-liveness",
+			"method": "GET",
+			"path": "/api/v1/health",
+			"expected_status": 200
+		},
+		{
+			"id": "health-readiness",
+			"method": "GET",
+			"path": "/api/v1/health/ready",
+			"expected_status": 200
+		},
+		{
+			"id": "policy-allow",
+			"method": "POST",
+			"path": "/api/v1/fixture/policy/decisions",
+			"expected_status": 200
+		},
+		{
+			"id": "policy-deny",
+			"method": "POST",
+			"path": "/api/v1/fixture/policy/decisions",
+			"expected_status": 200,
+			"expected_reason_code": "scope_mismatch"
+		},
+		{
+			"id": "policy-unknown-field",
+			"method": "POST",
+			"path": "/api/v1/fixture/policy/decisions",
+			"expected_status": 400,
+			"expected_reason_code": "malformed_command"
+		},
+		{
+			"id": "unknown-route",
+			"method": "GET",
+			"path": "/api/v1/nothing",
+			"expected_status": 404,
+			"expected_reason_code": "not_found"
+		},
+		{
+			"id": "local-room-send-unsupported",
+			"method": "POST",
+			"path": "/api/v1/local-room/messages",
+			"expected_status": 404,
+			"expected_reason_code": "unavailable_capability"
+		},
+		{
+			"id": "local-room-send-unknown-field",
+			"method": "POST",
+			"path": "/api/v1/local-room/messages",
+			"expected_status": 400,
+			"expected_reason_code": "malformed_command"
+		}
+	]
+}

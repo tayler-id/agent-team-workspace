@@ -1,0 +1,184 @@
+node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
+exit: 0
+{
+	"schema_version": "agora.probe/v1",
+	"target": "apps/center/src/main.ts",
+	"base": "http://127.0.0.1:14666",
+	"outcome": "pass",
+	"exit": 0,
+	"results": [
+		{
+			"id": "health-liveness",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.health/v1",
+					"status": "ok",
+					"service": "agora-center"
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.health/v1",
+					"status": "ok",
+					"service": "agora-center"
+				}
+			}
+		},
+		{
+			"id": "health-readiness",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.readiness/v1",
+					"status": "ready",
+					"checks": {
+						"database": "ok"
+					}
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.readiness/v1",
+					"status": "ready",
+					"checks": {
+						"database": "ok"
+					}
+				}
+			}
+		},
+		{
+			"id": "policy-allow",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "allow",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "allow",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			}
+		},
+		{
+			"id": "policy-deny",
+			"outcome": "pass",
+			"expected": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "deny",
+					"reason_code": "scope_mismatch",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			},
+			"observed": {
+				"status": 200,
+				"body": {
+					"schema_version": "agora.fixture-policy-decision/v1",
+					"decision": "deny",
+					"reason_code": "scope_mismatch",
+					"policy_version": "agora.fixture-policy/v1",
+					"policy_digest": "sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4"
+				}
+			}
+		},
+		{
+			"id": "policy-unknown-field",
+			"outcome": "pass",
+			"expected": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			},
+			"observed": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"correlation_id": "3306ae5e-e9cc-402f-b98a-a26a91867f7f",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			}
+		},
+		{
+			"id": "unknown-route",
+			"outcome": "pass",
+			"expected": {
+				"status": 404,
+				"body": {
+					"reason_code": "not_found"
+				}
+			},
+			"observed": {
+				"status": 404,
+				"body": {
+					"reason_code": "not_found",
+					"correlation_id": "4c0564c6-6119-4931-8a40-370cf0a7c1da"
+				}
+			}
+		},
+		{
+			"id": "local-room-send-unsupported",
+			"outcome": "pass",
+			"expected": {
+				"status": 404,
+				"body": {
+					"reason_code": "unavailable_capability"
+				}
+			},
+			"observed": {
+				"status": 404,
+				"body": {
+					"reason_code": "unavailable_capability",
+					"correlation_id": "e7f96f9f-7829-4427-aaa8-ce88cb830972",
+					"details": [
+						"local-room message persistence is not composed in this slice (local-room L1); the command was validated and dispatched"
+					]
+				}
+			}
+		},
+		{
+			"id": "local-room-send-unknown-field",
+			"outcome": "pass",
+			"expected": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			},
+			"observed": {
+				"status": 400,
+				"body": {
+					"reason_code": "malformed_command",
+					"correlation_id": "5ded8cc0-d9f7-45d2-8e59-a3ec7d38381c",
+					"details": [
+						"$ must NOT have additional properties"
+					]
+				}
+			}
+		}
+	]
+}

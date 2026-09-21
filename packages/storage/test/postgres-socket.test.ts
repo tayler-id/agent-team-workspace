@@ -2,11 +2,23 @@ import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSy
 import { spawnSync } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
 import { afterAll, expect, test } from 'vitest';
-import { allocatePostgresSocket } from '../../../scripts/postgres-socket.ts';
+import { allocatePostgresSocket as allocate } from '../../../scripts/postgres-socket.ts';
 
 mkdirSync('.scratch', { recursive: true });
 const artifacts = mkdtempSync(`${realpathSync('.scratch')}/socket-test-deep-artifacts-`);
-afterAll(() => { rmSync(artifacts, { recursive: true }); });
+const leases: ReturnType<typeof allocate>[] = [];
+function allocatePostgresSocket(directory: string, runId?: string): ReturnType<typeof allocate> {
+	const lease = allocate(directory, runId);
+	leases.push(lease);
+	console.error(JSON.stringify({ allocated: lease.identity, mode: statSync(lease.identity.socketDir).mode & 0o777 }));
+	return lease;
+}
+afterAll(() => {
+	const removed = leases.every(lease => !existsSync(lease.identity.socketDir));
+	console.error(JSON.stringify({ cleanup: removed, runs: leases.map(lease => lease.identity.runId) }));
+	expect(removed).toBe(true);
+	rmSync(artifacts, { recursive: true });
+});
 
 test('allocation baseline: creates a private directory without touching artifacts', () => {
 	const lease = allocatePostgresSocket(artifacts);

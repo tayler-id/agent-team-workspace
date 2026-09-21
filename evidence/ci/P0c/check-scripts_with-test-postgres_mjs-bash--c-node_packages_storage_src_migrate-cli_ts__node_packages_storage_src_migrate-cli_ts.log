@@ -1,0 +1,4 @@
+node scripts/with-test-postgres.mjs bash -c node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts
+exit: 0
+{"schema_version":"agora.migration-report/v1","applied":1,"total":1,"schema_digest":"sha256:fbc2fbff28382282c51cd6e84c763c3cb7481a8011581e98fac09788fc3c39f1","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}
+{"schema_version":"agora.migration-report/v1","applied":0,"total":1,"schema_digest":"sha256:fbc2fbff28382282c51cd6e84c763c3cb7481a8011581e98fac09788fc3c39f1","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}

@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the local-room L1 contract baseline from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04 plus local-room L1; later slices extend it.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the local-room L1 contract baseline from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 and CI P0c A allocation only; later slices extend it.
 ---
 
 # Verify Agora

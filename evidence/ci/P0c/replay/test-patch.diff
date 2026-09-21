@@ -1,0 +1,103 @@
+diff --git a/packages/storage/test/postgres-socket.test.ts b/packages/storage/test/postgres-socket.test.ts
+index dd21095..46c5c61 100644
+--- a/packages/storage/test/postgres-socket.test.ts
++++ b/packages/storage/test/postgres-socket.test.ts
+@@ -1,12 +1,14 @@
+-import { mkdirSync, mkdtempSync, realpathSync, rmSync, statSync } from 'node:fs';
++import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, renameSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
++import { spawnSync } from 'node:child_process';
++import { createHash, randomUUID } from 'node:crypto';
+ import { afterAll, expect, test } from 'vitest';
+ import { allocatePostgresSocket } from '../../../scripts/postgres-socket.ts';
+ 
+ mkdirSync('.scratch', { recursive: true });
+-const artifacts = mkdtempSync(`${realpathSync('.scratch')}/socket-test-`);
++const artifacts = mkdtempSync(`${realpathSync('.scratch')}/socket-test-deep-artifacts-`);
+ afterAll(() => { rmSync(artifacts, { recursive: true }); });
+ 
+-test('allocation baseline: creates a private empty directory without touching artifacts', () => {
++test('allocation baseline: creates a private directory without touching artifacts', () => {
+ 	const lease = allocatePostgresSocket(artifacts);
+ 	try {
+ 		lease.verify();
+@@ -14,3 +16,80 @@ test('allocation baseline: creates a private empty directory without touching ar
+ 		expect(lease.identity.artifactDir).toBe(artifacts);
+ 	} finally { lease.cleanup(); }
+ });
++
++test('short socket denial, collision and idempotent cleanup', () => {
++	const lease = allocatePostgresSocket(artifacts);
++	writeFileSync(`${artifacts}/evidence`, 'retained');
++	try {
++		expect(lease.identity.socketDir.startsWith(`${realpathSync('/tmp')}/agora-p0c-`), 'deny long artifact socket location').toBe(true);
++		expect(Buffer.byteLength(`${lease.identity.socketDir}/.s.PGSQL.5432`)).toBeLessThan(104);
++		expect(readFileSync(`${lease.identity.socketDir}/owner.json`, 'utf8')).toBe(JSON.stringify(lease.identity));
++		expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)).toThrow('EEXIST');
++		const other = allocatePostgresSocket(artifacts);
++		try { expect(other.identity.socketDir).not.toBe(lease.identity.socketDir); } finally { other.cleanup(); }
++		lease.cleanup();
++		lease.cleanup();
++		expect(existsSync(lease.identity.socketDir)).toBe(false);
++		expect(readFileSync(`${artifacts}/evidence`, 'utf8')).toBe('retained');
++	} finally { lease.cleanup(); }
++});
++
++test.each(['runId', 'artifactDir', 'socketDir', 'directory-mode', 'record-mode', 'neighbor', 'symlink', 'directory-symlink'])('refuses unsafe ownership: %s', (change) => {
++	const lease = allocatePostgresSocket(artifacts);
++	const record = `${lease.identity.socketDir}/owner.json`;
++	const original = readFileSync(record, 'utf8');
++	try {
++		if (change === 'directory-symlink') {
++			renameSync(lease.identity.socketDir, `${lease.identity.socketDir}.saved`);
++			symlinkSync(`${lease.identity.socketDir}.saved`, lease.identity.socketDir);
++		} else if (change === 'symlink') {
++			renameSync(record, `${record}.saved`);
++			symlinkSync(`${record}.saved`, record);
++		} else if (change === 'directory-mode') chmodSync(lease.identity.socketDir, 0o755);
++		else if (change === 'record-mode') chmodSync(record, 0o644);
++		else if (change === 'neighbor') writeFileSync(`${lease.identity.socketDir}/neighbor`, 'unrelated');
++		else writeFileSync(record, JSON.stringify({ ...lease.identity, [change]: 'foreign' }));
++		expect(() => allocatePostgresSocket(artifacts, lease.identity.runId)).toThrow('EEXIST');
++		if (change !== 'neighbor') expect(() => { lease.verify(); }).toThrow('socket ownership');
++		expect(() => { lease.cleanup(); }).toThrow(/socket ownership|socket not empty/);
++		if (change === 'neighbor') expect(readFileSync(`${lease.identity.socketDir}/neighbor`, 'utf8')).toBe('unrelated');
++		expect(existsSync(record)).toBe(true);
++	} finally {
++		if (change === 'directory-symlink') { rmSync(lease.identity.socketDir); renameSync(`${lease.identity.socketDir}.saved`, lease.identity.socketDir); }
++		if (change === 'symlink') { rmSync(record); renameSync(`${record}.saved`, record); }
++		chmodSync(lease.identity.socketDir, 0o700);
++		chmodSync(record, 0o600);
++		writeFileSync(record, original);
++		rmSync(`${lease.identity.socketDir}/neighbor`, { force: true });
++		lease.cleanup();
++	}
++});
++
++test('refuses invalid run identity before allocation', () => {
++	expect(() => allocatePostgresSocket(artifacts, '../foreign')).toThrow('invalid run identity');
++});
++
++test.each([
++	['short-selection', "path.join(temporaryRoot, `agora-p0c-${runId}`)", "path.join(artifactDir, `agora-p0c-${runId}`)"],
++	['ownership', 'if (!owned())', 'if (false)'],
++])('guard disabled: %s denial assertion turns red', (guard, before, after) => {
++	const source = readFileSync('scripts/postgres-socket.ts', 'utf8');
++	expect(source.split(before)).toHaveLength(2);
++	const copy = `${artifacts}/${guard}.ts`;
++	const runId = randomUUID();
++	const script = `import assert from 'node:assert/strict'; import {writeFileSync,rmSync,existsSync} from 'node:fs'; import {allocatePostgresSocket} from ${JSON.stringify(copy)};
++const lease=allocatePostgresSocket(${JSON.stringify(artifacts)}, ${JSON.stringify(runId)});
++console.log(JSON.stringify(lease.identity));
++try { ${guard === 'ownership' ? "writeFileSync(lease.identity.socketDir+'/owner.json', '{}'); assert.throws(()=>lease.verify(), /socket ownership/, 'ownership denial');" : `assert.ok(lease.identity.socketDir.startsWith(${JSON.stringify(`${realpathSync('/tmp')}/`)}), 'short selection denial');`} }
++finally { rmSync(lease.identity.socketDir, {recursive:true}); assert.equal(existsSync(lease.identity.socketDir),false); }`;
++	try {
++		for (const weakened of [false, true]) {
++			writeFileSync(copy, weakened ? source.replace(before, after) : source);
++			const result = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 10_000 });
++			const digest = (bytes: string): string => createHash('sha256').update(bytes).digest('hex');
++			console.error(JSON.stringify({ guard, weakened, source: digest(readFileSync(copy, 'utf8')), input: digest(script), exit: result.status, identity: result.stdout, diagnostic: result.stderr }));
++			expect(result.status).toBe(weakened ? 1 : 0);
++			if (weakened) expect(result.stderr).toContain(guard === 'ownership' ? 'ownership denial' : 'short selection denial');
++		}
++	} finally { rmSync(copy); }
++});

@@ -51,7 +51,7 @@ Short private socket | Allocate a run-bound 0700 directory under the canonical l
 Ownership boundary | Verify exact identity before use or removal; preserve evidence and unrelated resources.
 ```
 
-The [allocation helper](repo:scripts/postgres-socket.ts) and [literal tests](repo:packages/storage/test/postgres-socket.test.ts) cover allocation, two live identities, collision refusal, private permissions, foreign records, symlink substitution, nonempty directories and idempotent removal. Both source-copy guard mutations must turn their named denial assertions red. The [evidence record](repo:evidence/ci/P0c/scope-proposal.md) retains the untouched-wrapper failure and approved slice boundary; no data directory was shortened to hide it. The [runbook](repo:docs/runbooks/development.md) distinguishes this allocation proof from server lifecycle readiness.
+The [allocation helper](repo:scripts/postgres-socket.ts) and [literal tests](repo:packages/storage/test/postgres-socket.test.ts) cover allocation, two live identities, collision refusal, private permissions, foreign records, symlink substitution, nonempty directories and idempotent removal. Both source-copy guard mutations must turn their named denial assertions red. The [evidence record](repo:evidence/ci/P0c/review.md) retains the untouched-wrapper failure and approved slice boundary; no data directory was shortened to hide it. The [runbook](repo:docs/runbooks/development.md) distinguishes this allocation proof from server lifecycle readiness.
 
 ## Verification and proof
 

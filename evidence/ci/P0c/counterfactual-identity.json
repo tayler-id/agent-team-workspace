@@ -1,0 +1,13 @@
+{
+  "runId": "21b36aa2-0454-4f6f-9864-5f54b2f3361e",
+  "artifactDir": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/counterfactual/same-deliberately-long-data-artifact-and-log-directory",
+  "socketDir": "/private/tmp/agora-p0c-21b36aa2-0454-4f6f-9864-5f54b2f3361e",
+  "data": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/counterfactual/same-deliberately-long-data-artifact-and-log-directory/data",
+  "log": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/.scratch/p0c/counterfactual/same-deliberately-long-data-artifact-and-log-directory/postgres.log",
+  "evidence": "/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/11/agent-team-workspace/evidence/ci/P0c",
+  "pid": "80225",
+  "socketBytes": 73,
+  "longSocketBytes": 179,
+  "mode": 448,
+  "recordMode": 384
+}

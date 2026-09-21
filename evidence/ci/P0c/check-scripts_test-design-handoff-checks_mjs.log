@@ -1,0 +1,23 @@
+node scripts/test-design-handoff-checks.mjs
+exit: 0
+PASS accepts baseline
+PASS rejects missing-required-section
+PASS rejects missing-readme-part-link
+PASS rejects broken-relative-link
+PASS rejects missing-anchor
+PASS rejects link-escapes-project
+PASS rejects missing-mermaid-diagram
+PASS rejects unknown-mermaid-type
+PASS rejects unknown-stage-label
+PASS rejects unknown-status-label
+PASS rejects private-path
+PASS rejects long-dash
+PASS rejects placeholder
+PASS rejects unclosed-fence
+PASS rejects skipped-heading-level
+PASS rejects packet-over-line-limit
+PASS rejects unlisted-packet-file
+PASS rejects manifest-lists-missing-file
+PASS rejects manifest-without-revision
+PASS rejects readme-order-drift
+PASS 20 behavioral design-handoff check cases; no application acceptance implied
