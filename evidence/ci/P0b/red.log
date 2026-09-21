@@ -1,0 +1,118 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-21T03:05:25.649Z
+parent: f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec
+head: 5437b32941aa92a72c8d2ebec0be58302b88a46a
+subject_revision: f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec
+test_patch_applied_to_subject: true
+test_patch_files: scripts/test/ci-doctor.test.ts
+test_patch_digest: sha256:d6fafd45ebb259c3024e781e8f1adb4516f19e5dc439252ae100b4a590440e7b
+fixture: {"migration_journal":"sha256:3a4656cb303dd7c6ae61edaa7c2bc2738589ba1847ff13e69d1aef40aec9b6eb","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node --test scripts/test/ci-doctor.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+✔ doctor public help baseline (23.649292ms)
+✖ G01 real locked native import and exact toolchain are ready (23.257ms)
+✖ G01 node denial and omitted-probe guard (24.76825ms)
+✖ G01 pnpm denial and omitted-probe guard (23.099625ms)
+✖ G01 rolldown denial and omitted-probe guard (23.902292ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 1
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 184.331416
+
+✖ failing tests:
+
+test at scripts/test/ci-doctor.test.ts:16:7
+✖ G01 real locked native import and exact toolchain are ready (23.257ms)
+  AssertionError [ERR_ASSERTION]: {"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}
+  
+  
+  2 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp/agora-red-WyUXjp/scripts/test/ci-doctor.test.ts:18:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp/agora-red-WyUXjp/scripts/test/ci-doctor.test.ts:16:7 {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/test/ci-doctor.test.ts:24:54
+✖ G01 node denial and omitted-probe guard (24.76825ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /"id":"node","outcome":"blocked"/. Input:
+  
+  '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n'
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp/agora-red-WyUXjp/scripts/test/ci-doctor.test.ts:47:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp/agora-red-WyUXjp/scripts/test/ci-doctor.test.ts:24:54 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n',
+    expected: /"id":"node","outcome":"blocked"/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at scripts/test/ci-doctor.test.ts:24:54
+✖ G01 pnpm denial and omitted-probe guard (23.099625ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /"id":"pnpm","outcome":"blocked"/. Input:
+  
+  '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n'
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp/agora-red-WyUXjp/scripts/test/ci-doctor.test.ts:47:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp/agora-red-WyUXjp/scripts/test/ci-doctor.test.ts:24:54 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n',
+    expected: /"id":"pnpm","outcome":"blocked"/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at scripts/test/ci-doctor.test.ts:24:54
+✖ G01 rolldown denial and omitted-probe guard (23.902292ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /"id":"rolldown","outcome":"blocked"/. Input:
+  
+  '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n'
+  
+      at TestContext.<anonymous> (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp/agora-red-WyUXjp/scripts/test/ci-doctor.test.ts:47:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/tmp/agora-red-WyUXjp/scripts/test/ci-doctor.test.ts:24:54 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"schema_version":"agora.ci-doctor/v1","outcome":"blocked","results":[],"remedy":"Test-only harness: probes not implemented."}\n',
+    expected: /"id":"rolldown","outcome":"blocked"/,
+    operator: 'match',
+    diff: 'simple'
+  }

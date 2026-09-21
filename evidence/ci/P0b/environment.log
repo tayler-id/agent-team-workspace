@@ -1,0 +1,11 @@
+parent=95f35277fbfc821be148029521222f0de617d7de
+Mon Sep 21 02:45:45 UTC 2026
+v24.16.0
+10.34.1
+Darwin 25.5.0 arm64
+ProductName:		macOS
+ProductVersion:		26.5.1
+BuildVersion:		25F80
+lockfile 5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d  pnpm-lock.yaml
+node /usr/local/bin/node: Mach-O 64-bit executable arm64
+pnpm lrwxr-xr-x@ 1 taylerramsay  wheel  41 Jun  6 13:43 /Users/taylerramsay/.local/node/bin/pnpm -> ../lib/node_modules/corepack/dist/pnpm.js

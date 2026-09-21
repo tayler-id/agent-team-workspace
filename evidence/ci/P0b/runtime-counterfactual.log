@@ -1,0 +1,26 @@
+
+Official Node 24.16.0, same installed tree and lock:
+v24.16.0
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed | 1 expected fail (4)
+   Start at  22:46:58
+   Duration  243ms (import 62%, transform 26%, tests 10%, worker 1%)
+
+vitest_exit=0
+
+Official Node 24.21.0, same installed tree and lock:
+v24.21.0
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/7/agent-team-workspace/.scratch/P0b/clean
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed | 1 expected fail (4)
+   Start at  22:46:59
+   Duration  181ms (import 57%, transform 29%, tests 12%, worker 2%)
+
+vitest_exit=0
