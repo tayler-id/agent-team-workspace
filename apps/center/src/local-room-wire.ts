@@ -20,4 +20,3 @@ export const toWireReceipt = (r: RoomReceipt, replayed: boolean): Schema<'RoomCo
 	message_id: r.messageId,
 	replayed,
 });
-
