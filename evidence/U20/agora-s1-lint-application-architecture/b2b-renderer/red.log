@@ -1,0 +1,289 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-22T02:31:48.511Z
+parent: 53dc59292c5bb99f81febb2f7bc04e525dfaa8bd
+head: 359c4f89cc8e3a12b063ea7612ce6a16896ba861
+subject_revision: 53dc59292c5bb99f81febb2f7bc04e525dfaa8bd
+test_patch_applied_to_subject: true
+test_patch_files: packages/client-core/test/app-architecture.test.ts
+test_patch_digest: sha256:0fc2666dea61460c851cf6e4c4994eb35e3e195affe2673723ec8793fba41bde
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-V5XOQu
+
+ ❯ |unit| packages/client-core/test/app-architecture.test.ts (19 tests | 10 failed) 17211ms
+   × owner tables are explicit and test-visible architecture policy 5ms
+   × apps/web non-src relocation cannot bypass renderer footguns or import boundaries 703ms
+   × renderer footguns: effects only in framework; browser APIs only in host or framework 10ms
+   × effect ownership closes aliases barrels dynamic imports and re-exports without rejecting locals 5ms
+   × browser globals require unresolved references; Host ports and ordinary names stay allowed 41ms
+   × ambient declare shadows cannot hide browser globals 6ms
+   × DOM mutation is receiver-aware including computed and union keys; ordinary writers stay allowed 18ms
+   × inline eslint disables cannot suppress Agora rules including bare and line forms 6ms
+   × a committed exception row lets exactly one renderer-footgun violation through the live rule 6ms
+   × removing app-architecture protections makes denial assertions turn red 12ms
+
+ Test Files  1 failed (1)
+      Tests  10 failed | 9 passed (19)
+   Start at  22:31:03
+   Duration  17.38s (tests 99%)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > owner tables are explicit and test-visible architecture policy
+AssertionError: expected 'import { existsSync, readFileSync, st…' to contain '\'agora/import-boundary\', \'agora/re…'
+
+- Expected
++ Received
+
+- 'agora/import-boundary', 'agora/renderer-footgun'
++ import { existsSync, readFileSync, statSync } from 'node:fs';
++ import path from 'node:path';
++
++ export const projectRoot = path.resolve(import.meta.dirname, '..');
++ /** Test-visible guard list: only rules that consult exceptionAllows belong here. Widening it is an architecture-policy change. */
++ export const ARCHITECTURE_EXCEPTION_GUARDS = ['agora/import-boundary'] as const;
++ export type ArchitectureExceptionGuard = (typeof ARCHITECTURE_EXCEPTION_GUARDS)[number];
++ export interface ArchitectureException {
++ 	path: string; symbol: string; guard: ArchitectureExceptionGuard; rationale: string;
++ 	owner: string; approver: string; expires: string; compensatingTest: string;
++ }
++ export interface ArchitectureExceptionFile { schema_version: 'agora.architecture-exceptions/v1'; exceptions: ArchitectureException[] }
++
++ const keys = ['path', 'symbol', 'guard', 'rationale', 'owner', 'approver', 'expires', 'compensatingTest'] as const;
++ const filePath = /^(?:apps|packages|contracts|scripts)\/[A-Za-z0-9._/-]+\.[A-Za-z0-9]+$/;
++ const exactSymbol = (s: string): boolean => {
++ 	if (s === 'dynamic-import') return true;
++ 	if (!s || /[*?\s]/.test(s)) return false;
++ 	if (s.startsWith('@')) return /^@[A-Za-z0-9][A-Za-z0-9_.-]*\/[A-Za-z0-9][A-Za-z0-9_./-]*$/.test(s);
++ 	if (s.startsWith('.')) return /^\.(?:\.?\/[A-Za-z0-9_./-]+)+$/.test(s);
++ 	return /^[A-Za-z0-9_@$][A-Za-z0-9_$./@-]*$/.test(s);
++ };
++
++ export const architectureExceptionsPath = (root = projectRoot): string => path.join(root, 'agora/architecture-exceptions.json');
++ export function parseArchitectureExceptions(raw: string): ArchitectureExceptionFile {
++ 	const p = JSON.parse(raw) as { schema_version?: string; exceptions?: unknown };
++ 	if (p.schema_version !== 'agora.architecture-exceptions/v1' || !Array.isArray(p.exceptions)) throw new Error('architecture exceptions require schema agora.architecture-exceptions/v1');
++ 	return p as ArchitectureExceptionFile;
++ }
++ export function validateArchitectureExceptions(doc: ArchitectureExceptionFile, opts: { today?: string; root?: string } = {}): string[] {
++ 	const today = opts.today ?? new Date().toISOString().slice(0, 10), root = opts.root ?? projectRoot, errors: string[] = [];
++ 	for (const [i, raw] of doc.exceptions.entries()) {
++ 		const at = `exceptions[${String(i)}]`, e = raw as Partial<ArchitectureException> | null;
++ 		if (e === null || typeof e !== 'object' || Array.isArray(e)) { errors.push(`${at}: must be an object`); continue; }
++ 		for (const k of keys) if (typeof e[k] !== 'string' || e[k].trim() === '') errors.push(`${at}.${k}: required non-empty string`);
++ 		if (typeof e.path === 'string' && (/[*?[]/.test(e.path) || e.path.endsWith('/') || !filePath.test(e.path))) errors.push(`${at}.path: exact file path required (no wildcards or directories)`);
++ 		if (typeof e.symbol === 'string' && !exactSymbol(e.symbol)) errors.push(`${at}.symbol: exact symbol required`);
++ 		if (typeof e.guard === 'string' && !(ARCHITECTURE_EXCEPTION_GUARDS as readonly string[]).includes(e.guard)) errors.push(`${at}.guard: unknown guard ${e.guard}`);
++ 		if (typeof e.owner === 'string' && e.owner === e.approver) errors.push(`${at}: self-approved exceptions are rejected`);
++ 		if (typeof e.expires === 'string') {
++ 			if (!/^\d{4}-\d{2}-\d{2}$/.test(e.expires)) errors.push(`${at}.expires: use YYYY-MM-DD`);
++ 			else if (e.expires < today) errors.push(`${at}.expires: expired on ${e.expires}`);
++ 		}
++ 		if (typeof e.compensatingTest === 'string' && e.compensatingTest) {
++ 			if (/[*?]/.test(e.compensatingTest) || !filePath.test(e.compensatingTest)) errors.push(`${at}.compensatingTest: exact test path required`);
++ 			else if (!existsSync(path.join(root, e.compensatingTest))) errors.push(`${at}.compensatingTest: missing ${e.compensatingTest}`);
++ 		}
++ 	}
++ 	return errors;
++ }
++
++ const cache = new Map<string, { mtime: number; exceptions: ArchitectureException[] }>();
++ export function loadArchitectureExceptions(root = projectRoot): ArchitectureException[] {
++ 	const key = architectureExceptionsPath(root), mtime = statSync(key).mtimeMs, hit = cache.get(key);
++ 	if (hit?.mtime === mtime) return hit.exceptions;
++ 	const doc = parseArchitectureExceptions(readFileSync(key, 'utf8'));
++ 	const errors = validateArchitectureExceptions(doc, { root });
++ 	if (errors.length) throw new Error(errors.join('; '));
++ 	cache.set(key, { mtime, exceptions: doc.exceptions });
++ 	return doc.exceptions;
++ }
++ export function clearArchitectureExceptionCache(): void { cache.clear(); }
++ export function assertArchitectureExceptionsValid(root = projectRoot): void {
++ 	clearArchitectureExceptionCache();
++ 	loadArchitectureExceptions(root);
++ }
++ export function exceptionAllows(file: string, symbol: string, guard: string, root = projectRoot): boolean {
++ 	const rel = path.relative(root, file).replaceAll('\\', '/');
++ 	return loadArchitectureExceptions(root).some((e) => e.path === rel && e.symbol === symbol && e.guard === guard);
++ }
++
+
+ ❯ packages/client-core/test/app-architecture.test.ts:52:12
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > apps/web non-src relocation cannot bypass renderer footguns or import boundaries
+AssertionError: apps/web/test/relocmuc259c0-leak.ts: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ packages/client-core/test/app-architecture.test.ts:139:23
+    137|  for (const rel of [`apps/web/test/${stamp}-leak.ts`, `apps/web/lib/${…
+    138|   const { status, out } = publicEslint(rel);
+    139|   expect(status, rel).toBe(1);
+       |                       ^
+    140|   expect(out, rel).toContain('agora/renderer-footgun');
+    141|  }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > renderer footguns: effects only in framework; browser APIs only in host or framework
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:150:81
+    148| test('renderer footguns: effects only in framework; browser APIs only …
+    149|  const effect = effectCard("import { useEffect } from 'react';", 'useE…
+    150|  expect(await has(effect, feature, 'agora/renderer-footgun', owners.fr…
+       |                                                                                 ^
+    151|  expect(await has(effect, framework, 'agora/renderer-footgun')).toBe(f…
+    152|  const aliased = effectCard("import { useEffect as sideEffect } from '…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > effect ownership closes aliases barrels dynamic imports and re-exports without rejecting locals
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ deny packages/client-core/test/app-architecture.test.ts:173:158
+    171|
+    172| test('effect ownership closes aliases barrels dynamic imports and re-e…
+    173|  const deny = async (code: string, needle: string = owners.framework):…
+       |                                                                                                                                                              ^
+    174|  await deny("import React from 'react'; const { useEffect } = React; e…
+    175|  await deny("import * as R from 'react'; const { useLayoutEffect } = R…
+ ❯ packages/client-core/test/app-architecture.test.ts:174:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > browser globals require unresolved references; Host ports and ordinary names stay allowed
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:196:115
+    194|  await allow('export function label(window: { name: string }): string …
+    195|  await allow("import { fetch } from '../../host/index.ts'; export asyn…
+    196|  expect(await has('export const read = (): string => window.name;', fe…
+       |                                                                                                                   ^
+    197|  expect(await has('export const read = (): string => document.title;',…
+    198|  expect(await has('export const openSocket = (): WebSocket => new WebS…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > ambient declare shadows cannot hide browser globals
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:203:71
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > DOM mutation is receiver-aware including computed and union keys; ordinary writers stay allowed
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ deny packages/client-core/test/app-architecture.test.ts:216:131
+    214| test('DOM mutation is receiver-aware including computed and union keys…
+    215|  const allow = async (code: string): Promise<void> => { expect(await h…
+    216|  const deny = async (code: string): Promise<void> => { expect(await ha…
+       |                                                                                                                                   ^
+    217|  await allow('export const q = (p: URLSearchParams, v: string): void =…
+    218|  await allow('export const h = (x: Headers): void => { x.append("a", "…
+ ❯ packages/client-core/test/app-architecture.test.ts:221:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > inline eslint disables cannot suppress Agora rules including bare and line forms
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:239:103
+    237| test('inline eslint disables cannot suppress Agora rules including bar…
+    238|  const windowUse = 'export const read = (): string => window.name;';
+    239|  expect(await has(`/* eslint-disable */\n${windowUse}`, feature, 'agor…
+       |                                                                                                       ^
+    240|  expect(await has(`/* eslint-disable agora/renderer-footgun */\n${wind…
+    241|  expect(await has(`${windowUse} // eslint-disable-line agora/renderer-…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > a committed exception row lets exactly one renderer-footgun violation through the live rule
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:261:76
+    259|  const original = readFileSync(registry);
+    260|  const windowUse = 'export const read = (): string => window.name;';
+    261|  expect(await has(windowUse, feature, 'agora/renderer-footgun', 'windo…
+       |                                                                            ^
+    262|  try {
+    263|   writeFileSync(registry, JSON.stringify({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > removing app-architecture protections makes denial assertions turn red
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:416:68
+    414|   ['agora/renderer-footgun', feature, 'declare const window: Window; e…
+    415|  ] as const) {
+    416|   expect((await agora(code, file)).some((m) => m.ruleId === rule)).toB…
+       |                                                                    ^
+    417|   const messages = await agora(code, file, new ESLint({ cwd: root, ign…
+    418|   expect(messages.filter((m) => m.ruleId === rule)).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/10]⎯
+

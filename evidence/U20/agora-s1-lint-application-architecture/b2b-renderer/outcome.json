@@ -1,0 +1,43 @@
+{
+  "schema_version": "agora.task-outcome/v1",
+  "task": "agora-s1-lint-application-architecture",
+  "unit": "U20",
+  "slice": "B2b",
+  "parent": "53dc59292c5bb99f81febb2f7bc04e525dfaa8bd",
+  "head": "359c4f89cc8e3a12b063ea7612ce6a16896ba861",
+  "result": "pass",
+  "summary": "B2b lands the renderer foot-gun rule split from the reconciled B2 candidate 09b619e (D88) on top of main's merged B2a exception registry: scripts/renderer-policy.ts, the agora/renderer-footgun ESLint registration and its mixed-union DOM, effect-ownership and browser-capability tests. ARCHITECTURE_EXCEPTION_GUARDS widens to include agora/renderer-footgun since the rule consults exceptionAllows; agora/public-types stays out of the guard list as unrelated to this slice.",
+  "red": "evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/red.log",
+  "green": "evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/green.log",
+  "red_assertions": "B2b head tests fail on parent 53dc59292c5bb99f81febb2f7bc04e525dfaa8bd (Tests 10 failed | 9 passed (19)): owner-tables guard-list string, non-src relocation renderer denial, effect ownership, browser globals, ambient declare shadows, DOM mutation union keys, inline-disable suppression, and the multi-rule guard-weakening loop fail on renderer/renderer-footgun assertions; the B1/B2a import-boundary and exception cases stay green",
+  "green_assertions": "Tests 19 passed (19)",
+  "guard_negatives": [
+    "Removing agora/renderer-footgun from eslint.config.js's rule map turns each of the nine listed denial assertions in 'removing app-architecture protections makes denial assertions turn red' red one at a time, restored via overrideConfig rather than editing the committed file",
+    "Widening ARCHITECTURE_EXCEPTION_GUARDS is test-visible: 'owner tables are explicit and test-visible architecture policy' pins the exact guard-list string",
+    "A committed exception row naming symbol 'window' and guard agora/renderer-footgun lets exactly that browser-global reference through the live rule while document.title and the same reference from another path stay denied; the registry is restored byte for byte in a finally block"
+  ],
+  "commands": [
+    "node scripts/record-red-green.mjs --parent 53dc59292c5bb99f81febb2f7bc04e525dfaa8bd --head 359c4f89cc8e3a12b063ea7612ce6a16896ba861 --out evidence/U20/agora-s1-lint-application-architecture/b2b-renderer -- pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts",
+    "pnpm lint",
+    "pnpm typecheck",
+    "pnpm contracts:check",
+    "pnpm boundaries",
+    "pnpm docs:check",
+    "pnpm check"
+  ],
+  "size": {
+    "receipt": "evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/size.json",
+    "source_files": 5,
+    "source_meaningful_lines": 389,
+    "captain_target": "400 meaningful lines / 12 source files (D85)",
+    "note": "Counted with the same method as the B2a size.json (git diff parent..head, non-blank non-comment-only added lines)."
+  },
+  "limits": [
+    "No Client/Host runtime, Feature discovery or product Features",
+    "agora/public-types does not consult the registry, so it is not a valid guard until a separate slice wires it",
+    "Property-assignment mutators (innerHTML =), untyped ambiguous computed-key mutators and @ts-nocheck remain unclosed limits inherited from the preserved candidate's own review (report-09b619e-preserved.md); not disproven here",
+    "whole-feature-red.log and the B1/B2a red/green logs one level up are the retained earlier-slice receipts"
+  ],
+  "test_patch_digest": "sha256:0fc2666dea61460c851cf6e4c4994eb35e3e195affe2673723ec8793fba41bde",
+  "lockfile_digest": "sha256:e5119ab121dbffebdc70cc840ccbd902b86e68edb2d8f0f560a9cf629021c0b6"
+}

@@ -1,0 +1,260 @@
+diff --git a/packages/client-core/test/app-architecture.test.ts b/packages/client-core/test/app-architecture.test.ts
+index 651ded8..caac171 100644
+--- a/packages/client-core/test/app-architecture.test.ts
++++ b/packages/client-core/test/app-architecture.test.ts
+@@ -13,6 +13,7 @@ const client = 'apps/web/src/client/index.ts';
+ const host = 'apps/web/src/host/index.ts';
+ const owners = { framework: 'apps/web/src/framework', client: 'apps/web/src/client', host: 'apps/web/src/host', features: 'apps/web/src/features' } as const;
+ const ownerStubs = [feature, notes, framework, client, host];
++// Project-service typed lint needs the reserved owner paths on disk for the apps/web tsconfig.
+ for (const rel of ownerStubs) {
+ 	const abs = path.join(root, rel);
+ 	mkdirSync(path.dirname(abs), { recursive: true });
+@@ -21,7 +22,9 @@ for (const rel of ownerStubs) {
+ const engine = new ESLint({ cwd: root, ignore: false });
+ const probes = new Set<string>();
+ const track = (rel: string): string => { probes.add(rel); return path.join(root, rel); };
+-afterAll(() => { for (const rel of ownerStubs) try { rmSync(path.join(root, rel), { force: true }); } catch { /* gone */ } });
++afterAll(() => {
++	for (const rel of ownerStubs) try { rmSync(path.join(root, rel), { force: true }); } catch { /* gone */ }
++});
+ afterEach(() => { for (const rel of probes) try { rmSync(path.join(root, rel), { force: true }); } catch { /* gone */ } probes.clear(); });
+ const agora = async (code: string, file: string, lint = engine) =>
+ 	(await lint.lintText(code, { filePath: path.join(root, file) })).flatMap((r) => r.messages).filter((m) => m.ruleId?.startsWith('agora/'));
+@@ -36,6 +39,7 @@ const publicEslint = (rel: string): { status: number; out: string } => {
+ 	});
+ 	return { status: r.status ?? 1, out: `${r.stdout}\n${r.stderr}` };
+ };
++const effectCard = (imp: string, call: string): string => `${imp} export function Card(): null { ${call}(() => undefined, []); return null; }`;
+ const storageLeak = "import type { Database } from '@agora/storage';\nexport type Leak = keyof Database;\n";
+ const cjsLeak = "const storage = require('@agora/storage');\nmodule.exports = { storage };\n";
+ 
+@@ -44,16 +48,15 @@ test('owner tables are explicit and test-visible architecture policy', () => {
+ 	const x = readFileSync(path.join(root, 'scripts/architecture-exceptions.ts'), 'utf8');
+ 	const e = readFileSync(path.join(root, 'eslint.config.js'), 'utf8');
+ 	expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker']");
+-	for (const s of ["framework: 'apps/web/src/framework'", "client: 'apps/web/src/client'", "host: 'apps/web/src/host'", "features: 'apps/web/src/features'", 'apps/web/src']) expect(b).toContain(s);
+-	expect(x).toContain("export const ARCHITECTURE_EXCEPTION_GUARDS = ['agora/import-boundary'] as const");
++	for (const s of ["framework: 'apps/web/src/framework'", "client: 'apps/web/src/client'", "host: 'apps/web/src/host'", "features: 'apps/web/src/features'", 'export const domGlobals', 'apps/web/src']) expect(b).toContain(s);
++	expect(x).toContain("'agora/import-boundary', 'agora/renderer-footgun'");
+ 	expect(b.match(/exceptionAllows\(file, /g)).toHaveLength(2);
+-	expect(e).toMatch(/^assertArchitectureExceptionsValid\s*\(\s*\)\s*;/m);
+ 	expect(e).toContain('noInlineConfig: true');
++	expect(e).toMatch(/assertArchitectureExceptionsValid\s*\(/);
+ 	expect(e).toContain('ts,tsx,mts,cts,js,jsx,mjs,cjs');
+ 	expect(e).toContain('apps/web/**');
+ 	expect(e).toContain('contracts/**/*.js');
+ 	expect(e).toContain('contracts/**/*.{mjs,cjs}');
+-	expect(e).not.toContain('renderer-footgun');
+ 	expect(readFileSync(path.join(root, 'package.json'), 'utf8')).toContain('tsc -p apps/web/tsconfig.json');
+ 	expect(readFileSync(path.join(root, 'tsconfig.json'), 'utf8')).toContain('"apps/web/**"');
+ });
+@@ -122,27 +125,127 @@ test('framework client and host never import features; features use public entry
+ 	expect(await has("import { createRoot } from 'react-dom/client'; export const r = createRoot;", feature, 'agora/import-boundary')).toBe(false);
+ }, 120_000);
+ 
+-test('apps/web non-src relocation cannot bypass import boundaries', () => {
++test('apps/web non-src relocation cannot bypass renderer footguns or import boundaries', () => {
+ 	const stamp = `reloc${Date.now().toString(36)}`;
+-	writeProbe(`apps/web/test/${stamp}-leak.ts`, storageLeak);
+-	writeProbe(`apps/web/lib/${stamp}-leak.ts`, storageLeak);
++	const leak = ['export const load = (u: string): Promise<Response> => fetch(u);', 'export const agent = (): string => navigator.userAgent;', 'export const sock = (u: string): WebSocket => new WebSocket(u);'].join('\n');
++	writeProbe(`apps/web/test/${stamp}-leak.ts`, leak);
++	writeProbe(`apps/web/lib/${stamp}-leak.ts`, leak);
+ 	const featureRel = `apps/web/src/features/room/${stamp}-reloc.tsx`;
+-	writeProbe(featureRel, [
+-		`import type { Leak as A } from '../../../test/${stamp}-leak.ts';`,
+-		`import type { Leak as B } from '../../../lib/${stamp}-leak.ts';`,
+-		'export type Hold = A | B;',
+-	].join('\n'));
++	writeProbe(featureRel, [`import { load, agent } from '../../../test/${stamp}-leak.ts';`, `import { sock } from '../../../lib/${stamp}-leak.ts';`, 'export const run = async (u: string): Promise<string> => { await load(u); sock(u); return agent(); };'].join('\n'));
+ 	const ctrl = `apps/web/src/features/room/${stamp}-ctrl.tsx`;
+-	writeProbe(ctrl, storageLeak);
++	writeProbe(ctrl, leak);
+ 	for (const rel of [`apps/web/test/${stamp}-leak.ts`, `apps/web/lib/${stamp}-leak.ts`, ctrl]) {
+ 		const { status, out } = publicEslint(rel);
+ 		expect(status, rel).toBe(1);
+-		expect(out, rel).toContain('agora/import-boundary');
++		expect(out, rel).toContain('agora/renderer-footgun');
+ 	}
+ 	const { status, out } = publicEslint(featureRel);
+ 	expect(status).toBe(1);
+-	expect(out).toContain('agora/import-boundary');
+-	expect(out).toMatch(/apps\/web\/src|relative import escapes/);
++	expect(out).toMatch(/agora\/(import-boundary|renderer-footgun)/);
++	expect(out).toMatch(/apps\/web\/src|fetch|navigator|WebSocket|relative import escapes/);
++}, 120_000);
++
++test('renderer footguns: effects only in framework; browser APIs only in host or framework', async () => {
++	const effect = effectCard("import { useEffect } from 'react';", 'useEffect');
++	expect(await has(effect, feature, 'agora/renderer-footgun', owners.framework)).toBe(true);
++	expect(await has(effect, framework, 'agora/renderer-footgun')).toBe(false);
++	const aliased = effectCard("import { useEffect as sideEffect } from 'react';", 'sideEffect');
++	expect(await has(aliased, feature, 'agora/renderer-footgun', 'useEffect')).toBe(true);
++	expect(await has(aliased, framework, 'agora/renderer-footgun')).toBe(false);
++	expect(await has(effectCard("import { 'useEffect' as ue } from 'react';", 'ue'), feature, 'agora/renderer-footgun', 'useEffect')).toBe(true);
++	const namespaced = effectCard("import * as React from 'react';", 'React.useLayoutEffect');
++	expect(await has(namespaced, feature, 'agora/renderer-footgun', owners.framework)).toBe(true);
++	expect(await has(namespaced, framework, 'agora/renderer-footgun')).toBe(false);
++	expect(await has(effectCard("import React from 'react';", 'React.useInsertionEffect'), feature, 'agora/renderer-footgun', owners.framework)).toBe(true);
++	expect(await has('export function useEffect(run: () => void): void { run(); } export function Card(): null { useEffect(() => undefined); return null; }', feature, 'agora/renderer-footgun')).toBe(false);
++	const browser = 'export function read(): string { return window.localStorage.getItem("k") ?? ""; }';
++	expect(await has(browser, feature, 'agora/renderer-footgun', owners.host)).toBe(true);
++	expect(await has(browser, client, 'agora/renderer-footgun', 'Host/framework')).toBe(true);
++	expect(await has(browser, host, 'agora/renderer-footgun')).toBe(false);
++	expect(await has(browser, framework, 'agora/renderer-footgun')).toBe(false);
++	expect(await has('export async function load(url: string): Promise<Response> { return fetch(url); }', feature, 'agora/renderer-footgun', 'fetch')).toBe(true);
++	expect(await has('export function mount(node: Element, child: Node): Node { return node.appendChild(child); }', feature, 'agora/renderer-footgun', 'DOM mutation')).toBe(true);
++	expect(await has('export function Bad(): JSX.Element { return <div dangerouslySetInnerHTML={{ __html: "x" }} />; }', feature, 'agora/renderer-footgun', 'dangerouslySetInnerHTML')).toBe(true);
++	expect(await agora("import { useState } from 'react'; export function Ok(): null { const [v] = useState(0); return null; }", feature)).toEqual([]);
++}, 120_000);
++
++test('effect ownership closes aliases barrels dynamic imports and re-exports without rejecting locals', async () => {
++	const deny = async (code: string, needle: string = owners.framework): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun', needle)).toBe(true); };
++	await deny("import React from 'react'; const { useEffect } = React; export function Card(): null { useEffect(() => undefined, []); return null; }");
++	await deny("import * as R from 'react'; const { useLayoutEffect } = R; export function Card(): null { useLayoutEffect(() => undefined, []); return null; }");
++	await deny(effectCard("import { useEffect } from 'react'; const eff = useEffect;", 'eff'), 'useEffect');
++	await deny("import React from 'react'; export function Card(): null { React['useEffect'](() => undefined, []); return null; }");
++	await deny("export async function boot(): Promise<void> { const R = await import('react'); R.useEffect(() => undefined, []); }");
++	await deny("export { useEffect } from 'react';");
++	await deny("export { 'useEffect' as ue } from 'react';", 'useEffect');
++	await deny("export * from 'react';");
++	expect(await has('export function useEffect(run: () => void): void { run(); } export const run = (): void => { useEffect(() => undefined); };', feature, 'agora/renderer-footgun')).toBe(false);
++	expect(await has('const api = { useEffect(run: () => void): void { run(); } }; export const run = (): void => { api.useEffect(() => undefined); };', feature, 'agora/renderer-footgun')).toBe(false);
++	expect(await has("import { useEffect } from '../../framework/index.ts'; export function Card(): null { useEffect(() => undefined); return null; }", feature, 'agora/renderer-footgun')).toBe(false);
++}, 120_000);
++
++test('browser globals require unresolved references; Host ports and ordinary names stay allowed', async () => {
++	const allow = async (code: string): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun')).toBe(false); };
++	await allow('export const read = (props: { location: string }): string => props.location;');
++	await allow('export const read = (props: { location: string }): string => { const { location } = props; return location; };');
++	await allow('export const ports = { fetch: (u: string): string => u };');
++	await allow('export type Ports = { document: string; window: number };');
++	await allow('export class Nav { history: string[] = []; }');
++	await allow('export function label(window: { name: string }): string { return window.name; }');
++	await allow("import { fetch } from '../../host/index.ts'; export async function load(u: string): Promise<string> { return fetch(u); }");
++	expect(await has('export const read = (): string => window.name;', feature, 'agora/renderer-footgun', 'window')).toBe(true);
++	expect(await has('export const read = (): string => document.title;', feature, 'agora/renderer-footgun', 'document')).toBe(true);
++	expect(await has('export const openSocket = (): WebSocket => new WebSocket("wss://x");', feature, 'agora/renderer-footgun', 'WebSocket')).toBe(true);
++}, 120_000);
++
++test('ambient declare shadows cannot hide browser globals', async () => {
++	const code = ['declare const window: Window;', 'declare const document: Document;', 'declare function fetch(u: string): Promise<Response>;', 'export const t = (): string => document.title;', 'export const n = (): string => window.name;', 'export const f = (u: string): Promise<Response> => fetch(u);'].join('\n');
++	expect(await has(code, feature, 'agora/renderer-footgun', 'window')).toBe(true);
++	expect(await has(code, feature, 'agora/renderer-footgun', 'document')).toBe(true);
++	expect(await has(code, feature, 'agora/renderer-footgun', 'fetch')).toBe(true);
++	const rel = `apps/web/src/features/room/decl${Date.now().toString(36)}.tsx`;
++	writeProbe(rel, code);
++	const { status, out } = publicEslint(rel);
++	expect(status).toBe(1);
++	expect(out).toContain('agora/renderer-footgun');
++	expect(out).toContain('window');
++}, 120_000);
++
++test('DOM mutation is receiver-aware including computed and union keys; ordinary writers stay allowed', async () => {
++	const allow = async (code: string): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun')).toBe(false); };
++	const deny = async (code: string): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun', 'DOM mutation')).toBe(true); };
++	await allow('export const q = (p: URLSearchParams, v: string): void => { p.append("q", v); };');
++	await allow('export const h = (x: Headers): void => { x.append("a", "b"); };');
++	await allow('export const drop = (store: { remove: (id: string) => void }, id: string): void => { store.remove(id); };');
++	await allow("export const writeOut = (out: { write: (s: string) => void }): void => { out.write('x'); };");
++	await deny('export const detach = (node: Element): void => { node.remove(); };');
++	await deny('export const mount = (node: Element, child: Node): Node => node.appendChild(child);');
++	await deny("export const mount = (node: Element, child: Node): Node => node['appendChild'](child);");
++	await deny("const k = 'appendChild' as const; export const mount = (node: Element, child: Node): Node => node[k](child);");
++	await deny("export const a = (n: Element, c: Node, k: 'append' | 'prepend'): void => { n[k](c); };");
++	await deny("export const b = (n: Element, c: Node, flag: boolean): void => { const k = flag ? 'append' : 'prepend'; n[k](c); };");
++	await deny("export const r = (n: Element, k: 'remove' | 'normalize'): void => { n[k](); };");
++	await deny("export const s = (n: Element, flag: boolean): void => { const k = flag ? 'remove' : 'normalize'; n[k](); };");
++	await deny("export const t = (n: Element, k: 'append' | 'getAttribute'): unknown => n[k]('x');");
++	const rel = `apps/web/src/features/room/mut${Date.now().toString(36)}.tsx`;
++	writeProbe(rel, "export const r = (n: Element, k: 'remove' | 'normalize'): void => { n[k](); };\n");
++	const { status, out } = publicEslint(rel);
++	expect(status).toBe(1);
++	expect(out).toContain('DOM mutation');
++}, 120_000);
++
++test('inline eslint disables cannot suppress Agora rules including bare and line forms', async () => {
++	const windowUse = 'export const read = (): string => window.name;';
++	expect(await has(`/* eslint-disable */\n${windowUse}`, feature, 'agora/renderer-footgun', 'window')).toBe(true);
++	expect(await has(`/* eslint-disable agora/renderer-footgun */\n${windowUse}`, feature, 'agora/renderer-footgun', 'window')).toBe(true);
++	expect(await has(`${windowUse} // eslint-disable-line agora/renderer-footgun`, feature, 'agora/renderer-footgun', 'window')).toBe(true);
++	const mixed = `/* eslint-disable agora/renderer-footgun, agora/import-boundary */\nimport type { Database } from '@agora/storage';\nexport type Leak = keyof Database;\n${windowUse}`;
++	expect(await has(mixed, feature, 'agora/import-boundary', 'renderer')).toBe(true);
++	expect(await has(mixed, feature, 'agora/renderer-footgun', 'window')).toBe(true);
++	expect(await has('export const value = 1;\n// eslint-disable-next-line agora/import-boundary\nexport type Leak = string;', feature, 'agora/renderer-footgun', 'architecture-exceptions.json')).toBe(true);
++	expect(await has('// @ts-ignore\nexport const value = 1;', feature, 'agora/renderer-footgun', '@ts-ignore')).toBe(true);
++	expect(await has('// @ts-expect-error\nexport const value: string = 1;', feature, 'agora/renderer-footgun', 'description')).toBe(true);
++	expect(await has('// @ts-expect-error test contract fixture\nexport const value: string = 1;', feature, 'agora/renderer-footgun')).toBe(false);
+ }, 120_000);
+ 
+ test('portable client-core rejects application and storage edges', async () => {
+@@ -151,11 +254,24 @@ test('portable client-core rejects application and storage edges', async () => {
+ 	expect(await has("import type { Database } from '@agora/storage'; export type Leak = keyof Database;", file, 'agora/import-boundary')).toBe(true);
+ }, 120_000);
+ 
+-test('inline eslint disables cannot suppress import-boundary under noInlineConfig', async () => {
+-	const leak = "import type { Database } from '@agora/storage'; export type Leak = keyof Database;";
+-	expect(await has(`/* eslint-disable */\n${leak}`, feature, 'agora/import-boundary', 'renderer')).toBe(true);
+-	expect(await has(`/* eslint-disable agora/import-boundary */\n${leak}`, feature, 'agora/import-boundary', 'renderer')).toBe(true);
+-	expect(await has(`${leak} // eslint-disable-line agora/import-boundary`, feature, 'agora/import-boundary', 'renderer')).toBe(true);
++test('a committed exception row lets exactly one renderer-footgun violation through the live rule', async () => {
++	const registry = path.join(root, 'agora/architecture-exceptions.json');
++	const original = readFileSync(registry);
++	const windowUse = 'export const read = (): string => window.name;';
++	expect(await has(windowUse, feature, 'agora/renderer-footgun', 'window')).toBe(true);
++	try {
++		writeFileSync(registry, JSON.stringify({
++			schema_version: schema,
++			exceptions: [{ ...exceptionRow, symbol: 'window', guard: 'agora/renderer-footgun' as const }],
++		}, null, '\t'));
++		expect(await has(windowUse, feature, 'agora/renderer-footgun')).toBe(false);
++		expect(await has(windowUse, notes, 'agora/renderer-footgun', 'window')).toBe(true);
++		expect(await has('export const read = (): string => document.title;', feature, 'agora/renderer-footgun', 'document')).toBe(true);
++	} finally {
++		writeFileSync(registry, original);
++	}
++	expect(readFileSync(registry).equals(original)).toBe(true);
++	expect(await has(windowUse, feature, 'agora/renderer-footgun', 'window')).toBe(true);
+ }, 120_000);
+ 
+ const schema = 'agora.architecture-exceptions/v1' as const;
+@@ -191,7 +307,7 @@ test('architecture exceptions reject wildcard expired unknown broadened and self
+ 	expect(errors({ ...exceptionRow, path: 'apps/web/src/features/' })).toEqual(['exceptions[0].path: exact file path required (no wildcards or directories)']);
+ 	expect(errors({ ...exceptionRow, expires: '2020-01-01' }, '2026-09-21')).toEqual(['exceptions[0].expires: expired on 2020-01-01']);
+ 	expect(errors({ ...exceptionRow, expires: 'never' })).toEqual(['exceptions[0].expires: use YYYY-MM-DD']);
+-	expect(errors({ ...exceptionRow, guard: 'agora/renderer-footgun' })).toEqual(['exceptions[0].guard: unknown guard agora/renderer-footgun']);
++	expect(errors({ ...exceptionRow, guard: 'agora/not-a-rule' as typeof exceptionRow.guard })).toEqual(['exceptions[0].guard: unknown guard agora/not-a-rule']);
+ 	expect(errors({ ...exceptionRow, owner: 'same', approver: 'same' })).toEqual(['exceptions[0]: self-approved exceptions are rejected']);
+ 	expect(errors({ ...exceptionRow, symbol: '*' })).toEqual(['exceptions[0].symbol: exact symbol required']);
+ 	expect(errors({ ...exceptionRow, symbol: '@agora/*' })).toEqual(['exceptions[0].symbol: exact symbol required']);
+@@ -285,12 +401,23 @@ test('weakening the exception validator lets a self-approved row load', () => {
+ 	}
+ }, 120_000);
+ 
+-test('removing import-boundary protection makes denial assertions turn red', async () => {
+-	const code = "import type { Database } from '@agora/storage'; export type Leak = keyof Database;";
+-	expect((await agora(code, feature)).some((m) => m.ruleId === 'agora/import-boundary')).toBe(true);
+-	const messages = await agora(code, feature, new ESLint({ cwd: root, ignore: false, overrideConfig: [{ rules: { 'agora/import-boundary': 'off' } }] }));
+-	expect(messages.filter((m) => m.ruleId === 'agora/import-boundary')).toEqual([]);
+-	expect(() => { expect(messages.some((m) => m.ruleId === 'agora/import-boundary')).toBe(true); }).toThrow('expected false to be true');
++test('removing app-architecture protections makes denial assertions turn red', async () => {
++	for (const [rule, file, code] of [
++		['agora/import-boundary', feature, "import type { Database } from '@agora/storage'; export type Leak = keyof Database;"],
++		['agora/renderer-footgun', feature, effectCard("import { useEffect } from 'react';", 'useEffect')],
++		['agora/renderer-footgun', feature, effectCard("import { 'useEffect' as ue } from 'react';", 'ue')],
++		['agora/renderer-footgun', feature, effectCard("import * as React from 'react';", 'React.useEffect')],
++		['agora/renderer-footgun', feature, 'export const read = (): string => window.name;'],
++		['agora/renderer-footgun', feature, 'export const detach = (node: Element): void => { node.remove(); };'],
++		['agora/renderer-footgun', feature, "export const a = (n: Element, c: Node, k: 'append' | 'prepend'): void => { n[k](c); };"],
++		['agora/renderer-footgun', feature, "export const r = (n: Element, k: 'remove' | 'normalize'): void => { n[k](); };"],
++		['agora/renderer-footgun', feature, 'declare const window: Window; export const read = (): string => window.name;'],
++	] as const) {
++		expect((await agora(code, file)).some((m) => m.ruleId === rule)).toBe(true);
++		const messages = await agora(code, file, new ESLint({ cwd: root, ignore: false, overrideConfig: [{ rules: { [rule]: 'off' } }] }));
++		expect(messages.filter((m) => m.ruleId === rule)).toEqual([]);
++		expect(() => { expect(messages.some((m) => m.ruleId === rule)).toBe(true); }).toThrow('expected false to be true');
++	}
+ 	// Guard-weakening: narrowing the non-feature→Feature check back to framework/client/host only lets the util relay pass.
+ 	const policy = readFileSync(path.join(root, 'scripts/boundary-policy.ts'), 'utf8');
+ 	expect(policy).toContain("layer.kind !== 'feature' && targetLayer?.kind === 'feature'");
