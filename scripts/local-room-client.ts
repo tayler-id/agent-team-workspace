@@ -1,5 +1,6 @@
 import { initialState, synchronize, type ClientInput, type ClientState, type Message } from '@agora/client-core';
-import { createWireValidator, canonicalJson, type ComponentName, type Schema } from '@agora/contracts';
+import { createWireValidator, type ComponentName, type Schema } from '@agora/contracts';
+import { canonicalJson } from '@agora/contracts/canonical';
 
 const wire = createWireValidator();
 const message = (m: Schema<'RoomMessage'>): Message => ({ id: m.message_id, createdSeq: m.room_seq, revision: '1', content: { tag: 'visible', body: m.body } });
