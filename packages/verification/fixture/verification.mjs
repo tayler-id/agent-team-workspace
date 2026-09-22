@@ -3,7 +3,7 @@ import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { createApp } from './app.ts';
+import { createApp } from '../../../apps/center/src/app.ts';
 import { openDatabase } from '@agora/storage';
 import { asScopeId } from '@agora/domain';
 /** @param {{database: string, id: string, handle: string, object_namespace: string}} state */

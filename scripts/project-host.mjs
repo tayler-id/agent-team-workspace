@@ -38,7 +38,7 @@ try {
 		databaseStarted = true;
 		for (const sql of ['CREATE ROLE agora_app LOGIN NOSUPERUSER NOBYPASSRLS', 'CREATE ROLE agora_owner LOGIN NOSUPERUSER CREATEDB NOBYPASSRLS', 'CREATE DATABASE agora_fixture OWNER agora_owner']) requireThat(command([pg('psql'), '-v', 'ON_ERROR_STOP=1', '-h', state.root, '-U', 'postgres', '-d', 'postgres', '-c', sql]).status === 0, 'postgres_setup_failed');
 		state.database = `postgresql://agora_app@/agora_fixture?host=${encodeURIComponent(state.root)}`;
-		const { start } = await import('../apps/center/src/verification.mjs');
+		const { start } = await import('../packages/verification/fixture/verification.mjs');
 		const server = await start(state); application = server.close; state.url = server.url;
 		state.database_pid = Number(readFileSync(path.join(data, 'postmaster.pid'), 'utf8').split('\n')[0]);
 	} else {
