@@ -230,3 +230,74 @@ flushSync regression), zero `flushSync`/React warnings in the run; `pnpm -s docs
 No further preserved-source paths remain unmapped; every file touched by the source copy's committed head or
 18 uncommitted paths appears in the mapping table above as either integrated, already present, or superseded with
 rationale. Preserved slot 12 was not modified by any slice.
+
+## Final consolidation: real-merge with source provenance (landed)
+
+Slices 1-4 built the integrated tree by hand, file by file, against the mapping above; this step gives that
+tree real git ancestry back to the preserved source, matching the merge-commit provenance pattern AGENTS.md
+already documents for the local-room web shell and web-framework Client/Host branches.
+
+**Re-verification before touching anything.** Before building the archival commit, slot 12's live tracked-file
+diff (`git diff`) and all 9 untracked files under it were re-hashed (SHA-256) against the independent recovery
+backup at `data/agora-recovery/20260921-190031` (`copy-4-unstaged.patch`, `copy-4.tar.gz`) — byte-identical, no
+drift since the original inventory pass. Slot 12 was not written to at any point in this step.
+
+**Archival commit** `5f2e852` on a new branch `archive/agora-browser-pretext-virtualization-dirty-snapshot`,
+built from `fm/agora-browser-pretext-virtualization` (4e66370, this repo's copy of slot 12's committed head)
+by applying the recovery backup's unstaged patch and copying the 9 untracked files, reproducing slot 12's
+exact dirty tree as a single commit — verified byte-identical to the live source both before and after. This
+gives the uncommitted salvage work an addressable git object instead of living only as loose files in a
+read-only evidence copy.
+
+**Merge commit** `1eee6ae`, `git merge --no-ff` of the archive branch into
+`fm/agora-browser-pretext-virtualization-salvage` (parents `e34df8f`, `5f2e852` — the latter's own parent chain
+carries the full 17-commit `fm/agora-browser-pretext-virtualization` history, so the merge reaches all the way
+back to the original source branch). 26 conflicting paths plus several non-conflicting auto-merged paths, each
+resolved individually against `e34df8f`, not with a blanket strategy:
+
+- Files main had moved forward on independently of this salvage (center app L2 routes, verify-agora skill,
+  docs/runbooks, progress.md, site.json, root package.json, apps/web/tsconfig.json) took ours: the archive
+  branch's versions are strictly earlier snapshots of the same files.
+- Every already-integrated file (App.tsx, FixtureControls.tsx, Timeline.tsx, host/index.ts, main.tsx, rows.ts,
+  the ported/adapted test files, pretext-boundary.test.ts, boundary-policy.ts, feature-map.json,
+  app-architecture.test.ts, corpus.test.ts, docs/site/local-room-web-shell.md, apps/web/package.json)
+  took ours, matching the "done"/"superseded" rows in the mapping table above.
+- **New addition, carried over verbatim:** `apps/web/vite.config.ts`'s build-only Content-Security-Policy meta
+  injection (the `agora-csp` Vite plugin) — present in the preserved source, never ported by any of slices 1-4
+  (this doc's own mapping row for `vite.config.ts` said "diff for CSP additions only if missing", and it was
+  missing). Verified present in `apps/web/dist/index.html` after a real `pnpm --filter @agora/web build`.
+- **New addition, evidence only:** `evidence/local-room/virtualization/planning-checkpoint.md`, this task's own
+  pre-slice-1 planning/benchmark-design checkpoint, carried over as disposable research provenance (it says so
+  itself), not linked into the atlas or feature map.
+- Two non-conflicting auto-merges were caught and reverted by diffing the full post-merge tree against
+  `e34df8f` path by path (not by trusting the absence of conflict markers): `scripts/boundary-policy.ts` had
+  picked up a stale `isWebTooling`/`webTooling` reference on an unconflicted line (the archive's removed
+  predecessor of `isWebTestOrConfig`/`webTestConfigAllowed`), and `docs/site/atlas.json` had picked up a stale
+  duplicate `local-room-web-shell` node whose proof pointed at a file this merge deletes.
+- Eight files only the archive branch touched (no conflict, because `fm/agora-browser-pretext-virtualization-salvage`
+  never had them) were removed rather than resurrected as unwired duplicates, per this doc's own
+  superseded-list: `apps/web/src/components/Composer.tsx`, `apps/web/src/fixture/adapter.ts`,
+  `apps/web/src/fixture/fixtureTransport.ts`, `apps/web/src/projection.ts`, `apps/web/src/store.ts`,
+  `apps/web/src/transport/port.ts`, `apps/web/test/adapter.test.ts`, `apps/web/test/projection.test.ts`.
+
+Net result verified identical to `e34df8f` except the two intentional additions above:
+`git diff e34df8f -- . ':(exclude)apps/web/vite.config.ts' ':(exclude)evidence/local-room/virtualization/planning-checkpoint.md'`
+is empty.
+
+Verified after the merge: `pnpm -s lint`, `pnpm -s typecheck`, `pnpm -s docs:check` (31/31), `pnpm -s contracts:check`
+(no drift) all clean; `pnpm -s boundaries` 33/33; `apps/web` vitest 20/20 (stable across 3 consecutive full-suite
+runs; one earlier run hit 4 failures in `timeline.test.tsx` when run alongside the other three test files under
+parallel workers, all passing individually and on the next 3 full-suite reruns — the same class of
+resource-contention flake noted after slice 2's correction, not caused by this merge's two-file delta, and not
+separately chased here); `pnpm --filter @agora/web build` succeeds with the CSP meta present in the output.
+Slot 12 verified untouched throughout (head `4e66370`, still 18 uncommitted paths, byte-identical to the
+recovery backup).
+
+**Cleanup deferred, not done here:** slot 12 (evidence slot 12) and the recovery backup remain read-only
+inputs. Once this branch is reviewed and merged, slot 12 can be safely reset/cleaned because every one of its
+committed and uncommitted bytes now has a git-addressable copy in this repo:
+`fm/agora-browser-pretext-virtualization` (4e66370, already existed) for the committed history, and
+`archive/agora-browser-pretext-virtualization-dirty-snapshot` (5f2e852, new) for the uncommitted snapshot —
+both reachable from this branch's merge commit `1eee6ae`. The exact comparison to safely commit slot 12's own
+dirty tree later (if ever wanted) is: `git -C <slot12> diff` plus its untracked files must stay byte-identical
+to `5f2e852`'s diff against `4e66370` — the same check this step already ran.
