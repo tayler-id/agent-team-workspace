@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "pnpm",
+    "exec",
+    "vitest",
+    "run",
+    "--project",
+    "unit",
+    "packages/verification/test/project.test.ts"
+  ],
+  "exit": 0,
+  "stdout": "JSON report written to /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace/evidence/U01b/agora-isolation-integrate/merge/lanes/lanes.json\n",
+  "stderr": ""
+}

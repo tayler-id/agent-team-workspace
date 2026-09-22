@@ -1,0 +1,24 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "start",
+  "versions": {
+    "code": "6aadbbd7a0f074a82ecd9498bfab9f1460d6f99c",
+    "config": "sha256:cb1403ac32c7341e4ad306db33d8549c636e5bf18a161ad062c3c1eca19e9b98",
+    "fixture": "sha256:04383173d3606891d8ec0d49b61e7e36f4b800fc7c7185805c778058bd6ed856"
+  },
+  "outcome": "pass",
+  "diagnostics": [],
+  "artifacts": [],
+  "started_at": "2026-09-22T15:37:39.498Z",
+  "finished_at": "2026-09-22T15:37:40.648Z",
+  "run_id": "e4fd726f-7fc7-4cf6-a1b1-949b90395d82",
+  "instance": {
+    "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-IKFa2l",
+    "pid": 82805,
+    "process_start": "Tue Sep 22 11:37:39 2026",
+    "url": "http://127.0.0.1:54099",
+    "database": "postgresql://agora_app@/agora_fixture?host=%2Fprivate%2Fvar%2Ffolders%2Fh7%2F09tw5cfs5m102pwjgg7sxdz80000gn%2FT%2Fagora-b01-IKFa2l",
+    "object_namespace": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-IKFa2l/objects",
+    "cleanup_handle": "07a8cec4-0dfd-4d09-b102-e6dd0593cfa0"
+  }
+}
