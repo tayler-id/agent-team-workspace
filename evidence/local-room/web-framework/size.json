@@ -1,0 +1,24 @@
+{
+  "schema_version": "agora.evidence.size/v1",
+  "unit": "web-framework-client-host",
+  "main": "17fbf24609fb3cbcb25c052ae7ecee124bc0bc87",
+  "tested_subject": "5f29ec46fc934f6d43db8c5e857db8f216b0ac5b",
+  "budget": {
+    "meaningful_authored_lines": 800,
+    "source_files": 20
+  },
+  "counts": {
+    "typescript_tsx_meaningful_lines": 776,
+    "fixture_css_json_meaningful_lines": 77,
+    "total_with_fixture_assets": 853,
+    "source_files_ts_tsx_css_json": 15,
+    "note": "Budget applies to TypeScript/TSX logic. Fixture CSS and room.json counted separately."
+  },
+  "bundle": {
+    "js_gzip_kb": 131.17,
+    "css_gzip_kb": 0.83,
+    "r18_budget_gzip_kb": 350,
+    "note": "Fixture-only; not S1-qualified R18."
+  },
+  "source_range": "candidate 95f3527..60bcd79 onto main 17fbf24; tested subject 5f29ec4"
+}
