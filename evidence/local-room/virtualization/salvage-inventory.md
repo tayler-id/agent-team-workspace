@@ -31,18 +31,19 @@ not resurrect those as unwired duplicates.
 | `apps/web/src/main.tsx` | present, different bootstrap (env/store wiring differs) | already present, different shape |
 | `apps/web/src/rows.ts` (uncommitted) | absent | **pending** — pure, adjust `Row` import to `@agora/web-framework` |
 | `apps/web/src/components/Timeline.tsx` (uncommitted) | absent (Timeline is now inline paging code in `App.tsx`) | **pending, largest slice** — port virtualization onto the consolidated `App.tsx`, do not reintroduce a separate always-imported `Timeline.tsx` unless it stays the single owner of the row-window concern |
-| `apps/web/src/host/geometry.ts` (uncommitted) | absent | **pending** — pure, no dependency, no naming collision with existing `host/` files |
-| `apps/web/src/host/text-sizing.ts` (uncommitted) | absent | **pending** — pure, no dependency |
-| `apps/web/src/host/pretext.ts` (uncommitted) | absent | **blocked** — needs the `@chenglou/pretext` dependency; add was denied by the auto-mode permission classifier ("Untrusted Code Integration"); needs a human-approved `pnpm --filter @agora/web add @chenglou/pretext@0.0.9 --save-exact` (integrity already verified in source commit `da7e9ab`) |
-| `apps/web/src/host/index.ts` | present (2-line barrel, different exports) | needs additive exports once the above land |
-| `apps/web/test/timeline.test.tsx` (uncommitted) | absent | **pending** — imports the old modular layout (`App` with explicit `store`/`port` props); needs adjusting to the current `App` props shape before it can run, not a behavioral redesign |
-| `apps/web/test/geometry.ts` (uncommitted, test double) | absent | **pending** — self-contained, no changes needed |
-| `apps/web/test/sizing.test.ts` (uncommitted) | absent | **pending** — adjust `Row` import to `@agora/web-framework`; pretext-specific assertions blocked on the same dependency add |
+| `apps/web/src/host/geometry.ts` (uncommitted) | **integrated, slice 1** — ported verbatim, no dependency | done |
+| `apps/web/src/host/text-sizing.ts` (uncommitted) | **integrated, slice 1** — ported verbatim, no dependency | done |
+| `apps/web/src/host/pretext.ts` (uncommitted) | **integrated, slice 1** — `@chenglou/pretext@0.0.9` installed (captain-approved, integrity matches source commit `da7e9ab`); required adding a narrow `TEXT_SIZING_ADAPTER` import-boundary check to `scripts/boundary-policy.ts` restricting Pretext to exactly this file (the source copy's own `pretext-boundary.test.ts`, not yet ported, was going to add the same restriction — implemented directly instead of deferred, since it was required to pass lint on this file) | done |
+| `apps/web/src/host/index.ts` | **integrated, slice 1** — additive barrel exports for the above plus `createTextSizer` | done |
+| `apps/web/src/rows.ts` (uncommitted) | **integrated, slice 1** — `Row` import adjusted from the superseded local `./projection.ts` to `@agora/web-framework`, otherwise verbatim | done |
+| `apps/web/test/timeline.test.tsx` (uncommitted) | absent | **pending, later slice** — imports the old modular layout (`App` with explicit `store`/`port` props); needs adjusting to the current `App` props shape before it can run, not a behavioral redesign |
+| `apps/web/test/geometry.ts` (uncommitted, test double) | absent | **pending, later slice** — only needed by `timeline.test.tsx`, not slice 1; direct DOM-global use trips `agora/renderer-footgun` because `isWebTestOrConfig` is deliberately scoped to `*.test.ts(x)` only (see its comment: guards against non-test files placed under `apps/web/test/` as a boundary bypass); needs a reviewed `agora/architecture-exceptions.json` entry or a different shape, not a casual widening of that check |
+| `apps/web/test/sizing.test.ts` (uncommitted) | **integrated, slice 1** — `Row` import adjusted to `@agora/web-framework`, otherwise verbatim; all 6 tests (including the live Pretext RTL/CJK cases) pass | done |
 | `apps/web/test/app.test.tsx` (both committed+uncommitted diffs) | present, different content | needs reconciling against current main's own `app.test.tsx`, not overwriting |
 | `apps/web/test/adapter.test.ts` (committed) | absent (adapter consolidated) | superseded — do not carry over |
 | `apps/web/test/projection.test.ts` (committed) | now `packages/web-framework/test/projection.test.ts` | already present under new location — do not duplicate |
 | `apps/web/index.html`, `tsconfig.json`, `vite.config.ts`, `vitest.config.ts` | present, mostly equivalent | diff for the `@vitejs/plugin-react` / CSP additions only if missing |
-| `apps/web/package.json` (pretext/react-virtual pins) | absent | **blocked** — same dependency-add restriction as above |
+| `apps/web/package.json` (pretext/react-virtual pins) | `@chenglou/pretext@0.0.9` **integrated, slice 1**; `@tanstack/react-virtual` still absent | pending the same captain-approval path, deferred to the Timeline-integration slice |
 | `packages/client-core/test/pretext-boundary.test.ts` (uncommitted) | absent | **pending, later slice** — references `apps/web/src/components/Timeline.tsx` and `apps/web/src/rows.ts` paths; add once those files exist, not before |
 | `scripts/boundary-policy.ts` (uncommitted, `TEXT_SIZING_ADAPTER` const) | absent | **pending, later slice** — pairs with the file above |
 | `packages/client-core/test/app-architecture.test.ts` (committed, 5-line diff) | needs reconciling against current main's version | check for drift before reapplying |
@@ -75,3 +76,41 @@ artifact, not a real defect in the preserved Timeline.tsx.** No code fix was
 required or applied to reproduce green. This should be re-verified once the
 suite runs as part of `pnpm check`/`pnpm test` in the fully integrated tree,
 since a whole-repo run has not yet been attempted with the ported code in place.
+
+## Slice 1: pure sizing/geometry engine (landed)
+
+Files: `apps/web/src/host/{geometry,text-sizing,pretext}.ts`, `apps/web/src/host/index.ts`
+(additive), `apps/web/src/rows.ts`, `apps/web/test/sizing.test.ts`, `apps/web/package.json`
++ `pnpm-lock.yaml` (`@chenglou/pretext@0.0.9`), `scripts/boundary-policy.ts`
+(`TEXT_SIZING_ADAPTER`). 9 files, 251 lines. No changes to `App.tsx` or any consolidated
+main architecture file — this slice is pure, dependency-ordered groundwork with no
+behavioral surface yet (nothing in the production render path imports it).
+
+Verified: `apps/web` vitest suite 10/10 pass (existing `app.test.tsx` + `fixture.test.ts`
+unaffected, new `sizing.test.ts` 6/6 green including live Pretext RTL/CJK/repeat-cache
+assertions); full-repo `tsc` across all three project configs clean; full-repo `eslint .`
+clean; the three `pnpm boundaries` suites (boundaries/export-maps/app-architecture) 29/29
+pass.
+
+Deliberately not done in this slice: feature-map entry and a docs/site page. This slice has
+no observable product behavior yet (nothing wires the sizing engine into the rendered
+Timeline), so there is nothing yet to document from a user or reviewer-facing angle; adding
+a feature-map entry now would need a documentation page describing behavior that does not
+exist until the Timeline-integration slice lands. Revisit both in that slice.
+
+## Remaining slices (dependency order)
+
+1. **Landed above** — pure sizing/geometry engine.
+2. `apps/web/src/fixture/corpus.ts` (50k-message generator) + the `Append N messages`
+   fixture control needed by the reconnect test — pure-ish, small, no architecture conflict.
+3. Port `Timeline.tsx`'s virtualization onto the current consolidated `App.tsx` (the
+   largest, highest-risk slice — must replace the inline `windowRows`/pageSize paging
+   without resurrecting a separate always-imported `Timeline.tsx` module, per `AGENTS.md`).
+   Add `@tanstack/react-virtual` (same captain-approval path as this slice's dependency add).
+   Port `test/timeline.test.tsx` and `test/geometry.ts` alongside, resolving the
+   `agora/renderer-footgun` gap noted above properly.
+   This is where the feature-map entry and docs/site page belong.
+4. `packages/client-core/test/pretext-boundary.test.ts` + the `@tanstack/react-virtual`
+   half of `scripts/boundary-policy.ts`'s boundary rule (pairs with slice 3, not before —
+   the test references `Timeline.tsx`/`rows.ts` paths that only make full sense once
+   Timeline.tsx exists).

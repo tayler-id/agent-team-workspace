@@ -10,6 +10,8 @@ export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/we
 /** Reserved apps/web owners. Folders may arrive in later slices. */
 export const WEB_OWNERS = { framework: 'apps/web/src/framework', client: 'apps/web/src/client', host: 'apps/web/src/host', features: 'apps/web/src/features' } as const;
 const WEB_SRC = 'apps/web/src';
+/** The one file allowed to import @chenglou/pretext; every other apps/web path, including the rest of the host owner, is denied. */
+export const TEXT_SIZING_ADAPTER = 'apps/web/src/host/pretext.ts';
 
 const inside = (root: string, file: string): boolean => !path.relative(root, file).startsWith('..') && !path.isAbsolute(path.relative(root, file));
 const physical = (file: string): string => (existsSync(file) ? realpathSync(file) : file);
@@ -36,7 +38,7 @@ const packageAllowed: Record<string, readonly string[]> = {
 	contracts: ['ajv', 'ajv-formats', 'openapi-typescript', 'node:crypto'],
 	'packages/storage': ['@agora/domain', '@agora/contracts/canonical', 'pg', 'drizzle-orm', 'node:crypto', 'node:fs', 'node:path', 'node:url'],
 	'apps/center': ['@agora/contracts', '@agora/domain', '@agora/storage', 'hono', '@hono/node-server', 'node:url', 'node:crypto'],
-	'apps/web': ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime'],
+	'apps/web': ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime', '@chenglou/pretext'],
 	'apps/worker': ['@agora/contracts', '@agora/client-core'],
 };
 const contractsTooling = ['node:child_process', 'node:fs', 'node:path', 'node:url', 'node:os'] as const;
@@ -111,6 +113,9 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 		return webTestConfigAllowed.some((name) => specifier === name || prefixOk(name, specifier)) ? undefined : `apps/web test/config owner cannot import ${specifier}; only dev-tooling and the app's own public surface are allowed here`;
 	}
 	if (owner === 'apps/web' || layer) {
+		if ((specifier === '@chenglou/pretext' || specifier.startsWith('@chenglou/pretext/')) && relPosix(file) !== TEXT_SIZING_ADAPTER) {
+			return `Pretext is allowed only behind the text-sizing adapter ${TEXT_SIZING_ADAPTER}; ${supportedOwner(file)} must go through the Host TextSizer, not import Pretext directly`;
+		}
 		if (rendererForbidden.some((name) => specifier === name || specifier.startsWith(`${name}/`))) {
 			return `renderer code cannot import ${specifier}; use ${WEB_OWNERS.client} / ${WEB_OWNERS.host} adapters instead of storage, domain implementation, or server packages`;
 		}

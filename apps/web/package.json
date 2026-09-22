@@ -14,6 +14,7 @@
 		"@agora/client-core": "workspace:*",
 		"@agora/contracts": "workspace:*",
 		"@agora/web-framework": "workspace:*",
+		"@chenglou/pretext": "0.0.9",
 		"react": "19.3.0",
 		"react-dom": "19.3.0"
 	},
