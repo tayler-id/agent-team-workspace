@@ -18,6 +18,15 @@
 			"fixtures": ["P0c A allocation ownership semantics; B and C leave them unchanged"], "platforms": ["node24", "posix"], "owner": "CI P0c A"
 		},
 		{
+			"id": "design-negative-source-closure", "documentation": "docs/site/ci.md", "owner": "CI P0a",
+			"paths": ["scripts/test-design-checks.mjs"],
+			"public": ["node scripts/test-design-checks.mjs"],
+			"scenarios": ["baseline accepts", "omitted-application-source rejects apps/center/src/app.ts with the exact missing-link reason", "23 prior named mutation cases"],
+			"fixtures": ["disposable design-check sandbox copying docs, scripts, evidence, packages, contracts, apps, agora and root files AGENTS.md/CLAUDE.md/skills-lock.json/eslint.config.js"],
+			"platforms": ["node24"],
+			"invalidation": "A future decision row citing a path outside this copied set fails the same way; widen the sandbox's copied-trees/root-files lists to match."
+		},
+		{
 			"id": "ci-toolchain-native", "documentation": "docs/site/ci.md", "owner": "CI P0b",
 			"paths": ["scripts/ci-doctor.mjs", "scripts/test/ci-doctor.test.ts", ".node-version", "package.json", ".npmrc", "pnpm-workspace.yaml", "pnpm-lock.yaml", "vitest.config.ts"],
 			"public": ["node scripts/ci-doctor.mjs --json"],

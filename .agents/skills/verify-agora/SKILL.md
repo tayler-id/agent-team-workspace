@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 and L2) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 and L2, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts and the persisted local-development room (local-room L1 and L2) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 and L2, CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
 ---
 
 # Verify Agora
@@ -23,7 +23,11 @@ pnpm audit --json
 pnpm typecheck
 pnpm lint
 pnpm docs:check
+node scripts/verify-design.mjs
+node scripts/test-design-checks.mjs
 ```
+
+Design-negative P0a pass predicates: `verify-design` exits 0 on the real tree; `test-design-checks` prints `PASS accepts baseline`, `PASS rejects omitted-application-source`, every other named mutation rejection with its reason, and `PASS 24 behavioral design-check cases`. The disposable sandbox must copy `apps` and `agora`, and the root `eslint.config.js`, so legitimate decision evidence such as `apps/center/src/app.ts`, `agora/architecture-exceptions.json` and `eslint.config.js` resolve. This is fixture honesty only - it is not hosted CI, not full `pnpm check` coverage of every standalone negative, and not product acceptance. Receipts: `evidence/ci/P0a/`.
 
 P0b alone launches no service. Drive `node --test scripts/test/ci-doctor.test.ts`: known-good actual native import passes, wrong Node/pnpm and unavailable native binding report blocked. Each omitted probe in a disposable copy makes its own denial assertion fail. Evidence: use the recorder below with `--parent f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec --head <code-head> --out .scratch/P0b/replay -- node --test scripts/test/ci-doctor.test.ts`; retain P0b receipts under `evidence/ci/P0b/`. Cleanup removes only owned `.scratch/doctor-*` copies, never receipts. Full fixture verification still follows below and may be independently blocked.
 

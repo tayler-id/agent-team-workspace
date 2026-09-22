@@ -1,0 +1,66 @@
+{
+  "schema": "agora.ci-p0a/v1",
+  "slice": "P0a",
+  "title": "design-negative sandbox source closure",
+  "parent": "b9934c323d7852d7813f3b55c94a9153a40abf7f",
+  "head": "this implementation commit; bound to an exact sha in a follow-up docs-only commit, not amended into this one",
+  "red": {
+    "command": "node scripts/test-design-checks.mjs",
+    "exit": 1,
+    "cause": "baseline unexpected exit; index.md: missing link apps/center/src/app.ts because the disposable sandbox omitted apps/",
+    "log": "evidence/ci/P0a/red.log",
+    "reproduced_at": "b9934c323d7852d7813f3b55c94a9153a40abf7f (current main before this fix)"
+  },
+  "green": {
+    "command": "node scripts/test-design-checks.mjs",
+    "exit": 0,
+    "cases": 24,
+    "log": "evidence/ci/P0a/green.log"
+  },
+  "guard_negative": {
+    "method": "reverted the fix in a WIP stash, reran the suite, observed the same red.log failure, restored the stash byte-for-byte and reran green",
+    "restored_diff_identical": true
+  },
+  "fix": {
+    "sandbox_copies_added": ["apps", "agora"],
+    "root_files_added": ["eslint.config.js"],
+    "reason": "D84/D86 (application-architecture boundaries) added decision citations of apps/web/tsconfig.json, agora/architecture-exceptions.json and eslint.config.js after the original P0a attempt on fm/agora-ci-guardrails; the sandbox source closure had to grow to match, or the same missing-link failure recurs for a different cited path",
+    "omit_negative": "omitted-application-source removes apps/center/src/app.ts after copy and asserts the same missing-link diagnostic",
+    "mutation_applied_asserted": true,
+    "transplanted_from": {
+      "source_branch": "fm/agora-ci-guardrails (preserved, unaltered)",
+      "source_commit": "6797716e59beaf3712d9d5012b4838df8ec29df0",
+      "note": "only scripts/test-design-checks.mjs was transplanted; that branch's own evidence/docs are its own and are not reused here to avoid reviving a stale whole-tree snapshot"
+    }
+  },
+  "digests": {
+    "test_patch_sha256": "sha256:53939b21f5c5de5bb04d7dbbbdcc198b6de4464f4e4aacce632e34a7a10c4604",
+    "test_design_checks_mjs_sha256": "sha256:d00e8b4297b94c3cd11d9ff440bd08d816fde201c2aa02efc2b2472ae7422367"
+  },
+  "scope_owned_checks": {
+    "verify-design": "pass",
+    "test-design-checks": "pass 24 cases",
+    "test-design-handoff-checks": "pass 20 cases",
+    "lint": "pass",
+    "typecheck": "pass",
+    "docs:check": "pass",
+    "contracts:check": "pass"
+  },
+  "pnpm_check": {
+    "exit": 0,
+    "log": "evidence/ci/P0a/pnpm-check.log",
+    "detail": "lint, typecheck, docs:check (31/31 site tests), contracts:check and pnpm test (throwaway PostgreSQL 18 cluster, 26 files / 163 tests) all passed at this head; no known-blocked prerequisite encountered on this host at this time"
+  },
+  "scope_limits": [
+    "not wired into pnpm check as a standalone aggregate step; design negatives remain a separately run gate",
+    "no hosted CI or branch protection",
+    "no browser or React lint changes",
+    "no PostgreSQL socket or toolchain doctor changes",
+    "GitHub tokens were unset for this run (GITHUB_TOKEN, GH_TOKEN)"
+  ],
+  "cleanup": {
+    "design_check_scratch": "removed by the suite itself under .scratch/design-check-tests",
+    "worktrees": "the read-only reproduction worktree used for red.log was removed with git worktree remove after copying its log out",
+    "test_postgres": "with-test-postgres reported outcome cleaned after pnpm test"
+  }
+}
