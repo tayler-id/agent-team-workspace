@@ -14,17 +14,26 @@ const host = 'apps/web/src/host/index.ts';
 const owners = { framework: 'apps/web/src/framework', client: 'apps/web/src/client', host: 'apps/web/src/host', features: 'apps/web/src/features' } as const;
 const ownerStubs = [feature, notes, framework, client, host];
 // Project-service typed lint needs the reserved owner paths on disk for the apps/web tsconfig.
-for (const rel of ownerStubs) {
-	const abs = path.join(root, rel);
-	mkdirSync(path.dirname(abs), { recursive: true });
-	if (!existsSync(abs)) writeFileSync(abs, 'export {};\n');
-}
+// Only paths this run creates get deleted in afterAll: once real product code lands at one of
+// these owner paths (e.g. the apps/web Host barrel), that file already exists on disk and must
+// never be touched by setup or cleanup.
+const syncOwnerStubs = (rootDir: string, stubs: readonly string[]): string[] => {
+	const created: string[] = [];
+	for (const rel of stubs) {
+		const abs = path.join(rootDir, rel);
+		mkdirSync(path.dirname(abs), { recursive: true });
+		if (!existsSync(abs)) { writeFileSync(abs, 'export {};\n'); created.push(rel); }
+	}
+	return created;
+};
+const cleanupOwnerStubs = (rootDir: string, created: readonly string[]): void => {
+	for (const rel of created) try { rmSync(path.join(rootDir, rel), { force: true }); } catch { /* gone */ }
+};
+const createdOwnerStubs = syncOwnerStubs(root, ownerStubs);
 const engine = new ESLint({ cwd: root, ignore: false });
 const probes = new Set<string>();
 const track = (rel: string): string => { probes.add(rel); return path.join(root, rel); };
-afterAll(() => {
-	for (const rel of ownerStubs) try { rmSync(path.join(root, rel), { force: true }); } catch { /* gone */ }
-});
+afterAll(() => { cleanupOwnerStubs(root, createdOwnerStubs); });
 afterEach(() => { for (const rel of probes) try { rmSync(path.join(root, rel), { force: true }); } catch { /* gone */ } probes.clear(); });
 const agora = async (code: string, file: string, lint = engine) =>
 	(await lint.lintText(code, { filePath: path.join(root, file) })).flatMap((r) => r.messages).filter((m) => m.ruleId?.startsWith('agora/'));
@@ -42,6 +51,28 @@ const publicEslint = (rel: string): { status: number; out: string } => {
 const effectCard = (imp: string, call: string): string => `${imp} export function Card(): null { ${call}(() => undefined, []); return null; }`;
 const storageLeak = "import type { Database } from '@agora/storage';\nexport type Leak = keyof Database;\n";
 const cjsLeak = "const storage = require('@agora/storage');\nmodule.exports = { storage };\n";
+
+test('owner stub sync preserves pre-existing bytes on setup and cleanup, and only removes what it created', () => {
+	const tempRoot = mkdtempSync(path.join(tmpdir(), 'agora-owner-stub-'));
+	try {
+		const existingRel = 'apps/web/src/host/index.ts';
+		const missingRel = 'apps/web/src/client/index.ts';
+		const existingAbs = path.join(tempRoot, existingRel);
+		const missingAbs = path.join(tempRoot, missingRel);
+		mkdirSync(path.dirname(existingAbs), { recursive: true });
+		const realBytes = "export const real = 'not a stub';\n";
+		writeFileSync(existingAbs, realBytes);
+		const created = syncOwnerStubs(tempRoot, [existingRel, missingRel]);
+		expect(created).toEqual([missingRel]);
+		expect(readFileSync(existingAbs, 'utf8')).toBe(realBytes);
+		expect(existsSync(missingAbs)).toBe(true);
+		cleanupOwnerStubs(tempRoot, created);
+		expect(readFileSync(existingAbs, 'utf8')).toBe(realBytes);
+		expect(existsSync(missingAbs)).toBe(false);
+	} finally {
+		rmSync(tempRoot, { recursive: true, force: true });
+	}
+});
 
 test('owner tables are explicit and test-visible architecture policy', () => {
 	const b = readFileSync(path.join(root, 'scripts/boundary-policy.ts'), 'utf8');
@@ -76,6 +107,20 @@ test('tsx renderer rejects server imports with owner-named diagnostics across im
 	}
 	expect(await agora('export const ok = (value: string): string => value;', feature)).toEqual([]);
 }, 120_000);
+
+test('apps/web test/config owner allows dev-tooling imports; production src cannot import them, including a relay', async () => {
+	const testFile = 'apps/web/test/fixture.test.ts';
+	const devImport = "import { test } from 'vitest'; test('x', () => undefined);\n";
+	expect(await has(devImport, testFile, 'agora/import-boundary')).toBe(false);
+	expect(await has(devImport, feature, 'agora/import-boundary', 'vitest')).toBe(true);
+	expect(await has(`export { test } from '${testFile}';`, feature, 'agora/import-boundary')).toBe(true);
+	// The owner is file-name-scoped (*.test.ts(x)), not directory-scoped: a non-test file placed
+	// under apps/web/test/ (the same relocation trick the adversarial test above covers for
+	// renderer-footgun) still gets the strict apps/web import-boundary allow-list.
+	const relocated = `apps/web/test/${Date.now().toString(36)}-leak.ts`;
+	writeProbe(relocated, devImport);
+	expect(await has(devImport, relocated, 'agora/import-boundary', 'vitest')).toBe(true);
+}, 60_000);
 
 test('every guarded source extension keeps import-boundary diagnostics via public CLI', () => {
 	const stamp = `ext${Date.now().toString(36)}`;

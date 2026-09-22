@@ -63,7 +63,17 @@ importers:
         specifier: 4.13.8
         version: 4.13.8
 
-  apps/web: {}
+  apps/web:
+    dependencies:
+      '@agora/client-core':
+        specifier: workspace:*
+        version: link:../../packages/client-core
+      '@agora/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@agora/web-framework':
+        specifier: workspace:*
+        version: link:../../packages/web-framework
 
   contracts:
     dependencies:

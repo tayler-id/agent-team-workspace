@@ -1,7 +1,7 @@
 import ts from 'typescript';
 import { AST_NODE_TYPES, ESLintUtils, type TSESLint, type TSESTree } from '@typescript-eslint/utils';
 import { exceptionAllows } from './architecture-exceptions.ts';
-import { WEB_OWNERS, domGlobals, webLayer } from './boundary-policy.ts';
+import { WEB_OWNERS, domGlobals, isWebTestOrConfig, webLayer } from './boundary-policy.ts';
 
 const effects = new Set(['useEffect', 'useLayoutEffect', 'useInsertionEffect']);
 const reactSources = new Set(['react', 'react/index.js', 'react/index']);
@@ -169,6 +169,10 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 	create(context) {
 		const file = context.filename;
 		const layer = webLayer(file);
+		// apps/web/test/** and apps/web/*.config.ts are the test/config owner: jsdom component tests and build
+		// config legitimately touch window/document/raw effects to assert on rendered output; they carry no
+		// production behavior and cannot be imported back into apps/web/src (see boundary-policy.ts's WEB_SRC guard).
+		if (isWebTestOrConfig(file)) return {};
 		if (!layer && !file.includes('/apps/web/') && !isPortableFramework(file)) return {};
 		const denyEffectImport = (node: TSESTree.Node, name: string): void => {
 			if (isFrameworkLike(file)) return;

@@ -36,10 +36,21 @@ const packageAllowed: Record<string, readonly string[]> = {
 	contracts: ['ajv', 'ajv-formats', 'openapi-typescript', 'node:crypto'],
 	'packages/storage': ['@agora/domain', '@agora/contracts/canonical', 'pg', 'drizzle-orm', 'node:crypto', 'node:fs', 'node:path', 'node:url'],
 	'apps/center': ['@agora/contracts', '@agora/domain', '@agora/storage', 'hono', '@hono/node-server', 'node:url', 'node:crypto'],
-	'apps/web': ['@agora/contracts', '@agora/client-core', 'react', 'react-dom', 'react/jsx-runtime'],
+	'apps/web': ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime'],
 	'apps/worker': ['@agora/contracts', '@agora/client-core'],
 };
 const contractsTooling = ['node:child_process', 'node:fs', 'node:path', 'node:url', 'node:os'] as const;
+/**
+ * Narrow, explicit dev-tooling allow-list for apps/web/test/*.test.ts(x) and apps/web root *.config.ts only;
+ * production apps/web/src files never get this owner. Deliberately named-file-scoped (not directory-scoped):
+ * a non-test file placed under apps/web/test/ (a relocation bypass attempt) still gets the strict renderer
+ * checks, exactly like a file placed anywhere else outside its owner.
+ */
+const webTestConfigAllowed = ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime', 'vitest', 'vitest/config', '@testing-library/react', '@testing-library/dom', '@vitejs/plugin-react', 'vite', 'node:fs', 'node:path'] as const;
+export const isWebTestOrConfig = (file: string): boolean => {
+	const rel = relPosix(file);
+	return (rel.startsWith('apps/web/test/') && /\.test\.tsx?$/.test(rel)) || /^apps\/web\/[^/]+\.config\.ts$/.test(rel);
+};
 const supportedOwner = (file: string): string => {
 	const layer = webLayer(file);
 	if (layer?.kind === 'feature') return `Feature owner ${WEB_OWNERS.features}/${layer.name} (public entrypoints only for framework/client/host)`;
@@ -96,12 +107,15 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 		return typesOnly && resolved && physical(resolved) === physical(path.join(projectRoot, 'contracts/generated/typescript/openapi.d.ts')) ? undefined : 'generated values require a type-only edge to the declared generated file';
 	}
 	if (owner === 'packages/storage' && file.endsWith('/src/index.ts')) return specifier === '@agora/domain' ? undefined : 'public storage entry exports domain ports, not SDK bindings';
+	if (owner === 'apps/web' && isWebTestOrConfig(file)) {
+		return webTestConfigAllowed.some((name) => specifier === name || prefixOk(name, specifier)) ? undefined : `apps/web test/config owner cannot import ${specifier}; only dev-tooling and the app's own public surface are allowed here`;
+	}
 	if (owner === 'apps/web' || layer) {
 		if (rendererForbidden.some((name) => specifier === name || specifier.startsWith(`${name}/`))) {
 			return `renderer code cannot import ${specifier}; use ${WEB_OWNERS.client} / ${WEB_OWNERS.host} adapters instead of storage, domain implementation, or server packages`;
 		}
-		if (specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core'].includes(specifier) && !specifier.startsWith('@agora/contracts/') && !specifier.startsWith('@agora/client-core/')) {
-			return `renderer cannot import server package ${specifier}; supported imports are @agora/contracts, @agora/client-core and the selected renderer under ${supportedOwner(file)}`;
+		if (specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core', '@agora/web-framework'].includes(specifier) && !specifier.startsWith('@agora/contracts/') && !specifier.startsWith('@agora/client-core/')) {
+			return `renderer cannot import server package ${specifier}; supported imports are @agora/contracts, @agora/client-core, @agora/web-framework and the selected renderer under ${supportedOwner(file)}`;
 		}
 		if (specifier.startsWith('@agora/client-core/')) {
 			return `renderer must import @agora/client-core only through its public entrypoint; private path ${specifier} is closed under ${supportedOwner(file)}`;

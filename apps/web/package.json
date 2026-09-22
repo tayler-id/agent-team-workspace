@@ -3,5 +3,10 @@
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
-	"exports": {}
+	"exports": {},
+	"dependencies": {
+		"@agora/client-core": "workspace:*",
+		"@agora/contracts": "workspace:*",
+		"@agora/web-framework": "workspace:*"
+	}
 }

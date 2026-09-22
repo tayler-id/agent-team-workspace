@@ -7,5 +7,5 @@
 		"allowJs": true,
 		"checkJs": true
 	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.mts", "src/**/*.cts", "src/**/*.js", "src/**/*.jsx", "src/**/*.mjs", "src/**/*.cjs"]
+	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.mts", "src/**/*.cts", "src/**/*.js", "src/**/*.jsx", "src/**/*.mjs", "src/**/*.cjs", "test", "vite.config.ts", "vitest.config.ts"]
 }
