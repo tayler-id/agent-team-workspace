@@ -1,6 +1,11 @@
 // Application-owned browser Host adapter. The only module allowed to touch window/document/crypto for shell capabilities.
 import type { EnvironmentPort, RoomTransport } from '@agora/web-framework';
 
+/** The composition root's only DOM access: find the element it mounts the app into. */
+export function getMountRoot(domId: string): HTMLElement | null {
+	return document.getElementById(domId);
+}
+
 export function createBrowserEnvironment(transport: RoomTransport, options: { readonly digestText?: (text: string) => Promise<string> } = {}): EnvironmentPort {
 	let focusTimer: ReturnType<typeof setTimeout> | undefined;
 	const digestText = options.digestText ?? (async (text: string): Promise<string> => {
@@ -26,5 +31,9 @@ export function createBrowserEnvironment(transport: RoomTransport, options: { re
 		now: () => Date.now(),
 		createId: () => crypto.randomUUID(),
 		digestText,
+		defer: (fn, ms) => {
+			const timer = setTimeout(fn, ms);
+			return () => { clearTimeout(timer); };
+		},
 	};
 }

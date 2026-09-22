@@ -1,6 +1,7 @@
 import { initialState, synchronize, type ClientInput, type ClientState, type Transition } from '@agora/client-core';
 import { createContext, createElement, useCallback, useContext, useEffect, useRef, useState, useSyncExternalStore, type ReactElement, type ReactNode } from 'react';
 import type { EnvironmentPort, TransportConnection } from './environment.ts';
+import type { Row } from './projection.ts';
 
 export interface TransitionRecord {
 	readonly index: number;
@@ -128,4 +129,43 @@ export function useStaleSafeBusy(): { readonly busy: boolean; readonly run: (wor
 
 export function useScheduleFocus(): EnvironmentPort['scheduleFocus'] {
 	return useEnvironment().scheduleFocus;
+}
+
+/** Announces a growth in `count` after `delayMs`, so a burst of arrivals reads as one notice. */
+export function useDelayedAnnouncement(count: number, delayMs: number): string {
+	const [announcement, setAnnouncement] = useState('');
+	const seenCount = useRef<number | undefined>(undefined);
+	const { defer } = useEnvironment();
+	useEffect(() => {
+		const previous = seenCount.current;
+		seenCount.current = count;
+		if (previous === undefined || count <= previous) return;
+		return defer(() => { setAnnouncement(`${count - previous} new message${count - previous === 1 ? '' : 's'}.`); }, delayMs);
+	}, [count, delayMs, defer]);
+	return announcement;
+}
+
+/** Two-step focus request: clears any pending target, then sets the new one on the next task so a re-render can mount it first. */
+export function useDeferredFocus(): readonly [string | undefined, (id: string) => void] {
+	const [focusRequest, setFocusRequest] = useState<string | undefined>(undefined);
+	const { defer } = useEnvironment();
+	const request = useCallback((id: string): void => {
+		setFocusRequest(undefined);
+		defer(() => { setFocusRequest(id); }, 0);
+	}, [defer]);
+	return [focusRequest, request];
+}
+
+/** Widens the caller's own `limit` window until `focusRequest` is included, then activates and schedules focus on it. */
+export function useFocusRequestEffect(focusRequest: string | undefined, rows: readonly Row[], limit: number, pageSize: number, setLimit: (limit: number) => void, setActiveId: (id: string | undefined) => void, scheduleFocus: (domId: string) => void, rowDomId: (id: string) => string): void {
+	useEffect(() => {
+		if (!focusRequest) return;
+		const index = rows.findIndex((r) => r.message.id === focusRequest);
+		if (index < 0) return;
+		const needed = rows.length - index;
+		if (needed > limit) { setLimit(Math.ceil(needed / pageSize) * pageSize); return; }
+		setActiveId(focusRequest);
+		// Sync focus after the limit window includes the target (effect re-runs once setLimit commits).
+		scheduleFocus(rowDomId(focusRequest));
+	}, [focusRequest, rows, limit, pageSize, setLimit, setActiveId, scheduleFocus, rowDomId]);
 }

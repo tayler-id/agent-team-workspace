@@ -24,4 +24,6 @@ export interface EnvironmentPort {
 	readonly now: () => number;
 	readonly createId: () => string;
 	readonly digestText: (text: string) => Promise<string>;
+	/** Run `fn` after `ms`; the returned function cancels it if it has not fired yet. */
+	readonly defer: (fn: () => void, ms: number) => () => void;
 }
