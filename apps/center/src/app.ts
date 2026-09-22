@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
-import { createWireValidator, digestCanonical, type Schema } from '@agora/contracts';
-import { asCommandId, asMessageId, asProjectId, asRoomId, asScopeId, decideFixtureScopeAccess, FIXTURE_POLICY, FIXTURE_POLICY_DIGEST, type LocalRoomPort, type SendRoomMessage, unsupportedLocalRoom } from '@agora/domain';
+import { createWireValidator, type Schema } from '@agora/contracts';
+import { asCommandId, asMessageId, asProjectId, asRoomId, asScopeId, decideFixtureScopeAccess, digestCanonical, FIXTURE_POLICY, FIXTURE_POLICY_DIGEST, type LocalRoomPort, type SendRoomMessage, unsupportedLocalRoom } from '@agora/domain';
 import { Hono } from 'hono';
 import { toWireMessage, toWireReceipt } from './local-room-wire.ts';
 

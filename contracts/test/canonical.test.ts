@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { canonicalJson, digestCanonical } from '@agora/contracts';
+import { canonicalJson, digestCanonical } from '@agora/contracts/canonical';
 
 test('canonicalJson sorts member names recursively and drops whitespace', () => {
 	expect(canonicalJson({ b: 1, a: [{ d: 'x', c: null }], e: { z: true, y: 2.5 } })).toBe('{"a":[{"c":null,"d":"x"}],"b":1,"e":{"y":2.5,"z":true}}');

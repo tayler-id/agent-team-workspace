@@ -11,7 +11,6 @@ import foundation from '../schemas/foundation.schema.json' with { type: 'json' }
 import primitives from '../schemas/primitives.schema.json' with { type: 'json' };
 import sync from '../schemas/sync.schema.json' with { type: 'json' };
 
-export { canonicalJson, digestCanonical, type Digest } from './canonical.ts';
 export type { components, operations, paths } from '../generated/typescript/openapi.d.ts';
 
 export type ComponentName = keyof components['schemas'];

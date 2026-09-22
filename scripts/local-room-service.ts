@@ -68,7 +68,7 @@ try {
 	const contractRequire = createRequire(import.meta.resolve('@agora/contracts'));
 	writeFileSync(`${owner.root}/validator.cjs`, browserValidatorSource());
 	writeFileSync(`${owner.root}/validator.mjs`, browserValidatorWrapper(`${owner.root}/validator.cjs`, resolve('contracts/src/canonical.ts')));
-	await vite.build({ configFile: false, logLevel: 'silent', resolve: { alias: { '@agora/contracts': `${owner.root}/validator.mjs`, ajv: dirname(contractRequire.resolve('ajv/package.json')), 'ajv-formats': dirname(contractRequire.resolve('ajv-formats/package.json')) } }, build: { commonjsOptions: { include: [/node_modules/, /validator.cjs/] }, outDir: `${owner.root}/harness`, emptyOutDir: true, lib: { entry: 'scripts/local-room-browser.ts', formats: ['es'], fileName: 'harness' } } });
+	await vite.build({ configFile: false, logLevel: 'silent', resolve: { alias: { '@agora/contracts/canonical': `${owner.root}/validator.mjs`, '@agora/contracts': `${owner.root}/validator.mjs`, ajv: dirname(contractRequire.resolve('ajv/package.json')), 'ajv-formats': dirname(contractRequire.resolve('ajv-formats/package.json')) } }, build: { commonjsOptions: { include: [/node_modules/, /validator.cjs/] }, outDir: `${owner.root}/harness`, emptyOutDir: true, lib: { entry: 'scripts/local-room-browser.ts', formats: ['es'], fileName: 'harness' } } });
 	let tokens = 60, last = Date.now();
 	server.on('request', (request, response) => {
 		const answer = (status: number, text: string, type = 'text/plain'): void => {
