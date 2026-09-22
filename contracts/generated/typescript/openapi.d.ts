@@ -131,6 +131,15 @@ export interface components {
         };
         /** @enum {string} */
         CliCommandName: "doctor" | "scenarios" | "start" | "verify" | "evidence" | "stop" | "lanes";
+        CliInstance: {
+            root: string;
+            pid: number;
+            process_start: string;
+            url: string;
+            database: string;
+            object_namespace: string;
+            cleanup_handle: components["schemas"]["Uuid"];
+        };
         /**
          * @description Closed outcome set. Process exit follows the outcome exactly: pass 0, fail 1, blocked 2, unavailable 3, usage_error 64, infrastructure_failure 70. A report whose exit disagrees with its outcome is invalid evidence.
          * @enum {string}
@@ -142,6 +151,8 @@ export interface components {
             schema_version: "agora.cli-report/v1";
             command: components["schemas"]["CliCommandName"];
             run_id?: components["schemas"]["Uuid"];
+            instance?: components["schemas"]["CliInstance"];
+            scenarios?: string[];
             scenario_id?: string;
             versions: {
                 code: components["schemas"]["GitSha"];
@@ -185,6 +196,15 @@ export interface components {
          * @enum {integer}
          */
         ExitCode: 0 | 1 | 2 | 3 | 64 | 70;
+        FixtureEffect: {
+            report: components["schemas"]["FixturePolicyDecisionReport"];
+            object: components["schemas"]["FixturePolicyDecisionReport"];
+        };
+        FixtureEffects: components["schemas"]["FixtureEffect"][];
+        FixtureLane: {
+            id: number;
+            predicate: string;
+        };
         /** @description Body of POST /api/v1/fixture/policy/decisions. */
         FixturePolicyCommand: {
             /** @enum {string} */
@@ -340,6 +360,24 @@ export interface components {
             snapshot?: components["schemas"]["RoomSnapshot"];
             receipt?: components["schemas"]["RoomCommandReceipt"];
             events?: components["schemas"]["RoomEventBatch"];
+        };
+        ProjectFixtureConfig: {
+            /** @enum {string} */
+            schema_version: "agora.verification-fixture/v1";
+            /** @enum {string} */
+            authority: "foundation_fixture";
+            commands: {
+                command: components["schemas"]["CliCommandName"];
+                agora: string[];
+                python: string[];
+            }[];
+            scenarios: string[];
+            lanes: components["schemas"]["FixtureLane"][];
+            driver: string[];
+            timeout_ms: number;
+            /** @enum {string} */
+            target: "local-foundation-fixture";
+            cleanup: string;
         };
         /** @description Answer of GET /api/v1/health/ready. 200 when ready, 503 when not_ready. */
         ReadinessReport: {
