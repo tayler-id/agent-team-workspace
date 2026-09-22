@@ -4,7 +4,10 @@ export default defineConfig({
 	test: {
 		projects: [
 			{
-				test: { name: 'unit', include: ['apps/*/test/**/*.test.ts', 'packages/*/test/**/*.test.ts'], exclude: ['**/*.pg.test.ts'] },
+				// packages/verification/test/project.test.ts hashes every tracked+untracked file under apps/packages/scripts/contracts/agora
+				// as its live freshness digest; a concurrent file (e.g. app-architecture.test.ts's owner-stub setup/cleanup) writing into
+				// those same trees mid-run flips that digest and makes the instance it started against look stale. Serialize unit files.
+				test: { name: 'unit', include: ['apps/*/test/**/*.test.ts', 'packages/*/test/**/*.test.ts'], exclude: ['**/*.pg.test.ts'], fileParallelism: false },
 			},
 			{
 				// Contract tests drive SwiftPM; one build directory cannot serve two concurrent runs, so files run one at a time.

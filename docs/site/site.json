@@ -270,7 +270,7 @@
       "page": "project-controls.md"
     },
     {
-      "path": "packages/verification/fixture/verification.mjs",
+      "path": "apps/center/src/verification.mjs",
       "page": "project-controls.md"
     },
     {

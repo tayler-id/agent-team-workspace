@@ -1,7 +1,7 @@
 // One owned foreground host behind each detached instance. No PID-only stop or global process sweep.
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
-import { chmodSync, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { command, environment, json, requireThat, safe, writeState } from './project-checks.mjs';
 const registry = safe(process.argv[2]); const state = json(path.join(registry, 'state.json'));
@@ -38,8 +38,12 @@ try {
 		databaseStarted = true;
 		for (const sql of ['CREATE ROLE agora_app LOGIN NOSUPERUSER NOBYPASSRLS', 'CREATE ROLE agora_owner LOGIN NOSUPERUSER CREATEDB NOBYPASSRLS', 'CREATE DATABASE agora_fixture OWNER agora_owner']) requireThat(command([pg('psql'), '-v', 'ON_ERROR_STOP=1', '-h', state.root, '-U', 'postgres', '-d', 'postgres', '-c', sql]).status === 0, 'postgres_setup_failed');
 		state.database = `postgresql://agora_app@/agora_fixture?host=${encodeURIComponent(state.root)}`;
-		const { start } = await import('../packages/verification/fixture/verification.mjs');
-		const server = await start(state); application = server.close; state.url = server.url;
+		const { start } = await import('../apps/center/src/verification.mjs');
+		const objects = {
+			read: seq => readFileSync(path.join(state.object_namespace, seq + '.json'), 'utf8'),
+			write: (seq, json) => { mkdirSync(state.object_namespace, { recursive: true }); writeFileSync(path.join(state.object_namespace, seq + '.json'), json, { flag: 'wx' }); },
+		};
+		const server = await start(state, objects); application = server.close; state.url = server.url;
 		state.database_pid = Number(readFileSync(path.join(data, 'postmaster.pid'), 'utf8').split('\n')[0]);
 	} else {
 		state.database = path.join(state.root, 'fixture.sqlite');
