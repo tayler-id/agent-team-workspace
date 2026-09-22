@@ -1,0 +1,39 @@
+{
+	"schema_version": "agora.task-outcome/v1",
+	"task": "agora-local-room-web-live",
+	"slice": "L4 first vertical slice: apps/web room shell (App/Timeline/Composer) wired to the live L1-L3 local-room runtime over a new Host transport, replacing the plain-DOM harness at GET /",
+	"delivery": "local-only, branch fm/agora-local-room-web",
+	"parent": "796fe2c3910c5f8eb67b8a2db02a657a561b0416",
+	"head": "8b41c78e701ccae92f836e418ad07276ec86a557",
+	"red_green": "record-red-green.mjs proof under this directory (red_exit 1, green_exit 0) for apps/web/test/live.test.ts against @agora/web vitest project",
+	"live_browser_verification": "Driven directly in Chrome against a real `node scripts/local-room.ts start` instance: two tabs converge on the same persisted order after a fresh page reload, no duplicate or optimistic-only insertion, keyboard-only send (Tab focus, type, Enter) works, no console error or CSP violation. Two real bugs were found and fixed only by this live drive, not by the unit tests alone: (1) the runtime's ad hoc vite.build() call had no `process.env.NODE_ENV` define, so React threw `process is not defined` and the page silently never mounted; (2) attemptSend compared the Host's local digestText hash (of raw text only) against the server's canonical-command digest, which can never match, causing every accepted send to retry forever. Both are fixed in this commit.",
+	"scope": {
+		"in": [
+			"apps/web/src/host/live.ts: live Host transport (snapshot/events/messages polling, submit with retry/receipt semantics, per-message author/time presentation)",
+			"apps/web/src/main-live.tsx: composition root mounting the same App/Timeline/Composer shell over createLiveTransport",
+			"scripts/local-room-service.ts: builds and serves apps/web/src/main-live.tsx (with the existing standalone-Ajv CSP aliasing) at GET / instead of the removed scripts/local-room-browser.ts"
+		],
+		"deferred_to_later_L4_work": [
+			"manual disconnect/reconnect toggle (the poll loop runs for the page's lifetime; reload is the reconnect path)",
+			"request cancellation",
+			"a non-fixture room header (project/room naming, since L1 carries none)"
+		]
+	},
+	"size": {
+		"source_test_lines_added": 280,
+		"source_test_files": 3,
+		"other_touched_source_files": 4,
+		"documentation_files": 6
+	},
+	"commands_run": [
+		"pnpm --filter @agora/web exec vitest run --config vitest.config.ts (24 -> 25 tests pass)",
+		"pnpm boundaries (33 tests pass)",
+		"pnpm lint (clean on touched files; pre-existing unrelated red in scripts/local-room-client.ts on main, not modified here)",
+		"pnpm typecheck (clean)",
+		"pnpm docs:check (clean, 31/31 docs tests pass)",
+		"pnpm contracts:check (no drift; no contract files touched)",
+		"node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts -t 'public runtime owns' (pass)",
+		"node scripts/with-test-postgres.mjs pnpm exec vitest run (226 passed, 2 failed; the 2 failures are packages/verification/test/project.test.ts, pre-existing and unrelated: this worktree has no locked Python requirements installed, and the diff touches nothing under packages/verification)"
+	],
+	"trust": "owner_attested local development proof plus a real two-tab Chrome drive against the actual runtime process; not trusted CI or independent review"
+}

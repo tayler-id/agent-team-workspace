@@ -1,0 +1,51 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-22T23:54:51.992Z
+parent: 796fe2c3910c5f8eb67b8a2db02a657a561b0416
+head: 8b41c78e701ccae92f836e418ad07276ec86a557
+subject_revision: 796fe2c3910c5f8eb67b8a2db02a657a561b0416
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/live.test.ts
+test_patch_digest: sha256:5b8143732987cdd6bb0f5195e43b58fc561b5d3dddfbd719428e863fa34a20e7
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/live.test.ts","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-Y0LBRf/apps/web
+
+ ❯ |web| test/live.test.ts (5 tests | 5 failed) 2ms
+   × loadSnapshot applies the wire snapshot, then polls events into the committed projection 2ms
+   × a second tab that reconnects after restart converges on the same persisted order without duplicates 0ms
+   × submit posts the command, applies the receipt and clears the draft without an optimistic insert 0ms
+   × a successful send settles even though the server digest never equals the Host digestText hash 0ms
+   × a rejected send retries the frozen command and settles once the server accepts it 0ms
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  19:54:43
+   Duration  548ms (environment 72%, import 16%, transform 12%, tests 1%)
+
+undefined
+/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-Y0LBRf/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/live.test.ts
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/live.test.ts > loadSnapshot applies the wire snapshot, then polls events into the committed projection
+ FAIL  |web| test/live.test.ts > a second tab that reconnects after restart converges on the same persisted order without duplicates
+ FAIL  |web| test/live.test.ts > submit posts the command, applies the receipt and clears the draft without an optimistic insert
+ FAIL  |web| test/live.test.ts > a successful send settles even though the server digest never equals the Host digestText hash
+ FAIL  |web| test/live.test.ts > a rejected send retries the frozen command and settles once the server accepts it
+TypeError: createLiveTransport is not a function
+ ❯ test/live.test.ts:24:20
+     22| beforeEach(() => {
+     23|  const client = createRoomClient();
+     24|  const transport = createLiveTransport(client, { baseUrl: 'http://loca…
+       |                    ^
+     25|  boot = [client, transport];
+     26| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
