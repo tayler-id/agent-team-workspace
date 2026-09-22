@@ -156,6 +156,24 @@
         "repo:evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/red.log",
         "repo:evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/green.log"
       ]
+    },
+    {
+      "id": "web-framework-client-host",
+      "title": "Local room web shell",
+      "status": "In progress",
+      "why": "Give the browser one writer Client, named hooks and a typed EnvironmentPort so the room shell cannot own a second timeline, landed in three dependency-ordered slices.",
+      "page": "local-room-web-shell.md",
+      "proof": [
+        "repo:packages/web-framework/src/client.ts",
+        "repo:packages/web-framework/src/environment.ts",
+        "repo:apps/web/src/host/environment.ts",
+        "repo:apps/web/src/components/App.tsx",
+        "repo:apps/web/test/app.test.tsx",
+        "repo:packages/web-framework/test/boundaries.test.ts",
+        "repo:evidence/local-room/web-framework-foundation/outcome.json",
+        "repo:evidence/local-room/web-framework-host/outcome.json",
+        "repo:evidence/local-room/web-framework-shell/outcome.json"
+      ]
     }
   ],
   "nodes": [
