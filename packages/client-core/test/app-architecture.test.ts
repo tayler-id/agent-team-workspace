@@ -30,6 +30,25 @@ const cleanupOwnerStubs = (rootDir: string, created: readonly string[]): void =>
 	for (const rel of created) try { rmSync(path.join(rootDir, rel), { force: true }); } catch { /* gone */ }
 };
 const createdOwnerStubs = syncOwnerStubs(root, ownerStubs);
+// The two tests below write the real agora/architecture-exceptions.json in place and restore it in
+// a finally. `packages/client-core/test/fixture.test.ts` shells out `pnpm -s boundaries`, which
+// re-runs this same file as a nested vitest subprocess; without a cross-process lock, that nested
+// run and this one can both hold the file mutated at once and one process's restore loses the race,
+// corrupting the committed registry on disk. mkdir is atomic on POSIX filesystems, so a lock
+// directory next to the registry serializes both processes on the same absolute path.
+const withRegistryLock = async <T>(registry: string, run: () => Promise<T> | T): Promise<T> => {
+	const lockDir = `${registry}.lock`;
+	const deadline = Date.now() + 60_000;
+	for (;;) {
+		try { mkdirSync(lockDir); break; }
+		catch (err) {
+			if ((err as NodeJS.ErrnoException).code !== 'EEXIST') throw err;
+			if (Date.now() > deadline) throw new Error(`timed out waiting for registry lock at ${lockDir}`, { cause: err });
+			await new Promise((resolve) => setTimeout(resolve, 15));
+		}
+	}
+	try { return await run(); } finally { rmSync(lockDir, { recursive: true, force: true }); }
+};
 const engine = new ESLint({ cwd: root, ignore: false });
 const probes = new Set<string>();
 const track = (rel: string): string => { probes.add(rel); return path.join(root, rel); };
@@ -301,22 +320,28 @@ test('portable client-core rejects application and storage edges', async () => {
 
 test('a committed exception row lets exactly one renderer-footgun violation through the live rule', async () => {
 	const registry = path.join(root, 'agora/architecture-exceptions.json');
-	const original = readFileSync(registry);
 	const windowUse = 'export const read = (): string => window.name;';
-	expect(await has(windowUse, feature, 'agora/renderer-footgun', 'window')).toBe(true);
-	try {
-		writeFileSync(registry, JSON.stringify({
-			schema_version: schema,
-			exceptions: [{ ...exceptionRow, symbol: 'window', guard: 'agora/renderer-footgun' as const }],
-		}, null, '\t'));
-		expect(await has(windowUse, feature, 'agora/renderer-footgun')).toBe(false);
-		expect(await has(windowUse, notes, 'agora/renderer-footgun', 'window')).toBe(true);
-		expect(await has('export const read = (): string => document.title;', feature, 'agora/renderer-footgun', 'document')).toBe(true);
-	} finally {
-		writeFileSync(registry, original);
-	}
-	expect(readFileSync(registry).equals(original)).toBe(true);
-	expect(await has(windowUse, feature, 'agora/renderer-footgun', 'window')).toBe(true);
+	// The whole test, including the pristine-state checks before and after the mutation, holds the
+	// lock: a bare read of the registry (via `has`, which lints against whatever is on disk right
+	// now) between two lock-protected sections would still observe another process's in-flight
+	// mutation if it weren't inside the same critical section.
+	await withRegistryLock(registry, async () => {
+		const original = readFileSync(registry);
+		expect(await has(windowUse, feature, 'agora/renderer-footgun', 'window')).toBe(true);
+		try {
+			writeFileSync(registry, JSON.stringify({
+				schema_version: schema,
+				exceptions: [{ ...exceptionRow, symbol: 'window', guard: 'agora/renderer-footgun' as const }],
+			}, null, '\t'));
+			expect(await has(windowUse, feature, 'agora/renderer-footgun')).toBe(false);
+			expect(await has(windowUse, notes, 'agora/renderer-footgun', 'window')).toBe(true);
+			expect(await has('export const read = (): string => document.title;', feature, 'agora/renderer-footgun', 'document')).toBe(true);
+		} finally {
+			writeFileSync(registry, original);
+		}
+		expect(readFileSync(registry).equals(original)).toBe(true);
+		expect(await has(windowUse, feature, 'agora/renderer-footgun', 'window')).toBe(true);
+	});
 }, 120_000);
 
 const schema = 'agora.architecture-exceptions/v1' as const;
@@ -388,27 +413,53 @@ test('exact architecture exceptions allow one path symbol and guard without broa
 
 test('a committed exception row lets exactly one import through the live import-boundary rule', async () => {
 	const registry = path.join(root, 'agora/architecture-exceptions.json');
-	const original = readFileSync(registry);
 	const leak = "import type { Database } from '@agora/storage'; export type Leak = keyof Database;";
-	expect(await has(leak, feature, 'agora/import-boundary', 'renderer')).toBe(true);
-	try {
-		const portable = 'packages/client-core/src/model.ts';
-		writeFileSync(registry, JSON.stringify({ schema_version: schema, exceptions: [exceptionRow, { ...exceptionRow, path: portable, symbol: 'window' }] }, null, '\t'));
-		expect(await has(leak, feature, 'agora/import-boundary')).toBe(false);
-		expect(await has('export const w = (): string => window.name;', portable, 'agora/import-boundary')).toBe(false);
-		expect(await has('export const w = (): string => window.name;', 'packages/client-core/src/index.ts', 'agora/import-boundary', 'ambient window')).toBe(true);
-		expect(await has('export const d = (): string => document.title;', portable, 'agora/import-boundary', 'ambient document')).toBe(true);
-		expect(await has(leak, notes, 'agora/import-boundary', 'renderer')).toBe(true);
-		expect(await has("import type { X } from '@agora/domain'; export type Leak = X;", feature, 'agora/import-boundary', 'renderer')).toBe(true);
-		// A module symbol covers every literal import form of that module; an unprovable target needs its own dynamic-import row.
-		expect(await has("export async function leak(): Promise<unknown> { return import('@agora/storage'); }", feature, 'agora/import-boundary')).toBe(false);
-		expect(await has('export const load = (m: string): Promise<unknown> => import(m);', feature, 'agora/import-boundary')).toBe(true);
-	} finally {
-		writeFileSync(registry, original);
-	}
-	expect(readFileSync(registry).equals(original)).toBe(true);
-	expect(await has(leak, feature, 'agora/import-boundary', 'renderer')).toBe(true);
+	await withRegistryLock(registry, async () => {
+		const original = readFileSync(registry);
+		expect(await has(leak, feature, 'agora/import-boundary', 'renderer')).toBe(true);
+		try {
+			const portable = 'packages/client-core/src/model.ts';
+			writeFileSync(registry, JSON.stringify({ schema_version: schema, exceptions: [exceptionRow, { ...exceptionRow, path: portable, symbol: 'window' }] }, null, '\t'));
+			expect(await has(leak, feature, 'agora/import-boundary')).toBe(false);
+			expect(await has('export const w = (): string => window.name;', portable, 'agora/import-boundary')).toBe(false);
+			expect(await has('export const w = (): string => window.name;', 'packages/client-core/src/index.ts', 'agora/import-boundary', 'ambient window')).toBe(true);
+			expect(await has('export const d = (): string => document.title;', portable, 'agora/import-boundary', 'ambient document')).toBe(true);
+			expect(await has(leak, notes, 'agora/import-boundary', 'renderer')).toBe(true);
+			expect(await has("import type { X } from '@agora/domain'; export type Leak = X;", feature, 'agora/import-boundary', 'renderer')).toBe(true);
+			// A module symbol covers every literal import form of that module; an unprovable target needs its own dynamic-import row.
+			expect(await has("export async function leak(): Promise<unknown> { return import('@agora/storage'); }", feature, 'agora/import-boundary')).toBe(false);
+			expect(await has('export const load = (m: string): Promise<unknown> => import(m);', feature, 'agora/import-boundary')).toBe(true);
+		} finally {
+			writeFileSync(registry, original);
+		}
+		expect(readFileSync(registry).equals(original)).toBe(true);
+		expect(await has(leak, feature, 'agora/import-boundary', 'renderer')).toBe(true);
+	});
 }, 120_000);
+
+test('concurrent registry writers serialize under the lock and leave committed bytes on disk', async () => {
+	const registry = path.join(root, 'agora/architecture-exceptions.json');
+	const original = readFileSync(registry);
+	const lockDir = `${registry}.lock`;
+	const stateFor = (label: string) => JSON.stringify({ schema_version: schema, exceptions: [{ ...exceptionRow, symbol: label }] });
+	let holders = 0;
+	const sawOverlap: boolean[] = [];
+	const contender = (label: string) => withRegistryLock(registry, async () => {
+		holders += 1;
+		sawOverlap.push(holders > 1);
+		writeFileSync(registry, stateFor(label));
+		await new Promise((resolve) => setTimeout(resolve, 20));
+		expect(readFileSync(registry, 'utf8')).toBe(stateFor(label));
+		writeFileSync(registry, original);
+		holders -= 1;
+	});
+	// Two invocations racing the same critical section this file's real-registry tests use;
+	// the lock must serialize them so neither observes the other's write mid-flight.
+	await Promise.all([contender('a'), contender('b')]);
+	expect(sawOverlap).toEqual([false, false]);
+	expect(readFileSync(registry).equals(original)).toBe(true);
+	expect(existsSync(lockDir)).toBe(false);
+});
 
 test('eslint config load path fails closed on invalid architecture exceptions', () => {
 	const tempRoot = exceptionRoot([{ ...exceptionRow, owner: 'same', approver: 'same' }]);

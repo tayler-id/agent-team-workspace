@@ -109,8 +109,22 @@ clearing the room), `apps/web/src/components/FixtureControls.tsx` (`Append 100 m
 33 diff lines + 29 new lines. No `App.tsx`/Timeline changes; this is fixture-layer groundwork consumed by
 the reconnect-anchor scenario once Timeline lands in slice 3.
 
-Verified: `apps/web` vitest suite 12/12 pass (10 prior + 2 new); full-repo `tsc -b --force` clean;
-full-repo `eslint .` clean; `pnpm boundaries` 32/32 pass.
+Verified: `apps/web` unit-project test files (`npx vitest run apps/web`) 10/10 pass (8 prior + 2 new);
+full-repo `tsc -b --force` clean; full-repo `eslint .` clean; `pnpm boundaries` 32/32 pass.
+
+Correction (bounded review, `data/agora-ci-postgres-fixture-proof-review/report.md`): the prior
+"12/12 (10 prior + 2 new)" figure double-counted; verified by checking out each commit and running
+`npx vitest run apps/web --reporter=verbose` in isolation.
+
+Also fixed in this pass: a real, reproducing (not flaky) test-isolation race between
+`packages/client-core/test/app-architecture.test.ts`'s two tests that mutate the committed
+`agora/architecture-exceptions.json` in place and `packages/client-core/test/fixture.test.ts`'s
+`pnpm -s boundaries` nested-subprocess test, which re-runs `app-architecture.test.ts` concurrently
+with the parent run. Both processes agree on the same absolute registry path, so
+`app-architecture.test.ts` now wraps its two live-registry mutations in a cross-process
+`mkdir`-based lock (`withRegistryLock`) scoped to `agora/architecture-exceptions.json.lock`,
+serializing the parent and nested runs instead of racing a shared real file. A new regression test
+proves the lock serializes two concurrent writers and leaves committed bytes on disk.
 
 ## Remaining slices (dependency order)
 
