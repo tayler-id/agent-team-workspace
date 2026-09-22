@@ -1,0 +1,60 @@
+{
+	"schema_version": "agora.evidence/v1",
+	"task": "agora-app-architecture-docs",
+	"purpose": "foundation_fixture",
+	"scope": "documentation and governing-contract only; no application source, dependency, or package rename",
+	"candidate": "preserved 4d7534b, rebased its intended content cleanly onto main c04f560, then folded the prior evidence-only commit's decision, atlas rebind and regenerated companion into this single immutable subject commit to resolve independent re-review finding B5",
+	"base_sha": "c04f5606df49eb7976ad5cf244911c73f77dd1fb",
+	"self_reference_note": "This file is part of the commit it describes, so it cannot name that commit's own hash or tree without becoming a hash preimage of itself; a prior round did exactly this and stamped a different, wrong commit's hash while reporting this commit's own counts, which independent re-review flagged. A later round then stamped this same commit's base_sha with a malformed, non-resolving SHA, which a subsequent focused review caught. Confirm this commit's real identity after checkout with `git rev-parse HEAD` and `git rev-parse HEAD^{tree}`, then reproduce the counts below by rerunning the commands in \"checks\" against that checkout.",
+	"patch_digest_sha256": "aee8e64a05ce709c54973a41ab7b9634998e7cc7d6b1edc1911008e8102c8ada",
+	"patch_digest_command": "git diff c04f5606df49eb7976ad5cf244911c73f77dd1fb HEAD -- . ':!evidence' | shasum -a 256",
+	"size_count_command": "git diff --numstat c04f5606df49eb7976ad5cf244911c73f77dd1fb HEAD -- . ':!evidence' ':!docs/site/progress.md' | awk '{add+=$1; del+=$2; n++} END {print n, add, del}'",
+	"config_digests_sha256": {
+		"scripts/verify-design.mjs": "d7ebb22ce1711cf86b9a6a006f5b11304806046146cc74d88e2dd9f2652551b5",
+		"scripts/test-naming-guard.mjs": "9e2f65a1c142174c30b0cc50a49e56ab5eb30fc1f67891c9e34f3a20c10aeade",
+		"package.json": "41f0f66852cd1c907a3fdd7da1736de9d0dc84fbe28e0338894465b33c32198f",
+		"pnpm-lock.yaml": "5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d (unchanged; confirms no dependency drift)"
+	},
+	"changed_files": 24,
+	"meaningful_lines_added": 996,
+	"meaningful_lines_removed": 34,
+	"risk_class": "R2",
+	"risk_class_rationale": "R11 defines R0 as documentation or declared mechanical work and R2 as including CI and verification policy. This change edits scripts/verify-design.mjs's executable naming-guard logic and task/unit-count assertions, adds scripts/test-naming-guard.mjs, and wires it into pnpm docs:check via package.json; all three are verification-policy changes under R11's own list, so the floor is R2.",
+	"r11_size_note": "Under the D68/D73 additions-only precedent (deletions disclosed but not summed into the blocking count), this candidate is 996 meaningful additions across 24 source files (excluding evidence/ and the generated docs/site/progress.md companion), 4 lines below the 1,000-line block threshold, and crosses the 200-line/8-file scope-rationale threshold. Total meaningful churn (996 added + 34 removed) is 1,030 lines, disclosed for transparency but not the threshold R11's precedent applies. No size exception was sought or granted.",
+	"review_corrections": {
+		"B1": "reconciled R20/R26 scheduled-work triggers and gave marketplace vs. local signed-pack installation one consistent dependency; D87",
+		"B2": "fixed R25's Feature path convention to match its worked example and added an ownership map distinguishing schema authority from consumer wiring; split U23 into a pure-relocation task and a required Client/Host rewrite task; D88",
+		"B3": "added U20.B02 for declared Feature-to-Feature dependencies and the framework-edge negative; split U24 into 5 dependency-ordered tasks with explicit manual/event/scheduled automation coverage; D89",
+		"B4": "made the naming guard case-insensitive and package-name-aware, added scripts/test-naming-guard.mjs with 8 cases plus a disabled-guard proof, wired into pnpm docs:check; D90",
+		"B5": "refreshed all receipts against this commit's own real content, fixed the progress companion's hardcoded qualified-milestone line, and replaced docs/site/render.mjs's matching hardcoded HTML roadmap sentence with prose derived from atlas.json; a first correction pass (D91, D94) stamped an evidence-only commit's receipts with a different, earlier commit's hash while reporting this commit's own counts, which independent re-review flagged; D95 folds the decision, the atlas rebind (bound to c54575f, the real commit that introduces the R25/R26 specification, since a commit cannot name its own hash) and the regenerated companion into this one immutable subject commit instead",
+		"B6": "linked the committed design results into docs/site/handoff.md as the approved provisional baseline and exposed results/README.md and results/state-matrix.md through the site builder, without touching docs/design-handoff/results/; D92",
+		"additional": "moved the app-architecture.md Planned notice above the fold, added created-agent/Bug Agent rows to authorization.md and introduction.md, cross-linked R09's per-attempt microVM against R26's persistent per-agent environment (D93); corrected the src/features/<name>/ path form in two secondary references and a research-basis.md cross-reference wording nit found by re-review"
+	},
+	"checks": {
+		"pnpm install --frozen-lockfile": "pass, lockfile unchanged",
+		"pnpm docs:check": "pass, see docs-check.log (includes markdownlint, verify-design.mjs, test-naming-guard.mjs, verify-design-handoff.mjs, docs:validate, docs:test)",
+		"node scripts/verify-design.mjs": "pass, see verify-design.log; 26 requirements, 29 live-scenario mappings, 28 milestones, 78 tasks, 78 exactly-owned Build outcomes, 47 skills, 95 append-only decisions, 253 local links",
+		"node scripts/test-naming-guard.mjs": "pass, see naming-guard.log; 8 cases plus 1 disabled-guard proof",
+		"node .agents/skills/poteto-mode/scripts/check-plan.mjs docs/implementation-plan.md": "pass, see plan-check.log; 28 sections, 0 problems (informational format check)",
+		"node docs/site/build.mjs --mirror --check": "pass; docs/site/progress.md matches the generator run against this commit's own atlas.json and render.mjs",
+		"node docs/site/build.mjs --check": "pass; 26 pages, 28 milestones",
+		"pnpm check (lint, typecheck, docs:check, contracts:check, test)": "pass, see full-check.log; 23 test files, 130 tests passed, 1 expected fail; PostgreSQL wrapper ran a throwaway cluster and cleaned up",
+		"pnpm boundaries": "pass",
+		"pnpm contracts:conform -- --json": "pass; 126 vectors, Swift pass",
+		"git diff --check c04f560 HEAD": "pass, no whitespace errors"
+	},
+	"pre_existing_failure_not_fixed": {
+		"command": "node scripts/test-design-checks.mjs",
+		"case": "baseline",
+		"reason": "its isolated fixture does not copy the apps/ tree, and decision D78 cites apps/center/src/app.ts as evidence; reproduces identically on unmodified main c04f560",
+		"disposition": "left unmodified per instruction; scripts/test-design-checks.mjs is byte-identical to c04f560 in this change",
+		"log": "pre-existing-test-design-checks.log"
+	},
+	"not_in_scope": [
+		"eslint.config.js / scripts/boundary-policy.ts changes (U20-U23 define the future contract only)",
+		"application source, new dependencies, package renames",
+		"final enforcement of the R25 mechanical contract",
+		"docs/design-handoff/results/ content (linked, not modified)",
+		"widening the naming guard's scanned-file set beyond the seven governing documents and top-level docs/site/*.md (D90's original scope; a nonblocking observation, not required for this correction)"
+	]
+}

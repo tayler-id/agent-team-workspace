@@ -24,6 +24,8 @@ The site inventory is `docs/site/site.json`. Build validation discovers current 
 | `tests`, `agora/project.json` | General registered CLI/scenario runners and evidence validation | [Verification](verification.md), S1 |
 | `infra` | Compose, TLS, backup and recovery | [Operations](operations.md), S1 |
 
+Inside `apps/web`, product code is further organized by [the Agora application architecture](app-architecture.md) into owned `src/features/<name>/` directories rather than by shared component/route/store roots.
+
 ## Planned domain modules
 
 Identity owns membership and device grants. Collaboration owns rooms and message revisions; its first port and send decision, `packages/domain/src/local-room/port.ts`, landed with the [local room](local-room.md), and `packages/storage/src/local-room.ts` is its PostgreSQL adapter. Control owns tasks, leases, budgets and receipts. Policy makes pure decisions. Agents compile context and call providers without shell authority. Evidence verifies exact-head manifests. Projects owns registration and provisioning. Knowledge owns reviewed claims and invalidation. Integrations reconciles external effects. These are responsibilities in [R03](repo:docs/technical-spec.md), not a claim that modules already exist in source.

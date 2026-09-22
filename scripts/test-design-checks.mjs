@@ -41,7 +41,7 @@ const cases = [
 	], reason: 'foundation proof requires a foundation owner' },
 	{ name: 'missing-integration-scenario', changes: [change('docs/implementation-plan.md', t => t.replace(/^- \[ \] Lane 10\..+\n/m, ''))], reason: 'live coverage' },
 	{ name: 'model-write-before-canary', changes: [change('docs/task-breakdown.md', t => task(t, 'agora-s1-execute-headless-task', b => b.replace('`agora-s1-qualify-scripted-worker`', '`agora-s1-isolate-local-environment`')))], reason: 'model writes precede agora-s1-qualify-scripted-worker' },
-	{ name: 'feature-bypasses-foundation', changes: [change('docs/implementation-plan.md', t => t.replaceAll('U01c, U01d', 'U01c')), change('docs/task-breakdown.md', t => t.replaceAll('- Unit gates: U01c, U01d.', '- Unit gates: U01c.'))], reason: 'feature bypasses foundation U01d' },
+	{ name: 'feature-bypasses-foundation', changes: [change('docs/implementation-plan.md', t => t.replaceAll('U01c, U01d', 'U01c')), change('docs/task-breakdown.md', t => t.replaceAll('- Unit gates: U01c, U01d.', '- Unit gates: U01c.').replaceAll('- Unit gates: U01c, U01d, U20, U21, U22.', '- Unit gates: U01c, U20, U21, U22.'))], reason: 'feature bypasses foundation U01d' },
 	{ name: 'memory-unnecessarily-needs-cloud', changes: [
 		change('docs/implementation-plan.md', t => unit(t, 'U13', b => b.replace('**Depends on.** U09.', '**Depends on.** U09, U12.')).replace('| U13 | U09 | S2 |', '| U13 | U09, U12 | S2 |')),
 		change('docs/task-breakdown.md', t => {

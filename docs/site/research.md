@@ -30,6 +30,10 @@ The useful patterns were a coherent sidebar, progressive explanation before refe
 
 The browser displayed V0.1.5 on the landing page. These pages are undated and may change; the inspection date is not a publication date. Some reference examples used different order field names across pages, a reminder to verify examples against code rather than copy them. This was a documentation-usability inspection, not independent verification of Noodle's implementation.
 
+## Provenance
+
+The five nouns behind [the Agora application architecture](app-architecture.md), Feature, Entrypoint, Timeline Card, Client, and Host, are Agora's own names for a shape independently observed once, in a private, unpublished internal framework built for an unrelated company's desktop chat client. That framework has no public repository, package, or documentation, and its author states on the record that it will not be open-sourced. [The research basis](repo:docs/research-basis.md) records exactly what was recoverable, its limits, and why Agora's names, file conventions, and every specific mechanical rule are independent choices rather than a copy. That framework's own internal codename is not repeated here and is not Agora's name for anything it builds.
+
 ## More useful visuals, not more decoration
 
 Agora adds a first-class system and milestone atlas, a generated Mermaid companion, plain-language purpose on every component and ordered visual flows on feature pages. Visuals must expose relationships and authority, while remaining legible as text and to assistive technology. [The authoring contract](authoring.md) requires those visuals with future implementations.

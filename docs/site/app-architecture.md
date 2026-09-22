@@ -33,4 +33,4 @@ These slices do not implement Client/Host runtime, Feature discovery, product UI
 
 Inspect [boundary policy](repo:scripts/boundary-policy.ts), [renderer policy](repo:scripts/renderer-policy.ts), [exception validator](repo:scripts/architecture-exceptions.ts), [exceptions file](repo:agora/architecture-exceptions.json) and [fixtures](repo:packages/client-core/test/app-architecture.test.ts). Run `pnpm boundaries` and `pnpm lint`. B1 receipts live under `evidence/U20/agora-s1-lint-application-architecture/`; B2a receipts under its `b2a-exceptions/` folder; B2b receipts under its `b2b-renderer/` folder.
 
-Next: [system architecture](architecture.md), [client synchronization](synchronization.md), and [development runbook](repo:docs/runbooks/development.md).
+Next: [system architecture](architecture.md), [client synchronization](synchronization.md), [development runbook](repo:docs/runbooks/development.md), and [the full R25 Feature/Client/Host specification these boundaries enforce](agora-application-architecture.md), including the migration units still ahead.

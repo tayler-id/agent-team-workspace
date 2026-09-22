@@ -188,6 +188,17 @@
         "repo:apps/web/test/app.test.tsx",
         "repo:evidence/local-room/virtualization/salvage-inventory.md"
       ]
+    },
+    {
+      "id": "agora-application-architecture",
+      "title": "Agora application architecture",
+      "status": "Planned",
+      "why": "Give every product Feature an owned folder, discovered rather than registered, behind a one-writer Client and a typed Host; U20 boundary lint is already Built and tracked separately as app-architecture, U21-U23 (discovery, Client/Host, migration) remain planned.",
+      "page": "agora-application-architecture.md",
+      "proof": [
+        "repo:docs/technical-spec.md",
+        "repo:docs/research-basis.md"
+      ]
     }
   ],
   "nodes": [
@@ -337,6 +348,34 @@
       "outcome": "A user navigates a large room and failure/recovery cards in a responsive accessible client without authority confusion."
     },
     {
+      "id": "U20",
+      "title": "Establish application-architecture boundary lint",
+      "stage": "S1",
+      "status": "Not started",
+      "outcome": "A renderer file that imports a storage or domain type, calls a browser global directly, or uses an unmediated effect fails lint with an error naming its supported owner."
+    },
+    {
+      "id": "U21",
+      "title": "Establish Feature and Entrypoint discovery",
+      "stage": "S1",
+      "status": "Not started",
+      "outcome": "Adding a Feature with its reserved files makes it appear in the generated inventory automatically, and hand-editing that inventory instead of adding the reserved file fails the same way schema drift already fails."
+    },
+    {
+      "id": "U22",
+      "title": "Establish the Client and Host boundary",
+      "stage": "S1",
+      "status": "Not started",
+      "outcome": "A component that holds durable timeline state in local state, or calls a browser global or transport directly, fails to build with an error naming the Client hook or Host method to use instead."
+    },
+    {
+      "id": "U23",
+      "title": "Migrate existing work into the Agora application architecture",
+      "stage": "S1",
+      "status": "Not started",
+      "outcome": "The local-room feature's server entrypoint now lives in one discovered Feature folder, its generated inventory entry replaces the old hand-edited route registration, and every test that passed before the move still passes after it with an unchanged assertion."
+    },
+    {
       "id": "U02",
       "title": "Invite developers into scoped project rooms",
       "stage": "S1",
@@ -428,6 +467,13 @@
       "outcome": "A developer chooses local or cloud explicitly and receives the same trustworthy review contract, while placement-specific trust and cost remain visible."
     },
     {
+      "id": "U24",
+      "title": "Enable conversational agent creation with isolated environments",
+      "stage": "S2",
+      "status": "Not started",
+      "outcome": "A maintainer proposes an agent from a room and a second eligible human confirms its exact plan before any spend; self-confirmation and confirmation without the preview are both rejected."
+    },
+    {
       "id": "U18",
       "title": "Qualify a real external coding-agent adapter",
       "stage": "S2",
@@ -461,6 +507,13 @@
       "stage": "S3",
       "status": "Not started",
       "outcome": "A requested Slack channel receives one approved notification linking to the authoritative Agora record, without becoming another control plane."
+    },
+    {
+      "id": "U25",
+      "title": "Deliver the built-in Bug Agent role",
+      "stage": "S3",
+      "status": "Not started",
+      "outcome": "A Bug Agent reproduces a seeded defect, posts one cited finding, a repeat of the same defect updates that finding instead of duplicating it, and a human-approved repair task closes through the ordinary independent-review path."
     }
   ]
 }

@@ -1,0 +1,74 @@
+
+> agora@ docs:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/15/agent-team-workspace
+> markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs && node scripts/test-naming-guard.mjs && node scripts/verify-design-handoff.mjs && pnpm docs:validate && pnpm docs:test
+
+markdownlint-cli2 v0.23.2 (markdownlint v0.41.1)
+Finding: AGENTS.md docs/**/*.md evidence/**/*.md .agents/skills/verify-agora/SKILL.md
+Linting: 112 files
+Summary: 0 issues in 0 files
+PASS authored structure: 7 documents; 26 requirements; 29 live-scenario mappings
+PASS semantic readiness: 28 milestones; 78 independently gated tasks; 78 exactly owned Build outcomes
+PASS combined dependency graph; 8 foundation proofs; evidence/canary before model writes; cloud-independent later tracks
+PASS 47 official skills; 95 append-only decisions; 253 local links; authored style/privacy checks
+SCOPE static design readiness only; no runtime foundation or product acceptance has run; upstream format/model literals are not semantic authority
+PASS accepts baseline
+PASS rejects lowercase-dune-in-spec
+PASS rejects uppercase-dune-in-spec
+PASS rejects dune-in-site-page
+PASS rejects lowercase-dune-package-name
+PASS rejects mixed-case-dune-package-name
+PASS rejects root-package-dune-name
+PASS accepts allowed-provenance-page-unaffected
+PASS disabled-guard: naming rejection turns red when the check is removed, proving the guard is real
+PASS 8 naming-guard cases plus one disabled-guard proof; D83 scope only
+PASS packet structure: 14 files; 744 meaningful lines; required sections present
+PASS 90 relative links and anchors; 6 Mermaid diagrams; stage/status vocabularies; no private paths, placeholders or long dashes
+SCOPE packet structure only; it cannot verify that prose is true or that any screen exists; base revision 606cba2
+
+> agora@ docs:validate /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/15/agent-team-workspace
+> node docs/site/build.mjs --check
+
+{"outcome":"pass","pages":26,"milestones":28}
+
+> agora@ docs:test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/15/agent-team-workspace
+> node --test docs/site/test/*.test.ts
+
+✔ the same public build driver produces a valid baseline before corpus assertions (0.268334ms)
+✔ the complete corpus has 26 pages and both audience tracks (0.235459ms)
+✔ the atlas explains all nine system nodes and eight connections (0.174084ms)
+✔ the committed design packet is readable as linked documentation, not a source-code dump (0.170709ms)
+✔ current commands and planned product availability have separate references (0.172291ms)
+✔ disabling only the private path guard makes its behavioral assertion fail (102.76825ms)
+✔ disabling only the : section guard makes its behavioral assertion fail (95.571416ms)
+✔ disabling only the : visual guard makes its behavioral assertion fail (93.600625ms)
+✔ disabling only the : link guard makes its behavioral assertion fail (88.908875ms)
+✔ disabling only the : source guard makes its behavioral assertion fail (90.734667ms)
+✔ disabling only the snapshot revision guard makes its behavioral assertion fail (90.995542ms)
+✔ disabling only the invalid status guard makes its behavioral assertion fail (90.804041ms)
+✔ disabling only the Built proof guard makes its behavioral assertion fail (90.147709ms)
+✔ disabling only the milestone coverage guard makes its behavioral assertion fail (92.081584ms)
+✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (88.810334ms)
+✔ disabling only the : outcome guard makes its behavioral assertion fail (88.902625ms)
+✔ disabling only the : stage guard makes its behavioral assertion fail (89.75825ms)
+✔ disabling only the inventory missing guard makes its behavioral assertion fail (89.947875ms)
+✔ disabling only the feature documentation guard makes its behavioral assertion fail (90.683792ms)
+✔ public documentation guard accepts the complete valid fixture (3.115959ms)
+✔ broken internal page and anchor links fail (1.127792ms)
+✔ feature explanations and visual flows are mandatory (0.273917ms)
+✔ progress statuses are closed and Built requires source test and evidence (0.273917ms)
+✔ all milestones must occur exactly once with an outcome and release stage (0.317375ms)
+✔ milestone outcomes mirror the authoritative plan instead of drifting (0.103917ms)
+✔ every executable and package must have a documentation home (0.084834ms)
+✔ every feature-map entry requires a validated feature page (0.084666ms)
+✔ private absolute paths and unsafe links never enter the site (0.182208ms)
+✔ production links include generated navigation, fragment, stylesheet and nested source views (0.825084ms)
+✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (2.045ms)
+✔ Mermaid mirror carries the same status and relationships as the data owner (0.156084ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1340.709791

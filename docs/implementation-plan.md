@@ -321,7 +321,7 @@ Foundation proofs. FG08.
 
 ## Invite developers into scoped project rooms (U02)
 
-**Depends on.** U01c, U01d. Stage S1. Requirements R01, R02, R04, R05, R14, R21, R22, R24. Acceptance AC01, AC02, AC15.
+**Depends on.** U01c, U01d, U20, U21, U22. Stage S1. Requirements R01, R02, R04, R05, R14, R21, R22, R24. Acceptance AC01, AC02, AC15.
 
 **Files.**
 
@@ -385,7 +385,7 @@ Foundation proofs. None.
 
 ## Deliver durable conversation and ordered reconnection (U03)
 
-**Depends on.** U02. Stage S1. Requirements R02, R05, R07, R18, R13, R21. Acceptance AC02, AC03.
+**Depends on.** U02, U23. Stage S1. Requirements R02, R05, R07, R18, R13, R21. Acceptance AC02, AC03.
 
 **Files.**
 
@@ -1438,6 +1438,378 @@ Foundation proofs. None.
 - [ ] For the milestone, require every task plus all integration lanes and security/performance proofs at a compatible reviewed head.
 - [ ] Refresh parent, rerun impacted evidence and hand off to the operator. No worker merge authority is granted.
 
+## Establish application-architecture boundary lint (U20)
+
+**Depends on.** U01c, U01d. Stage S1. Requirements R21, R22, R25. Acceptance AC16.
+
+**Files.**
+
+- [ ] Own the Web and Client core boundary tooling under the planned roots. Record actual created paths and lint-configuration receipts.
+
+Schema and API. No new wire schema. Extend the existing import-boundary lint and its compile negatives to `.tsx` files and to named renderer foot-gun rules.
+
+Migration and compatibility. Existing `.ts` boundary rules and their guard-negative tests are unchanged; this unit only widens their file coverage and adds new named rules.
+
+Foundation proofs. None.
+
+**Build.**
+
+- [ ] `U20.B01` Extend the import-boundary lint to `.tsx` files, add named renderer rules banning direct browser-global and unmediated effect access outside the framework layer, and give every rejection an error naming its supported owner and sanctioned alternative.
+- [ ] `U20.B02` Implement the reserved per-Feature `dependencies.json` declaration, reject an import naming a Feature absent from it, and reject a framework-layer file that imports any Feature, each naming the supported owner and sanctioned alternative.
+
+**You see.**
+
+- [ ] A renderer file that imports a storage or domain type, calls a browser global directly, or uses an unmediated effect fails lint with an error naming its supported owner. Save `evidence/U20/outcome.json`.
+- [ ] A Feature importing another Feature it has not declared in `dependencies.json`, and a framework-layer file importing any Feature, both fail lint naming the supported owner. Save `evidence/U20/outcome.json`.
+
+**Verify, unit.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Test each new rule against an accepted and a rejected fixture, and against a disabled-guard copy that must turn red. Save `evidence/U20/unit.log` and security findings.
+- [ ] For each task save `red.log` and `green.log`, run guard/evidence negatives and mechanical contract/import drift checks. Record exact subjects, not only exit status.
+- [ ] Maintain the feature map and run affected skill instructions at this head. Save `evidence/U20/feature-map.json`; stale/missing scenarios block.
+
+**Verify, live.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked. Ten lanes on `grok-4.6-fast-xhigh` at the PR head is an upstream format annotation only. Run the following ten scenarios through the project runner with approved independent review; no literal model is required.
+
+- [ ] Lane 1. Regression lane against trunk. Lint the existing `.ts` fixtures at parent and head. Save `evidence/U20/lane-1/scenario.png` and its transcript/assertions. Pass when head keeps every existing `.ts` rejection and trunk's absence of `.tsx` coverage is recorded honestly.
+- [ ] Lane 2. Add a `.tsx` fixture importing a storage type. Save `evidence/U20/lane-2/scenario.png` and its transcript/assertions. Pass when lint rejects it with the same rule id `.ts` files already use.
+- [ ] Lane 3. Add a `.tsx` fixture calling a browser global outside the framework folder. Save `evidence/U20/lane-3/scenario.png` and its transcript/assertions. Pass when lint rejects it and accepts the same call moved inside the framework folder.
+- [ ] Lane 4. Add a fixture using an unmediated effect outside the framework folder. Save `evidence/U20/lane-4/scenario.png` and its transcript/assertions. Pass when lint rejects it and accepts the equivalent framework-owned hook.
+- [ ] Lane 5. Disable the `.tsx` glob in an isolated copy. Save `evidence/U20/lane-5/scenario.png` and its transcript/assertions. Pass when the lane-2 assertion turns red, proving the guard is real.
+- [ ] Lane 6. Add an `eslint-disable` comment naming the new rule. Save `evidence/U20/lane-6/scenario.png` and its transcript/assertions. Pass when the disable comment itself is rejected under the R25 exception contract.
+- [ ] Lane 7. Read the rejection message for each new rule. Save `evidence/U20/lane-7/scenario.png` and its transcript/assertions. Pass when each names the supported owner and the sanctioned alternative path.
+- [ ] Lane 8. Run the widened lint against the paused renderer fixture branch content. Save `evidence/U20/lane-8/scenario.png` and its transcript/assertions. Pass when its known drift is reproduced as rejections, not silently accepted.
+- [ ] Lane 9. Import one Feature from another without adding it to `dependencies.json`, and import a Feature from a framework-layer file. Save `evidence/U20/lane-9/scenario.png` and its transcript/assertions. Pass when the undeclared Feature-to-Feature import is rejected naming the missing declaration, and the framework-layer import of a Feature is rejected naming Framework as the non-importing owner.
+- [ ] Lane 10. Run the full existing `.ts` boundary suite alongside the new `.tsx` suite. Save `evidence/U20/lane-10/scenario.png` and its transcript/assertions. Pass when both pass together with no rule regression.
+
+**Verify, perf.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Metric. Lint wall time across the widened file set.
+- [ ] Probe. Run `agora project verify --scenario perf --unit U20 --json` in five interleaved parent/head batches with equal fixtures and declared instrumentation.
+- [ ] Baseline. Measure parent first. If behavior is absent, report absence and compare existing host cost separately from new absolute budgets.
+- [ ] Rule. Equivalent behavior fails above 10% p95 regression. Fail lint wall time above twice the existing `.ts`-only baseline.
+
+**Review gate.** The operator reviews before merge.
+
+- [ ] Independently inspect task-scoped screenshot/transcript proof, red/green cause and security findings before that task closes.
+- [ ] Inspect all milestone scenarios, relevant screenshot and 30-60 second video, performance samples and feature-map freshness before the unit closes.
+- [ ] The operator records an exact-head verdict. Independent reviewers cannot be the implementing owner. Missing tools/proof block, regardless of model name.
+
+**Merge.**
+
+- [ ] For a task, require only its task gate and completed external prerequisites, never its own milestone.
+- [ ] For the milestone, require every task plus all integration lanes and security/performance proofs at a compatible reviewed head.
+- [ ] Refresh parent, rerun impacted evidence and hand off to the operator. No worker merge authority is granted.
+
+## Establish Feature and Entrypoint discovery (U21)
+
+**Depends on.** U20. Stage S1. Requirements R21, R22, R25. Acceptance AC16.
+
+**Files.**
+
+- [ ] Own the Web feature-discovery tooling under the planned roots. Record actual created paths and generated-inventory receipts.
+
+Schema and API. No new wire schema. Define the reserved Entrypoint and Timeline Card filenames and the generated inventory format they produce.
+
+Migration and compatibility. The generated inventory replaces hand-edited per-feature rows in the site inventory and feature map; existing entries migrate in U23, not here.
+
+Foundation proofs. None.
+
+**Build.**
+
+- [ ] `U21.B01` Implement build-time discovery of Feature directories and their reserved Entrypoint/Timeline Card files, generate a drift-checked inventory from them, and reject a Feature outside the conventional path or a hand-edited inventory row that disagrees with the generated one.
+
+**You see.**
+
+- [ ] Adding a Feature with its reserved files makes it appear in the generated inventory automatically, and hand-editing that inventory instead of adding the reserved file fails the same way schema drift already fails. Save `evidence/U21/outcome.json`.
+
+**Verify, unit.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Test discovery of a well-formed Feature, rejection of a misplaced one, and drift rejection of a hand-edited inventory row. Save `evidence/U21/unit.log` and security findings.
+- [ ] For each task save `red.log` and `green.log`, run guard/evidence negatives and mechanical contract/import drift checks. Record exact subjects, not only exit status.
+- [ ] Maintain the feature map and run affected skill instructions at this head. Save `evidence/U21/feature-map.json`; stale/missing scenarios block.
+
+**Verify, live.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked. Ten lanes on `grok-4.6-fast-xhigh` at the PR head is an upstream format annotation only. Run the following ten scenarios through the project runner with approved independent review; no literal model is required.
+
+- [ ] Lane 1. Regression lane against trunk. Generate the inventory from the current fixture Feature set at parent and head. Save `evidence/U21/lane-1/scenario.png` and its transcript/assertions. Pass when head's generated inventory matches the fixture and trunk's absence of discovery is recorded honestly.
+- [ ] Lane 2. Add a Feature with both reserved files. Save `evidence/U21/lane-2/scenario.png` and its transcript/assertions. Pass when it appears in the generated inventory with no manual registration.
+- [ ] Lane 3. Add a Feature missing its Entrypoint file. Save `evidence/U21/lane-3/scenario.png` and its transcript/assertions. Pass when discovery fails naming the missing reserved file.
+- [ ] Lane 4. Place feature files outside the conventional `src/features/<name>/` path. Save `evidence/U21/lane-4/scenario.png` and its transcript/assertions. Pass when the build rejects the location.
+- [ ] Lane 5. Hand-edit a generated inventory row. Save `evidence/U21/lane-5/scenario.png` and its transcript/assertions. Pass when drift detection rejects the edit.
+- [ ] Lane 6. Disable drift detection in an isolated copy. Save `evidence/U21/lane-6/scenario.png` and its transcript/assertions. Pass when the lane-5 assertion turns red.
+- [ ] Lane 7. Remove a Feature directory entirely. Save `evidence/U21/lane-7/scenario.png` and its transcript/assertions. Pass when the generated inventory drops it and no stale reference remains.
+- [ ] Lane 8. Add two Features with the same declared name. Save `evidence/U21/lane-8/scenario.png` and its transcript/assertions. Pass when discovery rejects the collision.
+- [ ] Lane 9. Read the rejection message for a misplaced or missing reserved file. Save `evidence/U21/lane-9/scenario.png` and its transcript/assertions. Pass when it names the supported owner and the conventional path.
+- [ ] Lane 10. Regenerate the inventory twice with no source change. Save `evidence/U21/lane-10/scenario.png` and its transcript/assertions. Pass when the second run is a no-op with an identical digest.
+
+**Verify, perf.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Metric. Discovery and generation wall time.
+- [ ] Probe. Run `agora project verify --scenario perf --unit U21 --json` in five interleaved parent/head batches with equal fixtures and declared instrumentation.
+- [ ] Baseline. Measure parent first. If behavior is absent, report absence and compare existing host cost separately from new absolute budgets.
+- [ ] Rule. Equivalent behavior fails above 10% p95 regression. Fail generation above five seconds for the fixture Feature set.
+
+**Review gate.** The operator reviews before merge.
+
+- [ ] Independently inspect task-scoped screenshot/transcript proof, red/green cause and security findings before that task closes.
+- [ ] Inspect all milestone scenarios, relevant screenshot and 30-60 second video, performance samples and feature-map freshness before the unit closes.
+- [ ] The operator records an exact-head verdict. Independent reviewers cannot be the implementing owner. Missing tools/proof block, regardless of model name.
+
+**Merge.**
+
+- [ ] For a task, require only its task gate and completed external prerequisites, never its own milestone.
+- [ ] For the milestone, require every task plus all integration lanes and security/performance proofs at a compatible reviewed head.
+- [ ] Refresh parent, rerun impacted evidence and hand off to the operator. No worker merge authority is granted.
+
+## Establish the Client and Host boundary (U22)
+
+**Depends on.** U20. Stage S1. Requirements R21, R22, R25. Acceptance AC16.
+
+**Files.**
+
+- [ ] Own the Web and Client core boundary tooling under the planned roots. Record actual created paths and interface receipts.
+
+Schema and API. No new wire schema. Define the Client's named hooks/commands surface and the Host's one typed interface over browser globals and transport.
+
+Migration and compatibility. Existing Client core replay/dedupe/receipt behavior under R21 is unchanged; this unit adds the renderer-facing named surface and the Host wrapper around it.
+
+Foundation proofs. None.
+
+**Build.**
+
+- [ ] `U22.B01` Implement the Client's named hooks and commands as the sole durable-state write/read surface, implement the one typed Host interface wrapping every browser global and transport call, and reject component code that bypasses either.
+
+**You see.**
+
+- [ ] A component that holds durable timeline state in local state, or calls a browser global or transport directly, fails to build with an error naming the Client hook or Host method to use instead. Save `evidence/U22/outcome.json`.
+
+**Verify, unit.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Test that the Client's hooks return immutable projections, that its commands are the only write path, and that Host calls are exhaustively typed. Save `evidence/U22/unit.log` and security findings.
+- [ ] For each task save `red.log` and `green.log`, run guard/evidence negatives and mechanical contract/import drift checks. Record exact subjects, not only exit status.
+- [ ] Maintain the feature map and run affected skill instructions at this head. Save `evidence/U22/feature-map.json`; stale/missing scenarios block.
+
+**Verify, live.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked. Ten lanes on `grok-4.6-fast-xhigh` at the PR head is an upstream format annotation only. Run the following ten scenarios through the project runner with approved independent review; no literal model is required.
+
+- [ ] Lane 1. Regression lane against trunk. Read and write fixture room state through the existing Client core at parent and head. Save `evidence/U22/lane-1/scenario.png` and its transcript/assertions. Pass when head's named-hook surface reproduces the same replay/dedupe result trunk already proves.
+- [ ] Lane 2. Duplicate a durable value in component state. Save `evidence/U22/lane-2/scenario.png` and its transcript/assertions. Pass when the build rejects the duplicate holder.
+- [ ] Lane 3. Call `fetch` or a WebSocket directly from a component. Save `evidence/U22/lane-3/scenario.png` and its transcript/assertions. Pass when the build rejects it and accepts the same call through the Host.
+- [ ] Lane 4. Call `document` or `window` directly from a component. Save `evidence/U22/lane-4/scenario.png` and its transcript/assertions. Pass when the build rejects it and accepts the same call through the Host.
+- [ ] Lane 5. Send a command through the Client and inspect the resulting receipt. Save `evidence/U22/lane-5/scenario.png` and its transcript/assertions. Pass when the receipt matches R07's command-receipt shape.
+- [ ] Lane 6. Disable the one-writer guard in an isolated copy. Save `evidence/U22/lane-6/scenario.png` and its transcript/assertions. Pass when the lane-2 assertion turns red.
+- [ ] Lane 7. Call a Host method with a malformed request. Save `evidence/U22/lane-7/scenario.png` and its transcript/assertions. Pass when the typed interface rejects it at compile time, not at runtime.
+- [ ] Lane 8. Subscribe and unsubscribe through the Host repeatedly. Save `evidence/U22/lane-8/scenario.png` and its transcript/assertions. Pass when no subscription leaks past its owning component's lifetime.
+- [ ] Lane 9. Read the rejection message for a bypassed Client or Host call. Save `evidence/U22/lane-9/scenario.png` and its transcript/assertions. Pass when it names the supported hook, command, or Host method.
+- [ ] Lane 10. Run the existing Client core replay suite alongside the new named-hook suite. Save `evidence/U22/lane-10/scenario.png` and its transcript/assertions. Pass when both pass together with no regression.
+
+**Verify, perf.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Metric. Hook re-render count and Host call latency under fixture load.
+- [ ] Probe. Run `agora project verify --scenario perf --unit U22 --json` in five interleaved parent/head batches with equal fixtures and declared instrumentation.
+- [ ] Baseline. Measure parent first. If behavior is absent, report absence and compare existing host cost separately from new absolute budgets.
+- [ ] Rule. Equivalent behavior fails above 10% p95 regression. Fail unrelated-row re-renders above zero during a scoped update.
+
+**Review gate.** The operator reviews before merge.
+
+- [ ] Independently inspect task-scoped screenshot/transcript proof, red/green cause and security findings before that task closes.
+- [ ] Inspect all milestone scenarios, relevant screenshot and 30-60 second video, performance samples and feature-map freshness before the unit closes.
+- [ ] The operator records an exact-head verdict. Independent reviewers cannot be the implementing owner. Missing tools/proof block, regardless of model name.
+
+**Merge.**
+
+- [ ] For a task, require only its task gate and completed external prerequisites, never its own milestone.
+- [ ] For the milestone, require every task plus all integration lanes and security/performance proofs at a compatible reviewed head.
+- [ ] Refresh parent, rerun impacted evidence and hand off to the operator. No worker merge authority is granted.
+
+## Migrate existing work into the Agora application architecture (U23)
+
+**Depends on.** U20, U21, U22. Stage S1. Requirements R21, R25. Acceptance AC16.
+
+**Files.**
+
+- [ ] Own Web, Domain, Client core under the planned roots. Record actual created paths and migration receipts.
+
+Schema and API. No wire schema changes. This unit relocates call sites and rewrites one previously non-compliant fixture; it does not change any wire contract or database schema.
+
+Migration and compatibility. The local-room schema stays in Contracts and the domain port stays in Domain, both unmoved, per [R25's ownership map](technical-spec.md#ownership-map-for-existing-work); a Feature imports each only through the dependency direction R21's table already allows. Two things move. `apps/center`'s one-line adapter-selection becomes its Feature-owned Entrypoint at `apps/center/src/features/local-room/entrypoint.ts`, a pure path/import change with no behavior change. The paused browser-shell fixture becomes `apps/web/src/features/local-room/`, which is not a pure move because that fixture predates U20's rules and still calls browser globals and unmediated effects directly; moving it also rewrites those calls onto the Client's named hooks and the Host's typed interface.
+
+Foundation proofs. None.
+
+**Build.**
+
+- [ ] `U23.B01` Move `apps/center`'s local-room adapter-selection into its Feature-owned Entrypoint, a pure path/import change, with every existing test passing unchanged before and after.
+- [ ] `U23.B02` Move the paused browser-shell fixture into `apps/web`'s Feature-owned folder, rewriting its direct browser-global and unmediated-effect calls onto the Client's named hooks and the Host's typed interface so it passes U20's rules it previously failed.
+
+**You see.**
+
+- [ ] The local-room feature's server entrypoint now lives in one discovered Feature folder, its generated inventory entry replaces the old hand-edited route registration, and every test that passed before the move still passes after it with an unchanged assertion. Save `evidence/U23/outcome.json`.
+- [ ] The local-room renderer now lives in one discovered Feature folder with no direct browser-global or unmediated-effect call remaining, and it passes the widened boundary lint it previously failed. Save `evidence/U23/outcome.json`.
+
+**Verify, unit.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Test that every pre-move passing test still passes post-move with an unchanged assertion, that the generated inventory now owns the local-room entrypoint entry, and that the rewritten renderer's behavior matches its pre-move fixture output. Save `evidence/U23/unit.log` and security findings.
+- [ ] For each task save `red.log` and `green.log`, run guard/evidence negatives and mechanical contract/import drift checks. Record exact subjects, not only exit status.
+- [ ] Maintain the feature map and run affected skill instructions at this head. Save `evidence/U23/feature-map.json`; stale/missing scenarios block.
+
+**Verify, live.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked. Ten lanes on `grok-4.6-fast-xhigh` at the PR head is an upstream format annotation only. Run the following ten scenarios through the project runner with approved independent review; no literal model is required.
+
+- [ ] Lane 1. Regression lane against trunk. Run the full local-room test suite at parent and head. Save `evidence/U23/lane-1/scenario.png` and its transcript/assertions. Pass when every assertion that passed at parent still passes at head with an unchanged expected value.
+- [ ] Lane 2. Diff the entrypoint-relocation change against its pre-move contents. Save `evidence/U23/lane-2/scenario.png` and its transcript/assertions. Pass when only its path and import statements changed, and separately confirm the contracts schema and the domain port are byte-identical at their original paths.
+- [ ] Lane 3. Run the generated Feature inventory over the moved local-room folders. Save `evidence/U23/lane-3/scenario.png` and its transcript/assertions. Pass when both appear with no remaining hand-edited row.
+- [ ] Lane 4. Run the widened boundary lint over the moved renderer. Save `evidence/U23/lane-4/scenario.png` and its transcript/assertions. Pass when the moved renderer fixture now passes U20's rules it previously failed, with no remaining direct browser-global or unmediated-effect call.
+- [ ] Lane 5. Run the portable-contracts conformance suite. Save `evidence/U23/lane-5/scenario.png` and its transcript/assertions. Pass when TypeScript and Swift still agree on every golden vector.
+- [ ] Lane 6. Run the PostgreSQL-backed storage tests. Save `evidence/U23/lane-6/scenario.png` and its transcript/assertions. Pass when every row-level and migration test still passes.
+- [ ] Lane 7. Search the repository for the old hand-edited paths. Save `evidence/U23/lane-7/scenario.png` and its transcript/assertions. Pass when no reference to the pre-move location remains outside historical evidence.
+- [ ] Lane 8. Revert the move in an isolated copy and rerun the generated inventory. Save `evidence/U23/lane-8/scenario.png` and its transcript/assertions. Pass when the reverted copy fails discovery, proving the move is what discovery depends on.
+- [ ] Lane 9. Inspect the feature map and site inventory. Save `evidence/U23/lane-9/scenario.png` and its transcript/assertions. Pass when both point at the new Feature-owned paths only.
+- [ ] Lane 10. Run the complete `pnpm check` suite. Save `evidence/U23/lane-10/scenario.png` and its transcript/assertions. Pass when lint, typecheck, contracts, and tests all pass at head.
+
+**Verify, perf.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Metric. Full-suite wall time before and after the move.
+- [ ] Probe. Run `agora project verify --scenario perf --unit U23 --json` in five interleaved parent/head batches with equal fixtures and declared instrumentation.
+- [ ] Baseline. Measure parent first. If behavior is absent, report absence and compare existing host cost separately from new absolute budgets.
+- [ ] Rule. Equivalent behavior fails above 10% p95 regression. The entrypoint relocation is a pure move and fails any regression beyond noise; the renderer rewrite is measured against its pre-move fixture behavior, not byte-identical timing.
+
+**Review gate.** The operator reviews before merge.
+
+- [ ] Independently inspect task-scoped screenshot/transcript proof, red/green cause and security findings before that task closes.
+- [ ] Inspect all milestone scenarios, relevant screenshot and 30-60 second video, performance samples and feature-map freshness before the unit closes.
+- [ ] The operator records an exact-head verdict. Independent reviewers cannot be the implementing owner. Missing tools/proof block, regardless of model name.
+
+**Merge.**
+
+- [ ] For a task, require only its task gate and completed external prerequisites, never its own milestone.
+- [ ] For the milestone, require every task plus all integration lanes and security/performance proofs at a compatible reviewed head.
+- [ ] Refresh parent, rerun impacted evidence and hand off to the operator. No worker merge authority is granted.
+
+## Enable conversational agent creation with isolated environments (U24)
+
+**Depends on.** U06, U11, U13, U14. Stage S2. Requirements R04, R06, R08, R09, R14, R16, R26. Acceptance AC27.
+
+**Files.**
+
+- [ ] Own Identity, Policy, Control, Projects, Web under the planned roots. Record actual created paths and schema/API/migration receipts.
+
+Schema and API. Add agent-proposal, routine-pack version, automation, environment-template, and lifecycle-state records. Add propose/confirm-agent, routine-pack install, and provision/pause/resume/snapshot/reset/archive/destroy commands.
+
+Migration and compatibility. Reuse R08's worker enrollment and R09's environment-definition machinery for the per-agent environment; no separate execution boundary is invented. A created agent's environment is a distinct instance from a task attempt's environment under R09. R09's microVM is disposable and replaced on every attempt, while a created agent's environment is the one persistent workspace its identity owns across many attempts, explicitly provisioned, paused, and destroyed rather than recreated per attempt. A routine-pack marketplace source is not part of this unit; installation validates only a locally supplied signed manifest.
+
+Foundation proofs. None.
+
+**Build.** Five independently gated tasks, dependency-ordered within this milestone; each closes on its own task gate under R22 and never waits for a sibling Build box.
+
+- [ ] `U24.B01` Implement the propose/confirm agent-creation flow, its stable identity, role, project/room scope, resource/spend limits, and the exact plan/permission/cost/lifecycle preview a second eligible human must see before confirming, with self-confirmation rejected.
+- [ ] `U24.B02` Implement one isolated persistent environment per created agent and its explicit provision/pause/resume/snapshot/reset/archive/destroy states, distinct from R09's per-attempt microVM.
+- [ ] `U24.B03` Implement signed-manifest routine-pack installation that diffs the pack's permission manifest against the agent's current grant and rejects an unsigned or over-broad pack.
+- [ ] `U24.B04` Implement manual, event-triggered, and scheduled automations, plus human inspect/edit/disable/immediate-stop controls, none of which can expand the agent's authority beyond its creation approval.
+- [ ] `U24.B05` Implement the room-based creation, lifecycle, and automation-control surface in Web that drives the propose/confirm, environment, routine-pack, and automation commands through no other path.
+
+**You see.**
+
+- [ ] A maintainer proposes an agent from a room and a second eligible human confirms its exact plan before any spend; self-confirmation and confirmation without the preview are both rejected. Save `evidence/U24/outcome.json`.
+- [ ] The agent receives its own isolated persistent environment, separate from any task-attempt microVM, moving explicitly through provision, pause, resume, snapshot, reset, archive, and destroy. Save `evidence/U24/outcome.json`.
+- [ ] Installing an over-broad or unsigned routine pack is rejected before it reaches the agent's grant. Save `evidence/U24/outcome.json`.
+- [ ] A manual, event, or scheduled trigger runs an assigned automation exactly once and records which kind fired it; disabling an automation stops every trigger kind and a human can inspect, edit, and immediately stop it. Save `evidence/U24/outcome.json`.
+- [ ] The room surface exposes exactly these flows and no direct path around them. Save `evidence/U24/outcome.json`.
+
+**Verify, unit.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Test proposal/confirmation authority including self-confirmation denial, lifecycle-state transitions, environment isolation between two agents, manifest-scope rejection, and each automation trigger kind. Save `evidence/U24/unit.log` and security findings.
+- [ ] For each task save `red.log` and `green.log`, run guard/evidence negatives and mechanical contract/import drift checks. Record exact subjects, not only exit status.
+- [ ] Maintain the feature map and run affected skill instructions at this head. Save `evidence/U24/feature-map.json`; stale/missing scenarios block.
+
+**Verify, live.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked. Ten lanes on `grok-4.6-fast-xhigh` at the PR head is an upstream format annotation only. Run the following ten scenarios through the project runner with approved independent review; no literal model is required.
+
+- [ ] Lane 1. Regression lane against trunk. Propose and confirm a fixture agent at parent and head. Save `evidence/U24/lane-1/scenario.png` and its transcript/assertions. Pass when head creates one agent identity and trunk's absence of the capability is recorded honestly.
+- [ ] Lane 2. Confirm without first viewing the plan preview, and separately confirm a proposal as the same human who proposed it. Save `evidence/U24/lane-2/scenario.png` and its transcript/assertions. Pass when both are rejected.
+- [ ] Lane 3. Create two agents and inspect their environments. Save `evidence/U24/lane-3/scenario.png` and its transcript/assertions. Pass when neither can reach the other's filesystem, browser, or terminal.
+- [ ] Lane 4. Install a routine pack requesting a wider tool or network scope than the agent's approval. Save `evidence/U24/lane-4/scenario.png` and its transcript/assertions. Pass when installation is rejected without a fresh approval.
+- [ ] Lane 5. Install an unsigned routine pack. Save `evidence/U24/lane-5/scenario.png` and its transcript/assertions. Pass when installation is rejected.
+- [ ] Lane 6. Drive provision, pause, resume, snapshot, reset, archive, and destroy in order on one agent, and separately stop a fresh agent mid-automation. Save `evidence/U24/lane-6/scenario.png` and its transcript/assertions. Pass when each transition is explicit and auditable with no state inferred from a missing heartbeat, and the mid-automation stop takes effect immediately with a recorded state.
+- [ ] Lane 7. Fire one automation through its manual trigger, and a second automation through its event trigger. Save `evidence/U24/lane-7/scenario.png` and its transcript/assertions. Pass when each trigger kind runs its automation exactly once and the record names which kind fired it.
+- [ ] Lane 8. Let a scheduled automation reach its due time, disable it before its next due time and confirm it does not fire, then re-enable it and confirm it fires again. Save `evidence/U24/lane-8/scenario.png` and its transcript/assertions. Pass when the due-time firing, the disabled non-firing, and the re-enabled firing all hold.
+- [ ] Lane 9. Inspect the recurring-cost figure shown before confirmation against the environment's actual billed rate. Save `evidence/U24/lane-9/scenario.png` and its transcript/assertions. Pass when the shown figure matches the rate exactly.
+- [ ] Lane 10. Inspect, edit, and disable one automation from the created agent's own page. Save `evidence/U24/lane-10/scenario.png` and its transcript/assertions. Pass when each control is visible, takes effect immediately, and the disabled state is auditable.
+
+**Verify, perf.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Metric. Proposal-to-preview latency and environment provisioning time.
+- [ ] Probe. Run `agora project verify --scenario perf --unit U24 --json` in five interleaved parent/head batches with equal fixtures and declared instrumentation.
+- [ ] Baseline. Measure parent first. If behavior is absent, report absence and compare existing host cost separately from new absolute budgets.
+- [ ] Rule. Equivalent behavior fails above 10% p95 regression. Fail preview latency above one second or provisioning above the R09 cold-build budget.
+
+**Review gate.** The operator reviews before merge.
+
+- [ ] Independently inspect task-scoped screenshot/transcript proof, red/green cause and security findings before that task closes.
+- [ ] Inspect all milestone scenarios, relevant screenshot and 30-60 second video, performance samples and feature-map freshness before the unit closes.
+- [ ] The operator records an exact-head verdict. Independent reviewers cannot be the implementing owner. Missing tools/proof block, regardless of model name.
+
+**Merge.**
+
+- [ ] For a task, require only its task gate and completed external prerequisites, never its own milestone.
+- [ ] For the milestone, require every task plus all integration lanes and security/performance proofs at a compatible reviewed head.
+- [ ] Refresh parent, rerun impacted evidence and hand off to the operator. No worker merge authority is granted.
+
+## Deliver the built-in Bug Agent role (U25)
+
+**Depends on.** U24. Stage S3. Requirements R04, R11, R14, R16, R26. Acceptance AC33.
+
+**Files.**
+
+- [ ] Own Agents, Evidence, Control under the planned roots. Record actual created paths and schema/API/migration receipts.
+
+Schema and API. Add a Bug Agent principal kind, a finding record (revision, environment, routine version, reproduction, logs, artifact references, severity, confidence), and finding-deduplication keys.
+
+Migration and compatibility. Reuse U24's created-agent environment and R11's task/evidence/review path for a Bug Agent's proposed repair; no new publication or merge authority is added.
+
+Foundation proofs. None.
+
+**Build.**
+
+- [ ] `U25.B01` Implement the Bug Agent's read-only default grant, its cited and deduplicated finding record, and a human-approved bounded repair task that routes through the ordinary R11 evidence and independent-review path with the Bug Agent excluded as approver and reviewer.
+
+**You see.**
+
+- [ ] A Bug Agent reproduces a seeded defect, posts one cited finding, a repeat of the same defect updates that finding instead of duplicating it, and a human-approved repair task closes through the ordinary independent-review path. Save `evidence/U25/outcome.json`.
+
+**Verify, unit.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Test citation completeness, deduplication matching, denial of administration/production/merge credentials, and approver/reviewer exclusion. Save `evidence/U25/unit.log` and security findings.
+- [ ] For each task save `red.log` and `green.log`, run guard/evidence negatives and mechanical contract/import drift checks. Record exact subjects, not only exit status.
+- [ ] Maintain the feature map and run affected skill instructions at this head. Save `evidence/U25/feature-map.json`; stale/missing scenarios block.
+
+**Verify, live.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked. Ten lanes on `grok-4.6-fast-xhigh` at the PR head is an upstream format annotation only. Run the following ten scenarios through the project runner with approved independent review; no literal model is required.
+
+- [ ] Lane 1. Regression lane against trunk. Reproduce a seeded fixture defect at parent and head. Save `evidence/U25/lane-1/scenario.png` and its transcript/assertions. Pass when head posts one complete cited finding and trunk's absence of the role is recorded honestly.
+- [ ] Lane 2. Reproduce the same defect a second time. Save `evidence/U25/lane-2/scenario.png` and its transcript/assertions. Pass when the existing finding updates instead of a duplicate being created.
+- [ ] Lane 3. Attempt to grant the Bug Agent an administration, production, merge, or broad GitHub credential. Save `evidence/U25/lane-3/scenario.png` and its transcript/assertions. Pass when the grant is rejected.
+- [ ] Lane 4. Attempt to have the Bug Agent approve its own proposed repair task. Save `evidence/U25/lane-4/scenario.png` and its transcript/assertions. Pass when self-approval is rejected.
+- [ ] Lane 5. Attempt to have the Bug Agent serve as the repair task's independent reviewer. Save `evidence/U25/lane-5/scenario.png` and its transcript/assertions. Pass when it is rejected as a reviewer.
+- [ ] Lane 6. Approve a bounded repair task from a real finding. Save `evidence/U25/lane-6/scenario.png` and its transcript/assertions. Pass when it produces the same evidence manifest shape R11 already requires.
+- [ ] Lane 7. Omit one required citation field from a finding. Save `evidence/U25/lane-7/scenario.png` and its transcript/assertions. Pass when the finding is rejected as incomplete.
+- [ ] Lane 8. Have the Bug Agent attempt a write outside its read-only default. Save `evidence/U25/lane-8/scenario.png` and its transcript/assertions. Pass when the write is denied.
+- [ ] Lane 9. Attempt to suppress or delete a posted finding. Save `evidence/U25/lane-9/scenario.png` and its transcript/assertions. Pass when the attempt is denied and the finding remains visible.
+- [ ] Lane 10. Inspect two findings for unrelated defects on the same project. Save `evidence/U25/lane-10/scenario.png` and its transcript/assertions. Pass when both remain distinct and neither is merged incorrectly.
+
+**Verify, perf.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
+
+- [ ] Metric. Time from reproduction to a posted finding.
+- [ ] Probe. Run `agora project verify --scenario perf --unit U25 --json` in five interleaved parent/head batches with equal fixtures and declared instrumentation.
+- [ ] Baseline. Measure parent first. If behavior is absent, report absence and compare existing host cost separately from new absolute budgets.
+- [ ] Rule. Equivalent behavior fails above 10% p95 regression. Fail finding latency above the R17 read-only answer wall limit.
+
+**Review gate.** The operator reviews before merge.
+
+- [ ] Independently inspect task-scoped screenshot/transcript proof, red/green cause and security findings before that task closes.
+- [ ] Inspect all milestone scenarios, relevant screenshot and 30-60 second video, performance samples and feature-map freshness before the unit closes.
+- [ ] The operator records an exact-head verdict. Independent reviewers cannot be the implementing owner. Missing tools/proof block, regardless of model name.
+
+**Merge.**
+
+- [ ] For a task, require only its task gate and completed external prerequisites, never its own milestone.
+- [ ] For the milestone, require every task plus all integration lanes and security/performance proofs at a compatible reviewed head.
+- [ ] Refresh parent, rerun impacted evidence and hand off to the operator. No worker merge authority is granted.
+
 ## Close the program
 
 - [ ] Close S1 only after every S1 task/milestone and all S1 acceptance rows pass. Keep later-stage capabilities disabled until separately authorized and qualified.
@@ -1470,8 +1842,12 @@ The following graph is authoritative for external milestone dependencies. Task-l
 | U01b | U01a | S1 |
 | U01c | U01b | S1 |
 | U01d | U01b | S1 |
-| U02 | U01c, U01d | S1 |
-| U03 | U02 | S1 |
+| U20 | U01c, U01d | S1 |
+| U21 | U20 | S1 |
+| U22 | U20 | S1 |
+| U23 | U20, U21, U22 | S1 |
+| U02 | U01c, U01d, U20, U21, U22 | S1 |
+| U03 | U02, U23 | S1 |
 | U04 | U03 | S1 |
 | U05 | U04 | S1 |
 | U06 | U05 | S1 |
@@ -1483,6 +1859,8 @@ The following graph is authoritative for external milestone dependencies. Task-l
 | U12 | U11 | S2 |
 | U13 | U09 | S2 |
 | U14 | U12, U13 | S2 |
+| U24 | U06, U11, U13, U14 | S2 |
+| U25 | U24 | S3 |
 | U18 | U09 | S2 |
 | U19 | U09 | S2 |
 | U15 | U13 | S3 |
