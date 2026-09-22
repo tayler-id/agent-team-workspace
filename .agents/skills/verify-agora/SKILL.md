@@ -164,7 +164,7 @@ node scripts/record-red-green.mjs --parent 661b4c5e012be8b851d271f063d3d53738c15
 
 The selected red must be `expected 'unavailable' to be 'pass'` after doctor passes, not a missing runner or import. Run the complete runtime suites separately at head, without selection. Record the test-patch digest, stack bindings, source/line categories, native outputs, PostgreSQL/replay evidence, guard negatives and owned inventory before/after cleanup. CI and independent review remain distinct prerequisites; local green does not authorize landing the unlanded L3 stack.
 
-## Cleanup
+## Cleanup (local-room L3 instance)
 
 For the L3 instance created at Launch, save evidence first, then:
 
