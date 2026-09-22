@@ -41,7 +41,9 @@ function leaks(program: ts.Program, entries: string[]): string[] {
 				seen.add(type);
 				for (const symbol of [type.aliasSymbol, type.getSymbol()]) for (const decl of symbol?.declarations ?? []) {
 					const origin = decl.getSourceFile().fileName;
-					if (origin.includes('/node_modules/') && (!origin.includes('/typescript/lib/') || /\/lib\.(dom|webworker)/.test(origin))) {
+					// @agora/web-framework is a React package: ReactElement/ReactNode on AgoraProvider are intentional substrate, not an SDK leak.
+					const allowReact = entry.includes(`${path.sep}packages${path.sep}web-framework${path.sep}`) && origin.includes(`${path.sep}@types${path.sep}react${path.sep}`);
+					if (!allowReact && origin.includes('/node_modules/') && (!origin.includes('/typescript/lib/') || /\/lib\.(dom|webworker)/.test(origin))) {
 						failures.add(`${path.relative(projectRoot, entry)}: ${exported.name} exposes SDK type ${symbol?.name ?? 'unknown'} (${origin.slice(origin.lastIndexOf('/node_modules/') + 14)})`);
 						return;
 					}

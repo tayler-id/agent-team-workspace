@@ -47,7 +47,7 @@ test('owner tables are explicit and test-visible architecture policy', () => {
 	const b = readFileSync(path.join(root, 'scripts/boundary-policy.ts'), 'utf8');
 	const x = readFileSync(path.join(root, 'scripts/architecture-exceptions.ts'), 'utf8');
 	const e = readFileSync(path.join(root, 'eslint.config.js'), 'utf8');
-	expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker']");
+	expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/web-framework', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker']");
 	for (const s of ["framework: 'apps/web/src/framework'", "client: 'apps/web/src/client'", "host: 'apps/web/src/host'", "features: 'apps/web/src/features'", 'export const domGlobals', 'apps/web/src']) expect(b).toContain(s);
 	expect(x).toContain("'agora/import-boundary', 'agora/renderer-footgun'");
 	expect(b.match(/exceptionAllows\(file, /g)).toHaveLength(2);

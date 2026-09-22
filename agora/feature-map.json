@@ -208,6 +208,16 @@
 			"scenarios": ["packages/storage/test/local-room.pg.test.ts", "apps/center/test/local-room.pg.test.ts", "apps/center/test/local-room.test.ts", "contracts/test/local-room.test.ts", "scripts/probe-center.mjs"],
 			"platforms": ["node24", "postgresql18", "swift6-macos"],
 			"owner": "local-room L2"
+		},
+		{
+			"id": "web-framework",
+			"documentation": "docs/site/synchronization.md",
+			"paths": ["packages/web-framework/src", "packages/web-framework/package.json", "packages/web-framework/tsconfig.json"],
+			"public": ["@agora/web-framework createRoomClient", "@agora/web-framework AgoraProvider", "@agora/web-framework EnvironmentPort", "@agora/web-framework named hooks"],
+			"scenarios": ["packages/web-framework/test/client.test.ts", "packages/web-framework/test/boundaries.test.ts"],
+			"fixtures": [],
+			"platforms": ["node24", "browser"],
+			"owner": "agora-web-shell-integrate foundation slice"
 		}
 	]
 }

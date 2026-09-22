@@ -6,7 +6,7 @@ import { exceptionAllows } from './architecture-exceptions.ts';
 
 export const projectRoot = path.resolve(import.meta.dirname, '..');
 /** Test-visible owner table. Widening it is an architecture-policy change. */
-export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker'] as const;
+export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/web-framework', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker'] as const;
 /** Reserved apps/web owners. Folders may arrive in later slices. */
 export const WEB_OWNERS = { framework: 'apps/web/src/framework', client: 'apps/web/src/client', host: 'apps/web/src/host', features: 'apps/web/src/features' } as const;
 const WEB_SRC = 'apps/web/src';
@@ -31,6 +31,7 @@ const isPublicEntrypoint = (target: string, ownerRoot: string): boolean => {
 const rendererForbidden = ['@agora/storage', '@agora/domain', '@agora/center', 'pg', 'hono', '@hono/node-server', 'drizzle-orm'] as const;
 const packageAllowed: Record<string, readonly string[]> = {
 	'packages/client-core': [],
+	'packages/web-framework': ['@agora/client-core', 'react'],
 	'packages/domain': ['@agora/contracts/canonical', 'node:crypto'],
 	contracts: ['ajv', 'ajv-formats', 'openapi-typescript', 'node:crypto'],
 	'packages/storage': ['@agora/domain', '@agora/contracts/canonical', 'pg', 'drizzle-orm', 'node:crypto', 'node:fs', 'node:path', 'node:url'],

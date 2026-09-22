@@ -12,6 +12,11 @@ const domMutationHosts = new Set(['Node', 'ParentNode', 'ChildNode', 'Element', 
 
 const hostOrFramework = (file: string): boolean => { const l = webLayer(file); return l?.kind === 'host' || l?.kind === 'framework'; };
 const isFramework = (file: string): boolean => webLayer(file)?.kind === 'framework';
+// @agora/web-framework is the portable Client/hooks layer outside apps/web: it may use raw React effects to
+// implement named hooks, exactly like apps/web/src/framework, but it never gets the Host exemption for raw
+// window/document/crypto/DOM-mutation access below; only apps/web/src/host and apps/web/src/framework get that.
+const isPortableFramework = (file: string): boolean => file.includes('/packages/web-framework/src/');
+const isFrameworkLike = (file: string): boolean => isFramework(file) || isPortableFramework(file);
 const isReactSource = (value: string): boolean => reactSources.has(value) || value.startsWith('react/');
 const report = (context: TSESLint.RuleContext<'forbidden', []>, node: TSESTree.Node, symbol: string, reason: string): void => {
 	if (exceptionAllows(context.filename, symbol, 'agora/renderer-footgun')) return;
@@ -152,7 +157,7 @@ function reactModuleFromSource(source: TSESTree.Node | null | undefined): string
 }
 
 function denyReactEdge(context: TSESLint.RuleContext<'forbidden', []>, node: TSESTree.Node, source: TSESTree.Node | null | undefined, kind: string): void {
-	if (isFramework(context.filename)) return;
+	if (isFrameworkLike(context.filename)) return;
 	const mod = reactModuleFromSource(source);
 	if (!mod) return;
 	report(context, node, mod, `React ${kind} is allowed only in framework owner ${WEB_OWNERS.framework}; Features/Client/Host import named non-effect APIs or framework wrappers, not raw React effect surfaces`);
@@ -164,14 +169,14 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 	create(context) {
 		const file = context.filename;
 		const layer = webLayer(file);
-		if (!layer && !file.includes('/apps/web/')) return {};
+		if (!layer && !file.includes('/apps/web/') && !isPortableFramework(file)) return {};
 		const denyEffectImport = (node: TSESTree.Node, name: string): void => {
-			if (isFramework(file)) return;
+			if (isFrameworkLike(file)) return;
 			report(context, node, name, `${name} is allowed only in framework owner ${WEB_OWNERS.framework}; expose a named framework hook instead of importing raw effects in ${layer?.kind ?? 'renderer'} code`);
 		};
 		return {
 			ImportDeclaration(node) {
-				if (typeof node.source.value !== 'string' || !isReactSource(node.source.value) || isFramework(file)) return;
+				if (typeof node.source.value !== 'string' || !isReactSource(node.source.value) || isFrameworkLike(file)) return;
 				for (const spec of node.specifiers) {
 					if (spec.type === AST_NODE_TYPES.ImportDefaultSpecifier || spec.type === AST_NODE_TYPES.ImportNamespaceSpecifier) {
 						report(context, spec, 'react', `default/namespace React import is allowed only in framework owner ${WEB_OWNERS.framework}; import named non-effect APIs instead`);
@@ -182,7 +187,7 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 				}
 			},
 			ExportNamedDeclaration(node) {
-				if (!node.source || isFramework(file) || node.exportKind === 'type') return;
+				if (!node.source || isFrameworkLike(file) || node.exportKind === 'type') return;
 				if (!reactModuleFromSource(node.source)) return;
 				for (const spec of node.specifiers.filter((s) => s.exportKind !== 'type')) {
 					const name = exportLocalName(spec);
@@ -200,7 +205,7 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 			},
 			CallExpression(node) {
 				if (node.callee.type === AST_NODE_TYPES.Identifier && node.callee.name === 'require') denyReactEdge(context, node, node.arguments[0], 'require');
-				if (isFramework(file)) return;
+				if (isFrameworkLike(file)) return;
 				const hook = reactEffectFromCallee(context, node.callee);
 				if (hook) report(context, node, hook, `${hook} is allowed only in framework owner ${WEB_OWNERS.framework}; expose a named framework hook instead of raw effects in ${layer?.kind ?? 'renderer'} code`);
 			},

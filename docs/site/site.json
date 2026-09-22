@@ -169,6 +169,10 @@
       "page": "synchronization.md"
     },
     {
+      "path": "packages/web-framework",
+      "page": "synchronization.md"
+    },
+    {
       "path": "scripts/boundary-policy.ts",
       "page": "synchronization.md"
     },

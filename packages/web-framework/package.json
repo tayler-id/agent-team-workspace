@@ -1,0 +1,17 @@
+{
+	"name": "@agora/web-framework",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"description": "One-writer React room framework over @agora/client-core with a typed EnvironmentPort. No apps, domain, storage or provider SDKs.",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"dependencies": {
+		"@agora/client-core": "workspace:*",
+		"react": "19.3.0"
+	},
+	"devDependencies": {
+		"@types/react": "19.3.0"
+	}
+}
