@@ -1,23 +1,25 @@
-// Entry point for the development fixture. Fixture bytes are validated before any state exists.
+// Composition root: one RoomClient, Host EnvironmentPort, fixture transport. Features never construct these.
+import { AgoraProvider, createRoomClient } from '@agora/web-framework';
 import { createRoot } from 'react-dom/client';
 import { App } from './components/App.tsx';
 import { FixtureControls } from './components/FixtureControls.tsx';
-import { load } from './fixture/adapter.ts';
-import { createFixtureTransport } from './fixture/fixtureTransport.ts';
+import { createBrowserEnvironment, createFixtureTransport, load } from './host/index.ts';
 import room from './fixture/room.json' with { type: 'json' };
-import { createStore } from './store.ts';
 import './fixture.css';
 
 const container = document.getElementById('root');
 if (!container) throw new Error('missing #root');
 const loaded = load(room);
 if (loaded.ok) {
-	const store = createStore();
-	const transport = createFixtureTransport(store, loaded.fixture);
-	createRoot(container).render(<>
-		<App store={store} port={transport} header={loaded.fixture.header} presentation={loaded.fixture.presentation} />
-		<FixtureControls store={store} transport={transport} />
-	</>);
+	const client = createRoomClient();
+	const transport = createFixtureTransport(client, loaded.fixture);
+	const environment = createBrowserEnvironment(transport);
+	createRoot(container).render(
+		<AgoraProvider client={client} environment={environment}>
+			<App header={loaded.fixture.header} presentation={loaded.fixture.presentation} />
+			<FixtureControls transport={transport} />
+		</AgoraProvider>,
+	);
 } else {
 	container.textContent = `Fixture rejected: ${loaded.error}`;
 	container.setAttribute('role', 'alert');

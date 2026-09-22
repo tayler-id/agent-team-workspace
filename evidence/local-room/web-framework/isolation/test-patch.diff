@@ -1,0 +1,163 @@
+diff --git a/apps/web/test/fixture.test.ts b/apps/web/test/fixture.test.ts
+new file mode 100644
+index 0000000..99eda9e
+--- /dev/null
++++ b/apps/web/test/fixture.test.ts
+@@ -0,0 +1,31 @@
++import type { ClientState } from '@agora/client-core';
++import { createRoomClient, type RoomClient } from '@agora/web-framework';
++import { expect, test } from 'vitest';
++import { createFixtureTransport, largeSnapshot, load, toEvent, toSnapshot, type FixtureTransport } from '../src/host/fixture.ts';
++import room from '../src/fixture/room.json' with { type: 'json' };
++
++const loaded = load(room);
++if (!loaded.ok) throw new Error(loaded.error);
++const fixture = loaded.fixture;
++const clone = (): Record<string, unknown> => JSON.parse(JSON.stringify(room)) as Record<string, unknown>;
++const boot = (): [RoomClient, FixtureTransport] => { const client = createRoomClient(); const transport = createFixtureTransport(client, fixture); transport.loadSnapshot(); return [client, transport]; };
++const roomOf = (client: RoomClient): ClientState['rooms'][number] | undefined => client.getState().rooms.find((r) => r.streamId === fixture.streamId);
++
++test('fixture validates and rejects malformed sections; duplicate and gap agree with core', () => {
++	expect(fixture.snapshot.messages).toHaveLength(8);
++	expect(load({ ...clone(), schema_version: 'agora.web-fixture.room/v2' })).toEqual({ ok: false, error: 'fixture schema_version must be agora.web-fixture.room/v1' });
++	const badSnap = clone(); (badSnap['snapshot'] as Record<string, unknown>)['extra'] = true;
++	expect(load(badSnap)).toEqual({ ok: false, error: 'snapshot failed FixtureSyncSnapshot validation' });
++	expect(toSnapshot({})).toBeUndefined();
++	expect(toEvent(fixture.streamId, { kind: 'fixture.message_revision' })).toEqual({ type: 'unsupported', streamId: fixture.streamId });
++	expect(largeSnapshot('s', 3).messages).toHaveLength(3);
++	const [client, transport] = boot();
++	transport.replayNext();
++	const before = client.getState();
++	transport.duplicateLast();
++	expect(client.getState()).toBe(before);
++	transport.skipOne();
++	expect(roomOf(client)?.mode).toBe('gap');
++	transport.fillGap();
++	expect(roomOf(client)?.mode).toBe('live');
++});
+diff --git a/contracts/test/canonical.test.ts b/contracts/test/canonical.test.ts
+index e4e1ef2..2ef5d5e 100644
+--- a/contracts/test/canonical.test.ts
++++ b/contracts/test/canonical.test.ts
+@@ -1,5 +1,5 @@
+ import { expect, test } from 'vitest';
+-import { canonicalJson, digestCanonical } from '@agora/contracts';
++import { canonicalJson, digestCanonical } from '@agora/contracts/canonical';
+ 
+ test('canonicalJson sorts member names recursively and drops whitespace', () => {
+ 	expect(canonicalJson({ b: 1, a: [{ d: 'x', c: null }], e: { z: true, y: 2.5 } })).toBe('{"a":[{"c":null,"d":"x"}],"b":1,"e":{"y":2.5,"z":true}}');
+diff --git a/docs/site/test/corpus.test.ts b/docs/site/test/corpus.test.ts
+index 792150b..30f60a0 100644
+--- a/docs/site/test/corpus.test.ts
++++ b/docs/site/test/corpus.test.ts
+@@ -8,8 +8,8 @@ const result = build();
+ const root = path.resolve(import.meta.dirname, '../../../.docs-dist');
+ const html = file => existsSync(path.join(root, file)) ? readFileSync(path.join(root, file), 'utf8') : '';
+ test('the same public build driver produces a valid baseline before corpus assertions', () => assert.equal(result.outcome, 'pass'));
+-test('the complete corpus has 25 pages and both audience tracks', () => {
+-	assert.equal(result.pages, 25, 'complete audience corpus');
++test('the complete corpus has 26 pages and both audience tracks', () => {
++	assert.equal(result.pages, 26, 'complete audience corpus');
+ 	assert.match(html('test-first.html'), /FG01.red-required/);
+ 	assert.match(html('test-first.html'), /foundation_fixture/);
+ 	assert.match(html('index.html'), /Use Agora/);
+diff --git a/packages/web-framework/test/boundaries.test.ts b/packages/web-framework/test/boundaries.test.ts
+new file mode 100644
+index 0000000..981fd32
+--- /dev/null
++++ b/packages/web-framework/test/boundaries.test.ts
+@@ -0,0 +1,39 @@
++import { ESLint } from 'eslint';
++import { existsSync, readFileSync } from 'node:fs';
++import path from 'node:path';
++import ts from 'typescript';
++import { expect, test } from 'vitest';
++
++const root = path.resolve(import.meta.dirname, '../../..');
++const engine = new ESLint({ cwd: root, ignore: false });
++const boundary = async (code: string, file: string) => (await engine.lintText(code, { filePath: path.join(root, file) })).flatMap((r) => r.messages).filter((m) => m.ruleId?.startsWith('agora/'));
++const forms = [(m: string) => `import { x } from '${m}'; export const leak: unknown = x;`, (m: string) => `import type { X } from '${m}'; export type Leak = X;`, (m: string) => `export async function leak(): Promise<unknown> { return import('${m}'); }`];
++
++test('web-framework rejects server/domain/storage/provider/apps imports and unrestricted browser globals', async () => {
++	const file = 'packages/web-framework/src/client.ts';
++	expect(await boundary('export const ok = 1;\n', file)).toEqual([]);
++	for (const module of ['@agora/domain', '@agora/storage', '@agora/center', 'hono', 'pg', 'openai', 'apps/web/src/main.tsx']) {
++		for (const form of forms) expect((await boundary(form(module), file)).some((m) => m.ruleId === 'agora/import-boundary'), module).toBe(true);
++	}
++	for (const code of ['export const leak: unknown = window;', 'export const leak: unknown = fetch;', 'export const leak: unknown = localStorage;']) {
++		expect((await boundary(code, file)).some((m) => m.ruleId === 'agora/import-boundary'), code).toBe(true);
++	}
++}, 60_000);
++
++test('framework cannot reverse-import the host; export map hides private paths; barrel keeps named commands only', async () => {
++	const file = 'packages/web-framework/src/index.ts';
++	for (const module of ['../../apps/web/src/host/environment.ts', '@agora/web']) {
++		expect((await boundary(`import type { X } from '${module}'; export type Leak = X;`, file)).some((m) => m.ruleId === 'agora/import-boundary'), module).toBe(true);
++	}
++	const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2024, lib: ['lib.es2024.d.ts', 'lib.dom.d.ts'], types: [], module: ts.ModuleKind.NodeNext, moduleResolution: ts.ModuleResolutionKind.NodeNext, strict: true, noEmit: true, skipLibCheck: true, allowImportingTsExtensions: true, jsx: ts.JsxEmit.ReactJSX };
++	const host = ts.createCompilerHost(options), filename = path.join(root, 'packages/web-framework/negative.ts');
++	const code = "export type Leak = typeof import('@agora/web-framework/src/client.ts');", read = host.getSourceFile.bind(host);
++	host.getSourceFile = (name, version, ...args) => name === filename ? ts.createSourceFile(name, code, version, true) : read(name, version, ...args);
++	expect([...ts.getPreEmitDiagnostics(ts.createProgram([filename], options, host))].some((d) => d.code === 2307)).toBe(true);
++	expect(existsSync(path.join(root, 'packages/web-framework/src/client.ts'))).toBe(true);
++	const barrel = readFileSync(path.join(root, 'packages/web-framework/src/index.ts'), 'utf8');
++	expect(barrel).toMatch(/createRoomClient/);
++	expect(barrel).toMatch(/useSetDraft/);
++	expect(barrel).toMatch(/EnvironmentPort/);
++	expect(barrel.includes('dispatch')).toBe(false);
++}, 60_000);
+diff --git a/packages/web-framework/test/client.test.ts b/packages/web-framework/test/client.test.ts
+new file mode 100644
+index 0000000..a504a5c
+--- /dev/null
++++ b/packages/web-framework/test/client.test.ts
+@@ -0,0 +1,49 @@
++import { initialState, type Snapshot } from '@agora/client-core';
++import { expect, test } from 'vitest';
++import { createRoomClient } from '../src/client.ts';
++import { composer, rows, segments, status, window } from '../src/projection.ts';
++
++const snap = (cursor = '1'): Snapshot => ({ type: 'snapshot', streamId: 's1', cursor, lastSeen: '0', runs: [], messages: [{ id: 'm1', createdSeq: '1', revision: '1', content: { tag: 'visible', body: 'hello' } }] });
++
++test('one writer keeps immutable identity; alternate clients do not share state', () => {
++	const a = createRoomClient(), b = createRoomClient();
++	expect(a.getState()).toEqual(initialState());
++	const first = a.apply(snap()).state;
++	expect(a.apply({ type: 'event', streamId: 's1', seq: '1', change: { type: 'message', message: { id: 'm1', createdSeq: '1', revision: '1', content: { tag: 'visible', body: 'hello' } } } }).state).toBe(first);
++	b.apply(snap());
++	expect(b.getState().rooms[0]?.messages[0]).not.toBe(a.getState().rooms[0]?.messages[0]);
++});
++
++test('command routing, gap/duplicate agreement, unsubscribe and offline decisions stay on one writer', () => {
++	const client = createRoomClient();
++	client.apply(snap('8'));
++	client.apply({ type: 'draft', streamId: 's1', text: 'draft' });
++	expect(client.apply({ type: 'submit', commandId: 'c1', streamId: 's1', requestDigest: 'sha256:x', online: true }).requests).toEqual([{ type: 'send', commandId: 'c1' }]);
++	const event = { type: 'event' as const, streamId: 's1', seq: '10', change: { type: 'message' as const, message: { id: 'm10', createdSeq: '10', revision: '1', content: { tag: 'visible' as const, body: 'later' } } } };
++	expect(client.apply(event).state.rooms[0]?.mode).toBe('gap');
++	expect(client.apply({ type: 'event', streamId: 's1', seq: '9', change: { type: 'message', message: { id: 'm9', createdSeq: '9', revision: '1', content: { tag: 'visible', body: 'missing' } } } }).state.rooms[0]?.cursor).toBe('10');
++	const before = client.getState();
++	client.apply(event);
++	expect(client.getState()).toBe(before);
++	let ticks = 0;
++	const stop = client.subscribe(() => { ticks += 1; });
++	client.apply({ type: 'draft', streamId: 's1', text: 'x' });
++	stop();
++	client.apply({ type: 'draft', streamId: 's1', text: 'y' });
++	expect(ticks).toBe(1);
++	expect(client.apply({ type: 'submit', commandId: 'c2', streamId: 's1', requestDigest: 'sha256:y', online: false }).requests).toEqual([{ type: 'wait_connection', commandId: 'c2' }]);
++});
++
++test('pure projection covers rows, window, status, composer and safe segments', () => {
++	const client = createRoomClient();
++	client.apply(snap());
++	const room = client.getState().rooms[0];
++	const projected = rows(room, { authors: { m1: { name: 'Ada', kind: 'human' } }, times: { m1: 't' }, citations: {} });
++	expect(projected[0]).toMatchObject({ author: { name: 'Ada' }, firstUnread: true });
++	expect(window(projected, 1).total).toBe(1);
++	expect(status(room, { online: true, phase: 'idle', error: undefined }).phase).toBe('live');
++	expect(status(undefined, { online: true, phase: 'error', error: 'boom' }).phase).toBe('error');
++	client.apply({ type: 'draft', streamId: 's1', text: 'note' });
++	expect(composer(client.getState(), 's1', 'send').draft).toBe('note');
++	expect(segments('a\n```\ncode\n```\nb')).toEqual([{ kind: 'text', value: 'a' }, { kind: 'code', value: 'code' }, { kind: 'text', value: 'b' }]);
++});

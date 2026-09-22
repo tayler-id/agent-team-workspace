@@ -1,7 +1,5 @@
-// Presentation-free projection of client-core state into row and status view models. No React, DOM or styling here.
-// Reused from the preserved React engineering checkpoint (evidence/local-room/preservation/README.md), trimmed of
-// the reply-thread and run-card view models that belong to a later, separately gated slice.
-import type { ClientState, Message } from '@agora/client-core';
+// Presentation-free projection of client-core state. No React, DOM, or Host imports.
+import type { ClientState } from '@agora/client-core';
 
 export type Room = ClientState['rooms'][number];
 export type FrozenMessage = Room['messages'][number];
@@ -12,6 +10,8 @@ export interface Window { readonly rows: readonly Row[]; readonly older: number;
 export type RoomPhase = 'empty' | 'loading' | 'live' | 'gap' | 'resync' | 'upgrade' | 'error' | 'revoked';
 export interface RoomStatus { readonly phase: RoomPhase; readonly online: boolean; readonly label: string; readonly detail: string; readonly unread: number; readonly cursor: string | undefined }
 export interface ComposerStatus { readonly draft: string; readonly pending: readonly { commandId: string; tag: 'pending' | 'received' }[]; readonly decision: string | undefined }
+export interface Connection { readonly online: boolean; readonly phase: 'idle' | 'loading' | 'error' | 'revoked'; readonly error: string | undefined }
+export interface RoomHeader { readonly project: string; readonly room: string; readonly lifecycle: string; readonly agentLabel: string; readonly members: number }
 
 const compare = (a: string, b: string): number => BigInt(a) < BigInt(b) ? -1 : BigInt(a) > BigInt(b) ? 1 : 0;
 const unknownAuthor: Author = { name: 'Unknown author', kind: 'system' };
@@ -27,13 +27,10 @@ export function rows(room: Room | undefined, presentation: Presentation): readon
 	});
 }
 
-// Bounded window over the newest rows; older rows stay reachable through an explicit Load older messages step.
 export function window(all: readonly Row[], limit: number): Window {
 	const start = Math.max(0, all.length - limit);
 	return { rows: all.slice(start), older: start, total: all.length };
 }
-
-export interface Connection { readonly online: boolean; readonly phase: 'idle' | 'loading' | 'error' | 'revoked'; readonly error: string | undefined }
 
 export function status(room: Room | undefined, connection: Connection): RoomStatus {
 	const base = { online: connection.online, unread: room?.unread ?? 0, cursor: room?.cursor };
@@ -59,9 +56,6 @@ export function composer(state: ClientState, streamId: string, decision: string 
 }
 
 export const messageById = (room: Room | undefined, id: string): FrozenMessage | undefined => room?.messages.find((m) => m.id === id);
-export const body = (message: Message | FrozenMessage): string => message.content.tag === 'visible' ? message.content.body : '';
-
-// Split a body on code fences; the fixture renders text and code blocks only, never raw HTML or agent links.
 export function segments(text: string): readonly { kind: 'text' | 'code'; value: string }[] {
 	return text.split(/```[a-z]*\n?/).map((value, i) => ({ kind: i % 2 === 1 ? 'code' as const : 'text' as const, value: value.replace(/\n$/, '') })).filter((s) => s.value.length > 0);
 }

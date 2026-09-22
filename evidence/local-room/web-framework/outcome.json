@@ -1,0 +1,17 @@
+{
+  "schema_version": "agora.evidence.outcome/v1",
+  "unit": "web-framework-client-host",
+  "main": "17fbf24609fb3cbcb25c052ae7ecee124bc0bc87",
+  "tested_subject": "5f29ec46fc934f6d43db8c5e857db8f216b0ac5b",
+  "status": "implemented",
+  "summary": "Reusable @agora/web-framework with one-writer RoomClient, named hooks and typed EnvironmentPort; apps/web Host adapter and fixture shell. Rebased onto P0c-A main; full pnpm check green at hygiene head with product subject 5f29ec4.",
+  "proof": [
+    "evidence/local-room/web-framework/final-check.log",
+    "evidence/local-room/web-framework/isolation/red.log",
+    "evidence/local-room/web-framework/isolation/green.log",
+    "evidence/local-room/web-framework/web-test-build.log",
+    "evidence/docs/agora-web-framework-client-host/browser/assertions.md",
+    "evidence/local-room/web-framework/source-range.md",
+    "evidence/local-room/web-framework/size.json"
+  ]
+}

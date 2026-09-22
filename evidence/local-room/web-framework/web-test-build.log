@@ -1,0 +1,35 @@
+subject_product=5f29ec46fc934f6d43db8c5e857db8f216b0ac5b
+head=8b761bd61f7641550074565423bfd8e77bfb1c92
+at=2026-09-21T05:19:28Z
+
+> agora@ web:test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/13/agent-team-workspace
+> pnpm --filter @agora/web exec vitest run --config vitest.config.ts
+
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/13/agent-team-workspace/apps/web
+
+
+ Test Files  2 passed (2)
+      Tests  3 passed (3)
+   Start at  01:19:29
+   Duration  964ms (environment 67%, import 14%, tests 11%, transform 7%)
+
+web_test_exit=0
+
+> agora@ web:build /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/13/agent-team-workspace
+> pnpm --filter @agora/web build
+
+
+> @agora/web@0.0.0 build /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/13/agent-team-workspace/apps/web
+> vite build
+
+vite v6.4.1 building for production...
+transforming...
+✓ 234 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.47 kB │ gzip:   0.31 kB
+dist/assets/index-BHw8tm3B.css    1.97 kB │ gzip:   0.83 kB
+dist/assets/index-DQpDA-Ra.js   429.91 kB │ gzip: 131.17 kB
+✓ built in 504ms
+web_build_exit=0

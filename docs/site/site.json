@@ -115,7 +115,7 @@
         },
         {
           "id": "local-room-web-shell",
-          "title": "Local room web shell",
+          "title": "Web framework and room shell",
           "kind": "feature"
         },
         {
@@ -299,6 +299,10 @@
     },
     {
       "path": "apps/web",
+      "page": "local-room-web-shell.md"
+    },
+    {
+      "path": "packages/web-framework",
       "page": "local-room-web-shell.md"
     },
     {

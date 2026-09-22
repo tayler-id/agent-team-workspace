@@ -124,6 +124,22 @@
       ]
     },
     {
+      "id": "web-framework-client-host",
+      "title": "Web framework, Client and Host",
+      "status": "In progress",
+      "why": "Give the browser one writer Client, named hooks and a typed EnvironmentPort so the room shell cannot own a second timeline. Tested subject 5f29ec4 on main 17fbf24.",
+      "page": "local-room-web-shell.md",
+      "proof": [
+        "repo:packages/web-framework/src/client.ts",
+        "repo:packages/web-framework/src/environment.ts",
+        "repo:apps/web/src/host/environment.ts",
+        "repo:apps/web/test/app.test.tsx",
+        "repo:packages/web-framework/test/boundaries.test.ts",
+        "repo:evidence/local-room/web-framework/final-check.log",
+        "repo:evidence/local-room/web-framework/source-range.md"
+      ]
+    },
+    {
       "id": "documentation",
       "title": "Living documentation and progress atlas",
       "status": "In progress",
@@ -156,26 +172,13 @@
         "repo:evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/red.log",
         "repo:evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/green.log"
       ]
-    },
-    {
-      "id": "local-room-web-shell",
-      "title": "Local room web shell",
-      "status": "In progress",
-      "why": "Build reusable room-shell product code in parallel with the L1-L3 backend slices, behind a port L4 can connect without rewriting components.",
-      "page": "local-room-web-shell.md",
-      "proof": [
-        "repo:apps/web/src/components/App.tsx",
-        "repo:apps/web/src/transport/port.ts",
-        "repo:apps/web/test/app.test.tsx",
-        "repo:evidence/local-room/web-shell/isolation/green.log"
-      ]
     }
   ],
   "nodes": [
     {
       "id": "browser",
       "title": "Browser and client core",
-      "availability": "S1 planned UI; core in progress",
+      "availability": "S1 planned UI; core built; web-framework and fixture shell in progress",
       "page": "architecture.md",
       "why": "Show shared conversation without owning authority."
     },

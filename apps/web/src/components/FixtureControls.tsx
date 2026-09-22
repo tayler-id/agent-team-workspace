@@ -1,16 +1,14 @@
+import { useTranscript, useTransportState } from '@agora/web-framework';
 import type { ReactElement } from 'react';
-import type { Failure, FixtureTransport } from '../fixture/fixtureTransport.ts';
-import { useTranscript, type Store } from '../store.ts';
-import { useTransportState } from '../transport/port.ts';
+import type { Failure, FixtureTransport } from '../host/index.ts';
 
-interface Props { readonly store: Store; readonly transport: FixtureTransport }
+interface Props { readonly transport: FixtureTransport }
 const failures: readonly Failure[] = ['timeout', 'stale_revision', 'denied', 'rate_limited'];
 
-// Development-only scenario buttons. Each dispatches validated fixture inputs through the concrete
-// FixtureTransport; only this component may import it, never App, Timeline or Composer.
-export function FixtureControls({ store, transport }: Props): ReactElement {
-	const state = useTransportState(transport);
-	const transcript = useTranscript(store);
+// Development-only scenario buttons. Only this component may import the concrete FixtureTransport.
+export function FixtureControls({ transport }: Props): ReactElement {
+	const state = useTransportState();
+	const transcript = useTranscript();
 	const last = transcript[transcript.length - 1];
 	const actions: readonly [string, () => void][] = [
 		['Load snapshot', () => { transport.loadSnapshot(); }],
@@ -31,7 +29,6 @@ export function FixtureControls({ store, transport }: Props): ReactElement {
 	return (
 		<section aria-labelledby="fixture-heading" className="fixture-controls">
 			<h2 id="fixture-heading">Fixture controls (development only)</h2>
-			<p className="kicker">Engineering fixture - visual design pending. These buttons replace a transport; nothing here is product authority.</p>
 			<div className="button-row">{actions.map(([label, run]) => <button type="button" key={label} onClick={run}>{label}</button>)}</div>
 			<dl aria-label="Last transition">
 				<dt>Input</dt><dd data-last-input={last?.input ?? ''}>{last?.input ?? 'none'}</dd>

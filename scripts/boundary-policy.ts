@@ -6,7 +6,7 @@ import { exceptionAllows } from './architecture-exceptions.ts';
 
 export const projectRoot = path.resolve(import.meta.dirname, '..');
 /** Test-visible owner table. Widening it is an architecture-policy change. */
-export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker'] as const;
+export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/web-framework', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker'] as const;
 /** Reserved apps/web owners. Folders may arrive in later slices. */
 export const WEB_OWNERS = { framework: 'apps/web/src/framework', client: 'apps/web/src/client', host: 'apps/web/src/host', features: 'apps/web/src/features' } as const;
 const WEB_SRC = 'apps/web/src';
@@ -31,11 +31,12 @@ const isPublicEntrypoint = (target: string, ownerRoot: string): boolean => {
 const rendererForbidden = ['@agora/storage', '@agora/domain', '@agora/center', 'pg', 'hono', '@hono/node-server', 'drizzle-orm'] as const;
 const packageAllowed: Record<string, readonly string[]> = {
 	'packages/client-core': [],
+	'packages/web-framework': ['@agora/client-core', 'react'],
 	'packages/domain': ['@agora/contracts/canonical', 'node:crypto'],
 	contracts: ['ajv', 'ajv-formats', 'openapi-typescript', 'node:crypto'],
 	'packages/storage': ['@agora/domain', '@agora/contracts/canonical', 'pg', 'drizzle-orm', 'node:crypto', 'node:fs', 'node:path', 'node:url'],
 	'apps/center': ['@agora/contracts', '@agora/domain', '@agora/storage', 'hono', '@hono/node-server', 'node:url', 'node:crypto'],
-	'apps/web': ['@agora/contracts', '@agora/client-core', 'react', 'react-dom', 'react/jsx-runtime'],
+	'apps/web': ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime'],
 	'apps/worker': ['@agora/contracts', '@agora/client-core'],
 };
 const contractsTooling = ['node:child_process', 'node:fs', 'node:path', 'node:url', 'node:os'] as const;
@@ -99,8 +100,8 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 		if (rendererForbidden.some((name) => specifier === name || specifier.startsWith(`${name}/`))) {
 			return `renderer code cannot import ${specifier}; use ${WEB_OWNERS.client} / ${WEB_OWNERS.host} adapters instead of storage, domain implementation, or server packages`;
 		}
-		if (specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core'].includes(specifier) && !specifier.startsWith('@agora/contracts/') && !specifier.startsWith('@agora/client-core/')) {
-			return `renderer cannot import server package ${specifier}; supported imports are @agora/contracts, @agora/client-core and the selected renderer under ${supportedOwner(file)}`;
+		if (specifier.startsWith('@agora/') && !['@agora/contracts', '@agora/client-core', '@agora/web-framework'].includes(specifier) && !specifier.startsWith('@agora/contracts/') && !specifier.startsWith('@agora/client-core/')) {
+			return `renderer cannot import server package ${specifier}; supported imports are @agora/contracts, @agora/client-core, @agora/web-framework and the selected renderer under ${supportedOwner(file)}`;
 		}
 		if (specifier.startsWith('@agora/client-core/')) {
 			return `renderer must import @agora/client-core only through its public entrypoint; private path ${specifier} is closed under ${supportedOwner(file)}`;
@@ -153,7 +154,7 @@ export const importBoundaryRule: TSESLint.RuleModule<'forbidden'> = {
 			TSImportEqualsDeclaration(node) { if (node.moduleReference.type === AST_NODE_TYPES.TSExternalModuleReference) check(node, node.moduleReference.expression, node.importKind === 'type'); },
 			CallExpression(node) { if (node.callee.type === AST_NODE_TYPES.Identifier && node.callee.name === 'require') check(node, node.arguments[0], false); },
 			Identifier(node) {
-				if (!file.includes('/packages/client-core/src/') && !file.includes('/packages/domain/src/') && !file.includes('/contracts/')) return;
+				if (!file.includes('/packages/client-core/src/') && !file.includes('/packages/web-framework/src/') && !file.includes('/packages/domain/src/') && !file.includes('/contracts/')) return;
 				if (file.includes('/contracts/tools/') || file.endsWith('/contracts/src/conform-cli.ts')) return;
 				if (file.includes('/contracts/') && ['process', 'global', 'require'].includes(node.name)) return;
 				if (!globals.has(node.name)) return;
