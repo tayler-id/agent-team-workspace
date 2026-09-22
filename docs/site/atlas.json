@@ -1,6 +1,6 @@
 {
-  "revision": "384289fed3e8fe65a262de750eeb6e46b7094fd4",
-  "date": "2026-09-22",
+  "revision": "257ab296b088db271c5676113a2376030f10c0b7",
+  "date": "2026-09-21",
   "features": [
     {
       "id": "postgres-socket",
@@ -20,6 +20,18 @@
         "repo:evidence/ci/P0c/C/scenarios.json",
         "repo:evidence/ci/P0c/C/red.log",
         "repo:evidence/ci/P0c/C/green.log"
+      ]
+    },
+    {
+      "id": "ci-design-negative",
+      "title": "Design-negative sandbox closure",
+      "status": "In progress",
+      "why": "P0a widened the disposable fixture to match every path the decision trail cites; standalone design negatives are not yet wired into the pnpm check aggregate.",
+      "page": "ci.md",
+      "proof": [
+        "repo:scripts/test-design-checks.mjs",
+        "repo:evidence/ci/P0a/red.log",
+        "repo:evidence/ci/P0a/green.log"
       ]
     },
     {

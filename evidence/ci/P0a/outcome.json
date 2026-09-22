@@ -4,6 +4,7 @@
   "title": "design-negative sandbox source closure",
   "parent": "b9934c323d7852d7813f3b55c94a9153a40abf7f",
   "head": "this implementation commit; bound to an exact sha in a follow-up docs-only commit, not amended into this one",
+  "code_head": "257ab296b088db271c5676113a2376030f10c0b7",
   "red": {
     "command": "node scripts/test-design-checks.mjs",
     "exit": 1,
