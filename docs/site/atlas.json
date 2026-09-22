@@ -1,5 +1,5 @@
 {
-  "revision": "5de13b43fcf64c1c47b37b3c8c2353824bc1a48c",
+  "revision": "0c8f4f6e9f54511f59a633b272acabb969676de1",
   "date": "2026-09-22",
   "features": [
     {
@@ -102,7 +102,7 @@
       "id": "local-room",
       "title": "Local room",
       "status": "In progress",
-      "why": "Owned local runtime, persistent messages and cursor replay through a minimal browser harness; L3 of 5 stacked candidate, not landable before L2 and CI.",
+      "why": "Owned local runtime, persistent messages and cursor replay through a minimal browser harness; L3 of 5 stacked candidates, landed on main with L1, L2 and CI P0a-P0c. L4 and L5 remain.",
       "page": "local-room.md",
       "proof": [
         "repo:contracts/schemas/local-room.schema.json",
