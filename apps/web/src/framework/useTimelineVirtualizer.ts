@@ -48,6 +48,14 @@ export function useTimelineVirtualizer(rows: readonly Row[], focusRequest: strin
 		overscan,
 		anchorTo: 'end',
 		followOnAppend: true,
+		// This hook issues imperative scrollToOffset/scrollToIndex calls from its own effects (anchor restore,
+		// keyboard/deep-link navigation) rather than only in direct response to a real user scroll; react-virtual's
+		// default synchronous flush (useFlushSync) then nests inside whichever React commit triggered the effect,
+		// tripping "flushSync was called from inside a lifecycle method". This flag is the library's own escape
+		// hatch: a normal (non-flushSync) update still lands before paint, just not synchronously nested in the
+		// caller's commit, so nothing observable changes — the test suite's settle() already polls for stability
+		// rather than assuming synchronous updates.
+		useFlushSync: false,
 		rangeExtractor: useCallback((range: Range) => { const base = defaultRangeExtractor(range); return [...new Set([...pinned, ...base])].sort((a, b) => a - b); }, [pinned]),
 		// The first measured text row per geometry calibrates the fixed chrome once; later rows only correct themselves.
 		measureElement: (element) => {

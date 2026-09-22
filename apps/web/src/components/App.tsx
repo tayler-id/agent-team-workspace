@@ -1,5 +1,6 @@
 import { composer as composerStatus, rows as projectRows, status as projectStatus, useClientSelector, useDeferredFocus, useDelayedAnnouncement, useEnvironment, useMediaQuery, useRoomCommands, useSetDraft, useStaleSafeBusy, useTransportState, type Presentation, type RoomHeader } from '@agora/web-framework';
 import { useMemo, type ReactElement, type SyntheticEvent } from 'react';
+import { useHashDeepLink } from '../framework/index.ts';
 import { Timeline } from './Timeline.tsx';
 
 export interface AppProps { readonly header: RoomHeader; readonly presentation: Presentation }
@@ -47,6 +48,7 @@ export function App({ header, presentation }: AppProps): ReactElement {
 	const phone = useMediaQuery(phoneQuery);
 	const commands = useRoomCommands();
 	const [focusRequest, requestFocus] = useDeferredFocus();
+	useHashDeepLink(requestFocus);
 	const roomStatus = projectStatus(room, connection);
 	const messages = room?.messages, lastSeen = room?.lastSeen;
 	const projected = useMemo(() => projectRows(room, presentation), [messages, lastSeen, presentation]);

@@ -36,7 +36,7 @@ not resurrect those as unwired duplicates.
 | `apps/web/src/host/pretext.ts` (uncommitted) | **integrated, slice 1** — `@chenglou/pretext@0.0.9` installed (captain-approved, integrity matches source commit `da7e9ab`); required adding a narrow `TEXT_SIZING_ADAPTER` import-boundary check to `scripts/boundary-policy.ts` restricting Pretext to exactly this file (the source copy's own `pretext-boundary.test.ts`, not yet ported, was going to add the same restriction — implemented directly instead of deferred, since it was required to pass lint on this file) | done |
 | `apps/web/src/host/index.ts` | **integrated, slice 1** — additive barrel exports for the above plus `createTextSizer` | done |
 | `apps/web/src/rows.ts` (uncommitted) | **integrated, slice 1** — `Row` import adjusted from the superseded local `./projection.ts` to `@agora/web-framework`, otherwise verbatim | done |
-| `apps/web/test/timeline.test.tsx` (uncommitted) | absent | **still pending, later slice** — imports the old modular layout (`App` with explicit `store`/`port` props) and asserts `useVirtualizer` is importable directly from `Timeline.tsx` (see below); needs adjusting to the current `App` props shape and the `useTimelineVirtualizer` split, not a verbatim port. Slice 3 ported only its mount-count/keyboard-roving assertions into `app.test.tsx`; the full resize/font/emoji/multilingual/RTL/reduced-motion/reconnect-anchor matrix from this file is not yet exercised outside the source copy's own isolated repro (see reproduction result below) |
+| `apps/web/test/timeline.test.tsx` (uncommitted) | **integrated, slice 4** — adjusted from the old modular layout (`App` with explicit `store`/`port` props, direct `useVirtualizer` import in `Timeline.tsx`) to the current `AgoraProvider`/`createRoomClient`/`createBrowserEnvironment` shell shape and the `useTimelineVirtualizer` split; all 7 source assertions plus a regression for the flushSync fix (see slice 4 below) | done, adapted |
 | `apps/web/test/geometry.ts` (uncommitted, test double) | **integrated, slice 3** — ported verbatim; needed immediately by `app.test.tsx` (jsdom returns 0 for every layout property, so the virtualizer mounts nothing without it), not deferrable to `timeline.test.tsx`'s slice as originally planned. `agora/renderer-footgun`'s file-scoped exemption (`isWebTestOrConfig`) widened by exact filename only (`TEST_GEOMETRY_DOUBLE` in `scripts/boundary-policy.ts`), matching the `TEXT_SIZING_ADAPTER` single-file pattern, not a directory-wide loosening; a second, previously-unexercised gap in the same function (relative imports from `apps/web` code restricted to `WEB_SRC`, with no test-file exemption) also had to be narrowed the same way so `app.test.tsx` could import this sibling test file | done, adapted |
 | `apps/web/test/sizing.test.ts` (uncommitted) | **integrated, slice 1** — `Row` import adjusted to `@agora/web-framework`, otherwise verbatim; all 6 tests (including the live Pretext RTL/CJK cases) pass | done |
 | `apps/web/test/app.test.tsx` (both committed+uncommitted diffs) | present, different content | **integrated, slice 3** — reconciled against current main's own file (not overwritten): the `showing N of M` / `Load older messages` paging assertions replaced with virtualized equivalents (`N total`, mounted-count bound); `installGeometry()` wired into `beforeEach` |
@@ -44,7 +44,7 @@ not resurrect those as unwired duplicates.
 | `apps/web/test/projection.test.ts` (committed) | now `packages/web-framework/test/projection.test.ts` | already present under new location — do not duplicate |
 | `apps/web/index.html`, `tsconfig.json`, `vite.config.ts`, `vitest.config.ts` | present, mostly equivalent | diff for the `@vitejs/plugin-react` / CSP additions only if missing |
 | `apps/web/package.json` (pretext/react-virtual pins) | **integrated** — `@chenglou/pretext@0.0.9` (slice 1), `@tanstack/react-virtual@3.14.13` (slice 3, integrity byte-identical to source commit `da7e9ab`) | done |
-| `packages/client-core/test/pretext-boundary.test.ts` (uncommitted) | absent | **still pending, later slice** — the source version asserts `useVirtualizer` is importable directly in `Timeline.tsx`, which is now false: slice 3's `VIRTUALIZER_ADAPTER` restricts `@tanstack/react-virtual` to `apps/web/src/framework/useTimelineVirtualizer.ts` only, the same single-file pattern as `TEXT_SIZING_ADAPTER`. This file needs a rewrite reflecting that, not a port; the real `eslint .`/`pnpm boundaries` runs already exercise both restrictions today (see Verified line below), same as slice 1 shipped `TEXT_SIZING_ADAPTER` without its own dedicated unit test |
+| `packages/client-core/test/pretext-boundary.test.ts` (uncommitted) | **integrated, slice 4** — rewritten, not ported: the source version asserted `useVirtualizer` is importable directly in `Timeline.tsx`, which slice 3's `VIRTUALIZER_ADAPTER` now forbids. Rewritten to assert both single-file adapters (`TEXT_SIZING_ADAPTER`, `VIRTUALIZER_ADAPTER`) symmetrically, denied everywhere else including `Timeline.tsx` itself | done, adapted |
 | `scripts/boundary-policy.ts` (uncommitted, `TEXT_SIZING_ADAPTER` const) | **integrated, slice 1 and 3** — `TEXT_SIZING_ADAPTER` (slice 1); `VIRTUALIZER_ADAPTER`, `TEST_GEOMETRY_DOUBLE` and the `isWebTestOrConfig` relative-import exemption (slice 3, none present in the source, which predates this whole boundary module) | done, adapted |
 | `packages/client-core/test/app-architecture.test.ts` (committed, 5-line diff) | needs reconciling against current main's version | check for drift before reapplying |
 
@@ -172,13 +172,61 @@ Deliberately not done in this slice: porting `apps/web/test/timeline.test.tsx` i
 asserts the opposite of this slice's design — that `useVirtualizer` is importable directly in `Timeline.tsx` — and needs
 a rewrite, not a port).
 
+## Slice 4: full timeline behavior matrix, boundary-test rewrite, and a real flushSync fix (landed)
+
+Files: `apps/web/test/timeline.test.tsx` (new, adapted from the preserved source), `apps/web/test/geometry.ts`
+(reverted to its slice-3 form after a diagnostic detour — see below), `apps/web/src/framework/useHashDeepLink.ts`
+(new), `apps/web/src/framework/index.ts` (additive export), `apps/web/src/components/App.tsx` (wires the new hook),
+`apps/web/src/framework/useTimelineVirtualizer.ts` (`useFlushSync: false`), `packages/client-core/test/pretext-boundary.test.ts`
+(rewritten), `agora/feature-map.json`, `docs/site/local-room-timeline-virtualization.md`. 7 source+test files (docs/
+feature-map additive), ~330 meaningful source+test lines.
+
+**Deep-link gap found and closed.** The preserved source's `App.tsx` had a raw `useEffect` reading `#message-<id>`
+from `window.location.hash` (and `hashchange`) and turning it into a citation-style focus request. Slice 3's port
+dropped this entirely — it was never in the "superseded/consolidated" list, just missed, and `apps/web/test/timeline.test.tsx`'s
+`jump()` helper depends on it for 4 of its 7 tests. Under current main's `agora/renderer-footgun` rule (which the
+source predates), a raw `window`/`hashchange` listener cannot live in `App.tsx` (an un-owned "other" src file); it now
+lives in `apps/web/src/framework/useHashDeepLink.ts`, exported from the framework's public `index.ts` and consumed by
+`App.tsx` as `useHashDeepLink(requestFocus)`, matching the same Host/framework-only exemption pattern as
+`useTimelineVirtualizer.ts`.
+
+**The reviewer-flagged `flushSync` warning: reproduced, root-caused, fixed, regression-tested.** Reproducing first
+(per the brief): `cd apps/web && npx vitest run --reporter=verbose` on the pre-slice-4 tree showed "flushSync was
+called from inside a lifecycle method" 3x per test run, deterministic, not flaky. Traced with a temporary
+`console.trace` patch to the vendored `@tanstack/react-virtual` (never committed, reverted byte-for-byte before any
+other work — confirmed via `diff` against a `cp` taken before the patch): every occurrence originates from
+`useTimelineVirtualizer.ts`'s anchor-restore `useLayoutEffect`, which calls `virtualizer.scrollToOffset(...)`
+imperatively. `@tanstack/react-virtual` defaults to `useFlushSync: true`, so its own scroll-event handler calls
+React's `flushSync` synchronously; when the triggering `.scrollTo()` call itself originates from inside a React
+layout effect (our own commit), that nests a second synchronous flush inside the first, which React reports as this
+exact warning. This is not limited to the anchor-restore path — the hook's keyboard/deep-link navigation effects
+call `virtualizer.scrollToIndex(...)` the same way.
+
+Two fix attempts were tried and rejected before landing the real one, to avoid changing accepted behavior (the
+brief's instruction): first, making the jsdom test double's `Element.prototype.scrollTo` in `geometry.ts` dispatch its
+synthetic `scroll` event asynchronously (`queueMicrotask`, then `setTimeout(0)`) to match real-browser async dispatch.
+Both broke 2-3 of the 7 preserved behavior tests (a scrollTop snap-back race between the virtualizer's own
+resize-triggered scroll adjustment and the pinned/forced-mounted anchor row), which the brief explicitly says not to
+do — `geometry.ts` was reverted byte-for-byte to its slice-3 form. The actual fix is `@tanstack/react-virtual`'s own
+documented escape hatch: `useFlushSync: false` in `useTimelineVirtualizer.ts`'s `useVirtualizer(...)` config. This
+keeps every such update a normal (still pre-paint, just non-nested) React update instead of a synchronous flush,
+which cannot itself change any test's observable outcome — confirmed by rerunning the full `apps/web` suite (still
+20/20 green, zero warnings) and a dedicated break-and-restore regression test (`anchor-preserving scroll restore
+never nests a synchronous flush inside a React commit` in `timeline.test.tsx`) that fails 3/3 with `useFlushSync`
+reverted to its default `true` and passes with the fix in place.
+
+Verified: `pnpm -s lint`, `pnpm -s typecheck` and `pnpm -s boundaries` (33/33, including the rewritten
+`pretext-boundary.test.ts`'s 3 tests) all clean; `apps/web` vitest 20/20 (12 prior + 7 from `timeline.test.tsx` + the
+flushSync regression), zero `flushSync`/React warnings in the run; `pnpm -s docs:check` 31/31.
+
 ## Remaining slices (dependency order)
 
 1. **Landed** — pure sizing/geometry engine (08e6009).
 2. **Landed** — corpus generator + reconnect-append fixture control (43115d0, 4ab04ad).
-3. **Landed above** — Timeline virtualization integration onto the consolidated `App.tsx`.
-4. Port the remainder of `apps/web/test/timeline.test.tsx`'s behavior matrix (resize/font/emoji/multilingual/RTL/
-   reduced-motion/reconnect-anchor with the real geometry double, beyond the mount-count/keyboard-roving subset slice 3
-   already ported into `app.test.tsx`), and rewrite `packages/client-core/test/pretext-boundary.test.ts` to assert the
-   current design (`@tanstack/react-virtual` allowed only in `apps/web/src/framework/useTimelineVirtualizer.ts`, denied
-   everywhere else including `Timeline.tsx` itself) instead of porting its now-inverted source assertion.
+3. **Landed** — Timeline virtualization integration onto the consolidated `App.tsx` (077f4bf).
+4. **Landed above** — full timeline behavior matrix, `pretext-boundary.test.ts` rewrite, deep-link gap closed,
+   flushSync defect fixed with regression coverage.
+
+No further preserved-source paths remain unmapped; every file touched by the source copy's committed head or
+18 uncommitted paths appears in the mapping table above as either integrated, already present, or superseded with
+rationale. Preserved slot 12 was not modified by any slice.
