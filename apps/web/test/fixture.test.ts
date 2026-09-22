@@ -2,6 +2,7 @@ import type { ClientState } from '@agora/client-core';
 import { createRoomClient, type RoomClient } from '@agora/web-framework';
 import { expect, test } from 'vitest';
 import { createFixtureTransport, largeSnapshot, load, toEvent, toSnapshot, type FixtureTransport } from '../src/host/index.ts';
+import { corpusBody, corpusTombstone } from '../src/fixture/corpus.ts';
 import room from '../src/fixture/room.json' with { type: 'json' };
 
 const loaded = load(room);
@@ -28,4 +29,27 @@ test('fixture validates and rejects malformed sections; duplicate and gap agree 
 	expect(roomOf(client)?.mode).toBe('gap');
 	transport.fillGap();
 	expect(roomOf(client)?.mode).toBe('live');
+});
+
+test('corpus is deterministic across runs and covers RTL/CJK/emoji/markdown/hostile-HTML content', () => {
+	expect(corpusBody(1)).toBe(corpusBody(1));
+	expect(corpusBody(50000)).toBe(corpusBody(50000));
+	const bodies = Array.from({ length: 12 }, (_, i) => corpusBody(i));
+	expect(new Set(bodies).size).toBe(12);
+	expect(corpusTombstone(97)).toBe(true);
+	expect(corpusTombstone(98)).toBe(false);
+});
+
+test('appendLarge inserts count synthetic events after the current cursor without clearing the room', () => {
+	const [client, transport] = boot();
+	transport.loadLargeRoom(400);
+	const before = roomOf(client);
+	if (!before) throw new Error('missing room after loadLargeRoom');
+	expect(before.messages).toHaveLength(400);
+	transport.appendLarge(100);
+	const after = roomOf(client);
+	if (!after) throw new Error('missing room after appendLarge');
+	expect(after.messages).toHaveLength(500);
+	expect(BigInt(after.cursor)).toBeGreaterThan(BigInt(before.cursor));
+	expect(after.messages.slice(0, 400)).toEqual(before.messages);
 });

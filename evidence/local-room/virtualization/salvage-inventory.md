@@ -27,7 +27,7 @@ not resurrect those as unwired duplicates.
 | `apps/web/src/fixture/room.json` | present | already present, unmodified fixture — reusable as-is |
 | `apps/web/src/fixture/adapter.ts` | consolidated into `apps/web/src/host/fixture.ts` | superseded — do not carry over |
 | `apps/web/src/fixture/fixtureTransport.ts` | consolidated into `apps/web/src/host/fixture.ts` | superseded — do not carry over |
-| `apps/web/src/fixture/corpus.ts` (50k generator, uncommitted) | absent | **pending** — needed for 50k-message test fixture, no dependency conflict |
+| `apps/web/src/fixture/corpus.ts` (50k generator, uncommitted) | **integrated, slice 2** — ported verbatim, no dependency | done |
 | `apps/web/src/main.tsx` | present, different bootstrap (env/store wiring differs) | already present, different shape |
 | `apps/web/src/rows.ts` (uncommitted) | absent | **pending** — pure, adjust `Row` import to `@agora/web-framework` |
 | `apps/web/src/components/Timeline.tsx` (uncommitted) | absent (Timeline is now inline paging code in `App.tsx`) | **pending, largest slice** — port virtualization onto the consolidated `App.tsx`, do not reintroduce a separate always-imported `Timeline.tsx` unless it stays the single owner of the row-window concern |
@@ -98,11 +98,24 @@ Timeline), so there is nothing yet to document from a user or reviewer-facing an
 a feature-map entry now would need a documentation page describing behavior that does not
 exist until the Timeline-integration slice lands. Revisit both in that slice.
 
+## Slice 2: corpus generator + reconnect-append control (landed)
+
+Files: `apps/web/src/fixture/corpus.ts` (new, verbatim from source), `apps/web/src/host/fixture.ts`
+(`largeSnapshot` now builds bodies through `corpusBody`/`corpusTombstone` instead of the placeholder
+`Large room message N` text; added `appendLarge(count)` to `FixtureTransport`, mirroring the source's
+reconnect-insertion semantics — delivers `count` synthetic events after the current cursor without
+clearing the room), `apps/web/src/components/FixtureControls.tsx` (`Append 100 messages` button),
+`apps/web/test/fixture.test.ts` (corpus determinism/coverage test, `appendLarge` behavior test). 4 files,
+33 diff lines + 29 new lines. No `App.tsx`/Timeline changes; this is fixture-layer groundwork consumed by
+the reconnect-anchor scenario once Timeline lands in slice 3.
+
+Verified: `apps/web` vitest suite 12/12 pass (10 prior + 2 new); full-repo `tsc -b --force` clean;
+full-repo `eslint .` clean; `pnpm boundaries` 32/32 pass.
+
 ## Remaining slices (dependency order)
 
-1. **Landed above** — pure sizing/geometry engine.
-2. `apps/web/src/fixture/corpus.ts` (50k-message generator) + the `Append N messages`
-   fixture control needed by the reconnect test — pure-ish, small, no architecture conflict.
+1. **Landed** — pure sizing/geometry engine (08e6009).
+2. **Landed above** — corpus generator + reconnect-append fixture control.
 3. Port `Timeline.tsx`'s virtualization onto the current consolidated `App.tsx` (the
    largest, highest-risk slice — must replace the inline `windowRows`/pageSize paging
    without resurrecting a separate always-imported `Timeline.tsx` module, per `AGENTS.md`).

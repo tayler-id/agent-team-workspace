@@ -2,12 +2,13 @@
 import { createWireValidator, type Schema } from '@agora/contracts';
 import type { ClientInput, CoreEvent, Receipt, Request, Snapshot } from '@agora/client-core';
 import type { Author, Presentation, Room, RoomClient, RoomHeader, RoomTransport, TransportConnection } from '@agora/web-framework';
+import { corpusBody, corpusTombstone } from '../fixture/corpus.ts';
 
 export interface RoomFixture { readonly streamId: string; readonly header: RoomHeader; readonly snapshot: Snapshot; readonly events: readonly CoreEvent[]; readonly presentation: Presentation; readonly receipt: Receipt }
 export type Loaded = { ok: true; fixture: RoomFixture } | { ok: false; error: string };
 export type Failure = 'timeout' | 'stale_revision' | 'denied' | 'rate_limited';
 export interface FixtureTransport extends RoomTransport {
-	readonly fixture: RoomFixture; readonly loadInvalidSnapshot: () => void; readonly loadLargeRoom: (count: number) => void;
+	readonly fixture: RoomFixture; readonly loadInvalidSnapshot: () => void; readonly loadLargeRoom: (count: number) => void; readonly appendLarge: (count: number) => void;
 	readonly replayNext: () => CoreEvent | undefined; readonly replayAll: () => number; readonly duplicateLast: () => void;
 	readonly skipOne: () => void; readonly fillGap: () => void; readonly unsupported: () => void; readonly resync: () => void;
 	readonly setOnline: (online: boolean) => void; readonly revoke: () => void; readonly deliverReceipt: () => void; readonly fail: (failure: Failure) => void;
@@ -89,8 +90,11 @@ export function load(value: unknown): Loaded {
 	return { ok: true, fixture: { streamId: snapshot.streamId, snapshot, events, presentation: shown, receipt, header: { project: project['name'], room: project['room'], lifecycle: project['lifecycle'], agentLabel: project['agent'], members: project['members'] } } };
 }
 
+// Deterministic multi-script/emoji/markdown/hostile-HTML content (corpus.ts) so repeated runs are identical; this never becomes a second fixture format, only a larger valid Snapshot.
+const syntheticMessage = (seq: number): Snapshot['messages'][number] => ({ id: syntheticId(BigInt(seq)), createdSeq: String(seq), revision: '1', content: corpusTombstone(seq) ? { tag: 'tombstone' as const } : { tag: 'visible' as const, body: corpusBody(seq) } });
+
 export function largeSnapshot(streamId: string, count: number): Snapshot {
-	return { type: 'snapshot', streamId, cursor: String(count), lastSeen: String(Math.max(0, count - 5)), runs: [], messages: Array.from({ length: count }, (_, i) => { const seq = BigInt(i + 1); return { id: syntheticId(seq), createdSeq: seq.toString(), revision: '1', content: { tag: 'visible' as const, body: `Large room message ${seq}` } }; }) };
+	return { type: 'snapshot', streamId, cursor: String(count), lastSeen: String(Math.max(0, count - 5)), runs: [], messages: Array.from({ length: count }, (_, i) => syntheticMessage(i + 1)) };
 }
 
 export function createFixtureTransport(client: RoomClient, fixture: RoomFixture): FixtureTransport {
@@ -112,6 +116,8 @@ export function createFixtureTransport(client: RoomClient, fixture: RoomFixture)
 		loadSnapshot: () => { set({ phase: 'loading', error: undefined }); const snap = freshSnapshot(); dispatch(snap); set({ phase: 'idle' }); if (snap === fixture.snapshot) nextEvent = 0; },
 		loadInvalidSnapshot: () => { const snap = freshSnapshot(); const t = client.apply({ ...snap, lastSeen: nextSeq(snap.cursor) }); set({ phase: 'error', error: `snapshot rejected: ${describe(t.requests) ?? 'no request'}`, decision: describe(t.requests) }); },
 		loadLargeRoom: (count) => { dispatch({ type: 'clear', reason: 'logout' }); dispatch(largeSnapshot(fixture.streamId, count)); set({ phase: 'idle' }); nextEvent = fixture.events.length; },
+		// Reconnect insertion at scale: count synthetic events after the current cursor, as a resumed stream delivers them.
+		appendLarge: (count) => { for (let i = 0; i < count; i++) { const current = room(); if (!current) return; const seq = Number(nextSeq(current.cursor)); deliver({ type: 'event', streamId: fixture.streamId, seq: String(seq), change: { type: 'message', message: syntheticMessage(seq) } }); } },
 		replayNext: () => { const event = fixture.events[nextEvent]; if (!event) return undefined; deliver(event); nextEvent += 1; return event; },
 		replayAll: () => { let count = 0; for (const event of fixture.events.slice(nextEvent)) { deliver(event); count++; } nextEvent = fixture.events.length; return count; },
 		duplicateLast: () => { if (last) dispatch(last); },
