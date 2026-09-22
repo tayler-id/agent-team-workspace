@@ -1,0 +1,25 @@
+{
+	"schema_version": "agora.evidence.size/v1",
+	"unit": "web-framework-foundation",
+	"parent": "35c28c13a024604546ddde8a0797858ccd6f476b",
+	"head": "1855306668400bec7f792c20978f15aef7fd8ccc",
+	"budget": {
+		"meaningful_code_test_lines": 400,
+		"source_files": 12
+	},
+	"counts": {
+		"new_package_src_lines": 222,
+		"new_package_test_lines": 95,
+		"new_package_ts_lines": 317,
+		"shared_policy_edit_lines": 19,
+		"total_meaningful_code_test_lines": 336,
+		"source_files": ["packages/web-framework/src/client.ts", "packages/web-framework/src/environment.ts", "packages/web-framework/src/index.ts", "packages/web-framework/src/projection.ts", "packages/web-framework/test/boundaries.test.ts", "packages/web-framework/test/client.test.ts", "scripts/boundary-policy.ts", "scripts/public-types.ts", "scripts/renderer-policy.ts", "packages/client-core/test/app-architecture.test.ts"],
+		"source_files_count": 10,
+		"note": "packages/web-framework/package.json, packages/web-framework/tsconfig.json, root package.json, root tsconfig.json, pnpm-lock.yaml, agora/feature-map.json and docs/site/site.json are shared reconciliation/config/docs, not counted against the source-file cap, matching the preservation candidates' own size.json methodology."
+	},
+	"remainder_mapping": {
+		"landed_this_slice": "packages/web-framework (Client, EnvironmentPort, projection, named hooks); its owner registration and narrow renderer-footgun exemption in shared policy.",
+		"next_slice": "apps/web wiring: replace apps/web/src/reserved-owners.ts placeholder with the Host adapter (apps/web/src/host/{environment,fixture,index}.ts), the room shell components, main.tsx composition root, and a scoped test/config owner in scripts/boundary-policy.ts for apps/web/test/**, apps/web/*.config.ts (vitest/vite/testing-library/node:fs/node:path), forbidding production apps/web/src files from importing that owner. Preserved sources: fm/agora-web-shell-integrate-checkpoint-1 (combined, unresolved lint gaps), fm/agora-local-room-web-shell@60bcd79 (original flat shell), fm/agora-web-framework-client-host@7d29380 (Client/Host candidate).",
+		"known_gap_carried_forward": "22 pnpm lint errors seen on the checkpoint: App.tsx/main.tsx component-local effects/timers with no matching framework hook yet, and apps/web test/config dev-tooling imports against the current apps/web allow-list."
+	}
+}

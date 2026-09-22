@@ -1,0 +1,15 @@
+{
+	"schema_version": "agora.evidence.outcome/v1",
+	"unit": "web-framework-foundation",
+	"parent": "35c28c13a024604546ddde8a0797858ccd6f476b",
+	"head": "1855306668400bec7f792c20978f15aef7fd8ccc",
+	"status": "implemented",
+	"summary": "First dependency-ordered slice of the web-shell/web-framework integration: packages/web-framework (one-writer RoomClient, named hooks, pure projection, typed EnvironmentPort), registered in scripts/boundary-policy.ts's owner table, with a narrow renderer-footgun exemption for its own raw React effects and positive/negative test coverage for that exemption. apps/web is not wired to it yet; that is the next slice, preserved on fm/agora-web-shell-integrate-checkpoint-1 and its source refs fm/agora-local-room-web-shell and fm/agora-web-framework-client-host.",
+	"proof": [
+		"evidence/local-room/web-framework-foundation/red.log",
+		"evidence/local-room/web-framework-foundation/green.log",
+		"evidence/local-room/web-framework-foundation/test-patch.diff",
+		"evidence/local-room/web-framework-foundation/size.json",
+		"evidence/local-room/web-framework-foundation/final-check.log"
+	]
+}

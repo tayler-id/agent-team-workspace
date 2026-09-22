@@ -1,0 +1,120 @@
+diff --git a/packages/client-core/test/app-architecture.test.ts b/packages/client-core/test/app-architecture.test.ts
+index caac171..892f873 100644
+--- a/packages/client-core/test/app-architecture.test.ts
++++ b/packages/client-core/test/app-architecture.test.ts
+@@ -47,7 +47,7 @@ test('owner tables are explicit and test-visible architecture policy', () => {
+ 	const b = readFileSync(path.join(root, 'scripts/boundary-policy.ts'), 'utf8');
+ 	const x = readFileSync(path.join(root, 'scripts/architecture-exceptions.ts'), 'utf8');
+ 	const e = readFileSync(path.join(root, 'eslint.config.js'), 'utf8');
+-	expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker']");
++	expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/web-framework', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker']");
+ 	for (const s of ["framework: 'apps/web/src/framework'", "client: 'apps/web/src/client'", "host: 'apps/web/src/host'", "features: 'apps/web/src/features'", 'export const domGlobals', 'apps/web/src']) expect(b).toContain(s);
+ 	expect(x).toContain("'agora/import-boundary', 'agora/renderer-footgun'");
+ 	expect(b.match(/exceptionAllows\(file, /g)).toHaveLength(2);
+diff --git a/packages/web-framework/test/boundaries.test.ts b/packages/web-framework/test/boundaries.test.ts
+new file mode 100644
+index 0000000..b8afd24
+--- /dev/null
++++ b/packages/web-framework/test/boundaries.test.ts
+@@ -0,0 +1,46 @@
++import { ESLint } from 'eslint';
++import { existsSync, readFileSync } from 'node:fs';
++import path from 'node:path';
++import ts from 'typescript';
++import { expect, test } from 'vitest';
++
++const root = path.resolve(import.meta.dirname, '../../..');
++const engine = new ESLint({ cwd: root, ignore: false });
++const boundary = async (code: string, file: string) => (await engine.lintText(code, { filePath: path.join(root, file) })).flatMap((r) => r.messages).filter((m) => m.ruleId?.startsWith('agora/'));
++const forms = [(m: string) => `import { x } from '${m}'; export const leak: unknown = x;`, (m: string) => `import type { X } from '${m}'; export type Leak = X;`, (m: string) => `export async function leak(): Promise<unknown> { return import('${m}'); }`];
++
++test('web-framework rejects server/domain/storage/provider/apps imports and unrestricted browser globals', async () => {
++	const file = 'packages/web-framework/src/client.ts';
++	expect(await boundary('export const ok = 1;\n', file)).toEqual([]);
++	for (const module of ['@agora/domain', '@agora/storage', '@agora/center', 'hono', 'pg', 'openai', 'apps/web/src/main.tsx']) {
++		for (const form of forms) expect((await boundary(form(module), file)).some((m) => m.ruleId === 'agora/import-boundary'), module).toBe(true);
++	}
++	for (const code of ['export const leak: unknown = window;', 'export const leak: unknown = fetch;', 'export const leak: unknown = localStorage;']) {
++		expect((await boundary(code, file)).some((m) => m.ruleId === 'agora/renderer-footgun'), code).toBe(true);
++	}
++}, 60_000);
++
++test('web-framework may implement named hooks with raw React effects, unlike a plain renderer owner', async () => {
++	const file = 'packages/web-framework/src/client.ts';
++	expect(await boundary("import { useEffect } from 'react'; export function useOk(): void { useEffect(() => undefined, []); }\n", file)).toEqual([]);
++	const other = 'apps/web/src/reserved-owners.ts';
++	expect((await boundary("import { useEffect } from 'react'; export function useOk(): void { useEffect(() => undefined, []); }\n", other)).some((m) => m.ruleId === 'agora/renderer-footgun')).toBe(true);
++}, 60_000);
++
++test('framework cannot reverse-import the host; export map hides private paths; barrel keeps named commands only', async () => {
++	const file = 'packages/web-framework/src/index.ts';
++	for (const module of ['../../apps/web/src/host/environment.ts', '@agora/web']) {
++		expect((await boundary(`import type { X } from '${module}'; export type Leak = X;`, file)).some((m) => m.ruleId === 'agora/import-boundary'), module).toBe(true);
++	}
++	const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2024, lib: ['lib.es2024.d.ts', 'lib.dom.d.ts'], types: [], module: ts.ModuleKind.NodeNext, moduleResolution: ts.ModuleResolutionKind.NodeNext, strict: true, noEmit: true, skipLibCheck: true, allowImportingTsExtensions: true, jsx: ts.JsxEmit.ReactJSX };
++	const host = ts.createCompilerHost(options), filename = path.join(root, 'packages/web-framework/negative.ts');
++	const code = "export type Leak = typeof import('@agora/web-framework/src/client.ts');", read = host.getSourceFile.bind(host);
++	host.getSourceFile = (name, version, ...args) => name === filename ? ts.createSourceFile(name, code, version, true) : read(name, version, ...args);
++	expect([...ts.getPreEmitDiagnostics(ts.createProgram([filename], options, host))].some((d) => d.code === 2307)).toBe(true);
++	expect(existsSync(path.join(root, 'packages/web-framework/src/client.ts'))).toBe(true);
++	const barrel = readFileSync(path.join(root, 'packages/web-framework/src/index.ts'), 'utf8');
++	expect(barrel).toMatch(/createRoomClient/);
++	expect(barrel).toMatch(/useSetDraft/);
++	expect(barrel).toMatch(/EnvironmentPort/);
++	expect(barrel.includes('dispatch')).toBe(false);
++}, 60_000);
+diff --git a/packages/web-framework/test/client.test.ts b/packages/web-framework/test/client.test.ts
+new file mode 100644
+index 0000000..a504a5c
+--- /dev/null
++++ b/packages/web-framework/test/client.test.ts
+@@ -0,0 +1,49 @@
++import { initialState, type Snapshot } from '@agora/client-core';
++import { expect, test } from 'vitest';
++import { createRoomClient } from '../src/client.ts';
++import { composer, rows, segments, status, window } from '../src/projection.ts';
++
++const snap = (cursor = '1'): Snapshot => ({ type: 'snapshot', streamId: 's1', cursor, lastSeen: '0', runs: [], messages: [{ id: 'm1', createdSeq: '1', revision: '1', content: { tag: 'visible', body: 'hello' } }] });
++
++test('one writer keeps immutable identity; alternate clients do not share state', () => {
++	const a = createRoomClient(), b = createRoomClient();
++	expect(a.getState()).toEqual(initialState());
++	const first = a.apply(snap()).state;
++	expect(a.apply({ type: 'event', streamId: 's1', seq: '1', change: { type: 'message', message: { id: 'm1', createdSeq: '1', revision: '1', content: { tag: 'visible', body: 'hello' } } } }).state).toBe(first);
++	b.apply(snap());
++	expect(b.getState().rooms[0]?.messages[0]).not.toBe(a.getState().rooms[0]?.messages[0]);
++});
++
++test('command routing, gap/duplicate agreement, unsubscribe and offline decisions stay on one writer', () => {
++	const client = createRoomClient();
++	client.apply(snap('8'));
++	client.apply({ type: 'draft', streamId: 's1', text: 'draft' });
++	expect(client.apply({ type: 'submit', commandId: 'c1', streamId: 's1', requestDigest: 'sha256:x', online: true }).requests).toEqual([{ type: 'send', commandId: 'c1' }]);
++	const event = { type: 'event' as const, streamId: 's1', seq: '10', change: { type: 'message' as const, message: { id: 'm10', createdSeq: '10', revision: '1', content: { tag: 'visible' as const, body: 'later' } } } };
++	expect(client.apply(event).state.rooms[0]?.mode).toBe('gap');
++	expect(client.apply({ type: 'event', streamId: 's1', seq: '9', change: { type: 'message', message: { id: 'm9', createdSeq: '9', revision: '1', content: { tag: 'visible', body: 'missing' } } } }).state.rooms[0]?.cursor).toBe('10');
++	const before = client.getState();
++	client.apply(event);
++	expect(client.getState()).toBe(before);
++	let ticks = 0;
++	const stop = client.subscribe(() => { ticks += 1; });
++	client.apply({ type: 'draft', streamId: 's1', text: 'x' });
++	stop();
++	client.apply({ type: 'draft', streamId: 's1', text: 'y' });
++	expect(ticks).toBe(1);
++	expect(client.apply({ type: 'submit', commandId: 'c2', streamId: 's1', requestDigest: 'sha256:y', online: false }).requests).toEqual([{ type: 'wait_connection', commandId: 'c2' }]);
++});
++
++test('pure projection covers rows, window, status, composer and safe segments', () => {
++	const client = createRoomClient();
++	client.apply(snap());
++	const room = client.getState().rooms[0];
++	const projected = rows(room, { authors: { m1: { name: 'Ada', kind: 'human' } }, times: { m1: 't' }, citations: {} });
++	expect(projected[0]).toMatchObject({ author: { name: 'Ada' }, firstUnread: true });
++	expect(window(projected, 1).total).toBe(1);
++	expect(status(room, { online: true, phase: 'idle', error: undefined }).phase).toBe('live');
++	expect(status(undefined, { online: true, phase: 'error', error: 'boom' }).phase).toBe('error');
++	client.apply({ type: 'draft', streamId: 's1', text: 'note' });
++	expect(composer(client.getState(), 's1', 'send').draft).toBe('note');
++	expect(segments('a\n```\ncode\n```\nb')).toEqual([{ kind: 'text', value: 'a' }, { kind: 'code', value: 'code' }, { kind: 'text', value: 'b' }]);
++});
