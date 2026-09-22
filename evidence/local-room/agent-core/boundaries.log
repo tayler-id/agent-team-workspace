@@ -1,0 +1,5 @@
+
+> agora@ boundaries /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/10/agent-team-workspace
+> vitest run --project unit packages/client-core/test/boundaries.test.ts packages/client-core/test/export-maps.test.ts --reporter=json --outputFile=.scratch/boundaries.json
+
+JSON report written to /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/10/agent-team-workspace/.scratch/boundaries.json

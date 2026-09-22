@@ -1,0 +1,204 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-21T03:24:58.024Z
+parent: c221c808e6841c57d016b3d22e8c55f5335ed811
+head: 4aaf74802507af3e14d33113a2e9d9696a8af2e7
+subject_revision: c221c808e6841c57d016b3d22e8c55f5335ed811
+test_patch_applied_to_subject: true
+test_patch_files: packages/domain/test/local-answer-guards.test.ts, packages/domain/test/local-answer.test.ts
+test_patch_digest: sha256:7ab79d217eaf3c020a41845af3e8aeb366624bf70243b2095ff9caa700c093b0
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/domain/test/local-answer.test.ts","vitest_config":"sha256:69b1252cec1cd03880b44a858935cb846f3ae4c79ef9cd6e9647289a28b0771e","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:5dd71f280d16a03cf503c8751367510536a195b45ec1bb3073aaf8ff9e5fbb1d"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-XTV7S7
+
+ ❯ |unit| packages/domain/test/local-answer.test.ts (10 tests | 9 failed) 6ms
+   × bounded selection uses exact selected records, numeric chronology, never timestamps or input order 2ms
+   × empty and unbounded selection or input deny rather than truncate 1ms
+   × Unicode scalar context limit is exact; oversized input records and aggregate context deny 0ms
+   × missing, duplicate and foreign records deny, including ambiguous room sequence 0ms
+   × unknown message variants and event inputs deny rather than acknowledge or interpret 0ms
+   × citations are exact stored IDs at exact sequences; missing, foreign and unselected references deny 0ms
+   × proposal has only exact attributed quotes and stable canonical digests, with no inferred claims 0ms
+   × duplicate identity binds requester, request ID, scope and selected content, without storing dedupe state 0ms
+   × injection-shaped message text and embedded citations remain inert quoted data, not transitive authority 0ms
+
+ Test Files  1 failed (1)
+      Tests  9 failed | 1 passed (10)
+   Start at  23:24:52
+   Duration  158ms (transform 48%, import 42%, tests 7%, worker 2%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/domain/test/local-answer.test.ts > bounded selection uses exact selected records, numeric chronology, never timestamps or input order
+AssertionError: expected 'denied' to be 'ok' // Object.is equality
+
+Expected: "ok"
+Received: "denied"
+
+ ❯ ok packages/domain/test/local-answer.test.ts:11:72
+      9| const request: AnswerRequest = { scope: LOCAL_ROOM, requestId: asComma…
+     10| const compile = (rows = records, req = request) => compileAnswerContex…
+     11| const ok = <T>(result: AnswerResult<T>): T => { expect(result.outcome)…
+       |                                                                        ^
+     12| const denied = (reason: string) => ({ outcome: 'denied', reason });
+     13|
+ ❯ packages/domain/test/local-answer.test.ts:19:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  |unit| packages/domain/test/local-answer.test.ts > empty and unbounded selection or input deny rather than truncate
+AssertionError: expected { outcome: 'denied', …(1) } to deeply equal { outcome: 'denied', …(1) }
+
+- Expected
++ Received
+
+  {
+    "outcome": "denied",
+-   "reason": "empty_context",
++   "reason": "unavailable_capability",
+  }
+
+ ❯ packages/domain/test/local-answer.test.ts:24:55
+     22| });
+     23| test('empty and unbounded selection or input deny rather than truncate…
+     24|  expect(compile([], { ...request, selectedIds: [] })).toEqual(denied('…
+       |                                                       ^
+     25|  expect(compile(records, { ...request, selectedIds: [] })).toEqual(den…
+     26|  expect(compile(Array.from({ length: 101 }, (_, n) => record(n + 1))))…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  |unit| packages/domain/test/local-answer.test.ts > Unicode scalar context limit is exact; oversized input records and aggregate context deny
+AssertionError: expected 'denied' to be 'ok' // Object.is equality
+
+Expected: "ok"
+Received: "denied"
+
+ ❯ ok packages/domain/test/local-answer.test.ts:11:72
+      9| const request: AnswerRequest = { scope: LOCAL_ROOM, requestId: asComma…
+     10| const compile = (rows = records, req = request) => compileAnswerContex…
+     11| const ok = <T>(result: AnswerResult<T>): T => { expect(result.outcome)…
+       |                                                                        ^
+     12| const denied = (reason: string) => ({ outcome: 'denied', reason });
+     13|
+ ❯ packages/domain/test/local-answer.test.ts:32:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  |unit| packages/domain/test/local-answer.test.ts > missing, duplicate and foreign records deny, including ambiguous room sequence
+AssertionError: expected { outcome: 'denied', …(1) } to deeply equal { outcome: 'denied', …(1) }
+
+- Expected
++ Received
+
+  {
+    "outcome": "denied",
+-   "reason": "missing_record",
++   "reason": "unavailable_capability",
+  }
+
+ ❯ packages/domain/test/local-answer.test.ts:37:67
+     35| });
+     36| test('missing, duplicate and foreign records deny, including ambiguous…
+     37|  expect(compile(records, { ...request, selectedIds: [id(999)] })).toEq…
+       |                                                                   ^
+     38|  expect(compile(records, { ...request, selectedIds: [id(1), id(1)] }))…
+     39|  expect(compile([record(1), record(1)])).toEqual(denied('ambiguous_rec…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  |unit| packages/domain/test/local-answer.test.ts > unknown message variants and event inputs deny rather than acknowledge or interpret
+AssertionError: expected { outcome: 'denied', …(1) } to deeply equal { outcome: 'denied', …(1) }
+
+- Expected
++ Received
+
+  {
+    "outcome": "denied",
+-   "reason": "unsupported_input",
++   "reason": "unavailable_capability",
+  }
+
+ ❯ packages/domain/test/local-answer.test.ts:45:143
+     43| });
+     44| test('unknown message variants and event inputs deny rather than ackno…
+     45|  for (const kind of ['local_room.message_created', 'future.event']) ex…
+       |                                                                                                                                               ^
+     46|  expect(compile([{ ...record(1), author: { kind: 'system' as 'human', …
+     47|  const wire = createWireValidator();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  |unit| packages/domain/test/local-answer.test.ts > citations are exact stored IDs at exact sequences; missing, foreign and unselected references deny
+AssertionError: expected 'denied' to be 'ok' // Object.is equality
+
+Expected: "ok"
+Received: "denied"
+
+ ❯ ok packages/domain/test/local-answer.test.ts:11:72
+      9| const request: AnswerRequest = { scope: LOCAL_ROOM, requestId: asComma…
+     10| const compile = (rows = records, req = request) => compileAnswerContex…
+     11| const ok = <T>(result: AnswerResult<T>): T => { expect(result.outcome)…
+       |                                                                        ^
+     12| const denied = (reason: string) => ({ outcome: 'denied', reason });
+     13|
+ ❯ packages/domain/test/local-answer.test.ts:54:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  |unit| packages/domain/test/local-answer.test.ts > proposal has only exact attributed quotes and stable canonical digests, with no inferred claims
+AssertionError: expected 'denied' to be 'ok' // Object.is equality
+
+Expected: "ok"
+Received: "denied"
+
+ ❯ ok packages/domain/test/local-answer.test.ts:11:72
+      9| const request: AnswerRequest = { scope: LOCAL_ROOM, requestId: asComma…
+     10| const compile = (rows = records, req = request) => compileAnswerContex…
+     11| const ok = <T>(result: AnswerResult<T>): T => { expect(result.outcome)…
+       |                                                                        ^
+     12| const denied = (reason: string) => ({ outcome: 'denied', reason });
+     13|
+ ❯ packages/domain/test/local-answer.test.ts:62:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+ FAIL  |unit| packages/domain/test/local-answer.test.ts > duplicate identity binds requester, request ID, scope and selected content, without storing dedupe state
+AssertionError: expected 'denied' to be 'ok' // Object.is equality
+
+Expected: "ok"
+Received: "denied"
+
+ ❯ ok packages/domain/test/local-answer.test.ts:11:72
+      9| const request: AnswerRequest = { scope: LOCAL_ROOM, requestId: asComma…
+     10| const compile = (rows = records, req = request) => compileAnswerContex…
+     11| const ok = <T>(result: AnswerResult<T>): T => { expect(result.outcome)…
+       |                                                                        ^
+     12| const denied = (reason: string) => ({ outcome: 'denied', reason });
+     13|
+ ❯ packages/domain/test/local-answer.test.ts:70:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯
+
+ FAIL  |unit| packages/domain/test/local-answer.test.ts > injection-shaped message text and embedded citations remain inert quoted data, not transitive authority
+AssertionError: expected 'denied' to be 'ok' // Object.is equality
+
+Expected: "ok"
+Received: "denied"
+
+ ❯ ok packages/domain/test/local-answer.test.ts:11:72
+      9| const request: AnswerRequest = { scope: LOCAL_ROOM, requestId: asComma…
+     10| const compile = (rows = records, req = request) => compileAnswerContex…
+     11| const ok = <T>(result: AnswerResult<T>): T => { expect(result.outcome)…
+       |                                                                        ^
+     12| const denied = (reason: string) => ({ outcome: 'denied', reason });
+     13|
+ ❯ packages/domain/test/local-answer.test.ts:85:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯
+

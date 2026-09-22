@@ -1,0 +1,258 @@
+{
+  "base": "55269a5103656a63cc6f246c00ebb1efa6785866",
+  "head": "4aaf74802507af3e14d33113a2e9d9696a8af2e7",
+  "method": "git diff --unified=0 base head; count nonblank additions excluding standalone comment lines. Source includes tests, configuration, feature map and ancillary verifier repair. All removals shown.",
+  "summary": {
+    "source": {
+      "files": 10,
+      "added": 264,
+      "removed": 5,
+      "meaningful_added": 247
+    },
+    "docs": {
+      "files": 9,
+      "added": 73,
+      "removed": 11,
+      "meaningful_added": 49
+    },
+    "evidence": {
+      "files": 2,
+      "added": 33,
+      "removed": 0,
+      "meaningful_added": 21
+    },
+    "generated": {
+      "files": 1,
+      "added": 2,
+      "removed": 2,
+      "meaningful_added": 2
+    }
+  },
+  "fixtures": {
+    "external_files": 0,
+    "inline_test_fixtures": "included in source tests"
+  },
+  "lockfiles": {
+    "changed": 0
+  },
+  "details": [
+    {
+      "file": ".agents/skills/verify-agora/SKILL.md",
+      "category": "docs",
+      "added": 12,
+      "removed": 2,
+      "meaningful_added": 9,
+      "meaningful_removed": 2
+    },
+    {
+      "file": "AGENTS.md",
+      "category": "docs",
+      "added": 1,
+      "removed": 1,
+      "meaningful_added": 1,
+      "meaningful_removed": 1
+    },
+    {
+      "file": "agora/feature-map.json",
+      "category": "source",
+      "added": 13,
+      "removed": 2,
+      "meaningful_added": 13,
+      "meaningful_removed": 2
+    },
+    {
+      "file": "docs/runbooks/development.md",
+      "category": "docs",
+      "added": 12,
+      "removed": 0,
+      "meaningful_added": 6,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "docs/site/atlas.json",
+      "category": "docs",
+      "added": 7,
+      "removed": 3,
+      "meaningful_added": 7,
+      "meaningful_removed": 3
+    },
+    {
+      "file": "docs/site/cli.md",
+      "category": "docs",
+      "added": 10,
+      "removed": 0,
+      "meaningful_added": 6,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "docs/site/getting-started.md",
+      "category": "docs",
+      "added": 4,
+      "removed": 0,
+      "meaningful_added": 2,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "docs/site/local-room.md",
+      "category": "docs",
+      "added": 22,
+      "removed": 4,
+      "meaningful_added": 15,
+      "meaningful_removed": 3
+    },
+    {
+      "file": "docs/site/memory.md",
+      "category": "docs",
+      "added": 3,
+      "removed": 1,
+      "meaningful_added": 2,
+      "meaningful_removed": 1
+    },
+    {
+      "file": "docs/site/operations.md",
+      "category": "docs",
+      "added": 2,
+      "removed": 0,
+      "meaningful_added": 1,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "docs/site/progress.md",
+      "category": "generated",
+      "added": 2,
+      "removed": 2,
+      "meaningful_added": 2,
+      "meaningful_removed": 2
+    },
+    {
+      "file": "evidence/local-room/agent-core/outcome.json",
+      "category": "evidence",
+      "added": 8,
+      "removed": 0,
+      "meaningful_added": 8,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "evidence/local-room/agent-core/scope.md",
+      "category": "evidence",
+      "added": 25,
+      "removed": 0,
+      "meaningful_added": 13,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "packages/domain/package.json",
+      "category": "source",
+      "added": 2,
+      "removed": 1,
+      "meaningful_added": 2,
+      "meaningful_removed": 1
+    },
+    {
+      "file": "packages/domain/src/local-answer/citations.ts",
+      "category": "source",
+      "added": 13,
+      "removed": 0,
+      "meaningful_added": 12,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "packages/domain/src/local-answer/context.ts",
+      "category": "source",
+      "added": 38,
+      "removed": 0,
+      "meaningful_added": 35,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "packages/domain/src/local-answer/posting.ts",
+      "category": "source",
+      "added": 11,
+      "removed": 0,
+      "meaningful_added": 8,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "packages/domain/src/local-answer/proposal.ts",
+      "category": "source",
+      "added": 25,
+      "removed": 0,
+      "meaningful_added": 23,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "packages/domain/src/local-answer/types.ts",
+      "category": "source",
+      "added": 14,
+      "removed": 0,
+      "meaningful_added": 12,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "packages/domain/test/local-answer-guards.test.ts",
+      "category": "source",
+      "added": 54,
+      "removed": 0,
+      "meaningful_added": 51,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "packages/domain/test/local-answer.test.ts",
+      "category": "source",
+      "added": 92,
+      "removed": 0,
+      "meaningful_added": 90,
+      "meaningful_removed": 0
+    },
+    {
+      "file": "scripts/test-design-checks.mjs",
+      "category": "source",
+      "added": 2,
+      "removed": 2,
+      "meaningful_added": 1,
+      "meaningful_removed": 1
+    }
+  ],
+  "source_digests": [
+    {
+      "file": "agora/feature-map.json",
+      "digest": "sha256:58adc1204d8625a9c4291115b413f7eebd0f7353ee2755e7665f612cab670263"
+    },
+    {
+      "file": "packages/domain/package.json",
+      "digest": "sha256:af71e8d8cc3a2f6056dd39ebb67ed6abfdb968a0594f269c1c5000a1ef874ff2"
+    },
+    {
+      "file": "packages/domain/src/local-answer/citations.ts",
+      "digest": "sha256:53e69e161d8f8c4b2235cbc3a0f19251dc954f71cc8fbf04d5e71e8ed679bfd3"
+    },
+    {
+      "file": "packages/domain/src/local-answer/context.ts",
+      "digest": "sha256:dff1e380659a9eaf37a9ffe1e6357c10fde4c65d182ed51d0d7dfefd8738595b"
+    },
+    {
+      "file": "packages/domain/src/local-answer/posting.ts",
+      "digest": "sha256:1043c8caec7f0c0191ab991449706cb8972edde8f82adc583be8323cdb445f5c"
+    },
+    {
+      "file": "packages/domain/src/local-answer/proposal.ts",
+      "digest": "sha256:a38f5e8b4d2f1dfca6ef125c3f673b32c5cc50d71e388ef66fd6b1aa32651973"
+    },
+    {
+      "file": "packages/domain/src/local-answer/types.ts",
+      "digest": "sha256:b1321a4f88c36cf63fb2b0c526b4082d38fc1faab95b27c07a348b381f65e407"
+    },
+    {
+      "file": "packages/domain/test/local-answer-guards.test.ts",
+      "digest": "sha256:c8ce9b8133d1ef40d9c63cc37c14b03322a3a1ef6a467b3fc25cd1178716b120"
+    },
+    {
+      "file": "packages/domain/test/local-answer.test.ts",
+      "digest": "sha256:7c78b74683afc09762f1d433f02054441c24cc1bc4c8b03064ffac8a28cee77b"
+    },
+    {
+      "file": "scripts/test-design-checks.mjs",
+      "digest": "sha256:56b3352b9062be3a189f1d7f45bea0800555393b23a2cf971b75d7ea7ca13abb"
+    }
+  ]
+}

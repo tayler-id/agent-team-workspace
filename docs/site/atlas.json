@@ -102,7 +102,7 @@
       "id": "local-room",
       "title": "Local room",
       "status": "In progress",
-      "why": "Owned local runtime, persistent messages and cursor replay through a minimal browser harness; L3 of 5 stacked candidates, landed on main with L1, L2 and CI P0a-P0c. L4 and L5 remain.",
+      "why": "Owned local runtime, persistent messages and cursor replay through a minimal browser harness; L3 of 5 stacked candidates, landed on main with L1, L2 and CI P0a-P0c, plus an independently testable L5 deterministic read-only local-answer core (no response posting, trigger or browser qualification). L4 remains.",
       "page": "local-room.md",
       "proof": [
         "repo:contracts/schemas/local-room.schema.json",
@@ -116,7 +116,11 @@
         "repo:scripts/local-room-client.ts",
         "repo:apps/center/test/runtime.pg.test.ts",
         "repo:apps/center/test/runtime.test.ts",
-        "repo:evidence/local-room/runtime/outcome.json"
+        "repo:evidence/local-room/runtime/outcome.json",
+        "repo:packages/domain/src/local-answer/proposal.ts",
+        "repo:packages/domain/test/local-answer.test.ts",
+        "repo:packages/domain/test/local-answer-guards.test.ts",
+        "repo:evidence/local-room/agent-core/outcome.json"
       ]
     },
     {
@@ -207,7 +211,7 @@
     {
       "id": "agents",
       "title": "Center and project-main agents",
-      "availability": "S1 / S2 planned",
+      "availability": "Read-only deterministic local fixture core; production agents S1 / S2 planned",
       "page": "authorization.md",
       "why": "Answer and propose within explicit audience boundaries."
     },

@@ -1,0 +1,1 @@
+{"schema_version":"agora.red-green/v1","outcome":"pass","parent":"c221c808e6841c57d016b3d22e8c55f5335ed811","head":"4aaf74802507af3e14d33113a2e9d9696a8af2e7","red_exit":1,"green_exit":0,"test_patch_digest":"sha256:7ab79d217eaf3c020a41845af3e8aeb366624bf70243b2095ff9caa700c093b0","out":"evidence/local-room/agent-core"}

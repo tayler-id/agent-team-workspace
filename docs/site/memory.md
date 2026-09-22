@@ -8,7 +8,7 @@ The durable Agora record is designed to live outside every model session and exe
 | --- | --- | --- |
 | PostgreSQL | Membership, message revisions, tasks, runs, receipts, decisions and knowledge versions | Durable service authority; today the fixture streams, events and claims plus the fixed local room's messages, events and receipts |
 | S3-compatible artifacts | Logs, screenshots, manifests and bounded attachments | Immutable bytes after quarantine and hash verification; planned |
-| Context bundle | Selected authorized revisions with trust labels, digests and omissions | Frozen input for a session/run, never permission; planned |
+| Context bundle | Selected authorized revisions with trust labels, digests and omissions | Frozen input, never permission; bounded local-message pure core exists, production session/run context remains planned |
 | Model context | Temporary interpretation of the supplied bundle | Not persistent project truth |
 | Worker worktree / cloud disk | One attempt's source and execution output | Disposable working state; preserve dirty recovery data, not authority |
 | Repository documents | Reviewed source or export with commit provenance | Input to knowledge review, not a competing live knowledge database |
@@ -28,6 +28,8 @@ All of this knowledge lifecycle is planned, not implemented by the current stora
 ## Retrieval is not authorization
 
 The intended compiler intersects requester access, agent grants, selected scope and destination-room audience before lexical search/ranking. A fact readable by a requester may still be unsafe to post in a general room. A context bundle names omitted material rather than silently treating a summary as a decision.
+
+The [local-answer fixture core](local-room.md#selected-messages-to-a-cited-proposal) accepts only explicitly supplied persisted-message values and selected IDs. It has no search, memory activation or persistence handle. Its quotes are attributed data, not trusted decisions; embedded citations never expand its context.
 
 FTS in PostgreSQL is the initial retrieval design. Embeddings and semantic judges are deferred until reviewed miss sets justify them. A model score must never decide permission.
 

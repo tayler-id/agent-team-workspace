@@ -62,6 +62,16 @@ Every command accepts `--instance NAME`, default `development`; names are 1-60 l
 
 [Local room](local-room.md) explains lifecycle and replay; [operator guidance](operations.md#local-room-lifecycle) explains retained data and uncertain cleanup. This is not the universal U01b project CLI or production identity.
 
+## Local answer pure core
+
+```sh
+pnpm exec vitest run --project unit packages/domain/test/local-answer.test.ts packages/domain/test/local-answer-guards.test.ts --reporter=json
+```
+
+This is a public package test driver, not a product response trigger. It invokes `@agora/domain/local-answer` with explicit fixture values representing validated persisted records. Native Vitest JSON reports 14 passing tests, exit 0; any assertion failure exits nonzero. It needs no database, service, provider, credentials or browser. Guard tests spawn bounded test-only Node processes and lint hypothetical forbidden imports; the pure computation has none of that authority. Test-only source copies under `.scratch/answer-guard-*` are removed in `finally`; remove the disposable `.vitest/json/output.json` reporter cache and its empty parent directories after retaining the report. Red/green and exact-subject receipts stay in `evidence/local-room/agent-core/`.
+
+No flags accept chat command text or arbitrary selected files. See [the local room](local-room.md#selected-messages-to-a-cited-proposal) and [developer boundary reference](repo:docs/runbooks/development.md). There is no HTTP operation, CLI send/ask command or UI trigger for this core.
+
 ## Center and database
 
 `node apps/center/src/main.ts` requires `AGORA_DATABASE_URL` and listens on `127.0.0.1`, `PORT` default 3000. Missing database configuration exits 64. It prints an `agora.center-start/v1` startup line. This fixture is not a public production service.

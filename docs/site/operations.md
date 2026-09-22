@@ -29,6 +29,8 @@ Ordinary stop/start retains data and the URL. Start has a 35-second deadline; HT
 
 Only `node scripts/local-room.ts reset --confirm-disposable` while stopped deletes the selected disposable instance. It proves its recorded listeners absent and refuses symlinks before removal. Save evidence outside that directory first, for example `node scripts/local-room.ts evidence > evidence/local-room/runtime/operator.json`. Reset never removes retained repository evidence. Reload a harness after reset because a fresh database is not a continuation of its old cursor. No backup or production restore qualification is claimed.
 
+The [local-answer pure-core test driver](cli.md#local-answer-pure-core) needs no service, database connection or credential. It is not wired into the running room; it proves deterministic proposals only and cannot persist responses or suppress duplicate triggers across storage. Its own applicable CI protections and independent exact-head review remain separate landing prerequisites for the eventual posted-response feature.
+
 ## Target production topology
 
 ```flow

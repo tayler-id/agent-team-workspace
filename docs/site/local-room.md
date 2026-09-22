@@ -2,9 +2,11 @@
 
 ## What it is
 
-One explicitly started, loopback-only development room with one fixed human principal. L1 defines its language-neutral contracts; L2 persists messages in PostgreSQL; this L3 candidate adds an owned runtime, cursor replay and a minimal browser harness. This is **not the finished room UI**, production identity or a hosted deployment.
+One explicitly started, loopback-only development room with one fixed human principal. L1 defines its language-neutral contracts; L2 persists messages in PostgreSQL; L3 adds an owned runtime, cursor replay and a minimal browser harness. This is **not the finished room UI**, production identity or a hosted deployment.
 
-The candidate is deliberately stacked on L2 `55269a5`. Neither the stack nor these local receipts authorize landing before L2 and the mandatory CI protections are available. L4 owns the usable room interface; L5 owns the bounded local response. Neither is implemented here.
+L1 published the conversation contracts, one JSON Schema 2020-12 family in [local-room.schema.json](repo:contracts/schemas/local-room.schema.json) with ten closed components. L2 makes the room durable: a send is committed to PostgreSQL in one transaction, and the room reads back in the same order after the service restarts. Cursors and the base receipt reuse the [synchronization values](repo:contracts/schemas/sync.schema.json); errors reuse the [stable reason codes](repo:contracts/schemas/errors.schema.json), which now include `command_conflict`.
+
+L4 owns the usable room interface; L5 owns the bounded local response. L4 is not implemented here. L5's read-only pure preparation core was built stacked on L2 and is now integrated at the landed L1-L3 base, deliberately kept independently testable; these local receipts alone do not authorize landing the final response feature, which still needs its own CI protections and independent review.
 
 ## What it does
 
@@ -23,6 +25,12 @@ node scripts/local-room.ts stop
 Open the `url` printed by start. The harness sends through the same HTTP command as the CLI and displays the **client-core committed projection**, not an optimistic timeline. Disconnect pauses its event requests; Reconnect resumes after its last applied cursor. A failed send retains its frozen command in that page so Send retries the same identity. Reload discards that pending command and unsent text; persistent drafts and polished delivery states belong to L4.
 
 Ordinary stop/start preserves the database and URL. Only `reset --confirm-disposable`, while stopped, removes that instance's disposable data. It is not an undo, backup or migration rollback. Use `--instance NAME` on every command for a separate development instance. Each instance has its own cluster, listeners and credentials, but the same fixed room IDs, not multi-room provisioning. [The CLI reference](cli.md#local-room-runtime) lists flags and structured results.
+
+### Read-only local answer preparation
+
+A separate pure core can prepare an attributed quotation of explicitly selected stored messages. Its visible label is **Deterministic local fixture (not AI inference)**. Each claim is only that the cited record contains the quoted text, not that its contents are true. It neither answers arbitrary questions nor follows instructions inside messages. Embedded citations and links stay data and never expand the selection.
+
+This is a contributor-testable package capability, not an Ask center button, a product CLI trigger, or a posted response. Nothing new appears in the room. Posting, cross-restart duplicate suppression and browser visibility remain later L5 work after L3/L4.
 
 ## Why it exists
 
@@ -47,15 +55,29 @@ The narrow development transport is bounded HTTP polling using the existing Hono
 
 Browser validators are compiled from the same authored schemas before launch; CSP permits neither runtime evaluation nor external scripts. Message text is rendered with `textContent`. The runtime checks exact Host and, when present, Origin; accepts JSON mutations only; bounds bodies to 128 KiB and uses a shared 60-token bucket refilling one token per second. The database listens only on loopback, requires its private SCRAM password and runs product queries as non-owner `agora_app`. Migration credentials never serve product queries.
 
+### Selected messages to a cited proposal
+
+```flow
+Selected messages | A trusted caller supplies validated persisted records and an explicit list of stored message IDs from one project and room; no storage handle enters the core.
+Bounded context | Refuse more than 100 supplied records, more than 10 selected IDs, or more than 4096 selected body scalars. Sort numerically by room sequence, never timestamp; freeze a private copy and digest it.
+Deterministic proposal | Emit exact quotes with the not-AI label. Bind the requester, project, room, request ID and selected content to deterministic identities, with no provider or execution authority.
+Cited records | Every claim names its selected stored message ID and exact sequence. Unknown, foreign or unselected citations deny; there is no transitive citation lookup or generated URL.
+Posting boundary | A separate type describes a future adapter. No instance exists, no function receives it, and no message is posted.
+```
+
+The [context compiler](repo:packages/domain/src/local-answer/context.ts), [citation constructor](repo:packages/domain/src/local-answer/citations.ts), [proposal function](repo:packages/domain/src/local-answer/proposal.ts) and [future posting port](repo:packages/domain/src/local-answer/posting.ts) are separate files. They use existing domain values, not new wire contracts. The [developer guide](repo:docs/runbooks/development.md) explains validation, digests and typed denials; the [driver reference](cli.md#local-answer-pure-core) gives the exact test command.
+
 ## Implementation status
 
 **In progress: L3 of 5, stacked candidate only.** Snapshot history is bounded to the latest 1000 messages. Older immutable records remain readable through event replay in pages of 50; this disposable runtime has no event compaction or retention expiry. CLI replay prints one page; continue with the last event's `seq`. The client drains at most 200 pages per call, then reports the bound and can resume again.
 
 There is no login, second principal, production membership, search, upload, external provider, agent response, task, repository authority, publication, cloud execution or final visual design. Reset creates a new disposable database, not a historical continuation: reload the harness after reset. A crashed supervisor with ambiguous surviving resources is refused rather than adopted or killed by a stored PID. See [operator recovery](operations.md#local-room-lifecycle). These receipts do not qualify FG04-FG08, AC02, AC04 or the S1 release.
 
+**L5 pure-core preparation is also present, independent of L3/L4.** Present and proven: bounded context compilation from explicitly supplied validated persisted records, deterministic attributed quote proposals with the not-AI label, and direct-citation integrity checks. Not present: a persisted local answer, any response trigger, posting, cross-restart duplicate suppression or browser visibility — those remain final L5 work after L4.
+
 ## Verification and proof
 
-[Runtime tests](repo:apps/center/test/runtime.pg.test.ts) exercise CLI/HTTP with real owned PostgreSQL: snapshot/replay interleaving, lost receipt, gap and duplicate convergence, numeric ordering beyond sequence 9, page boundaries, same-port restart durability, explicit reset, concurrent startup, cancellation, foreign identity and listener refusal, body/rate bounds and cleanup. [Adapter and guard tests](repo:apps/center/test/runtime.test.ts) cover unsupported frames, stale revisions, cancellation and isolated guard mutations. Existing [client-core tests](repo:packages/client-core/test/sync.test.ts) retain the transport-neutral ordering and retry proofs.
+[Runtime tests](repo:apps/center/test/runtime.pg.test.ts) exercise CLI/HTTP with real owned PostgreSQL: snapshot/replay interleaving, lost receipt, gap and duplicate convergence, numeric ordering beyond sequence 9, page boundaries, same-port restart durability, explicit reset, concurrent startup, cancellation, foreign identity and listener refusal, body/rate bounds and cleanup. [Adapter and guard tests](repo:apps/center/test/runtime.test.ts) cover unsupported frames, stale revisions, cancellation and isolated guard mutations. Existing [client-core tests](repo:packages/client-core/test/sync.test.ts) retain the transport-neutral ordering and retry proofs. The pure core has its own [behavior tests](repo:packages/domain/test/local-answer.test.ts) and [isolated guard mutations and authority negatives](repo:packages/domain/test/local-answer-guards.test.ts). The features are mapped in [the feature map](repo:agora/feature-map.json) under `local-room-contracts`, `local-room-persistence`, `local-room-runtime` and `local-room-agent-core`.
 
 ```sh
 pnpm contracts:check
@@ -65,4 +87,4 @@ pnpm test
 node scripts/local-room.ts doctor
 ```
 
-The literal Doctor, Launch, Drive, Evidence and Cleanup commands live in [verify-agora](repo:.agents/skills/verify-agora/SKILL.md). The feature map includes `local-room-runtime`. Retained [runtime evidence](repo:evidence/local-room/runtime/README.md) distinguishes local assertions, native CLI and browser observations from unavailable CI and independent review. Earlier [L1](repo:evidence/local-room/contracts/outcome.json) and [L2](repo:evidence/local-room/persistence/outcome.json) receipts keep their own exact subjects.
+The literal Doctor, Launch, Drive, Evidence and Cleanup commands live in [verify-agora](repo:.agents/skills/verify-agora/SKILL.md). Retained [runtime evidence](repo:evidence/local-room/runtime/README.md) distinguishes local assertions, native CLI and browser observations from unavailable CI and independent review. Earlier [L1](repo:evidence/local-room/contracts/outcome.json) and [L2](repo:evidence/local-room/persistence/outcome.json) receipts keep their own exact subjects. The pure core's [stacked candidate receipts](repo:evidence/local-room/agent-core/outcome.json) prove bounds, chronology, citation integrity and the three isolated guard mutations at its own exact head; they do not qualify AC04, FG04-FG08, final L5 or S1, and remain subject to their own applicable CI protections and independent exact-head review. See [portable contracts](contracts.md) for the generation contract and [the foundation](foundation.md) for the service and storage the room joins.
