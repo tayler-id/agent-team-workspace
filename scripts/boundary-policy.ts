@@ -9,6 +9,8 @@ export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/do
 /** Reserved apps/web owners. Folders may arrive in later slices. */
 export const WEB_OWNERS = { framework: 'apps/web/src/framework', client: 'apps/web/src/client', host: 'apps/web/src/host', features: 'apps/web/src/features' } as const;
 const WEB_SRC = 'apps/web/src';
+/** The single module allowed to import @chenglou/pretext. */
+export const TEXT_SIZING_ADAPTER = 'apps/web/src/host/pretext.ts';
 
 const inside = (root: string, file: string): boolean => !path.relative(root, file).startsWith('..') && !path.isAbsolute(path.relative(root, file));
 const physical = (file: string): string => (existsSync(file) ? realpathSync(file) : file);
@@ -34,7 +36,7 @@ const packageAllowed: Record<string, readonly string[]> = {
 	contracts: ['ajv', 'ajv-formats', 'openapi-typescript', 'node:crypto'],
 	'packages/storage': ['@agora/domain', '@agora/contracts/canonical', 'pg', 'drizzle-orm', 'node:crypto', 'node:fs', 'node:path', 'node:url'],
 	'apps/center': ['@agora/contracts', '@agora/contracts/canonical', '@agora/domain', '@agora/storage', 'hono', '@hono/node-server', 'node:url', 'node:crypto'],
-	'apps/web': ['@agora/contracts', '@agora/client-core', 'react', 'react-dom', 'react/jsx-runtime'],
+	'apps/web': ['@agora/contracts', '@agora/client-core', 'react', 'react-dom', 'react/jsx-runtime', '@tanstack/react-virtual'],
 	'apps/worker': ['@agora/contracts', '@agora/client-core'],
 };
 const contractsTooling = ['node:child_process', 'node:fs', 'node:path', 'node:url', 'node:os'] as const;
@@ -64,8 +66,9 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 		}
 		const boundary = file.includes('/contracts/generated/') ? 'contracts/generated' : owner;
 		if (!inside(physical(path.join(projectRoot, boundary)), resolvedTarget)) return `relative import escapes ${supportedOwner(file)}; keep paths inside ${boundary}`;
-		// apps/web code may only relative-import inside apps/web/src (blocks test/lib relocation bypass).
-		if (owner === 'apps/web' || layer) {
+		// apps/web/src code may only relative-import inside apps/web/src (blocks test/lib relocation bypass); test and
+		// config files outside src still answer to the owner boundary and the renderer import rules below.
+		if ((owner === 'apps/web' || layer) && relPosix(file).startsWith(`${WEB_SRC}/`)) {
 			const targetRel = relPosix(resolvedTarget);
 			if (!targetRel.startsWith(`${WEB_SRC}/`) && !targetRel.includes('node_modules')) {
 				return `relative import escapes ${WEB_SRC}; renderer code stays under ${WEB_SRC}/{framework,client,host,features} (not apps/web/test or other non-src paths)`;
@@ -97,6 +100,8 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 		return typesOnly && resolved && physical(resolved) === physical(path.join(projectRoot, 'contracts/generated/typescript/openapi.d.ts')) ? undefined : 'generated values require a type-only edge to the declared generated file';
 	}
 	if (owner === 'packages/storage' && file.endsWith('/src/index.ts')) return specifier === '@agora/domain' ? undefined : 'public storage entry exports domain ports, not SDK bindings';
+	// Pretext is a text-sizing engine; only the renderer's host adapter may import it, never portable or product code.
+	if (specifier === '@chenglou/pretext' || specifier.startsWith('@chenglou/pretext/')) return relPosix(file) === TEXT_SIZING_ADAPTER ? undefined : `text-sizing engine ${specifier} stays behind ${TEXT_SIZING_ADAPTER}; ${supportedOwner(file)} must use the host sizing interface`;
 	if (owner === 'apps/web' || layer) {
 		if (rendererForbidden.some((name) => specifier === name || specifier.startsWith(`${name}/`))) {
 			return `renderer code cannot import ${specifier}; use ${WEB_OWNERS.client} / ${WEB_OWNERS.host} adapters instead of storage, domain implementation, or server packages`;

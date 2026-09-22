@@ -24,7 +24,8 @@ export function FixtureControls({ store, transport }: Props): ReactElement {
 		['Resync', () => { transport.resync(); }],
 		[state.online ? 'Go offline' : 'Go online', () => { transport.setOnline(!state.online); }],
 		['Revoke access', () => { transport.revoke(); }],
-		['Load large room (400)', () => { transport.loadLargeRoom(400); }],
+		['Load large room (50,000)', () => { transport.loadLargeRoom(50_000); }],
+		['Append 100 messages', () => { transport.appendLarge(100); }],
 		['Deliver fixture receipt', () => { transport.deliverReceipt(); }],
 		...failures.map((failure): [string, () => void] => [`Fail send: ${failure.replaceAll('_', ' ')}`, () => { transport.fail(failure); }]),
 	];

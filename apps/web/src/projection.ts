@@ -8,7 +8,6 @@ export type FrozenMessage = Room['messages'][number];
 export interface Author { readonly name: string; readonly kind: 'human' | 'agent' | 'system' }
 export interface Presentation { readonly authors: Readonly<Record<string, Author>>; readonly times: Readonly<Record<string, string>>; readonly citations: Readonly<Record<string, readonly string[]>> }
 export interface Row { readonly message: FrozenMessage; readonly author: Author; readonly time: string; readonly edited: boolean; readonly unread: boolean; readonly firstUnread: boolean; readonly citations: readonly string[] }
-export interface Window { readonly rows: readonly Row[]; readonly older: number; readonly total: number }
 export type RoomPhase = 'empty' | 'loading' | 'live' | 'gap' | 'resync' | 'upgrade' | 'error' | 'revoked';
 export interface RoomStatus { readonly phase: RoomPhase; readonly online: boolean; readonly label: string; readonly detail: string; readonly unread: number; readonly cursor: string | undefined }
 export interface ComposerStatus { readonly draft: string; readonly pending: readonly { commandId: string; tag: 'pending' | 'received' }[]; readonly decision: string | undefined }
@@ -25,12 +24,6 @@ export function rows(room: Room | undefined, presentation: Presentation): readon
 		if (unread) boundary = false;
 		return { message, author: presentation.authors[message.id] ?? unknownAuthor, time: presentation.times[message.id] ?? '', edited: message.content.tag === 'visible' && message.revision !== '1', unread, firstUnread, citations: presentation.citations[message.id] ?? [] };
 	});
-}
-
-// Bounded window over the newest rows; older rows stay reachable through an explicit Load older messages step.
-export function window(all: readonly Row[], limit: number): Window {
-	const start = Math.max(0, all.length - limit);
-	return { rows: all.slice(start), older: start, total: all.length };
 }
 
 export interface Connection { readonly online: boolean; readonly phase: 'idle' | 'loading' | 'error' | 'revoked'; readonly error: string | undefined }

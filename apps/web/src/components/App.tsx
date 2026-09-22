@@ -19,7 +19,6 @@ export function App({ store, port, header, presentation, digest = subtleDigest }
 	const room = useSelector(store, (state) => state.rooms.find((r) => r.streamId === streamId));
 	const connection = useTransportState(port);
 	const phone = useSyncExternalStore(subscribePhone, isPhone, () => false);
-	const [notice, setNotice] = useState('');
 	const [announcement, setAnnouncement] = useState('');
 	const [focusRequest, setFocusRequest] = useState<string | undefined>(undefined);
 	const seenCount = useRef<number | undefined>(undefined);
@@ -39,8 +38,9 @@ export function App({ store, port, header, presentation, digest = subtleDigest }
 		return () => { clearTimeout(timer); };
 	}, [rows.length]);
 	// Stable across renders so an unrelated connection or command update does not break MessageRow's memoization.
-	const loadedOlder = useCallback((count: number): void => { setNotice(`Loaded ${count} older messages.`); }, []);
 	const cite = useCallback((messageId: string): void => { setFocusRequest(undefined); setTimeout(() => { setFocusRequest(messageId); }, 0); }, []);
+	// #message-<id> deep links reach any row of the virtualized list through the same focus request as a citation.
+	useEffect(() => { const fromHash = (): void => { const id = /^#message-(.+)$/.exec(window.location.hash)?.[1]; if (id) cite(id); }; fromHash(); window.addEventListener('hashchange', fromHash); return () => { window.removeEventListener('hashchange', fromHash); }; }, [cite]);
 	const composerDisabled = !room || status.phase === 'revoked';
 
 	return (
@@ -57,7 +57,7 @@ export function App({ store, port, header, presentation, digest = subtleDigest }
 					{room && status.unread > 0 && <button type="button" onClick={() => { port.markSeen(room.cursor); }}>Mark room as read</button>}
 				</p>
 				<div role="status" aria-live="polite" className="status" data-phase={status.phase} data-online={connection.online}>
-					<span className="badge" data-state={status.phase}>{status.label}</span> <span>{status.detail}</span> <span>{connection.online ? 'Online.' : 'Offline.'}</span> {notice && <span>{notice}</span>} {announcement && <span>{announcement}</span>}
+					<span className="badge" data-state={status.phase}>{status.label}</span> <span>{status.detail}</span> <span>{connection.online ? 'Online.' : 'Offline.'}</span> {announcement && <span>{announcement}</span>}
 				</div>
 				{status.phase === 'error' && <p role="alert" className="alert">{status.detail}</p>}
 			</header>
@@ -66,7 +66,7 @@ export function App({ store, port, header, presentation, digest = subtleDigest }
 				{status.phase === 'loading' && <p className="empty" aria-busy="true">Loading snapshot…</p>}
 				{status.phase === 'revoked' && <section className="empty" aria-labelledby="revoked-heading"><h2 id="revoked-heading">Access revoked</h2><p>Drafts, commands and the room were cleared.</p><button type="button" onClick={port.loadSnapshot}>Load fixture snapshot again</button></section>}
 				{(status.phase === 'resync' || status.phase === 'upgrade') && <p className="banner">{status.label}: {status.detail} <button type="button" onClick={port.loadSnapshot}>Load fresh snapshot</button></p>}
-				{room && <Timeline store={store} streamId={streamId} rows={rows} presentation={presentation} onLoadedOlder={loadedOlder} onCite={cite} focusRequest={focusRequest} />}
+				{room && <Timeline store={store} streamId={streamId} rows={rows} presentation={presentation} onCite={cite} focusRequest={focusRequest} />}
 				<Composer store={store} port={port} streamId={streamId} disabled={composerDisabled} digest={digest} />
 			</main>
 		</div>
