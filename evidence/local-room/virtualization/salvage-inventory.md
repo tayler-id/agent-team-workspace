@@ -59,8 +59,8 @@ hang, no nondeterministic failure.
 The previously-reported "blocks 11 min then cascades (5-7/7 fail)" does not
 reproduce against the preserved Timeline.tsx/rows.ts/host virtualization code
 run correctly (`cd apps/web && npx vitest run test/timeline.test.tsx`, which
-picks up `apps/web/vitest.config.ts`'s `web` project — jsdom + `@vitejs/plugin-react`
-+ `include: ['test/**/*.test.tsx', 'test/**/*.test.ts']`). Two earlier invocation
+picks up `apps/web/vitest.config.ts`'s `web` project: jsdom, `@vitejs/plugin-react`,
+and `include: ['test/**/*.test.tsx', 'test/**/*.test.ts']`). Two earlier invocation
 attempts in this session that used the **root** `vitest.config.ts` (`--project unit`
 or no project filter) failed immediately with "No projects were found" / "No test
 files found" — the root config's `unit` project only globs `*.test.ts`, never
@@ -80,8 +80,8 @@ since a whole-repo run has not yet been attempted with the ported code in place.
 ## Slice 1: pure sizing/geometry engine (landed)
 
 Files: `apps/web/src/host/{geometry,text-sizing,pretext}.ts`, `apps/web/src/host/index.ts`
-(additive), `apps/web/src/rows.ts`, `apps/web/test/sizing.test.ts`, `apps/web/package.json`
-+ `pnpm-lock.yaml` (`@chenglou/pretext@0.0.9`), `scripts/boundary-policy.ts`
+(additive), `apps/web/src/rows.ts`, `apps/web/test/sizing.test.ts`, `apps/web/package.json`,
+`pnpm-lock.yaml` (`@chenglou/pretext@0.0.9`), and `scripts/boundary-policy.ts`
 (`TEXT_SIZING_ADAPTER`). 9 files, 251 lines. No changes to `App.tsx` or any consolidated
 main architecture file — this slice is pure, dependency-ordered groundwork with no
 behavioral surface yet (nothing in the production render path imports it).
