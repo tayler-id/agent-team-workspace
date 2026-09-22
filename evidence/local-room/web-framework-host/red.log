@@ -1,0 +1,48 @@
+
+ RUN  v5.0.1 /private/tmp/agora-red-manual
+
+ ❯ |unit| apps/web/test/fixture.test.ts (0 test)
+ ❯ |unit| packages/client-core/test/app-architecture.test.ts (21 tests | 1 failed) 21856ms
+   × apps/web test/config owner allows dev-tooling imports; production src cannot import them, including a relay 1419ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| apps/web/test/fixture.test.ts [ apps/web/test/fixture.test.ts ]
+Error: Cannot find package '@agora/web-framework' imported from /private/tmp/agora-red-manual/apps/web/test/fixture.test.ts
+ ❯ apps/web/test/fixture.test.ts:2:1
+      1| import type { ClientState } from '@agora/client-core';
+      2| import { createRoomClient, type RoomClient } from '@agora/web-framewor…
+       | ^
+      3| import { expect, test } from 'vitest';
+      4| import { createFixtureTransport, largeSnapshot, load, toEvent, toSnaps…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > apps/web test/config owner allows dev-tooling imports; production src cannot import them, including a relay
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:122:77
+    120|  const relocated = `apps/web/test/${Date.now().toString(36)}-leak.ts`;
+    121|  writeProbe(relocated, devImport);
+    122|  expect(await has(devImport, relocated, 'agora/import-boundary', 'vite…
+       |                                                                             ^
+    123| }, 60_000);
+    124|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  1 failed | 20 passed (21)
+   Start at  02:46:41
+   Duration  22.01s (tests 100%)
+

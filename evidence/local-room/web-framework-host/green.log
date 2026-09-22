@@ -1,0 +1,9 @@
+
+ RUN  v5.0.1 /private/tmp/agora-green-manual
+
+
+ Test Files  2 passed (2)
+      Tests  22 passed (22)
+   Start at  02:47:17
+   Duration  22.83s (tests 99%, transform 1%, import 1%)
+

@@ -1,0 +1,25 @@
+{
+	"schema_version": "agora.evidence.size/v1",
+	"unit": "web-framework-host",
+	"parent": "9a8fe096605afaebc816227ebe42c3ceaafafd46",
+	"head": "eb7e8186a06c3a2f73748e4b00be072f28ff72fd",
+	"budget": {
+		"meaningful_code_test_lines": 400,
+		"source_files": 12
+	},
+	"counts": {
+		"host_adapter_lines": 170,
+		"host_barrel_lines": 2,
+		"host_test_lines": 31,
+		"app_architecture_owner_and_ownerstub_fix_lines": 61,
+		"shared_policy_edit_lines": 26,
+		"total_meaningful_code_test_lines": 290,
+		"source_files": ["apps/web/src/host/environment.ts", "apps/web/src/host/fixture.ts", "apps/web/src/host/index.ts", "apps/web/test/fixture.test.ts", "packages/client-core/test/app-architecture.test.ts", "scripts/boundary-policy.ts", "scripts/renderer-policy.ts"],
+		"source_files_count": 7,
+		"note": "The unrelated digestCanonical/canonicalJson node:crypto build-edge fix now lands as its own preceding commit (contracts/src/index.ts, contracts/test/canonical.test.ts, apps/center/src/app.ts, apps/center/test/local-room.pg.test.ts, scripts/local-room-client.ts, scripts/local-room-service.ts), which is what pushed this slice to 13 files under the prior split. This slice's 7 counted source files replace that count. apps/web/package.json, apps/web/tsconfig.json, apps/web/src/fixture/room.json (fixture data) and pnpm-lock.yaml stay config/fixture, not counted against the cap."
+	},
+	"remainder_mapping": {
+		"landed_this_slice": "apps/web/src/host/{environment,fixture,index}.ts wired onto @agora/web-framework; a narrow apps/web/test/*.test.ts(x) + apps/web/*.config.ts boundary-policy owner with its own allow-list, file-name-scoped so a relocation into apps/web/test/ without the .test.ts(x) suffix still gets the strict checks. packages/client-core/test/app-architecture.test.ts's ownerStubs setup/cleanup now tracks and only removes the stubs it created, so landing a real Host barrel at apps/web/src/host/index.ts is never deleted by a routine test run.",
+		"next_slice": "App.tsx, FixtureControls.tsx, main.tsx and app.test.tsx: move App.tsx's three component-local useEffect/setTimeout uses into named packages/web-framework hooks (no added behavior), route main.tsx's document.getElementById mount through the Host owner, and wire the remaining apps/web build files (vite.config.ts, vitest.config.ts, index.html). Preserved sources: fm/agora-web-shell-integrate-checkpoint-1 (combined, unresolved lint gaps), fm/agora-local-room-web-shell@60bcd79 (original flat shell), fm/agora-web-framework-client-host@7d29380 (Client/Host candidate)."
+	}
+}
