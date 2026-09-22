@@ -6,13 +6,14 @@ import type { ClientInput, CoreEvent, Request, Snapshot } from '@agora/client-co
 import type { Connection, Room } from '../projection.ts';
 import type { Store } from '../store.ts';
 import type { RoomTransportPort, TransportState } from '../transport/port.ts';
-import { largeSnapshot, type RoomFixture } from './adapter.ts';
+import { largeSnapshot, syntheticMessage, type RoomFixture } from './adapter.ts';
 
 export type Failure = 'timeout' | 'stale_revision' | 'denied' | 'rate_limited';
 export interface FixtureTransport extends RoomTransportPort {
 	readonly fixture: RoomFixture;
 	readonly loadInvalidSnapshot: () => void;
 	readonly loadLargeRoom: (count: number) => void;
+	readonly appendLarge: (count: number) => void;
 	readonly replayNext: () => CoreEvent | undefined;
 	readonly replayAll: () => number;
 	readonly duplicateLast: () => void;
@@ -70,6 +71,10 @@ export function createFixtureTransport(store: Store, fixture: RoomFixture): Fixt
 			dispatch(largeSnapshot(fixture.streamId, count));
 			set({ phase: 'idle' });
 			nextEvent = fixture.events.length;
+		},
+		// Reconnect insertion at scale: count synthetic events after the current cursor, as a resumed stream delivers them.
+		appendLarge: (count) => {
+			for (let i = 0; i < count; i++) { const current = room(); if (!current) return; const seq = Number(nextSeq(current.cursor)); deliver({ type: 'event', streamId: fixture.streamId, seq: String(seq), change: { type: 'message', message: syntheticMessage(seq) } }); }
 		},
 		replayNext: () => {
 			const event = fixture.events[nextEvent];

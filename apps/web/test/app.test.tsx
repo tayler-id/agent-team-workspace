@@ -1,11 +1,12 @@
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { afterEach, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { App } from '../src/components/App.tsx';
 import { FixtureControls } from '../src/components/FixtureControls.tsx';
 import { load } from '../src/fixture/adapter.ts';
 import { createFixtureTransport, type FixtureTransport } from '../src/fixture/fixtureTransport.ts';
 import { createStore, type Store } from '../src/store.ts';
 import room from '../src/fixture/room.json' with { type: 'json' };
+import { installGeometry } from './geometry.ts';
 
 const loaded = load(room);
 if (!loaded.ok) throw new Error(loaded.error);
@@ -16,6 +17,7 @@ let phone = false;
 const listeners = new Set<() => void>();
 window.matchMedia = (query: string): MediaQueryList => ({ matches: phone && query.includes('700px'), media: query, onchange: null, addEventListener: (_: string, l: unknown) => { listeners.add(l as () => void); }, removeEventListener: (_: string, l: unknown) => { listeners.delete(l as () => void); }, addListener: () => undefined, removeListener: () => undefined, dispatchEvent: () => true } as MediaQueryList);
 const setPhone = (value: boolean): void => { phone = value; act(() => { for (const l of listeners) l(); }); };
+beforeEach(() => { installGeometry(); });
 afterEach(() => { cleanup(); phone = false; vi.useRealTimers(); });
 declare module 'vitest' { interface Assertion { toHaveTextContent: (expected: string) => void } }
 expect.extend({ toHaveTextContent(received: unknown, expected: string) { const text = received instanceof Element ? received.textContent : ''; return { pass: text.includes(expected), message: () => `expected element text ${JSON.stringify(text)} to include ${JSON.stringify(expected)}` }; } });

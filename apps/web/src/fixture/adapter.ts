@@ -6,6 +6,7 @@ import { createWireValidator, type Schema } from '@agora/contracts';
 import type { ClientInput, CoreEvent, Receipt, Snapshot } from '@agora/client-core';
 import type { Author, Presentation } from '../projection.ts';
 import type { RoomHeader } from '../transport/port.ts';
+import { corpusBody, corpusTombstone } from './corpus.ts';
 
 export interface RoomFixture {
 	readonly streamId: string;
@@ -97,10 +98,10 @@ export function load(value: unknown): Loaded {
 	};
 }
 
-// Synthetic scale input for the bounded-rendering and update-isolation proofs. IDs derive from the sequence so
-// repeated runs are identical; this never becomes a second fixture format, only a larger valid Snapshot.
-const syntheticId = (seq: bigint): string => `aaaaaaaa-0000-4000-8000-${seq.toString(16).padStart(12, '0')}`;
+// Synthetic scale input for the virtualization and update-isolation proofs. IDs and bodies derive from the
+// sequence (corpus.ts) so repeated runs are identical; this never becomes a second fixture format, only a larger valid Snapshot.
+export const syntheticMessage = (seq: number): Snapshot['messages'][number] => ({ id: `aaaaaaaa-0000-4000-8000-${seq.toString(16).padStart(12, '0')}`, createdSeq: String(seq), revision: '1', content: corpusTombstone(seq) ? { tag: 'tombstone' as const } : { tag: 'visible' as const, body: corpusBody(seq) } });
 export function largeSnapshot(streamId: string, count: number): Snapshot {
-	const messages = Array.from({ length: count }, (_, i) => { const seq = BigInt(i + 1); return { id: syntheticId(seq), createdSeq: seq.toString(), revision: '1', content: { tag: 'visible' as const, body: `Large room message ${seq}` } }; });
+	const messages = Array.from({ length: count }, (_, i) => syntheticMessage(i + 1));
 	return { type: 'snapshot', streamId, cursor: String(count), lastSeen: String(Math.max(0, count - 5)), messages, runs: [] };
 }

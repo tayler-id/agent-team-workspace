@@ -6,34 +6,34 @@ import { load } from '../src/fixture/adapter.ts';
 import { createFixtureTransport, type FixtureTransport } from '../src/fixture/fixtureTransport.ts';
 import { createStore } from '../src/store.ts';
 import room from '../src/fixture/room.json' with { type: 'json' };
+import { fonts, geometry, installGeometry, scrollCalls } from './geometry.ts';
 
-// Drives only the public shell surface (App, FixtureControls, fixture transport) with jsdom geometry doubles:
-// the timeline region is a 600px tall scroll container, rows are as tall as their text is long, and widths
-// shrink on resize so heights change. Nothing here imports the sizing or virtualization modules directly.
+// Drives only the public shell surface (App, FixtureControls, fixture transport) with the jsdom geometry doubles
+// from geometry.ts. Nothing here imports the sizing or virtualization modules directly.
 const loaded = load(room);
 if (!loaded.ok) throw new Error(loaded.error);
 const fixture = loaded.fixture;
 const total = 50_000;
 const id = (n: number): string => `aaaaaaaa-0000-4000-8000-${n.toString(16).padStart(12, '0')}`;
-const geometry = { viewport: 600, width: 800, reducedMotion: false };
-const fonts = new EventTarget() as EventTarget & { ready: Promise<void> };
-fonts.ready = Promise.resolve();
-const rowHeight = (element: HTMLElement): number => 48 + 22 * Math.max(1, Math.ceil(element.textContent.length / (geometry.width / 8)));
-const scrollCalls: ScrollToOptions[] = [];
 
 beforeEach(() => {
-	Object.defineProperty(HTMLElement.prototype, 'offsetHeight', { configurable: true, get(this: HTMLElement) { return this.classList.contains('timeline') ? geometry.viewport : this.classList.contains('row') ? rowHeight(this) : 0; } });
-	Object.defineProperty(HTMLElement.prototype, 'offsetWidth', { configurable: true, get(this: HTMLElement) { return this.classList.contains('timeline') ? geometry.width : 0; } });
-	Element.prototype.scrollTo = function (this: Element, options?: ScrollToOptions | number) { const opts = typeof options === 'number' ? { top: options } : options ?? {}; scrollCalls.push(opts); this.scrollTop = opts.top ?? 0; this.dispatchEvent(new Event('scroll')); };
+	installGeometry();
 	window.matchMedia = (query: string): MediaQueryList => ({ matches: query.includes('reduced-motion') && geometry.reducedMotion, media: query, onchange: null, addEventListener: () => undefined, removeEventListener: () => undefined, addListener: () => undefined, removeListener: () => undefined, dispatchEvent: () => true } as MediaQueryList);
-	Object.defineProperty(document, 'fonts', { configurable: true, value: fonts });
-	scrollCalls.length = 0;
-	geometry.viewport = 600; geometry.width = 800; geometry.reducedMotion = false;
-	window.location.hash = '';
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); });
 
-const settle = async (): Promise<void> => { await act(async () => { await new Promise((resolve) => { setTimeout(resolve, 80); }); }); };
+// Waits until programmatic scrolling has settled: the virtualizer reconciles a jump over a few frames while newly
+// mounted rows are measured, so the scroll offset is read only once it has been stable for two ticks.
+const settle = async (): Promise<void> => {
+	const region = screen.queryByRole('region', { name: 'Messages' });
+	let last = -1, stable = 0;
+	for (let i = 0; i < 40 && stable < 2; i++) {
+		await act(async () => { await new Promise((resolve) => { setTimeout(resolve, 32); }); });
+		const now = region?.scrollTop ?? 0;
+		stable = now === last ? stable + 1 : 0;
+		last = now;
+	}
+};
 function mountLarge(count = total): { transport: FixtureTransport; region: HTMLElement; list: HTMLElement } {
 	const store = createStore();
 	const transport = createFixtureTransport(store, fixture);
