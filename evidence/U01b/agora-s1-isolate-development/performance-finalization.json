@@ -1,0 +1,30 @@
+{
+  "head": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+  "samples_artifact": "evidence/U01b/agora-s1-isolate-development/performance.json",
+  "samples_digest": "sha256:3734592af7961fc9c9c272cf7e4fcd105d8f7f227c832f4d825a6ad229826236",
+  "samples_per_metric": 100,
+  "batches": 5,
+  "p95_ms": {
+    "parent": 1004.74825,
+    "head": 1038.5315,
+    "agora-start": 1145.294875,
+    "python-start": 486.840417,
+    "agora-verify": 304.656334,
+    "python-verify": 301.308333,
+    "agora-evidence": 272.41525,
+    "python-evidence": 269.705875,
+    "agora-stop": 346.124833,
+    "python-stop": 191.291584,
+    "equivalent_ratio": 1.0336235967567
+  },
+  "outcome": "pass",
+  "cleanup": {
+    "owned_temp_root": "/tmp/agora-u01b-perf-na2b53sn",
+    "remaining_before_cleanup": [
+      "node-compile-cache"
+    ],
+    "removed": true,
+    "baseline_worktree_removed": true
+  },
+  "note": "No measurement rerun. The original driver correctly found Node tool-cache residue, failed its too-broad empty-directory assertion and retained the samples with outcome running. This separate receipt finalizes those same samples and proves removal of only the owned cache."
+}

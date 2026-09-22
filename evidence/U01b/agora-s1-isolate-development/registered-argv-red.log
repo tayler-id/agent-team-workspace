@@ -1,0 +1,243 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ❯ |unit| packages/verification/test/project.test.ts (5 tests | 5 failed) 1871ms
+   × project lane 1 persists literal public effects in Agora and Python 386ms
+   × project lane 2 isolates resources and refuses foreign cleanup 371ms
+   × project lane 3 rejects unknown scenarios and missing or mismatched artifacts 369ms
+   × project lane 4 invalidates changed instructions and deleted feature coverage 373ms
+   × project guards require their own assertions to turn red in isolated copies 372ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 1 persists literal public effects in Agora and Python
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ undefined
+- [
+-   'node',
+-   'scripts/project.mjs',
+-   'project',
+-   'start'
+- ]
+
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:8:84
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: [ 'node', 'scripts/project.mjs', 'project', 'start' ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ [eval1]:8:84
+ ❯ probe packages/verification/test/project.test.ts:14:55
+
+ ❯ packages/verification/test/project.test.ts:18:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 2 isolates resources and refuses foreign cleanup
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ undefined
+- [
+-   'node',
+-   'scripts/project.mjs',
+-   'project',
+-   'start'
+- ]
+
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:8:84
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: [ 'node', 'scripts/project.mjs', 'project', 'start' ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ [eval1]:8:84
+ ❯ probe packages/verification/test/project.test.ts:14:55
+
+ ❯ packages/verification/test/project.test.ts:28:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 3 rejects unknown scenarios and missing or mismatched artifacts
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ undefined
+- [
+-   'node',
+-   'scripts/project.mjs',
+-   'project',
+-   'start'
+- ]
+
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:8:84
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: [ 'node', 'scripts/project.mjs', 'project', 'start' ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ [eval1]:8:84
+ ❯ probe packages/verification/test/project.test.ts:14:55
+
+ ❯ packages/verification/test/project.test.ts:40:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 4 invalidates changed instructions and deleted feature coverage
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ undefined
+- [
+-   'node',
+-   'scripts/project.mjs',
+-   'project',
+-   'start'
+- ]
+
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:8:84
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: [ 'node', 'scripts/project.mjs', 'project', 'start' ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ [eval1]:8:84
+ ❯ probe packages/verification/test/project.test.ts:14:55
+
+ ❯ packages/verification/test/project.test.ts:53:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project guards require their own assertions to turn red in isolated copies
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ undefined
+- [
+-   'node',
+-   'scripts/project.mjs',
+-   'project',
+-   'start'
+- ]
+
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:8:84
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: [ 'node', 'scripts/project.mjs', 'project', 'start' ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ [eval1]:8:84
+ ❯ probe packages/verification/test/project.test.ts:14:55
+
+ ❯ packages/verification/test/project.test.ts:61:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  17:28:09
+   Duration  1.94s (tests 99%)
+

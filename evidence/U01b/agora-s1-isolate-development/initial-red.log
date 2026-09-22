@@ -1,0 +1,181 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+ ❯ |unit| packages/verification/test/project.test.ts (4 tests | 4 failed) 214ms
+   × project lane 1 persists literal public effects in Agora and Python 90ms
+   × project lane 2 isolates resources and refuses foreign cleanup 84ms
+   × project lane 3 rejects unknown scenarios and missing or mismatched artifacts 20ms
+   × project lane 4 invalidates changed instructions and deleted feature coverage 20ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 1 persists literal public effects in Agora and Python
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"schema_version":"agora.cli-report/v1","command":"scenarios","versions":{"code":"ab6a1832da47782ddad69e2ca80512bb4d24ed24","config":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f","fixture":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f"},"outcome":"unavailable","diagnostics":[],"artifacts":[],"started_at":"2026-09-20T20:57:10.700Z","finished_at":"2026-09-20T20:57:10.700Z"}
++ actual - expected
+
++ 'unavailable'
+- 'pass'
+
+    at pass (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:5:53)
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:7:17
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'unavailable',
+  expected: 'pass',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ pass [eval1]:5:53
+ ❯ [eval1]:7:17
+ ❯ probe packages/verification/test/project.test.ts:13:55
+     11| const inventory=pass('scenarios'); assert.ok(inventory.scenarios.inclu…
+     12| ${body}`], { encoding: 'utf8', timeout: 300_000 });
+     13|  expect(result.status, result.stdout + result.stderr).toBe(0);
+       |                                                       ^
+     14| }
+     15|
+ ❯ packages/verification/test/project.test.ts:17:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 2 isolates resources and refuses foreign cleanup
+AssertionError: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"schema_version":"agora.cli-report/v1","command":"scenarios","versions":{"code":"ab6a1832da47782ddad69e2ca80512bb4d24ed24","config":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f","fixture":"sha256:f94366138e3856dda172151a276da120c18bce98d2bd718bea41952988947d9f"},"outcome":"unavailable","diagnostics":[],"artifacts":[],"started_at":"2026-09-20T20:57:10.786Z","finished_at":"2026-09-20T20:57:10.786Z"}
++ actual - expected
+
++ 'unavailable'
+- 'pass'
+
+    at pass (file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:5:53)
+    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:7:17
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:230:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:227:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'unavailable',
+  expected: 'pass',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ pass [eval1]:5:53
+ ❯ [eval1]:7:17
+ ❯ probe packages/verification/test/project.test.ts:13:55
+     11| const inventory=pass('scenarios'); assert.ok(inventory.scenarios.inclu…
+     12| ${body}`], { encoding: 'utf8', timeout: 300_000 });
+     13|  expect(result.status, result.stdout + result.stderr).toBe(0);
+       |                                                       ^
+     14| }
+     15|
+ ❯ packages/verification/test/project.test.ts:27:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 3 rejects unknown scenarios and missing or mismatched artifacts
+AssertionError: file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:14
+}finally{pass('stop','--instance',id,'--handle',s.instance.cleanup_handle);}}
+                                                                            ^
+
+SyntaxError: Unexpected token '}'
+    at compileSourceTextModule (node:internal/modules/esm/utils:318:16)
+    at ModuleLoader.createModuleWrap (node:internal/modules/esm/loader:215:12)
+    at ModuleLoader.eval (node:internal/modules/esm/loader:254:23)
+    at node:internal/process/execution:77:24
+    at asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:11)
+    at Object.runEntryPointWithESMLoader (node:internal/modules/run_main:123:19)
+    at evalModuleEntryPoint (node:internal/process/execution:76:47)
+    at node:internal/main/eval_string:37:3
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ probe packages/verification/test/project.test.ts:13:55
+     11| const inventory=pass('scenarios'); assert.ok(inventory.scenarios.inclu…
+     12| ${body}`], { encoding: 'utf8', timeout: 300_000 });
+     13|  expect(result.status, result.stdout + result.stderr).toBe(0);
+       |                                                       ^
+     14| }
+     15|
+ ❯ packages/verification/test/project.test.ts:39:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  |unit| packages/verification/test/project.test.ts > project lane 4 invalidates changed instructions and deleted feature coverage
+AssertionError: file:///Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/[eval1]:12
+}finally{fs.writeFileSync(file,original);fs.writeFileSync(skill,instructions);pass('stop','--instance',id,'--handle',s.instance.cleanup_handle);}}
+                                                                                                                                                 ^
+
+SyntaxError: Unexpected token '}'
+    at compileSourceTextModule (node:internal/modules/esm/utils:318:16)
+    at ModuleLoader.createModuleWrap (node:internal/modules/esm/loader:215:12)
+    at ModuleLoader.eval (node:internal/modules/esm/loader:254:23)
+    at node:internal/process/execution:77:24
+    at asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:11)
+    at Object.runEntryPointWithESMLoader (node:internal/modules/run_main:123:19)
+    at evalModuleEntryPoint (node:internal/process/execution:76:47)
+    at node:internal/main/eval_string:37:3
+
+Node.js v24.16.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ probe packages/verification/test/project.test.ts:13:55
+     11| const inventory=pass('scenarios'); assert.ok(inventory.scenarios.inclu…
+     12| ${body}`], { encoding: 'utf8', timeout: 300_000 });
+     13|  expect(result.status, result.stdout + result.stderr).toBe(0);
+       |                                                       ^
+     14| }
+     15|
+ ❯ packages/verification/test/project.test.ts:49:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  16:57:10
+   Duration  289ms (tests 93%, transform 4%, import 2%, worker 1%)
+

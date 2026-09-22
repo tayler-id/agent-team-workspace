@@ -54,6 +54,11 @@
           "kind": "guide"
         },
         {
+          "id": "checking-a-project",
+          "title": "Checking a project",
+          "kind": "feature"
+        },
+        {
           "id": "configuration",
           "title": "Configuration",
           "kind": "guide"
@@ -96,6 +101,11 @@
         {
           "id": "test-first",
           "title": "Task proof admission",
+          "kind": "feature"
+        },
+        {
+          "id": "project-controls",
+          "title": "Owned project verification",
           "kind": "feature"
         },
         {
@@ -246,6 +256,22 @@
     {
       "path": "scripts/foundation.mjs",
       "page": "test-first.md"
+    },
+    {
+      "path": "scripts/project.mjs",
+      "page": "project-controls.md"
+    },
+    {
+      "path": "scripts/project-host.mjs",
+      "page": "project-controls.md"
+    },
+    {
+      "path": "scripts/project-checks.mjs",
+      "page": "project-controls.md"
+    },
+    {
+      "path": "apps/center/src/verification.mjs",
+      "page": "project-controls.md"
     },
     {
       "path": "scripts/foundation-policy.mjs",

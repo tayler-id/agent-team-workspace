@@ -1,0 +1,163 @@
+
+> agora@ check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test
+
+
+> agora@ lint /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> eslint .
+
+
+> agora@ typecheck /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json
+
+
+> agora@ docs:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> markdownlint-cli2 AGENTS.md 'docs/**/*.md' 'evidence/**/*.md' '.agents/skills/verify-agora/SKILL.md' && node scripts/verify-design.mjs && node scripts/verify-design-handoff.mjs && pnpm docs:validate && pnpm docs:test
+
+markdownlint-cli2 v0.23.2 (markdownlint v0.41.1)
+Finding: AGENTS.md docs/**/*.md evidence/**/*.md .agents/skills/verify-agora/SKILL.md
+Linting: 64 files
+Summary: 0 issues in 0 files
+PASS authored structure: 7 documents; 24 requirements; 26 live-scenario mappings
+PASS semantic readiness: 22 milestones; 66 independently gated tasks; 66 exactly owned Build outcomes
+PASS combined dependency graph; 8 foundation proofs; evidence/canary before model writes; cloud-independent later tracks
+PASS 47 official skills; 76 append-only decisions; 192 local links; authored style/privacy checks
+SCOPE static design readiness only; no runtime foundation or product acceptance has run; upstream format/model literals are not semantic authority
+PASS packet structure: 14 files; 744 meaningful lines; required sections present
+PASS 90 relative links and anchors; 6 Mermaid diagrams; stage/status vocabularies; no private paths, placeholders or long dashes
+SCOPE packet structure only; it cannot verify that prose is true or that any screen exists; base revision 606cba2
+
+> agora@ docs:validate /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> node docs/site/build.mjs --check
+
+{"outcome":"pass","pages":26,"milestones":22}
+
+> agora@ docs:test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> node --test docs/site/test/*.test.ts
+
+✔ the same public build driver produces a valid baseline before corpus assertions (0.272791ms)
+✔ the complete corpus has 26 pages and both audience tracks (0.296042ms)
+✔ the atlas explains all nine system nodes and eight connections (0.153416ms)
+✔ the committed design packet is readable as linked documentation, not a source-code dump (0.152792ms)
+✔ current commands and planned product availability have separate references (0.187334ms)
+✔ disabling only the private path guard makes its behavioral assertion fail (103.28425ms)
+✔ disabling only the : section guard makes its behavioral assertion fail (95.8855ms)
+✔ disabling only the : visual guard makes its behavioral assertion fail (92.428292ms)
+✔ disabling only the : link guard makes its behavioral assertion fail (92.413333ms)
+✔ disabling only the : source guard makes its behavioral assertion fail (90.386083ms)
+✔ disabling only the snapshot revision guard makes its behavioral assertion fail (88.180709ms)
+✔ disabling only the invalid status guard makes its behavioral assertion fail (88.30425ms)
+✔ disabling only the Built proof guard makes its behavioral assertion fail (89.019833ms)
+✔ disabling only the milestone coverage guard makes its behavioral assertion fail (90.218583ms)
+✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (91.813209ms)
+✔ disabling only the : outcome guard makes its behavioral assertion fail (87.797875ms)
+✔ disabling only the : stage guard makes its behavioral assertion fail (87.60175ms)
+✔ disabling only the inventory missing guard makes its behavioral assertion fail (91.568417ms)
+✔ disabling only the feature documentation guard makes its behavioral assertion fail (90.7445ms)
+✔ public documentation guard accepts the complete valid fixture (3.397916ms)
+✔ broken internal page and anchor links fail (1.503208ms)
+✔ feature explanations and visual flows are mandatory (0.368583ms)
+✔ progress statuses are closed and Built requires source test and evidence (0.3275ms)
+✔ all milestones must occur exactly once with an outcome and release stage (0.621125ms)
+✔ milestone outcomes mirror the authoritative plan instead of drifting (0.204417ms)
+✔ every executable and package must have a documentation home (0.291666ms)
+✔ every feature-map entry requires a validated feature page (0.129667ms)
+✔ private absolute paths and unsafe links never enter the site (0.354708ms)
+✔ production links include generated navigation, fragment, stylesheet and nested source views (0.962542ms)
+✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (2.470667ms)
+✔ Mermaid mirror carries the same status and relationships as the data owner (0.197834ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1333.544584
+
+> agora@ contracts:check /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> node contracts/tools/generate.mjs --check
+
+{"schema_version":"agora.contract-generation-run/v1","mode":"check","outcome":"pass","exit":0,"outputs":[{"file":"contracts/generated/openapi.bundled.json","digest":"sha256:00ee351c2322b9440d97d42b698f1157b41eb7b72f804877e8eff5ab23188f8d"},{"file":"contracts/generated/typescript/openapi.d.ts","digest":"sha256:e1c3cb147f33b5a5555f138ddbf6f6df3fab624e00059f258c33e28f768b2716"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Client.swift","digest":"sha256:0c91522556b6648d8629bc401e328ba76ad0b45242eabeb71ef8b7eba57b969d"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Headers.swift","digest":"sha256:b98a3f97c4cb97176fe979d198d2a3705972f99e4346887f0af4a266c6de8365"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Parameters.swift","digest":"sha256:d595dcdbd4f83d327e4c2ac0afd0c24e1f480a8a51080b3317e3705ecfc805d4"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+RequestBodies.swift","digest":"sha256:00a9569f70ba89057fd5fd14b4ecbbad8a34d6941e8bb905c57dc198873116d5"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Responses.swift","digest":"sha256:9398591b37a3141b09b726fcf5612eabf46e641bb56e0da6d7f0a098d307b348"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift","digest":"sha256:217da30d704c94b1eefac70d7125071e60936e5bc26835f4503b848d58697efd"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Components.swift","digest":"sha256:a823627f9eccdb71d20853743709c54609c76fe51096cd751aa2493f3f828a38"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types+Operations.swift","digest":"sha256:163d477ad74b98eafe77c46470b1bc2ef32ae144eb7bd0ee9557d880ab2ace79"},{"file":"contracts/swift/Sources/AgoraContracts/Generated/Types.swift","digest":"sha256:49aa1d90e0c5dde8f87940abfff61f2b0e416352bda4437beffd1da8beb4a869"}],"drift":[]}
+
+> agora@ test /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> node scripts/with-test-postgres.mjs vitest run
+
+{"schema_version":"agora.test-postgres/v1","outcome":"started","socket_dir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-FIuaU0","database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+
+
+ Test Files  20 passed (20)
+      Tests  98 passed (98)
+   Start at  17:47:47
+   Duration  42.27s (tests 97%, import 2%, transform 1%)
+
+PASS accepts baseline
+PASS accepts independent-reviewer-without-model-literal
+PASS rejects missing-requirement
+PASS rejects dependency-cycle
+PASS rejects missing-live-scenario
+PASS rejects broken-local-link
+PASS rejects placeholder
+PASS rejects long-dash
+PASS rejects unofficial-skill
+PASS rejects missing-decision-evidence
+PASS rejects historical-decision-rewrite
+PASS rejects outcome-build-mismatch
+PASS rejects deleted-build-outcome
+PASS rejects unowned-build-outcome
+PASS rejects duplicate-build-owner
+PASS rejects own-milestone-deadlock
+PASS rejects milestone-close-gate
+PASS rejects missing-foundation-proof
+PASS rejects foundation-proof-in-dependent-feature
+PASS rejects missing-integration-scenario
+PASS rejects model-write-before-canary
+PASS rejects feature-bypasses-foundation
+PASS rejects memory-unnecessarily-needs-cloud
+PASS 23 behavioral design-check cases; no application acceptance implied
+PASS accepts baseline
+PASS rejects missing-required-section
+PASS rejects missing-readme-part-link
+PASS rejects broken-relative-link
+PASS rejects missing-anchor
+PASS rejects link-escapes-project
+PASS rejects missing-mermaid-diagram
+PASS rejects unknown-mermaid-type
+PASS rejects unknown-stage-label
+PASS rejects unknown-status-label
+PASS rejects private-path
+PASS rejects long-dash
+PASS rejects placeholder
+PASS rejects unclosed-fence
+PASS rejects skipped-heading-level
+PASS rejects packet-over-line-limit
+PASS rejects unlisted-packet-file
+PASS rejects manifest-lists-missing-file
+PASS rejects manifest-without-revision
+PASS rejects readme-order-drift
+PASS 20 behavioral design-handoff check cases; no application acceptance implied
+Establish repository contracts and test-first gates (U01a)  boxes=29  files=1 build=4 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Qualify isolated verification and trusted evidence (U01b)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Prove independently recoverable backup and restore (U01c)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Qualify the selected React production client (U01d)  boxes=26  files=1 build=1 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Invite developers into scoped project rooms (U02)  boxes=30  files=1 build=5 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Deliver durable conversation and ordered reconnection (U03)  boxes=29  files=1 build=4 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Answer questions with visible read-only agent sessions (U04)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Create owned tasks with fenced runs and approvals (U05)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Connect owner-bound workers and prepare clean worktrees (U06)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Execute bounded local work and collect behavior evidence (U07)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Publish approved drafts and enforce independent review (U08)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Prove the first release across two accounts and machines (U09)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Provision a private project from a conversation (U10)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Build and qualify declarative project images (U11)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Execute and recover one isolated cloud attempt (U12)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Activate persistent project agents and reviewed knowledge (U13)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Prove local and cloud execution parity (U14)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Qualify a real external coding-agent adapter (U18)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Deliver the native Swift client without worker authority (U19)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Capture observer proposals and promote reviewed knowledge (U15)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Harden operations and prove governed deletion (U16)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+Add an opt-in notification-only Slack bridge (U17)  boxes=28  files=1 build=3 you-see=1 verify-unit=3 verify-live=10 verify-perf=4 review-gate=3 merge=3
+22 PR sections, 0 problems

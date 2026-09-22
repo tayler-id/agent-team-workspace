@@ -1,21 +1,25 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3) and the read-only deterministic local-answer core (L5 pure-core preparation) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the read-only deterministic local-answer core (L5 pure-core preparation) and the independent Agora/Python project verification controls from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, packages/verification, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, U01b.B01, local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
 ---
 
 # Verify Agora
 
-Every step is a literal command run from the repository root. Record outputs under `evidence/U01a/<task>/` (local-room slices: `evidence/local-room/<slice>/`), or under a scratch path when the run must leave no project changes. A command that cannot run is a blocked prerequisite, not a pass. The feature map is `agora/feature-map.json`; a change to any path it lists invalidates that feature's scenarios until the Drive step passes again at the new head.
+Every step is a literal command run from the repository root. Record outputs under `evidence/U01a/<task>/` (local-room slices: `evidence/local-room/<slice>/`; U01b project-controls slices: `evidence/U01b/<task>/`), or under a scratch path when the run must leave no project changes. A command that cannot run is a blocked prerequisite, not a pass. The feature map is `agora/feature-map.json`; a change to any path it lists invalidates that feature's scenarios until the Drive step passes again at the new head. Project-controls commands (`pnpm -s agora project ...`, `python3 packages/verification/fixture/project.py ...`) use ordinary Node 24 without inherited forge credentials and are local foundation-fixture proof, not product authority or U01b qualification beyond B01. Read [project controls](../../../docs/site/project-controls.md) for prerequisites and trust limits.
 
 ## Doctor
 
-Toolchain and static checks only. P0b requires Node 24.21.0 and pnpm 10.34.1 exactly, plus the real Vitest/Vite Rolldown native import. Run the read-only doctor after the frozen install below; exit 2 is a blocked prerequisite, never behavioral red. Use `node scripts/ci-doctor.mjs --json` directly if pnpm cannot start. Remaining checks require PostgreSQL 18.x server binaries and Swift 6; P0b does not qualify their exact pins. Mandatory CI, PostgreSQL fixture hardening, React guardrails and hosted enforcement remain unimplemented.
+Toolchain and static checks only. P0b requires Node 24.21.0 and pnpm 10.34.1 exactly, plus the real Vitest/Vite Rolldown native import. Run the read-only doctor after the frozen install below; exit 2 is a blocked prerequisite, never behavioral red. Use `node scripts/ci-doctor.mjs --json` directly if pnpm cannot start. Remaining checks require PostgreSQL 18.x server binaries, Swift 6 and Python 3 with the locked independent validator; P0b does not qualify their exact pins. Project-controls installation is explicit; `project doctor` itself is read-only. Missing prerequisites block, never skip. Mandatory CI, PostgreSQL fixture hardening, React guardrails and hosted enforcement remain unimplemented.
 
 ```sh
+unset GH_TOKEN GITHUB_TOKEN
 node --version
 pnpm --version
 pg_ctl --version
 swift --version
+python3 -m venv .scratch/python
+.scratch/python/bin/pip install -r packages/verification/fixture/requirements.txt
+export PATH="$PWD/.scratch/python/bin:$PATH"
 pnpm install --frozen-lockfile
 node scripts/ci-doctor.mjs --json
 node --test scripts/test/ci-doctor.test.ts
@@ -25,6 +29,10 @@ pnpm lint
 pnpm docs:check
 node scripts/verify-design.mjs
 node scripts/test-design-checks.mjs
+pnpm -s agora project doctor --json
+python3 packages/verification/fixture/project.py doctor --json
+pnpm -s agora project scenarios --json
+python3 packages/verification/fixture/project.py scenarios --json
 ```
 
 Design-negative P0a pass predicates: `verify-design` exits 0 on the real tree; `test-design-checks` prints `PASS accepts baseline`, `PASS rejects omitted-application-source`, every other named mutation rejection with its reason, and `PASS 24 behavioral design-check cases`. The disposable sandbox must copy `apps` and `agora`, and the root `eslint.config.js`, so legitimate decision evidence such as `apps/center/src/app.ts`, `agora/architecture-exceptions.json` and `eslint.config.js` resolve. This is fixture honesty only - it is not hosted CI, not full `pnpm check` coverage of every standalone negative, and not product acceptance. Receipts: `evidence/ci/P0a/`.
@@ -35,8 +43,21 @@ P0b alone launches no service. Drive `node --test scripts/test/ci-doctor.test.ts
 
 `scripts/with-test-postgres.mjs` uses the unchanged owned short-socket allocator and a 30-second startup deadline (`AGORA_PG_STARTUP_TIMEOUT_MS`, 1..300000 ms). It boots a throwaway socket-only PostgreSQL cluster (owner role `agora_owner`, non-owner role `agora_app`, guard-negative role `agora_bypass`, database `agora_test`) for the duration of one command and removes it afterwards. It exports `AGORA_DATABASE_URL` as the service role and `AGORA_MIGRATION_DATABASE_URL` as the owner. To reuse an existing PostgreSQL 18 server, export `AGORA_TEST_DATABASE_URL` (as `agora_app`), `AGORA_TEST_OWNER_DATABASE_URL` (as the schema owner), `AGORA_TEST_BYPASS_DATABASE_URL` (a `BYPASSRLS` member of `agora_app`) and `AGORA_TEST_SUPERUSER_DATABASE_URL` (used only to remove and restore cluster-level prerequisites in one test) and the wrapper passes the command through.
 
+### Project verification controls launch (U01b.B01)
+
+Each start creates a private, non-reusable UUID namespace. Agora uses a socket-only PostgreSQL cluster and non-owner service role. Python independently uses SQLite and JSON Schema. Both bind loopback HTTP port zero, use a private object directory and an authenticated control socket. No ambient database URL is reused. Keep the returned cleanup handle, process start identity and root ownership receipt.
+
 ```sh
-node scripts/with-test-postgres.mjs <command>
+A=$(node -e 'console.log(crypto.randomUUID())')
+B=$(node -e 'console.log(crypto.randomUUID())')
+P=$(node -e 'console.log(crypto.randomUUID())')
+OUT="evidence/U01b/agora-s1-isolate-development/live-$A"
+mkdir -p "$OUT"
+export TMPDIR=$(mktemp -d /tmp/agora-u01b-XXXXXX)
+printf '%s\n' "$TMPDIR" > "$OUT/temp-owner.txt"
+pnpm -s agora project start --profile verify --instance "$A" --json > "$OUT/a-start.json"
+pnpm -s agora project start --profile verify --instance "$B" --json > "$OUT/b-start.json"
+python3 packages/verification/fixture/project.py start --profile verify --instance "$P" --json > "$OUT/python-start.json"
 ```
 
 ### Owned local runtime launch (L3)
@@ -61,7 +82,13 @@ node evidence/ci/P0c/C/driver/guard.mjs --out .scratch/p0c-c
 node evidence/ci/P0c/C/driver/scenarios.mjs --out .scratch/p0c-c
 ```
 
+For U01b.B01's project verification controls, pass means literal public allow/deny results, exactly two additional persisted journal entries and matching object bytes. The task lane runner additionally proves two simultaneous instances of each application, foreign cleanup refusal, missing/altered/stale evidence rejection, missing runners, report/exit disagreement, instruction drift and deleted required coverage. Its isolated guard mutation must fail the original denial assertion. This is CLI/HTTP proof, not a screenshot or a browser application claim.
+
 ```sh
+pnpm -s agora project verify --scenario policy --instance "$A" --artifacts "$OUT/a" --json
+pnpm -s agora project verify --scenario policy --instance "$B" --artifacts "$OUT/b" --json
+python3 packages/verification/fixture/project.py verify --scenario policy --instance "$P" --artifacts "$OUT/python" --json
+pnpm -s agora project lanes --unit U01b --task agora-s1-isolate-development --artifacts "$OUT/lanes" --json
 pnpm contracts:check
 pnpm contracts:conform -- --json
 pnpm client:replay -- --json --swift
@@ -102,13 +129,22 @@ Pass predicates:
 - The local-answer public package driver reports 14 passing tests. It requires no Launch step or database: supplied fixtures represent validated persisted messages, not storage provenance proof. The behavioral suite proves bounds, numerical chronology, source-specific citations, empty/foreign/missing/unknown denial, deterministic digests/replay, requester/scope/request identity and inert injection-shaped text. The three isolated mutations each require normal exit 0 and weakened exit 1 for the named assertion (`unbounded-selector`, `outside-citation`, `injected-command`). The authority test checks the exact runtime export surface and twelve forbidden import/global probes. No core function accepts a posting handle; the posting port is type-only. This does not qualify final L5 or AC04, and the driver is not a product trigger.
 - The first migration report has `applied: 2`; the second has `applied: 0` and the same `schema_digest`.
 
+For U01b.B01's project verification controls: every required command must exit zero, all native lane assertions must pass without skips, and conformance must name both consumers as passing. Whole-unit lanes remain blocked without U01b.B02/B03; the explicit task selector does not qualify that milestone. U01a's historical task-admission driver remains documented in [task proof](../../../docs/site/test-first.md), not a substitute for this task's controls.
+
 ## Evidence
 
-Red before green: apply the head's test patch to the parent revision and keep both receipts.
+The callable test-only baseline below has a passing doctor. Its scenario inventory is unavailable, so the new inventory assertion is red on a value, not a missing executable. The recorder applies the current test patch at that baseline. Retain both exits and causes; an infrastructure or syntax failure is not red proof.
 
 ```sh
-node scripts/record-red-green.mjs --parent <parent-sha> --head <head-sha> --out evidence/U01a/<task> -- pnpm -s test
+BASE=$(git rev-parse ab6a1832da47782ddad69e2ca80512bb4d24ed24)
+HEAD=$(git rev-parse HEAD)
+node scripts/record-red-green.mjs --parent "$BASE" --head "$HEAD" --out "$OUT/red-green" -- pnpm exec vitest run --project unit packages/verification/test/project.test.ts
+pnpm -s agora project evidence --instance "$A" --json > "$OUT/a-evidence.json"
+pnpm -s agora project evidence --instance "$B" --json > "$OUT/b-evidence.json"
+python3 packages/verification/fixture/project.py evidence --instance "$P" --json > "$OUT/python-evidence.json"
 ```
+
+The local U01b.B01 receipt binds head and content digests, scenario and instance, plus artifact hashes and lengths. Missing artifacts and stale bytes refuse. This is not U01b.B02's general signed evidence validator, and a malicious owner can modify this local implementation. Exact-head independent review remains mandatory.
 
 For the U01a.B03 core slice, use the existing empty public harness and Swift consumer at its parent, with the focused command below and the committed pair the repository's refreshed receipts use. The fixture CLI is additional head-only integration proof, not a missing-driver red:
 
@@ -174,6 +210,25 @@ node scripts/record-red-green.mjs --parent 661b4c5e012be8b851d271f063d3d53738c15
 
 The selected red must be `expected 'unavailable' to be 'pass'` after doctor passes, not a missing runner or import. Run the complete runtime suites separately at head, without selection. Record the test-patch digest, stack bindings, source/line categories, native outputs, PostgreSQL/replay evidence, guard negatives and owned inventory before/after cleanup. CI and independent review remain distinct prerequisites; local green does not authorize landing the unlanded L3 stack.
 
+### Project verification controls cleanup handles (U01b.B01)
+
+Stop only owned handles. Stopping A must leave B usable. Evidence remains readable after every stop. Repeated matching stop is idempotent; a foreign handle fails even after removal. On an earlier failed step, use these same recorded handles to clean up and preserve that failure before a fresh attempt.
+
+```sh
+AH=$(node -p "JSON.parse(require('fs').readFileSync('$OUT/a-start.json')).instance.cleanup_handle")
+BH=$(node -p "JSON.parse(require('fs').readFileSync('$OUT/b-start.json')).instance.cleanup_handle")
+PH=$(node -p "JSON.parse(require('fs').readFileSync('$OUT/python-start.json')).instance.cleanup_handle")
+pnpm -s agora project stop --instance "$A" --handle "$AH" --json
+pnpm -s agora project verify --scenario policy --instance "$B" --artifacts "$OUT/b-after-a-stop" --json
+pnpm -s agora project stop --instance "$B" --handle "$BH" --json
+python3 packages/verification/fixture/project.py stop --instance "$P" --handle "$PH" --json
+pnpm -s agora project evidence --instance "$A" --json
+pnpm -s agora project evidence --instance "$B" --json
+python3 packages/verification/fixture/project.py evidence --instance "$P" --json
+node --input-type=module -e 'import fs from "node:fs"; import assert from "node:assert/strict"; const root=process.env.TMPDIR; assert.ok(root.startsWith("/tmp/agora-u01b-")); const entries=fs.readdirSync(root); assert.ok(!entries.some(name=>/^agora-(b01|pg|red|green|clean)-/.test(name)), "owned runtime leak"); console.log(JSON.stringify({owned_root:root,remaining_tool_scratch:entries})); fs.rmSync(root,{recursive:true});'
+unset TMPDIR
+```
+
 ## Cleanup (local-room L3 instance)
 
 For the L3 instance created at Launch, save evidence first, then:
@@ -211,5 +266,7 @@ pnpm exec vitest run --project unit packages/storage/test/postgres-wrapper.test.
 The driver must pass its exact-owned PID/path removal assertions. Recorder-created worktrees must be absent from the listing; unrelated worktrees and resources remain untouched.
 
 For the local-answer pure-core driver, also confirm `git worktree list | grep -c 'agora-red-\|agora-green-\|agora-clean-'` and `ls "${TMPDIR:-/tmp}" | grep agora-` both find nothing, then run `find .scratch -maxdepth 1 -name 'answer-guard-*' -print`; no matching directory may remain. Remove its disposable reporter cache with `rm -f .vitest/json/output.json; rmdir .vitest/json .vitest` after retaining the report under evidence. In parallel development, a shared temp/worktree match may belong to another lane: report it without deleting or inspecting its contents; prove this task's exact owned paths were removed.
+
+For the project verification controls (U01b.B01), the final cleanup command above must find no owned runtime resource before deleting only this invocation's remaining Swift tool scratch. SwiftPM leaves `.keep-directory` and lock files even after its build exits; the first literal run exposed that distinction. Never sweep the platform temp directory or prune somebody else's worktrees. The ignored `.scratch/project/` ownership journals and evidence directories remain deliberately; no database, object runtime namespace, HTTP listener or owned host process may remain.
 
 Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.

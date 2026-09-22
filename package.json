@@ -8,6 +8,7 @@
 		"pnpm": ">=10.34.1 <11"
 	},
 	"scripts": {
+		"agora": "node scripts/project.mjs",
 		"lint": "eslint .",
 		"typecheck": "tsc -p tsconfig.json && tsc -p packages/client-core/tsconfig.json && tsc -p packages/web-framework/tsconfig.json && tsc -p apps/web/tsconfig.json",
 		"boundaries": "vitest run --project unit packages/client-core/test/boundaries.test.ts packages/client-core/test/export-maps.test.ts packages/client-core/test/app-architecture.test.ts packages/web-framework/test/boundaries.test.ts --reporter=json --outputFile=.scratch/boundaries.json",

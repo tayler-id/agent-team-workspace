@@ -1,0 +1,139 @@
+{
+	"schema_version": "agora.feature-map/v1",
+	"unit": "U01a",
+	"task": "agora-s1-enforce-test-first",
+	"features": [
+		{
+			"id": "project-controls",
+			"documentation": "docs/site/project-controls.md",
+			"last_verified_subject": {"receipt": ".scratch/project/{fixture}/{instance}/evidence.json", "fields": ["versions.code", "versions.config", "versions.fixture"], "requires_live_pass": true},
+			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
+			"public": ["pnpm agora project doctor|scenarios|start|verify|evidence|stop|lanes", "python3 packages/verification/fixture/project.py"],
+			"contracts": ["contracts/schemas/cli.schema.json"],
+			"scenarios": ["policy", "packages/verification/test/project.test.ts"],
+			"fixtures": ["non-production PostgreSQL policy journal", "independent Python SQLite policy journal"],
+			"platforms": ["node24", "postgresql18", "python3"],
+			"owner": "U01b.B01"
+		},
+		{
+			"id": "foundation-admission",
+			"documentation": "docs/site/test-first.md",
+			"paths": ["scripts/foundation-policy.mjs", "scripts/foundation-replay.mjs", "scripts/foundation.mjs", "scripts/record-red-green.mjs", "packages/verification/test", "contracts/schemas/foundation.schema.json"],
+			"public": ["pnpm verify:foundation", "node scripts/foundation.mjs"],
+			"scenarios": ["packages/verification/test/admission.test.ts", "packages/verification/test/protocol.test.ts", "lane-9", "lane-10"],
+			"fixtures": ["foundation-only task proof, no product authority"],
+			"platforms": ["node24", "postgresql18", "swift6-macos"],
+			"owner": "U01a.B04"
+		},
+		{
+			"id": "documentation-config-rejection",
+			"documentation": "docs/site/authoring.md",
+			"paths": ["pnpm-workspace.yaml", "pnpm-lock.yaml"],
+			"public": ["pnpm docs:check", "markdownlint-cli2 --config"],
+			"scenarios": ["packages/client-core/test/fixture.test.ts"],
+			"fixtures": ["bounded malformed TOML configuration"],
+			"platforms": ["node24"],
+			"owner": "U01a.B03 verification repair"
+		},
+		{
+			"id": "mechanical-boundaries",
+			"documentation": "docs/site/synchronization.md",
+			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/public-types.ts", "packages/client-core/tsconfig.json", "packages/domain/src/index.ts", "packages/domain/src/policy/fixture-scope.ts", "contracts/package.json", "apps/center/package.json", "package.json"],
+			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
+			"scenarios": ["packages/client-core/test/boundaries.test.ts", "packages/client-core/test/export-maps.test.ts", "packages/client-core/test/fixture.test.ts"],
+			"fixtures": ["ESLint typed stdin fixtures", "virtual TypeScript private-import and no-DOM fixtures", "isolated disabled-rule configurations"],
+			"platforms": ["node24"],
+			"owner": "U01a.B03"
+		},
+		{
+			"id": "client-synchronization",
+			"documentation": "docs/site/synchronization.md",
+			"paths": ["docs/features/client-synchronization.md", "packages/client-core/src/index.ts", "packages/client-core/src/model.ts", "packages/client-core/package.json", "contracts/package.json", "scripts/client-fixture.ts", "scripts/drive-client-core.ts", "contracts/fixtures/replay.json", "contracts/swift/Sources/AgoraContractsConform/Replay.swift"],
+			"public": ["@agora/client-core initialState", "@agora/client-core synchronize", "pnpm client:replay"],
+			"scenarios": ["packages/client-core/test/harness.test.ts", "packages/client-core/test/sync.test.ts", "packages/client-core/test/fixture.test.ts", "packages/client-core/test/guards.test.ts", "contracts/test/replay.test.ts", "scripts/drive-client-core.ts"],
+			"fixtures": ["agora.foundation-fixture.sync-event/v1", "agora.foundation-fixture.sync-snapshot/v1"],
+			"platforms": ["node24"],
+			"owner": "U01a.B03"
+		},
+		{
+			"id": "fixture-sync-contracts",
+			"documentation": "docs/site/contracts.md",
+			"paths": ["contracts/schemas/sync.schema.json", "contracts/schemas/fixture-sync.schema.json", "contracts/src/index.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift"],
+			"public": ["pnpm contracts:check", "pnpm contracts:conform"],
+			"contracts": ["contracts/schemas/sync.schema.json", "contracts/schemas/fixture-sync.schema.json"],
+			"fixtures": ["agora.foundation-fixture.sync-snapshot/v1", "agora.foundation-fixture.sync-event/v1"],
+			"scenarios": ["contracts/test/sync.test.ts", "contracts/test/conformance.test.ts", "contracts/test/generation.test.ts"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "U01a.B03"
+		},
+		{
+			"id": "center-health",
+			"paths": ["apps/center/src/app.ts", "apps/center/src/main.ts", "packages/storage/src/database.ts"],
+			"public": ["GET /api/v1/health", "GET /api/v1/health/ready"],
+			"scenarios": ["apps/center/test/health.test.ts", "apps/center/test/readiness.pg.test.ts", "scripts/probe-center.mjs"],
+			"platforms": ["node24"],
+			"owner": "U01a.B01",
+			"documentation": "docs/site/foundation.md",
+			"contracts": ["contracts/schemas/health.schema.json"]
+		},
+		{
+			"id": "fixture-policy-decision",
+			"paths": ["apps/center/src/app.ts", "packages/domain/src/policy/fixture-scope.ts", "contracts/schemas/fixture-policy.schema.json", "contracts/src/index.ts"],
+			"public": ["POST /api/v1/fixture/policy/decisions"],
+			"contracts": ["contracts/schemas/fixture-policy.schema.json", "contracts/schemas/errors.schema.json"],
+			"scenarios": ["packages/domain/test/fixture-scope.test.ts", "apps/center/test/policy.test.ts", "scripts/probe-center.mjs"],
+			"platforms": ["node24"],
+			"owner": "U01a.B01",
+			"documentation": "docs/site/foundation.md"
+		},
+		{
+			"id": "storage-foundation-fixture",
+			"paths": ["packages/storage/src/fixture.ts", "packages/storage/src/migrate.ts", "packages/storage/drizzle/0000_foundation_fixture.sql", "packages/storage/drizzle/meta/_journal.json"],
+			"public": ["pnpm migrate", "pnpm test:pg"],
+			"fixtures": ["foundation_fixture schema", "agora_app non-owner role"],
+			"scenarios": ["packages/storage/test/migrate.pg.test.ts", "packages/storage/test/fixture.pg.test.ts"],
+			"platforms": ["node24", "postgresql18"],
+			"owner": "U01a.B01",
+			"documentation": "docs/site/foundation.md"
+		},
+		{
+			"id": "wire-contracts",
+			"paths": ["contracts/openapi.json", "contracts/schemas/primitives.schema.json", "contracts/schemas/health.schema.json", "contracts/schemas/fixture-policy.schema.json", "contracts/schemas/errors.schema.json", "contracts/schemas/cli.schema.json", "contracts/tools/generate.mjs", "contracts/generated/openapi.bundled.json", "contracts/generated/typescript/openapi.d.ts", "contracts/generated/manifest.json", "contracts/swift/Package.swift", "contracts/swift/openapi-generator-config.yaml", "contracts/swift/Sources/AgoraContracts/Generated"],
+			"public": ["pnpm contracts:generate", "pnpm contracts:check"],
+			"contracts": ["contracts/generated/openapi.bundled.json"],
+			"scenarios": ["contracts/test/generation.test.ts"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "U01a.B02",
+			"documentation": "docs/site/contracts.md"
+		},
+		{
+			"id": "contract-conformance",
+			"paths": ["contracts/src/index.ts", "contracts/src/conformance.ts", "contracts/src/conform-cli.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform"],
+			"public": ["pnpm contracts:conform"],
+			"contracts": ["contracts/fixtures/vectors.json"],
+			"fixtures": ["fixture-only Ed25519 signing key derived from a public seed"],
+			"scenarios": ["contracts/test/conformance.test.ts", "contracts/src/conform-cli.ts"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "U01a.B02",
+			"documentation": "docs/site/contracts.md"
+		},
+		{
+			"id": "canonical-json",
+			"paths": ["contracts/src/canonical.ts"],
+			"public": ["canonicalJson", "digestCanonical"],
+			"scenarios": ["contracts/test/canonical.test.ts", "contracts/test/conformance.test.ts"],
+			"platforms": ["node24"],
+			"owner": "U01a.B02",
+			"documentation": "docs/site/contracts.md"
+		},
+		{
+			"id": "living-documentation",
+			"paths": ["docs/site", "package.json"],
+			"public": ["pnpm docs:dev", "pnpm docs:build", "pnpm docs:validate", "pnpm docs:atlas"],
+			"scenarios": ["docs/site/test/guards.test.ts", "docs/site/test/guard-weakening.test.ts", "docs/site/test/output.test.ts", "docs/site/test/corpus.test.ts", "browser: docs at 390x844 and 1440x900"],
+			"platforms": ["node24", "static-html"],
+			"owner": "agora-visual-progress",
+			"documentation": "docs/site/authoring.md"
+		}
+	]
+}

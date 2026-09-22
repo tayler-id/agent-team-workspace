@@ -2,6 +2,23 @@
 
 This is the complete current contributor command surface, plus a separate inventory of planned product commands. Run current commands from the repository root. There is no installed `agora` binary at this snapshot.
 
+## Owned project controls
+
+`pnpm -s agora project COMMAND --json` forwards directly to `node scripts/project.mjs project COMMAND --json`. The independent Python application uses `python3 packages/verification/fixture/project.py COMMAND --json`. All output is `agora.cli-report/v1`. See [checking a project](checking-a-project.md) for the user boundary and [operator details](project-controls.md) for setup and proof.
+
+| Command | Required input and result |
+| --- | --- |
+| `doctor` | Read-only Node/PostgreSQL or Python/validator prerequisites |
+| `scenarios` | Current `policy`, `controls`, `guards` inventory; missing mapping fails |
+| `start` | `--profile verify --instance UUID`; returns allocated URL, database/object namespace, PID/start identity and cleanup handle |
+| `verify` | `--scenario policy --instance UUID --artifacts DIRECTORY`; drives HTTP and persists retained proof |
+| `verify` | `--scenario controls` or `guards --artifacts DIRECTORY`; executes the full task-native test/guard suite |
+| `evidence` | `--instance UUID`; requires fresh same-instance proof and matching artifact bytes, including after stop |
+| `stop` | `--instance UUID --handle CLEANUP_HANDLE`; authenticated owned cleanup, idempotent only for that handle |
+| `lanes` | `--unit U01b --task agora-s1-isolate-development --artifacts DIRECTORY`; task lanes 1-4 plus guard mutation |
+
+`--fixture python` selects the Python fixture through the Node launcher; prefer its independent Python entry when checking cross-language reports. Unknown options reject. Direct whole-unit `lanes --unit U01b` still executes available proof but exits blocked because lanes 5-10 belong to later tasks. Exit codes are exactly 0 pass, 1 observed failure, 2 blocked, 3 unavailable, 64 usage error, 70 infrastructure failure. An unavailable check is never successful evidence. Runtime state is private to `.scratch/project/`; evidence paths must stay below repository `evidence/` or `.scratch/` without symlink escape.
+
 ## Documentation commands
 
 | Command | Input / effect | Result |

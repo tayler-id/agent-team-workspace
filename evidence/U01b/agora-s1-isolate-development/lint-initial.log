@@ -1,0 +1,12 @@
+
+> agora@ lint /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace
+> eslint .
+
+
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/scripts/project.mjs
+   5:67   error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+  84:210  error  'AbortSignal' is not defined              no-undef
+
+✖ 2 problems (2 errors, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.

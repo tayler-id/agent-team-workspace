@@ -1,0 +1,3278 @@
+{
+  "outcome": "pass",
+  "owned_registries": [
+    {
+      "registry": ".scratch/project/python/3ef9e1ce-783c-4a40-a29c-c4d9f291f83c/state.json",
+      "id": "3ef9e1ce-783c-4a40-a29c-c4d9f291f83c",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-MJ6AuA",
+      "phase": "removed",
+      "pid": 573,
+      "process_start": "Sun Sep 20 17:39:26 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/e9f1fdda-0d3c-4bc3-b1df-dc596c64cba8/state.json",
+      "id": "e9f1fdda-0d3c-4bc3-b1df-dc596c64cba8",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-5GeKpw",
+      "phase": "removed",
+      "pid": 32647,
+      "process_start": "Sun Sep 20 17:40:59 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/2c3aad19-60be-4847-94f4-e78e29dd7304/state.json",
+      "id": "2c3aad19-60be-4847-94f4-e78e29dd7304",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-yGPS8E",
+      "phase": "removed",
+      "pid": 10067,
+      "process_start": "Sun Sep 20 17:44:22 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/cd61c365-1081-49aa-8e70-28323ebf8816/state.json",
+      "id": "cd61c365-1081-49aa-8e70-28323ebf8816",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-X3vXpj",
+      "phase": "removed",
+      "pid": 66684,
+      "process_start": "Sun Sep 20 17:42:29 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/5d018908-e6b1-4330-957c-200eae98938d/state.json",
+      "id": "5d018908-e6b1-4330-957c-200eae98938d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-eH0qEz",
+      "phase": "removed",
+      "pid": 32103,
+      "process_start": "Sun Sep 20 17:40:57 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/8708c047-f60a-448a-8935-b525cf9a1de0/state.json",
+      "id": "8708c047-f60a-448a-8935-b525cf9a1de0",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-zbAkWO",
+      "phase": "removed",
+      "pid": 25385,
+      "process_start": "Sun Sep 20 17:15:18 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/3ce7e5c8-5ad2-430c-a7a8-a88d3d2986aa/state.json",
+      "id": "3ce7e5c8-5ad2-430c-a7a8-a88d3d2986aa",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-16FOJO",
+      "phase": "removed",
+      "pid": 76133,
+      "process_start": "Sun Sep 20 17:03:40 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/15f1d1ea-5e7e-4355-b9d1-786b19a3188d/state.json",
+      "id": "15f1d1ea-5e7e-4355-b9d1-786b19a3188d",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-5TBuZy",
+      "phase": "removed",
+      "pid": 47479,
+      "process_start": "Sun Sep 20 17:47:59 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/f970657b-25ff-408e-bed6-203ed3099a1f/state.json",
+      "id": "f970657b-25ff-408e-bed6-203ed3099a1f",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-zOqGlk",
+      "phase": "removed",
+      "pid": 60656,
+      "process_start": "Sun Sep 20 17:37:33 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/4de1e318-3a90-4b1b-a740-d9b069ecdb0b/state.json",
+      "id": "4de1e318-3a90-4b1b-a740-d9b069ecdb0b",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-n7dN2f",
+      "phase": "removed",
+      "pid": 1396,
+      "process_start": "Sun Sep 20 17:39:29 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/5b0ccf72-95dc-441c-b2b2-0b53555ab1ad/state.json",
+      "id": "5b0ccf72-95dc-441c-b2b2-0b53555ab1ad",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-69RdHS",
+      "phase": "removed",
+      "pid": 5714,
+      "process_start": "Sun Sep 20 17:44:11 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/ea280854-ad47-4c04-8e24-f3bf439be7f4/state.json",
+      "id": "ea280854-ad47-4c04-8e24-f3bf439be7f4",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-L4tYEi",
+      "phase": "removed",
+      "pid": 61704,
+      "process_start": "Sun Sep 20 17:37:38 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/4cd8ada5-807c-4608-995e-dcc05d0d5075/state.json",
+      "id": "4cd8ada5-807c-4608-995e-dcc05d0d5075",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Z63oqu",
+      "phase": "removed",
+      "pid": 60948,
+      "process_start": "Sun Sep 20 17:37:35 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/60522ded-4cd7-4559-9029-1b4c10d30390/state.json",
+      "id": "60522ded-4cd7-4559-9029-1b4c10d30390",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-KlGRCV",
+      "phase": "removed",
+      "pid": 51109,
+      "process_start": "Sun Sep 20 17:09:48 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/8197b18c-413c-4b97-8876-e51f44e91a0a/state.json",
+      "id": "8197b18c-413c-4b97-8876-e51f44e91a0a",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-jcScLK",
+      "phase": "removed",
+      "pid": 95367,
+      "process_start": "Sun Sep 20 17:39:14 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/5155e01b-a056-49be-be55-5088d0416780/state.json",
+      "id": "5155e01b-a056-49be-be55-5088d0416780",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-07QJQS",
+      "phase": "removed",
+      "pid": 38227,
+      "process_start": "Sun Sep 20 17:41:10 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/dc7e620a-bd20-4bfc-8ecc-7869aef2f3e0/state.json",
+      "id": "dc7e620a-bd20-4bfc-8ecc-7869aef2f3e0",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-o8oD6m",
+      "phase": "removed",
+      "pid": 52239,
+      "process_start": "Sun Sep 20 17:24:48 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/184f5e9c-cf7f-4cb5-9696-fb4e1621ad0f/state.json",
+      "id": "184f5e9c-cf7f-4cb5-9696-fb4e1621ad0f",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-uN6Pvn",
+      "phase": "removed",
+      "pid": 93768,
+      "process_start": "Sun Sep 20 17:39:10 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/8b751a51-53c6-4719-bd2c-fc1763374435/state.json",
+      "id": "8b751a51-53c6-4719-bd2c-fc1763374435",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-KLZmRY",
+      "phase": "removed",
+      "pid": 98854,
+      "process_start": "Sun Sep 20 17:39:19 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/0054c96e-f253-4a4d-82f3-85ef1cc4c0ce/state.json",
+      "id": "0054c96e-f253-4a4d-82f3-85ef1cc4c0ce",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-YRtHvv",
+      "phase": "removed",
+      "pid": 30302,
+      "process_start": "Sun Sep 20 17:15:26 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/76b930f5-0f1e-4758-9e9b-aa87bcfb4f66/state.json",
+      "id": "76b930f5-0f1e-4758-9e9b-aa87bcfb4f66",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-qxcX2P",
+      "phase": "removed",
+      "pid": 13639,
+      "process_start": "Sun Sep 20 17:44:32 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/38e09885-addd-463b-b0da-695a72a5df14/state.json",
+      "id": "38e09885-addd-463b-b0da-695a72a5df14",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-jtyWOc",
+      "phase": "removed",
+      "pid": 8512,
+      "process_start": "Sun Sep 20 17:44:21 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/dfa81b29-5936-4d43-9992-ab1384acaadb/state.json",
+      "id": "dfa81b29-5936-4d43-9992-ab1384acaadb",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-6h659S",
+      "phase": "removed",
+      "pid": 37976,
+      "process_start": "Sun Sep 20 17:41:08 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/703389bc-116d-44f9-b317-090860c569be/state.json",
+      "id": "703389bc-116d-44f9-b317-090860c569be",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-cLhhh3",
+      "phase": "removed",
+      "pid": 6216,
+      "process_start": "Sun Sep 20 17:44:13 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/4d106ce3-7b92-467b-83a7-a92c099bd863/state.json",
+      "id": "4d106ce3-7b92-467b-83a7-a92c099bd863",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Ltys37",
+      "phase": "removed",
+      "pid": 99401,
+      "process_start": "Sun Sep 20 17:39:21 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/0fe935f9-260f-4139-84c2-224c862a6504/state.json",
+      "id": "0fe935f9-260f-4139-84c2-224c862a6504",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-OgvlC2",
+      "phase": "removed",
+      "pid": 87030,
+      "process_start": "Sun Sep 20 17:26:21 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/70fe0370-c54f-42cc-b168-8b94dd0b6813/state.json",
+      "id": "70fe0370-c54f-42cc-b168-8b94dd0b6813",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-y0RLNR",
+      "phase": "removed",
+      "pid": 66975,
+      "process_start": "Sun Sep 20 17:42:30 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/f49ba539-6542-4c43-b214-72f9508ed59a/state.json",
+      "id": "f49ba539-6542-4c43-b214-72f9508ed59a",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-IEPajU",
+      "phase": "removed",
+      "pid": 71495,
+      "process_start": "Sun Sep 20 17:42:36 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/ebe8ace1-eadf-400a-9af2-3aa309193748/state.json",
+      "id": "ebe8ace1-eadf-400a-9af2-3aa309193748",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-CfyLrv",
+      "phase": "removed",
+      "pid": 71244,
+      "process_start": "Sun Sep 20 17:42:35 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/c126cf3a-9272-494d-a9f6-d50ff67bf517/state.json",
+      "id": "c126cf3a-9272-494d-a9f6-d50ff67bf517",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-MlEMaA",
+      "phase": "removed",
+      "pid": 834,
+      "process_start": "Sun Sep 20 17:39:27 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/ead2d2a2-b5f9-4d1f-b47b-2e82cc4cb788/state.json",
+      "id": "ead2d2a2-b5f9-4d1f-b47b-2e82cc4cb788",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-0rsGlO",
+      "phase": "removed",
+      "pid": 73588,
+      "process_start": "Sun Sep 20 17:42:46 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/b82bbf15-3a94-4f7a-8b53-61f5ed83d230/state.json",
+      "id": "b82bbf15-3a94-4f7a-8b53-61f5ed83d230",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-08CtNY",
+      "phase": "removed",
+      "pid": 38478,
+      "process_start": "Sun Sep 20 17:41:11 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/7cc4cf23-ff6d-49fa-8f8e-75fab556120d/state.json",
+      "id": "7cc4cf23-ff6d-49fa-8f8e-75fab556120d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-lsiroT",
+      "phase": "removed",
+      "pid": 62175,
+      "process_start": "Sun Sep 20 17:30:50 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/31a98aa2-8800-4b59-91ba-db69fe1f7c32/state.json",
+      "id": "31a98aa2-8800-4b59-91ba-db69fe1f7c32",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-XZpXDW",
+      "phase": "removed",
+      "pid": 73296,
+      "process_start": "Sun Sep 20 17:42:44 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/b30c8612-60ee-4002-9c85-f5c886f52de2/state.json",
+      "id": "b30c8612-60ee-4002-9c85-f5c886f52de2",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-9OPzHx",
+      "phase": "removed",
+      "pid": 73045,
+      "process_start": "Sun Sep 20 17:42:43 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/cea5c804-d4ae-4ca4-8058-49af74658979/state.json",
+      "id": "cea5c804-d4ae-4ca4-8058-49af74658979",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ObbJ2f",
+      "phase": "removed",
+      "pid": 99108,
+      "process_start": "Sun Sep 20 17:39:20 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/d0f7eaa7-f0d7-4f7f-b51e-408f97b36a82/state.json",
+      "id": "d0f7eaa7-f0d7-4f7f-b51e-408f97b36a82",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ZBDjlJ",
+      "phase": "removed",
+      "pid": 7523,
+      "process_start": "Sun Sep 20 17:44:19 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/60739a5e-503c-4a2d-9002-34222aeb8f2b/state.json",
+      "id": "60739a5e-503c-4a2d-9002-34222aeb8f2b",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-VPSq9R",
+      "phase": "removed",
+      "pid": 30803,
+      "process_start": "Sun Sep 20 17:40:51 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/eaaf7bba-3386-4c07-b25a-11785e0a2331/state.json",
+      "id": "eaaf7bba-3386-4c07-b25a-11785e0a2331",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-qkNqym",
+      "phase": "removed",
+      "pid": 62758,
+      "process_start": "Sun Sep 20 17:37:43 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/657ecc16-bfa3-43bc-b7d2-7f72a22920ee/state.json",
+      "id": "657ecc16-bfa3-43bc-b7d2-7f72a22920ee",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-hwWToU",
+      "phase": "removed",
+      "pid": 56076,
+      "process_start": "Sun Sep 20 17:37:26 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/475e25ca-00cd-4bf1-a8b8-082c898b7fba/state.json",
+      "id": "475e25ca-00cd-4bf1-a8b8-082c898b7fba",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-jArlbb",
+      "phase": "removed",
+      "pid": 31099,
+      "process_start": "Sun Sep 20 17:40:52 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/74bdbfa6-cf00-40c8-a247-831782684ec6/state.json",
+      "id": "74bdbfa6-cf00-40c8-a247-831782684ec6",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-XVPHfu",
+      "phase": "removed",
+      "pid": 1141,
+      "process_start": "Sun Sep 20 17:39:28 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/e8f8007f-b64d-4127-9fc9-100e244c897f/state.json",
+      "id": "e8f8007f-b64d-4127-9fc9-100e244c897f",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-EgWnDx",
+      "phase": "removed",
+      "pid": 11836,
+      "process_start": "Sun Sep 20 17:44:24 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/3ffd95a6-dc8b-412d-8750-a6f80a315135/state.json",
+      "id": "3ffd95a6-dc8b-412d-8750-a6f80a315135",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-bW6oJR",
+      "phase": "removed",
+      "pid": 97287,
+      "process_start": "Sun Sep 20 17:39:15 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/fa7c57f7-e2c6-45f2-97d1-71c0cc24c7ed/state.json",
+      "id": "fa7c57f7-e2c6-45f2-97d1-71c0cc24c7ed",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-oL3tMJ",
+      "phase": "removed",
+      "pid": 80482,
+      "process_start": "Sun Sep 20 17:19:17 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/d479fa55-1d8c-496c-8e59-ef2a2af3e22d/state.json",
+      "id": "d479fa55-1d8c-496c-8e59-ef2a2af3e22d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-I6mKl3",
+      "phase": "removed",
+      "pid": 5965,
+      "process_start": "Sun Sep 20 17:44:12 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/88db3ad2-98f5-42ae-aca4-d32d42be3b19/state.json",
+      "id": "88db3ad2-98f5-42ae-aca4-d32d42be3b19",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-EazlYg",
+      "phase": "removed",
+      "pid": 59897,
+      "process_start": "Sun Sep 20 17:37:30 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/7b5d73d2-ccfd-4783-a479-708aaa40bb6e/state.json",
+      "id": "7b5d73d2-ccfd-4783-a479-708aaa40bb6e",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Ba6INR",
+      "phase": "removed",
+      "pid": 6759,
+      "process_start": "Sun Sep 20 17:44:15 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/c983e0f1-2ae3-4b57-83e8-342cfa817995/state.json",
+      "id": "c983e0f1-2ae3-4b57-83e8-342cfa817995",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-t877ok",
+      "phase": "removed",
+      "pid": 72794,
+      "process_start": "Sun Sep 20 17:42:42 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/470c0da9-e9d4-47be-8496-5cafcb914ab8/state.json",
+      "id": "470c0da9-e9d4-47be-8496-5cafcb914ab8",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-4m036l",
+      "phase": "removed",
+      "pid": 93266,
+      "process_start": "Sun Sep 20 17:39:08 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/044aa596-baef-4d23-8215-d975dedd941e/state.json",
+      "id": "044aa596-baef-4d23-8215-d975dedd941e",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-sviLIR",
+      "phase": "removed",
+      "pid": 72041,
+      "process_start": "Sun Sep 20 17:42:38 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/48b40c6b-882d-43ee-b365-1a8c225a018d/state.json",
+      "id": "48b40c6b-882d-43ee-b365-1a8c225a018d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Q4xNBN",
+      "phase": "removed",
+      "pid": 12842,
+      "process_start": "Sun Sep 20 17:44:28 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/7c929336-0e26-470c-80ae-ff97cbe30680/state.json",
+      "id": "7c929336-0e26-470c-80ae-ff97cbe30680",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-f4bn59",
+      "phase": "removed",
+      "pid": 79125,
+      "process_start": "Sun Sep 20 17:19:12 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/60e499b5-8f51-4ffd-ba0f-23f76f1f538e/state.json",
+      "id": "60e499b5-8f51-4ffd-ba0f-23f76f1f538e",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-YOh4Zk",
+      "phase": "removed",
+      "pid": 93516,
+      "process_start": "Sun Sep 20 17:39:09 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/99ca6626-b3c4-46cb-96e5-348ef8013987/state.json",
+      "id": "99ca6626-b3c4-46cb-96e5-348ef8013987",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-xN8WUU",
+      "phase": "removed",
+      "pid": 45157,
+      "process_start": "Sun Sep 20 17:30:00 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/09419dcc-9fad-4671-8fad-4ada8dfcc072/state.json",
+      "id": "09419dcc-9fad-4671-8fad-4ada8dfcc072",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-HOnPxO",
+      "phase": "removed",
+      "pid": 99655,
+      "process_start": "Sun Sep 20 17:39:22 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/bec70bf6-529c-4ad1-8741-3e9f2bc9a68a/state.json",
+      "id": "bec70bf6-529c-4ad1-8741-3e9f2bc9a68a",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-5CCeQN",
+      "phase": "removed",
+      "pid": 7012,
+      "process_start": "Sun Sep 20 17:44:17 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/08daca60-cc31-48ec-b0e9-2cc6e77b568e/state.json",
+      "id": "08daca60-cc31-48ec-b0e9-2cc6e77b568e",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-Eig6ue",
+      "phase": "removed",
+      "pid": 95222,
+      "process_start": "Sun Sep 20 17:19:52 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/25861b56-c9da-4a77-906a-27c4abe1c6ed/state.json",
+      "id": "25861b56-c9da-4a77-906a-27c4abe1c6ed",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-cwemDw",
+      "phase": "removed",
+      "pid": 30839,
+      "process_start": "Sun Sep 20 17:29:11 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/7cf9a11a-3eda-4123-a85d-04ded8971f8d/state.json",
+      "id": "7cf9a11a-3eda-4123-a85d-04ded8971f8d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-tuQx4Y",
+      "phase": "removed",
+      "pid": 70732,
+      "process_start": "Sun Sep 20 17:42:34 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/f50f5206-8449-4839-a2b7-46f01048869e/state.json",
+      "id": "f50f5206-8449-4839-a2b7-46f01048869e",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-7hMcM7",
+      "phase": "removed",
+      "pid": 93014,
+      "process_start": "Sun Sep 20 17:39:07 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/4e0919d7-a6c7-405d-afe2-092eeacedb3c/state.json",
+      "id": "4e0919d7-a6c7-405d-afe2-092eeacedb3c",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Aizn7n",
+      "phase": "removed",
+      "pid": 62457,
+      "process_start": "Sun Sep 20 17:37:41 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/74ef5c6f-6bb5-42ac-8397-83ff7101c027/state.json",
+      "id": "74ef5c6f-6bb5-42ac-8397-83ff7101c027",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-4qVdEx",
+      "phase": "removed",
+      "pid": 51091,
+      "process_start": "Sun Sep 20 17:24:43 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/d26b4445-b23d-48d6-b9bb-ea34b14d6e05/state.json",
+      "id": "d26b4445-b23d-48d6-b9bb-ea34b14d6e05",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-uAQv1B",
+      "phase": "removed",
+      "pid": 64094,
+      "process_start": "Sun Sep 20 17:25:31 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/ed48e20e-efb6-4b93-902e-051abe26e72a/state.json",
+      "id": "ed48e20e-efb6-4b93-902e-051abe26e72a",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-B0U4GM",
+      "phase": "removed",
+      "pid": 47363,
+      "process_start": "Sun Sep 20 17:47:58 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/591ff2d4-b493-49b2-ae7a-51e9f2fc7a61/state.json",
+      "id": "591ff2d4-b493-49b2-ae7a-51e9f2fc7a61",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-OX3mVF",
+      "phase": "removed",
+      "pid": 74287,
+      "process_start": "Sun Sep 20 17:03:34 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/e4c48eef-539c-441c-bea8-ae1bc237f5f3/state.json",
+      "id": "e4c48eef-539c-441c-bea8-ae1bc237f5f3",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-pKNGSe",
+      "phase": "removed",
+      "pid": 61452,
+      "process_start": "Sun Sep 20 17:37:37 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/157a21b5-b8aa-497f-9e1a-457ed19c5a7d/state.json",
+      "id": "157a21b5-b8aa-497f-9e1a-457ed19c5a7d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-z0v9S0",
+      "phase": "removed",
+      "pid": 74344,
+      "process_start": "Sun Sep 20 17:42:49 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/555b06cf-fb14-452b-a1d5-8497ecb5670f/state.json",
+      "id": "555b06cf-fb14-452b-a1d5-8497ecb5670f",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-7K6DUC",
+      "phase": "removed",
+      "pid": 6468,
+      "process_start": "Sun Sep 20 17:44:14 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/f26cd99c-8512-447a-8ab8-c318c3c729aa/state.json",
+      "id": "f26cd99c-8512-447a-8ab8-c318c3c729aa",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-9uw5zK",
+      "phase": "removed",
+      "pid": 7271,
+      "process_start": "Sun Sep 20 17:44:18 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/dd0d78ed-3619-4260-8820-551af7421674/state.json",
+      "id": "dd0d78ed-3619-4260-8820-551af7421674",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-aSXJcx",
+      "phase": "removed",
+      "pid": 37725,
+      "process_start": "Sun Sep 20 17:41:07 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/fdf9d400-e1c0-4305-b482-6cf45ff5a5b0/state.json",
+      "id": "fdf9d400-e1c0-4305-b482-6cf45ff5a5b0",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-gcdGE1",
+      "phase": "removed",
+      "pid": 62271,
+      "process_start": "Sun Sep 20 17:30:50 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/9affa839-fe33-4500-ac94-fa1e96282f0d/state.json",
+      "id": "9affa839-fe33-4500-ac94-fa1e96282f0d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-qraQBp",
+      "phase": "removed",
+      "pid": 66184,
+      "process_start": "Sun Sep 20 17:37:46 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/671bde7b-8405-47c2-918f-6a8a13a97f25/state.json",
+      "id": "671bde7b-8405-47c2-918f-6a8a13a97f25",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-yNZ32B",
+      "phase": "removed",
+      "pid": 65605,
+      "process_start": "Sun Sep 20 17:25:37 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/b473ff06-2088-4b6d-b4ad-b8286f373494/state.json",
+      "id": "b473ff06-2088-4b6d-b4ad-b8286f373494",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-e7Vpto",
+      "phase": "removed",
+      "pid": 94020,
+      "process_start": "Sun Sep 20 17:39:11 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/750872bd-fe74-411d-81b1-9fcc3167751a/state.json",
+      "id": "750872bd-fe74-411d-81b1-9fcc3167751a",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-c3Gh3b",
+      "phase": "removed",
+      "pid": 76192,
+      "process_start": "Sun Sep 20 17:03:40 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/3479d65d-c104-46a6-84d5-9293ed2143f6/state.json",
+      "id": "3479d65d-c104-46a6-84d5-9293ed2143f6",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-uoSIf3",
+      "phase": "removed",
+      "pid": 75643,
+      "process_start": "Sun Sep 20 17:42:50 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/c6556a83-9489-4fd6-8a58-5f1c73f31538/state.json",
+      "id": "c6556a83-9489-4fd6-8a58-5f1c73f31538",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ilHI54",
+      "phase": "removed",
+      "pid": 30544,
+      "process_start": "Sun Sep 20 17:40:49 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/09f4b5fd-31b3-4c27-8c25-5838c52f662a/state.json",
+      "id": "09f4b5fd-31b3-4c27-8c25-5838c52f662a",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-TXql6u",
+      "phase": "removed",
+      "pid": 60719,
+      "process_start": "Sun Sep 20 17:30:43 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/7e2da5b0-de2f-4a69-805b-9ec54e6c4d30/state.json",
+      "id": "7e2da5b0-de2f-4a69-805b-9ec54e6c4d30",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-FNG8QZ",
+      "phase": "removed",
+      "pid": 72543,
+      "process_start": "Sun Sep 20 17:42:41 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/cc9a07fd-cf9b-4383-be9e-899d88276d5d/state.json",
+      "id": "cc9a07fd-cf9b-4383-be9e-899d88276d5d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-fgzDgL",
+      "phase": "removed",
+      "pid": 12337,
+      "process_start": "Sun Sep 20 17:44:26 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/6b7c6688-e4f8-40c7-9757-21b8140513b1/state.json",
+      "id": "6b7c6688-e4f8-40c7-9757-21b8140513b1",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-0zdCHb",
+      "phase": "removed",
+      "pid": 62832,
+      "process_start": "Sun Sep 20 17:25:26 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/a6f76234-f75e-457f-ae67-431e53eb490e/state.json",
+      "id": "a6f76234-f75e-457f-ae67-431e53eb490e",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-AR8zY4",
+      "phase": "removed",
+      "pid": 51192,
+      "process_start": "Sun Sep 20 17:09:48 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/483a9afd-9f20-4cfb-bc29-df43286955cf/state.json",
+      "id": "483a9afd-9f20-4cfb-bc29-df43286955cf",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-chDbTY",
+      "phase": "removed",
+      "pid": 31852,
+      "process_start": "Sun Sep 20 17:40:55 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/efc79680-8b1f-45c2-9b90-cd7f552b7b7e/state.json",
+      "id": "efc79680-8b1f-45c2-9b90-cd7f552b7b7e",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-gGQiih",
+      "phase": "removed",
+      "pid": 31351,
+      "process_start": "Sun Sep 20 17:40:53 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/e4d837b1-62cd-40b0-8438-f630147534ae/state.json",
+      "id": "e4d837b1-62cd-40b0-8438-f630147534ae",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-brj7zC",
+      "phase": "removed",
+      "pid": 34817,
+      "process_start": "Sun Sep 20 17:41:01 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/ff10042a-00fe-47b4-b574-a2c478ae81ee/state.json",
+      "id": "ff10042a-00fe-47b4-b574-a2c478ae81ee",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-4h4vCQ",
+      "phase": "removed",
+      "pid": 60404,
+      "process_start": "Sun Sep 20 17:37:32 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/a9ae35d0-00ae-485b-9b5a-8b5b2dcb59e4/state.json",
+      "id": "a9ae35d0-00ae-485b-9b5a-8b5b2dcb59e4",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-FlcbIZ",
+      "phase": "removed",
+      "pid": 67567,
+      "process_start": "Sun Sep 20 17:42:31 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/24c9ede2-8859-4fa8-b69e-da870362205b/state.json",
+      "id": "24c9ede2-8859-4fa8-b69e-da870362205b",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-oy1s4c",
+      "phase": "removed",
+      "pid": 65869,
+      "process_start": "Sun Sep 20 17:17:59 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/4bc72c66-f792-4f62-a6ff-6375a7daa42b/state.json",
+      "id": "4bc72c66-f792-4f62-a6ff-6375a7daa42b",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-y6Knfp",
+      "phase": "removed",
+      "pid": 63061,
+      "process_start": "Sun Sep 20 17:37:44 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/647de48c-7f1a-44cc-8d33-dd0f09c68a5f/state.json",
+      "id": "647de48c-7f1a-44cc-8d33-dd0f09c68a5f",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ai9FN1",
+      "phase": "removed",
+      "pid": 57902,
+      "process_start": "Sun Sep 20 17:37:28 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/5cdbfd40-ac8f-4745-9b08-e39b0215515b/state.json",
+      "id": "5cdbfd40-ac8f-4745-9b08-e39b0215515b",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-zNnDIk",
+      "phase": "removed",
+      "pid": 61956,
+      "process_start": "Sun Sep 20 17:37:39 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/3e52984e-a4c0-4087-ab8a-27877d6a9a8d/state.json",
+      "id": "3e52984e-a4c0-4087-ab8a-27877d6a9a8d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-oCejKz",
+      "phase": "removed",
+      "pid": 98423,
+      "process_start": "Sun Sep 20 17:19:59 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/9cab4140-0e35-4219-bd40-ed5fc793f964/state.json",
+      "id": "9cab4140-0e35-4219-bd40-ed5fc793f964",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-pp3TXe",
+      "phase": "removed",
+      "pid": 30294,
+      "process_start": "Sun Sep 20 17:40:48 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/a7fad2b3-6217-43b3-94db-92e21be5b94d/state.json",
+      "id": "a7fad2b3-6217-43b3-94db-92e21be5b94d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-eRf1U3",
+      "phase": "removed",
+      "pid": 98324,
+      "process_start": "Sun Sep 20 17:19:59 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/3686b4e5-3bfe-43e2-8e6f-ec2483c369b8/state.json",
+      "id": "3686b4e5-3bfe-43e2-8e6f-ec2483c369b8",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-bIa7YB",
+      "phase": "removed",
+      "pid": 74093,
+      "process_start": "Sun Sep 20 17:42:48 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/fae163c0-ca1a-4f3b-a0c1-835193235101/state.json",
+      "id": "fae163c0-ca1a-4f3b-a0c1-835193235101",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-H4sfip",
+      "phase": "removed",
+      "pid": 65952,
+      "process_start": "Sun Sep 20 17:18:00 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/2ed7e88e-66ca-46bc-b3fc-ecc164d2dac7/state.json",
+      "id": "2ed7e88e-66ca-46bc-b3fc-ecc164d2dac7",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-0mnDoo",
+      "phase": "removed",
+      "pid": 64547,
+      "process_start": "Sun Sep 20 17:37:45 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/6b933439-0d85-42ac-b50b-a4198c9e66c6/state.json",
+      "id": "6b933439-0d85-42ac-b50b-a4198c9e66c6",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-shwCU8",
+      "phase": "removed",
+      "pid": 67342,
+      "process_start": "Sun Sep 20 17:37:49 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/6149aab4-66e6-4440-9251-35019b0042e1/state.json",
+      "id": "6149aab4-66e6-4440-9251-35019b0042e1",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-yWkS0w",
+      "phase": "removed",
+      "pid": 94271,
+      "process_start": "Sun Sep 20 17:39:13 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/7ba37bbe-98b5-48f0-bb41-c2a63ad8d4e4/state.json",
+      "id": "7ba37bbe-98b5-48f0-bb41-c2a63ad8d4e4",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-nNCZtK",
+      "phase": "removed",
+      "pid": 46559,
+      "process_start": "Sun Sep 20 17:30:06 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/d9fc43d1-04a1-438b-a927-b5ed2ec1c07c/state.json",
+      "id": "d9fc43d1-04a1-438b-a927-b5ed2ec1c07c",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-SUNBbs",
+      "phase": "removed",
+      "pid": 12087,
+      "process_start": "Sun Sep 20 17:44:25 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/1d89a834-58c1-4f57-8da4-716ffd80fbae/state.json",
+      "id": "1d89a834-58c1-4f57-8da4-716ffd80fbae",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-pDbcVm",
+      "phase": "removed",
+      "pid": 7776,
+      "process_start": "Sun Sep 20 17:44:20 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/8f9aa448-44b6-40d6-b677-5d6c2bcc6194/state.json",
+      "id": "8f9aa448-44b6-40d6-b677-5d6c2bcc6194",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-o36Fp3",
+      "phase": "removed",
+      "pid": 80628,
+      "process_start": "Sun Sep 20 17:19:17 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/4b199ca1-2f7e-4a45-befb-32f6f2737df1/state.json",
+      "id": "4b199ca1-2f7e-4a45-befb-32f6f2737df1",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-4SHCRS",
+      "phase": "removed",
+      "pid": 12591,
+      "process_start": "Sun Sep 20 17:44:27 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/c8c2d1c4-55dc-4c76-96e1-9fb9ccd8173f/state.json",
+      "id": "c8c2d1c4-55dc-4c76-96e1-9fb9ccd8173f",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-J6qVKU",
+      "phase": "removed",
+      "pid": 72293,
+      "process_start": "Sun Sep 20 17:42:40 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/79d39c30-a1f0-4006-ab23-58933c0f7401/state.json",
+      "id": "79d39c30-a1f0-4006-ab23-58933c0f7401",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-JLo2Xu",
+      "phase": "removed",
+      "pid": 69015,
+      "process_start": "Sun Sep 20 17:42:33 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/f19b2634-0cd1-4756-800a-bcdd0106a54f/state.json",
+      "id": "f19b2634-0cd1-4756-800a-bcdd0106a54f",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-uDSYtj",
+      "phase": "removed",
+      "pid": 99906,
+      "process_start": "Sun Sep 20 17:39:24 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/117a076a-ea0e-4b00-8caa-cef266f6de70/state.json",
+      "id": "117a076a-ea0e-4b00-8caa-cef266f6de70",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-vuItLF",
+      "phase": "removed",
+      "pid": 36464,
+      "process_start": "Sun Sep 20 17:41:03 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/bb124930-213a-43bd-87b9-c9ac3c19cc87/state.json",
+      "id": "bb124930-213a-43bd-87b9-c9ac3c19cc87",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-ZwEaZW",
+      "phase": "removed",
+      "pid": 82194,
+      "process_start": "Sun Sep 20 17:26:13 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/9662413e-8efe-4bd6-acfa-537c8913e4be/state.json",
+      "id": "9662413e-8efe-4bd6-acfa-537c8913e4be",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-BqTbvG",
+      "phase": "removed",
+      "pid": 33131,
+      "process_start": "Sun Sep 20 17:41:00 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/6dc5ca7f-ef7c-48ac-91b1-bdd139ad3d9a/state.json",
+      "id": "6dc5ca7f-ef7c-48ac-91b1-bdd139ad3d9a",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-xNL4eY",
+      "phase": "removed",
+      "pid": 60154,
+      "process_start": "Sun Sep 20 17:37:31 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/cf59b328-c893-4883-958c-b531b0885913/state.json",
+      "id": "cf59b328-c893-4883-958c-b531b0885913",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-5ILZvn",
+      "phase": "removed",
+      "pid": 61454,
+      "process_start": "Sun Sep 20 17:17:53 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/cb811182-8344-47ec-825b-229931456b2d/state.json",
+      "id": "cb811182-8344-47ec-825b-229931456b2d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-9aSJWf",
+      "phase": "removed",
+      "pid": 98601,
+      "process_start": "Sun Sep 20 17:39:18 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/b4db51a1-f9eb-4b14-ae3d-fd710a7b095a/state.json",
+      "id": "b4db51a1-f9eb-4b14-ae3d-fd710a7b095a",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-nZGnDV",
+      "phase": "removed",
+      "pid": 45743,
+      "process_start": "Sun Sep 20 17:47:51 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/fd053e84-8fec-439f-906d-d24d4fd969f9/state.json",
+      "id": "fd053e84-8fec-439f-906d-d24d4fd969f9",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-jF3eLD",
+      "phase": "removed",
+      "pid": 65499,
+      "process_start": "Sun Sep 20 17:25:37 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/68330867-da39-4216-af35-22a963fe28dd/state.json",
+      "id": "68330867-da39-4216-af35-22a963fe28dd",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-fjK5ul",
+      "phase": "removed",
+      "pid": 52326,
+      "process_start": "Sun Sep 20 17:24:49 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/4fb4818a-3b68-4928-894a-990fe4900ea7/state.json",
+      "id": "4fb4818a-3b68-4928-894a-990fe4900ea7",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-xBqKnb",
+      "phase": "removed",
+      "pid": 30419,
+      "process_start": "Sun Sep 20 17:15:26 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/61cb3298-1e42-4d7c-854f-cb7fe0af91f8/state.json",
+      "id": "61cb3298-1e42-4d7c-854f-cb7fe0af91f8",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-7vYyYp",
+      "phase": "removed",
+      "pid": 71789,
+      "process_start": "Sun Sep 20 17:42:37 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/2d6a22bc-dd1d-4601-8e7e-dcab6cf43ed3/state.json",
+      "id": "2d6a22bc-dd1d-4601-8e7e-dcab6cf43ed3",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-aimyGN",
+      "phase": "removed",
+      "pid": 5437,
+      "process_start": "Sun Sep 20 17:44:10 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/2069b4e6-eebf-4af6-a93a-030966e7b5e1/state.json",
+      "id": "2069b4e6-eebf-4af6-a93a-030966e7b5e1",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-TxPM2k",
+      "phase": "removed",
+      "pid": 62206,
+      "process_start": "Sun Sep 20 17:37:40 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/34219e7f-d18b-457a-be86-681120419b49/state.json",
+      "id": "34219e7f-d18b-457a-be86-681120419b49",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-PKmtAK",
+      "phase": "removed",
+      "pid": 259,
+      "process_start": "Sun Sep 20 17:39:25 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/861df15c-5588-4e10-bb25-923d824d9df1/state.json",
+      "id": "861df15c-5588-4e10-bb25-923d824d9df1",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-zxTcq7",
+      "phase": "removed",
+      "pid": 77858,
+      "process_start": "Sun Sep 20 17:19:06 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/c9a82f84-ae5e-4448-afaf-c3c87085d34a/state.json",
+      "id": "c9a82f84-ae5e-4448-afaf-c3c87085d34a",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ysrDE9",
+      "phase": "removed",
+      "pid": 36918,
+      "process_start": "Sun Sep 20 17:41:04 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/7ed60f8b-058f-4d19-8a8f-4d4a97b51d47/state.json",
+      "id": "7ed60f8b-058f-4d19-8a8f-4d4a97b51d47",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Hk6Iq2",
+      "phase": "removed",
+      "pid": 31602,
+      "process_start": "Sun Sep 20 17:40:54 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/21753b0d-a579-4ee7-bdee-f6a7b7e6d84d/state.json",
+      "id": "21753b0d-a579-4ee7-bdee-f6a7b7e6d84d",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-HYNGcA",
+      "phase": "removed",
+      "pid": 30924,
+      "process_start": "Sun Sep 20 17:29:11 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/e2fb2f8b-5092-4351-955e-b56f4875162c/state.json",
+      "id": "e2fb2f8b-5092-4351-955e-b56f4875162c",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-security-fl10h0fh/agora-b01-qmv7eT",
+      "phase": "removed",
+      "pid": 25304,
+      "process_start": "Sun Sep 20 17:46:13 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/4ef5c19f-4679-41d8-817e-341b93baa73d/state.json",
+      "id": "4ef5c19f-4679-41d8-817e-341b93baa73d",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-4RKN6R",
+      "phase": "removed",
+      "pid": 73841,
+      "process_start": "Sun Sep 20 17:42:47 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/e1a35133-e2dc-4f8b-9494-f7a0c57a9801/state.json",
+      "id": "e1a35133-e2dc-4f8b-9494-f7a0c57a9801",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-q5n5fz",
+      "phase": "removed",
+      "pid": 13093,
+      "process_start": "Sun Sep 20 17:44:29 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/5f0d3c84-a659-4f74-8681-72f0794dadbe/state.json",
+      "id": "5f0d3c84-a659-4f74-8681-72f0794dadbe",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-3QlZxT",
+      "phase": "removed",
+      "pid": 32354,
+      "process_start": "Sun Sep 20 17:40:58 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/18ddf091-6ccf-4c44-bef0-8e37c4167b15/state.json",
+      "id": "18ddf091-6ccf-4c44-bef0-8e37c4167b15",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-oboLhD",
+      "phase": "removed",
+      "pid": 59644,
+      "process_start": "Sun Sep 20 17:37:29 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/2e6cfd43-0700-4981-a449-e154a8b21a05/state.json",
+      "id": "2e6cfd43-0700-4981-a449-e154a8b21a05",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-c1Bjl7",
+      "phase": "removed",
+      "pid": 98340,
+      "process_start": "Sun Sep 20 17:39:16 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/ab81cdbc-5d40-4f6b-9e06-e57ea5da4f59/state.json",
+      "id": "ab81cdbc-5d40-4f6b-9e06-e57ea5da4f59",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-XMU097",
+      "phase": "removed",
+      "pid": 77222,
+      "process_start": "Sun Sep 20 17:42:51 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/4c162a5d-70ee-49ad-83fe-bb6c5f1bd580/state.json",
+      "id": "4c162a5d-70ee-49ad-83fe-bb6c5f1bd580",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-QdF6wc",
+      "phase": "removed",
+      "pid": 46664,
+      "process_start": "Sun Sep 20 17:30:06 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/9f1543d5-1fb0-4d49-837b-25fdaafdcbdf/state.json",
+      "id": "9f1543d5-1fb0-4d49-837b-25fdaafdcbdf",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-KTFiLV",
+      "phase": "removed",
+      "pid": 67089,
+      "process_start": "Sun Sep 20 17:37:47 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/c13861fb-33b2-4797-9114-3007e523224d/state.json",
+      "id": "c13861fb-33b2-4797-9114-3007e523224d",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-GL0L30",
+      "phase": "removed",
+      "pid": 28788,
+      "process_start": "Sun Sep 20 17:29:05 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/f02a5cec-1767-4e05-84ba-edf20f95684a/state.json",
+      "id": "f02a5cec-1767-4e05-84ba-edf20f95684a",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-ZgfpVn",
+      "phase": "removed",
+      "pid": 40635,
+      "process_start": "Sun Sep 20 17:29:55 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/d09e9314-d90e-4a6f-a94e-27002dd0739e/state.json",
+      "id": "d09e9314-d90e-4a6f-a94e-27002dd0739e",
+      "fixture": "python",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-RL2wOX",
+      "phase": "removed",
+      "pid": 48802,
+      "process_start": "Sun Sep 20 17:09:42 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/422eebbf-3c12-4d9e-bf9d-8170f07cf227/state.json",
+      "id": "422eebbf-3c12-4d9e-bf9d-8170f07cf227",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-B8BQaT",
+      "phase": "removed",
+      "pid": 37177,
+      "process_start": "Sun Sep 20 17:41:05 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/28d3efc2-4a9f-4832-bf4d-2ef6922dddd7/state.json",
+      "id": "28d3efc2-4a9f-4832-bf4d-2ef6922dddd7",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-0Lw24Z",
+      "phase": "removed",
+      "pid": 86831,
+      "process_start": "Sun Sep 20 17:26:20 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/8004c1b8-3cd1-4eed-9a87-90a1380a1c65/state.json",
+      "id": "8004c1b8-3cd1-4eed-9a87-90a1380a1c65",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-1z74oI",
+      "phase": "removed",
+      "pid": 13386,
+      "process_start": "Sun Sep 20 17:44:31 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/1661cc47-2a63-4d26-bb02-0b0e10e6cf67/state.json",
+      "id": "1661cc47-2a63-4d26-bb02-0b0e10e6cf67",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-pYKMU1",
+      "phase": "removed",
+      "pid": 61199,
+      "process_start": "Sun Sep 20 17:37:36 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/python/3c93a954-aa61-486e-9b69-456d18e240b4/state.json",
+      "id": "3c93a954-aa61-486e-9b69-456d18e240b4",
+      "fixture": "python",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-4GUEyD",
+      "phase": "removed",
+      "pid": 37455,
+      "process_start": "Sun Sep 20 17:41:06 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/847e4d81-1926-4ba9-8422-2ca744a58bc8/state.json",
+      "id": "847e4d81-1926-4ba9-8422-2ca744a58bc8",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-MOd1br",
+      "phase": "removed",
+      "pid": 46768,
+      "process_start": "Sun Sep 20 17:47:55 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/878e6e50-d5ce-4254-84f6-764723c3e020/state.json",
+      "id": "878e6e50-d5ce-4254-84f6-764723c3e020",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-vQGhF1",
+      "phase": "removed",
+      "pid": 97795,
+      "process_start": "Sun Sep 20 17:19:56 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/b4490e3f-f5a6-460a-b16a-342f8f7ef2ea/state.json",
+      "id": "b4490e3f-f5a6-460a-b16a-342f8f7ef2ea",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-qLTLMk",
+      "phase": "removed",
+      "pid": 64548,
+      "process_start": "Sun Sep 20 17:42:18 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e427a1fb-9e40-424b-8ef6-48f79b7695fe/state.json",
+      "id": "e427a1fb-9e40-424b-8ef6-48f79b7695fe",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-qgOysB",
+      "phase": "removed",
+      "pid": 60976,
+      "process_start": "Sun Sep 20 17:17:51 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/1daf22e4-454c-4460-bf47-1aa2a74ad6ac/state.json",
+      "id": "1daf22e4-454c-4460-bf47-1aa2a74ad6ac",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-bVW88S",
+      "phase": "removed",
+      "pid": 96689,
+      "process_start": "Sun Sep 20 17:43:47 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/28958681-3a6e-45a5-b757-5ee670b296b8/state.json",
+      "id": "28958681-3a6e-45a5-b757-5ee670b296b8",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-kUkgsK",
+      "phase": "removed",
+      "pid": 99149,
+      "process_start": "Sun Sep 20 17:20:03 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/3116faad-44e4-4722-886a-342ca2fc3d77/state.json",
+      "id": "3116faad-44e4-4722-886a-342ca2fc3d77",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-yw2ej7",
+      "phase": "removed",
+      "pid": 83490,
+      "process_start": "Sun Sep 20 17:26:17 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/3f72a389-888e-4a90-ab72-339cbef5c9fd/state.json",
+      "id": "3f72a389-888e-4a90-ab72-339cbef5c9fd",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-MPlIzc",
+      "phase": "removed",
+      "pid": 26497,
+      "process_start": "Sun Sep 20 17:40:42 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/8bc6ab2d-2691-4e35-884e-81f2b5097710/state.json",
+      "id": "8bc6ab2d-2691-4e35-884e-81f2b5097710",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-lVv7yy",
+      "phase": "removed",
+      "pid": 29296,
+      "process_start": "Sun Sep 20 17:29:07 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/166a6e6a-e1be-49c1-8beb-8dd7d44450d8/state.json",
+      "id": "166a6e6a-e1be-49c1-8beb-8dd7d44450d8",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-0AHSMU",
+      "phase": "removed",
+      "pid": 87803,
+      "process_start": "Sun Sep 20 17:26:24 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/3ce4f0e7-48a3-4d51-a25e-c23740858350/state.json",
+      "id": "3ce4f0e7-48a3-4d51-a25e-c23740858350",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-security-fl10h0fh/agora-b01-X2t9nP",
+      "phase": "removed",
+      "pid": 25068,
+      "process_start": "Sun Sep 20 17:46:12 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/a3bd9528-81e2-42f4-b5c6-31e903e86872/state.json",
+      "id": "a3bd9528-81e2-42f4-b5c6-31e903e86872",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-QTo2Wo",
+      "phase": "removed",
+      "pid": 47997,
+      "process_start": "Sun Sep 20 17:09:40 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/006b4cd8-00e3-408f-8507-f180798c1930/state.json",
+      "id": "006b4cd8-00e3-408f-8507-f180798c1930",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-b0ZK3K",
+      "phase": "removed",
+      "pid": 17264,
+      "process_start": "Sun Sep 20 17:40:13 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/b4d7755f-68cf-49a1-96da-3cba6ab8f44e/state.json",
+      "id": "b4d7755f-68cf-49a1-96da-3cba6ab8f44e",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-sHjZ9O",
+      "phase": "removed",
+      "pid": 93191,
+      "process_start": "Sun Sep 20 17:43:41 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/0b5d1b16-f02a-4c33-9c7c-d5d8b23f7d55/state.json",
+      "id": "0b5d1b16-f02a-4c33-9c7c-d5d8b23f7d55",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-sW3nC6",
+      "phase": "removed",
+      "pid": 80104,
+      "process_start": "Sun Sep 20 17:38:34 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e1183458-717d-41d9-b861-8cfbbb25ea01/state.json",
+      "id": "e1183458-717d-41d9-b861-8cfbbb25ea01",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-JvTpqF",
+      "phase": "removed",
+      "pid": 55494,
+      "process_start": "Sun Sep 20 17:37:24 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e1da03a2-4b99-4bd7-b36c-05d2af795d08/state.json",
+      "id": "e1da03a2-4b99-4bd7-b36c-05d2af795d08",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-mIP0Ea",
+      "phase": "removed",
+      "pid": 97555,
+      "process_start": "Sun Sep 20 17:19:55 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/dbe662eb-d52b-42ef-b984-40b9ce59a1df/state.json",
+      "id": "dbe662eb-d52b-42ef-b984-40b9ce59a1df",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-v35JwZ",
+      "phase": "removed",
+      "pid": 79746,
+      "process_start": "Sun Sep 20 17:19:14 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2ac341ce-f415-469c-8f62-0cd319bd41cb/state.json",
+      "id": "2ac341ce-f415-469c-8f62-0cd319bd41cb",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-gPP38E",
+      "phase": "removed",
+      "pid": 59250,
+      "process_start": "Sun Sep 20 17:24:56 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/6a54d218-7ad9-4cb9-b13f-efd6728f1732/state.json",
+      "id": "6a54d218-7ad9-4cb9-b13f-efd6728f1732",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-biMtcg",
+      "phase": "removed",
+      "pid": 61146,
+      "process_start": "Sun Sep 20 17:42:14 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/a6baa7ff-5d7b-493a-87d9-546cd598bd2e/state.json",
+      "id": "a6baa7ff-5d7b-493a-87d9-546cd598bd2e",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-6HSg0s",
+      "phase": "removed",
+      "pid": 24491,
+      "process_start": "Sun Sep 20 17:40:35 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/d64cd4d1-b743-4201-9477-dfff0e016676/state.json",
+      "id": "d64cd4d1-b743-4201-9477-dfff0e016676",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-DpN2cP",
+      "phase": "removed",
+      "pid": 67248,
+      "process_start": "Sun Sep 20 17:30:57 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/350fd108-ecf8-4efe-baa7-eb2151fda219/state.json",
+      "id": "350fd108-ecf8-4efe-baa7-eb2151fda219",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-eflMqZ",
+      "phase": "removed",
+      "pid": 78493,
+      "process_start": "Sun Sep 20 17:19:09 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/56cf70c0-9a3d-4322-a443-8c5c5d7da7dd/state.json",
+      "id": "56cf70c0-9a3d-4322-a443-8c5c5d7da7dd",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-KTu0KN",
+      "phase": "removed",
+      "pid": 24726,
+      "process_start": "Sun Sep 20 17:15:15 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/675a9a59-cc85-452c-b303-d91fadbf616b/state.json",
+      "id": "675a9a59-cc85-452c-b303-d91fadbf616b",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-PNUwDs",
+      "phase": "removed",
+      "pid": 25232,
+      "process_start": "Sun Sep 20 17:40:38 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/f8ce0f91-b61e-4735-990f-c6301dcb92ce/state.json",
+      "id": "f8ce0f91-b61e-4735-990f-c6301dcb92ce",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-uNKKrM",
+      "phase": "removed",
+      "pid": 50254,
+      "process_start": "Sun Sep 20 17:37:09 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/db7e1cbb-0777-4898-b920-3b82e0b77987/state.json",
+      "id": "db7e1cbb-0777-4898-b920-3b82e0b77987",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-sthJIi",
+      "phase": "removed",
+      "pid": 65993,
+      "process_start": "Sun Sep 20 17:42:25 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/10fdbdb2-1413-4fa5-a5c9-e686e2133558/state.json",
+      "id": "10fdbdb2-1413-4fa5-a5c9-e686e2133558",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-6Cmmqk",
+      "phase": "removed",
+      "pid": 54401,
+      "process_start": "Sun Sep 20 17:37:19 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/18a5704a-4590-4771-8309-06d1f7064c0a/state.json",
+      "id": "18a5704a-4590-4771-8309-06d1f7064c0a",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-c6bC8U",
+      "phase": "removed",
+      "pid": 92634,
+      "process_start": "Sun Sep 20 17:39:05 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2c27f0ea-b4b3-480d-82ab-7f1cea359a97/state.json",
+      "id": "2c27f0ea-b4b3-480d-82ab-7f1cea359a97",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-9qkHwt",
+      "phase": "removed",
+      "pid": 49757,
+      "process_start": "Sun Sep 20 17:09:45 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/c1296de1-7d05-4e3c-81c5-9d087973793f/state.json",
+      "id": "c1296de1-7d05-4e3c-81c5-9d087973793f",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-BNFPFf",
+      "phase": "removed",
+      "pid": 53836,
+      "process_start": "Sun Sep 20 17:41:55 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/46c0e8eb-c7ee-45ac-97f1-5b307e55441f/state.json",
+      "id": "46c0e8eb-c7ee-45ac-97f1-5b307e55441f",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-wUaA6d",
+      "phase": "removed",
+      "pid": 45083,
+      "process_start": "Sun Sep 20 17:47:48 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/201cb489-f8d5-409a-9e4a-3b694fea8475/state.json",
+      "id": "201cb489-f8d5-409a-9e4a-3b694fea8475",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-fsNGbj",
+      "phase": "removed",
+      "pid": 25581,
+      "process_start": "Sun Sep 20 17:40:40 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/742ebc6b-8221-495d-a0af-105b9e094ade/state.json",
+      "id": "742ebc6b-8221-495d-a0af-105b9e094ade",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-IqQMZU",
+      "phase": "removed",
+      "pid": 24880,
+      "process_start": "Sun Sep 20 17:40:36 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/523b63b9-6d58-44ce-b275-d847a69778bb/state.json",
+      "id": "523b63b9-6d58-44ce-b275-d847a69778bb",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ybWfbA",
+      "phase": "removed",
+      "pid": 47166,
+      "process_start": "Sun Sep 20 17:36:58 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/c0c0bec4-55a9-443c-b90d-4c04d257db8b/state.json",
+      "id": "c0c0bec4-55a9-443c-b90d-4c04d257db8b",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-cbGcHN",
+      "phase": "removed",
+      "pid": 47866,
+      "process_start": "Sun Sep 20 17:37:02 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/4c6cce50-eee4-497d-8244-5744c61c08fe/state.json",
+      "id": "4c6cce50-eee4-497d-8244-5744c61c08fe",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-23OsQU",
+      "phase": "removed",
+      "pid": 50609,
+      "process_start": "Sun Sep 20 17:24:40 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/af9f817c-bde0-4705-83a9-56af7d279f5b/state.json",
+      "id": "af9f817c-bde0-4705-83a9-56af7d279f5b",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-LNuARr",
+      "phase": "removed",
+      "pid": 66342,
+      "process_start": "Sun Sep 20 17:42:27 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/5117fb1b-171c-46d8-81e4-4924073e5dcb/state.json",
+      "id": "5117fb1b-171c-46d8-81e4-4924073e5dcb",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-yj5TrF",
+      "phase": "removed",
+      "pid": 63506,
+      "process_start": "Sun Sep 20 17:25:29 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2f66a1cc-827d-4e92-b3dd-a3e9a736897d/state.json",
+      "id": "2f66a1cc-827d-4e92-b3dd-a3e9a736897d",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-7CZXZt",
+      "phase": "removed",
+      "pid": 66204,
+      "process_start": "Sun Sep 20 17:30:54 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/34b9230e-5f73-484e-95f1-4f353d41c441/state.json",
+      "id": "34b9230e-5f73-484e-95f1-4f353d41c441",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-gMYU3y",
+      "phase": "removed",
+      "pid": 85576,
+      "process_start": "Sun Sep 20 17:38:46 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/cd252a67-3a1a-486d-96da-38c7295d4cf3/state.json",
+      "id": "cd252a67-3a1a-486d-96da-38c7295d4cf3",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-t9Xoyw",
+      "phase": "removed",
+      "pid": 75564,
+      "process_start": "Sun Sep 20 17:03:36 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/4b653f9c-bec8-4085-8050-c495ede821f7/state.json",
+      "id": "4b653f9c-bec8-4085-8050-c495ede821f7",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-vp18Cc",
+      "phase": "removed",
+      "pid": 77684,
+      "process_start": "Sun Sep 20 17:19:05 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2b29990f-6f78-4b0d-b816-461eacd2271d/state.json",
+      "id": "2b29990f-6f78-4b0d-b816-461eacd2271d",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-NEutBn",
+      "phase": "removed",
+      "pid": 85928,
+      "process_start": "Sun Sep 20 17:38:48 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/cd574ebc-7b28-4a5a-9c3e-20440ed1b31b/state.json",
+      "id": "cd574ebc-7b28-4a5a-9c3e-20440ed1b31b",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-lLDk40",
+      "phase": "removed",
+      "pid": 57919,
+      "process_start": "Sun Sep 20 17:24:52 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ffdb30c8-7bbf-40cd-a7fc-afdecf333167/state.json",
+      "id": "ffdb30c8-7bbf-40cd-a7fc-afdecf333167",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-m08uf5",
+      "phase": "removed",
+      "pid": 70273,
+      "process_start": "Sun Sep 20 17:25:41 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/c9577405-a119-418c-a38d-ed217737d55c/state.json",
+      "id": "c9577405-a119-418c-a38d-ed217737d55c",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-JiNYCU",
+      "phase": "removed",
+      "pid": 45819,
+      "process_start": "Sun Sep 20 17:30:02 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/82b65771-a535-4113-b574-daa8bc176622/state.json",
+      "id": "82b65771-a535-4113-b574-daa8bc176622",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-sxjyHF",
+      "phase": "removed",
+      "pid": 80493,
+      "process_start": "Sun Sep 20 17:38:36 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/af160f15-db9d-47d9-8093-bb3ac9c85c03/state.json",
+      "id": "af160f15-db9d-47d9-8093-bb3ac9c85c03",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-0um7E5",
+      "phase": "removed",
+      "pid": 77470,
+      "process_start": "Sun Sep 20 17:19:04 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2d960b7c-5b5d-49ec-9097-faf16532f59d/state.json",
+      "id": "2d960b7c-5b5d-49ec-9097-faf16532f59d",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ZZ3AwC",
+      "phase": "removed",
+      "pid": 48962,
+      "process_start": "Sun Sep 20 17:37:08 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/9c64644b-e7af-4c63-b8c6-bf3c3a721647/state.json",
+      "id": "9c64644b-e7af-4c63-b8c6-bf3c3a721647",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-DL2tbM",
+      "phase": "removed",
+      "pid": 53102,
+      "process_start": "Sun Sep 20 17:09:54 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/5a975a41-408c-4816-90d9-6a9556f2e393/state.json",
+      "id": "5a975a41-408c-4816-90d9-6a9556f2e393",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-xX84jO",
+      "phase": "removed",
+      "pid": 18714,
+      "process_start": "Sun Sep 20 17:40:21 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/764748d0-eec4-4069-882a-be8945b23c0e/state.json",
+      "id": "764748d0-eec4-4069-882a-be8945b23c0e",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-gbYF6a",
+      "phase": "removed",
+      "pid": 31571,
+      "process_start": "Sun Sep 20 17:29:14 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/c367c69e-8df6-4994-9d7d-b49b5393666d/state.json",
+      "id": "c367c69e-8df6-4994-9d7d-b49b5393666d",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-y1cAun",
+      "phase": "removed",
+      "pid": 84252,
+      "process_start": "Sun Sep 20 17:38:40 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/da86906e-1749-4198-b7c0-a16a34aa4006/state.json",
+      "id": "da86906e-1749-4198-b7c0-a16a34aa4006",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-chkRqz",
+      "phase": "removed",
+      "pid": 52445,
+      "process_start": "Sun Sep 20 17:41:51 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/54f46a78-59e7-47ff-866a-bf59fab7b9de/state.json",
+      "id": "54f46a78-59e7-47ff-866a-bf59fab7b9de",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-e1HQsS",
+      "phase": "removed",
+      "pid": 19066,
+      "process_start": "Sun Sep 20 17:40:23 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/eaaa5009-2bac-425b-acd2-f3eac1c41a80/state.json",
+      "id": "eaaa5009-2bac-425b-acd2-f3eac1c41a80",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-xmSgaB",
+      "phase": "removed",
+      "pid": 76620,
+      "process_start": "Sun Sep 20 17:03:42 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/f1e7c590-1a3c-4692-8607-eecf779f29ec/state.json",
+      "id": "f1e7c590-1a3c-4692-8607-eecf779f29ec",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-RxP9gg",
+      "phase": "removed",
+      "pid": 54048,
+      "process_start": "Sun Sep 20 17:37:17 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e97b1733-efdb-49a1-ad37-899082388639/state.json",
+      "id": "e97b1733-efdb-49a1-ad37-899082388639",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-4Oofo2",
+      "phase": "removed",
+      "pid": 5096,
+      "process_start": "Sun Sep 20 17:44:08 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/23b31a45-bdff-4b17-a186-e028d678010e/state.json",
+      "id": "23b31a45-bdff-4b17-a186-e028d678010e",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-fVfVHQ",
+      "phase": "removed",
+      "pid": 88750,
+      "process_start": "Sun Sep 20 17:26:27 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ef4e3d00-2ce6-4f18-a935-21b5f39d96d6/state.json",
+      "id": "ef4e3d00-2ce6-4f18-a935-21b5f39d96d6",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-FMnNg2",
+      "phase": "removed",
+      "pid": 60187,
+      "process_start": "Sun Sep 20 17:42:12 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/c23cdf7a-7c6c-4f2a-af6a-6a516ca2c0c0/state.json",
+      "id": "c23cdf7a-7c6c-4f2a-af6a-6a516ca2c0c0",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-YMc6MA",
+      "phase": "removed",
+      "pid": 29951,
+      "process_start": "Sun Sep 20 17:40:46 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/7eb6a424-475b-445a-80d5-b91b29cfa2c3/state.json",
+      "id": "7eb6a424-475b-445a-80d5-b91b29cfa2c3",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-NZMyH7",
+      "phase": "removed",
+      "pid": 16499,
+      "process_start": "Sun Sep 20 17:40:10 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/9a2f79f9-0ce8-4f31-b3f4-815280150f80/state.json",
+      "id": "9a2f79f9-0ce8-4f31-b3f4-815280150f80",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-BK0zKe",
+      "phase": "removed",
+      "pid": 47517,
+      "process_start": "Sun Sep 20 17:37:00 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/1a2e7206-e63c-4916-add9-c0f9b79a3ef1/state.json",
+      "id": "1a2e7206-e63c-4916-add9-c0f9b79a3ef1",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ODwNvz",
+      "phase": "removed",
+      "pid": 55141,
+      "process_start": "Sun Sep 20 17:37:23 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/0c45d71c-2417-4975-a5ed-dbc65e59b075/state.json",
+      "id": "0c45d71c-2417-4975-a5ed-dbc65e59b075",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-F7F5BV",
+      "phase": "removed",
+      "pid": 86280,
+      "process_start": "Sun Sep 20 17:38:50 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2eeedd4f-0b16-4b38-baaf-40efaa407c79/state.json",
+      "id": "2eeedd4f-0b16-4b38-baaf-40efaa407c79",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-T5T5bQ",
+      "phase": "removed",
+      "pid": 64902,
+      "process_start": "Sun Sep 20 17:42:20 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/f9769706-4b6d-4ed8-9fb4-9f7abd51c3ff/state.json",
+      "id": "f9769706-4b6d-4ed8-9fb4-9f7abd51c3ff",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-hv9JKc",
+      "phase": "removed",
+      "pid": 32449,
+      "process_start": "Sun Sep 20 17:29:18 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/5201874d-d368-4932-8eb6-9db8513a46e8/state.json",
+      "id": "5201874d-d368-4932-8eb6-9db8513a46e8",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-vUMmZw",
+      "phase": "removed",
+      "pid": 57646,
+      "process_start": "Sun Sep 20 17:41:59 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/50b98413-0ab6-43bf-9ca6-55f78cba0ab1/state.json",
+      "id": "50b98413-0ab6-43bf-9ca6-55f78cba0ab1",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-28dPyP",
+      "phase": "removed",
+      "pid": 50055,
+      "process_start": "Sun Sep 20 17:48:07 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/651f51de-f07b-41ef-9f5d-93496c07c4e6/state.json",
+      "id": "651f51de-f07b-41ef-9f5d-93496c07c4e6",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-OcNXIn",
+      "phase": "removed",
+      "pid": 24141,
+      "process_start": "Sun Sep 20 17:40:33 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/3c79c2ba-15b9-4d23-896d-d2cc005620a8/state.json",
+      "id": "3c79c2ba-15b9-4d23-896d-d2cc005620a8",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-usjOvD",
+      "phase": "removed",
+      "pid": 17619,
+      "process_start": "Sun Sep 20 17:40:15 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/72d43407-2e99-4aba-aa3b-f6fccddff38c/state.json",
+      "id": "72d43407-2e99-4aba-aa3b-f6fccddff38c",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-UNOAbf",
+      "phase": "removed",
+      "pid": 33002,
+      "process_start": "Sun Sep 20 17:29:20 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/1b3b8737-2e38-41e2-97eb-f80a549f1b1f/state.json",
+      "id": "1b3b8737-2e38-41e2-97eb-f80a549f1b1f",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-nqTIck",
+      "phase": "removed",
+      "pid": 79406,
+      "process_start": "Sun Sep 20 17:38:30 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/c5e5b56b-78e2-4759-a199-0e908c690935/state.json",
+      "id": "c5e5b56b-78e2-4759-a199-0e908c690935",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-VvORDS",
+      "phase": "removed",
+      "pid": 40202,
+      "process_start": "Sun Sep 20 17:29:53 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/501e605f-07a2-4637-8066-337822b9305d/state.json",
+      "id": "501e605f-07a2-4637-8066-337822b9305d",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-Atnx8s",
+      "phase": "removed",
+      "pid": 64933,
+      "process_start": "Sun Sep 20 17:25:34 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/cc1b5672-b875-4bbf-9956-ec3d549147dd/state.json",
+      "id": "cc1b5672-b875-4bbf-9956-ec3d549147dd",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-wrGwB1",
+      "phase": "removed",
+      "pid": 92452,
+      "process_start": "Sun Sep 20 17:43:37 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/4500ad90-04e1-4f59-910f-287283468e2d/state.json",
+      "id": "4500ad90-04e1-4f59-910f-287283468e2d",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-Cu7UgB",
+      "phase": "removed",
+      "pid": 79960,
+      "process_start": "Sun Sep 20 17:19:15 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/beba4c2e-8625-4f5b-aadb-2a3301753254/state.json",
+      "id": "beba4c2e-8625-4f5b-aadb-2a3301753254",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-RMXiru",
+      "phase": "removed",
+      "pid": 51817,
+      "process_start": "Sun Sep 20 17:24:46 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/6e05e084-6910-4258-99e7-d57136b196a5/state.json",
+      "id": "6e05e084-6910-4258-99e7-d57136b196a5",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-L517KW",
+      "phase": "removed",
+      "pid": 62987,
+      "process_start": "Sun Sep 20 17:17:56 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/b0135a47-a1cc-4d9a-97fd-2aedd6d2d066/state.json",
+      "id": "b0135a47-a1cc-4d9a-97fd-2aedd6d2d066",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-qdDHQa",
+      "phase": "removed",
+      "pid": 87023,
+      "process_start": "Sun Sep 20 17:38:53 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/5b5cbf93-4ed9-42b9-8256-75954afcfefd/state.json",
+      "id": "5b5cbf93-4ed9-42b9-8256-75954afcfefd",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-rTQa2m",
+      "phase": "removed",
+      "pid": 92213,
+      "process_start": "Sun Sep 20 17:39:03 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ea9ba82c-cc10-4324-bf6e-7054cc77bc6b/state.json",
+      "id": "ea9ba82c-cc10-4324-bf6e-7054cc77bc6b",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-ZYDHrF",
+      "phase": "removed",
+      "pid": 32996,
+      "process_start": "Sun Sep 20 17:15:35 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/d48789c0-a621-484f-8c1a-3e8ca00ec8b7/state.json",
+      "id": "d48789c0-a621-484f-8c1a-3e8ca00ec8b7",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-jxxday",
+      "phase": "removed",
+      "pid": 98606,
+      "process_start": "Sun Sep 20 17:43:52 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/7e815b96-57bb-4c1f-a6c9-410945972973/state.json",
+      "id": "7e815b96-57bb-4c1f-a6c9-410945972973",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-OEhlB7",
+      "phase": "removed",
+      "pid": 16865,
+      "process_start": "Sun Sep 20 17:40:12 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/7c84571f-b7a9-40d1-be5c-2c1068296a9d/state.json",
+      "id": "7c84571f-b7a9-40d1-be5c-2c1068296a9d",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-1r4zvx",
+      "phase": "removed",
+      "pid": 65644,
+      "process_start": "Sun Sep 20 17:42:23 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2b053b8b-c669-414d-bee7-e75204922022/state.json",
+      "id": "2b053b8b-c669-414d-bee7-e75204922022",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-VtKos9",
+      "phase": "removed",
+      "pid": 58036,
+      "process_start": "Sun Sep 20 17:42:01 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ad8be4a8-6dd8-4279-905d-5988fa732496/state.json",
+      "id": "ad8be4a8-6dd8-4279-905d-5988fa732496",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-ep7LGM",
+      "phase": "removed",
+      "pid": 31244,
+      "process_start": "Sun Sep 20 17:15:29 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/b8ab383e-2bc4-44f9-b3f8-5ecc85cbecf4/state.json",
+      "id": "b8ab383e-2bc4-44f9-b3f8-5ecc85cbecf4",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-pJIY7d",
+      "phase": "removed",
+      "pid": 55565,
+      "process_start": "Sun Sep 20 17:41:57 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/1315c6e2-08c8-483f-b01b-59aa20c420cb/state.json",
+      "id": "1315c6e2-08c8-483f-b01b-59aa20c420cb",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-3aexdK",
+      "phase": "removed",
+      "pid": 54132,
+      "process_start": "Sun Sep 20 17:09:57 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e85eafdf-37c5-4daf-af58-3fbd80b55355/state.json",
+      "id": "e85eafdf-37c5-4daf-af58-3fbd80b55355",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-dw8NwE",
+      "phase": "removed",
+      "pid": 92841,
+      "process_start": "Sun Sep 20 17:43:39 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/85bb46e8-2fcc-47b3-aa24-7f1b5cf5db02/state.json",
+      "id": "85bb46e8-2fcc-47b3-aa24-7f1b5cf5db02",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-aMgXtM",
+      "phase": "removed",
+      "pid": 175,
+      "process_start": "Sun Sep 20 17:44:00 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/3d31b34a-f826-49c3-a1c7-cda9d4e11f95/state.json",
+      "id": "3d31b34a-f826-49c3-a1c7-cda9d4e11f95",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-0GavnK",
+      "phase": "removed",
+      "pid": 91745,
+      "process_start": "Sun Sep 20 17:43:33 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/85b39138-7e90-45ea-b94b-8b158f59e567/state.json",
+      "id": "85b39138-7e90-45ea-b94b-8b158f59e567",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-xowOLN",
+      "phase": "removed",
+      "pid": 64570,
+      "process_start": "Sun Sep 20 17:17:57 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2070de44-bd2c-4733-b396-dbd96e619be9/state.json",
+      "id": "2070de44-bd2c-4733-b396-dbd96e619be9",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-Av5FnV",
+      "phase": "removed",
+      "pid": 52312,
+      "process_start": "Sun Sep 20 17:09:51 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/907c8cad-96e0-46d0-8e29-abde37c196a8/state.json",
+      "id": "907c8cad-96e0-46d0-8e29-abde37c196a8",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-I2FUJA",
+      "phase": "removed",
+      "pid": 23436,
+      "process_start": "Sun Sep 20 17:40:29 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/8c8426ce-10c9-4b12-a09a-13bc68d1e670/state.json",
+      "id": "8c8426ce-10c9-4b12-a09a-13bc68d1e670",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-nRZHir",
+      "phase": "removed",
+      "pid": 42484,
+      "process_start": "Sun Sep 20 17:36:51 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/49927125-b163-4b73-8e58-a1e3141df2aa/state.json",
+      "id": "49927125-b163-4b73-8e58-a1e3141df2aa",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-c6MiHR",
+      "phase": "removed",
+      "pid": 61644,
+      "process_start": "Sun Sep 20 17:30:47 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/18fa3436-939d-4cd0-87d8-67919a80e338/state.json",
+      "id": "18fa3436-939d-4cd0-87d8-67919a80e338",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-TowSsH",
+      "phase": "removed",
+      "pid": 97908,
+      "process_start": "Sun Sep 20 17:43:49 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/f3443aa6-1608-491d-bb33-296451edf217/state.json",
+      "id": "f3443aa6-1608-491d-bb33-296451edf217",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-uufeLM",
+      "phase": "removed",
+      "pid": 2309,
+      "process_start": "Sun Sep 20 17:44:04 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/60061157-3f55-4df3-8127-28d4a5461c2f/state.json",
+      "id": "60061157-3f55-4df3-8127-28d4a5461c2f",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-EELica",
+      "phase": "removed",
+      "pid": 48608,
+      "process_start": "Sun Sep 20 17:37:06 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/5d204163-3fd3-4c00-b7ab-4ab0f930f52a/state.json",
+      "id": "5d204163-3fd3-4c00-b7ab-4ab0f930f52a",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-AzZM82",
+      "phase": "removed",
+      "pid": 68029,
+      "process_start": "Sun Sep 20 17:18:08 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/d95714bd-c756-4d11-b022-046a710500d7/state.json",
+      "id": "d95714bd-c756-4d11-b022-046a710500d7",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-nwqRLr",
+      "phase": "removed",
+      "pid": 4704,
+      "process_start": "Sun Sep 20 17:44:06 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e603cef0-574b-4f96-ab1f-6d19e8731de6/state.json",
+      "id": "e603cef0-574b-4f96-ab1f-6d19e8731de6",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-fVRH4d",
+      "phase": "removed",
+      "pid": 86672,
+      "process_start": "Sun Sep 20 17:38:52 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/0cd0a0bc-2dc9-4207-a18c-9f4daed4f0d7/state.json",
+      "id": "0cd0a0bc-2dc9-4207-a18c-9f4daed4f0d7",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-wcPAQ3",
+      "phase": "removed",
+      "pid": 52954,
+      "process_start": "Sun Sep 20 17:37:11 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e1a3a825-fd6e-4108-a064-dc51587b7d1b/state.json",
+      "id": "e1a3a825-fd6e-4108-a064-dc51587b7d1b",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-FlSFmk",
+      "phase": "removed",
+      "pid": 91767,
+      "process_start": "Sun Sep 20 17:39:01 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/f701f6bc-db59-4da2-ada0-fd696e465531/state.json",
+      "id": "f701f6bc-db59-4da2-ada0-fd696e465531",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-pivl3x",
+      "phase": "removed",
+      "pid": 99704,
+      "process_start": "Sun Sep 20 17:43:58 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/789724aa-b886-46b7-9b07-653fa983adfe/state.json",
+      "id": "789724aa-b886-46b7-9b07-653fa983adfe",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-3xsZ4D",
+      "phase": "removed",
+      "pid": 83195,
+      "process_start": "Sun Sep 20 17:19:26 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/5b41199d-29e2-49b2-b987-035bfeca9a8c/state.json",
+      "id": "5b41199d-29e2-49b2-b987-035bfeca9a8c",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-SW6c8g",
+      "phase": "removed",
+      "pid": 53344,
+      "process_start": "Sun Sep 20 17:37:13 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/f79b989a-3da6-40b2-8c43-24430807cd77/state.json",
+      "id": "f79b989a-3da6-40b2-8c43-24430807cd77",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-8JcERn",
+      "phase": "removed",
+      "pid": 48541,
+      "process_start": "Sun Sep 20 17:30:13 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/b01b051b-880d-43ae-be0f-5b3ac41e900f/state.json",
+      "id": "b01b051b-880d-43ae-be0f-5b3ac41e900f",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-QgqjqH",
+      "phase": "removed",
+      "pid": 67862,
+      "process_start": "Sun Sep 20 17:30:59 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/78fc40d6-0700-4da5-bdab-aed3a6ce2639/state.json",
+      "id": "78fc40d6-0700-4da5-bdab-aed3a6ce2639",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-7BZjB8",
+      "phase": "removed",
+      "pid": 238,
+      "process_start": "Sun Sep 20 17:20:06 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/a79ec3f2-4874-448d-b39a-85d1364aaf3e/state.json",
+      "id": "a79ec3f2-4874-448d-b39a-85d1364aaf3e",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-RfMKxa",
+      "phase": "removed",
+      "pid": 26243,
+      "process_start": "Sun Sep 20 17:15:21 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/4433206e-c4c2-473e-ae3f-28568ea488ae/state.json",
+      "id": "4433206e-c4c2-473e-ae3f-28568ea488ae",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-7c5pxx",
+      "phase": "removed",
+      "pid": 46777,
+      "process_start": "Sun Sep 20 17:36:56 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/147d1b02-83a5-4e8b-ba13-1ed733d8015a/state.json",
+      "id": "147d1b02-83a5-4e8b-ba13-1ed733d8015a",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-6gnmtB",
+      "phase": "removed",
+      "pid": 29140,
+      "process_start": "Sun Sep 20 17:40:44 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/99e1a7fa-4468-4164-a5f0-1d536e10f21b/state.json",
+      "id": "99e1a7fa-4468-4164-a5f0-1d536e10f21b",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-El7Fbb",
+      "phase": "removed",
+      "pid": 46507,
+      "process_start": "Sun Sep 20 17:47:53 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e42cfb0a-3b6e-4166-aa2f-d369e1f7b8fb/state.json",
+      "id": "e42cfb0a-3b6e-4166-aa2f-d369e1f7b8fb",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-c8LmO1",
+      "phase": "removed",
+      "pid": 58737,
+      "process_start": "Sun Sep 20 17:42:04 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/f4785ab9-f18c-4b0f-afd2-f883717649ed/state.json",
+      "id": "f4785ab9-f18c-4b0f-afd2-f883717649ed",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-AfkJQQ",
+      "phase": "removed",
+      "pid": 41623,
+      "process_start": "Sun Sep 20 17:36:49 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/317e6f14-624d-4e30-a6fe-45f655d999b6/state.json",
+      "id": "317e6f14-624d-4e30-a6fe-45f655d999b6",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-1faeTz",
+      "phase": "removed",
+      "pid": 84836,
+      "process_start": "Sun Sep 20 17:38:42 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/6af92878-d042-495b-afa6-d1431ab10fa8/state.json",
+      "id": "6af92878-d042-495b-afa6-d1431ab10fa8",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-g3GYxY",
+      "phase": "removed",
+      "pid": 27577,
+      "process_start": "Sun Sep 20 17:15:23 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/33f8de71-0bf2-43b5-b660-90293be9dbd1/state.json",
+      "id": "33f8de71-0bf2-43b5-b660-90293be9dbd1",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-z2khkN",
+      "phase": "removed",
+      "pid": 49301,
+      "process_start": "Sun Sep 20 17:09:44 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/6d9ed3c5-e07d-4ef6-8bc3-835efc6c3c82/state.json",
+      "id": "6d9ed3c5-e07d-4ef6-8bc3-835efc6c3c82",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-IQZUoT",
+      "phase": "removed",
+      "pid": 87514,
+      "process_start": "Sun Sep 20 17:38:55 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/a057d8bb-28fb-4c43-a4b6-5687fca8c913/state.json",
+      "id": "a057d8bb-28fb-4c43-a4b6-5687fca8c913",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-Q8Byy8",
+      "phase": "removed",
+      "pid": 48293,
+      "process_start": "Sun Sep 20 17:48:02 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/1e0d8fc6-e0b6-437a-8ec0-765cfddf6c60/state.json",
+      "id": "1e0d8fc6-e0b6-437a-8ec0-765cfddf6c60",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-9wN9QC",
+      "phase": "removed",
+      "pid": 23791,
+      "process_start": "Sun Sep 20 17:40:31 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/c047c2c4-7c50-4010-9b98-70aa3af56c28/state.json",
+      "id": "c047c2c4-7c50-4010-9b98-70aa3af56c28",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-fPcwkc",
+      "phase": "removed",
+      "pid": 59479,
+      "process_start": "Sun Sep 20 17:42:08 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/8cce7c3c-226e-40e7-bdc4-91d0683528ec/state.json",
+      "id": "8cce7c3c-226e-40e7-bdc4-91d0683528ec",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-RRAol8",
+      "phase": "removed",
+      "pid": 46033,
+      "process_start": "Sun Sep 20 17:30:03 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/b5bd450b-9eb6-45c9-af39-5805a2650414/state.json",
+      "id": "b5bd450b-9eb6-45c9-af39-5805a2650414",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-tQEImj",
+      "phase": "removed",
+      "pid": 65254,
+      "process_start": "Sun Sep 20 17:42:21 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e6d7fcf8-bf8e-4871-a73f-d9cb4c9784b1/state.json",
+      "id": "e6d7fcf8-bf8e-4871-a73f-d9cb4c9784b1",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-aPtt3W",
+      "phase": "removed",
+      "pid": 99349,
+      "process_start": "Sun Sep 20 17:43:56 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/65f4aab1-cf5e-44d9-9169-8eac4be32a6c/state.json",
+      "id": "65f4aab1-cf5e-44d9-9169-8eac4be32a6c",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ogDbfh",
+      "phase": "removed",
+      "pid": 59087,
+      "process_start": "Sun Sep 20 17:42:06 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/43e059e2-a09e-4898-a845-e6fd2c915ba0/state.json",
+      "id": "43e059e2-a09e-4898-a845-e6fd2c915ba0",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Bh6DeC",
+      "phase": "removed",
+      "pid": 46429,
+      "process_start": "Sun Sep 20 17:36:54 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/37f37839-ca8e-419d-bd9f-07cf3021a892/state.json",
+      "id": "37f37839-ca8e-419d-bd9f-07cf3021a892",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-OFpVwf",
+      "phase": "removed",
+      "pid": 72933,
+      "process_start": "Sun Sep 20 17:25:44 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ba8818f2-e21f-4813-a931-822960dba676/state.json",
+      "id": "ba8818f2-e21f-4813-a931-822960dba676",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-OvsTWL",
+      "phase": "removed",
+      "pid": 47503,
+      "process_start": "Sun Sep 20 17:30:09 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/e0e415d2-ce33-4143-82b9-99d72f7efa6c/state.json",
+      "id": "e0e415d2-ce33-4143-82b9-99d72f7efa6c",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-uRJYOk",
+      "phase": "removed",
+      "pid": 60125,
+      "process_start": "Sun Sep 20 17:30:40 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/54b7a984-3840-46dd-8ef1-c8f1bca15b3f/state.json",
+      "id": "54b7a984-3840-46dd-8ef1-c8f1bca15b3f",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-io2GM4",
+      "phase": "removed",
+      "pid": 66637,
+      "process_start": "Sun Sep 20 17:18:03 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/d4367074-c1c9-4d4e-90d4-d67d537e4c71/state.json",
+      "id": "d4367074-c1c9-4d4e-90d4-d67d537e4c71",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-oeiWTa",
+      "phase": "removed",
+      "pid": 81596,
+      "process_start": "Sun Sep 20 17:26:10 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/842420dd-a20b-4412-8bbe-c866685728fc/state.json",
+      "id": "842420dd-a20b-4412-8bbe-c866685728fc",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-WvKnpT",
+      "phase": "removed",
+      "pid": 91407,
+      "process_start": "Sun Sep 20 17:38:59 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/7c48efaf-cc35-4fca-a652-f289d96e0b27/state.json",
+      "id": "7c48efaf-cc35-4fca-a652-f289d96e0b27",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-1kRd6p",
+      "phase": "removed",
+      "pid": 62438,
+      "process_start": "Sun Sep 20 17:25:24 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ade0cc18-6b85-493d-a1eb-ea393fc9f64b/state.json",
+      "id": "ade0cc18-6b85-493d-a1eb-ea393fc9f64b",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-FVi7bd",
+      "phase": "removed",
+      "pid": 81375,
+      "process_start": "Sun Sep 20 17:38:38 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/cd3b538c-b4db-47a7-93ee-dd7a7cb51f69/state.json",
+      "id": "cd3b538c-b4db-47a7-93ee-dd7a7cb51f69",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-EplZ4j",
+      "phase": "removed",
+      "pid": 79755,
+      "process_start": "Sun Sep 20 17:38:32 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ad7ecc76-3c10-4f97-8d65-7a27aed37713/state.json",
+      "id": "ad7ecc76-3c10-4f97-8d65-7a27aed37713",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-8HrBNi",
+      "phase": "removed",
+      "pid": 90324,
+      "process_start": "Sun Sep 20 17:38:57 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/b50d044c-268a-4830-8c4a-e455a48f8e76/state.json",
+      "id": "b50d044c-268a-4830-8c4a-e455a48f8e76",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-ww4Kzl",
+      "phase": "removed",
+      "pid": 44595,
+      "process_start": "Sun Sep 20 17:36:53 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/9d21fed0-2a75-4c72-afa5-622632172dbb/state.json",
+      "id": "9d21fed0-2a75-4c72-afa5-622632172dbb",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-dB60Lj",
+      "phase": "removed",
+      "pid": 67479,
+      "process_start": "Sun Sep 20 17:18:06 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2f664d3a-2aef-4c1c-92bb-884048adb499/state.json",
+      "id": "2f664d3a-2aef-4c1c-92bb-884048adb499",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-uV7Nyy",
+      "phase": "removed",
+      "pid": 93541,
+      "process_start": "Sun Sep 20 17:43:43 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/c5d0edff-5ec9-4b0e-99bb-c3560450ee65/state.json",
+      "id": "c5d0edff-5ec9-4b0e-99bb-c3560450ee65",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Bk0BqQ",
+      "phase": "removed",
+      "pid": 93947,
+      "process_start": "Sun Sep 20 17:43:45 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/25ae7212-8f1b-4ff5-8c68-ad36aebd0b46/state.json",
+      "id": "25ae7212-8f1b-4ff5-8c68-ad36aebd0b46",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Wftu9D",
+      "phase": "removed",
+      "pid": 98998,
+      "process_start": "Sun Sep 20 17:43:54 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/8597275e-e35a-4ef6-b60a-d76099b48dac/state.json",
+      "id": "8597275e-e35a-4ef6-b60a-d76099b48dac",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Gt1xyv",
+      "phase": "removed",
+      "pid": 53698,
+      "process_start": "Sun Sep 20 17:37:15 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/6614bc5d-be90-4492-a33e-2eb24eba13cb/state.json",
+      "id": "6614bc5d-be90-4492-a33e-2eb24eba13cb",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-FYkypi",
+      "phase": "removed",
+      "pid": 59823,
+      "process_start": "Sun Sep 20 17:24:58 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/5d935031-0c3e-475c-8eac-2478146cfb3b/state.json",
+      "id": "5d935031-0c3e-475c-8eac-2478146cfb3b",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-SHNdel",
+      "phase": "removed",
+      "pid": 58389,
+      "process_start": "Sun Sep 20 17:42:03 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/3caed19f-2af2-4b36-b69b-516d23e9c038/state.json",
+      "id": "3caed19f-2af2-4b36-b69b-516d23e9c038",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-5rwL4F",
+      "phase": "removed",
+      "pid": 49378,
+      "process_start": "Sun Sep 20 17:48:05 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/f480bf13-cf96-406e-bcb5-8bbe1f1e93f7/state.json",
+      "id": "f480bf13-cf96-406e-bcb5-8bbe1f1e93f7",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-vEFmD5",
+      "phase": "removed",
+      "pid": 59830,
+      "process_start": "Sun Sep 20 17:42:10 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2f7778de-8b1d-4b7f-a56a-04c032f95f08/state.json",
+      "id": "2f7778de-8b1d-4b7f-a56a-04c032f95f08",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-CNaWkx",
+      "phase": "removed",
+      "pid": 29515,
+      "process_start": "Sun Sep 20 17:29:08 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/240608f1-cd95-4913-8e2f-3dc12196cfb9/state.json",
+      "id": "240608f1-cd95-4913-8e2f-3dc12196cfb9",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-luRNim",
+      "phase": "removed",
+      "pid": 28310,
+      "process_start": "Sun Sep 20 17:29:03 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2e84ae82-ce21-4f7c-be64-b6bd5de15571/state.json",
+      "id": "2e84ae82-ce21-4f7c-be64-b6bd5de15571",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-YkEdDW",
+      "phase": "removed",
+      "pid": 20763,
+      "process_start": "Sun Sep 20 17:40:25 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/9746b5e8-d625-4d18-9152-74b9acc68974/state.json",
+      "id": "9746b5e8-d625-4d18-9152-74b9acc68974",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-ow4OvK",
+      "phase": "removed",
+      "pid": 926,
+      "process_start": "Sun Sep 20 17:20:08 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/7ea08647-fa5b-4ccb-9b1d-838b095a5c51/state.json",
+      "id": "7ea08647-fa5b-4ccb-9b1d-838b095a5c51",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-kabIZr",
+      "phase": "removed",
+      "pid": 41437,
+      "process_start": "Sun Sep 20 17:29:58 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ea5f3c39-04b3-4c27-973a-c334fc82b3ff/state.json",
+      "id": "ea5f3c39-04b3-4c27-973a-c334fc82b3ff",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-jNQUXd",
+      "phase": "removed",
+      "pid": 82468,
+      "process_start": "Sun Sep 20 17:19:24 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/1f05f63e-0572-4906-89fa-adf7df1e90c9/state.json",
+      "id": "1f05f63e-0572-4906-89fa-adf7df1e90c9",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Cpb0mm",
+      "phase": "removed",
+      "pid": 609,
+      "process_start": "Sun Sep 20 17:44:02 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/cd98e295-f8de-4e8a-9bc6-669513562ddc/state.json",
+      "id": "cd98e295-f8de-4e8a-9bc6-669513562ddc",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-XJQyGL",
+      "phase": "removed",
+      "pid": 89404,
+      "process_start": "Sun Sep 20 17:26:30 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/9264c75b-7aec-41a0-8c5c-ee995ee39cae/state.json",
+      "id": "9264c75b-7aec-41a0-8c5c-ee995ee39cae",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-wQn2G6",
+      "phase": "removed",
+      "pid": 81431,
+      "process_start": "Sun Sep 20 17:19:20 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/9c5f130b-d997-4eec-9e25-8711c67f5937/state.json",
+      "id": "9c5f130b-d997-4eec-9e25-8711c67f5937",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-EVcCID",
+      "phase": "removed",
+      "pid": 85226,
+      "process_start": "Sun Sep 20 17:38:44 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ed677087-5399-4f9b-955e-1ef6859fbb1d/state.json",
+      "id": "ed677087-5399-4f9b-955e-1ef6859fbb1d",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-XRrklo",
+      "phase": "removed",
+      "pid": 75708,
+      "process_start": "Sun Sep 20 17:03:38 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/83b2a63a-babe-437b-aed7-d869c250e62f/state.json",
+      "id": "83b2a63a-babe-437b-aed7-d869c250e62f",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-aLHJLB",
+      "phase": "removed",
+      "pid": 98256,
+      "process_start": "Sun Sep 20 17:43:50 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/6aeab770-ea51-4def-93be-2f7edac2c381/state.json",
+      "id": "6aeab770-ea51-4def-93be-2f7edac2c381",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-Pa5KDZ",
+      "phase": "removed",
+      "pid": 73610,
+      "process_start": "Sun Sep 20 17:25:47 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/6c22521c-ef95-454b-869b-70bc0537baad/state.json",
+      "id": "6c22521c-ef95-454b-869b-70bc0537baad",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-EG17G4",
+      "phase": "removed",
+      "pid": 54792,
+      "process_start": "Sun Sep 20 17:37:21 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/8d2cf5e7-e938-4ce7-bab4-e2e256dfbe85/state.json",
+      "id": "8d2cf5e7-e938-4ce7-bab4-e2e256dfbe85",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-cZRCts",
+      "phase": "removed",
+      "pid": 62652,
+      "process_start": "Sun Sep 20 17:25:25 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ad637e07-c4c9-4432-853d-2afb2412d11b/state.json",
+      "id": "ad637e07-c4c9-4432-853d-2afb2412d11b",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-dNcjzZ",
+      "phase": "removed",
+      "pid": 48216,
+      "process_start": "Sun Sep 20 17:37:04 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/3ae9e2fa-cfc1-4f4a-8cc1-61abad84e2a9/state.json",
+      "id": "3ae9e2fa-cfc1-4f4a-8cc1-61abad84e2a9",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-EIXHxf",
+      "phase": "removed",
+      "pid": 64715,
+      "process_start": "Sun Sep 20 17:25:33 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/fbba8357-ba26-4a1c-af02-7484649926af/state.json",
+      "id": "fbba8357-ba26-4a1c-af02-7484649926af",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-5CDMbO",
+      "phase": "removed",
+      "pid": 61403,
+      "process_start": "Sun Sep 20 17:30:45 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/f946bf2d-4c99-47c6-a1ad-e634cf814a02/state.json",
+      "id": "f946bf2d-4c99-47c6-a1ad-e634cf814a02",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-CoVKMx/agora-b01-3NpWcD",
+      "phase": "removed",
+      "pid": 82910,
+      "process_start": "Sun Sep 20 17:26:16 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/cc87e5b2-3f72-4292-a1de-bfdd38d5455d/state.json",
+      "id": "cc87e5b2-3f72-4292-a1de-bfdd38d5455d",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-UqIZJU",
+      "phase": "removed",
+      "pid": 40462,
+      "process_start": "Sun Sep 20 17:29:54 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/3998092c-2a9d-496f-a342-52e765cbf468/state.json",
+      "id": "3998092c-2a9d-496f-a342-52e765cbf468",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-qqlwq8",
+      "phase": "removed",
+      "pid": 73885,
+      "process_start": "Sun Sep 20 17:03:32 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/1dff1f9c-0e9b-4c0e-9721-f9442df78354/state.json",
+      "id": "1dff1f9c-0e9b-4c0e-9721-f9442df78354",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-QSUMDV",
+      "phase": "removed",
+      "pid": 51634,
+      "process_start": "Sun Sep 20 17:24:45 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/ecc543a0-a80f-405b-be2c-5c675034806b/state.json",
+      "id": "ecc543a0-a80f-405b-be2c-5c675034806b",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-VxA0rv",
+      "phase": "removed",
+      "pid": 52834,
+      "process_start": "Sun Sep 20 17:41:53 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/921f3cd3-4ab4-4d0d-b656-a07a720040b3/state.json",
+      "id": "921f3cd3-4ab4-4d0d-b656-a07a720040b3",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-itpttJ",
+      "phase": "removed",
+      "pid": 92100,
+      "process_start": "Sun Sep 20 17:43:35 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/8c05bdb7-8425-4d4a-b59b-7e7495f64eff/state.json",
+      "id": "8c05bdb7-8425-4d4a-b59b-7e7495f64eff",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-a7L1j6",
+      "phase": "removed",
+      "pid": 79056,
+      "process_start": "Sun Sep 20 17:38:28 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/97e8dccb-c1b2-4452-9602-42c16e32e130/state.json",
+      "id": "97e8dccb-c1b2-4452-9602-42c16e32e130",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-HRmpUx",
+      "phase": "removed",
+      "pid": 49302,
+      "process_start": "Sun Sep 20 17:30:15 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/b6ed60a8-ff0c-4569-8c20-715474c5e8ba/state.json",
+      "id": "b6ed60a8-ff0c-4569-8c20-715474c5e8ba",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-d6Dxn6",
+      "phase": "removed",
+      "pid": 17970,
+      "process_start": "Sun Sep 20 17:40:17 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/47b2f2a3-3ca5-4789-afa7-4ce87ab71081/state.json",
+      "id": "47b2f2a3-3ca5-4789-afa7-4ce87ab71081",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-Nl6QgK",
+      "phase": "removed",
+      "pid": 91384,
+      "process_start": "Sun Sep 20 17:43:31 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/46dedf4c-0766-4aaa-870c-0051cca82856/state.json",
+      "id": "46dedf4c-0766-4aaa-870c-0051cca82856",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-9tAUwj/agora-b01-58ezYP",
+      "phase": "removed",
+      "pid": 93012,
+      "process_start": "Sun Sep 20 17:19:49 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/2f17eb1e-a333-4280-8b04-544770b6bd36/state.json",
+      "id": "2f17eb1e-a333-4280-8b04-544770b6bd36",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-hOzqwX",
+      "phase": "removed",
+      "pid": 23045,
+      "process_start": "Sun Sep 20 17:40:27 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/0b7b1319-78d4-4f35-a08d-58dc70449e5d/state.json",
+      "id": "0b7b1319-78d4-4f35-a08d-58dc70449e5d",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-96upqt",
+      "phase": "removed",
+      "pid": 18319,
+      "process_start": "Sun Sep 20 17:40:19 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/d632ce56-da7e-4f2e-b61f-192a6448a46e/state.json",
+      "id": "d632ce56-da7e-4f2e-b61f-192a6448a46e",
+      "fixture": "agora",
+      "root": "/private/tmp/agora-u01b-perf-na2b53sn/agora-b01-pLWIaF",
+      "phase": "removed",
+      "pid": 64163,
+      "process_start": "Sun Sep 20 17:42:16 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/df58551e-8463-45fe-ba75-38e03d45cd4e/state.json",
+      "id": "df58551e-8463-45fe-ba75-38e03d45cd4e",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-ZfpqEb",
+      "phase": "removed",
+      "pid": 77253,
+      "process_start": "Sun Sep 20 17:03:45 2026",
+      "root_removed": true
+    },
+    {
+      "registry": ".scratch/project/agora/1c5104d2-80b2-43fe-a01f-e963f88f50e6/state.json",
+      "id": "1c5104d2-80b2-43fe-a01f-e963f88f50e6",
+      "fixture": "agora",
+      "root": "/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-b01-JKxinp",
+      "phase": "removed",
+      "pid": 32315,
+      "process_start": "Sun Sep 20 17:15:32 2026",
+      "root_removed": true
+    }
+  ],
+  "registry_retention": "deliberate; no runtime root remains",
+  "external_temp_ownership": "temp-owner.txt in each live run; performance-finalization.json; security-live.json",
+  "failed_attempt_recovery": "live-af160f15-db9d-47d9-8093-bb3ac9c85c03/failed-attempt-cleanup.json and orphan-database-cleanup.log"
+}

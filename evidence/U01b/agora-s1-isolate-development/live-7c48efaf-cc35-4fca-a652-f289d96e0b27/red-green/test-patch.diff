@@ -1,0 +1,111 @@
+diff --git a/contracts/fixtures/vectors.json b/contracts/fixtures/vectors.json
+index 86f77f1..b560097 100644
+--- a/contracts/fixtures/vectors.json
++++ b/contracts/fixtures/vectors.json
+@@ -3,6 +3,12 @@
+ 	"description": "Golden wire vectors for the foundation contract surface. wire holds the exact bytes a consumer parses; canonical, digest and signature are the values both consumers must reproduce. The Ed25519 key is a fixture-only key derived from a public seed and authorizes nothing.",
+ 	"signing_key_seed": "sha256(\"agora fixture signing key; non-production; contracts/fixtures/vectors.json\")",
+ 	"vectors": [
++		{"id":"project-lane-unknown-field","component":"FixtureLane","wire":"{\"id\":1,\"predicate\":\"live\",\"override\":true}","expect":"reject","reason":"unknown lane field"},
++		{"id":"project-config-unknown-authority","component":"ProjectFixtureConfig","wire":"{\"authority\":\"production\"}","expect":"reject","reason":"foundation fixture only"},
++		{"id":"project-cliinstance","component":"CliInstance","wire":"{\"cleanup_handle\":\"11111111-1111-4111-8111-111111111111\",\"database\":\"fixture\",\"object_namespace\":\"fixture/objects\",\"pid\":123,\"process_start\":\"fixture start\",\"root\":\"/tmp/fixture\",\"url\":\"http://127.0.0.1:4123\"}","expect":"accept","canonical":"{\"cleanup_handle\":\"11111111-1111-4111-8111-111111111111\",\"database\":\"fixture\",\"object_namespace\":\"fixture/objects\",\"pid\":123,\"process_start\":\"fixture start\",\"root\":\"/tmp/fixture\",\"url\":\"http://127.0.0.1:4123\"}","digest":"sha256:c6f26b9d9795b211eb8a8ea85622f514b2996e218c697f7910b2a99c69321b57"},
++		{"id":"project-fixtureeffect","component":"FixtureEffect","wire":"{\"object\":{\"decision\":\"allow\",\"policy_digest\":\"sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4\",\"policy_version\":\"agora.fixture-policy/v1\",\"schema_version\":\"agora.fixture-policy-decision/v1\"},\"report\":{\"decision\":\"allow\",\"policy_digest\":\"sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4\",\"policy_version\":\"agora.fixture-policy/v1\",\"schema_version\":\"agora.fixture-policy-decision/v1\"}}","expect":"accept","canonical":"{\"object\":{\"decision\":\"allow\",\"policy_digest\":\"sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4\",\"policy_version\":\"agora.fixture-policy/v1\",\"schema_version\":\"agora.fixture-policy-decision/v1\"},\"report\":{\"decision\":\"allow\",\"policy_digest\":\"sha256:6bb3839045a8266e1ae93d4e7a2483a73225943fd9360b6c3c11e4e69b8b4fa4\",\"policy_version\":\"agora.fixture-policy/v1\",\"schema_version\":\"agora.fixture-policy-decision/v1\"}}","digest":"sha256:50389701fdcc1191e45d556c7e8f52de14e29ad22cd4f3d952e818fb9fa0aad8"},
++		{"id":"project-fixtureeffects","component":"FixtureEffects","wire":"[]","expect":"accept","canonical":"[]","digest":"sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},
++		{"id":"project-instance-foreign-field","component":"CliInstance","wire":"{\"override\":true}","expect":"reject","reason":"missing ownership fields and unknown override"},
+ 		{
+ 			"id": "foundation-blocked",
+ 			"component": "FoundationReport",
+diff --git a/docs/site/test/corpus.test.ts b/docs/site/test/corpus.test.ts
+index 45ef683..8b064ff 100644
+--- a/docs/site/test/corpus.test.ts
++++ b/docs/site/test/corpus.test.ts
+@@ -8,8 +8,10 @@ const result = build();
+ const root = path.resolve(import.meta.dirname, '../../../.docs-dist');
+ const html = file => existsSync(path.join(root, file)) ? readFileSync(path.join(root, file), 'utf8') : '';
+ test('the same public build driver produces a valid baseline before corpus assertions', () => assert.equal(result.outcome, 'pass'));
+-test('the complete corpus has 24 pages and both audience tracks', () => {
+-	assert.equal(result.pages, 24, 'complete audience corpus');
++test('the complete corpus has 26 pages and both audience tracks', () => {
++	assert.equal(result.pages, 26, 'complete audience corpus');
++	assert.match(html('project-controls.html'), /socket-only PostgreSQL/);
++	assert.match(html('checking-a-project.html'), /non-production foundation fixtures/);
+ 	assert.match(html('test-first.html'), /FG01.red-required/);
+ 	assert.match(html('test-first.html'), /foundation_fixture/);
+ 	assert.match(html('index.html'), /Use Agora/);
+diff --git a/packages/verification/test/project.test.ts b/packages/verification/test/project.test.ts
+new file mode 100644
+index 0000000..1ae99ad
+--- /dev/null
++++ b/packages/verification/test/project.test.ts
+@@ -0,0 +1,71 @@
++import { spawnSync } from 'node:child_process';
++import { expect, test } from 'vitest';
++
++function probe(body: string): void {
++	const result = spawnSync(process.execPath, ['--input-type=module', '-e', `
++import assert from 'node:assert/strict'; import * as fs from 'node:fs'; import path from 'node:path';
++import {randomUUID} from 'node:crypto'; import {spawnSync} from 'node:child_process';
++const cli=(...args)=>{const python=args[args.indexOf('--fixture')+1]==='python';if(python)args.splice(args.indexOf('--fixture'),2);const r=spawnSync(python?'python3':process.execPath,[...(python?['-B','packages/verification/fixture/project.py']:['scripts/project.mjs','project']),...args,'--json'],{encoding:'utf8',timeout:90000}); assert.equal(r.error,undefined); const v=JSON.parse(r.stdout); assert.equal(r.status,{pass:0,fail:1,blocked:2,unavailable:3,usage_error:64,infrastructure_failure:70}[v.outcome]); return v;};
++const pass=(...args)=>{const v=cli(...args); assert.equal(v.outcome,'pass',JSON.stringify(v));return v;};
++assert.equal(pass('doctor').command,'doctor');
++const inventory=pass('scenarios'); assert.ok(inventory.scenarios.includes('policy'));
++${body}`], { encoding: 'utf8', timeout: 300_000 });
++	expect(result.status, result.stdout + result.stderr).toBe(0);
++}
++
++test('project lane 1 persists literal public effects in Agora and Python', () => {
++	probe(`for(const fixture of ['agora','python']) { const id=randomUUID(), dir='.scratch/project-tests/'+id;
++const s=pass('start','--profile','verify','--fixture',fixture,'--instance',id);
++try {const v=pass('verify','--fixture',fixture,'--scenario','policy','--instance',id,'--artifacts',dir);
++assert.ok(v.artifacts.length>0); const e=pass('evidence','--fixture',fixture,'--instance',id); assert.deepEqual(e.artifacts,v.artifacts);
++const artifact=JSON.parse(fs.readFileSync(e.artifacts[0].path,'utf8')); assert.equal(artifact.observed[0].decision,'allow'); assert.equal(artifact.observed[1].reason_code,'scope_mismatch'); assert.equal(artifact.persisted.length,2);
++} finally {pass('stop','--fixture',fixture,'--instance',id,'--handle',s.instance.cleanup_handle);}
++assert.ok(fs.existsSync(dir));pass('evidence','--fixture',fixture,'--instance',id); fs.rmSync(dir,{recursive:true}); }`);
++}, 300_000);
++
++test('project lane 2 isolates resources and refuses foreign cleanup', () => {
++	probe(`for(const fixture of ['agora','python']) {const ids=[randomUUID(),randomUUID()];const live=[];
++try {for(const id of ids) live.push(pass('start','--profile','verify','--fixture',fixture,'--instance',id));
++for(const key of ['url','database','object_namespace','pid','cleanup_handle','root']) assert.notEqual(live[0].instance[key],live[1].instance[key],key);
++assert.equal(cli('stop','--fixture',fixture,'--instance',ids[0],'--handle',live[1].instance.cleanup_handle).outcome,'fail');
++pass('stop','--fixture',fixture,'--instance',ids[0],'--handle',live[0].instance.cleanup_handle);
++assert.equal(fs.existsSync(live[0].instance.root),false);assert.equal(fs.existsSync(live[1].instance.root),true);
++pass('verify','--fixture',fixture,'--scenario','policy','--instance',ids[1],'--artifacts','.scratch/project-tests/'+ids[1]);
++} finally {for(const s of live) {const v=cli('stop','--fixture',fixture,'--instance',s.run_id,'--handle',s.instance.cleanup_handle);assert.equal(v.outcome,'pass');} }
++}`);
++}, 300_000);
++
++test('project lane 3 rejects unknown scenarios and missing or mismatched artifacts', () => {
++	probe(`assert.equal(cli('verify','--scenario','imaginary').outcome,'usage_error');assert.equal(cli('doctor','--wat').outcome,'usage_error');
++const checks=await import('./scripts/project-checks.mjs'); assert.throws(()=>checks.validateReport({},0));const healthy=pass('doctor');assert.throws(()=>checks.validateReport(healthy,1));
++const manifest='agora/project.json',savedManifest=fs.readFileSync(manifest);try {const bad=JSON.parse(savedManifest);bad.driver=['/definitely/missing/project-runner'];fs.writeFileSync(manifest,JSON.stringify(bad));assert.notEqual(cli('lanes','--unit','U01b','--task','agora-s1-isolate-development','--artifacts','.scratch/missing-runner-'+randomUUID()).outcome,'pass');fs.writeFileSync(manifest,'not JSON');assert.notEqual(cli('scenarios').outcome,'pass');}finally{fs.writeFileSync(manifest,savedManifest);}
++const id=randomUUID(),dir='.scratch/project-tests/'+id,s=pass('start','--profile','verify','--instance',id);
++try {assert.equal(cli('evidence','--instance',id).outcome,'blocked');assert.equal(cli('start','--profile','verify','--instance',id).outcome,'fail');
++const v=pass('verify','--scenario','policy','--instance',id,'--artifacts',dir); const file=v.artifacts[0].path, bytes=fs.readFileSync(file);
++fs.writeFileSync(file,'{}'); assert.equal(cli('evidence','--instance',id).outcome,'fail');fs.unlinkSync(file);assert.equal(cli('evidence','--instance',id).outcome,'fail');fs.writeFileSync(file,bytes);
++const receipt=path.join('.scratch/project/agora',id,'evidence.json'), saved=fs.readFileSync(receipt);const report=JSON.parse(saved);report.versions.code='a'.repeat(40);fs.writeFileSync(receipt,JSON.stringify(report));assert.equal(cli('evidence','--instance',id).outcome,'fail');fs.writeFileSync(receipt,saved);
++const wrong=JSON.parse(saved);wrong.instance.cleanup_handle=randomUUID();fs.writeFileSync(receipt,JSON.stringify(wrong));assert.equal(cli('evidence','--instance',id).outcome,'fail');fs.writeFileSync(receipt,saved);
++}finally{pass('stop','--instance',id,'--handle',s.instance.cleanup_handle);}`);
++}, 300_000);
++
++test('project lane 4 invalidates changed instructions and deleted feature coverage', () => {
++	probe(`const id=randomUUID(),s=pass('start','--profile','verify','--instance',id),file='agora/feature-map.json',original=fs.readFileSync(file),skill='.agents/skills/verify-agora/SKILL.md',instructions=fs.readFileSync(skill);
++try {pass('verify','--scenario','policy','--instance',id,'--artifacts','.scratch/project-tests/'+id);
++fs.appendFileSync(skill,'\\nChanged route instructions.\\n');assert.equal(cli('evidence','--instance',id).outcome,'fail');fs.writeFileSync(skill,instructions);
++const map=JSON.parse(original);map.features=map.features.filter(x=>x.id!=='project-controls');fs.writeFileSync(file,JSON.stringify(map));assert.equal(cli('verify','--scenario','policy','--instance',id,'--artifacts','.scratch/project-tests/'+id+'-drift').outcome,'fail');
++}finally{fs.writeFileSync(file,original);fs.writeFileSync(skill,instructions);pass('stop','--instance',id,'--handle',s.instance.cleanup_handle);}`);
++}, 300_000);
++
++test('project guards require their own assertions to turn red in isolated copies', () => {
++	probe(`const fsDefault=(await import('node:fs')).default,{syncBuiltinESMExports}=await import('node:module');const write=fsDefault.writeFileSync,target='.scratch/atomic-state-'+randomUUID();write(target,'{"old":true}');
++try {fsDefault.writeFileSync=(file,bytes,options)=>{write(file,String(bytes).slice(0,3),options);assert.deepEqual(JSON.parse(fs.readFileSync(target)),{old:true},'readers see a complete prior snapshot during a partial write');write(file,bytes,options);};syncBuiltinESMExports();const {writeState}=await import('./scripts/project-checks.mjs');writeState(target,{fresh:true});assert.deepEqual(JSON.parse(fs.readFileSync(target)),{fresh:true});}finally{fsDefault.writeFileSync=write;syncBuiltinESMExports();fs.rmSync(target,{force:true});}
++const id=randomUUID(),s=pass('start','--profile','verify','--instance',id),copy='.scratch/project-guard-'+id+'.mjs';
++try {const v=pass('verify','--scenario','policy','--instance',id,'--artifacts','.scratch/project-tests/'+id);fs.writeFileSync(v.artifacts[0].path,'{}');
++const original=fs.readFileSync('scripts/project-checks.mjs','utf8'), needle="bytes.length === artifact.byte_length && hash(bytes) === artifact.digest";
++assert.equal(original.split(needle).length,2); const trials=[];
++for(const weakened of [false,true]) {fs.writeFileSync(copy,weakened?original.replace(needle,'true'):original);
++const r=spawnSync(process.execPath,['--input-type=module','-e',\`import assert from 'node:assert/strict';import {checkEvidence,json} from './\${copy}';assert.throws(()=>checkEvidence(json('.scratch/project/agora/\${id}/evidence.json'),json('.scratch/project/agora/\${id}/state.json')),/artifact_mismatch/);\`],{encoding:'utf8'});
++assert.equal(r.status,weakened?1:0,r.stderr); if(weakened)assert.match(r.stderr,/Missing expected exception/); trials.push({weakened,exit:r.status,stderr:r.stderr});}
++fs.writeFileSync('.scratch/project-guards.json',JSON.stringify({head:v.versions.code,mutation:needle,normal_and_disabled:trials}));
++}finally{fs.rmSync(copy,{force:true});pass('stop','--instance',id,'--handle',s.instance.cleanup_handle);}`);
++}, 300_000);

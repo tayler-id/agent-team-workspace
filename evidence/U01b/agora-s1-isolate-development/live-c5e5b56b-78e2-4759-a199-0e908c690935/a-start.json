@@ -1,0 +1,24 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "start",
+  "versions": {
+    "code": "2d93d40c911ec4f73cfc32705263ba31fc0c684b",
+    "config": "sha256:9a0e1e42972a778d832173f930949bf00f3c772227a5a99feb9081e8829df581",
+    "fixture": "sha256:04383173d3606891d8ec0d49b61e7e36f4b800fc7c7185805c778058bd6ed856"
+  },
+  "outcome": "pass",
+  "diagnostics": [],
+  "artifacts": [],
+  "started_at": "2026-09-20T21:29:53.086Z",
+  "finished_at": "2026-09-20T21:29:53.926Z",
+  "run_id": "c5e5b56b-78e2-4759-a199-0e908c690935",
+  "instance": {
+    "root": "/private/tmp/agora-u01b-kd2Lml/agora-b01-VvORDS",
+    "pid": 40202,
+    "process_start": "Sun Sep 20 17:29:53 2026",
+    "url": "http://127.0.0.1:54961",
+    "database": "postgresql://agora_app@/agora_fixture?host=%2Fprivate%2Ftmp%2Fagora-u01b-kd2Lml%2Fagora-b01-VvORDS",
+    "object_namespace": "/private/tmp/agora-u01b-kd2Lml/agora-b01-VvORDS/objects",
+    "cleanup_handle": "26a31272-2895-44ef-82bd-00fdd73938de"
+  }
+}

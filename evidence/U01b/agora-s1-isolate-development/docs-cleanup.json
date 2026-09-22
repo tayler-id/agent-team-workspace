@@ -1,0 +1,11 @@
+{
+  "pid": 1114,
+  "command": [
+    "node",
+    "docs/site/serve.mjs"
+  ],
+  "port": 43261,
+  "start": "Sun Sep 20 17:33:01 2026",
+  "observed_start": "Sun Sep 20 17:33:01 2026",
+  "signal": "SIGTERM"
+}

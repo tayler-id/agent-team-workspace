@@ -1,0 +1,24 @@
+{
+  "schema_version": "agora.verification-fixture/v1",
+  "authority": "foundation_fixture",
+  "commands": [
+    {"command":"doctor","agora":["node","scripts/project.mjs","project","doctor"],"python":["python3","packages/verification/fixture/project.py","doctor"]},
+    {"command":"scenarios","agora":["node","scripts/project.mjs","project","scenarios"],"python":["python3","packages/verification/fixture/project.py","scenarios"]},
+    {"command":"start","agora":["node","scripts/project.mjs","project","start"],"python":["python3","packages/verification/fixture/project.py","start"]},
+    {"command":"verify","agora":["node","scripts/project.mjs","project","verify"],"python":["python3","packages/verification/fixture/project.py","verify"]},
+    {"command":"evidence","agora":["node","scripts/project.mjs","project","evidence"],"python":["python3","packages/verification/fixture/project.py","evidence"]},
+    {"command":"stop","agora":["node","scripts/project.mjs","project","stop"],"python":["python3","packages/verification/fixture/project.py","stop"]},
+    {"command":"lanes","agora":["node","scripts/project.mjs","project","lanes"],"python":["python3","packages/verification/fixture/project.py","lanes"]}
+  ],
+  "scenarios": ["policy", "controls", "guards"],
+  "lanes": [
+    {"id": 1, "predicate": "literal allow/deny and two persisted records in both applications"},
+    {"id": 2, "predicate": "distinct ports, databases, objects, process identities; stop one preserves the other"},
+    {"id": 3, "predicate": "unknown scenarios, malformed reports, missing and altered artifacts refuse"},
+    {"id": 4, "predicate": "changed skill and deleted feature-map coverage refuse"}
+  ],
+  "driver": ["pnpm", "exec", "vitest", "run", "--project", "unit", "packages/verification/test/project.test.ts"],
+  "timeout_ms": 300000,
+  "target": "local-foundation-fixture",
+  "cleanup": "stop by instance and live cleanup handle; preserve evidence"
+}

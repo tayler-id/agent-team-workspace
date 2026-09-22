@@ -47,6 +47,18 @@
 			"owner": "local-room L5 pure core only"
 		},
 		{
+			"id": "project-controls",
+			"documentation": "docs/site/project-controls.md",
+			"last_verified_subject": {"receipt": ".scratch/project/{fixture}/{instance}/evidence.json", "fields": ["versions.code", "versions.config", "versions.fixture"], "requires_live_pass": true},
+			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
+			"public": ["pnpm agora project doctor|scenarios|start|verify|evidence|stop|lanes", "python3 packages/verification/fixture/project.py"],
+			"contracts": ["contracts/schemas/cli.schema.json"],
+			"scenarios": ["policy", "packages/verification/test/project.test.ts"],
+			"fixtures": ["non-production PostgreSQL policy journal", "independent Python SQLite policy journal"],
+			"platforms": ["node24", "postgresql18", "python3"],
+			"owner": "U01b.B01"
+		},
+		{
 			"id": "foundation-admission",
 			"documentation": "docs/site/test-first.md",
 			"paths": ["scripts/foundation-policy.mjs", "scripts/foundation-replay.mjs", "scripts/foundation.mjs", "scripts/record-red-green.mjs", "packages/verification/test", "contracts/schemas/foundation.schema.json"],
