@@ -128,20 +128,24 @@
       "id": "app-architecture",
       "title": "Application architecture boundaries",
       "status": "Built",
-      "why": "Make Feature/Client/Host import shortcuts fail in lint and tests with owner-named diagnostics (B1 import ownership + B2a exact-row exception registry).",
+      "why": "Make Feature/Client/Host and renderer shortcuts fail in lint and tests with owner-named diagnostics (B1 import ownership + B2a exact-row exception registry + B2b foot-guns).",
       "page": "app-architecture.md",
       "proof": [
         "repo:apps/web/src/reserved-owners.ts",
         "repo:scripts/boundary-policy.ts",
         "repo:scripts/architecture-exceptions.ts",
         "repo:agora/architecture-exceptions.json",
+        "repo:scripts/renderer-policy.ts",
         "repo:packages/client-core/test/app-architecture.test.ts",
         "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json",
         "repo:evidence/U20/agora-s1-lint-application-architecture/whole-feature-red.log",
         "repo:evidence/U20/agora-s1-lint-application-architecture/green.log",
         "repo:evidence/U20/agora-s1-lint-application-architecture/b2a-exceptions/outcome.json",
         "repo:evidence/U20/agora-s1-lint-application-architecture/b2a-exceptions/red.log",
-        "repo:evidence/U20/agora-s1-lint-application-architecture/b2a-exceptions/green.log"
+        "repo:evidence/U20/agora-s1-lint-application-architecture/b2a-exceptions/green.log",
+        "repo:evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/outcome.json",
+        "repo:evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/red.log",
+        "repo:evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/green.log"
       ]
     }
   ],

@@ -273,6 +273,10 @@
       "page": "app-architecture.md"
     },
     {
+      "path": "scripts/renderer-policy.ts",
+      "page": "app-architecture.md"
+    },
+    {
       "path": "scripts/architecture-exceptions.ts",
       "page": "app-architecture.md"
     },

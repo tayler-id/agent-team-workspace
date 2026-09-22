@@ -3,7 +3,7 @@ import path from 'node:path';
 
 export const projectRoot = path.resolve(import.meta.dirname, '..');
 /** Test-visible guard list: only rules that consult exceptionAllows belong here. Widening it is an architecture-policy change. */
-export const ARCHITECTURE_EXCEPTION_GUARDS = ['agora/import-boundary'] as const;
+export const ARCHITECTURE_EXCEPTION_GUARDS = ['agora/import-boundary', 'agora/renderer-footgun'] as const;
 export type ArchitectureExceptionGuard = (typeof ARCHITECTURE_EXCEPTION_GUARDS)[number];
 export interface ArchitectureException {
 	path: string; symbol: string; guard: ArchitectureExceptionGuard; rationale: string;

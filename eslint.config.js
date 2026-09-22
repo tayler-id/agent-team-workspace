@@ -3,6 +3,7 @@ import tseslint from 'typescript-eslint';
 import { assertArchitectureExceptionsValid } from './scripts/architecture-exceptions.ts';
 import { importBoundaryRule } from './scripts/boundary-policy.ts';
 import { publicTypesRule } from './scripts/public-types.ts';
+import { rendererFootgunRule } from './scripts/renderer-policy.ts';
 
 // Fail closed at config load: an invalid exceptions file must stop every lint run, not only runs that hit a violation.
 assertArchitectureExceptionsValid();
@@ -13,6 +14,7 @@ const agoraPlugin = {
 		rules: {
 			'import-boundary': importBoundaryRule,
 			'public-types': publicTypesRule,
+			'renderer-footgun': rendererFootgunRule,
 		},
 	},
 };
@@ -34,7 +36,6 @@ export default tseslint.config(
 		},
 	},
 	{
-		// Guard apps/*/src and the entire apps/web tree so non-src relocation cannot bypass owner import rules.
 		files: [`contracts/**/*.${exts}`, `packages/*/src/**/*.${exts}`, `apps/*/src/**/*.${exts}`, `apps/web/**/*.${exts}`],
 		ignores: ['contracts/test/**', '**/*.{mjs,cjs}'],
 		linterOptions: noInline,
@@ -42,18 +43,19 @@ export default tseslint.config(
 		rules: {
 			'agora/import-boundary': 'error',
 			'agora/public-types': 'error',
+			'agora/renderer-footgun': 'error',
 		},
 	},
 	{
 		files: [`apps/*/src/**/*.{mjs,cjs}`, `packages/*/src/**/*.{mjs,cjs}`, `apps/web/**/*.{mjs,cjs}`],
 		extends: [tseslint.configs.disableTypeChecked],
 		linterOptions: noInline,
-		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule } } },
-		rules: { 'agora/import-boundary': 'error' },
+		plugins: { agora: { rules: { 'import-boundary': importBoundaryRule, 'renderer-footgun': rendererFootgunRule } } },
+		rules: { 'agora/import-boundary': 'error', 'agora/renderer-footgun': 'error' },
 	},
 	{
 		files: ['contracts/**/*.js'],
-		rules: { 'agora/public-types': 'off' },
+		rules: { 'agora/public-types': 'off', 'agora/renderer-footgun': 'off' },
 	},
 	{
 		files: ['contracts/**/*.{mjs,cjs}'],
