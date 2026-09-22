@@ -1,0 +1,16 @@
+{
+	"schema_version": "agora.evidence.outcome/v1",
+	"unit": "web-framework-shell",
+	"parent": "eb7e8186a06c3a2f73748e4b00be072f28ff72fd",
+	"head": "fc04d275da7e64ed0a08d780a038bc677965652a",
+	"status": "implemented",
+	"summary": "Third dependency-ordered slice: the room shell (App.tsx, FixtureControls.tsx, main.tsx) wired onto @agora/web-framework and the Host adapter, completing the apps/web build surface (index.html, vite.config.ts, vitest.config.ts, fixture.css, full package.json). App.tsx's three component-local React effects/timers moved into new named packages/web-framework hooks (useDelayedAnnouncement, useDeferredFocus, useFocusRequestEffect) with no behavior change; both timer hooks and main.tsx's DOM mount route through a new EnvironmentPort.defer port method and getMountRoot Host function respectively, so every real timer/DOM call stays inside apps/web/src/host. Full pnpm check green (33 files, 204 tests); pnpm web:test passes (2 files, 3 tests); pnpm web:build produces 125.85 KB gzip, under R18's 350 KiB budget.",
+	"proof": [
+		"evidence/local-room/web-framework-shell/red.log",
+		"evidence/local-room/web-framework-shell/green.log",
+		"evidence/local-room/web-framework-shell/test-patch.diff",
+		"evidence/local-room/web-framework-shell/size.json",
+		"evidence/local-room/web-framework-shell/final-check.log",
+		"evidence/local-room/web-framework-shell/web-build.log"
+	]
+}

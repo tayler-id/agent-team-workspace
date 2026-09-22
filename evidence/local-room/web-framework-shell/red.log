@@ -1,0 +1,22 @@
+failed to load config from /private/tmp/redgreen-parent-3/apps/web/vitest.config.ts
+
+⎯⎯⎯⎯⎯⎯⎯ Startup Error ⎯⎯⎯⎯⎯⎯⎯⎯
+Error: Build failed with 1 error:
+
+[31m[UNRESOLVED_ENTRY] [0mCannot resolve entry module vitest.config.ts.
+
+    at aggregateBindingErrorsIntoJsError (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/error-CGhV1ebk.mjs:48:18)
+    at unwrapBindingResult (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/error-CGhV1ebk.mjs:18:128)
+    at #build (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/rolldown@1.2.9/node_modules/rolldown/dist/shared/rolldown-Ld3ZGGCt.mjs:133:34)
+    at async bundleConfigFile (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/vite@8.3.0_@types+node@24.10.1/node_modules/vite/dist/node/chunks/node.js:37448:12)
+    at async bundleAndLoadConfigFile (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/vite@8.3.0_@types+node@24.10.1/node_modules/vite/dist/node/chunks/node.js:37344:18)
+    at async loadConfigFromFile (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/vite@8.3.0_@types+node@24.10.1/node_modules/vite/dist/node/chunks/node.js:37305:42)
+    at async resolveConfig (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/vite@8.3.0_@types+node@24.10.1/node_modules/vite/dist/node/chunks/node.js:36906:22)
+    at async resolveConfig$1 (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/index.DzobfTyw.js:14777:25)
+    at async createVitest (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/cli-api.DcLieX4F.js:26:17)
+    at async prepareVitest (file:///private/tmp/redgreen-parent-3/node_modules/.pnpm/vitest@5.0.1_@types+node@24.10.1_vite@8.3.0_@types+node@24.10.1_/node_modules/vitest/dist/chunks/cli-api.DcLieX4F.js:421:14) {
+  errors: [Getter/Setter]
+}
+
+
+

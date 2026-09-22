@@ -1,0 +1,9 @@
+
+ RUN  v5.0.1 /private/tmp/redgreen-head-3/apps/web
+
+
+ Test Files  2 passed (2)
+      Tests  3 passed (3)
+   Start at  01:13:32
+   Duration  812ms (environment 60%, import 17%, tests 14%, transform 8%)
+

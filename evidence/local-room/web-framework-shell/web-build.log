@@ -1,0 +1,18 @@
+
+> agora@ web:build /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace
+> pnpm --filter @agora/web build
+
+
+> @agora/web@0.0.0 build /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace/apps/web
+> vite build
+
+vite v8.3.0 building client environment for production...
+transforming...
+✓ 129 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.46 kB │ gzip:   0.30 kB
+dist/assets/index-DvSYU0Et.css    2.10 kB │ gzip:   0.87 kB
+dist/assets/index-CSoIHJ6z.js   420.29 kB │ gzip: 125.85 kB
+
+✓ built in 78ms

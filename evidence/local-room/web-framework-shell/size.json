@@ -1,0 +1,24 @@
+{
+	"schema_version": "agora.evidence.size/v1",
+	"unit": "web-framework-shell",
+	"parent": "eb7e8186a06c3a2f73748e4b00be072f28ff72fd",
+	"head": "fc04d275da7e64ed0a08d780a038bc677965652a",
+	"budget": {
+		"meaningful_code_test_lines": 400,
+		"source_files": 12
+	},
+	"counts": {
+		"shell_component_lines": 178,
+		"shell_test_lines": 103,
+		"host_and_framework_hook_edit_lines": 55,
+		"main_lines": 26,
+		"total_meaningful_code_test_lines": 362,
+		"source_files": ["apps/web/src/components/App.tsx", "apps/web/src/components/FixtureControls.tsx", "apps/web/src/main.tsx", "apps/web/src/host/environment.ts", "apps/web/src/host/index.ts", "apps/web/test/app.test.tsx", "packages/web-framework/src/client.ts", "packages/web-framework/src/environment.ts", "packages/web-framework/src/index.ts"],
+		"source_files_count": 9,
+		"note": "apps/web/index.html, apps/web/vite.config.ts, apps/web/vitest.config.ts, apps/web/src/fixture.css, apps/web/package.json, eslint.config.js, .gitignore, root package.json are config/build/style, not counted against the cap. App.tsx/FixtureControls.tsx/main.tsx/app.test.tsx bytes are preserved from the fm/agora-web-framework-client-host candidate except the three effect/timer relocations, which are new lines in this slice."
+	},
+	"remainder_mapping": {
+		"landed_this_slice": "Full apps/web room shell wired onto @agora/web-framework and its Host adapter; App.tsx's three component-local effects/timers relocated into named framework hooks with no behavior change; main.tsx's DOM mount routed through the Host owner. This closes the apps/web wiring slice from evidence/local-room/web-framework-host/size.json's remainder_mapping.",
+		"remaining_work": "None required to land the shell itself. Optional follow-up: fm/agora-web-shell-integrate-checkpoint-1 and the two original source branches (fm/agora-local-room-web-shell@60bcd79, fm/agora-web-framework-client-host@7d29380) can be retired once this integration lands and the merge authority confirms the split slices supersede them."
+	}
+}
