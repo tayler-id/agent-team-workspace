@@ -156,6 +156,19 @@
         "repo:evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/red.log",
         "repo:evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/green.log"
       ]
+    },
+    {
+      "id": "local-room-web-shell",
+      "title": "Local room web shell",
+      "status": "In progress",
+      "why": "Build reusable room-shell product code in parallel with the L1-L3 backend slices, behind a port L4 can connect without rewriting components.",
+      "page": "local-room-web-shell.md",
+      "proof": [
+        "repo:apps/web/src/components/App.tsx",
+        "repo:apps/web/src/transport/port.ts",
+        "repo:apps/web/test/app.test.tsx",
+        "repo:evidence/local-room/web-shell/isolation/green.log"
+      ]
     }
   ],
   "nodes": [

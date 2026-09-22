@@ -1,11 +1,5 @@
 {
 	"extends": "../../tsconfig.base.json",
-	"compilerOptions": {
-		"lib": ["es2024", "DOM"],
-		"jsx": "react-jsx",
-		"types": [],
-		"allowJs": true,
-		"checkJs": true
-	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.mts", "src/**/*.cts", "src/**/*.js", "src/**/*.jsx", "src/**/*.mjs", "src/**/*.cjs"]
+	"compilerOptions": { "types": [], "lib": ["es2024", "dom", "dom.iterable"], "jsx": "react-jsx" },
+	"include": ["src", "test", "vite.config.ts", "vitest.config.ts"]
 }

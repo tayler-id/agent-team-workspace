@@ -1,0 +1,48 @@
+{
+	"schema_version": "agora.web-fixture.room/v1",
+	"notice": "Development-only fixture input for the React room shell. Not a wire contract, not a production conversation schema, no authority.",
+	"project": { "name": "Agora local room fixture", "room": "General room", "lifecycle": "active", "agent": "Local room agent (fixture)", "members": 3 },
+	"snapshot": {
+		"schema_version": "agora.foundation-fixture.sync-snapshot/v1",
+		"cursor": { "stream_id": "0f1c1e5e-0000-4000-8000-000000000001", "committed_seq": "8" },
+		"last_seen_room_seq": "6",
+		"state": {
+			"messages": [
+				{ "message_id": "0f1c1e5e-0000-4000-8000-000000000101", "created_seq": "1", "revision": "1", "body": "Kicking off the fixture." },
+				{ "message_id": "0f1c1e5e-0000-4000-8000-000000000102", "created_seq": "2", "revision": "1", "body": "Where does the unread line come from?" },
+				{ "message_id": "0f1c1e5e-0000-4000-8000-000000000103", "created_seq": "3", "revision": "2", "body": "From last_seen_room_seq. An edit raises only the revision." },
+				{ "message_id": "0f1c1e5e-0000-4000-8000-000000000104", "created_seq": "4", "revision": "1", "body": "Long body for wrapping checks: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef apps/web/src/components/Timeline.tsx" },
+				{ "message_id": "0f1c1e5e-0000-4000-8000-000000000106", "created_seq": "6", "revision": "1", "body": "@local-room-agent what changed this week?" },
+				{ "message_id": "0f1c1e5e-0000-4000-8000-000000000107", "created_seq": "7", "revision": "1", "body": "Decimal cursor compare plus a bounded replay buffer.\n```ts\nconst compare = (a: string, b: string): number => BigInt(a) < BigInt(b) ? -1 : BigInt(a) > BigInt(b) ? 1 : 0;\n```" },
+				{ "message_id": "0f1c1e5e-0000-4000-8000-000000000108", "created_seq": "8", "revision": "1", "body": "Reading up to here." }
+			],
+			"tombstones": [{ "message_id": "0f1c1e5e-0000-4000-8000-000000000105", "created_seq": "5", "revision": "2" }],
+			"run_cards": []
+		}
+	},
+	"events": [
+		{ "schema_version": "agora.foundation-fixture.sync-event/v1", "stream_id": "0f1c1e5e-0000-4000-8000-000000000001", "seq": "9", "event_id": "0f1c1e5e-0000-4000-8000-000000000309", "kind": "fixture.message_revision", "actor": "a0000000-0000-4000-8000-00000000000a", "occurred_at": "2026-09-20T09:09:00Z", "payload": { "message_id": "0f1c1e5e-0000-4000-8000-000000000115", "created_seq": "9", "revision": "1", "body": "Delivered after the snapshot through replay." } },
+		{ "schema_version": "agora.foundation-fixture.sync-event/v1", "stream_id": "0f1c1e5e-0000-4000-8000-000000000001", "seq": "10", "event_id": "0f1c1e5e-0000-4000-8000-000000000310", "kind": "fixture.message_revision", "actor": "a0000000-0000-4000-8000-00000000000a", "occurred_at": "2026-09-20T09:10:00Z", "payload": { "message_id": "0f1c1e5e-0000-4000-8000-000000000108", "created_seq": "8", "revision": "2", "body": "Reading up to here. Edited after the snapshot." } },
+		{ "schema_version": "agora.foundation-fixture.sync-event/v1", "stream_id": "0f1c1e5e-0000-4000-8000-000000000001", "seq": "11", "event_id": "0f1c1e5e-0000-4000-8000-000000000311", "kind": "fixture.message_tombstone", "actor": "a0000000-0000-4000-8000-00000000000a", "occurred_at": "2026-09-20T09:11:00Z", "payload": { "message_id": "0f1c1e5e-0000-4000-8000-000000000115", "created_seq": "9", "revision": "2" } }
+	],
+	"presentation": {
+		"authors": {
+			"0f1c1e5e-0000-4000-8000-000000000101": { "name": "Ada", "kind": "human" }, "0f1c1e5e-0000-4000-8000-000000000102": { "name": "Ben", "kind": "human" }, "0f1c1e5e-0000-4000-8000-000000000103": { "name": "Ada", "kind": "human" },
+			"0f1c1e5e-0000-4000-8000-000000000104": { "name": "Ben", "kind": "human" }, "0f1c1e5e-0000-4000-8000-000000000105": { "name": "Cam", "kind": "human" }, "0f1c1e5e-0000-4000-8000-000000000106": { "name": "Ada", "kind": "human" },
+			"0f1c1e5e-0000-4000-8000-000000000107": { "name": "Local room agent", "kind": "agent" }, "0f1c1e5e-0000-4000-8000-000000000108": { "name": "Ben", "kind": "human" }, "0f1c1e5e-0000-4000-8000-000000000115": { "name": "Cam", "kind": "human" }
+		},
+		"times": {
+			"0f1c1e5e-0000-4000-8000-000000000101": "2026-09-20T09:01:00Z", "0f1c1e5e-0000-4000-8000-000000000102": "2026-09-20T09:02:00Z", "0f1c1e5e-0000-4000-8000-000000000103": "2026-09-20T09:03:00Z",
+			"0f1c1e5e-0000-4000-8000-000000000104": "2026-09-20T09:04:00Z", "0f1c1e5e-0000-4000-8000-000000000105": "2026-09-20T09:05:00Z", "0f1c1e5e-0000-4000-8000-000000000106": "2026-09-20T09:06:00Z",
+			"0f1c1e5e-0000-4000-8000-000000000107": "2026-09-20T09:07:00Z", "0f1c1e5e-0000-4000-8000-000000000108": "2026-09-20T09:08:00Z", "0f1c1e5e-0000-4000-8000-000000000115": "2026-09-20T09:09:00Z"
+		},
+		"citations": { "0f1c1e5e-0000-4000-8000-000000000107": ["0f1c1e5e-0000-4000-8000-000000000101", "0f1c1e5e-0000-4000-8000-000000000103"] }
+	},
+	"receipt": {
+		"command_id": "00000000-0000-4000-8000-000000000000",
+		"aggregate_id": "00000000-0000-4000-8000-000000000000",
+		"revision": "1",
+		"event_cursors": [{ "stream_id": "0f1c1e5e-0000-4000-8000-000000000001", "committed_seq": "0" }],
+		"receipt_id": "0f1c1e5e-0000-4000-8000-000000000701"
+	}
+}

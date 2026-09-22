@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3) and the read-only deterministic local-answer core (L5 pure-core preparation) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the local room web shell, and the read-only deterministic local-answer core (L5 pure-core preparation) from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, apps/web, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, local-room L1 through L3, the local room web shell (covers apps/web), L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
 ---
 
 # Verify Agora
@@ -213,3 +213,23 @@ The driver must pass its exact-owned PID/path removal assertions. Recorder-creat
 For the local-answer pure-core driver, also confirm `git worktree list | grep -c 'agora-red-\|agora-green-\|agora-clean-'` and `ls "${TMPDIR:-/tmp}" | grep agora-` both find nothing, then run `find .scratch -maxdepth 1 -name 'answer-guard-*' -print`; no matching directory may remain. Remove its disposable reporter cache with `rm -f .vitest/json/output.json; rmdir .vitest/json .vitest` after retaining the report under evidence. In parallel development, a shared temp/worktree match may belong to another lane: report it without deleting or inspecting its contents; prove this task's exact owned paths were removed.
 
 Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.
+
+## Local room web shell
+
+Scope: **browser shell available; persistence not connected.** `apps/web` is a coding stream independent of L1-L3; it has no PostgreSQL persistence, service route or production conversation schema. Its fixture is `agora.web-fixture.room/v1`, development-only and clearly labelled in the running shell.
+
+```sh
+pnpm --filter @agora/web install
+pnpm typecheck
+pnpm lint
+pnpm web:test
+pnpm web:dev
+pnpm web:build
+```
+
+Pass predicates:
+
+- `pnpm typecheck` includes `tsc -p apps/web/tsconfig.json`; `pnpm lint` covers `apps/web/src/**/*.ts` under `agora/import-boundary`, which allows only `@agora/contracts` and `@agora/client-core` from the `@agora/` scope for this package.
+- `pnpm web:test` runs `apps/web/test/*.test.ts(x)` under jsdom: fixture wire validation and rejection, the projection view model, keyboard roving focus, gap/duplicate/resync/revoked scenarios, draft retention, retry decisions, the Load older messages path, and update isolation (an unrelated connection change must not increment any message row's `data-commits`).
+- Browser verification uses `chrome-devtools-axi`, never Playwright: run `pnpm web:dev`, open `http://127.0.0.1:4174`, click every Fixture controls button once, resize to 390x844 and 1440x900, confirm no horizontal scroll, tab through the timeline and composer, and set `prefers-reduced-motion: reduce` to confirm animations shorten. Record screenshots and observed assertions under `evidence/docs/<task>/`, per `docs/site/authoring.md`.
+- `pnpm web:build` reports the production bundle size in its output; record it against R18's 350 KiB compressed budget honestly (this slice is not S1-qualified, so a miss is recorded, not silently dropped).

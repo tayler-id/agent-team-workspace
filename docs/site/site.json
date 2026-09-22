@@ -114,6 +114,11 @@
           "kind": "feature"
         },
         {
+          "id": "local-room-web-shell",
+          "title": "Local room web shell",
+          "kind": "feature"
+        },
+        {
           "id": "memory",
           "title": "Data and memory",
           "kind": "guide"
@@ -294,7 +299,7 @@
     },
     {
       "path": "apps/web",
-      "page": "app-architecture.md"
+      "page": "local-room-web-shell.md"
     },
     {
       "path": "scripts/renderer-policy.ts",
