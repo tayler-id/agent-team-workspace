@@ -1,10 +1,11 @@
 {
   "schema_version": "agora.ci-p0b-reconcile/v1",
-  "head": "83b98a00d9f2cd208f8a6569dc1fd264f93696b5",
+  "head": "384289fed3e8fe65a262de750eeb6e46b7094fd4",
   "parent_main": "6730740",
   "source_tip": "83029a3",
   "doctor_supported": "pass",
   "doctor_tests": "pass",
   "pnpm_check": "pass",
-  "notes": "Transplant of four toolchain commits onto main with P0c/L2/B1/B2a preserved; native-launcher diagnosis treated as established evidence."
+  "notes": "Transplant of four toolchain commits onto main with P0c/L2/B1/B2a preserved; native-launcher diagnosis treated as established evidence.",
+  "code_head": "83b98a00d9f2cd208f8a6569dc1fd264f93696b5"
 }
