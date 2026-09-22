@@ -202,13 +202,13 @@
 		{
 			"id": "local-room-runtime",
 			"documentation": "docs/site/local-room.md",
-			"paths": ["scripts/local-room.ts", "scripts/local-room-owner.ts", "scripts/local-room-service.ts", "scripts/local-room-client.ts", "scripts/local-room-browser.ts", "scripts/local-room-harness.html", "contracts/tools/browser-validator.ts", "apps/center/src/app.ts", "apps/center/src/local-room-wire.ts", "packages/domain/src/local-room/port.ts", "packages/storage/src/local-room.ts", "contracts/schemas/local-room.schema.json", "contracts/openapi.json"],
-			"public": ["node scripts/local-room.ts doctor|start|status|send|history|replay|evidence|stop|reset", "GET /api/v1/local-room/events?after=CURSOR", "GET / (local runtime harness)"],
+			"paths": ["scripts/local-room.ts", "scripts/local-room-owner.ts", "scripts/local-room-service.ts", "scripts/local-room-client.ts", "scripts/local-room-harness.html", "apps/web/src/host/live.ts", "apps/web/src/main-live.tsx", "contracts/tools/browser-validator.ts", "apps/center/src/app.ts", "apps/center/src/local-room-wire.ts", "packages/domain/src/local-room/port.ts", "packages/storage/src/local-room.ts", "contracts/schemas/local-room.schema.json", "contracts/openapi.json"],
+			"public": ["node scripts/local-room.ts doctor|start|status|send|history|replay|evidence|stop|reset", "GET /api/v1/local-room/events?after=CURSOR", "GET / (live room shell: apps/web App/Timeline/Composer over createLiveTransport)"],
 			"contracts": ["contracts/schemas/local-room.schema.json"],
 			"fixtures": ["worktree-owned disposable PostgreSQL 18, product role agora_app", "private launch challenge and exact path identity"],
-			"scenarios": ["apps/center/test/runtime.pg.test.ts", "apps/center/test/runtime.test.ts"],
+			"scenarios": ["apps/center/test/runtime.pg.test.ts", "apps/center/test/runtime.test.ts", "apps/web/test/live.test.ts"],
 			"platforms": ["node24", "postgresql18", "browser"],
-			"owner": "local-room L3"
+			"owner": "local-room L3/L4"
 		},
 		{
 			"id": "local-room-persistence",
@@ -226,7 +226,7 @@
 			"documentation": "docs/site/local-room-web-shell.md",
 			"paths": ["packages/web-framework/src", "packages/web-framework/package.json", "packages/web-framework/tsconfig.json", "apps/web/src", "apps/web/package.json", "apps/web/vite.config.ts", "apps/web/vitest.config.ts", "apps/web/tsconfig.json", "apps/web/index.html", "scripts/boundary-policy.ts"],
 			"public": ["@agora/web-framework createRoomClient", "@agora/web-framework AgoraProvider", "@agora/web-framework EnvironmentPort", "@agora/web-framework named hooks", "pnpm web:dev", "pnpm web:build", "pnpm web:test"],
-			"scenarios": ["packages/web-framework/test/client.test.ts", "packages/web-framework/test/boundaries.test.ts", "apps/web/test/fixture.test.ts", "apps/web/test/app.test.tsx"],
+			"scenarios": ["packages/web-framework/test/client.test.ts", "packages/web-framework/test/boundaries.test.ts", "apps/web/test/fixture.test.ts", "apps/web/test/app.test.tsx", "apps/web/test/live.test.ts"],
 			"fixtures": ["agora.web-fixture.room/v1 development-only room fixture, no production conversation schema"],
 			"platforms": ["node24", "browser"],
 			"owner": "agora-web-shell-integrate"

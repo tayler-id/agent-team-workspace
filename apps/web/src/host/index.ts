@@ -1,5 +1,6 @@
 export { createBrowserEnvironment, getMountRoot } from './environment.ts';
 export { createFixtureTransport, largeSnapshot, load, toEvent, toReceipt, toSnapshot, type Failure, type FixtureTransport, type Loaded, type RoomFixture } from './fixture.ts';
+export { createLiveTransport, type LiveOptions, type LiveTransport } from './live.ts';
 export { observeFonts, observeWidth, prefersReducedMotion, readGeometry } from './geometry.ts';
 export { fallbackSizer, geometryKey, type SizerFactory, type TextGeometry, type TextSizer } from './text-sizing.ts';
 export { pretextSizer, pretextSupported } from './pretext.ts';

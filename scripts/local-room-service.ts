@@ -68,7 +68,7 @@ try {
 	const contractRequire = createRequire(import.meta.resolve('@agora/contracts'));
 	writeFileSync(`${owner.root}/validator.cjs`, browserValidatorSource());
 	writeFileSync(`${owner.root}/validator.mjs`, browserValidatorWrapper(`${owner.root}/validator.cjs`, resolve('contracts/src/canonical.ts')));
-	await vite.build({ configFile: false, logLevel: 'silent', resolve: { alias: { '@agora/contracts/canonical': `${owner.root}/validator.mjs`, '@agora/contracts': `${owner.root}/validator.mjs`, ajv: dirname(contractRequire.resolve('ajv/package.json')), 'ajv-formats': dirname(contractRequire.resolve('ajv-formats/package.json')) } }, build: { commonjsOptions: { include: [/node_modules/, /validator.cjs/] }, outDir: `${owner.root}/harness`, emptyOutDir: true, lib: { entry: 'scripts/local-room-browser.ts', formats: ['es'], fileName: 'harness' } } });
+	await vite.build({ configFile: false, logLevel: 'silent', define: { 'process.env.NODE_ENV': JSON.stringify('production') }, resolve: { alias: { '@agora/contracts/canonical': `${owner.root}/validator.mjs`, '@agora/contracts': `${owner.root}/validator.mjs`, ajv: dirname(contractRequire.resolve('ajv/package.json')), 'ajv-formats': dirname(contractRequire.resolve('ajv-formats/package.json')) } }, build: { commonjsOptions: { include: [/node_modules/, /validator.cjs/] }, outDir: `${owner.root}/harness`, emptyOutDir: true, lib: { entry: 'apps/web/src/main-live.tsx', formats: ['es'], fileName: 'harness' } } });
 	let tokens = 60, last = Date.now();
 	server.on('request', (request, response) => {
 		const answer = (status: number, text: string, type = 'text/plain'): void => {
@@ -76,7 +76,7 @@ try {
 			response.writeHead(status, { 'content-type': type }); response.end(text);
 		};
 		request.on('error', () => response.destroy());
-		response.setHeader('content-security-policy', "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+		response.setHeader('content-security-policy', "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
 		response.setHeader('cache-control', 'no-store'); response.setHeader('x-content-type-options', 'nosniff');
 		if (request.headers.host !== new URL(owner.url).host || request.headers.origin && request.headers.origin !== owner.url) { answer(403, 'loopback origin refused'); return; }
 		const target = new URL(request.url ?? '/', owner.url);
@@ -87,6 +87,7 @@ try {
 		}
 		if (target.pathname === '/') { answer(200, readFileSync('scripts/local-room-harness.html', 'utf8'), 'text/html'); return; }
 		if (target.pathname === '/harness.js') { answer(200, readFileSync(`${owner.root}/harness/harness.js`, 'utf8'), 'text/javascript'); return; }
+		if (target.pathname === '/harness.css') { answer(200, readFileSync(`${owner.root}/harness/harness.css`, 'utf8'), 'text/css'); return; }
 		if (request.method === 'POST' && request.headers['content-type'] !== 'application/json') { answer(415, 'JSON required'); return; }
 		let size = 0; const chunks: Buffer[] = [];
 		request.on('data', (chunk: Buffer) => {

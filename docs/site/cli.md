@@ -66,7 +66,7 @@ The project-owned driver is `node scripts/local-room.ts COMMAND`. Output is alwa
 | Command | Effect and flags |
 | --- | --- |
 | `doctor` | Read-only Node 24/PostgreSQL 18 availability report |
-| `start` | Allocate private cluster and center, migrate as owner, run queries as `agora_app`, build minimal harness and print its `url`; optional `--port PORT` |
+| `start` | Allocate private cluster and center, migrate as owner, run queries as `agora_app`, build the live room UI and print its `url`; optional `--port PORT` |
 | `status` | Challenge the running launch, or prove its listeners absent when stopped |
 | `send --body TEXT` | Same validated HTTP send as the browser; optional `--command-id UUID` for an explicit same-command retry |
 | `history` | Public snapshot, latest 1000 messages plus consistent cursor |

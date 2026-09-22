@@ -26,7 +26,7 @@ node scripts/local-room.ts doctor
 node scripts/local-room.ts start
 ```
 
-Open the printed `url`, type a message and send it. The JSON projection shows only committed messages. Disconnect and reconnect to observe cursor replay. `node scripts/local-room.ts send --body 'From the CLI'` uses the same room and command path. Stop with `node scripts/local-room.ts stop`; starting again keeps the messages and URL. This is L3's deliberately minimal harness, not the L4 room interface. [Local room](local-room.md) explains its limits and the separately confirmed destructive reset.
+Open the printed `url`, type a message and send it. The room shell shows only committed messages, never an optimistic echo. `node scripts/local-room.ts send --body 'From the CLI'` uses the same room and command path; reload the page to see it appear. Stop with `node scripts/local-room.ts stop`; starting again keeps the messages and URL. This is L4's first vertical slice, not the finished room interface: there is no manual disconnect toggle yet, and reload is the reconnect path. [Local room](local-room.md) explains its limits and the separately confirmed destructive reset.
 
 This branch is a stacked candidate on L2 `55269a5`; it is not landable before L2 and mandatory CI. No production credentials, model account or shared developer database are used.
 
