@@ -2,11 +2,12 @@ import { AgoraProvider, createRoomClient, type RoomClient } from '@agora/web-fra
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { afterEach, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { App } from '../src/components/App.tsx';
 import { FixtureControls } from '../src/components/FixtureControls.tsx';
 import { createBrowserEnvironment, createFixtureTransport, load, type FixtureTransport } from '../src/host/index.ts';
 import room from '../src/fixture/room.json' with { type: 'json' };
+import { installGeometry } from './geometry.ts';
 
 const loaded = load(room);
 if (!loaded.ok) throw new Error(loaded.error);
@@ -15,7 +16,10 @@ const digest = (text: string): Promise<string> => Promise.resolve(`sha256:${text
 const id = (n: number): string => `0f1c1e5e-0000-4000-8000-${String(n).padStart(12, '0')}`;
 let phone = false;
 const listeners = new Set<() => void>();
-window.matchMedia = (query: string): MediaQueryList => ({ matches: phone && query.includes('700px'), media: query, onchange: null, addEventListener: (_: string, l: unknown) => { listeners.add(l as () => void); }, removeEventListener: (_: string, l: unknown) => { listeners.delete(l as () => void); }, addListener: () => undefined, removeListener: () => undefined, dispatchEvent: () => true } as MediaQueryList);
+beforeEach(() => {
+	installGeometry();
+	window.matchMedia = (query: string): MediaQueryList => ({ matches: phone && query.includes('700px'), media: query, onchange: null, addEventListener: (_: string, l: unknown) => { listeners.add(l as () => void); }, removeEventListener: (_: string, l: unknown) => { listeners.delete(l as () => void); }, addListener: () => undefined, removeListener: () => undefined, dispatchEvent: () => true } as MediaQueryList);
+});
 const setPhone = (value: boolean): void => { phone = value; act(() => { for (const l of listeners) l(); }); };
 afterEach(() => { cleanup(); phone = false; vi.useRealTimers(); });
 declare module 'vitest' { interface Assertion { toHaveTextContent: (expected: string) => void } }
@@ -36,7 +40,7 @@ test('phases, isolation, draft/submit/revoke and phone viewport', async () => {
 	expect(status().dataset['phase']).toBe('empty');
 	fireEvent.click(screen.getByRole('button', { name: 'Load fixture snapshot' }));
 	expect(status().dataset['phase']).toBe('live');
-	expect(screen.getByRole('list', { name: 'Messages, showing 8 of 8' })).toBeTruthy();
+	expect(screen.getByRole('list', { name: 'Messages, 8 total' })).toBeTruthy();
 	const before = screen.getAllByRole('listitem').map((li) => li.dataset['commits']);
 	act(() => { transport.setOnline(false); });
 	expect(status()).toHaveTextContent('Offline.');
@@ -69,7 +73,7 @@ test('phases, isolation, draft/submit/revoke and phone viewport', async () => {
 	expect(screen.getByRole('main').parentElement?.dataset['viewport']).toBe('phone');
 });
 
-test('keyboard roving, windowing, citations, announcement and no alternate client', async () => {
+test('keyboard roving, virtualized large rooms, citations, announcement and no alternate client', async () => {
 	const { transport } = mount();
 	act(() => { transport.loadSnapshot(); });
 	const items = screen.getAllByRole('article');
@@ -81,9 +85,9 @@ test('keyboard roving, windowing, citations, announcement and no alternate clien
 	press(active(), 'End');
 	expect(active().dataset['messageId']).toBe(id(108));
 	act(() => { transport.loadLargeRoom(400); });
-	expect(screen.getByRole('list', { name: 'Messages, showing 50 of 400' })).toBeTruthy();
-	fireEvent.click(screen.getByRole('button', { name: 'Load older messages (350 older)' }));
-	expect(status()).toHaveTextContent('Loaded 50 older messages.');
+	const list = screen.getByRole('list', { name: 'Messages, 400 total' });
+	expect(list.getAttribute('data-total')).toBe('400');
+	expect(screen.getAllByRole('listitem').length).toBeLessThan(400);
 	act(() => { transport.revoke(); transport.loadSnapshot(); });
 	const [citation] = within(screen.getByRole('article', { name: /^Local room agent,/ })).getAllByRole('button', { name: 'Cited: Ada' });
 	if (!citation) throw new Error('missing citation');

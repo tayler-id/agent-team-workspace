@@ -6,7 +6,7 @@ A reusable React room shell under `apps/web`, built over `@agora/web-framework` 
 
 ## What it does
 
-`App`, `Timeline` and `Composer` read immutable Client projections through named hooks and issue only named commands (`useSetDraft`, `useRoomCommands`). They never receive arbitrary event dispatch, mutable store internals or a factory for a second authoritative room store. Ephemeral presentation state (focus target, open window limit, composer busy, notices) stays local, using named framework hooks (`useDeferredFocus`, `useFocusRequestEffect`, `useDelayedAnnouncement`) instead of raw React effects. Browser capabilities reach the shell only through `EnvironmentPort`: transport subscribe/send, focus scheduling, deferred timers, media-query subscription, clock and identifier access. `apps/web/src/host/environment.ts` is the only module that may touch `window`, `document` or `crypto` for those named needs.
+`App`, `Timeline` and `Composer` read immutable Client projections through named hooks and issue only named commands (`useSetDraft`, `useRoomCommands`). They never receive arbitrary event dispatch, mutable store internals or a factory for a second authoritative room store. Ephemeral presentation state (composer busy, deferred focus target, delayed announcement) stays local, using named portable framework hooks (`useDeferredFocus`, `useDelayedAnnouncement`) instead of raw React effects. Browser capabilities reach `App` and `Composer` only through `EnvironmentPort`: transport subscribe/send, focus scheduling, deferred timers, media-query subscription, clock and identifier access. `Timeline` virtualizes instead of paging (see [timeline virtualization](local-room-timeline-virtualization.md)); its raw effects and DOM globals live in the local `apps/web/src/framework/` owner, which — unlike the portable `@agora/web-framework` package — gets the same Host DOM exemption as `apps/web/src/host/environment.ts`.
 
 ## Why it exists
 
@@ -18,8 +18,8 @@ Product UI work must not wait on L3 transport or invent a second timeline inside
 Host composition | main.tsx creates one RoomClient, one FixtureTransport and one browser EnvironmentPort, then injects them through AgoraProvider.
 EnvironmentPort | Named capabilities only: transport, scheduleFocus, defer, media query, now, createId, digestText. No fetch, WebSocket, storage or raw window handle.
 RoomClient | Forwards every input to client-core synchronize(); holds only frozen state and a bounded transcript.
-Named hooks | useClientSelector, useSetDraft, useRoomCommands, useTransportState, useMediaQuery, useStaleSafeBusy, useDeferredFocus, useDelayedAnnouncement, useFocusRequestEffect own subscribe/unsubscribe, stale completion rejection, timers and cleanup.
-Room shell | Renders header, timeline, composer and status; MessageRow re-commits only when its own message reference changes.
+Named hooks | useClientSelector, useSetDraft, useRoomCommands, useTransportState, useMediaQuery, useStaleSafeBusy, useDeferredFocus, useDelayedAnnouncement own subscribe/unsubscribe, stale completion rejection, timers and cleanup.
+Room shell | Renders header, a virtualized timeline and composer/status; MessageRow re-commits only when its own message reference changes.
 FixtureControls | Development-only; the sole importer of the concrete fixture transport beyond Host wiring.
 ```
 

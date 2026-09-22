@@ -218,6 +218,16 @@
 			"fixtures": ["agora.web-fixture.room/v1 development-only room fixture, no production conversation schema"],
 			"platforms": ["node24", "browser"],
 			"owner": "agora-web-shell-integrate"
+		},
+		{
+			"id": "local-room-timeline-virtualization",
+			"documentation": "docs/site/local-room-timeline-virtualization.md",
+			"paths": ["apps/web/src/framework", "apps/web/src/components/Timeline.tsx", "apps/web/src/rows.ts", "apps/web/src/host/text-sizing.ts", "apps/web/src/host/pretext.ts", "apps/web/src/host/geometry.ts", "apps/web/package.json", "scripts/boundary-policy.ts"],
+			"public": ["apps/web/src/framework/index.ts useTimelineVirtualizer", "pnpm web:dev Load large room (400) / Append 100 messages"],
+			"scenarios": ["apps/web/test/app.test.tsx", "apps/web/test/sizing.test.ts", "apps/web/test/fixture.test.ts"],
+			"fixtures": ["agora.web-fixture.room/v1 largeSnapshot corpus generator, no production conversation schema"],
+			"platforms": ["node24", "browser"],
+			"owner": "agora-browser-pretext-virtualization-salvage"
 		}
 	]
 }

@@ -174,6 +174,20 @@
         "repo:evidence/local-room/web-framework-host/outcome.json",
         "repo:evidence/local-room/web-framework-shell/outcome.json"
       ]
+    },
+    {
+      "id": "local-room-timeline-virtualization",
+      "title": "Timeline virtualization",
+      "status": "In progress",
+      "why": "Salvaged from a preserved source copy's Pretext/react-virtual implementation and integrated onto the current consolidated App.tsx behind the local apps/web/src/framework owner, so 50,000-message rooms mount only visible rows.",
+      "page": "local-room-timeline-virtualization.md",
+      "proof": [
+        "repo:apps/web/src/framework/useTimelineVirtualizer.ts",
+        "repo:apps/web/src/components/Timeline.tsx",
+        "repo:apps/web/src/rows.ts",
+        "repo:apps/web/test/app.test.tsx",
+        "repo:evidence/local-room/virtualization/salvage-inventory.md"
+      ]
     }
   ],
   "nodes": [

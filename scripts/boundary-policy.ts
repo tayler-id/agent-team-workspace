@@ -12,6 +12,13 @@ export const WEB_OWNERS = { framework: 'apps/web/src/framework', client: 'apps/w
 const WEB_SRC = 'apps/web/src';
 /** The one file allowed to import @chenglou/pretext; every other apps/web path, including the rest of the host owner, is denied. */
 export const TEXT_SIZING_ADAPTER = 'apps/web/src/host/pretext.ts';
+/** The one non-`.test.tsx?` file under apps/web/test that gets the test/config owner: a jsdom geometry double
+ * consumed only by timeline/app test files. Named exactly, not directory-scoped, for the same reason as the
+ * `.test.tsx?` restriction below: it carries no production behavior and the WEB_SRC guard already blocks any
+ * apps/web/src file from importing it back in. */
+export const TEST_GEOMETRY_DOUBLE = 'apps/web/test/geometry.ts';
+/** The one file allowed to import @tanstack/react-virtual; every other apps/web path is denied. */
+export const VIRTUALIZER_ADAPTER = 'apps/web/src/framework/useTimelineVirtualizer.ts';
 
 const inside = (root: string, file: string): boolean => !path.relative(root, file).startsWith('..') && !path.isAbsolute(path.relative(root, file));
 const physical = (file: string): string => (existsSync(file) ? realpathSync(file) : file);
@@ -38,7 +45,7 @@ const packageAllowed: Record<string, readonly string[]> = {
 	contracts: ['ajv', 'ajv-formats', 'openapi-typescript', 'node:crypto'],
 	'packages/storage': ['@agora/domain', '@agora/contracts/canonical', 'pg', 'drizzle-orm', 'node:crypto', 'node:fs', 'node:path', 'node:url'],
 	'apps/center': ['@agora/contracts', '@agora/domain', '@agora/storage', 'hono', '@hono/node-server', 'node:url', 'node:crypto'],
-	'apps/web': ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime', '@chenglou/pretext'],
+	'apps/web': ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime', '@chenglou/pretext', '@tanstack/react-virtual'],
 	'apps/worker': ['@agora/contracts', '@agora/client-core'],
 };
 const contractsTooling = ['node:child_process', 'node:fs', 'node:path', 'node:url', 'node:os'] as const;
@@ -51,7 +58,7 @@ const contractsTooling = ['node:child_process', 'node:fs', 'node:path', 'node:ur
 const webTestConfigAllowed = ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime', 'vitest', 'vitest/config', '@testing-library/react', '@testing-library/dom', '@vitejs/plugin-react', 'vite', 'node:fs', 'node:path'] as const;
 export const isWebTestOrConfig = (file: string): boolean => {
 	const rel = relPosix(file);
-	return (rel.startsWith('apps/web/test/') && /\.test\.tsx?$/.test(rel)) || /^apps\/web\/[^/]+\.config\.ts$/.test(rel);
+	return (rel.startsWith('apps/web/test/') && /\.test\.tsx?$/.test(rel)) || /^apps\/web\/[^/]+\.config\.ts$/.test(rel) || rel === TEST_GEOMETRY_DOUBLE;
 };
 const supportedOwner = (file: string): string => {
 	const layer = webLayer(file);
@@ -76,8 +83,10 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 		}
 		const boundary = file.includes('/contracts/generated/') ? 'contracts/generated' : owner;
 		if (!inside(physical(path.join(projectRoot, boundary)), resolvedTarget)) return `relative import escapes ${supportedOwner(file)}; keep paths inside ${boundary}`;
-		// apps/web code may only relative-import inside apps/web/src (blocks test/lib relocation bypass).
-		if (owner === 'apps/web' || layer) {
+		// apps/web renderer code may only relative-import inside apps/web/src (blocks test/lib relocation bypass);
+		// test/config owner files are exempt here too, so a test may relative-import a sibling test double like
+		// apps/web/test/geometry.ts (isWebTestOrConfig already gives them a separate, stricter absolute-import list).
+		if ((owner === 'apps/web' || layer) && !isWebTestOrConfig(file)) {
 			const targetRel = relPosix(resolvedTarget);
 			if (!targetRel.startsWith(`${WEB_SRC}/`) && !targetRel.includes('node_modules')) {
 				return `relative import escapes ${WEB_SRC}; renderer code stays under ${WEB_SRC}/{framework,client,host,features} (not apps/web/test or other non-src paths)`;
@@ -115,6 +124,9 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 	if (owner === 'apps/web' || layer) {
 		if ((specifier === '@chenglou/pretext' || specifier.startsWith('@chenglou/pretext/')) && relPosix(file) !== TEXT_SIZING_ADAPTER) {
 			return `Pretext is allowed only behind the text-sizing adapter ${TEXT_SIZING_ADAPTER}; ${supportedOwner(file)} must go through the Host TextSizer, not import Pretext directly`;
+		}
+		if ((specifier === '@tanstack/react-virtual' || specifier.startsWith('@tanstack/react-virtual/')) && relPosix(file) !== VIRTUALIZER_ADAPTER) {
+			return `react-virtual is allowed only behind the virtualization adapter ${VIRTUALIZER_ADAPTER}; ${supportedOwner(file)} must go through useTimelineVirtualizer, not import react-virtual directly`;
 		}
 		if (rendererForbidden.some((name) => specifier === name || specifier.startsWith(`${name}/`))) {
 			return `renderer code cannot import ${specifier}; use ${WEB_OWNERS.client} / ${WEB_OWNERS.host} adapters instead of storage, domain implementation, or server packages`;

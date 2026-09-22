@@ -119,6 +119,11 @@
           "kind": "feature"
         },
         {
+          "id": "local-room-timeline-virtualization",
+          "title": "Timeline virtualization",
+          "kind": "feature"
+        },
+        {
           "id": "memory",
           "title": "Data and memory",
           "kind": "guide"

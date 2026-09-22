@@ -8,8 +8,8 @@ const result = build();
 const root = path.resolve(import.meta.dirname, '../../../.docs-dist');
 const html = file => existsSync(path.join(root, file)) ? readFileSync(path.join(root, file), 'utf8') : '';
 test('the same public build driver produces a valid baseline before corpus assertions', () => assert.equal(result.outcome, 'pass'));
-test('the complete corpus has 28 pages and both audience tracks', () => {
-	assert.equal(result.pages, 28, 'complete audience corpus');
+test('the complete corpus has 29 pages and both audience tracks', () => {
+	assert.equal(result.pages, 29, 'complete audience corpus');
 	assert.match(html('ci.html'), /prerequisite diagnosis before tests/);
 	assert.match(html('test-first.html'), /FG01.red-required/);
 	assert.match(html('test-first.html'), /foundation_fixture/);
