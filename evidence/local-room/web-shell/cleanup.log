@@ -1,0 +1,6 @@
+=== git worktree prune ===
+=== worktree list grep ===
+0
+worktrees: clean
+=== tmp scan ===
+tmp: clean
