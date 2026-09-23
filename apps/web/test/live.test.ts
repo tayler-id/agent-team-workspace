@@ -136,3 +136,48 @@ test('a rejected send retries the frozen command and settles once the server acc
 	expect(attempts).toBe(2);
 	expect(boot[0].getState().commands.find((c) => c.commandId === '11111111-0000-4000-8000-000000000001')?.tag).toBe('received');
 });
+
+const receiptFor = (commandId: string): Response => json({ schema_version: 'agora.local-room.receipt/v1', identity: { command_id: commandId, request_digest: 'sha256:' + 'e'.repeat(64) }, receipt: { command_id: commandId, aggregate_id: roomId, revision: '1', event_cursors: [{ stream_id: roomId, committed_seq: '1' }], receipt_id: messageId(503) }, message_id: messageId(4), replayed: false }, 201);
+function stubMessages(respond: (commandId: string, attempt: number) => Response | Promise<Response>): string[] {
+	const posted: string[] = [];
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+		posted.push(command.command_id);
+		return Promise.resolve(respond(command.command_id, posted.length));
+	}));
+	return posted;
+}
+
+test('pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message', async () => {
+	const [client, transport] = boot;
+	const posted = stubMessages((commandId, attempt) => attempt <= 3 ? Promise.reject(new TypeError('Failed to fetch')) : receiptFor(commandId));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'sent while down' });
+	transport.submit('33333333-0000-4000-8000-000000000001', 'sha256:' + 'f'.repeat(64), 'sent while down');
+	transport.submit('33333333-0000-4000-8000-000000000002', 'sha256:' + 'f'.repeat(64), 'sent while down');
+	await flush(12);
+	expect(new Set(posted)).toEqual(new Set(['33333333-0000-4000-8000-000000000001']));
+	expect(client.getState().commands.map((c) => [c.commandId, c.tag])).toEqual([['33333333-0000-4000-8000-000000000001', 'received']]);
+	expect(client.getState().drafts).toEqual([]);
+});
+
+test.each([
+	['a 400 malformed_command', (): Response => json({ reason_code: 'malformed_command', correlation_id: messageId(600), details: ['/body must NOT have more than 4096 characters'] }, 400), 'HTTP 400 malformed_command'],
+	['a schema-invalid receipt', (): Response => json({ schema_version: 'agora.local-room.receipt/v1' }, 201), 'invalid RoomCommandReceipt'],
+	['a receipt for another command', (): Response => receiptFor('99999999-0000-4000-8000-000000000001'), 'receipt identity mismatch'],
+])('%s stops retrying, keeps the draft and shows the failure', async (_name, respond, shown) => {
+	const [client, transport] = boot;
+	const posted = stubMessages(respond);
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'rejected' });
+	transport.submit('44444444-0000-4000-8000-000000000001', 'sha256:' + 'f'.repeat(64), 'rejected');
+	await flush(20);
+	expect(posted).toHaveLength(1);
+	expect(transport.getState().decision).toContain('stop');
+	expect(transport.getState().decision).toContain(shown);
+	expect(client.getState().drafts.map((d) => d.text)).toEqual(['rejected']);
+});

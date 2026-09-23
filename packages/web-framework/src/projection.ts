@@ -35,9 +35,9 @@ export function window(all: readonly Row[], limit: number): Window {
 export function status(room: Room | undefined, connection: Connection): RoomStatus {
 	const base = { online: connection.online, unread: room?.unread ?? 0, cursor: room?.cursor };
 	if (connection.phase === 'revoked') return { ...base, phase: 'revoked', label: 'Access revoked', detail: 'Private state cleared. Sign in again to load a fresh snapshot.' };
-	if (connection.phase === 'error') return { ...base, phase: 'error', label: 'Fixture error', detail: connection.error ?? 'Unknown fixture error' };
-	if (connection.phase === 'loading') return { ...base, phase: 'loading', label: 'Loading snapshot', detail: 'Waiting for the fixture snapshot.' };
-	if (!room) return { ...base, phase: 'empty', label: 'No room loaded', detail: 'Load the fixture snapshot to start.' };
+	if (connection.phase === 'error') return { ...base, phase: 'error', label: 'Connection error', detail: connection.error ?? 'Unknown connection error' };
+	if (connection.phase === 'loading') return { ...base, phase: 'loading', label: 'Loading snapshot', detail: 'Waiting for the room snapshot.' };
+	if (!room) return { ...base, phase: 'empty', label: 'No room loaded', detail: 'Load the room snapshot to start.' };
 	const suffix = connection.online ? '' : ' Offline: sends wait for a connection.';
 	switch (room.mode) {
 		case 'live': return { ...base, phase: 'live', label: 'Live', detail: `Cursor ${room.cursor} applied.${suffix}` };

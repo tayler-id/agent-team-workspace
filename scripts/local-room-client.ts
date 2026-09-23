@@ -34,7 +34,7 @@ export class RoomClient {
 	async request(path: string, signal?: AbortSignal, body?: unknown): Promise<unknown> {
 		const response = await fetch(`${this.url}/api/v1/local-room/${path}`, { signal: AbortSignal.any([AbortSignal.timeout(5000), ...(signal ? [signal] : [])]), ...(body === undefined ? {} : { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }) });
 		if (!response.ok) throw new Error(`HTTP ${response.status}`);
-		return response.json() as Promise<unknown>;
+		return response.json();
 	}
 	async resume(signal?: AbortSignal): Promise<void> {
 		if (!this.state.rooms.length || this.state.rooms[0]?.mode === 'resync') this.snapshot(await this.request('snapshot', signal));

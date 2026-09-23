@@ -7,12 +7,12 @@ import { App } from './components/App.tsx';
 import { createBrowserEnvironment, createLiveTransport, getMountRoot, type LiveTransport } from './host/index.ts';
 import './fixture.css';
 
-// L1 carries no room/project name; this is fixture chrome for the one fixed local room, not persisted state.
-const header = { project: 'Local project', room: 'Local room', lifecycle: 'active', agentLabel: 'Local agent (not live)', members: 1 } as const;
+// L1 carries no room/project name; these are fixed labels for the one local room, not persisted state.
+const header = { project: 'Local project', room: 'Local room', lifecycle: 'active', agentLabel: 'Local agent', members: 1 } as const;
 
 function Root({ transport }: { readonly transport: LiveTransport }): ReactElement {
 	const presentation = useSyncExternalStore(transport.subscribe, transport.getPresentation, transport.getPresentation);
-	return <App header={header} presentation={presentation} />;
+	return <App live header={header} presentation={presentation} />;
 }
 
 const container = getMountRoot('root');

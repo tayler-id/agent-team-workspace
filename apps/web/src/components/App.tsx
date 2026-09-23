@@ -3,7 +3,7 @@ import { useMemo, type ReactElement, type SyntheticEvent } from 'react';
 import { useHashDeepLink } from '../framework/index.ts';
 import { Timeline } from './Timeline.tsx';
 
-export interface AppProps { readonly header: RoomHeader; readonly presentation: Presentation }
+export interface AppProps { readonly header: RoomHeader; readonly presentation: Presentation; readonly live?: boolean }
 const phoneQuery = '(max-width: 700px)';
 const announceDelay = 2000;
 
@@ -26,7 +26,7 @@ function Composer({ streamId, disabled }: { readonly streamId: string; readonly 
 		<form className="composer" aria-labelledby="composer-heading" onSubmit={onSubmit}>
 			<h2 id="composer-heading" className="visually-hidden">Composer</h2>
 			<label htmlFor="composer-text">Message (Enter sends, Shift+Enter adds a line)</label>
-			<textarea id="composer-text" value={status.draft} disabled={disabled} rows={3} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); onSubmit(); } }} onChange={(event) => { setDraft(streamId, event.target.value); }} aria-describedby="composer-state" />
+			<textarea id="composer-text" value={status.draft} disabled={disabled} rows={3} maxLength={4096} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); onSubmit(); } }} onChange={(event) => { setDraft(streamId, event.target.value); }} aria-describedby="composer-state" />
 			<div className="composer-actions">
 				<button type="submit" disabled={disabled || busy}>Send</button>
 				<p id="composer-state" className="composer-state">
@@ -40,7 +40,7 @@ function Composer({ streamId, disabled }: { readonly streamId: string; readonly 
 	);
 }
 
-export function App({ header, presentation }: AppProps): ReactElement {
+export function App({ header, presentation, live = false }: AppProps): ReactElement {
 	const { transport } = useEnvironment();
 	const streamId = transport.streamId;
 	const room = useClientSelector((state) => state.rooms.find((r) => r.streamId === streamId));
@@ -58,12 +58,12 @@ export function App({ header, presentation }: AppProps): ReactElement {
 		<div className={phone ? 'shell phone' : 'shell'} data-viewport={phone ? 'phone' : 'desktop'}>
 			<a href="#timeline-heading" className="skip-link">Skip to messages</a>
 			<header className="room-header">
-				<p className="kicker">Engineering fixture - visual design pending</p>
+				<p className="kicker">{live ? 'Local development room' : 'Engineering fixture'} - visual design pending</p>
 				<h1>{header.project} · {header.room}</h1>
 				<p className="meta">
 					<span className="badge" data-state={header.lifecycle}>{header.lifecycle.replaceAll('_', ' ')}</span>
-					<span>{header.agentLabel} (read-only, local fixture, no live provider)</span>
-					<span>{header.members} members</span>
+					<span>{header.agentLabel} ({live ? 'local runtime, no model provider' : 'read-only, local fixture, no live provider'})</span>
+					<span>{header.members} member{header.members === 1 ? '' : 's'}</span>
 					<span data-unread={roomStatus.unread}>{roomStatus.unread} unread</span>
 					{room && roomStatus.unread > 0 && <button type="button" onClick={() => { commands.markSeen(room.cursor); }}>Mark room as read</button>}
 				</p>
@@ -73,9 +73,9 @@ export function App({ header, presentation }: AppProps): ReactElement {
 				{roomStatus.phase === 'error' && <p role="alert" className="alert">{roomStatus.detail}</p>}
 			</header>
 			<main className="main">
-				{roomStatus.phase === 'empty' && <section className="empty" aria-labelledby="empty-heading"><h2 id="empty-heading">No room loaded</h2><p>{roomStatus.detail}</p><button type="button" onClick={commands.loadSnapshot}>Load fixture snapshot</button></section>}
+				{roomStatus.phase === 'empty' && <section className="empty" aria-labelledby="empty-heading"><h2 id="empty-heading">No room loaded</h2><p>{roomStatus.detail}</p><button type="button" onClick={commands.loadSnapshot}>Load {live ? 'room' : 'fixture'} snapshot</button></section>}
 				{roomStatus.phase === 'loading' && <p className="empty" aria-busy="true">Loading snapshot…</p>}
-				{roomStatus.phase === 'revoked' && <section className="empty" aria-labelledby="revoked-heading"><h2 id="revoked-heading">Access revoked</h2><p>Drafts, commands and the room were cleared.</p><button type="button" onClick={commands.loadSnapshot}>Load fixture snapshot again</button></section>}
+				{roomStatus.phase === 'revoked' && <section className="empty" aria-labelledby="revoked-heading"><h2 id="revoked-heading">Access revoked</h2><p>Drafts, commands and the room were cleared.</p><button type="button" onClick={commands.loadSnapshot}>Load {live ? 'room' : 'fixture'} snapshot again</button></section>}
 				{(roomStatus.phase === 'resync' || roomStatus.phase === 'upgrade') && <p className="banner">{roomStatus.label}: {roomStatus.detail} <button type="button" onClick={commands.loadSnapshot}>Load fresh snapshot</button></p>}
 				{room && <Timeline streamId={streamId} rows={projected} presentation={presentation} onCite={requestFocus} focusRequest={focusRequest} />}
 				<Composer streamId={streamId} disabled={composerDisabled} />

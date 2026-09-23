@@ -26,7 +26,8 @@ function annotate(presentation: Presentation, messages: readonly Schema<'RoomMes
 async function requestJson(baseUrl: string, path: string, body?: unknown): Promise<unknown> {
 	const response = await fetch(`${baseUrl}/api/v1/local-room/${path}`, { signal: AbortSignal.timeout(5000), ...(body === undefined ? {} : { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }) });
 	if (!response.ok) {
-		const error = new Error(`HTTP ${response.status}`) as Error & { status: number; retryAfterSeconds: number | undefined };
+		const reason = await response.json().then((v: { reason_code?: unknown }) => typeof v.reason_code === 'string' ? ` ${v.reason_code}` : '', () => '');
+		const error = new Error(`HTTP ${response.status}${reason}`) as Error & { status: number; retryAfterSeconds: number | undefined };
 		error.status = response.status;
 		const retryAfter = Number(response.headers.get('retry-after'));
 		error.retryAfterSeconds = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : undefined;
@@ -34,9 +35,13 @@ async function requestJson(baseUrl: string, path: string, body?: unknown): Promi
 	}
 	return response.json() as Promise<unknown>;
 }
-function classify(error: unknown): { tag: 'timeout' } | { tag: 'rate_limited'; retryAfterSeconds: number } {
+// Only an unreachable server, a timeout, 408 or 5xx is transient. Any other 4xx, an invalid receipt or a receipt for
+// another command would fail the same way again, so the core stops instead of spending the rate budget forever.
+function classify(error: unknown): { tag: 'timeout' | 'denied' } | { tag: 'rate_limited'; retryAfterSeconds: number } {
 	const status = (error as { status?: number } | undefined)?.status;
-	return status === 429 ? { tag: 'rate_limited', retryAfterSeconds: (error as { retryAfterSeconds?: number }).retryAfterSeconds ?? 30 } : { tag: 'timeout' };
+	if (status === 429) return { tag: 'rate_limited', retryAfterSeconds: (error as { retryAfterSeconds?: number }).retryAfterSeconds ?? 30 };
+	const transient = status === undefined ? error instanceof TypeError || (error as Error | undefined)?.name === 'TimeoutError' : status === 408 || status >= 500;
+	return { tag: transient ? 'timeout' : 'denied' };
 }
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -49,6 +54,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 	let scope: Schema<'RoomSnapshot'>['scope'] | undefined;
 	let streamId = '';
 	let started = false;
+	const unsettled = new Set<string>(); // Draft texts with a command still retrying; a second Send reuses that identity.
 	const listeners = new Set<() => void>();
 	const notify = (): void => { for (const listener of listeners) listener(); };
 	const set = (patch: Partial<TransportConnection>): void => { connection = { ...connection, ...patch }; notify(); };
@@ -91,11 +97,13 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			if (receiptWire.identity.command_id !== commandId) throw new Error('receipt identity mismatch');
 			client.apply({ type: 'receipt', receipt: receiptWire.receipt });
 			client.apply({ type: 'draft', streamId, text: '' });
+			unsettled.delete(text);
 			set({ decision: undefined });
 		} catch (error) {
 			const transition = client.apply({ type: 'retry', commandId, requestDigest, online: true, failure: classify(error) });
-			set({ decision: transition.requests.map((r) => r.type).join(', ') || undefined });
 			const request = transition.requests[0];
+			if (request?.type === 'stop') unsettled.delete(text);
+			set({ decision: request?.type === 'stop' ? `stop: not sent (${error instanceof Error ? error.message : String(error)}); the draft is kept` : transition.requests.map((r) => r.type).join(', ') || undefined });
 			if (request?.type === 'resend_same_command') { await sleep(retryDelayMs); void attemptSend(commandId, requestDigest, text); }
 			else if (request?.type === 'wait_retry_after') { await sleep(request.retryAfterSeconds * 1000); void attemptSend(commandId, requestDigest, text); }
 		}
@@ -107,9 +115,10 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		subscribe: (listener) => { listeners.add(listener); return () => { listeners.delete(listener); }; },
 		loadSnapshot: () => { if (started) return; started = true; set({ phase: 'loading' }); void poll(); },
 		submit: (commandId, requestDigest, text) => {
+			if (unsettled.has(text)) return;
 			const transition = client.apply({ type: 'submit', commandId, streamId, requestDigest, online: connection.online });
 			set({ decision: transition.requests.map((r) => r.type).join(', ') || undefined });
-			if (transition.requests.some((r) => r.type === 'send')) void attemptSend(commandId, requestDigest, text);
+			if (transition.requests.some((r) => r.type === 'send')) { unsettled.add(text); void attemptSend(commandId, requestDigest, text); }
 		},
 		markSeen: (seq) => { client.apply({ type: 'seen', streamId, seq }); },
 	};

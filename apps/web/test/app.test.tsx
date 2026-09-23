@@ -105,3 +105,14 @@ test('keyboard roving, virtualized large rooms, citations, announcement and no a
 		expect(readFileSync(resolve(import.meta.dirname, '..', relative), 'utf8').includes('createRoomClient')).toBe(false);
 	}
 });
+
+test('the live route labels itself as the local development room, with no fixture wording', () => {
+	const client = createRoomClient();
+	const transport = createFixtureTransport(client, fixture);
+	render(<AgoraProvider client={client} environment={createBrowserEnvironment(transport, { digestText: digest })}><App live header={{ project: 'Local project', room: 'Local room', lifecycle: 'active', agentLabel: 'Local agent', members: 1 }} presentation={fixture.presentation} /></AgoraProvider>);
+	expect(screen.getByRole('banner')).toHaveTextContent('Local development room - visual design pending');
+	expect(screen.getByRole('banner').textContent).toMatch(/1 member(?!s)/);
+	expect(screen.getByRole('button', { name: 'Load room snapshot' })).toBeTruthy();
+	expect(screen.getByRole('textbox')).toHaveProperty('maxLength', 4096);
+	expect(document.body.textContent).not.toMatch(/fixture/i);
+});
