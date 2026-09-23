@@ -29,7 +29,7 @@
 		],
 		"cleanup": "stop and reset --confirm-disposable pass; SysV shm segment count 30 before and after"
 	},
-	"size": "796fe2c..6461208 under apps, packages, scripts: 12 files, 371 added, 72 deleted",
+	"size": "796fe2c..HEAD under apps, packages, scripts: 12 files, 372 added",
 	"commands_run": [
 		"toolchain: node v24.21.0 (official darwin-arm64 tarball, SHA-256 checked against nodejs.org SHASUMS256.txt), pnpm 10.34.1, locked Python requirements installed with --require-hashes into .scratch/python, GITHUB_TOKEN/GH_TOKEN unset",
 		"pnpm check: exit 0, 37 test files, 232 tests passed (includes packages/verification project lanes with the Python fixture)",
@@ -54,8 +54,9 @@
 	],
 	"design_baseline": {
 		"source": "firstmate inbox 002: docs/design-handoff/results is the approved starting direction for implementation",
-		"changed": "live and fixture kicker no longer claim 'visual design pending'; it reads 'approved design baseline not yet applied' (red-first test in apps/web/test/app.test.tsx); fixture.css comment and docs/site/local-room-web-shell.md no longer call the results provisional",
+		"changed": "live and fixture kicker no longer claim 'visual design pending'; it reads 'approved design baseline not yet applied' (red-first test in apps/web/test/app.test.tsx); docs/site/local-room-web-shell.md no longer call the results provisional",
 		"recorded_mismatch": "docs/site/local-room.md#live-room-ui lists tokens/type, radii/spacing, shell, header, chips/alert, composer and timeline differences against tokens.json, component READMEs and state-matrix.md",
-		"not_changed": "no restyling in this slice; the next bounded L4 presentation slice implements the baseline"
+		"not_changed": "no restyling in this slice; the next bounded L4 presentation slice implements the baseline",
+		"deferred": "apps/web/src/fixture.css line 1 comment still says 'visual design pending'; editing it would make a 13th source file past the 12-file bound, and the presentation slice replaces that stylesheet"
 	}
 }
