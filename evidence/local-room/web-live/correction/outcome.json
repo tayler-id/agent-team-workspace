@@ -12,12 +12,21 @@
 		"B3": "any 4xx other than 408/429, a schema-invalid receipt or a receipt for another command is denied and stops; transient failures still resend the same command (red.log/green.log, live 4097-character body got one 400 and no retry)",
 		"B4": "verify-agora L4 drive recipe, local-room page and flow visual, getting-started, faq, operations, synchronization, development runbook and Atlas (local-room, U01b and U20 set to In progress) describe the landed slice and its remaining L4 work"
 	},
-	"red_green": ["red.log", "green.log", "app-label-red-green.log", "test-patch.diff"],
+	"red_green": [
+		"red.log",
+		"green.log",
+		"app-label-red-green.log",
+		"test-patch.diff",
+		"design-label-red-green.log"
+	],
 	"live_drive": {
 		"subject": "48ff997c2e7ce6744f1afdab59acb2ff523ceb36",
 		"served_code_equal_at_code_head": "git diff 48ff997 6461208 -- apps packages scripts touches only apps/center/test/runtime.pg.test.ts",
 		"transcript": "drive/transcript.log",
-		"screenshots": ["drive/tab-a-390x844.png", "drive/tab-a-1440x900.png"],
+		"screenshots": [
+			"drive/tab-a-390x844.png",
+			"drive/tab-a-1440x900.png"
+		],
 		"cleanup": "stop and reset --confirm-disposable pass; SysV shm segment count 30 before and after"
 	},
 	"size": "796fe2c..6461208 under apps, packages, scripts: 12 files, 371 added, 72 deleted",
@@ -40,6 +49,13 @@
 		"a lost or failed receipt proved in the browser",
 		"retained latency, bundle and replay measurements",
 		"VoiceOver pass",
-		"'Load fresh snapshot' in the resync banner is inert on the live route; the poll loop has no dispose"
-	]
+		"'Load fresh snapshot' in the resync banner is inert on the live route; the poll loop has no dispose",
+		"implement the approved design baseline in docs/design-handoff/results (see local-room.md mismatch list)"
+	],
+	"design_baseline": {
+		"source": "firstmate inbox 002: docs/design-handoff/results is the approved starting direction for implementation",
+		"changed": "live and fixture kicker no longer claim 'visual design pending'; it reads 'approved design baseline not yet applied' (red-first test in apps/web/test/app.test.tsx); fixture.css comment and docs/site/local-room-web-shell.md no longer call the results provisional",
+		"recorded_mismatch": "docs/site/local-room.md#live-room-ui lists tokens/type, radii/spacing, shell, header, chips/alert, composer and timeline differences against tokens.json, component READMEs and state-matrix.md",
+		"not_changed": "no restyling in this slice; the next bounded L4 presentation slice implements the baseline"
+	}
 }

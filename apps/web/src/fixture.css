@@ -1,4 +1,4 @@
-/* Engineering fixture - visual design pending. Neutral tokens only; the design team owns final presentation. */
+/* Engineering stylesheet, not the approved baseline in docs/design-handoff/results/ (see docs/site/local-room.md#live-room-ui). */
 :root { color-scheme: light dark; --border: #8888; --surface: canvas; --text: canvastext; --gap: 0.75rem; }
 * { box-sizing: border-box; }
 html, body { margin: 0; max-width: 100%; overflow-x: hidden; }

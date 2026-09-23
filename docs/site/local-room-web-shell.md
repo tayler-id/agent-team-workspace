@@ -25,7 +25,7 @@ FixtureControls | Development-only; the sole importer of the concrete fixture tr
 
 ## Implementation status
 
-**In progress: browser shell and web-framework available; persistence not connected.** The shell runs against a validated development fixture, preserves keyboard, focus, composition Enter, phone/desktop viewport and update-isolation behavior, and passes framework one-writer and environment-boundary tests. There is no PostgreSQL-backed room, no real-server connection and no production conversation schema. Design-handoff results under `docs/design-handoff/results/` are provisional presentation guidance only; this slice does not treat them as final visual acceptance. `docs/technical-spec.md` AC02 remains unqualified.
+**In progress: browser shell and web-framework available; persistence not connected.** The shell runs against a validated development fixture, preserves keyboard, focus, composition Enter, phone/desktop viewport and update-isolation behavior, and passes framework one-writer and environment-boundary tests. There is no PostgreSQL-backed room, no real-server connection and no production conversation schema. Design-handoff results under `docs/design-handoff/results/` are the approved starting direction for implementation, and this shell does not implement them yet. [Live room UI](local-room.md#live-room-ui) lists the mismatches. `docs/technical-spec.md` AC02 remains unqualified.
 
 ## Verification and proof
 

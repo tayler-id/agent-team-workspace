@@ -58,7 +58,7 @@ export function App({ header, presentation, live = false }: AppProps): ReactElem
 		<div className={phone ? 'shell phone' : 'shell'} data-viewport={phone ? 'phone' : 'desktop'}>
 			<a href="#timeline-heading" className="skip-link">Skip to messages</a>
 			<header className="room-header">
-				<p className="kicker">{live ? 'Local development room' : 'Engineering fixture'} - visual design pending</p>
+				<p className="kicker">{live ? 'Local development room' : 'Engineering fixture'} - approved design baseline not yet applied</p>
 				<h1>{header.project} · {header.room}</h1>
 				<p className="meta">
 					<span className="badge" data-state={header.lifecycle}>{header.lifecycle.replaceAll('_', ' ')}</span>

@@ -1,0 +1,9 @@
+# design-label red/green, 2026-09-23T23:29:46Z, node v24.21.0, pnpm 10.34.1
+## red: test changed, App.tsx at 8be8d30
+   × the live route labels itself as the local development room, with no fixture wording 49ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 2 skipped (3)
+red_exit: 1
+## green: App.tsx kicker changed
+      Tests  1 passed | 2 skipped (3)
+green_exit: 0
