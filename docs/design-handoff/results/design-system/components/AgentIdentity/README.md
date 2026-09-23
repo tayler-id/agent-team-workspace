@@ -6,19 +6,18 @@ This is how a busy room stays legible. When four runs are talking at once, a rea
 
 ## The tint system
 
-Six tints: blue, purple, green, yellow, pink, orange. Two are fixed: `center` is always blue and the project agent is always purple. Task agents take the next free tint at spin-up, in order, and keep it for the run's whole life, including in history. When six are live the cycle repeats and the glyph plus run number disambiguates.
+Six cool pastels: blue, violet, mint, sky, pink, teal. Two are fixed: `center` is always blue and the project agent is always violet. Task agents take the next free tint at spin-up, in order, and keep it for the run's whole life, including in history. When six are live the cycle repeats and the glyph plus run number disambiguates.
 
-Each tint is a pair: a tint fill and a tint ink that holds 4.5:1 on it, so an agent's name can be set in its tint ink on white and its glyph in tint ink on tint fill.
+Each tint is a pair: a pastel fill and a soft glyph colour of the same family. The glyph sits on the fill; the agent's name is always set in `ink`, never in the tint. The pair is identity only and carries no text.
 
 ## Where the tint appears
 
 - The agent's mark, everywhere the agent speaks or is listed.
-- The agent's name in a message header.
-- The whole row, as a tinted tile with a white disc, when the agent is the subject: live-run lists, the phone home.
+- Beside the agent's row when the agent is the subject: live-run lists, the phone home. The row itself stays neutral.
 
 ## Where it never appears
 
-- On state. State is a chip with its own live, pass, fail and neutral tints, and a tint never means running, passed or failed.
+- On state. State is a neutral chip with one dot, and a tint never means running, passed or failed.
 - On a person.
 - As a border, outline or left bar.
 

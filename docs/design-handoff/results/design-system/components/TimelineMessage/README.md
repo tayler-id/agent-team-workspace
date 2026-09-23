@@ -1,6 +1,6 @@
 # TimelineMessage
 
-A message in the room: avatar, name, time, body. People are circles with initials; agents are tinted squircles with their name set in their tint ink.
+A message in the room: avatar, name, time, body. People are circles with initials; agents are pastel squircles with a soft glyph of the same family, and their name set in ink like everyone else.
 
 The timeline is where a lot happens at once, and the identity system is what keeps it readable. A reader can find every turn by the same agent by scanning for its colour, and can tell people from agents by shape without reading.
 

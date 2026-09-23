@@ -1,9 +1,5 @@
 # Design results
 
-## Status
-
-This is the approved starting direction for implementation, not a finished or immutable design. Preserve its assets, tokens, component coverage, flows, and decisions as the working baseline, then refine the presentation through implementation, browser evidence, accessibility testing, comprehension testing, and product-owner review. Do not treat agent-generated previews as final visual acceptance.
-
 Results for the design assignment in the packet one folder up. Everything here proposes presentation. Product behavior stays owned by the technical specification, and nothing in this folder edits the specification, plan, task breakdown or decision trail.
 
 ## What is here
@@ -12,10 +8,12 @@ Results for the design assignment in the packet one folder up. Everything here p
 | --- | --- | --- |
 | Token file, light theme | `design-system/tokens.json` | 2 |
 | Brand book and usage rules | `design-system/README.md` | 2 |
-| S1 prototype flow, desktop 1440x900 | `frames/screen-*.png` | 3 |
-| S1 prototype flow, phone 390 | `frames/screen-phone.png` | 3 |
+| S1 prototype flow, desktop 1440x900 | `frames/screen-*.png` at 1x, `mocks/screens/*.png` at 2x | 3 |
+| S1 prototype flow, phone 390 | `frames/screen-phone.png`, `mocks/screens/screen-phone.png` | 3 |
+| Layout mocks of every component, 2x PNG, indexed | `mocks/README.md`, `mocks/components/*.png` | 3, 4 |
 | Component and state matrix | `state-matrix.md` | 4 |
-| Live previews of every component and screen | `design-system/components/*/preview.html` with `README.md` beside each | 4, 6 |
+| Standalone previews of every component and screen | `design-system/components/*/preview.html` with `README.md` beside each. Each opens in a browser on its own and loads `design-system/tokens.css` | 4, 6 |
+| Generated stylesheet for the previews | `design-system/tokens.css`, built from `tokens.json`, fonts relative to `design-system/fonts/` | 2 |
 | Clickable prototype | The Agora Design System artifact on claude.ai, shared on request | 5 |
 | Fonts, with license | `design-system/fonts/` | 2 |
 

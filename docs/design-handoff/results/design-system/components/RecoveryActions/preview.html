@@ -1,3 +1,13 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agora · RecoveryActions</title>
+<link rel="stylesheet" href="../../tokens.css">
+<style>html,body{margin:0;background:var(--surface-base);color:var(--ink)}</style>
+</head>
+<body>
 <!-- @dsCard group="Panes" height=560 subtitle="After loss: last observed facts, lease expiry, cleanup state, retained worktree, and three choices that name their consequence" -->
 <style>
  .st{background:var(--surface-base);color:var(--ink);font-family:var(--font-text);-webkit-font-smoothing:antialiased}
@@ -182,3 +192,6 @@
  <symbol id="inbox" viewBox="0 0 16 16"><path d="M3 9h3l1 1.5h2L10 9h3v4H3zM4 9l1.5-5h5L12 9"/></symbol>
 </svg>
 <div class="st"><div class="wrap"><div class="panel pane-w"><p class="caps two">RECOVERY · RUN 4 · TASK 3</p><h2 class="title" style="margin:var(--space-1) 0 var(--space-3)">Lost contact with Ada-laptop</h2><div class="sec"><div class="h"><span class="caps">LAST OBSERVED</span></div><dl class="kv body"><dt>last activity</dt><dd class="num">31 min ago · action: ran migration</dd><dt>lease</dt><dd class="num">expired 14:41 · authority revoked</dd><dt>cleanup</dt><dd><span class="chip neutral"><svg class="g sm"><use href="#q"/></svg> unconfirmed</span></dd><dt>worktree</dt><dd class="mono">~/agora/run-4 · retained · owner only</dd></dl></div><div class="sec" style="display:grid;gap:var(--space-2)"><div class="tl-card" style="margin-top:0"><p class="body nm" style="font-family:var(--font-sans);font-weight:600;">Retry fresh</p><p class="meta two">New run, new ID and fence, same machine. Run 4 stays as history and can never publish. Attempt 2 of 2.</p></div><div class="tl-card" style="margin-top:0"><p class="body nm" style="font-family:var(--font-sans);font-weight:600;">Keep for manual recovery</p><p class="meta two">Nothing changes. The worktree is labelled retained and never removed silently.</p></div><div class="tl-card" style="margin-top:0"><p class="body nm" style="font-family:var(--font-sans);font-weight:600;color:var(--fail-text)">Cancel task</p><p class="meta two">Task 3 becomes cancelled by Ada. Cleanup stays unconfirmed until the machine reports.</p></div></div><div class="sec"><div class="row" style="gap:var(--space-2)"><span class="pill black" style="min-height:32px">Retry fresh</span><span class="pill soft" style="min-height:32px">Keep</span><span class="pill ghost" style="min-height:32px;color:var(--fail-text)">Cancel task</span></div></div></div></div></div>
+
+</body>
+</html>

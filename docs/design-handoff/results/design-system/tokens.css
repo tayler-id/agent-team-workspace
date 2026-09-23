@@ -1,0 +1,20 @@
+@font-face{font-family:"Cal Sans UI";src:url("fonts/CalSansUI-Regular.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Cal Sans UI";src:url("fonts/CalSansUI-Medium.woff2") format("woff2");font-weight:500}
+@font-face{font-family:"Cal Sans UI";src:url("fonts/CalSansUI-SemiBold.woff2") format("woff2");font-weight:600}
+@font-face{font-family:"Cal Sans Text";src:url("fonts/CalSansText-Regular.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Cal Sans Text";src:url("fonts/CalSansText-Medium.woff2") format("woff2");font-weight:500}
+@font-face{font-family:"Cal Sans Text";src:url("fonts/CalSansText-SemiBold.woff2") format("woff2");font-weight:600}
+:root{--surface-base:#f6f6f8;--surface-raised:#ffffff;--surface-inset:#f3f3f6;--surface-overlay:#ffffff;--surface-selected:#ebebf0;--hairline:#e8e8ee;--ink:#141414;--ink-secondary:#6f6f78;--ink-muted:#a0a0a8;--action:#141414;--on-action:#ffffff;--signal-live:#8b6cf6;--mark-pass:#34d399;--mark-fail:#f87171;--fail-text:#c62828;--diff-added:#e6f9f1;--diff-removed:#feeceb;--focus-ring:var(--ink);--agent-blue-tint:#dbeafe;--agent-blue-glyph:#4f83f1;--agent-violet-tint:#ede9fe;--agent-violet-glyph:#8b6cf6;--agent-mint-tint:#d1fae5;--agent-mint-glyph:#2fb98a;--agent-pink-tint:#fce7f3;--agent-pink-glyph:#ec6aa6;--agent-sky-tint:#e0f2fe;--agent-sky-glyph:#38a3e8;--agent-teal-tint:#ccfbf1;--agent-teal-glyph:#2bb5a6;--shadow-card:0 8px 32px #14141412;--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--focus-ring-width:2px;--focus-ring-offset:2px;--radius-card:24px;--radius-tile:16px;--radius-control:12px;--radius-pill:999px;--border-hairline:1px;--font-sans:"Cal Sans UI", system-ui, -apple-system, sans-serif;--font-text:"Cal Sans Text", "Cal Sans UI", system-ui, sans-serif;--font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace}
+.display{font-family:var(--font-sans);font-size:32px;line-height:36px;font-weight:600;letter-spacing:-0.02em}
+.title{font-family:var(--font-sans);font-size:20px;line-height:26px;font-weight:600;letter-spacing:-0.01em}
+.room-title{font-family:var(--font-sans);font-size:18px;line-height:24px;font-weight:600;letter-spacing:-0.01em}
+.item-title{font-family:var(--font-sans);font-size:15px;line-height:20px;font-weight:600}
+.numeral{font-family:var(--font-sans);font-size:28px;line-height:32px;font-weight:600;letter-spacing:-0.03em}
+.body{font-family:var(--font-text);font-size:15px;line-height:22px;font-weight:400}
+.quote{font-family:var(--font-text);font-size:15px;line-height:22px;font-weight:400}
+.meta{font-family:var(--font-sans);font-size:13px;line-height:18px;font-weight:400}
+.chip{font-family:var(--font-sans);font-size:12px;line-height:16px;font-weight:600}
+.caps{font-family:var(--font-sans);font-size:11px;line-height:14px;font-weight:600;letter-spacing:0.08em}
+.kicker{font-family:var(--font-sans);font-size:11px;line-height:14px;font-weight:600;letter-spacing:0.06em}
+.data{font-family:var(--font-mono);font-size:13px;line-height:18px;font-weight:400}
+.data-strong{font-family:var(--font-mono);font-size:13px;line-height:18px;font-weight:600}

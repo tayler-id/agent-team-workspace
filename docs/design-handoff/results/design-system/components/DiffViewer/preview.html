@@ -1,3 +1,13 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agora · DiffViewer</title>
+<link rel="stylesheet" href="../../tokens.css">
+<style>html,body{margin:0;background:var(--surface-base);color:var(--ink)}</style>
+</head>
+<body>
 <!-- @dsCard group="Evidence" height=400 subtitle="Read-only, opened last. Every hunk maps to a claim or is marked unmapped" -->
 <style>
  .st{background:var(--surface-base);color:var(--ink);font-family:var(--font-text);-webkit-font-smoothing:antialiased}
@@ -182,3 +192,6 @@
  <symbol id="inbox" viewBox="0 0 16 16"><path d="M3 9h3l1 1.5h2L10 9h3v4H3zM4 9l1.5-5h5L12 9"/></symbol>
 </svg>
 <div class="st"><div class="wrap"><div class="panel"><div class="row" style="gap:var(--space-2)"><span class="caps two">DIFF</span><span class="mono">billing/receipt.ts</span><span class="meta two">+6 −3 · read-only</span></div><div class="out"><p class="trunc meta"><span class="mono">@@ -112,7 +112,10 @@</span> · mapped to acceptance item 2</p><div class="dl del"><span class="n">112</span><span>−</span><span>  await writeReceipt(invoice)</span></div><div class="dl del"><span class="n">113</span><span>−</span><span>  await send(invoice)</span></div><div class="dl "><span class="n">112</span><span> </span><span>  const delivery = await send(invoice)</span></div><div class="dl add"><span class="n">113</span><span>+</span><span>  if (!delivery.confirmed) throw new SendNotConfirmed(invoice.id)</span></div><div class="dl add"><span class="n">114</span><span>+</span><span>  await writeReceipt(invoice, delivery.id)</span></div></div><p class="meta two" style="margin-top:var(--space-3)"><svg class="g sm"><use href="#q"/></svg> 1 hunk in <span class="mono">billing/mailer.ts</span> is unmapped: no acceptance item claims it.</p></div></div></div>
+
+</body>
+</html>

@@ -1,3 +1,13 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agora · CheckOutcomeMark</title>
+<link rel="stylesheet" href="../../tokens.css">
+<style>html,body{margin:0;background:var(--surface-base);color:var(--ink)}</style>
+</head>
+<body>
 <!-- @dsCard group="Foundations" height=330 subtitle="Pass, fail, blocked, unavailable, infrastructure error. Skipped does not exist" -->
 <style>
  .st{background:var(--surface-base);color:var(--ink);font-family:var(--font-text);-webkit-font-smoothing:antialiased}
@@ -182,3 +192,6 @@
  <symbol id="inbox" viewBox="0 0 16 16"><path d="M3 9h3l1 1.5h2L10 9h3v4H3zM4 9l1.5-5h5L12 9"/></symbol>
 </svg>
 <div class="st"><div class="wrap"><div class="panel"><div class="chk"><span class="chip neutral"><span class="dot" style="background:var(--mark-pass)"></span></span><p class="body nm"><span class="mono">unit</span> <span class="two">passed</span></p><span class="meta two">required</span></div><div class="chk"><span class="chip neutral"><span class="dot" style="background:var(--mark-pass)"></span></span><p class="body nm"><span class="mono">billing-contract</span> <span class="two">passed</span></p><span class="meta two">required</span></div><div class="chk"><span class="chip neutral"><svg class="g sm"><use href="#dash"/></svg></span><p class="body nm"><span class="mono">billing-smoke</span> <span class="two">blocked · missing_docker</span></p><span class="meta two">required</span></div><div class="chk"><span class="chip neutral"><svg class="g sm"><use href="#q"/></svg></span><p class="body nm"><span class="mono">ui-screenshot-390</span> <span class="two">unavailable · swift_toolchain</span></p><span class="meta two">optional</span></div><div class="chk"><span class="chip neutral"><span class="dot" style="background:var(--mark-fail)"></span></span><p class="body nm"><span class="mono">integration</span> <span class="two">failed</span></p><span class="meta two">required</span></div><div class="chk"><span class="chip neutral"><svg class="g sm"><use href="#q"/></svg></span><p class="body nm"><span class="mono">lint</span> <span class="two">infrastructure error · runner_evicted</span></p><span class="meta two">required</span></div><p class="meta two" style="margin-top:var(--space-3)">A verdict is a dot. A missing verdict is a glyph on the same neutral chip, at the same weight. Nothing is quieter for having failed to run.</p></div></div></div>
+
+</body>
+</html>
