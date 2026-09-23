@@ -1,0 +1,39 @@
+# app.test.tsx label test, by hand: record-red-green.mjs only selects *.test.ts
+node: v24.21.0 pnpm: 10.34.1 head: 48ff997c2e7ce6744f1afdab59acb2ff523ceb36
+## red: App.tsx and projection.ts restored from 92be226, test from head
+
+ RUN  v5.0.1 <worktree>/apps/web
+
+ ❯ |web| test/app.test.tsx (3 tests | 1 failed | 2 skipped) 48ms
+   × the live route labels itself as the local development room, with no fixture wording 48ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/app.test.tsx > the live route labels itself as the local development room, with no fixture wording
+Error: expected "Engineering fixture - visual design pendingLocal project · Local roomactiveLocal agent (read-only, local fixture, no live provider)1 members0 unreadNo room loaded Load the fixture snapshot to start. Online. " to include "Local development room - visual design pending"
+ ❯ test/app.test.tsx:113:37
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 skipped (3)
+   Start at  06:54:00
+   Duration  731ms (environment 55%, import 25%, transform 13%, tests 7%)
+
+undefined
+<worktree>/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/app.test.tsx -t live route
+red_exit: 1
+## green: head sources
+
+ RUN  v5.0.1 <worktree>/apps/web
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 2 skipped (3)
+   Start at  06:54:01
+   Duration  985ms (environment 44%, import 28%, transform 15%, tests 12%)
+
+green_exit: 0

@@ -1,6 +1,6 @@
 # Installation and first checks
 
-Today you install a contributor checkout with a local-room development harness, not a production deployment. There is no supported production installer or downloadable worker yet.
+Today you install a contributor checkout with a local development room, not a production deployment. There is no supported production installer or downloadable worker yet.
 
 ## Prerequisites
 
@@ -19,16 +19,16 @@ pnpm docs:dev
 
 Open `http://127.0.0.1:4173`. The server rebuilds on page requests. Stop it with Ctrl+C. Set `DOCS_PORT` if that port is occupied. For static output, run `pnpm docs:build`; deploy the contents of `.docs-dist/` to any ordinary static host. See [docs operations](operations.md#documentation-deployment).
 
-## Open the local room harness
+## Open the local room
 
 ```sh
 node scripts/local-room.ts doctor
 node scripts/local-room.ts start
 ```
 
-Open the printed `url`, type a message and send it. The room shell shows only committed messages, never an optimistic echo. `node scripts/local-room.ts send --body 'From the CLI'` uses the same room and command path; reload the page to see it appear. Stop with `node scripts/local-room.ts stop`; starting again keeps the messages and URL. This is L4's first vertical slice, not the finished room interface: there is no manual disconnect toggle yet, and reload is the reconnect path. [Local room](local-room.md) explains its limits and the separately confirmed destructive reset.
+Open the printed `url`, type a message and send it. The room shell shows only committed messages, never an optimistic echo. `node scripts/local-room.ts send --body 'From the CLI'` uses the same room and command path, and the message appears in every open tab within one poll. Stop with `node scripts/local-room.ts stop`; starting again keeps the messages and URL. This is L4's first vertical slice, not the finished room interface: there is no manual disconnect control yet; the page reconnects by itself when the service returns. [Local room](local-room.md) explains its limits and the separately confirmed destructive reset.
 
-This branch is a stacked candidate on L2 `55269a5`; it is not landable before L2 and mandatory CI. No production credentials, model account or shared developer database are used.
+No production credentials, model account or shared developer database are used.
 
 ## Prove the actual foundation
 

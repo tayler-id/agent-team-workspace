@@ -1,6 +1,6 @@
 # Development
 
-Server and CLI run from TypeScript source under Node type stripping. Local-runtime start builds only its minimal browser harness with the Vite already locked by Vitest; it adds no dependency or lockfile change. P0b readiness requires exactly Node 24.21.0 (`.node-version`, the unchanged specification pin) and pnpm 10.34.1 (`packageManager`); the broader `engines` ranges are installation compatibility, not qualification. There is no build step yet.
+Server and CLI run from TypeScript source under Node type stripping. Local-runtime start builds only the live room page (`apps/web/src/main-live.tsx`) with the Vite already locked by Vitest; it adds no dependency or lockfile change. P0b readiness requires exactly Node 24.21.0 (`.node-version`, the unchanged specification pin) and pnpm 10.34.1 (`packageManager`); the broader `engines` ranges are installation compatibility, not qualification. There is no build step yet.
 
 Run `node scripts/ci-doctor.mjs --json` before behavioral tests, even when pnpm cannot start. `node --test scripts/test/ci-doctor.test.ts` proves positives, missing/wrong prerequisites and each omitted-probe denial in disposable copies. Exit 2 is blocked infrastructure, never behavioral red. The doctor installs nothing and does not qualify PostgreSQL, Swift, browser, mandatory CI or hosted enforcement. See [toolchain readiness](../site/ci.md).
 
@@ -83,9 +83,9 @@ Reading is explicit and monotone. Drafts remain `unsent` across snapshot/route c
 
 `contracts/fixtures/replay.json` contains test vectors, not production API payload definitions. `pnpm client:replay -- --json --swift` drives six literal ordered/gap/duplicate/unknown/stale-revision snapshots independently through TypeScript and Swift. Remove `--swift` for the pure Node driver; absence of Swift with that flag exits 3, not pass. `--file` selects a reviewed local vector file. `packages/client-core/test/guards.test.ts` disables guards only in disposable source copies and requires their public assertions to fail. Lane 8 is `pnpm boundaries`, with native JSON at `.scratch/boundaries.json`; foundation readiness remains a separate, unqualified gate. The [client synchronization feature page](../features/client-synchronization.md) explains the behavior and includes a state visual.
 
-## Local runtime and browser harness
+## Local runtime and live room page
 
-`node scripts/local-room.ts doctor|start|status|send|history|replay|evidence|stop|reset` is the public local-development control surface. See [CLI flags](../site/cli.md#local-room-runtime), [the product-user recipe](../site/getting-started.md#open-the-local-room-harness) and [operator ownership/recovery](../site/operations.md#local-room-lifecycle). It requires the checkout root and refuses ambiguous existing resources. All product behavior uses a private PostgreSQL 18 cluster and non-owner `agora_app`; supplied developer database URLs are ignored.
+`node scripts/local-room.ts doctor|start|status|send|history|replay|evidence|stop|reset` is the public local-development control surface. See [CLI flags](../site/cli.md#local-room-runtime), [the product-user recipe](../site/getting-started.md#open-the-local-room) and [operator ownership/recovery](../site/operations.md#local-room-lifecycle). It requires the checkout root and refuses ambiguous existing resources. All product behavior uses a private PostgreSQL 18 cluster and non-owner `agora_app`; supplied developer database URLs are ignored.
 
 Service lifecycle, filesystem/listener ownership, HTTP dispatch, event conversion, SQL reads and client projection are separate modules under `scripts/local-room*`, `apps/center/src/local-room-wire.ts`, the domain port and storage adapter. The runtime's outer HTTP boundary enforces Host/Origin, content type, body/rate limits and five-second request bounds. The old `apps/center/src/main.ts` fixture remains for foundation probes; it is not the guarded local-runtime launcher.
 

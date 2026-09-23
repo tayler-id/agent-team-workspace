@@ -8,7 +8,7 @@ Not yet. You can read this site and run foundation checks. There is no product l
 
 ## Can I send a message to a room?
 
-In the local development harness, yes. Run `node scripts/local-room.ts start` and open its printed URL, or send through the CLI. The [local room](local-room.md) persists messages in PostgreSQL and resumes committed events after reconnect or ordinary stop/start. L3 is a stacked candidate, not a finished room UI or a production deployment. L4 and L5 still own the usable room interface and bounded local answer.
+In the local development room, yes. Run `node scripts/local-room.ts start` and open its printed URL, or send through the CLI. The [local room](local-room.md) persists messages in PostgreSQL and resumes committed events after reconnect or ordinary stop/start. The page is L4's first slice of the apps/web room shell, not a finished room UI or a production deployment. The rest of L4 and L5's bounded local answer remain.
 
 ## The site says Built. Why is S1 still incomplete?
 

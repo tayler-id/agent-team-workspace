@@ -70,7 +70,7 @@ node scripts/local-room.ts doctor
 node scripts/local-room.ts start --instance "$INSTANCE"
 ```
 
-Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/PostgreSQL port and harness `url`. Open that URL with the approved browser driver. It is a minimal projection harness, not the finished room UI. No external accounts or production credentials are needed.
+Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/PostgreSQL port and harness `url`. Open that URL with the approved browser driver. It serves the apps/web room shell over the live runtime (L4 first slice), not the finished room UI. No external accounts or production credentials are needed.
 
 ## Drive
 
@@ -112,7 +112,40 @@ pnpm exec vitest run --project unit apps/center/test/runtime.test.ts
 node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/runtime.pg.test.ts
 ```
 
-L3 predicates: every CLI report is `agora.local-runtime/v1`, `outcome: pass` with exit 0; the history contains the sent body; replay carries that same message ID and sequence. The pg tests prove snapshot/replay interleaving, accepted send without receipt, receipt-only cursor immobility, duplicate/gap repair, numeric multi-page replay, two same-port restarts, reset, parallel start, cancelled startup, 403 Host/Origin/stop negatives, 413 body bound, 429 rate bound, foreign record/listener/symlink refusal and cleanup. Unit negatives run a normally denied input and an isolated one-guard-disabled copy; the latter must fail its assertion. Core replay/guard tests remain mandatory. The browser must send, disconnect, observe another CLI send after reconnect, survive ordinary service restart, render injected markup as text and produce no CSP/runtime error. Retain 1440x900 and 390x844 observations and disclose harness-only UI scope.
+L3 predicates: every CLI report is `agora.local-runtime/v1`, `outcome: pass` with exit 0; the history contains the sent body; replay carries that same message ID and sequence. The pg tests prove snapshot/replay interleaving, accepted send without receipt, receipt-only cursor immobility, duplicate/gap repair, numeric multi-page replay, two same-port restarts, reset, parallel start, cancelled startup, 403 Host/Origin/stop negatives, 413 body bound, 429 rate bound, foreign record/listener/symlink refusal and cleanup. Unit negatives run a normally denied input and an isolated one-guard-disabled copy; the latter must fail its assertion. Core replay/guard tests remain mandatory. Drive the browser with the L4 two-tab recipe below.
+
+For the L4 live room, drive two tabs of the launched `url` with `chrome-devtools-axi` in its own session. If the npx copy of `chrome-devtools-mcp` fails with `ERR_MODULE_NOT_FOUND: pkce-challenge`, install `chrome-devtools-mcp@1.10.0` and `pkce-challenge` into a scratch directory and point `CHROME_DEVTOOLS_AXI_MCP_PATH` at its `build/src/bin/chrome-devtools-mcp.js`. `URL` is the start report's `url`:
+
+```sh
+export CHROME_DEVTOOLS_AXI_SESSION=verify-l4
+PROBE='JSON.stringify({rows:[...document.querySelectorAll("article")].map(a=>a.lastElementChild.textContent),b:document.querySelectorAll("b").length,mains:document.querySelectorAll("main").length,status:document.querySelector("[role=status]").textContent,composer:document.getElementById("composer-state").textContent})'
+chrome-devtools-axi open "$URL"                      # tab A
+chrome-devtools-axi press Tab; chrome-devtools-axi press Tab
+chrome-devtools-axi eval 'document.activeElement.id'  # composer-text
+chrome-devtools-axi type 'hello from tab A <b>x</b>'; chrome-devtools-axi press Enter
+chrome-devtools-axi newpage "$URL"                   # tab B
+node scripts/local-room.ts send --instance "$INSTANCE" --body 'from the CLI'
+chrome-devtools-axi pages                            # then selectpage each tab and eval "$PROBE"
+node scripts/local-room.ts stop --instance "$INSTANCE"
+chrome-devtools-axi eval 'document.getElementById("composer-text").focus()'
+chrome-devtools-axi type 'sent while down'; chrome-devtools-axi press Enter; chrome-devtools-axi press Enter
+chrome-devtools-axi eval "$PROBE"
+node scripts/local-room.ts start --instance "$INSTANCE"
+node scripts/local-room.ts history --instance "$INSTANCE"
+chrome-devtools-axi eval '(()=>{const t=document.getElementById("composer-text");t.focus();Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,"value").set.call(t,"x".repeat(4097));t.dispatchEvent(new Event("input",{bubbles:true}));return t.maxLength})()'
+chrome-devtools-axi press Enter
+chrome-devtools-axi eval 'JSON.stringify(performance.getEntriesByType("resource").filter(e=>e.name.endsWith("/messages")).map(e=>e.responseStatus))'
+chrome-devtools-axi open "$URL"                      # reload; eval "$PROBE"
+chrome-devtools-axi emulate --viewport "390x844x3,mobile,touch"; chrome-devtools-axi screenshot "$OUT/390x844.png"
+chrome-devtools-axi emulate --viewport "1440x900x1"; chrome-devtools-axi screenshot "$OUT/1440x900.png"
+chrome-devtools-axi console
+chrome-devtools-axi stop
+CHROME_DEVTOOLS_AXI_SESSION=verify-l4-rm CHROME_DEVTOOLS_AXI_CHROME_ARGS=--force-prefers-reduced-motion chrome-devtools-axi open "$URL"
+CHROME_DEVTOOLS_AXI_SESSION=verify-l4-rm chrome-devtools-axi eval 'JSON.stringify({reduce:matchMedia("(prefers-reduced-motion: reduce)").matches,animations:document.getAnimations().length})'
+CHROME_DEVTOOLS_AXI_SESSION=verify-l4-rm chrome-devtools-axi stop
+```
+
+L4 predicates: focus lands on `composer-text` after two Tabs and stays there after Enter; both tabs and the CLI message show in both tabs without a reload, in the same order; markup renders as text (`b` count 0) and the page has one `main`. With the service stopped, the double Enter leaves `1 pending command`, and after `start` history holds exactly one `sent while down`. Background tabs are throttled, so select a tab before expecting it to catch up. The 4097-character body produces exactly one `/messages` 400 with no retry, and the composer shows `stop: not sent (HTTP 400 malformed_command); the draft is kept`. Reload shows the same persisted order. At 390x844, `scrollWidth` equals `clientWidth` and the shell reports `phone`. The console has no messages. The reduced-motion probe reports `reduce: true` and zero running animations. This proves the first L4 slice only. It does not prove a manual disconnect, per-command delivery states, session drafts or a browser receipt failure, which are not built.
 
 Pass predicates:
 

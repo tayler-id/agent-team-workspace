@@ -1,0 +1,45 @@
+{
+	"schema_version": "agora.task-outcome/v1",
+	"task": "agora-local-room-web-live-correction",
+	"slice": "L4 first vertical slice, review corrections B1-B4 from the 92be226 review",
+	"delivery": "local-only, branch fm/agora-local-room-web",
+	"parent": "92be226ad94af1fee4919b43e5c983b776077f37",
+	"code_head": "6461208ce580ff3760a8f15aefe47e3a13d99d1e",
+	"outcome": "pass",
+	"corrections": {
+		"B1": "scripts/local-room-client.ts drops the assertion made unnecessary when scripts/local-room-browser.ts left the lint program; the web-live outcome.json claim that the lint failure pre-existed on main is corrected in place",
+		"B2": "a second Send on an unchanged unsettled draft reuses the pending command identity (red.log/green.log, live double Enter while stopped persisted one message)",
+		"B3": "any 4xx other than 408/429, a schema-invalid receipt or a receipt for another command is denied and stops; transient failures still resend the same command (red.log/green.log, live 4097-character body got one 400 and no retry)",
+		"B4": "verify-agora L4 drive recipe, local-room page and flow visual, getting-started, faq, operations, synchronization, development runbook and Atlas (local-room, U01b and U20 set to In progress) describe the landed slice and its remaining L4 work"
+	},
+	"red_green": ["red.log", "green.log", "app-label-red-green.log", "test-patch.diff"],
+	"live_drive": {
+		"subject": "48ff997c2e7ce6744f1afdab59acb2ff523ceb36",
+		"served_code_equal_at_code_head": "git diff 48ff997 6461208 -- apps packages scripts touches only apps/center/test/runtime.pg.test.ts",
+		"transcript": "drive/transcript.log",
+		"screenshots": ["drive/tab-a-390x844.png", "drive/tab-a-1440x900.png"],
+		"cleanup": "stop and reset --confirm-disposable pass; SysV shm segment count 30 before and after"
+	},
+	"size": "796fe2c..6461208 under apps, packages, scripts: 12 files, 371 added, 72 deleted",
+	"commands_run": [
+		"toolchain: node v24.21.0 (official darwin-arm64 tarball, SHA-256 checked against nodejs.org SHASUMS256.txt), pnpm 10.34.1, locked Python requirements installed with --require-hashes into .scratch/python, GITHUB_TOKEN/GH_TOKEN unset",
+		"pnpm check: exit 0, 37 test files, 232 tests passed (includes packages/verification project lanes with the Python fixture)",
+		"pnpm boundaries: exit 0",
+		"pnpm --filter @agora/web exec vitest run --config vitest.config.ts: exit 0, 30 tests",
+		"pnpm docs:build: exit 0",
+		"node scripts/verify-design.mjs, node scripts/test-design-checks.mjs, node scripts/test-naming-guard.mjs, node scripts/verify-design-handoff.mjs: exit 0",
+		"SysV shm segment count 30 before and after pnpm check"
+	],
+	"not_changed": [
+		"docs/implementation-plan.md Build checkboxes for U01a.B01-B04 and U20.B01 stay unchecked: scripts/verify-design.mjs parses only '- [ ]' Build boxes and fails 'U01a: no owned Build boxes' when they are ticked; changing that checker is outside this slice"
+	],
+	"remaining_l4": [
+		"real connection state (online from the browser and fetch failures) and a manual disconnect/reconnect that cancels in-flight reads",
+		"per-message and per-command delivery states in place of the aggregate pending count",
+		"session drafts that survive reload",
+		"a lost or failed receipt proved in the browser",
+		"retained latency, bundle and replay measurements",
+		"VoiceOver pass",
+		"'Load fresh snapshot' in the resync banner is inert on the live route; the poll loop has no dispose"
+	]
+}

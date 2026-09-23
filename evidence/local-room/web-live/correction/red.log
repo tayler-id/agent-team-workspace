@@ -1,0 +1,112 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-23T10:53:33.826Z
+parent: 92be226ad94af1fee4919b43e5c983b776077f37
+head: 48ff997c2e7ce6744f1afdab59acb2ff523ceb36
+subject_revision: 92be226ad94af1fee4919b43e5c983b776077f37
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/live.test.ts
+test_patch_digest: sha256:e2d6d7b72b9b8d8748d588ddd6bfcd7b6a55c6c4f87fc7c7a031e137d40a199f
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/live.test.ts test/app.test.tsx","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-WjHMcz/apps/web
+
+ ❯ |web| test/live.test.ts (9 tests | 4 failed) 1298ms
+   × pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message 27ms
+   × a 400 malformed_command stops retrying, keeps the draft and shows the failure 38ms
+   × a schema-invalid receipt stops retrying, keeps the draft and shows the failure 35ms
+   × a receipt for another command stops retrying, keeps the draft and shows the failure 35ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  4 failed | 7 passed (11)
+   Start at  06:53:23
+   Duration  2.17s (tests 48%, environment 26%, import 14%, transform 11%)
+
+undefined
+/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-WjHMcz/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/live.test.ts test/app.test.tsx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/live.test.ts > pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message
+AssertionError: expected Set{ …(2) } to deeply equal Set{ '33333333-0000-4000-8000-000000…' }
+
+- Expected
++ Received
+
+  Set {
+    "33333333-0000-4000-8000-000000000001",
++   "33333333-0000-4000-8000-000000000002",
+  }
+
+ ❯ test/live.test.ts:162:26
+    160|  transport.submit('33333333-0000-4000-8000-000000000002', 'sha256:' + …
+    161|  await flush(12);
+    162|  expect(new Set(posted)).toEqual(new Set(['33333333-0000-4000-8000-000…
+       |                          ^
+    163|  expect(client.getState().commands.map((c) => [c.commandId, c.tag])).t…
+    164|  expect(client.getState().drafts).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  |web| test/live.test.ts > a 400 malformed_command stops retrying, keeps the draft and shows the failure
+AssertionError: expected [ …(20) ] to have a length of 1 but got 20
+
+- Expected
++ Received
+
+- 1
++ 20
+
+ ❯ test/live.test.ts:179:17
+    177|  transport.submit('44444444-0000-4000-8000-000000000001', 'sha256:' + …
+    178|  await flush(20);
+    179|  expect(posted).toHaveLength(1);
+       |                 ^
+    180|  expect(transport.getState().decision).toContain('stop');
+    181|  expect(transport.getState().decision).toContain(shown);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  |web| test/live.test.ts > a schema-invalid receipt stops retrying, keeps the draft and shows the failure
+AssertionError: expected [ …(46) ] to have a length of 1 but got 46
+
+- Expected
++ Received
+
+- 1
++ 46
+
+ ❯ test/live.test.ts:179:17
+    177|  transport.submit('44444444-0000-4000-8000-000000000001', 'sha256:' + …
+    178|  await flush(20);
+    179|  expect(posted).toHaveLength(1);
+       |                 ^
+    180|  expect(transport.getState().decision).toContain('stop');
+    181|  expect(transport.getState().decision).toContain(shown);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  |web| test/live.test.ts > a receipt for another command stops retrying, keeps the draft and shows the failure
+AssertionError: expected [ …(72) ] to have a length of 1 but got 72
+
+- Expected
++ Received
+
+- 1
++ 72
+
+ ❯ test/live.test.ts:179:17
+    177|  transport.submit('44444444-0000-4000-8000-000000000001', 'sha256:' + …
+    178|  await flush(20);
+    179|  expect(posted).toHaveLength(1);
+       |                 ^
+    180|  expect(transport.getState().decision).toContain('stop');
+    181|  expect(transport.getState().decision).toContain(shown);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

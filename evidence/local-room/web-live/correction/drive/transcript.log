@@ -1,0 +1,31 @@
+# L4 correction live drive, agora.local-runtime instance verify-l4-1790160874, subject 48ff997
+# Node v24.21.0 (official darwin-arm64 tarball, SHA-256 checked against nodejs.org SHASUMS256.txt), pnpm 10.34.1,
+# chrome-devtools-axi session l4fix with chrome-devtools-mcp@1.10.0 + pkce-challenge from a scratch directory.
+# Probe = rows (article bodies), <b> element count, <main> count, status text, composer state text.
+doctor: exit 0 (doctor.json); start: exit 0, outcome pass, url http://127.0.0.1:65429 (start.json)
+tab A open: kicker "Local development room - visual design pending", agent "Local agent (local runtime, no model provider)", "1 member", one main
+tab A keyboard: Tab, Tab -> document.activeElement.id = "composer-text"; typed 'hello from tab A <b>x</b>', Enter
+tab A after Enter: {"focus":"composer-text","draft":"","b":0,"state":"No draft."}; article "hello from tab A <b>x</b>", status "Live Cursor 1 applied."
+tab B open, then CLI send 'from the CLI' (cli-send-1.json, exit 0), no reload:
+  tab 2: {"rows":["hello from tab A <b>x</b>","from the CLI"],"b":0,"mains":1,"status":"Live Cursor 2 applied. Online. 1 new message.","composer":"No draft."}
+  tab 3: {"rows":["hello from tab A <b>x</b>","from the CLI"],"b":0,"mains":1,"status":"Live Cursor 2 applied. Online. 1 new message.","composer":"No draft."}
+tab B typed 'from tab B', Enter; tab A without reload:
+  {"rows":["hello from tab A <b>x</b>","from the CLI","from tab B"],"b":0,"mains":1,"status":"Live Cursor 3 applied. Online. 1 new message.","composer":"No draft."}
+service stop (stop-1.json, exit 0); tab B typed 'sent while down', Enter, Enter:
+  {"rows":[...3 rows...],"status":"Connection error TypeError: Failed to fetch Online. 1 new message.","composer":"Unsent draft (15 characters). 1 pending command awaiting a receipt. Last core decision: resend_same_command."}
+service start (start-2.json, exit 0, same url); after selecting each tab (background tabs are timer-throttled):
+  tab 3: {"rows":["hello from tab A <b>x</b>","from the CLI","from tab B","sent while down"],"b":0,"mains":1,"status":"Live Cursor 4 applied. Online. 1 new message.","composer":"No draft."}
+  tab 2: {"rows":["hello from tab A <b>x</b>","from the CLI","from tab B","sent while down"],"b":0,"mains":1,"status":"Live Cursor 4 applied. Online. 1 new message.","composer":"No draft."}
+history after restart (history-after-restart.json): bodies ["hello from tab A <b>x</b>","from the CLI","from tab B","sent while down"], 4 command_id values
+tab B /messages resource timings [startMs, status]: [17801,201] (tab B send), 13 x status 0 at ~1 s spacing while stopped, [40700,201] (one settle)
+tab B oversized: textarea value set programmatically to 4097 chars (typing is capped: maxLength=4096), Enter, waited 6 s:
+  composer "Unsent draft (4097 characters). 1 pending command awaiting a receipt. Last core decision: stop: not sent (HTTP 400 malformed_command); the draft is kept."
+  /messages timings after it: [65211,400] only, no retry
+tab A reload: {"rows":["hello from tab A <b>x</b>","from the CLI","from tab B","sent while down"],"b":0,"mains":1,"status":"Live Cursor 4 applied. Online. 4 new messages.","composer":"No draft."}
+390x844x3 mobile: {"sw":390,"cw":390,"shell":"phone"} -> tab-a-390x844.png
+1440x900: {"sw":1440,"cw":1440,"shell":"desktop"} -> tab-a-1440x900.png
+console: <no console messages found>
+reduced motion (separate session, --force-prefers-reduced-motion): {"reduce":true,"rows":4,"runningAnimations":0,"transition":"1e-06s"}
+cleanup: stop exit 0 (stop-final.json); reset --confirm-disposable exit 0, "owned disposable data removed; listeners absent" (reset.json)
+residue: SysV shm segment count 30 before launch and 30 after reset; instance root .scratch/local-room-verify-l4-1790160874 removed; both axi bridges stopped
+not driven: VoiceOver; manual disconnect (not built); per-command delivery states (not built); browser lost-receipt (not built)

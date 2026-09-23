@@ -1,0 +1,1 @@
+{"schema_version":"agora.local-runtime/v1","command":"doctor","outcome":"pass","detail":"v24.21.0; pg_ctl (PostgreSQL) 18.4 (Homebrew); private loopback cluster, agora_app product role"}

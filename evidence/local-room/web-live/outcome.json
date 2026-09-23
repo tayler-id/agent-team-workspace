@@ -28,7 +28,7 @@
 	"commands_run": [
 		"pnpm --filter @agora/web exec vitest run --config vitest.config.ts (24 -> 25 tests pass)",
 		"pnpm boundaries (33 tests pass)",
-		"pnpm lint (clean on touched files; pre-existing unrelated red in scripts/local-room-client.ts on main, not modified here)",
+		"pnpm lint (red at 8b41c78: scripts/local-room-client.ts:37 no-unnecessary-type-assertion. CORRECTED 2026-09-23: this was not pre-existing on main; eslint on that file exits 0 at 796fe2c and 1 at 92be226, because deleting scripts/local-room-browser.ts removed its DOM lib reference from the lint program. Fixed in 48ff997; see correction/outcome.json)",
 		"pnpm typecheck (clean)",
 		"pnpm docs:check (clean, 31/31 docs tests pass)",
 		"pnpm contracts:check (no drift; no contract files touched)",

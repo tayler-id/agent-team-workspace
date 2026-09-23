@@ -1,0 +1,1 @@
+{"schema_version":"agora.local-runtime/v1","command":"start","outcome":"pass","detail":"running; loopback-only development harness","root":"<worktree>/.scratch/local-room-verify-l4-1790160874","launch":"c569cbd2-e697-4fe8-a072-3286b25aaa28","url":"http://127.0.0.1:65429","center_pid":6123,"postgres_pid":6133,"postgres_port":65430}
