@@ -7,7 +7,7 @@ No application code or runtime proof exists in this specification delivery. Exec
 
 ## How to read this
 
-One box is one unit of work. Every box names the evidence that checks it. Check a box only when its evidence exists, as a file, log, screenshot, video, receipt or exact SHA. The body is a how-to. The appendices explain and record.
+One box is one unit of work and names baseline work/evidence; its unchecked state is not the completion ledger. Track completion in the Atlas and task receipts, not by ticking boxes here. The body is a how-to. The appendices explain and record.
 
 Use `.agents/skills/poteto-mode/playbooks/autopilot-stack.md` for a separately authorized implementation program, with project R22 overriding optional tests, model-specific verification and milestone-as-change assumptions. Only the operator lands changes. Every task has its own exact-head review. A unit closes only after its tasks and integration lanes pass; tasks never wait for their own unit to close.
 

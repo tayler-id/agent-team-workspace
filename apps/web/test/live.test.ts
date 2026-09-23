@@ -113,6 +113,29 @@ test('a successful send settles even though the server digest never equals the H
 	expect(client.getState().commands.find((c) => c.commandId === '22222222-0000-4000-8000-000000000001')?.tag).toBe('received');
 });
 
+test('a 503 retries the frozen command and settles once the server accepts it', async () => {
+	const [, transport] = boot;
+	let attempts = 0;
+	const fetchMock = vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) {
+			attempts += 1;
+			if (attempts === 1) return Promise.resolve(new Response('temporarily unavailable', { status: 503 }));
+			const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+			return Promise.resolve(receiptFor(command.command_id));
+		}
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	});
+	vi.stubGlobal('fetch', fetchMock);
+	transport.loadSnapshot();
+	await flush(6);
+	transport.submit('12121212-0000-4000-8000-000000000001', 'sha256:' + 'b'.repeat(64), 'retry 503');
+	await flush(12);
+	expect(attempts).toBe(2);
+	expect(boot[0].getState().commands.find((c) => c.commandId === '12121212-0000-4000-8000-000000000001')?.tag).toBe('received');
+});
+
 test('a rejected send retries the frozen command and settles once the server accepts it', async () => {
 	const [, transport] = boot;
 	let attempts = 0;

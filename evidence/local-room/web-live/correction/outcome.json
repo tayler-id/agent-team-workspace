@@ -31,7 +31,7 @@
 	},
 	"size": "796fe2c..HEAD under apps, packages, scripts: 12 files, 372 added",
 	"commands_run": [
-		"toolchain: node v24.21.0 (official darwin-arm64 tarball, SHA-256 checked against nodejs.org SHASUMS256.txt), pnpm 10.34.1, locked Python requirements installed with --require-hashes into .scratch/python, GITHUB_TOKEN/GH_TOKEN unset",
+		"toolchain: node v24.21.0 (official darwin-arm64 tarball, SHA-256 checked against nodejs.org SHASUMS256.txt), pnpm 10.34.1, pinned Python requirements installed into .scratch/python (requirements.txt does not contain hashes), GITHUB_TOKEN/GH_TOKEN unset",
 		"pnpm check: exit 0, 37 test files, 232 tests passed (includes packages/verification project lanes with the Python fixture)",
 		"pnpm boundaries: exit 0",
 		"pnpm --filter @agora/web exec vitest run --config vitest.config.ts: exit 0, 30 tests",
