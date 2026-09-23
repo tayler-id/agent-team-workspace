@@ -1,5 +1,3 @@
-# Agora design system
-
 Agora is an invitation-only communication center where a small developer team talks with each other and with visible agents, asks questions answered from the shared record, and launches bounded coding work from a thread. Agora owns the record. GitHub owns the code and the merge. A person's own machine runs the work.
 
 Start with [Screen-Room](components/Screen-Room/README.md) and follow the story: it is the `S1 prototype` set from the packet's screen inventory, drawn end to end on both viewports. Everything the packet says about what is built, in what order, with which words, is unchanged here. This system decides only how it looks.

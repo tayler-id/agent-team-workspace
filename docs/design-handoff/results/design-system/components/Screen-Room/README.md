@@ -1,4 +1,3 @@
 # Screen-Room
-
 Steps 2 and 3: the workspace shell with a project room open and a thread in the pane.
 The shell is rail, timeline, pane in one white frame. The rail lists rooms, live runs with their agents' tints, and the inbox, with unread counts as chips; presence sits on people. The header names the project, its lifecycle, the project agent as `not_enabled`, and the member count. Messages are flat; typed work objects, meaning the center's answer, the task card and the run's question, are tiles. The unread boundary is a live chip and a faint rule. The composer carries Ask center and Create task as soft pills, shows which agents are present, and states that Enter sends. The pane opens exactly one thing; here it is the thread, with the same two actions at thread level.

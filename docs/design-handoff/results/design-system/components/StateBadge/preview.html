@@ -1,4 +1,14 @@
-<!-- @dsCard group="Identity" height=400 subtitle="State chips: tinted pill, word plus glyph. Live is the only orange. Unknown is loud, not quiet" -->
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agora · StateBadge</title>
+<link rel="stylesheet" href="../../tokens.css">
+<style>html,body{margin:0;background:var(--surface-base);color:var(--ink)}</style>
+</head>
+<body>
+<!-- @dsCard group="Identity" height=400 subtitle="State chips: neutral pill, word in ink plus one dot. Violet is live. Unknown is loud, not quiet" -->
 <style>
  .st{background:var(--surface-base);color:var(--ink);font-family:var(--font-text);-webkit-font-smoothing:antialiased}
  .sans{font-family:var(--font-sans)}
@@ -83,3 +93,6 @@
  <symbol id="inbox" viewBox="0 0 16 16"><path d="M3 9h3l1 1.5h2L10 9h3v4H3zM4 9l1.5-5h5L12 9"/></symbol>
 </svg>
 <div class="st"><div class="wrap"><section class="card stack" style="--gap:var(--space-4)"><div class="row" style="align-items:flex-start"><span class="caps lbl" style="width:104px;flex:none;padding-top:var(--space-1)">LIVE</span><div class="row" style="flex-wrap:wrap;gap:var(--space-2)"><span class="chip live"><span class="dot"></span>Running</span><span class="chip live"><span class="dot"></span>Waiting for your answer · 8 min</span><span class="chip live"><span class="dot"></span>Expires in 29 min</span></div></div><div class="row" style="align-items:flex-start"><span class="caps lbl" style="width:104px;flex:none;padding-top:var(--space-1)">CURRENT</span><div class="row" style="flex-wrap:wrap;gap:var(--space-2)"><span class="chip neutral"><svg class="g sm"><use href="#clock"/></svg>Queued for Ada-laptop</span><span class="chip neutral"><svg class="g sm"><use href="#chip"/></svg>Preparing</span><span class="chip neutral"><svg class="g sm"><use href="#dash"/></svg>Cancelling · cleanup pending</span></div></div><div class="row" style="align-items:flex-start"><span class="caps lbl" style="width:104px;flex:none;padding-top:var(--space-1)">TERMINAL</span><div class="row" style="flex-wrap:wrap;gap:var(--space-2)"><span class="chip pass"><span class="dot"></span>Succeeded · evidence ready</span><span class="chip fail"><span class="dot"></span>Failed · doctor_failed</span><span class="chip neutral"><svg class="g sm"><use href="#dash"/></svg>Cancelled by Ada</span></div></div><div class="row" style="align-items:flex-start"><span class="caps lbl" style="width:104px;flex:none;padding-top:var(--space-1)">UNKNOWN</span><div class="row" style="flex-wrap:wrap;gap:var(--space-2)"><span class="chip neutral"><svg class="g sm"><use href="#q"/></svg>Lost contact</span><span class="chip neutral"><svg class="g sm"><use href="#q"/></svg>Cleanup unconfirmed</span><span class="chip neutral"><svg class="g sm"><use href="#q"/></svg>Unavailable · swift_toolchain</span></div></div><div class="row" style="align-items:flex-start"><span class="caps lbl" style="width:104px;flex:none;padding-top:var(--space-1)">HISTORICAL</span><div class="row" style="flex-wrap:wrap;gap:var(--space-2)"><span class="chip hist"><svg class="g sm"><use href="#archive"/></svg>Attempt 1 · superseded</span></div></div><div class="row" style="align-items:flex-start"><span class="caps lbl" style="width:104px;flex:none;padding-top:var(--space-1)">DELTAS</span><div class="row" style="flex-wrap:wrap;gap:var(--space-2)"><span class="chip pass"><span class="dot"></span>+12%</span><span class="chip fail"><span class="dot"></span>−4.6%</span><span class="chip neutral"><span class="dot"></span>0</span></div></div><p class="meta lbl" style="margin-top:var(--space-5)">The word is always ink and the pill is always neutral. The hue is the dot, and only the dot: violet is live, green and red are verdicts. Unknown keeps the question glyph and is never a spinner.</p></section></div></div>
+
+</body>
+</html>

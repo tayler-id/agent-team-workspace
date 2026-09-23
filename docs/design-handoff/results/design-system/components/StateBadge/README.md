@@ -1,14 +1,14 @@
 # StateBadge
 
-A state chip: a small tinted pill carrying a word and a 14px glyph. Five tints, one meaning each.
+A state chip: a neutral `surface-inset` pill carrying the word in `ink` and one 8px dot or a 14px glyph. Chips never take a coloured fill. Five kinds, one meaning each.
 
-| Chip | Fill and ink | Means |
+| Chip | Dot or glyph | Means |
 | --- | --- | --- |
-| live | `live-tint` / `signal-live`, with a pulsing dot for running | Happening right now: running, awaiting an answer, a countdown |
-| pass | `pass-tint` / `mark-pass` | A verdict of pass, or a positive delta |
-| fail | `fail-tint` / `mark-fail` | A verdict of fail, or a negative delta |
-| neutral | `surface-selected` / `ink` | Everything current or unknown that is not live |
-| hist | `surface-inset` / `ink-secondary` | History. Superseded attempts, archived rooms |
+| live | `signal-live` violet dot, pulsing for running | Happening right now: running, awaiting an answer, a countdown |
+| pass | `mark-pass` green dot | A verdict of pass, or a positive delta |
+| fail | `mark-fail` red dot | A verdict of fail, or a negative delta |
+| neutral | grey glyph in `ink-secondary` | Everything current or unknown that is not live |
+| hist | grey glyph, word in `ink-secondary` | History. Superseded attempts, archived rooms |
 
 Unknown, unconfirmed, lost and unavailable are neutral chips with the question glyph. They are not quieter than a terminal state and they never spin. Missing proof is a visible outcome.
 

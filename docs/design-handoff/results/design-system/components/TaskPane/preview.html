@@ -1,3 +1,13 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agora · TaskPane</title>
+<link rel="stylesheet" href="../../tokens.css">
+<style>html,body{margin:0;background:var(--surface-base);color:var(--ink)}</style>
+</head>
+<body>
 <!-- @dsCard group="Panes" height=680 subtitle="The full task: intent, acceptance, scope, dependencies, attempts, edit mode" -->
 <style>
  .st{background:var(--surface-base);color:var(--ink);font-family:var(--font-text);-webkit-font-smoothing:antialiased}
@@ -182,3 +192,6 @@
  <symbol id="inbox" viewBox="0 0 16 16"><path d="M3 9h3l1 1.5h2L10 9h3v4H3zM4 9l1.5-5h5L12 9"/></symbol>
 </svg>
 <div class="st"><div class="wrap"><div class="panel pane-w"><div class="row between" style="margin-bottom:var(--space-3)"><div class="row"><span class="ag lg t-mint"><svg class="g "><use href="#branch"/></svg></span><div><h2 class="title" style="margin:0">Task 7</h2><p class="meta two">Ada owns · attempt 2 of 2</p></div></div><span class="chip live"><span class="dot"></span>Executing</span></div><div class="sec"><div class="h"><span class="caps">INTENT</span></div><p class="body">Write the receipt only after the mailer confirms delivery, so a retry cannot re-send.</p></div><div class="sec"><div class="h"><span class="caps">ACCEPTANCE · 3</span></div><div class="lst"><p class="body" style="padding:var(--space-1) 0">1. A send that is not confirmed writes no receipt.</p><p class="body" style="padding:var(--space-1) 0">2. A retry after an unconfirmed send produces exactly one delivery.</p><p class="body" style="padding:var(--space-1) 0">3. billing-contract covers both paths.</p></div></div><div class="sec"><div class="h"><span class="caps">SCOPE · ALLOWED PATHS</span></div><p class="body mono">billing/receipt.ts<br>billing/mailer.ts</p></div><div class="sec"><div class="h"><span class="caps">DEPENDENCIES</span></div><p class="body two">None. <u>Decision 41</u> governs this path and is not superseded.</p></div><div class="sec"><div class="h"><span class="caps">ATTEMPTS</span></div><div class="lst"><div class="item"><span class="meta two mono">1</span><div class="c"><p class="body">Failed · <span class="mono">doctor_failed</span></p></div><span class="chip hist">historical</span></div><div class="item"><span class="meta two mono">2</span><div class="c"><p class="body">Running on Ada-laptop</p></div><span class="chip live"><span class="dot"></span>current</span></div></div></div><div class="sec"><div class="row" style="gap:var(--space-2)"><span class="pill soft" style="min-height:32px">Edit</span><span class="pill ghost" style="min-height:32px;color:var(--fail-text)">Cancel task</span></div><p class="meta two" style="margin-top:var(--space-2)">Edit changes intent, acceptance and scope. It cannot change the owner while a run is executing.</p></div></div></div></div>
+
+</body>
+</html>

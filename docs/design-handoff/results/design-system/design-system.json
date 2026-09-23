@@ -1,0 +1,25 @@
+{
+  "v": 3,
+  "layout": "files",
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-09-21T00:31:43Z"
+  },
+  "title": "Agora Design System",
+  "namespace": "Agora",
+  "libraries": [],
+  "sections": {},
+  "groups": [],
+  "assetGroups": {},
+  "blobs": {},
+  "docs": {
+    "readme": "project/README.md",
+    "sections": []
+  },
+  "lastChange": {
+    "by": "Tayler",
+    "at": "2026-09-21T03:31:55Z",
+    "via": "Cowork",
+    "note": "Full component inventory from components.md and the S1 screen surfaces, in the Studio kit"
+  }
+}
