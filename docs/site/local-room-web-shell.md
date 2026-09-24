@@ -2,7 +2,7 @@
 
 ## What it is
 
-A reusable React room shell under `apps/web`, built over `@agora/web-framework` and `@agora/client-core`. The framework owns the one-writer Client, named hooks and a typed `EnvironmentPort`. The application owns the browser Host adapter, development fixture transport and shell components. No PostgreSQL persistence, service route, authentication or hosted client exists yet.
+A reusable React room shell under `apps/web`, built over `@agora/web-framework` and `@agora/client-core`. The framework owns the one-writer Client, named hooks and a typed `EnvironmentPort`. The application owns the browser Host adapter, development fixture transport and shell components. The development fixture is in-memory; the live local route uses the L1-L3 runtime for persisted messages. No hosted room, authentication or production conversation schema exists yet.
 
 ## What it does
 
@@ -15,7 +15,7 @@ Product UI work must not wait on L3 transport or invent a second timeline inside
 ## How it works
 
 ```flow
-Host composition | main.tsx creates one RoomClient, one FixtureTransport and one browser EnvironmentPort, then injects them through AgoraProvider.
+Host composition | main.tsx creates one RoomClient with FixtureTransport for the fixture; main-live.tsx creates the same shell over createLiveTransport and the local runtime. Both inject one Client and browser EnvironmentPort through AgoraProvider.
 EnvironmentPort | Named capabilities only: transport, scheduleFocus, defer, media query, now, createId, digestText. No fetch, WebSocket, storage or raw window handle.
 RoomClient | Forwards every input to client-core synchronize(); holds only frozen state and a bounded transcript.
 Named hooks | useClientSelector, useSetDraft, useRoomCommands, useTransportState, useMediaQuery, useStaleSafeBusy, useDeferredFocus, useDelayedAnnouncement own subscribe/unsubscribe, stale completion rejection, timers and cleanup.
@@ -25,7 +25,7 @@ FixtureControls | Development-only; the sole importer of the concrete fixture tr
 
 ## Implementation status
 
-**In progress: browser shell, live local transport and approved presentation are available; persistence is not connected.** The shell runs against a validated development fixture or the L1-L3 local runtime, preserves keyboard, focus, composition Enter, phone/desktop viewport and update-isolation behavior, and uses the light surfaces, typography, restrained borders, rounded controls and narrow-screen spacing from the approved handoff. The responsive CSS keeps the header readable, the virtualized timeline independently scrollable and the composer anchored below it; no send/read command path changed. There is no production conversation schema or hosted room. Design references remain authoritative at `docs/design-handoff/results/`; the live shell is a bounded presentation adaptation, not a copy of the proposed full application.
+**In progress: browser shell, persisted live local transport and approved presentation are available; hosted persistence is not connected.** The shell runs against a validated development fixture or the L1-L3 local runtime, preserves keyboard, focus, composition Enter, phone/desktop viewport and update-isolation behavior, and uses the light surfaces, typography, restrained borders, rounded controls and narrow-screen spacing from the approved handoff. The responsive CSS keeps the header readable, the virtualized timeline independently scrollable and the composer anchored below it; no send/read command path changed. There is no production conversation schema or hosted room. Design references remain authoritative at `docs/design-handoff/results/`; the live shell is a bounded presentation adaptation, not a copy of the proposed full application.
 
 ```mermaid
 flowchart TD
@@ -43,6 +43,6 @@ flowchart TD
 
 Inspect the [framework barrel](repo:packages/web-framework/src/index.ts), [EnvironmentPort](repo:packages/web-framework/src/environment.ts), [RoomClient and hooks](repo:packages/web-framework/src/client.ts), [Host adapter](repo:apps/web/src/host/environment.ts), [fixture transport](repo:apps/web/src/host/fixture.ts) and [room shell](repo:apps/web/src/components/App.tsx). Behavioral coverage lives in [framework client tests](repo:packages/web-framework/test/client.test.ts), [framework boundary tests](repo:packages/web-framework/test/boundaries.test.ts), [fixture tests](repo:apps/web/test/fixture.test.ts) and [shell tests](repo:apps/web/test/app.test.tsx).
 
-Run `pnpm web:test` for unit and component coverage, `pnpm web:dev` for the live fixture, and `pnpm web:build` for the production bundle. The approved-shell check used the owned local runtime and chrome-devtools-axi at desktop and 390x844 phone widths: no horizontal overflow, message send/read rendered through the live client, and the browser console was clean. This is a visual smoke check, not final visual acceptance or an accessibility audit. This slice landed in three dependency-ordered units, each with its own red/green and size evidence under [evidence/local-room/web-framework-foundation/](repo:evidence/local-room/web-framework-foundation/outcome.json), [evidence/local-room/web-framework-host/](repo:evidence/local-room/web-framework-host/outcome.json) and [evidence/local-room/web-framework-shell/](repo:evidence/local-room/web-framework-shell/outcome.json). `.agents/skills/verify-agora/SKILL.md` records the public browser driver checklist.
+Run `pnpm web:test` for unit and component coverage, `pnpm web:dev` for the live fixture, and `pnpm web:build` for the production bundle. The approved-shell check used the owned local runtime and chrome-devtools-axi at desktop and 390x844 phone widths: no horizontal overflow, message send/read rendered through the live client, and the browser console was clean. This is a visual smoke check, not final visual acceptance or an accessibility audit. The framework and host foundation landed in three earlier dependency-ordered units, with red/green and size evidence under [evidence/local-room/web-framework-foundation/](repo:evidence/local-room/web-framework-foundation/outcome.json), [evidence/local-room/web-framework-host/](repo:evidence/local-room/web-framework-host/outcome.json) and [evidence/local-room/web-framework-shell/](repo:evidence/local-room/web-framework-shell/outcome.json). `.agents/skills/verify-agora/SKILL.md` records the public browser driver checklist.
 
 Next: [client synchronization](synchronization.md) and [system architecture](architecture.md).
