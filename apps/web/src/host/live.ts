@@ -113,7 +113,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			if (!scope) throw new Error('room not loaded');
 			// Persist the action identity before sending so a lost response and page reload retry the same command.
 			// A successful action clears it, so a later explicit Quote locally click starts a new action.
-			const key = `agora.local-answer.pending:${scope.project_id}:${scope.room_id}:${[...selectedIds].sort().join(',')}`;
+			const key = `agora.local-answer.pending:${scope.project_id}:${scope.room_id}:${selectedIds.join(',')}`;
 			const commandId = localStorage.getItem(key) ?? crypto.randomUUID();
 			localStorage.setItem(key, commandId);
 			const receipt = validate('RoomCommandReceipt', await requestJson(baseUrl, 'answer', { schema_version: 'agora.local-answer.command/v1', command_id: commandId, scope, selected_ids: selectedIds }));
