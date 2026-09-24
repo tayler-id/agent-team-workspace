@@ -1,0 +1,12 @@
+{
+	"schema_version": "agora.task-outcome/v1",
+	"task": "agora-live-room-usability-fixes",
+	"slice": "L4 live room: own sends read, unread announcement agrees with the header, 44px phone touch targets",
+	"delivery": "local-only, branch fm/agora-live-room-usability-fixes",
+	"parent": "2b10c09f3680018958809928d7b6788a2f308c9a",
+	"code_head": "38ce5595e175cd397946b0fe26e131c3142c6b88",
+	"findings": { "1": "confirmed, fixed", "2": "confirmed, fixed", "3": "not reproduced; arrow-key roving present since 077f4bf", "4": "not reproduced as stated; atomic status region re-reads per event; wrong counts fixed with 2", "5": "confirmed, fixed" },
+	"red_green": { "client_core": { "recorder": "scripts/record-red-green.mjs", "red_exit": 1, "green_exit": 0, "logs": ["red-green/red.log", "red-green/green.log"] }, "web": { "recorder": "manual parent worktree, head apps/web/test/app.test.tsx applied", "red": "3 failed | 31 passed", "green": "34 passed", "logs": ["red-green/web-red.log", "red-green/web-green.log"] } },
+	"browser": { "driver": "chrome-devtools-axi", "transcript": "browser-transcript.txt", "screenshots": ["desktop-1440x900-unread.png", "desktop-1440x900.png", "phone-390x844.png"] },
+	"size": { "source_files": 6, "added": 136, "deleted": 12 }
+}

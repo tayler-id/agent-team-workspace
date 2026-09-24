@@ -1,0 +1,16 @@
+# web-green.log at head 38ce5595e175cd397946b0fe26e131c3142c6b88
+command: pnpm web:test
+
+> agora@ web:test <worktree>
+> pnpm --filter @agora/web exec vitest run --config vitest.config.ts
+
+
+ RUN  v5.0.1 <worktree>/apps/web
+
+
+ Test Files  5 passed (5)
+      Tests  34 passed (34)
+   Start at  21:36:00
+   Duration  11.87s (tests 77%, environment 16%, import 5%, transform 2%)
+
+observed_exit: 0

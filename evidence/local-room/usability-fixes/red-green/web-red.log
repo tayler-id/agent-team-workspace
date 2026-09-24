@@ -1,0 +1,91 @@
+# web-red.log (manual; record-red-green.mjs carries only .ts test paths, so the head's apps/web/test/app.test.tsx is applied by hand)
+parent: 2b10c09f3680018958809928d7b6788a2f308c9a
+head_test: 38ce5595e175cd397946b0fe26e131c3142c6b88 apps/web/test/app.test.tsx sha256:e3e3044d65f10a5922a19a57835d3d732fb85a4da0a4b5c015d19564c239f5e1
+command: pnpm install --frozen-lockfile --prefer-offline && pnpm web:test
+
+> agora@ web:test <parent-worktree>
+> pnpm --filter @agora/web exec vitest run --config vitest.config.ts
+
+
+ RUN  v5.0.1 <parent-worktree>/apps/web
+
+ ❯ |web| test/app.test.tsx (5 tests | 3 failed) 331ms
+   × keyboard roving, virtualized large rooms, citations, announcement and no alternate client 52ms
+   × every button in the phone shell has at least a 44x44 CSS px touch target; desktop sizing is unchanged 47ms
+   × live room: your own send is never unread or announced; arrivals from elsewhere are announced with the header count 83ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/app.test.tsx > keyboard roving, virtualized large rooms, citations, announcement and no alternate client
+Error: expected "Live Cursor 9 applied. Online. 1 new message." to include "1 new message, 3 unread."
+ ❯ test/app.test.tsx:104:19
+    102|  act(() => { again.transport.replayNext(); });
+    103|  act(() => { vi.advanceTimersByTime(2000); });
+    104|  expect(status()).toHaveTextContent('1 new message, 3 unread.');
+       |                   ^
+    105|  expect(screen.getByRole('banner')).toHaveTextContent('3 unread');
+    106|  for (const relative of ['src/components/App.tsx', 'src/components/Fix…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  |web| test/app.test.tsx > every button in the phone shell has at least a 44x44 CSS px touch target; desktop sizing is unchanged
+AssertionError: expected [ [ 'auto', 'auto' ], …(1) ] to deeply equal [ [ '44px', '44px' ], …(1) ]
+
+- Expected
++ Received
+
+  [
+    [
+-     "44px",
+-     "44px",
++     "auto",
++     "auto",
+    ],
+    [
+-     "44px",
+-     "44px",
++     "auto",
++     "auto",
+    ],
+  ]
+
+ ❯ test/app.test.tsx:121:53
+    119|   expect(size('Send')).not.toEqual(['44px', '44px']);
+    120|   setPhone(true);
+    121|   expect([size('Send'), size('Mark room as read')]).toEqual([['44px', …
+       |                                                     ^
+    122|  } finally { sheet.remove(); }
+    123| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  |web| test/app.test.tsx > live room: your own send is never unread or announced; arrivals from elsewhere are announced with the header count
+AssertionError: expected 'Live Cursor 4 applied. Online. 4 new …' not to match /new message/
+
+- Expected:
+/new message/
+
++ Received:
+"Live Cursor 4 applied. Online. 4 new messages."
+
+ ❯ test/app.test.tsx:175:35
+    173|  await wait(2100);
+    174|  expect([unread(), screen.getAllByRole('article').length]).toEqual(['0…
+    175|  expect(status().textContent).not.toMatch(/new message/);
+       |                                   ^
+    176|
+    177|  const box = screen.getByRole('textbox', { name: /Message/ });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  3 failed | 31 passed (34)
+   Start at  21:36:26
+   Duration  11.96s (tests 76%, environment 16%, import 6%, transform 2%)
+
+undefined
+<parent-worktree>/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts
+ ELIFECYCLE  Command failed with exit code 1.
+observed_exit: 1

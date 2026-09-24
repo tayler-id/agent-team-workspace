@@ -248,6 +248,13 @@
 			"fixtures": ["agora.web-fixture.room/v1 largeSnapshot corpus generator, no production conversation schema"],
 			"platforms": ["node24", "browser"],
 			"owner": "agora-browser-pretext-virtualization-salvage"
+		},
+		{
+			"id": "local-room-live-attention", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-usability-fixes",
+			"paths": ["packages/client-core/src/index.ts", "packages/web-framework/src/client.ts", "apps/web/src/components/App.tsx", "apps/web/src/fixture.css"],
+			"public": ["@agora/client-core synchronize: an own receipted message advances lastSeen", "@agora/web-framework useDelayedAnnouncement", "live room header unread count, status announcement and Mark room as read", "44x44 CSS px buttons in the phone shell or under a coarse pointer"],
+			"contracts": [], "scenarios": ["packages/client-core/test/sync.test.ts", "apps/web/test/app.test.tsx", "live room browser drive: own send, two arrivals, mark read, keyboard roving, 390x844 and 1440x900"],
+			"fixtures": ["one fixed local room; fake local-room fetch server in apps/web/test/app.test.tsx"], "platforms": ["node24", "browser"]
 		}
 	]
 }
