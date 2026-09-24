@@ -1,0 +1,12 @@
+# web-green.log at combined head b4adca9731e22edb2f3bf6a0398d9ac8c9a10611 (code identical to 31a917c350db13b200332d9c8d7f83c214765c7b)
+$ pnpm -s web:test
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/3/agent-team-workspace/apps/web
+
+
+ Test Files  5 passed (5)
+      Tests  34 passed (34)
+   Start at  21:45:31
+   Duration  12.79s (tests 75%, environment 18%, import 6%, transform 2%)
+
+exit: 0

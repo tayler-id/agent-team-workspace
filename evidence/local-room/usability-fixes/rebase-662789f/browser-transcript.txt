@@ -1,0 +1,176 @@
+head: b4adca9731e22edb2f3bf6a0398d9ac8c9a10611
+## desktop fresh load, then 2.5s
+{
+ "header": [
+  "0 unread"
+ ],
+ "markRead": false,
+ "status": "Live Cursor 4 applied. Online. ",
+ "articles": [
+  "seed 1|tab=-1|unread=false",
+  "seed 2|tab=-1|unread=false",
+  "seed 3|tab=-1|unread=false",
+  "seed 4|tab=0|unread=false"
+ ],
+ "ann": [],
+ "active": "BODY"
+}
+## after own send + 3s
+{
+ "header": [
+  "0 unread"
+ ],
+ "markRead": false,
+ "status": "Live Cursor 5 applied. Online. ",
+ "articles": [
+  "seed 1|tab=-1|unread=false",
+  "seed 2|tab=-1|unread=false",
+  "seed 3|tab=-1|unread=false",
+  "seed 4|tab=0|unread=false",
+  "own message after rebase|tab=-1|unread=false"
+ ],
+ "ann": [
+  "Live Cursor 5 applied. Online. "
+ ],
+ "active": "composer-text"
+}
+## CLI arrival 1, +0.5s (before announce delay)
+{
+ "header": [
+  "1 unread"
+ ],
+ "markRead": true,
+ "status": "Live Cursor 6 applied. Online. ",
+ "articles": [
+  "seed 1|tab=-1|unread=false",
+  "seed 2|tab=-1|unread=false",
+  "seed 3|tab=-1|unread=false",
+  "seed 4|tab=0|unread=false",
+  "own message after rebase|tab=-1|unread=false",
+  "CLI arrival 1|tab=-1|unread=true|New"
+ ],
+ "ann": [
+  "Live Cursor 5 applied. Online. ",
+  "Live Cursor 6 applied. Online. "
+ ],
+ "active": "composer-text"
+}
+## CLI arrival 1, +3s
+{
+ "header": [
+  "1 unread",
+  "1 new message, 1 unread."
+ ],
+ "markRead": true,
+ "status": "Live Cursor 6 applied. Online. 1 new message, 1 unread.",
+ "articles": [
+  "seed 1|tab=-1|unread=false",
+  "seed 2|tab=-1|unread=false",
+  "seed 3|tab=-1|unread=false",
+  "seed 4|tab=0|unread=false",
+  "own message after rebase|tab=-1|unread=false",
+  "CLI arrival 1|tab=-1|unread=true|New"
+ ],
+ "ann": [
+  "Live Cursor 5 applied. Online. ",
+  "Live Cursor 6 applied. Online. ",
+  "Live Cursor 6 applied. Online. 1 new message, 1 unread."
+ ],
+ "active": "composer-text"
+}
+## CLI arrival 2, +0.3s (stale notice cleared)
+{
+ "header": [
+  "2 unread"
+ ],
+ "markRead": true,
+ "status": "Live Cursor 7 applied. Online. ",
+ "articles": [
+  "seed 1|tab=-1|unread=false",
+  "seed 2|tab=-1|unread=false",
+  "seed 3|tab=-1|unread=false",
+  "seed 4|tab=0|unread=false",
+  "own message after rebase|tab=-1|unread=false",
+  "CLI arrival 1|tab=-1|unread=true|New",
+  "CLI arrival 2|tab=-1|unread=true"
+ ],
+ "ann": [
+  "Live Cursor 5 applied. Online. ",
+  "Live Cursor 6 applied. Online. ",
+  "Live Cursor 6 applied. Online. 1 new message, 1 unread.",
+  "Live Cursor 7 applied. Online. "
+ ],
+ "active": "composer-text"
+}
+## CLI arrival 2, +3s
+{
+ "header": [
+  "2 unread",
+  "1 new message, 2 unread."
+ ],
+ "markRead": true,
+ "status": "Live Cursor 7 applied. Online. 1 new message, 2 unread.",
+ "articles": [
+  "seed 1|tab=-1|unread=false",
+  "seed 2|tab=-1|unread=false",
+  "seed 3|tab=-1|unread=false",
+  "seed 4|tab=0|unread=false",
+  "own message after rebase|tab=-1|unread=false",
+  "CLI arrival 1|tab=-1|unread=true|New",
+  "CLI arrival 2|tab=-1|unread=true"
+ ],
+ "ann": [
+  "Live Cursor 5 applied. Online. ",
+  "Live Cursor 6 applied. Online. ",
+  "Live Cursor 6 applied. Online. 1 new message, 1 unread.",
+  "Live Cursor 7 applied. Online. ",
+  "Live Cursor 7 applied. Online. 1 new message, 2 unread."
+ ],
+ "active": "composer-text"
+}
+## after Mark room as read
+{
+ "header": [
+  "0 unread"
+ ],
+ "markRead": false,
+ "status": "Live Cursor 7 applied. Online. ",
+ "articles": [
+  "seed 1|tab=-1|unread=false",
+  "seed 2|tab=-1|unread=false",
+  "seed 3|tab=-1|unread=false",
+  "seed 4|tab=0|unread=false",
+  "own message after rebase|tab=-1|unread=false",
+  "CLI arrival 1|tab=-1|unread=false",
+  "CLI arrival 2|tab=-1|unread=false"
+ ],
+ "ann": [
+  "Live Cursor 5 applied. Online. ",
+  "Live Cursor 6 applied. Online. ",
+  "Live Cursor 6 applied. Online. 1 new message, 1 unread.",
+  "Live Cursor 7 applied. Online. ",
+  "Live Cursor 7 applied. Online. 1 new message, 2 unread.",
+  "Live Cursor 7 applied. Online. "
+ ],
+ "active": "composer-text"
+}
+## keyboard: focus active article, ArrowUp x2, Home, End
+ArrowUp -> "\"ARTICLE seed 3\""
+ArrowUp -> "\"ARTICLE seed 2\""
+Home -> "\"ARTICLE seed 1\""
+End -> "\"ARTICLE CLI arrival 2\""
+## desktop 1440x900 button boxes
+"\"[\\\"Quote locally: 119.3x40.5\\\",\\\"Quote locally: 119.3x40.5\\\",\\\"Quote locally: 119.3x40.5\\\",\\\"Quote locally: 119.3x40.5\\\",\\\"Quote locally: 119.3x40.5\\\",\\\"Quote locally: 119.3x40.5\\\",\\\"Quote locally: 119.3x40.5\\\",\\\"Send: 88.0x40.5\\\"]\""
+## phone 390x844 button boxes
+"\"{\\\"viewport\\\":\\\"phone\\\",\\\"coarse\\\":true,\\\"scrollX\\\":false,\\\"buttons\\\":[\\\"Quote locally: 119.3x44.0\\\",\\\"Quote locally: 119.3x44.0\\\",\\\"Quote locally: 119.3x44.0\\\",\\\"Quote locally: 119.3x44.0\\\",\\\"Quote locally: 119.3x44.0\\\",\\\"Quote locally: 119.3x44.0\\\",\\\"Quote locally: 119.3x44.0\\\",\\\"Send: 88.0x44.0\\\"]}\""
+## console
+console:
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+## Console messages
+Showing 1-7 of 7 (Page 1 of 1).
+msgid=15 [error] Loading the font 'data:font/woff2;base64,<truncated>' violates the following Content Security Policy directive: "default-src 'none'". Note that 'font-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked. (0 args)
+msgid=16 [issue] Content Security Policy of your site blocks some resources (count: 1)
+    ... (truncated, 7843 chars total)
+help[2]:
+  Run `chrome-devtools-axi console-get <id>` to see a specific message
+  Run `chrome-devtools-axi console --type error` to filter by type

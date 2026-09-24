@@ -1,0 +1,15 @@
+# touch-target guard negatives on combined head b4adca9731e22edb2f3bf6a0398d9ac8c9a10611, apps/web/src/fixture.css restored byte for byte after each
+## negative 1: delete the :where(.shell.phone) button rule
+   × every button in the phone shell has at least a 44x44 CSS px touch target; desktop sizing is unchanged 48ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected [ [ '88px', '40px' ], …(1) ] to deeply equal [ [ '88px', '44px' ], …(1) ]
+      Tests  1 failed | 33 passed (34)
+restored
+## negative 2: raise the rule to .shell.phone button (overrides the approved 88px Send width)
+   × every button in the phone shell has at least a 44x44 CSS px touch target; desktop sizing is unchanged 42ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected [ [ '44px', '44px' ], …(1) ] to deeply equal [ [ '88px', '44px' ], …(1) ]
+      Tests  1 failed | 33 passed (34)
+restored
+## restored
+      Tests  34 passed (34)

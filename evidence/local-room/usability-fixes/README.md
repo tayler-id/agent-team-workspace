@@ -1,6 +1,6 @@
 # Live room usability fixes
 
-Task `agora-live-room-usability-fixes`. Parent `2b10c09`, code head `38ce559`. Input: the live-room browser review report, read as a claim to test, not a proved cause. Every finding below was reproduced through the served room at `node scripts/local-room.ts start` with `chrome-devtools-axi` before any code changed.
+Task `agora-live-room-usability-fixes`. Parent `2b10c09`, code head `38ce559`, rebased onto `662789f` (the approved light shell) with code head `31a917c`; see [Rebase onto the approved shell](#rebase-onto-the-approved-shell). Input: the live-room browser review report, read as a claim to test, not a proved cause. Every finding below was reproduced through the served room at `node scripts/local-room.ts start` with `chrome-devtools-axi` before any code changed.
 
 ## Verdicts
 
@@ -16,7 +16,7 @@ Task `agora-live-room-usability-fixes`. Parent `2b10c09`, code head `38ce559`. I
 
 - `packages/client-core/src/index.ts`: once the cursor has applied an event named by one of this client's own receipts, `lastSeen` rises to that sequence. The receipt and the event can arrive in either order. Earlier unread messages are marked read with it, because unread is one last-seen sequence (spec line 50). Sending in a Matrix room moves the read marker the same way.
 - `packages/web-framework/src/client.ts`, `apps/web/src/components/App.tsx`: the announcement follows the room's `unread` count, takes its baseline from the first loaded snapshot, reads `N new messages, M unread.` so it repeats the header total, and clears as soon as unread drops or the next arrival lands.
-- `apps/web/src/fixture.css`: every button is at least 44 x 44 CSS px in the phone shell or under a coarse pointer. Desktop sizes are unchanged.
+- `apps/web/src/fixture.css`: every button is at least 44 x 44 CSS px in the phone shell or under a coarse pointer. The phone rule is `:where(.shell.phone) button`, so it outranks the approved shell's 40 px base button but not its wider controls: Send keeps its 88 px width. Fine-pointer desktop buttons keep the approved 40 px.
 
 ## Proof
 
@@ -30,4 +30,16 @@ Task `agora-live-room-usability-fixes`. Parent `2b10c09`, code head `38ce559`. I
 
 - Unread state is per page session. A second tab still counts the first tab's message as unread, because it holds no receipt for it and read state is not persisted.
 - The roving tab stop stays on the message that was newest at load, so Tab lands there after new arrivals rather than on the current newest. Arrow keys and End still reach everything.
-- Other buttons, Quote locally among them, keep 21 px height on a fine-pointer desktop. The approved design baseline sets control sizes when that slice lands.
+- On a fine-pointer desktop every button is 40.5 px tall, the approved shell's size, not 44. WCAG 2.5.8 asks for 24 px there.
+- The served room blocks the approved Cal Sans fonts. `scripts/local-room-service.ts` sends `default-src 'none'` with no `font-src`, and the build inlines the `@font-face` files as `data:` URIs, so the page renders in `system-ui` and logs a CSP error. It came in with `1d9584d`; this branch touches neither file. The fix is a CSP change, which is out of this task's scope.
+
+## Rebase onto the approved shell
+
+Main advanced to `662789f` with the approved light presentation (`1d9584d`). The only conflict was `apps/web/src/fixture.css`. The resolution keeps main's tokens, responsive block and reduced-motion rule, and adds the touch-target rules after them.
+
+A plain `.shell.phone button` rule, as first written, has specificity 0,2,1 and beat `.composer-actions button { min-width: 88px }`, shrinking the approved Send button to 44 px wide on a phone. Wrapping the shell class in `:where()` drops the rule to 0,0,1, the same as the base `button`, so source order lifts the 40 px height to 44 and the wider rule still wins. The App test now asserts the literal values: desktop Send `88px` by `40px`, phone Send `88px` by `44px`, phone Mark room as read `44px` by `44px`.
+
+- `rebase-662789f/web-green.log`: `pnpm web:test` on the combined branch, 34 passed. `packages/client-core/test/sync.test.ts` and the web-framework tests also pass, 19 of 19.
+- `rebase-662789f/touch-target-negatives.log`: deleting the phone rule turns the test red (`40px` height). Raising it back to `.shell.phone button` turns it red (`44px` Send width). A byte-for-byte restore turns it green.
+- `rebase-662789f/browser-transcript.txt`: the same served-room drive with `chrome-devtools-axi` on the combined branch. Every step matches the pre-rebase transcript: `0 unread` on load, own send stays read, `1 new message, 1 unread.` after the delay, the stale notice clears on the next arrival, Mark room as read clears it, and arrow keys, Home and End reach every message. At 390x844 with touch, every button is 44.0 tall, Send 88.0 wide, and nothing scrolls sideways. At 1440x900 buttons are 40.5 tall. The only console entries are the CSP font block listed under Left open.
+- `rebase-662789f/desktop-1440x900-unread.png`, `rebase-662789f/desktop-1440x900.png`, `rebase-662789f/phone-390x844.png`: the approved shell with the fixes.
