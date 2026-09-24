@@ -1,0 +1,60 @@
+Served-room drive at code head (branch fm/agora-live-room-session-drafts), `node scripts/local-room.ts start` with `chrome-devtools-axi`. Test text is nonsensitive placeholder copy, no real user content.
+
+1. Reload restores an unsent draft (same instance)
+   - Fresh room at http://127.0.0.1:60186 (launch 6d8ecccd-...): composer shows "No draft."
+   - Typed "unsent evidence draft one" into #composer-text (input event, not Enter). sessionStorage
+     agora.local-room.draft:<project>:<room> holds {"cursor":"0","text":"unsent evidence draft one","instance":"6d8ecccd-..."}.
+   - Reloaded the same tab (chrome-devtools-axi open, same URL). Composer textbox comes back with
+     value="unsent evidence draft one" and description "Unsent draft (25 characters)."
+
+2. Reused-origin reset (empty room, cursor 0) suppresses the old draft
+   - Stopped the instance, ran `local-room reset --confirm-disposable`, then restarted with the
+     SAME port (60186) to force a reused origin: fresh launch id 99d911a7-..., cursor still 0,
+     "No messages in this room yet."
+   - Reloaded the tab that still held the draft from step 1 (still open in the same origin).
+     Composer comes back "No draft." and the room shows "No messages in this room yet." The
+     leftover sessionStorage entry's stamped instance (6d8ecccd-...) no longer equals the current
+     verified identity (99d911a7-...), so readDraft discards it even though the cursor alone
+     (both at "0") could not have told the reset apart from an ordinary reload.
+
+3. Pending-send retry reuses its command id across a reload; no duplicate on eventual success
+   - On the same reused origin, restarted with a real service outage: `local-room stop` then
+     `local-room start --port 60186` (data retained, no reset) — a genuine restart mints a new
+     launch id (d7466d1c-...) by design, so this exercises the ordinary "server restart while the
+     tab stays loaded" path, not the reload-mid-flight path.
+   - Reloaded once against the new instance to pick up the fresh identity; typed
+     "pending offline evidence message"; emulated the network Offline, pressed Enter. The send
+     stayed uncertain; sessionStorage agora.local-room.pending:<project>:<room> held
+     {"instance":"d7466d1c-...","text":"pending offline evidence message","commandId":"251ded61-..."}.
+   - Reloaded the tab while still offline: browser shows ERR_CONNECTION_REFUSED (no cached
+     document; expected, this is a plain dev server with no service worker).
+   - Restored network to Fast 4G and reloaded again: same instance, snapshot loads, the draft and
+     composer both restore "pending offline evidence message" (cursor unchanged, instance matches).
+   - Pressed Enter again on the unchanged text. `submit()` found the saved pending record for that
+     exact text, reused commandId 251ded61-... instead of minting a new one. `local-room history`
+     afterward shows exactly one message, body "pending offline evidence message",
+     command_id 251ded61-8c4b-490b-9d6a-fe8820c941b7 — the same id, not a duplicate row.
+   - After the receipt settled, both sessionStorage entries (draft, pending) cleared and the
+     composer emptied.
+
+4. Two tabs keep independent drafts
+   - Tab A (existing tab) had "tab A own draft text" typed into its composer.
+   - Opened a brand-new tab (chrome-devtools-axi newpage, a fresh window/tab, not a duplicate) at
+     the same URL: composer comes back empty, confirming a freshly opened tab gets its own empty
+     sessionStorage and never inherits another tab's draft.
+   - Typed "tab B independent draft" in the new tab, then switched back to tab A: tab A's composer
+     still reads "tab A own draft text", unaffected by tab B's write.
+
+Console: only the pre-existing, already-documented CSP font-src block (data:font/woff2 blocked by
+`default-src 'none'` with no font-src; see docs/site/local-room.md "Fonts in the served room").
+No other console errors across any step.
+
+Screenshot: browser/after-retry-send.png (state after step 3's successful resend).
+
+Untested here, honestly: a duplicated-tab (Ctrl/Cmd+... "duplicate tab") sessionStorage copy per
+the WHATWG spec limitation already documented in docs/site/local-room.md; this drive used only
+fresh tabs and reloads, matching the browser automation available. The reload-mid-flight case (a
+POST that is in flight against the SAME still-live instance, not one interrupted by an emulated
+network drop) was exercised indirectly through step 3's offline emulation rather than a literal
+race with the live fetch, since this driver cannot pause an in-flight request without either
+restarting the server (which mints a new identity by design) or blocking the network.
