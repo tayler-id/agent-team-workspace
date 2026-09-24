@@ -1,105 +1,72 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-24T02:58:48.299Z
-parent: 217cf541d3c0e73c9a70524542a66293e0b7e82f
-head: b4d69cb66222018f5970612a7f450e56b30c9cf6
-subject_revision: 217cf541d3c0e73c9a70524542a66293e0b7e82f
+recorded_at: 2026-09-24T03:15:18.149Z
+parent: 40328065a63c7293e950862568aa2815aa4212cf
+head: 68d8de022f446f98d17bb30338be3020c08feb85
+subject_revision: 40328065a63c7293e950862568aa2815aa4212cf
 test_patch_applied_to_subject: true
 test_patch_files: apps/web/test/live.test.ts
-test_patch_digest: sha256:9e4c4dd304348da10dfe59162a395096e79e44930ba0688fb9673313b05f9d94
+test_patch_digest: sha256:ec6cc9ebe2f1d159fdb43cf4a21b779e4225c1164a0fb61f8641c6faf144af27
 fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
-configuration: {"command":"npx vitest run apps/web/test/live.test.ts --root apps/web","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+configuration: {"command":"npx vitest run apps/web/test/live.test.ts","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
 toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
 expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
 observed_exit: 1
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-2bgOjE/apps/web
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-ZEwqGD
 
- ❯ |web| test/live.test.ts (17 tests | 6 failed) 1381ms
-   × an unsent draft survives a reload in the same tab 10ms
-   × a failed send keeps the draft persisted for the next reload 8ms
-   × a successful send clears the persisted draft so a later reload starts empty 8ms
-   × typing a new draft while an earlier send is in flight survives that send's receipt 8ms
-   × a deliberate clear (emptying the box) also drops the persisted draft 8ms
-   × a room reset to a lower cursor discards a stale draft instead of exposing old text 8ms
+ ❯ |unit| apps/web/test/live.test.ts (20 tests | 2 failed) 1563ms
+   × a same-origin reset still at cursor 0 is told apart from an ordinary reload by process identity 24ms
+   × a send still unsettled when the tab reloads reuses the same command id instead of duplicating it 36ms
 
  Test Files  1 failed (1)
-      Tests  6 failed | 11 passed (17)
-   Start at  22:58:38
-   Duration  1.99s (tests 72%, environment 19%, import 6%, transform 3%)
+      Tests  2 failed | 18 passed (20)
+   Start at  23:15:08
+   Duration  1.81s (tests 90%, import 6%, transform 4%)
 
 
-⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
 
- FAIL  |web| test/live.test.ts > an unsent draft survives a reload in the same tab
-TypeError: transport.saveDraft is not a function
- ❯ test/live.test.ts:262:12
-    260|  await flush(6);
-    261|  client.apply({ type: 'draft', streamId: roomId, text: 'not sent yet' …
-    262|  transport.saveDraft(roomId, 'not sent yet');
-       |            ^
-    263|  const [reloadedClient, reloadedTransport] = reopen();
-    264|  stubEmptyRoom();
+ FAIL  |unit| apps/web/test/live.test.ts > a same-origin reset still at cursor 0 is told apart from an ordinary reload by process identity
+AssertionError: expected [ 'from before the reset' ] to deeply equal []
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+- Expected
++ Received
 
- FAIL  |web| test/live.test.ts > a failed send keeps the draft persisted for the next reload
-TypeError: transport.saveDraft is not a function
- ❯ test/live.test.ts:276:12
-    274|  await flush(6);
-    275|  client.apply({ type: 'draft', streamId: roomId, text: 'still trying' …
-    276|  transport.saveDraft(roomId, 'still trying');
-       |            ^
-    277|  transport.submit('55555555-0000-4000-8000-000000000001', 'sha256:' + …
-    278|  await flush(6);
+- []
++ [
++   "from before the reset",
++ ]
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+ ❯ apps/web/test/live.test.ts:392:36
+    390|  reloadedTransport.loadSnapshot();
+    391|  await flush(6);
+    392|  expect(draftText(reloadedClient)).toEqual([]);
+       |                                    ^
+    393| });
+    394|
 
- FAIL  |web| test/live.test.ts > a successful send clears the persisted draft so a later reload starts empty
-TypeError: transport.saveDraft is not a function
- ❯ test/live.test.ts:292:12
-    290|  await flush(6);
-    291|  client.apply({ type: 'draft', streamId: roomId, text: 'about to send'…
-    292|  transport.saveDraft(roomId, 'about to send');
-       |            ^
-    293|  transport.submit('66666666-0000-4000-8000-000000000001', 'sha256:' + …
-    294|  await flush(6);
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+ FAIL  |unit| apps/web/test/live.test.ts > a send still unsettled when the tab reloads reuses the same command id instead of duplicating it
+AssertionError: expected [ …(2) ] to deeply equal [ …(2) ]
 
- FAIL  |web| test/live.test.ts > typing a new draft while an earlier send is in flight survives that send's receipt
-TypeError: transport.saveDraft is not a function
- ❯ test/live.test.ts:315:12
-    313|  await flush(6);
-    314|  client.apply({ type: 'draft', streamId: roomId, text: 'message A' });
-    315|  transport.saveDraft(roomId, 'message A');
-       |            ^
-    316|  transport.submit('77777777-0000-4000-8000-000000000001', 'sha256:' + …
-    317|  await flush(2);
+- Expected
++ Received
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+  [
+    "99999999-0000-4000-8000-000000000001",
+-   "99999999-0000-4000-8000-000000000001",
++   "99999999-0000-4000-8000-000000000002",
+  ]
 
- FAIL  |web| test/live.test.ts > a deliberate clear (emptying the box) also drops the persisted draft
-TypeError: transport.saveDraft is not a function
- ❯ test/live.test.ts:337:12
-    335|  await flush(6);
-    336|  client.apply({ type: 'draft', streamId: roomId, text: 'typed then und…
-    337|  transport.saveDraft(roomId, 'typed then undone');
-       |            ^
-    338|  client.apply({ type: 'draft', streamId: roomId, text: '' });
-    339|  transport.saveDraft(roomId, '');
+ ❯ apps/web/test/live.test.ts:427:17
+    425|  reloadedTransport.submit('99999999-0000-4000-8000-000000000002', 'sha…
+    426|  await flush(6);
+    427|  expect(posted).toEqual(['99999999-0000-4000-8000-000000000001', '9999…
+       |                 ^
+    428|  expect(draftText(reloadedClient)).toEqual([]);
+    429| });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
-
- FAIL  |web| test/live.test.ts > a room reset to a lower cursor discards a stale draft instead of exposing old text
-TypeError: transport.saveDraft is not a function
- ❯ test/live.test.ts:353:12
-    351|  await flush(6);
-    352|  client.apply({ type: 'draft', streamId: roomId, text: 'from before th…
-    353|  transport.saveDraft(roomId, 'from before the reset');
-       |            ^
-    354|  // A disposable reset drops all data and restarts the same room at a …
-    355|  const [reloadedClient, reloadedTransport] = reopen();
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
 
