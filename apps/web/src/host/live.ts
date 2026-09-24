@@ -44,6 +44,24 @@ function classify(error: unknown): { tag: 'timeout' | 'denied' } | { tag: 'rate_
 	return { tag: transient ? 'timeout' : 'denied' };
 }
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => { setTimeout(resolve, ms); });
+const draftBodyLimit = 4096;
+const draftKey = (scope: Schema<'RoomSnapshot'>['scope']): string => `agora.local-room.draft:${scope.project_id}:${scope.room_id}`;
+// sessionStorage bounds the draft's lifetime to this tab's session and keeps it private to that tab, so a reset or a
+// fresh instance (a distinct origin/port) never exposes another session's text. The stored cursor guards the one case
+// same-origin reuse cannot: a room reset to an empty, lower cursor while this tab's session survives.
+function readDraft(scope: Schema<'RoomSnapshot'>['scope'], currentCursor: string): string | undefined {
+	const raw = sessionStorage.getItem(draftKey(scope));
+	if (!raw) return undefined;
+	try {
+		const parsed = JSON.parse(raw) as { cursor?: unknown; text?: unknown };
+		if (typeof parsed.cursor !== 'string' || typeof parsed.text !== 'string' || BigInt(parsed.cursor) > BigInt(currentCursor)) { sessionStorage.removeItem(draftKey(scope)); return undefined; }
+		return parsed.text;
+	} catch { sessionStorage.removeItem(draftKey(scope)); return undefined; }
+}
+function writeDraft(scope: Schema<'RoomSnapshot'>['scope'], cursor: string, text: string): void {
+	if (text.trim() === '') { sessionStorage.removeItem(draftKey(scope)); return; }
+	sessionStorage.setItem(draftKey(scope), JSON.stringify({ cursor, text: text.slice(0, draftBodyLimit) }));
+}
 
 /** One committed browser connection to the fixed local room. No manual disconnect toggle: the loop runs for the page's lifetime, matching a normal reload-to-reconnect flow. */
 export function createLiveTransport(client: RoomClient, options: LiveOptions = {}): LiveTransport {
@@ -54,6 +72,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 	let scope: Schema<'RoomSnapshot'>['scope'] | undefined;
 	let streamId = '';
 	let started = false;
+	let draftRestored = false; // Restore a saved draft only once per page load, not on every later resync.
 	const unsettled = new Set<string>(); // Draft texts with a command still retrying; a second Send reuses that identity.
 	const listeners = new Set<() => void>();
 	const notify = (): void => { for (const listener of listeners) listener(); };
@@ -64,6 +83,11 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		scope = snapshot.scope; streamId = snapshot.cursor.stream_id;
 		presentation = annotate(emptyPresentation, snapshot.messages);
 		client.apply({ type: 'snapshot', streamId, cursor: snapshot.cursor.committed_seq, lastSeen: snapshot.cursor.committed_seq, messages: snapshot.messages.map(toMessage), runs: [] });
+		if (!draftRestored) {
+			draftRestored = true;
+			const saved = readDraft(scope, snapshot.cursor.committed_seq);
+			if (saved !== undefined) client.apply({ type: 'draft', streamId, text: saved });
+		}
 	}
 	function applyEvents(value: unknown): number {
 		const events = validate('RoomEventBatch', value);
@@ -97,6 +121,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			if (receiptWire.identity.command_id !== commandId) throw new Error('receipt identity mismatch');
 			client.apply({ type: 'receipt', receipt: receiptWire.receipt });
 			client.apply({ type: 'draft', streamId, text: '' });
+			writeDraft(scope, receiptWire.receipt.event_cursors[0]?.committed_seq ?? '0', '');
 			unsettled.delete(text);
 			set({ decision: undefined });
 		} catch (error) {
@@ -133,5 +158,6 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			if (transition.requests.some((r) => r.type === 'send')) { unsettled.add(text); void attemptSend(commandId, requestDigest, text); }
 		},
 		markSeen: (seq) => { client.apply({ type: 'seen', streamId, seq }); },
+		saveDraft: (draftStreamId, text) => { if (scope && draftStreamId === streamId) writeDraft(scope, client.getState().rooms.find((r) => r.streamId === streamId)?.cursor ?? '0', text); },
 	};
 }

@@ -142,5 +142,7 @@ export function createFixtureTransport(client: RoomClient, fixture: RoomFixture)
 			dispatch({ type: 'retry', commandId: entry.commandId, requestDigest: command.requestDigest, online: state.online, failure: failure === 'rate_limited' ? { tag: failure, retryAfterSeconds: 30 } : { tag: failure } });
 		},
 		markSeen: (seq) => { dispatch({ type: 'seen', streamId: fixture.streamId, seq }); },
+		// The engineering fixture never reloads a real page, so it keeps no browser-side draft.
+		saveDraft: () => undefined,
 	};
 }

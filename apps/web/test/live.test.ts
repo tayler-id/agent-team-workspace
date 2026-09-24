@@ -18,8 +18,14 @@ function event(seq: number, payload: Record<string, unknown>): Record<string, un
 }
 const json = (body: unknown, status = 200): Response => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 
+function fakeStorage(): Storage {
+	const store = new Map<string, string>();
+	return { getItem: (key: string) => store.get(key) ?? null, setItem: (key: string, value: string) => { store.set(key, value); }, removeItem: (key: string) => { store.delete(key); }, clear: () => { store.clear(); }, key: () => null, get length() { return store.size; } };
+}
+
 let boot: [RoomClient, LiveTransport];
 beforeEach(() => {
+	vi.stubGlobal('sessionStorage', fakeStorage());
 	const client = createRoomClient();
 	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0, retryDelayMs: 0 });
 	boot = [client, transport];
@@ -230,4 +236,97 @@ test.each([
 	expect(transport.getState().decision).toContain('stop');
 	expect(transport.getState().decision).toContain(shown);
 	expect(client.getState().drafts.map((d) => d.text)).toEqual(['rejected']);
+});
+
+function stubEmptyRoom(cursor = 0): void {
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(cursor, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+}
+// Simulates a reload: a fresh page loads a fresh client/transport but keeps the same tab's sessionStorage.
+function reopen(): [RoomClient, LiveTransport] {
+	const client = createRoomClient();
+	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0, retryDelayMs: 0 });
+	return [client, transport];
+}
+const draftText = (c: RoomClient): readonly string[] => c.getState().drafts.map((d) => d.text);
+
+test('an unsent draft survives a reload in the same tab', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom();
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'not sent yet' });
+	transport.saveDraft(roomId, 'not sent yet');
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom();
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['not sent yet']);
+});
+
+test('a failed send keeps the draft persisted for the next reload', async () => {
+	const [client, transport] = boot;
+	stubMessages(() => new Response('down', { status: 503 }));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'still trying' });
+	transport.saveDraft(roomId, 'still trying');
+	transport.submit('55555555-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'still trying');
+	await flush(6);
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom();
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['still trying']);
+});
+
+test('a successful send clears the persisted draft so a later reload starts empty', async () => {
+	const [client, transport] = boot;
+	stubMessages(() => receiptFor('66666666-0000-4000-8000-000000000001'));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'about to send' });
+	transport.saveDraft(roomId, 'about to send');
+	transport.submit('66666666-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'about to send');
+	await flush(6);
+	expect(draftText(client)).toEqual([]);
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(1);
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('a deliberate clear (emptying the box) also drops the persisted draft', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom();
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'typed then undone' });
+	transport.saveDraft(roomId, 'typed then undone');
+	client.apply({ type: 'draft', streamId: roomId, text: '' });
+	transport.saveDraft(roomId, '');
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom();
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('a room reset to a lower cursor discards a stale draft instead of exposing old text', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(5);
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'from before the reset' });
+	transport.saveDraft(roomId, 'from before the reset');
+	// A disposable reset drops all data and restarts the same room at a fresh, lower cursor.
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0);
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
 });

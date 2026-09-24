@@ -255,6 +255,13 @@
 			"public": ["@agora/client-core synchronize: an own receipted message advances lastSeen", "@agora/web-framework useDelayedAnnouncement", "live room header unread count, status announcement and Mark room as read", "44x44 CSS px buttons in the phone shell or under a coarse pointer"],
 			"contracts": [], "scenarios": ["packages/client-core/test/sync.test.ts", "apps/web/test/app.test.tsx", "live room browser drive: own send, two arrivals, mark read, keyboard roving, 390x844 and 1440x900"],
 			"fixtures": ["one fixed local room; fake local-room fetch server in apps/web/test/app.test.tsx"], "platforms": ["node24", "browser"]
+		},
+		{
+			"id": "local-room-session-drafts", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-session-drafts",
+			"paths": ["packages/web-framework/src/environment.ts", "apps/web/src/host/live.ts", "apps/web/src/host/fixture.ts", "apps/web/src/components/App.tsx"],
+			"public": ["RoomTransport.saveDraft", "sessionStorage-scoped unsent draft under agora.local-room.draft:PROJECT:ROOM, restored once per page load"],
+			"contracts": [], "scenarios": ["apps/web/test/live.test.ts: reload restores an unsent draft, a failed send keeps it, a successful send clears it, a deliberate clear drops it, a reset to a lower cursor discards a stale one"],
+			"fixtures": ["one fixed local room; fake fetch server and an in-memory sessionStorage double in apps/web/test/live.test.ts"], "platforms": ["node24", "browser"]
 		}
 	]
 }

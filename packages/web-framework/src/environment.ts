@@ -13,6 +13,8 @@ export interface RoomTransport {
 	readonly loadSnapshot: () => void;
 	readonly submit: (commandId: string, requestDigest: string, text: string) => void;
 	readonly markSeen: (seq: string) => void;
+	/** Persist (or, for empty text, clear) the composer's unsent draft for this stream. A no-op Host may ignore it. */
+	readonly saveDraft: (streamId: string, text: string) => void;
 }
 
 export interface EnvironmentPort {
