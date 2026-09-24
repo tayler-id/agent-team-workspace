@@ -406,3 +406,25 @@ test('a snapshot response that arrives after Disconnect is discarded instead of 
 	expect(client.getState().rooms).toHaveLength(0); // The late snapshot must not apply after Disconnect.
 	expect(transport.getState().link).toBe('disconnected');
 });
+
+test('an events response that arrives after Disconnect is discarded instead of mutating committed state', async () => {
+	const client = createRoomClient();
+	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0 });
+	let resolveEvents: ((response: Response) => void) | undefined;
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return new Promise<Response>((resolve) => { resolveEvents = resolve; });
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(4); // Lets the initial snapshot land and the poll loop move on to its first events fetch.
+	expect(resolveEvents).toBeDefined();
+	transport.disconnect(); // Bumps the generation while the events fetch is still outstanding.
+	expect(transport.getState().link).toBe('disconnected');
+	// The underlying fetch is not hooked to the AbortController in this mock, mirroring the real race where a
+	// response already arrived on the wire before the abort actually cancelled it.
+	resolveEvents?.(json([event(1, message(1, 'late arrival'))]));
+	await flush(4);
+	expect(client.getState().rooms.find((r) => r.streamId === roomId)?.cursor).toBe('0'); // The late event must not advance the cursor after Disconnect.
+	expect(transport.getState().link).toBe('disconnected');
+});
