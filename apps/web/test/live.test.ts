@@ -190,7 +190,10 @@ test('local quote retries reuse a persisted action identity, then a later explic
 	await expect(transport.answer([messageId(1)])).rejects.toThrow('Failed to fetch');
 	const pending = stored.get(`agora.local-answer.pending:${projectId}:${roomId}:${messageId(1)}`) ?? null;
 	expect(pending).toBe(posted[0]);
-	await transport.answer([messageId(1)]);
+	const reopened = createLiveTransport(createRoomClient(), { baseUrl: 'http://local-room.invalid', pollDelayMs: 0 });
+	reopened.loadSnapshot();
+	await flush(6);
+	await reopened.answer([messageId(1)]);
 	expect(posted[1]).toBe(posted[0]);
 	expect(stored.get(`agora.local-answer.pending:${projectId}:${roomId}:${messageId(1)}`)).toBeUndefined();
 	await transport.answer([messageId(1)]);
