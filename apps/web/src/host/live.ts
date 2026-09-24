@@ -46,21 +46,54 @@ function classify(error: unknown): { tag: 'timeout' | 'denied' } | { tag: 'rate_
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => { setTimeout(resolve, ms); });
 const draftBodyLimit = 4096;
 const draftKey = (scope: Schema<'RoomSnapshot'>['scope']): string => `agora.local-room.draft:${scope.project_id}:${scope.room_id}`;
+const pendingKey = (scope: Schema<'RoomSnapshot'>['scope']): string => `agora.local-room.pending:${scope.project_id}:${scope.room_id}`;
+// /_runtime/identity names the disposable process behind this origin, freshly random on every `local-room start`,
+// including the restart a `reset` requires; it never survives a reset even when the reused port and empty cursor do.
+// A stale server (or a test double) that lacks the route degrades to undefined, which skips the instance check below
+// rather than failing closed, so it never regresses the cursor-only guard that already covers advancing resets.
+async function fetchInstance(baseUrl: string): Promise<string | undefined> {
+	try {
+		const response = await fetch(`${baseUrl}/_runtime/identity`, { signal: AbortSignal.timeout(5000) });
+		return response.ok ? (await response.text()).trim() : undefined;
+	} catch { return undefined; }
+}
 // sessionStorage bounds the draft's lifetime to this tab's session and keeps it private to that tab, so a reset or a
-// fresh instance (a distinct origin/port) never exposes another session's text. The stored cursor guards the one case
-// same-origin reuse cannot: a room reset to an empty, lower cursor while this tab's session survives.
-function readDraft(scope: Schema<'RoomSnapshot'>['scope'], currentCursor: string): string | undefined {
+// fresh instance (a distinct origin/port) never exposes another session's text. The stored cursor guards an
+// advancing reset; the stored instance guards the one case a cursor cannot: a reset of a room still at cursor 0.
+function readDraft(scope: Schema<'RoomSnapshot'>['scope'], currentCursor: string, instance: string | undefined): string | undefined {
 	const raw = sessionStorage.getItem(draftKey(scope));
 	if (!raw) return undefined;
 	try {
-		const parsed = JSON.parse(raw) as { cursor?: unknown; text?: unknown };
-		if (typeof parsed.cursor !== 'string' || typeof parsed.text !== 'string' || BigInt(parsed.cursor) > BigInt(currentCursor)) { sessionStorage.removeItem(draftKey(scope)); return undefined; }
+		const parsed = JSON.parse(raw) as { cursor?: unknown; text?: unknown; instance?: unknown };
+		const foreignInstance = instance !== undefined && parsed.instance !== instance;
+		if (typeof parsed.cursor !== 'string' || typeof parsed.text !== 'string' || foreignInstance || BigInt(parsed.cursor) > BigInt(currentCursor)) { sessionStorage.removeItem(draftKey(scope)); return undefined; }
 		return parsed.text;
 	} catch { sessionStorage.removeItem(draftKey(scope)); return undefined; }
 }
-function writeDraft(scope: Schema<'RoomSnapshot'>['scope'], cursor: string, text: string): void {
+function writeDraft(scope: Schema<'RoomSnapshot'>['scope'], cursor: string, text: string, instance: string | undefined): void {
 	if (text.trim() === '') { sessionStorage.removeItem(draftKey(scope)); return; }
-	sessionStorage.setItem(draftKey(scope), JSON.stringify({ cursor, text: text.slice(0, draftBodyLimit) }));
+	sessionStorage.setItem(draftKey(scope), JSON.stringify({ cursor, text: text.slice(0, draftBodyLimit), instance }));
+}
+// Mirrors an in-flight send's identity across a reload so a POST that already committed is replayed, not repeated:
+// the next Send on the same still-unsettled text reuses this command_id instead of minting one the server has never
+// seen, and the server's own actor/command_id idempotency then returns the original receipt instead of a duplicate.
+function readPending(scope: Schema<'RoomSnapshot'>['scope'], instance: string | undefined, text: string): { commandId: string; requestDigest: string } | undefined {
+	const raw = sessionStorage.getItem(pendingKey(scope));
+	if (!raw) return undefined;
+	try {
+		const parsed = JSON.parse(raw) as { instance?: unknown; text?: unknown; commandId?: unknown; requestDigest?: unknown };
+		if (parsed.text !== text || typeof parsed.commandId !== 'string' || typeof parsed.requestDigest !== 'string' || instance !== undefined && parsed.instance !== instance) return undefined;
+		return { commandId: parsed.commandId, requestDigest: parsed.requestDigest };
+	} catch { return undefined; }
+}
+function writePending(scope: Schema<'RoomSnapshot'>['scope'], instance: string | undefined, text: string, commandId: string, requestDigest: string): void {
+	sessionStorage.setItem(pendingKey(scope), JSON.stringify({ instance, text, commandId, requestDigest }));
+}
+function clearPendingIfMatches(scope: Schema<'RoomSnapshot'>['scope'], commandId: string): void {
+	const raw = sessionStorage.getItem(pendingKey(scope));
+	if (!raw) return;
+	try { if ((JSON.parse(raw) as { commandId?: unknown }).commandId === commandId) sessionStorage.removeItem(pendingKey(scope)); }
+	catch { sessionStorage.removeItem(pendingKey(scope)); }
 }
 
 /** One committed browser connection to the fixed local room. No manual disconnect toggle: the loop runs for the page's lifetime, matching a normal reload-to-reconnect flow. */
@@ -73,6 +106,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 	let streamId = '';
 	let started = false;
 	let draftRestored = false; // Restore a saved draft only once per page load, not on every later resync.
+	let currentInstance: string | undefined; // This origin's current disposable process identity, if the route answered.
 	const unsettled = new Set<string>(); // Draft texts with a command still retrying; a second Send reuses that identity.
 	const listeners = new Set<() => void>();
 	const notify = (): void => { for (const listener of listeners) listener(); };
@@ -85,7 +119,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		client.apply({ type: 'snapshot', streamId, cursor: snapshot.cursor.committed_seq, lastSeen: snapshot.cursor.committed_seq, messages: snapshot.messages.map(toMessage), runs: [] });
 		if (!draftRestored) {
 			draftRestored = true;
-			const saved = readDraft(scope, snapshot.cursor.committed_seq);
+			const saved = readDraft(scope, snapshot.cursor.committed_seq, currentInstance);
 			if (saved !== undefined) client.apply({ type: 'draft', streamId, text: saved });
 		}
 	}
@@ -100,7 +134,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		for (;;) {
 			try {
 				const room = client.getState().rooms.find((r) => r.streamId === streamId);
-				if (!room || room.mode === 'resync') { applySnapshot(await requestJson(baseUrl, 'snapshot')); set({ phase: 'idle', error: undefined }); continue; }
+				if (!room || room.mode === 'resync') { currentInstance = await fetchInstance(baseUrl); applySnapshot(await requestJson(baseUrl, 'snapshot')); set({ phase: 'idle', error: undefined }); continue; }
 				if (room.mode === 'upgrade') { set({ phase: 'error', error: 'upgrade required: reload to resync' }); return; }
 				const count = applyEvents(await requestJson(baseUrl, `events?after=${room.cursor}`));
 				set({ phase: 'idle', error: undefined });
@@ -124,14 +158,15 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			// new, still-unsent message while this one was in flight, and that later text must survive the receipt.
 			if (client.getState().drafts.find((d) => d.streamId === streamId)?.text === text) {
 				client.apply({ type: 'draft', streamId, text: '' });
-				writeDraft(scope, receiptWire.receipt.event_cursors[0]?.committed_seq ?? '0', '');
+				writeDraft(scope, receiptWire.receipt.event_cursors[0]?.committed_seq ?? '0', '', currentInstance);
 			}
 			unsettled.delete(text);
+			clearPendingIfMatches(scope, commandId);
 			set({ decision: undefined });
 		} catch (error) {
 			const transition = client.apply({ type: 'retry', commandId, requestDigest, online: true, failure: classify(error) });
 			const request = transition.requests[0];
-			if (request?.type === 'stop') unsettled.delete(text);
+			if (request?.type === 'stop') { unsettled.delete(text); clearPendingIfMatches(scope, commandId); }
 			set({ decision: request?.type === 'stop' ? `stop: not sent (${error instanceof Error ? error.message : String(error)}); the draft is kept` : transition.requests.map((r) => r.type).join(', ') || undefined });
 			if (request?.type === 'resend_same_command') { await sleep(retryDelayMs); void attemptSend(commandId, requestDigest, text); }
 			else if (request?.type === 'wait_retry_after') { await sleep(request.retryAfterSeconds * 1000); void attemptSend(commandId, requestDigest, text); }
@@ -157,11 +192,18 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		loadSnapshot: () => { if (started) return; started = true; set({ phase: 'loading' }); void poll(); },
 		submit: (commandId, requestDigest, text) => {
 			if (unsettled.has(text)) return;
+			// A saved pending identity for this exact still-unsent text (from before a reload) is reused rather than
+			// the fresh id the caller minted, so a POST that already committed replays instead of duplicating.
+			if (scope) { const saved = readPending(scope, currentInstance, text); if (saved) { commandId = saved.commandId; requestDigest = saved.requestDigest; } }
 			const transition = client.apply({ type: 'submit', commandId, streamId, requestDigest, online: connection.online });
 			set({ decision: transition.requests.map((r) => r.type).join(', ') || undefined });
-			if (transition.requests.some((r) => r.type === 'send')) { unsettled.add(text); void attemptSend(commandId, requestDigest, text); }
+			if (transition.requests.some((r) => r.type === 'send')) {
+				if (scope) writePending(scope, currentInstance, text, commandId, requestDigest);
+				unsettled.add(text);
+				void attemptSend(commandId, requestDigest, text);
+			}
 		},
 		markSeen: (seq) => { client.apply({ type: 'seen', streamId, seq }); },
-		saveDraft: (draftStreamId, text) => { if (scope && draftStreamId === streamId) writeDraft(scope, client.getState().rooms.find((r) => r.streamId === streamId)?.cursor ?? '0', text); },
+		saveDraft: (draftStreamId, text) => { if (scope && draftStreamId === streamId) writeDraft(scope, client.getState().rooms.find((r) => r.streamId === streamId)?.cursor ?? '0', text, currentInstance); },
 	};
 }

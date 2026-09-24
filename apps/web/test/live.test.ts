@@ -170,6 +170,7 @@ const receiptFor = (commandId: string): Response => json({ schema_version: 'agor
 function stubMessages(respond: (commandId: string, attempt: number) => Response | Promise<Response>): string[] {
 	const posted: string[] = [];
 	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('launch-a'));
 		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
@@ -185,6 +186,7 @@ test('local quote retries reuse a persisted action identity, then a later explic
 	vi.stubGlobal('localStorage', { getItem: (key: string) => stored.get(key) ?? null, setItem: (key: string, value: string) => { stored.set(key, value); }, removeItem: (key: string) => { stored.delete(key); } });
 	const posted: string[] = [];
 	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('launch-a'));
 		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
@@ -238,8 +240,9 @@ test.each([
 	expect(client.getState().drafts.map((d) => d.text)).toEqual(['rejected']);
 });
 
-function stubEmptyRoom(cursor = 0): void {
+function stubEmptyRoom(cursor = 0, instance?: string): void {
 	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (instance !== undefined && url.endsWith('/_runtime/identity')) return Promise.resolve(new Response(instance));
 		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(cursor, [])));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		return Promise.reject(new Error(`unexpected request ${url}`));
@@ -356,5 +359,71 @@ test('a room reset to a lower cursor discards a stale draft instead of exposing 
 	stubEmptyRoom(0);
 	reloadedTransport.loadSnapshot();
 	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('an unsent draft at cursor 0 survives an ordinary reload of the same instance', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(0, 'launch-a');
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'still typing' });
+	transport.saveDraft(roomId, 'still typing');
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a'); // Same reused port, same disposable process: an ordinary reload, not a reset.
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['still typing']);
+});
+
+test('a same-origin reset still at cursor 0 is told apart from an ordinary reload by process identity', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(0, 'launch-a');
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'from before the reset' });
+	transport.saveDraft(roomId, 'from before the reset');
+	// A disposable reset tears the whole process down and restarts it: the reused port keeps the cursor at the same
+	// 0, which a cursor-only check cannot tell from a reload, but `local-room start` mints a fresh process identity.
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-b');
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('a send still unsettled when the tab reloads reuses the same command id instead of duplicating it', async () => {
+	const [client, transport] = boot;
+	const posted: string[] = [];
+	let neverSettles: Promise<Response> | undefined;
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('launch-a'));
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) {
+			const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+			posted.push(command.command_id);
+			// The first attempt's response never arrives before the reload, matching a page that reloads while the
+			// POST is still uncertain: it may already have committed on the server.
+			if (posted.length === 1) { neverSettles = new Promise(() => undefined); return neverSettles; }
+			return Promise.resolve(receiptFor(command.command_id));
+		}
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'uncertain send' });
+	transport.saveDraft(roomId, 'uncertain send');
+	transport.submit('99999999-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'uncertain send');
+	await flush(4);
+	expect(posted).toEqual(['99999999-0000-4000-8000-000000000001']);
+	const [reloadedClient, reloadedTransport] = reopen();
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['uncertain send']);
+	// A fresh id minted for the retry must be discarded in favor of the id already posted before the reload.
+	reloadedTransport.submit('99999999-0000-4000-8000-000000000002', 'sha256:' + 'a'.repeat(64), 'uncertain send');
+	await flush(6);
+	expect(posted).toEqual(['99999999-0000-4000-8000-000000000001', '99999999-0000-4000-8000-000000000001']);
 	expect(draftText(reloadedClient)).toEqual([]);
 });
