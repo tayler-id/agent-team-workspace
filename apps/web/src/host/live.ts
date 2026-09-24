@@ -87,10 +87,17 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		for (;;) {
 			try {
 				const room = client.getState().rooms.find((r) => r.streamId === streamId);
-				if (!room || room.mode === 'resync') { applySnapshot(await requestJson(baseUrl, 'snapshot', abort.signal)); if (myGeneration !== generation) return; set({ phase: 'idle', error: undefined, online: true, link: 'online' }); continue; }
+				if (!room || room.mode === 'resync') {
+					const value = await requestJson(baseUrl, 'snapshot', abort.signal);
+					if (myGeneration !== generation) return; // A late response after Disconnect must not mutate committed state.
+					applySnapshot(value);
+					set({ phase: 'idle', error: undefined, online: true, link: 'online' });
+					continue;
+				}
 				if (room.mode === 'upgrade') { set({ phase: 'error', error: 'upgrade required: reload to resync' }); return; }
-				const count = applyEvents(await requestJson(baseUrl, `events?after=${room.cursor}`, abort.signal));
-				if (myGeneration !== generation) return;
+				const value = await requestJson(baseUrl, `events?after=${room.cursor}`, abort.signal);
+				if (myGeneration !== generation) return; // Same guard: a late events response after Disconnect must not apply.
+				const count = applyEvents(value);
 				set({ phase: 'idle', error: undefined, online: true, link: 'online' });
 				if (count < 50) await sleep(pollDelayMs);
 				if (myGeneration !== generation) return;
@@ -141,7 +148,10 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		resumeWaitingSend(myGeneration);
 	}
 	if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
-		window.addEventListener('online', () => { set({ online: true, link: connection.link === 'disconnected' ? 'disconnected' : 'online' }); resumeWaitingSend(generation); });
+		// The browser's 'online' event reports network reachability, not that this room's own poll or send has
+		// succeeded; a prior fetch failure may still be retrying. Only the poll loop's own next successful read
+		// sets link: 'online' (in poll, above), so this goes to 'retrying' and lets that read confirm it.
+		window.addEventListener('online', () => { set({ online: true, link: connection.link === 'disconnected' ? 'disconnected' : 'retrying' }); resumeWaitingSend(generation); });
 		window.addEventListener('offline', () => { set({ online: false, link: connection.link === 'disconnected' ? 'disconnected' : 'offline' }); });
 	}
 	return {

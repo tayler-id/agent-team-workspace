@@ -330,3 +330,79 @@ test('a browser offline event, not a fabricated heartbeat, distinguishes offline
 	expect(transport.getState().online).toBe(true);
 	expect(attempts).toBeGreaterThan(0);
 });
+
+test('a browser online event does not claim link: online until a poll actually succeeds', async () => {
+	const client = createRoomClient();
+	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0, errorDelayMs: 0 });
+	Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
+	let fail = true;
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return fail ? Promise.reject(new TypeError('Failed to fetch')) : Promise.resolve(json([]));
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(4);
+	expect(transport.getState().link).toBe('retrying'); // Still failing: no fetch has confirmed a live connection yet.
+	window.dispatchEvent(new Event('online'));
+	// The 'online' event is only network reachability, not an observed read; the still-failing poll must not be masked as connected.
+	expect(transport.getState().link).toBe('retrying');
+	expect(transport.getState().link).not.toBe('online');
+	fail = false;
+	await flush(4);
+	expect(transport.getState().link).toBe('online'); // Only the poll loop's own successful read sets 'online'.
+	transport.disconnect();
+});
+
+test('disconnect cancels a queued retry backoff; reconnect resumes the exact same command identity', async () => {
+	const client = createRoomClient();
+	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0, retryDelayMs: 50 });
+	const posted: string[] = [];
+	let attempts = 0;
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) {
+			attempts += 1;
+			const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+			posted.push(command.command_id);
+			return attempts === 1 ? Promise.reject(new TypeError('Failed to fetch')) : Promise.resolve(receiptFor(command.command_id));
+		}
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'queued retry' });
+	transport.submit('77777777-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'queued retry');
+	await flush(3); // Lets the first rejection classify and enter the retryDelayMs backoff, well before its 50 ms timer fires.
+	expect(attempts).toBe(1);
+	transport.disconnect(); // Cancels while the retry sits in its backoff sleep, not mid-fetch: a distinct race from the in-flight-fetch case above.
+	await new Promise((resolve) => { setTimeout(resolve, 90); }); // Let the queued 50 ms backoff elapse; the disconnected generation must stand down instead of resending.
+	expect(attempts).toBe(1);
+	expect(client.getState().commands.find((c) => c.commandId === '77777777-0000-4000-8000-000000000001')?.tag).toBe('pending');
+	transport.reconnect();
+	await flush(6);
+	expect(posted).toEqual(['77777777-0000-4000-8000-000000000001', '77777777-0000-4000-8000-000000000001']); // Same identity resumed, not a new command.
+	expect(client.getState().commands.find((c) => c.commandId === '77777777-0000-4000-8000-000000000001')?.tag).toBe('received');
+	transport.disconnect();
+});
+
+test('a snapshot response that arrives after Disconnect is discarded instead of mutating committed state', async () => {
+	const client = createRoomClient();
+	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0 });
+	let resolveSnapshot: ((response: Response) => void) | undefined;
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return new Promise<Response>((resolve) => { resolveSnapshot = resolve; });
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(2);
+	transport.disconnect(); // Bumps the generation while the snapshot fetch is still outstanding.
+	expect(transport.getState().link).toBe('disconnected');
+	// The underlying fetch is not hooked to the AbortController in this mock, mirroring the real race where a
+	// response already arrived on the wire before the abort actually cancelled it.
+	resolveSnapshot?.(json(snapshot(1, [message(1, 'late arrival')])));
+	await flush(4);
+	expect(client.getState().rooms).toHaveLength(0); // The late snapshot must not apply after Disconnect.
+	expect(transport.getState().link).toBe('disconnected');
+});
