@@ -1,0 +1,55 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-24T00:55:14.265Z
+parent: 6bb15515f222be42d53fda8d4036f09d4bca1a4d
+head: 7228d5cbe799c853b6cb012c1b3827fe5f35d211
+subject_revision: 6bb15515f222be42d53fda8d4036f09d4bca1a4d
+test_patch_applied_to_subject: true
+test_patch_files: apps/center/test/local-answer.pg.test.ts, contracts/fixtures/vectors.json
+test_patch_digest: sha256:08ea623082843b85ea55608d8e28eb65495af494aeeba23ea9761b7f6deb6949
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:2409daabed45fc7fe8a6b1c79de79ca65342910408917458615263d764c3e028"},{"file":"contracts/openapi.json","digest":"sha256:16bbf8c337e4f84e1cd0ad1976fd575b112e4ae6a5b18c92f6c6bb6d36c4475d"},{"file":"contracts/schemas/local-room.schema.json","digest":"sha256:2defcfac3a2c6f88a6c991305bfe56f016acd454026e4370004a0a1bba4713fa"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:317445342743f17ede8bcc0885981eace84d6ac7db2d1420e918f0e0c116d501"}]}
+configuration: {"command":"node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/local-answer.pg.test.ts","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-kN4pba
+
+ ❯ |pg| apps/center/test/local-answer.pg.test.ts (1 test | 1 failed) 2730ms
+   × local quoted response is committed once, source cited, and visible to two replaying browsers and CLI after restart 2730ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  20:54:57
+   Duration  2.83s (tests 99%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"088255a0-1828-4569-99c2-7502c2300f8f","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NzMtGz","socketDir":"/private/tmp/agora-p0c-088255a0-1828-4569-99c2-7502c2300f8f"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"088255a0-1828-4569-99c2-7502c2300f8f","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NzMtGz","socketDir":"/private/tmp/agora-p0c-088255a0-1828-4569-99c2-7502c2300f8f","pid":76403}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"088255a0-1828-4569-99c2-7502c2300f8f","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NzMtGz","socketDir":"/private/tmp/agora-p0c-088255a0-1828-4569-99c2-7502c2300f8f","socket_dir":"/private/tmp/agora-p0c-088255a0-1828-4569-99c2-7502c2300f8f","pid":76403,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| apps/center/test/local-answer.pg.test.ts > local quoted response is committed once, source cited, and visible to two replaying browsers and CLI after restart
+AssertionError: expected [ 404, 404 ] to deeply equal [ 201, 201 ]
+
+- Expected
++ Received
+
+  [
+-   201,
+-   201,
++   404,
++   404,
+  ]
+
+ ❯ apps/center/test/local-answer.pg.test.ts:26:41
+     24|   const command = { schema_version: 'agora.local-answer.command/v1', c…
+     25|   const [first, second] = await Promise.all([post(url, 'answer', comma…
+     26|   expect([first.status, second.status]).toEqual([201, 201]);
+       |                                         ^
+     27|   const receipts = await Promise.all([first.json(), second.json()]) as…
+     28|   expect(receipts.map(r => r.replayed).sort()).toEqual([false, true]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NzMtGz","socketDir":"/private/tmp/agora-p0c-088255a0-1828-4569-99c2-7502c2300f8f"}
