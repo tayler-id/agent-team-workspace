@@ -24,7 +24,7 @@ Renderer | Display the projection without authorizing work or owning another tim
 
 An unsupported state-changing event preserves the projection, pauses without acknowledgment and requests upgrade. Gaps buffer at most 1,000 out-of-order entries before requesting a fresh snapshot; acknowledgments cover only the applied contiguous prefix. Decimal revisions compare beyond JavaScript Number precision.
 
-A command receipt settles a known command without advancing the timeline. Retry preserves the original ID/digest, respects denial and rate limits, and refreshes stale state. Unread counts visible message creation positions after explicit last-seen state, not edits or run-card events. Drafts stay unsent through snapshot changes; logout/revocation inputs clear private state.
+A command receipt settles a known command without advancing the timeline. Retry preserves the original ID/digest, respects denial and rate limits, and refreshes stale state. Unread counts visible message creation positions after explicit last-seen state, not edits or run-card events. Last-seen also rises to the sequence of this client's own receipted event once the cursor has applied it, so your own message is never unread. Drafts stay unsent through snapshot changes; logout/revocation inputs clear private state.
 
 ## Implementation status
 
