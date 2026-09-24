@@ -42,6 +42,11 @@ test('phases, isolation, draft/submit/revoke and phone viewport', async () => {
 	fireEvent.click(screen.getByRole('button', { name: 'Load fixture snapshot' }));
 	expect(status().dataset['phase']).toBe('live');
 	expect(screen.getByRole('list', { name: 'Messages, 8 total' })).toBeTruthy();
+	fireEvent.click(screen.getByRole('button', { name: 'Disconnect' }));
+	expect(status().dataset['link']).toBe('disconnected');
+	expect(screen.getByText(/Disconnected: a send waits for Reconnect/)).toBeTruthy();
+	fireEvent.click(screen.getByRole('button', { name: 'Reconnect' }));
+	expect(status().dataset['link']).toBe('online');
 	const before = screen.getAllByRole('listitem').map((li) => li.dataset['commits']);
 	act(() => { transport.setOnline(false); });
 	expect(status()).toHaveTextContent('Offline.');

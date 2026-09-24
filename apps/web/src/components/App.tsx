@@ -34,6 +34,7 @@ function Composer({ streamId, disabled }: { readonly streamId: string; readonly 
 					{pending > 0 && ` ${pending} pending command${pending === 1 ? '' : 's'} awaiting a receipt.`}
 					{connection.decision && ` Last core decision: ${connection.decision}.`}
 					{!connection.online && ' Offline: a send waits for a connection and is never queued as accepted.'}
+					{connection.link === 'disconnected' && ' Disconnected: a send waits for Reconnect and is never queued as accepted.'}
 				</p>
 			</div>
 		</form>
@@ -74,8 +75,10 @@ export function App({ header, presentation, live = false, onAnswer }: AppProps):
 					<span data-unread={roomStatus.unread}>{roomStatus.unread} unread</span>
 					{room && roomStatus.unread > 0 && <button type="button" onClick={() => { commands.markSeen(room.cursor); }}>Mark room as read</button>}
 				</p>
-				<div role="status" aria-live="polite" className="status" data-phase={roomStatus.phase} data-online={connection.online}>
+				<div role="status" aria-live="polite" className="status" data-phase={roomStatus.phase} data-online={connection.online} data-link={connection.link}>
 					<span className="badge" data-state={roomStatus.phase}>{roomStatus.label}</span> <span>{roomStatus.detail}</span> <span>{connection.online ? 'Online.' : 'Offline.'}</span> {announcement && <span>{announcement}</span>}
+					{room && connection.link === 'disconnected' && <button type="button" onClick={commands.reconnect}>Reconnect</button>}
+					{room && connection.link !== 'disconnected' && <button type="button" onClick={commands.disconnect}>Disconnect</button>}
 				</div>
 				{roomStatus.phase === 'error' && <p role="alert" className="alert">{roomStatus.detail}</p>}
 			</header>

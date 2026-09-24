@@ -41,8 +41,8 @@ test('pure projection covers rows, window, status, composer and safe segments', 
 	const projected = rows(room, { authors: { m1: { name: 'Ada', kind: 'human' } }, times: { m1: 't' }, citations: {} });
 	expect(projected[0]).toMatchObject({ author: { name: 'Ada' }, firstUnread: true });
 	expect(window(projected, 1).total).toBe(1);
-	expect(status(room, { online: true, phase: 'idle', error: undefined }).phase).toBe('live');
-	expect(status(undefined, { online: true, phase: 'error', error: 'boom' }).phase).toBe('error');
+	expect(status(room, { online: true, phase: 'idle', error: undefined, link: 'online' }).phase).toBe('live');
+	expect(status(undefined, { online: true, phase: 'error', error: 'boom', link: 'retrying' }).phase).toBe('error');
 	client.apply({ type: 'draft', streamId: 's1', text: 'note' });
 	expect(composer(client.getState(), 's1', 'send').draft).toBe('note');
 	expect(segments('a\n```\ncode\n```\nb')).toEqual([{ kind: 'text', value: 'a' }, { kind: 'code', value: 'code' }, { kind: 'text', value: 'b' }]);

@@ -8,9 +8,9 @@ export interface Presentation { readonly authors: Readonly<Record<string, Author
 export interface Row { readonly message: FrozenMessage; readonly author: Author; readonly time: string; readonly edited: boolean; readonly unread: boolean; readonly firstUnread: boolean; readonly citations: readonly string[] }
 export interface Window { readonly rows: readonly Row[]; readonly older: number; readonly total: number }
 export type RoomPhase = 'empty' | 'loading' | 'live' | 'gap' | 'resync' | 'upgrade' | 'error' | 'revoked';
-export interface RoomStatus { readonly phase: RoomPhase; readonly online: boolean; readonly label: string; readonly detail: string; readonly unread: number; readonly cursor: string | undefined }
+export interface RoomStatus { readonly phase: RoomPhase; readonly online: boolean; readonly link: Connection['link']; readonly label: string; readonly detail: string; readonly unread: number; readonly cursor: string | undefined }
 export interface ComposerStatus { readonly draft: string; readonly pending: readonly { commandId: string; tag: 'pending' | 'received' }[]; readonly decision: string | undefined }
-export interface Connection { readonly online: boolean; readonly phase: 'idle' | 'loading' | 'error' | 'revoked'; readonly error: string | undefined }
+export interface Connection { readonly online: boolean; readonly phase: 'idle' | 'loading' | 'error' | 'revoked'; readonly error: string | undefined; readonly link: 'connecting' | 'online' | 'retrying' | 'offline' | 'disconnected' }
 export interface RoomHeader { readonly project: string; readonly room: string; readonly lifecycle: string; readonly agentLabel: string; readonly members: number }
 
 const compare = (a: string, b: string): number => BigInt(a) < BigInt(b) ? -1 : BigInt(a) > BigInt(b) ? 1 : 0;
@@ -32,13 +32,21 @@ export function window(all: readonly Row[], limit: number): Window {
 	return { rows: all.slice(start), older: start, total: all.length };
 }
 
+const linkSuffix: Readonly<Record<Connection['link'], string>> = {
+	connecting: ' Connecting…',
+	online: '',
+	retrying: ' Retrying the connection.',
+	offline: ' Offline: sends wait for a connection.',
+	disconnected: ' Disconnected: press Reconnect to resume.',
+};
+
 export function status(room: Room | undefined, connection: Connection): RoomStatus {
-	const base = { online: connection.online, unread: room?.unread ?? 0, cursor: room?.cursor };
+	const base = { online: connection.online, link: connection.link, unread: room?.unread ?? 0, cursor: room?.cursor };
 	if (connection.phase === 'revoked') return { ...base, phase: 'revoked', label: 'Access revoked', detail: 'Private state cleared. Sign in again to load a fresh snapshot.' };
 	if (connection.phase === 'error') return { ...base, phase: 'error', label: 'Connection error', detail: connection.error ?? 'Unknown connection error' };
 	if (connection.phase === 'loading') return { ...base, phase: 'loading', label: 'Loading snapshot', detail: 'Waiting for the room snapshot.' };
 	if (!room) return { ...base, phase: 'empty', label: 'No room loaded', detail: 'Load the room snapshot to start.' };
-	const suffix = connection.online ? '' : ' Offline: sends wait for a connection.';
+	const suffix = linkSuffix[connection.link];
 	switch (room.mode) {
 		case 'live': return { ...base, phase: 'live', label: 'Live', detail: `Cursor ${room.cursor} applied.${suffix}` };
 		case 'gap': return { ...base, phase: 'gap', label: 'Replaying gap', detail: `${room.pending.length} buffered after cursor ${room.cursor}; replay requested.${suffix}` };

@@ -98,7 +98,7 @@ export function largeSnapshot(streamId: string, count: number): Snapshot {
 }
 
 export function createFixtureTransport(client: RoomClient, fixture: RoomFixture): FixtureTransport {
-	let state: TransportConnection = { online: true, phase: 'idle', error: undefined, decision: undefined };
+	let state: TransportConnection = { online: true, phase: 'idle', error: undefined, decision: undefined, link: 'online' };
 	let nextEvent = 0, last: CoreEvent | undefined, skipped: CoreEvent | undefined, outbox: readonly { commandId: string; text: string }[] = [];
 	const listeners = new Set<() => void>();
 	const set = (patch: Partial<TransportConnection>): void => { state = { ...state, ...patch }; for (const l of listeners) l(); };
@@ -125,8 +125,11 @@ export function createFixtureTransport(client: RoomClient, fixture: RoomFixture)
 		fillGap: () => { if (skipped) { deliver(skipped); skipped = undefined; } },
 		unsupported: () => { dispatch({ type: 'unsupported', streamId: fixture.streamId }); },
 		resync: () => { dispatch({ type: 'resync', streamId: fixture.streamId }); },
-		setOnline: (online) => { set({ online }); },
+		setOnline: (online) => { set({ online, link: state.link === 'disconnected' ? 'disconnected' : online ? 'online' : 'offline' }); },
 		revoke: () => { dispatch({ type: 'clear', reason: 'revoked' }); set({ phase: 'revoked' }); outbox = []; },
+		// Dev-only: the fixture has no real socket to cancel, so disconnect/reconnect only flip the label FixtureControls exercises.
+		disconnect: () => { set({ link: 'disconnected' }); },
+		reconnect: () => { set({ link: state.online ? 'online' : 'offline' }); },
 		submit: (commandId, requestDigest, text) => { const t = client.apply({ type: 'submit', commandId, streamId: fixture.streamId, requestDigest, online: state.online }); set({ decision: describe(t.requests) }); if (t.requests.some((r) => r.type === 'send')) outbox = [...outbox, { commandId, text }]; },
 		deliverReceipt: () => {
 			const entry = outbox[0], current = room();

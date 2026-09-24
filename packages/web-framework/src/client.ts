@@ -91,6 +91,8 @@ export function useRoomCommands(): {
 	readonly loadSnapshot: () => void;
 	readonly markSeen: (seq: string) => void;
 	readonly submit: (text: string) => Promise<void>;
+	readonly disconnect: () => void;
+	readonly reconnect: () => void;
 } {
 	const environment = useEnvironment();
 	const alive = useRef(true);
@@ -101,6 +103,8 @@ export function useRoomCommands(): {
 	return {
 		loadSnapshot: environment.transport.loadSnapshot,
 		markSeen: environment.transport.markSeen,
+		disconnect: environment.transport.disconnect,
+		reconnect: environment.transport.reconnect,
 		submit: async (text: string): Promise<void> => {
 			const requestDigest = await environment.digestText(text);
 			if (!alive.current) return;

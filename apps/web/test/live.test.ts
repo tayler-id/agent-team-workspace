@@ -24,7 +24,7 @@ beforeEach(() => {
 	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0, retryDelayMs: 0 });
 	boot = [client, transport];
 });
-afterEach(() => { vi.unstubAllGlobals(); });
+afterEach(() => { boot[1].disconnect(); vi.unstubAllGlobals(); }); // Stops each test's poll loop so it cannot leak stray fetches into the next test.
 const room = (): ReturnType<RoomClient['getState']>['rooms'][number] | undefined => boot[0].getState().rooms.find((r) => r.streamId === roomId);
 // pollDelayMs/retryDelayMs are 0 in tests, but the loop still yields through real setTimeout(0) macrotasks between fetches.
 const flush = async (times = 6): Promise<void> => { for (let i = 0; i < times; i++) await new Promise((resolve) => { setTimeout(resolve, 0); }); };
@@ -198,6 +198,7 @@ test('local quote retries reuse a persisted action identity, then a later explic
 	expect(stored.get(`agora.local-answer.pending:${projectId}:${roomId}:${messageId(1)}`)).toBeUndefined();
 	await transport.answer([messageId(1)]);
 	expect(posted[2]).not.toBe(posted[1]);
+	reopened.disconnect(); // Its own poll loop would otherwise keep hitting whatever fetch mock later tests install.
 });
 
 test('pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message', async () => {
@@ -230,4 +231,102 @@ test.each([
 	expect(transport.getState().decision).toContain('stop');
 	expect(transport.getState().decision).toContain(shown);
 	expect(client.getState().drafts.map((d) => d.text)).toEqual(['rejected']);
+});
+
+function hangingFetch(onMessagesSignal: (signal: AbortSignal | undefined) => void): { fetchMock: (url: string, init?: { readonly signal?: AbortSignal }) => Promise<Response>; resolveEvents: (events: readonly Record<string, unknown>[]) => void } {
+	let resolveEvents: ((body: readonly Record<string, unknown>[]) => void) | undefined;
+	const fetchMock = vi.fn((url: string, init?: { readonly signal?: AbortSignal }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) {
+			return new Promise<Response>((resolve, reject) => {
+				resolveEvents = (body) => { resolve(json(body)); };
+				init?.signal?.addEventListener('abort', () => { reject(Object.assign(new Error('aborted'), { name: 'AbortError' })); });
+			});
+		}
+		if (url.endsWith('/api/v1/local-room/messages')) {
+			onMessagesSignal(init?.signal);
+			return new Promise<Response>((_resolve, reject) => { init?.signal?.addEventListener('abort', () => { reject(Object.assign(new Error('aborted'), { name: 'AbortError' })); }); });
+		}
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	});
+	return { fetchMock, resolveEvents: (events) => resolveEvents?.(events) };
+}
+
+test('disconnect cancels the in-flight poll; reconnect resumes from the applied cursor without duplicates', async () => {
+	const [client, transport] = boot;
+	let eventsSignal: AbortSignal | undefined;
+	const { fetchMock } = hangingFetch(() => undefined);
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly signal?: AbortSignal }) => {
+		if (url.includes('/api/v1/local-room/events?after=')) eventsSignal = init?.signal;
+		return fetchMock(url, init);
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	expect(eventsSignal?.aborted).toBe(false);
+	transport.disconnect();
+	expect(transport.getState().link).toBe('disconnected');
+	expect(eventsSignal?.aborted).toBe(true);
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([event(1, message(1, 'after reconnect'))]));
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.reconnect();
+	expect(transport.getState().link).not.toBe('disconnected');
+	await flush(6);
+	expect(room()?.messages.map((m) => m.content)).toEqual([{ tag: 'visible', body: 'after reconnect' }]);
+	// A duplicate delivery of the already-applied event must not insert a second row.
+	client.apply({ type: 'event', streamId: roomId, seq: '1', change: { type: 'message', message: { id: messageId(1), createdSeq: '1', revision: '1', content: { tag: 'visible', body: 'after reconnect' } } } });
+	expect(room()?.messages).toHaveLength(1);
+});
+
+test('disconnect cancels an in-flight command retry without settling it; reconnect resumes and settles the same command', async () => {
+	const [client, transport] = boot;
+	let messagesSignal: AbortSignal | undefined;
+	const { fetchMock, resolveEvents } = hangingFetch((signal) => { messagesSignal = signal; });
+	vi.stubGlobal('fetch', fetchMock);
+	transport.loadSnapshot();
+	await flush(6);
+	resolveEvents([]);
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'held by disconnect' });
+	transport.submit('66666666-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'held by disconnect');
+	await flush(4);
+	expect(messagesSignal?.aborted).toBe(false);
+	transport.disconnect();
+	await flush(4);
+	expect(messagesSignal?.aborted).toBe(true);
+	expect(client.getState().commands.find((c) => c.commandId === '66666666-0000-4000-8000-000000000001')?.tag).toBe('pending');
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) { const command = JSON.parse(init?.body ?? '{}') as { command_id: string }; return Promise.resolve(receiptFor(command.command_id)); }
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.reconnect();
+	await flush(6);
+	expect(client.getState().commands.find((c) => c.commandId === '66666666-0000-4000-8000-000000000001')?.tag).toBe('received');
+	expect(client.getState().drafts).toEqual([]);
+});
+
+test('a browser offline event, not a fabricated heartbeat, distinguishes offline from a live retry backoff', async () => {
+	const [, transport] = boot;
+	Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
+	let attempts = 0;
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) { attempts += 1; return Promise.reject(new TypeError('Failed to fetch')); }
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(4);
+	expect(transport.getState().link).toBe('retrying');
+	Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
+	window.dispatchEvent(new Event('offline'));
+	expect(transport.getState().link).toBe('offline');
+	expect(transport.getState().online).toBe(false);
+	await flush(4);
+	expect(transport.getState().link).toBe('offline'); // The next poll failure reclassifies from navigator.onLine, not a synthetic ping.
+	Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
+	window.dispatchEvent(new Event('online'));
+	expect(transport.getState().online).toBe(true);
+	expect(attempts).toBeGreaterThan(0);
 });
