@@ -1,5 +1,5 @@
 {
-  "head": "3c9b2370c0ce81a075c37f53a6388ad058454035",
+  "head": "996a339955aa4f3c06c3cfd014ec407de629f390",
   "mutation": "bytes.length === artifact.byte_length && hash(bytes) === artifact.digest",
   "normal_and_disabled": [
     {

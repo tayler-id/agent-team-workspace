@@ -2,32 +2,32 @@
   "schema_version": "agora.cli-report/v1",
   "command": "lanes",
   "versions": {
-    "code": "3c9b2370c0ce81a075c37f53a6388ad058454035",
-    "config": "sha256:50e32401352d8b5619c92fbbe17670e0b014cb3d92ca1e293b376e6a89e1f7e0",
+    "code": "996a339955aa4f3c06c3cfd014ec407de629f390",
+    "config": "sha256:dbd8742c8c852eed6451bac3ce4a7175513ba2bfc9ae87145d3d5ec08d0af37e",
     "fixture": "sha256:d0b408ef3c4b0465aadb14938a051d8eab46fb8d82e0a2413db1f21f8af504bc"
   },
   "outcome": "pass",
   "diagnostics": [],
   "artifacts": [
     {
-      "path": ".scratch/project-lanes/925d021a-d842-49ca-b1f0-83c1116ad416/lanes.json",
-      "digest": "sha256:c0ff06b68548186bb0507dfd3455376c34380d8eea079817e168e432fafe1003",
-      "byte_length": 3422,
+      "path": "evidence/U01b/agora-s1-validate-project-evidence/lanes/lanes.json",
+      "digest": "sha256:88aebf08ca43971a8b514b9c6c72ab0629edfbf3550162e38378e249e72f897e",
+      "byte_length": 3424,
       "media_type": "application/json"
     },
     {
-      "path": ".scratch/project-lanes/925d021a-d842-49ca-b1f0-83c1116ad416/command.json",
-      "digest": "sha256:b715935ae680933e6972a4e2a502fb70a1683710833e533ca6d49ff21e148742",
-      "byte_length": 430,
+      "path": "evidence/U01b/agora-s1-validate-project-evidence/lanes/command.json",
+      "digest": "sha256:6de9737f456f68f2f70ea61b2fba2bc5a40aacd3096e881dec8e58d9e81d78c0",
+      "byte_length": 425,
       "media_type": "application/json"
     },
     {
-      "path": ".scratch/project-lanes/925d021a-d842-49ca-b1f0-83c1116ad416/guards.json",
-      "digest": "sha256:7c6261079274a73b9fd280f3f27e428feff1788382ffcd0c97a3aab33f1f94ef",
+      "path": "evidence/U01b/agora-s1-validate-project-evidence/lanes/guards.json",
+      "digest": "sha256:1d8ef3ea49530eae290f760562d20ebc4ff87a6a5f9445ce6daf58d1c683c296",
       "byte_length": 1042,
       "media_type": "application/json"
     }
   ],
-  "started_at": "2026-09-24T00:57:53.669Z",
-  "finished_at": "2026-09-24T00:58:18.616Z"
+  "started_at": "2026-09-24T01:05:53.515Z",
+  "finished_at": "2026-09-24T01:06:17.145Z"
 }
