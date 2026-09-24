@@ -33,6 +33,8 @@ test('local quoted response is committed once, source cited, and visible to two 
 		expect(answer?.body).toContain('Deterministic local fixture (not AI inference)');
 		expect(answer?.body).toContain(message.body); // Injection-shaped text stays inert text, never a command.
 		expect(answer?.citations).toEqual([{ record_kind: 'message', record_id: message.message_id, room_seq: message.room_seq }]);
+		const cited = after.messages.find((record) => record.message_id === answer?.citations[0]?.record_id);
+		expect(cited && { message_id: cited.message_id, room_seq: cited.room_seq, body: cited.body }).toEqual({ message_id: message.message_id, room_seq: message.room_seq, body: message.body });
 		const { RoomClient } = await import('../../../scripts/local-room-client.ts');
 		const tabs = [new RoomClient(url), new RoomClient(url)];
 		for (const tab of tabs) { tab.snapshot(initial); await tab.resume(); expect(tab.state.rooms[0]?.messages).toHaveLength(2); }

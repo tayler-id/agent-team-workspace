@@ -173,6 +173,30 @@ function stubMessages(respond: (commandId: string, attempt: number) => Response 
 	return posted;
 }
 
+test('local quote retries reuse a persisted action identity, then a later explicit quote gets a fresh identity', async () => {
+	const [, transport] = boot;
+	const stored = new Map<string, string>();
+	vi.stubGlobal('localStorage', { getItem: (key: string) => stored.get(key) ?? null, setItem: (key: string, value: string) => { stored.set(key, value); }, removeItem: (key: string) => { stored.delete(key); } });
+	const posted: string[] = [];
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+		posted.push(command.command_id);
+		return posted.length === 1 ? Promise.reject(new TypeError('Failed to fetch')) : Promise.resolve(receiptFor(command.command_id));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	await expect(transport.answer([messageId(1)])).rejects.toThrow('Failed to fetch');
+	const pending = stored.get(`agora.local-answer.pending:${projectId}:${roomId}:${messageId(1)}`) ?? null;
+	expect(pending).toBe(posted[0]);
+	await transport.answer([messageId(1)]);
+	expect(posted[1]).toBe(posted[0]);
+	expect(stored.get(`agora.local-answer.pending:${projectId}:${roomId}:${messageId(1)}`)).toBeUndefined();
+	await transport.answer([messageId(1)]);
+	expect(posted[2]).not.toBe(posted[1]);
+});
+
 test('pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message', async () => {
 	const [client, transport] = boot;
 	const posted = stubMessages((commandId, attempt) => attempt <= 3 ? Promise.reject(new TypeError('Failed to fetch')) : receiptFor(commandId));

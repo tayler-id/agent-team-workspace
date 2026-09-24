@@ -110,7 +110,7 @@
       "id": "local-room",
       "title": "Local room",
       "status": "In progress",
-      "why": "Owned local runtime, persistent messages and cursor replay, landed on main with L1, L2 and CI P0a-P0c, plus an independently testable L5 deterministic local-answer core and a first selected-message posting slice: browser or CLI triggers a committed, cited local-agent quote, not model inference. L4's first slice has landed: the apps/web room shell runs over a live Host transport, two tabs converge on committed history, a repeated Send keeps one identity and permanent rejections stop. Remaining L4: real connection state with manual disconnect and read cancellation, per-command delivery states, session drafts, browser receipt-failure proof, measurements and a VoiceOver pass.",
+      "why": "Owned local runtime, persistent messages and cursor replay, landed on main with L1, L2 and CI P0a-P0c, plus an independently testable L5 deterministic local-answer core and selected-message posting: browser or CLI triggers a committed, cited local-agent quote, not model inference. Browser retries persist an action command ID through lost response and clear it after receipt; cross-tab action races and full L5 qualification remain open. L4's first slice has landed: the apps/web room shell runs over a live Host transport, two tabs converge on committed history, a repeated Send keeps one identity and permanent rejections stop. Remaining L4: real connection state with manual disconnect and read cancellation, per-command delivery states, session drafts, browser receipt-failure proof, measurements and a VoiceOver pass.",
       "page": "local-room.md",
       "proof": [
         "repo:contracts/schemas/local-room.schema.json",
