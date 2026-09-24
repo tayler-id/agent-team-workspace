@@ -1,0 +1,40 @@
+✔ the same public build driver produces a valid baseline before corpus assertions (0.291625ms)
+✔ the complete corpus has 33 pages and both audience tracks (0.33875ms)
+✔ the atlas explains all nine system nodes and eight connections (0.293417ms)
+✔ the committed design packet is readable as linked documentation, not a source-code dump (0.170208ms)
+✔ current commands and planned product availability have separate references (0.228334ms)
+✔ disabling only the private path guard makes its behavioral assertion fail (116.977125ms)
+✔ disabling only the : section guard makes its behavioral assertion fail (102.343083ms)
+✔ disabling only the : visual guard makes its behavioral assertion fail (102.833083ms)
+✔ disabling only the : link guard makes its behavioral assertion fail (100.543916ms)
+✔ disabling only the : source guard makes its behavioral assertion fail (97.913458ms)
+✔ disabling only the snapshot revision guard makes its behavioral assertion fail (100.698334ms)
+✔ disabling only the invalid status guard makes its behavioral assertion fail (93.854667ms)
+✔ disabling only the Built proof guard makes its behavioral assertion fail (98.523708ms)
+✔ disabling only the milestone coverage guard makes its behavioral assertion fail (98.99075ms)
+✔ disabling only the milestone outcome drift guard makes its behavioral assertion fail (102.678583ms)
+✔ disabling only the : outcome guard makes its behavioral assertion fail (103.274167ms)
+✔ disabling only the : stage guard makes its behavioral assertion fail (99.502375ms)
+✔ disabling only the inventory missing guard makes its behavioral assertion fail (97.178958ms)
+✔ disabling only the feature documentation guard makes its behavioral assertion fail (93.146625ms)
+✔ public documentation guard accepts the complete valid fixture (3.619959ms)
+✔ broken internal page and anchor links fail (1.412334ms)
+✔ feature explanations and visual flows are mandatory (0.266833ms)
+✔ progress statuses are closed and Built requires source test and evidence (0.393583ms)
+✔ all milestones must occur exactly once with an outcome and release stage (0.393083ms)
+✔ milestone outcomes mirror the authoritative plan instead of drifting (0.099959ms)
+✔ every executable and package must have a documentation home (0.082625ms)
+✔ every feature-map entry requires a validated feature page (0.091708ms)
+✔ private absolute paths and unsafe links never enter the site (0.202042ms)
+✔ production links include generated navigation, fragment, stylesheet and nested source views (0.770416ms)
+✔ renderer escapes HTML and flows, works without a browser script and gives native navigation semantics (2.451709ms)
+✔ Mermaid mirror carries the same status and relationships as the data owner (0.27925ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1469.400042
+docs:test exit=0
