@@ -1,0 +1,133 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-24T02:55:21.827Z
+parent: 217cf541d3c0e73c9a70524542a66293e0b7e82f
+head: 5207ba10f8feb32faed9f52f826ea8765e6f7f5f
+subject_revision: 217cf541d3c0e73c9a70524542a66293e0b7e82f
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/live.test.ts, packages/web-framework/test/client.test.ts
+test_patch_digest: sha256:39a7cf3fcd0069493ae97f4bd9eee627ded1a4734049130bb33c63cf3370f609
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm --filter @agora/web --filter @agora/web-framework exec vitest run","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-WrIkAZ/packages/web-framework
+
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  22:54:46
+   Duration  1.61s (tests 84%, import 11%, transform 4%)
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-WrIkAZ/apps/web
+
+ ❯ |web| test/live.test.ts (14 tests | 14 failed) 1351ms
+   × loadSnapshot applies the wire snapshot, then polls events into the committed projection 12ms
+   × a second tab that reconnects after restart converges on the same persisted order without duplicates 10ms
+   × submit posts the command, applies the receipt and clears the draft without an optimistic insert 17ms
+   × a successful send settles even though the server digest never equals the Host digestText hash 15ms
+   × a 503 retries the frozen command and settles once the server accepts it 23ms
+   × a rejected send retries the frozen command and settles once the server accepts it 1113ms
+   × local quote retries reuse a persisted action identity, then a later explicit quote gets a fresh identity 14ms
+   × pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message 21ms
+   × a 400 malformed_command stops retrying, keeps the draft and shows the failure 31ms
+   × a schema-invalid receipt stops retrying, keeps the draft and shows the failure 32ms
+   × a receipt for another command stops retrying, keeps the draft and shows the failure 31ms
+   × disconnect cancels the in-flight poll; reconnect resumes from the applied cursor without duplicates 8ms
+   × disconnect cancels an in-flight command retry without settling it; reconnect resumes and settles the same command 19ms
+   × a browser offline event, not a fabricated heartbeat, distinguishes offline from a live retry backoff 6ms
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  14 failed | 23 passed (37)
+   Start at  22:54:48
+   Duration  11.92s (tests 76%, environment 16%, import 6%, transform 2%)
+
+undefined
+/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-WrIkAZ/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/live.test.ts > loadSnapshot applies the wire snapshot, then polls events into the committed projection
+ FAIL  |web| test/live.test.ts > a second tab that reconnects after restart converges on the same persisted order without duplicates
+ FAIL  |web| test/live.test.ts > submit posts the command, applies the receipt and clears the draft without an optimistic insert
+ FAIL  |web| test/live.test.ts > a successful send settles even though the server digest never equals the Host digestText hash
+ FAIL  |web| test/live.test.ts > a 503 retries the frozen command and settles once the server accepts it
+ FAIL  |web| test/live.test.ts > a rejected send retries the frozen command and settles once the server accepts it
+ FAIL  |web| test/live.test.ts > local quote retries reuse a persisted action identity, then a later explicit quote gets a fresh identity
+ FAIL  |web| test/live.test.ts > pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message
+ FAIL  |web| test/live.test.ts > a 400 malformed_command stops retrying, keeps the draft and shows the failure
+ FAIL  |web| test/live.test.ts > a schema-invalid receipt stops retrying, keeps the draft and shows the failure
+ FAIL  |web| test/live.test.ts > a receipt for another command stops retrying, keeps the draft and shows the failure
+ FAIL  |web| test/live.test.ts > disconnect cancels the in-flight poll; reconnect resumes from the applied cursor without duplicates
+ FAIL  |web| test/live.test.ts > disconnect cancels an in-flight command retry without settling it; reconnect resumes and settles the same command
+ FAIL  |web| test/live.test.ts > a browser offline event, not a fabricated heartbeat, distinguishes offline from a live retry backoff
+TypeError: boot[1].disconnect is not a function
+ ❯ test/live.test.ts:27:27
+     25|  boot = [client, transport];
+     26| });
+     27| afterEach(() => { boot[1].disconnect(); vi.unstubAllGlobals(); }); // …
+       |                           ^
+     28| const room = (): ReturnType<RoomClient['getState']>['rooms'][number] |…
+     29| // pollDelayMs/retryDelayMs are 0 in tests, but the loop still yields …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯
+
+ FAIL  |web| test/live.test.ts > local quote retries reuse a persisted action identity, then a later explicit quote gets a fresh identity
+TypeError: reopened.disconnect is not a function
+ ❯ test/live.test.ts:201:11
+    199|  await transport.answer([messageId(1)]);
+    200|  expect(posted[2]).not.toBe(posted[1]);
+    201|  reopened.disconnect(); // Its own poll loop would otherwise keep hitt…
+       |           ^
+    202| });
+    203|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯
+
+ FAIL  |web| test/live.test.ts > disconnect cancels the in-flight poll; reconnect resumes from the applied cursor without duplicates
+TypeError: transport.disconnect is not a function
+ ❯ test/live.test.ts:266:12
+    264|  await flush(6);
+    265|  expect(eventsSignal?.aborted).toBe(false);
+    266|  transport.disconnect();
+       |            ^
+    267|  expect(transport.getState().link).toBe('disconnected');
+    268|  expect(eventsSignal?.aborted).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯
+
+ FAIL  |web| test/live.test.ts > disconnect cancels an in-flight command retry without settling it; reconnect resumes and settles the same command
+TypeError: transport.disconnect is not a function
+ ❯ test/live.test.ts:295:12
+    293|  await flush(4);
+    294|  expect(messagesSignal?.aborted).toBe(false);
+    295|  transport.disconnect();
+       |            ^
+    296|  await flush(4);
+    297|  expect(messagesSignal?.aborted).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/18]⎯
+
+ FAIL  |web| test/live.test.ts > a browser offline event, not a fabricated heartbeat, distinguishes offline from a live retry backoff
+AssertionError: expected undefined to be 'retrying' // Object.is equality
+
+- Expected:
+"retrying"
+
++ Received:
+undefined
+
+ ❯ test/live.test.ts:321:36
+    319|  transport.loadSnapshot();
+    320|  await flush(4);
+    321|  expect(transport.getState().link).toBe('retrying');
+       |                                    ^
+    322|  Object.defineProperty(navigator, 'onLine', { value: false, configurab…
+    323|  window.dispatchEvent(new Event('offline'));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/18]⎯
+
