@@ -12,7 +12,7 @@ const header = { project: 'Local project', room: 'Local room', lifecycle: 'activ
 
 function Root({ transport }: { readonly transport: LiveTransport }): ReactElement {
 	const presentation = useSyncExternalStore(transport.subscribe, transport.getPresentation, transport.getPresentation);
-	return <App live header={header} presentation={presentation} />;
+	return <App live header={header} presentation={presentation} onAnswer={(ids) => transport.answer(ids)} />;
 }
 
 const container = getMountRoot('root');

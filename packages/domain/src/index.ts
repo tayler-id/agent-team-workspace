@@ -1,3 +1,4 @@
+export { compileAnswerContext, proposeLocalAnswer } from './local-answer/proposal.ts';
 export { canonicalJson, digestCanonical, type Digest } from '@agora/contracts/canonical';
 export { asScopeId, decideFixtureScopeAccess, FIXTURE_POLICY, FIXTURE_POLICY_DIGEST, type FixtureDecision, type ScopeId } from './policy/fixture-scope.ts';
 export { messageCreated, type RoomMessageCreated } from './local-room/events.ts';

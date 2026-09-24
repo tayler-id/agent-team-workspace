@@ -47,6 +47,14 @@
 			"owner": "local-room L5 pure core only"
 		},
 		{
+			"id": "local-room-agent-response", "documentation": "docs/site/local-room.md", "owner": "local-room L5 first posted slice",
+			"paths": ["contracts/schemas/local-room.schema.json", "contracts/openapi.json", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift", "apps/center/src/app.ts", "packages/storage/src/local-room.ts", "packages/domain/src/index.ts", "packages/domain/src/local-room/port.ts", "apps/web/src/host/live.ts", "apps/web/src/components/App.tsx", "apps/web/src/components/Timeline.tsx", "apps/web/src/main-live.tsx", "scripts/local-room.ts", "apps/center/test/local-answer.pg.test.ts"],
+			"public": ["POST /api/v1/local-room/answer", "node scripts/local-room.ts answer --selected-id UUID", "Quote locally in the live room"],
+			"contracts": ["contracts/schemas/local-room.schema.json"],
+			"scenarios": ["apps/center/test/local-answer.pg.test.ts", "two-tab live room quote and reload"],
+			"fixtures": ["one fixed local room; selected persisted message IDs only; no model provider"], "platforms": ["node24", "postgresql18"]
+		},
+		{
 			"id": "project-controls",
 			"documentation": "docs/site/project-controls.md",
 			"last_verified_subject": {"receipt": ".scratch/project/{fixture}/{instance}/evidence.json", "fields": ["versions.code", "versions.config", "versions.fixture"], "requires_live_pass": true},

@@ -1,9 +1,9 @@
 import { composer as composerStatus, rows as projectRows, status as projectStatus, useClientSelector, useDeferredFocus, useDelayedAnnouncement, useEnvironment, useMediaQuery, useRoomCommands, useSetDraft, useStaleSafeBusy, useTransportState, type Presentation, type RoomHeader } from '@agora/web-framework';
-import { useMemo, type ReactElement, type SyntheticEvent } from 'react';
+import { useMemo, useState, type ReactElement, type SyntheticEvent } from 'react';
 import { useHashDeepLink } from '../framework/index.ts';
 import { Timeline } from './Timeline.tsx';
 
-export interface AppProps { readonly header: RoomHeader; readonly presentation: Presentation; readonly live?: boolean }
+export interface AppProps { readonly header: RoomHeader; readonly presentation: Presentation; readonly live?: boolean; readonly onAnswer?: (ids: readonly string[]) => Promise<void> }
 const phoneQuery = '(max-width: 700px)';
 const announceDelay = 2000;
 
@@ -40,7 +40,14 @@ function Composer({ streamId, disabled }: { readonly streamId: string; readonly 
 	);
 }
 
-export function App({ header, presentation, live = false }: AppProps): ReactElement {
+export function App({ header, presentation, live = false, onAnswer }: AppProps): ReactElement {
+	const [answerState, setAnswerState] = useState('');
+	const [answerBusy, setAnswerBusy] = useState(false);
+	const answer = onAnswer && ((id: string): void => {
+		if (answerBusy) return;
+		setAnswerBusy(true); setAnswerState('Posting local quoted response…');
+		void onAnswer([id]).then(() => { setAnswerState('Local response committed; waiting for room event.'); }).catch((error: unknown) => { setAnswerState(`Local response not posted: ${String(error)}`); }).finally(() => { setAnswerBusy(false); });
+	});
 	const { transport } = useEnvironment();
 	const streamId = transport.streamId;
 	const room = useClientSelector((state) => state.rooms.find((r) => r.streamId === streamId));
@@ -77,7 +84,8 @@ export function App({ header, presentation, live = false }: AppProps): ReactElem
 				{roomStatus.phase === 'loading' && <p className="empty" aria-busy="true">Loading snapshot…</p>}
 				{roomStatus.phase === 'revoked' && <section className="empty" aria-labelledby="revoked-heading"><h2 id="revoked-heading">Access revoked</h2><p>Drafts, commands and the room were cleared.</p><button type="button" onClick={commands.loadSnapshot}>Load {live ? 'room' : 'fixture'} snapshot again</button></section>}
 				{(roomStatus.phase === 'resync' || roomStatus.phase === 'upgrade') && <p className="banner">{roomStatus.label}: {roomStatus.detail} <button type="button" onClick={commands.loadSnapshot}>Load fresh snapshot</button></p>}
-				{room && <Timeline streamId={streamId} rows={projected} presentation={presentation} onCite={requestFocus} focusRequest={focusRequest} />}
+				{room && <Timeline streamId={streamId} rows={projected} presentation={presentation} onCite={requestFocus} focusRequest={focusRequest} onAnswer={answer} answerBusy={answerBusy} />}
+				{onAnswer && <p role="status" aria-live="polite">{answerState}</p>}
 				<Composer streamId={streamId} disabled={composerDisabled} />
 			</main>
 		</div>

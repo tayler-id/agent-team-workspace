@@ -1957,6 +1957,72 @@ extension Components {
                 ])
             }
         }
+        /// Select up to ten persisted messages for a deterministic quoted local response. The service derives authorship; no instructions or provider input is accepted.
+        ///
+        /// - Remark: Generated from `#/components/schemas/LocalAnswerCommand`.
+        public struct LocalAnswerCommand: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/LocalAnswerCommand/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_local_hyphen_answer_period_command_sol_v1 = "agora.local-answer.command/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/LocalAnswerCommand/schema_version`.
+            public var schema_version: Components.Schemas.LocalAnswerCommand.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/LocalAnswerCommand/command_id`.
+            public var command_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/LocalAnswerCommand/scope`.
+            public var scope: Components.Schemas.LocalRoomScope
+            /// - Remark: Generated from `#/components/schemas/LocalAnswerCommand/selected_ids`.
+            public var selected_ids: [Components.Schemas.Uuid]
+            /// Creates a new `LocalAnswerCommand`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - command_id:
+            ///   - scope:
+            ///   - selected_ids:
+            public init(
+                schema_version: Components.Schemas.LocalAnswerCommand.schema_versionPayload,
+                command_id: Components.Schemas.Uuid,
+                scope: Components.Schemas.LocalRoomScope,
+                selected_ids: [Components.Schemas.Uuid]
+            ) {
+                self.schema_version = schema_version
+                self.command_id = command_id
+                self.scope = scope
+                self.selected_ids = selected_ids
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case command_id
+                case scope
+                case selected_ids
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.LocalAnswerCommand.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.command_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .command_id
+                )
+                self.scope = try container.decode(
+                    Components.Schemas.LocalRoomScope.self,
+                    forKey: .scope
+                )
+                self.selected_ids = try container.decode(
+                    [Components.Schemas.Uuid].self,
+                    forKey: .selected_ids
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "command_id",
+                    "scope",
+                    "selected_ids"
+                ])
+            }
+        }
         /// Project and room identity of one local room. Both are opaque UUIDs fixed by the local development service (L2), never chosen from a hosted workspace.
         ///
         /// - Remark: Generated from `#/components/schemas/LocalRoomScope`.
@@ -2013,6 +2079,7 @@ extension Components {
                 case start = "start"
                 case status = "status"
                 case send = "send"
+                case answer = "answer"
                 case history = "history"
                 case replay = "replay"
                 case evidence = "evidence"

@@ -51,6 +51,19 @@
 				}
 			}
 		},
+		"/api/v1/local-room/answer": {
+			"post": {
+				"operationId": "postLocalAnswer",
+				"summary": "Commit deterministic local quotes of selected persisted messages (not a model provider)",
+				"requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LocalAnswerCommand" } } } },
+				"responses": {
+					"201": { "description": "Committed or replayed answer", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoomCommandReceipt" } } } },
+					"400": { "description": "Malformed selection", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } },
+					"404": { "description": "Missing selected record, scope mismatch or unavailable capability", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } },
+					"409": { "description": "Command identity reused for a different selection", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } }
+				}
+			}
+		},
 		"/api/v1/local-room/events": {
 			"get": {
 				"operationId": "replayLocalRoom",

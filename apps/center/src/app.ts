@@ -60,6 +60,15 @@ export function createApp(deps: CenterDependencies): Hono {
 		if (result.outcome === 'committed') return c.json(toWireReceipt(result.receipt, result.replayed), 201);
 		return c.json<ErrorReport>({ reason_code: result.reasonCode, correlation_id: randomUUID(), details: [result.detail] }, DENIAL_STATUS[result.reasonCode]);
 	});
+	app.post('/api/v1/local-room/answer', async (c) => {
+		const body: unknown = await c.req.json().catch(() => undefined);
+		const command = wire.validate('LocalAnswerCommand', body);
+		if (!command.ok) return c.json<ErrorReport>({ reason_code: 'malformed_command', correlation_id: randomUUID(), details: command.details }, 400);
+		if (!localRoom.answer) return c.json<ErrorReport>({ reason_code: 'unavailable_capability', correlation_id: randomUUID() }, 404);
+		const result = await localRoom.answer({ commandId: asCommandId(command.value.command_id), projectId: asProjectId(command.value.scope.project_id), roomId: asRoomId(command.value.scope.room_id), selectedIds: command.value.selected_ids.map(asMessageId), requestDigest: digestCanonical(command.value) });
+		if (result.outcome === 'committed') return c.json(toWireReceipt(result.receipt, result.replayed), 201);
+		return c.json<ErrorReport>({ reason_code: result.reasonCode, correlation_id: randomUUID(), details: [result.detail] }, DENIAL_STATUS[result.reasonCode]);
+	});
 	app.get('/api/v1/local-room/events', async (c) => {
 		const after = wire.validate('Revision', c.req.query('after'));
 		if (!after.ok) return c.json<ErrorReport>({ reason_code: 'malformed_command', correlation_id: randomUUID() }, 400);

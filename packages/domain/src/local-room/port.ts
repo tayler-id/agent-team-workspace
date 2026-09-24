@@ -94,6 +94,7 @@ export type SendRoomMessageResult =
 export type RoomSnapshotResult = { readonly outcome: 'ok'; readonly snapshot: RoomSnapshotRecord } | Unsupported;
 
 export interface LocalRoomPort {
+	answer?(command: { readonly commandId: CommandId; readonly projectId: ProjectId; readonly roomId: RoomId; readonly selectedIds: readonly MessageId[]; readonly requestDigest: Digest }): Promise<SendRoomMessageResult>;
 	send(command: SendRoomMessage): Promise<SendRoomMessageResult>;
 	snapshot(): Promise<RoomSnapshotResult>;
 	events(after: string): Promise<readonly RoomMessageCreated[]>;
@@ -107,6 +108,7 @@ export interface LocalRoomStore {
 	hasMessage(roomId: RoomId, citation: MessageCitation): Promise<boolean>;
 	nextSeq(roomId: RoomId): Promise<string>;
 	append(message: RoomMessageRecord, event: RoomMessageCreated, actor: PrincipalId, receipt: RoomReceipt): Promise<void>;
+	readSelected(roomId: RoomId, ids: readonly MessageId[]): Promise<readonly RoomMessageRecord[]>;
 	readSnapshot(roomId: RoomId, limit: number): Promise<RoomSnapshotRecord>;
 	readEvents(roomId: RoomId, after: string, limit: number): Promise<readonly RoomMessageCreated[]>;
 }

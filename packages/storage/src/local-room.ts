@@ -1,4 +1,5 @@
-import { type LocalRoomIdentity, type LocalRoomPort, type LocalRoomStore, type MessageCitation, type MessageId, type RoomId, type RoomMessageRecord, type RoomReceipt, sendRoomMessage } from '@agora/domain';
+import { compileAnswerContext, proposeLocalAnswer, messageCreated, asMessageId, asPrincipalId, type LocalRoomIdentity, type LocalRoomPort, type LocalRoomStore, type MessageCitation, type MessageId, type RoomId, type RoomMessageRecord, type RoomReceipt, sendRoomMessage } from '@agora/domain';
+import { randomUUID } from 'node:crypto';
 import type { PoolClient } from 'pg';
 import type { Database } from './database.ts';
 
@@ -42,6 +43,10 @@ export function bindLocalRoomStore(client: PoolClient, projectId: string): Local
 			await client.query('insert into local_room.event (project_id, stream_id, seq, event_id, kind, actor, occurred_at, payload) values (current_setting($1)::uuid, $2, $3, $4, $5, $6, $7, $8)', [SCOPE_SETTING, event.streamId, event.seq, event.eventId, event.kind, event.actor, event.occurredAt, JSON.stringify(event.payload)]);
 			await client.query('insert into local_room.command_receipt (project_id, actor, command_id, request_digest, receipt) values (current_setting($1)::uuid, $2, $3, $4, $5)', [SCOPE_SETTING, actor, receipt.commandId, receipt.requestDigest, JSON.stringify(receipt)]);
 		},
+		async readSelected(roomId, ids) {
+			const rows = await client.query<MessageRow>(`select m.message_id, m.room_id, m.room_seq::text as room_seq, m.author_kind, m.author_principal_id, m.command_id, m.body, m.citations, ${CREATED_AT} as created_at from local_room.message m where m.room_id = $1 and m.message_id = any($2::uuid[])`, [roomId, ids]);
+			return rows.rows.map(toRecord);
+		},
 		// The latest `limit` messages in ascending order plus the counter, both from the caller's repeatable read.
 		async readSnapshot(roomId, limit) {
 			const room = await client.query<{ committed_seq: string }>('select (next_seq - 1)::text as committed_seq from local_room.room where room_id = $1', [roomId]);
@@ -54,11 +59,38 @@ export function bindLocalRoomStore(client: PoolClient, projectId: string): Local
 }
 
 export const SNAPSHOT_LIMIT = 1000;
+const LOCAL_AGENT = asPrincipalId('a0000000-0000-4000-8000-000000000004');
+const LABEL = 'Deterministic local fixture (not AI inference)';
+
+// Lock, dedupe, load persisted source records, construct the proposal and append in one transaction.
+// The receipt belongs to the local agent, not the human send identity. No caller can supply an author or answer text.
+async function answer(store: LocalRoomStore, identity: LocalRoomIdentity, command: Parameters<NonNullable<LocalRoomPort['answer']>>[0]): ReturnType<NonNullable<LocalRoomPort['answer']>> {
+	if (command.projectId !== identity.projectId || command.roomId !== identity.roomId) return { outcome: 'denied', reasonCode: 'scope_mismatch', detail: 'fixed room only' };
+	if (!(await store.lockRoom(identity.roomId))) return { outcome: 'denied', reasonCode: 'not_found', detail: 'room not found' };
+	const prior = await store.findReceipt(LOCAL_AGENT, command.commandId);
+	if (prior) return prior.requestDigest === command.requestDigest
+		? { outcome: 'committed', receipt: prior, replayed: true }
+		: { outcome: 'denied', reasonCode: 'command_conflict', detail: 'command identity reused with another selection' };
+	const records = await store.readSelected(identity.roomId, command.selectedIds);
+	const context = compileAnswerContext({ scope: identity, requestId: command.commandId, selectedIds: command.selectedIds }, { kind: 'persisted_messages', records });
+	if (context.outcome === 'denied') return { outcome: 'denied', reasonCode: 'not_found', detail: `selection refused: ${context.reason}` };
+	const proposed = proposeLocalAnswer(context.value);
+	if (proposed.outcome === 'denied') return { outcome: 'denied', reasonCode: 'not_found', detail: `citation refused: ${proposed.reason}` };
+	const body = `${LABEL}\n${proposed.value.claims.map(c => `> ${c.text}`).join('\n')}`;
+	if (Array.from(body).length > 4096) return { outcome: 'denied', reasonCode: 'not_found', detail: 'answer exceeds message bound' };
+	const seq = await store.nextSeq(identity.roomId);
+	const message: RoomMessageRecord = { messageId: asMessageId(randomUUID()), projectId: identity.projectId, roomId: identity.roomId, roomSeq: seq, author: { kind: 'local_agent', principalId: LOCAL_AGENT }, commandId: command.commandId, body, citations: proposed.value.claims.map(c => c.citation), createdAt: new Date().toISOString() };
+	const receipt: RoomReceipt = { commandId: command.commandId, requestDigest: command.requestDigest, roomId: identity.roomId, revision: seq, messageId: message.messageId, receiptId: randomUUID() };
+	await store.append(message, messageCreated(message), LOCAL_AGENT, receipt);
+	return { outcome: 'committed', receipt, replayed: false };
+}
+
 
 export function createPostgresLocalRoom(database: Database, identity: LocalRoomIdentity): LocalRoomPort {
 	return {
 		events: (after) => database.withLocalRoom(identity.projectId, (store) => store.readEvents(identity.roomId, after, 50), { readOnly: true }),
 		send: (command) => database.withLocalRoom(identity.projectId, (store) => sendRoomMessage(store, identity, command)),
+		answer: (command) => database.withLocalRoom(identity.projectId, (store) => answer(store, identity, command)),
 		snapshot: async () => ({ outcome: 'ok', snapshot: await database.withLocalRoom(identity.projectId, (store) => store.readSnapshot(identity.roomId, SNAPSHOT_LIMIT), { readOnly: true }) }),
 	};
 }

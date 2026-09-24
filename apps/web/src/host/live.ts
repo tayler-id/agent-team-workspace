@@ -4,7 +4,7 @@ import { createWireValidator, type ComponentName, type Schema } from '@agora/con
 import type { Message } from '@agora/client-core';
 import type { Author, Presentation, RoomClient, RoomTransport, TransportConnection } from '@agora/web-framework';
 
-export interface LiveTransport extends RoomTransport { readonly getPresentation: () => Presentation }
+export interface LiveTransport extends RoomTransport { readonly getPresentation: () => Presentation; answer(selectedIds: readonly string[]): Promise<void> }
 export interface LiveOptions { readonly baseUrl?: string; readonly pollDelayMs?: number; readonly errorDelayMs?: number; readonly retryDelayMs?: number }
 
 const wire = createWireValidator();
@@ -109,6 +109,12 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		}
 	}
 	return {
+		async answer(selectedIds) {
+			const commandId = crypto.randomUUID();
+			if (!scope) throw new Error('room not loaded');
+			validate('RoomCommandReceipt', await requestJson(baseUrl, 'answer', { schema_version: 'agora.local-answer.command/v1', command_id: commandId, scope, selected_ids: selectedIds }));
+			// Polling delivers the committed event to every browser; no optimistic answer is rendered.
+		},
 		get streamId() { return streamId; },
 		getState: () => connection,
 		getPresentation: () => presentation,

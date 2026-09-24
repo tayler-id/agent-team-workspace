@@ -7,7 +7,7 @@ import { authenticate, available, fileId, loadOwner, pause, rootFor, safeTree, s
 
 const args = process.argv.slice(2), command = args[0] as Schema<'LocalRuntimeReport'>['command'];
 if (args[0] === '--help' || args[0] === '--version') {
-	process.stdout.write(args[0] === '--version' ? 'agora.local-runtime/v1\n' : 'local-room doctor|start|status|send|history|replay|evidence|stop|reset [--instance NAME] [--port PORT] [--body TEXT] [--command-id UUID] [--after CURSOR] [--confirm-disposable]\n'); process.exit(0);
+	process.stdout.write(args[0] === '--version' ? 'agora.local-runtime/v1\n' : 'local-room doctor|start|status|send|answer|history|replay|evidence|stop|reset [--instance NAME] [--port PORT] [--body TEXT] [--selected-id UUID] [--command-id UUID] [--after CURSOR] [--confirm-disposable]\n'); process.exit(0);
 }
 const option = (name: string): string | undefined => { const i = args.indexOf(name); return i < 0 ? undefined : args[i + 1]; };
 const report: Schema<'LocalRuntimeReport'> = { schema_version: 'agora.local-runtime/v1', command, outcome: 'pass', detail: '' };
@@ -15,10 +15,10 @@ const wire = createWireValidator();
 let lock: string | undefined;
 let exit = 2;
 try {
-	if (!['doctor', 'start', 'status', 'send', 'history', 'replay', 'evidence', 'stop', 'reset'].includes(command)) { report.command = 'unknown'; exit = 64; throw new Error('usage: local-room doctor|start|status|send|history|replay|evidence|stop|reset --instance NAME'); }
+	if (!['doctor', 'start', 'status', 'send', 'answer', 'history', 'replay', 'evidence', 'stop', 'reset'].includes(command)) { report.command = 'unknown'; exit = 64; throw new Error('usage: local-room doctor|start|status|send|answer|history|replay|evidence|stop|reset --instance NAME'); }
 	for (let i = 1; i < args.length; i++) {
 		const flag = args[i];
-		if (!flag || !['--instance', '--port', '--body', '--command-id', '--after', '--confirm-disposable'].includes(flag) || flag !== '--confirm-disposable' && (args[++i] === undefined || args[i]?.startsWith('--'))) { exit = 64; throw new Error('unknown flag or missing value'); }
+		if (!flag || !['--instance', '--port', '--body', '--selected-id', '--command-id', '--after', '--confirm-disposable'].includes(flag) || flag !== '--confirm-disposable' && (args[++i] === undefined || args[i]?.startsWith('--'))) { exit = 64; throw new Error('unknown flag or missing value'); }
 	}
 	if (command === 'doctor') {
 		const version = spawnSync(process.env['AGORA_PG_BIN'] ? `${process.env['AGORA_PG_BIN']}/pg_ctl` : 'pg_ctl', ['--version'], { encoding: 'utf8', timeout: 2000 });
@@ -71,6 +71,13 @@ try {
 				if (command === 'send') {
 					const snapshot = await client.request('snapshot') as Schema<'RoomSnapshot'>;
 					report.receipt = await client.send({ schema_version: 'agora.local-room.send-message/v1', command_id: option('--command-id') ?? randomUUID(), scope: snapshot.scope, body: option('--body') ?? '', citations: [] });
+				} else if (command === 'answer') {
+					const selected = option('--selected-id');
+					const snapshot = await client.request('snapshot') as Schema<'RoomSnapshot'>;
+					const payload: Schema<'LocalAnswerCommand'> = { schema_version: 'agora.local-answer.command/v1', command_id: option('--command-id') ?? randomUUID(), scope: snapshot.scope, selected_ids: selected ? [selected] : [] };
+					const checked = wire.validate('LocalAnswerCommand', payload);
+					if (!checked.ok) { exit = 64; throw new Error(checked.details.join(';')); }
+					report.receipt = await client.request('answer', undefined, checked.value) as Schema<'RoomCommandReceipt'>;
 				} else if (command === 'replay') report.events = await client.request(`events?after=${encodeURIComponent(option('--after') ?? '0')}`) as Schema<'RoomEventBatch'>;
 				else if (command === 'history' || command === 'evidence') report.snapshot = await client.request('snapshot') as Schema<'RoomSnapshot'>;
 				report.detail = 'running; loopback-only development harness';

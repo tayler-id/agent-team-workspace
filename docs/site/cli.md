@@ -69,6 +69,7 @@ The project-owned driver is `node scripts/local-room.ts COMMAND`. Output is alwa
 | `start` | Allocate private cluster and center, migrate as owner, run queries as `agora_app`, build the live room UI and print its `url`; optional `--port PORT` |
 | `status` | Challenge the running launch, or prove its listeners absent when stopped |
 | `send --body TEXT` | Same validated HTTP send as the browser; optional `--command-id UUID` for an explicit same-command retry |
+| `answer --selected-id UUID` | Post a deterministic quoted local response to a persisted message; optional `--command-id UUID` reuses the same identity across retries/restarts. A fresh ID makes a separate quote. |
 | `history` | Public snapshot, latest 1000 messages plus consistent cursor |
 | `replay --after CURSOR` | One public batch of at most 50 committed events, default cursor `0`; repeat after the last event's `seq` |
 | `evidence` | Fresh authenticated inventory and public snapshot; redirect JSON outside the instance directory to retain it |
@@ -87,7 +88,7 @@ pnpm exec vitest run --project unit packages/domain/test/local-answer.test.ts pa
 
 This is a public package test driver, not a product response trigger. It invokes `@agora/domain/local-answer` with explicit fixture values representing validated persisted records. Native Vitest JSON reports 14 passing tests, exit 0; any assertion failure exits nonzero. It needs no database, service, provider, credentials or browser. Guard tests spawn bounded test-only Node processes and lint hypothetical forbidden imports; the pure computation has none of that authority. Test-only source copies under `.scratch/answer-guard-*` are removed in `finally`; remove the disposable `.vitest/json/output.json` reporter cache and its empty parent directories after retaining the report. Red/green and exact-subject receipts stay in `evidence/local-room/agent-core/`.
 
-No flags accept chat command text or arbitrary selected files. See [the local room](local-room.md#selected-messages-to-a-cited-proposal) and [developer boundary reference](repo:docs/runbooks/development.md). There is no HTTP operation, CLI send/ask command or UI trigger for this core.
+No flags accept chat command text or arbitrary selected files. See [the local room](local-room.md#selected-messages-to-a-cited-proposal) and [developer boundary reference](repo:docs/runbooks/development.md). The pure core itself has no HTTP or effect handle. The separate L5 adapter now exposes a selected-message CLI/browser trigger; it loads persisted records and commits a quoted response through the room event path.
 
 ## Center and database
 
@@ -109,6 +110,7 @@ Migrate exits 0 pass, 2 blocked prerequisite, 64 usage error, or 70 infrastructu
 - `GET /api/v1/health/ready`: database reachability, 200 or 503.
 - `POST /api/v1/fixture/policy/decisions`: scope decision, 200; malformed input 400.
 - `POST /api/v1/local-room/messages`: send to the fixed local room, committed in one transaction; 201 receipt, replay returns the original receipt, changed body 409 `command_conflict`, other scope or unknown citation 404, malformed input 400. [Local room](local-room.md) explains the slice.
+- `POST /api/v1/local-room/answer`: validated `LocalAnswerCommand` selects 1-10 persisted message IDs from the fixed room, commits a labelled quoted local-agent response and returns a receipt (201). Replay with the same command ID and selection returns that receipt; different selection conflicts (409). Missing/duplicate selection or scope is refused (404), malformed wire is 400. Not a model provider.
 - `GET /api/v1/local-room/snapshot`: ordered history and cursor of the fixed room from one repeatable read, at most the latest 1000 messages.
 - `GET /api/v1/local-room/events?after=CURSOR`: up to 50 committed events in numeric order, strictly after the cursor. Invalid cursor is 400; an empty page means caught up.
 - Other routes: JSON 404 `not_found`. Each error has a reason code and correlation ID.

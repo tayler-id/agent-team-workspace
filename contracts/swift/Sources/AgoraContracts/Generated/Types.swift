@@ -31,6 +31,11 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `POST /api/v1/local-room/messages`.
     /// - Remark: Generated from `#/paths//api/v1/local-room/messages/post(sendLocalRoomMessage)`.
     func sendLocalRoomMessage(_ input: Operations.sendLocalRoomMessage.Input) async throws -> Operations.sendLocalRoomMessage.Output
+    /// Commit deterministic local quotes of selected persisted messages (not a model provider)
+    ///
+    /// - Remark: HTTP `POST /api/v1/local-room/answer`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/answer/post(postLocalAnswer)`.
+    func postLocalAnswer(_ input: Operations.postLocalAnswer.Input) async throws -> Operations.postLocalAnswer.Output
     /// Read up to 50 committed events strictly after a room cursor; repeat to resume
     ///
     /// - Remark: HTTP `GET /api/v1/local-room/events`.
@@ -81,6 +86,19 @@ extension APIProtocol {
         body: Operations.sendLocalRoomMessage.Input.Body
     ) async throws -> Operations.sendLocalRoomMessage.Output {
         try await sendLocalRoomMessage(Operations.sendLocalRoomMessage.Input(
+            headers: headers,
+            body: body
+        ))
+    }
+    /// Commit deterministic local quotes of selected persisted messages (not a model provider)
+    ///
+    /// - Remark: HTTP `POST /api/v1/local-room/answer`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/answer/post(postLocalAnswer)`.
+    public func postLocalAnswer(
+        headers: Operations.postLocalAnswer.Input.Headers = .init(),
+        body: Operations.postLocalAnswer.Input.Body
+    ) async throws -> Operations.postLocalAnswer.Output {
+        try await postLocalAnswer(Operations.postLocalAnswer.Input(
             headers: headers,
             body: body
         ))

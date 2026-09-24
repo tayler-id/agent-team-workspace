@@ -72,6 +72,7 @@ let generated: [String: (Data) throws -> Data] = [
 	"LocalRuntimeReport": roundTrip(Schemas.LocalRuntimeReport.self),
 	"ScopeReference": roundTrip(Schemas.ScopeReference.self),
 	"SendRoomMessageCommand": roundTrip(Schemas.SendRoomMessageCommand.self),
+	"LocalAnswerCommand": roundTrip(Schemas.LocalAnswerCommand.self),
 	"Timestamp": roundTrip(Schemas.Timestamp.self),
 	"StreamCursor": roundTrip(Schemas.StreamCursor.self),
 	"Uuid": roundTrip(Schemas.Uuid.self),

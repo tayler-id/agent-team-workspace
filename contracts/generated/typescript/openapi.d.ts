@@ -68,6 +68,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/local-room/answer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Commit deterministic local quotes of selected persisted messages (not a model provider) */
+        post: operations["postLocalAnswer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/local-room/events": {
         parameters: {
             query?: never;
@@ -338,6 +355,14 @@ export interface components {
             /** @enum {string} */
             service: "agora-center";
         };
+        /** @description Select up to ten persisted messages for a deterministic quoted local response. The service derives authorship; no instructions or provider input is accepted. */
+        LocalAnswerCommand: {
+            /** @enum {string} */
+            schema_version: "agora.local-answer.command/v1";
+            command_id: components["schemas"]["Uuid"];
+            scope: components["schemas"]["LocalRoomScope"];
+            selected_ids: components["schemas"]["Uuid"][];
+        };
         /** @description Project and room identity of one local room. Both are opaque UUIDs fixed by the local development service (L2), never chosen from a hosted workspace. */
         LocalRoomScope: {
             project_id: components["schemas"]["Uuid"];
@@ -348,7 +373,7 @@ export interface components {
             /** @enum {string} */
             schema_version: "agora.local-runtime/v1";
             /** @enum {string} */
-            command: "doctor" | "start" | "status" | "send" | "history" | "replay" | "evidence" | "stop" | "reset" | "unknown";
+            command: "doctor" | "start" | "status" | "send" | "answer" | "history" | "replay" | "evidence" | "stop" | "reset" | "unknown";
             outcome: components["schemas"]["CliOutcome"];
             detail: string;
             launch?: components["schemas"]["Uuid"];
@@ -610,6 +635,57 @@ export interface operations {
                 };
             };
             /** @description command_conflict: the same command_id was already committed with a different request digest */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+        };
+    };
+    postLocalAnswer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LocalAnswerCommand"];
+            };
+        };
+        responses: {
+            /** @description Committed or replayed answer */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomCommandReceipt"];
+                };
+            };
+            /** @description Malformed selection */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+            /** @description Missing selected record, scope mismatch or unavailable capability */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+            /** @description Command identity reused for a different selection */
             409: {
                 headers: {
                     [name: string]: unknown;

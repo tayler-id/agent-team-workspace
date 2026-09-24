@@ -154,6 +154,64 @@
 				}
 			}
 		},
+		"/api/v1/local-room/answer": {
+			"post": {
+				"operationId": "postLocalAnswer",
+				"summary": "Commit deterministic local quotes of selected persisted messages (not a model provider)",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LocalAnswerCommand"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Committed or replayed answer",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoomCommandReceipt"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Malformed selection",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorReport"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Missing selected record, scope mismatch or unavailable capability",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorReport"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "Command identity reused for a different selection",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorReport"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/v1/local-room/events": {
 			"get": {
 				"operationId": "replayLocalRoom",
@@ -1143,6 +1201,39 @@
 					}
 				}
 			},
+			"LocalAnswerCommand": {
+				"description": "Select up to ten persisted messages for a deterministic quoted local response. The service derives authorship; no instructions or provider input is accepted.",
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"schema_version",
+					"command_id",
+					"scope",
+					"selected_ids"
+				],
+				"properties": {
+					"schema_version": {
+						"type": "string",
+						"enum": [
+							"agora.local-answer.command/v1"
+						]
+					},
+					"command_id": {
+						"$ref": "#/components/schemas/Uuid"
+					},
+					"scope": {
+						"$ref": "#/components/schemas/LocalRoomScope"
+					},
+					"selected_ids": {
+						"type": "array",
+						"minItems": 1,
+						"maxItems": 10,
+						"items": {
+							"$ref": "#/components/schemas/Uuid"
+						}
+					}
+				}
+			},
 			"LocalRoomScope": {
 				"description": "Project and room identity of one local room. Both are opaque UUIDs fixed by the local development service (L2), never chosen from a hosted workspace.",
 				"type": "object",
@@ -1184,6 +1275,7 @@
 							"start",
 							"status",
 							"send",
+							"answer",
 							"history",
 							"replay",
 							"evidence",
