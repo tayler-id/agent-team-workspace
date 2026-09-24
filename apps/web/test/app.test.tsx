@@ -49,7 +49,7 @@ test('phases, isolation, draft/submit/revoke and phone viewport', async () => {
 	expect(status().dataset['link']).toBe('online');
 	const before = screen.getAllByRole('listitem').map((li) => li.dataset['commits']);
 	act(() => { transport.setOnline(false); });
-	expect(status()).toHaveTextContent('Offline.');
+	expect(status()).toHaveTextContent('Browser network unavailable.');
 	expect(screen.getAllByRole('listitem').map((li) => li.dataset['commits'])).toEqual(before);
 	act(() => { transport.setOnline(true); transport.skipOne(); });
 	expect(status().dataset['phase']).toBe('gap');
@@ -77,6 +77,20 @@ test('phases, isolation, draft/submit/revoke and phone viewport', async () => {
 	expect(status().dataset['phase']).toBe('revoked');
 	setPhone(true);
 	expect(screen.getByRole('main').parentElement?.dataset['viewport']).toBe('phone');
+});
+
+test('manual disconnect while the browser stays online reads unambiguous, distinguishing server link from network status', () => {
+	const { transport } = mount();
+	fireEvent.click(screen.getByRole('button', { name: 'Load fixture snapshot' }));
+	fireEvent.click(screen.getByRole('button', { name: 'Disconnect' }));
+	expect(status().dataset['link']).toBe('disconnected');
+	expect(status().dataset['online']).toBe('true');
+	expect(status()).toHaveTextContent('Disconnected: press Reconnect to resume.');
+	expect(status()).toHaveTextContent('Browser network available.');
+	expect(status().textContent).not.toContain(' Online.');
+	act(() => { transport.setOnline(false); });
+	expect(status().dataset['link']).toBe('disconnected');
+	expect(status()).toHaveTextContent('Browser network unavailable.');
 });
 
 test('keyboard roving, virtualized large rooms, citations, announcement and no alternate client', async () => {

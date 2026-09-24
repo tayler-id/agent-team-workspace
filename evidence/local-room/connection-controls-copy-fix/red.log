@@ -1,0 +1,42 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace/apps/web
+
+ ❯ |web| test/app.test.tsx (6 tests | 2 failed) 482ms
+   × phases, isolation, draft/submit/revoke and phone viewport 100ms
+   × manual disconnect while the browser stays online reads unambiguous, distinguishing server link from network status 20ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/app.test.tsx > phases, isolation, draft/submit/revoke and phone viewport
+Error: expected "Live Cursor 8 applied. Offline: sends wait for a connection. Offline. Disconnect" to include "Browser network unavailable."
+ ❯ test/app.test.tsx:52:19
+     50|  const before = screen.getAllByRole('listitem').map((li) => li.dataset…
+     51|  act(() => { transport.setOnline(false); });
+     52|  expect(status()).toHaveTextContent('Browser network unavailable.');
+       |                   ^
+     53|  expect(screen.getAllByRole('listitem').map((li) => li.dataset['commit…
+     54|  act(() => { transport.setOnline(true); transport.skipOne(); });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |web| test/app.test.tsx > manual disconnect while the browser stays online reads unambiguous, distinguishing server link from network status
+Error: expected "Live Cursor 8 applied. Disconnected: press Reconnect to resume. Online. Reconnect" to include "Browser network available."
+ ❯ test/app.test.tsx:89:19
+     87|  expect(status().dataset['online']).toBe('true');
+     88|  expect(status()).toHaveTextContent('Disconnected: press Reconnect to …
+     89|  expect(status()).toHaveTextContent('Browser network available.');
+       |                   ^
+     90|  expect(status().textContent).not.toContain(' Online.');
+     91|  act(() => { transport.setOnline(false); });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 4 passed (6)
+   Start at  23:46:40
+   Duration  1.17s (tests 43%, environment 34%, import 15%, transform 8%)
+
+undefined
+/Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/1/agent-team-workspace/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run test/app.test.tsx

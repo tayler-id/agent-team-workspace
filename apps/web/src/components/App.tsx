@@ -76,7 +76,7 @@ export function App({ header, presentation, live = false, onAnswer }: AppProps):
 					{room && roomStatus.unread > 0 && <button type="button" onClick={() => { commands.markSeen(room.cursor); }}>Mark room as read</button>}
 				</p>
 				<div role="status" aria-live="polite" className="status" data-phase={roomStatus.phase} data-online={connection.online} data-link={connection.link}>
-					<span className="badge" data-state={roomStatus.phase}>{roomStatus.label}</span> <span>{roomStatus.detail}</span> <span>{connection.online ? 'Online.' : 'Offline.'}</span> {announcement && <span>{announcement}</span>}
+					<span className="badge" data-state={roomStatus.phase}>{roomStatus.label}</span> <span>{roomStatus.detail}</span> <span>{connection.online ? 'Browser network available.' : 'Browser network unavailable.'}</span> {announcement && <span>{announcement}</span>}
 					{room && connection.link === 'disconnected' && <button type="button" onClick={commands.reconnect}>Reconnect</button>}
 					{room && connection.link !== 'disconnected' && <button type="button" onClick={commands.disconnect}>Disconnect</button>}
 				</div>

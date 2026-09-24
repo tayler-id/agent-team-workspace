@@ -45,6 +45,24 @@ report before `reset --confirm-disposable` removed the disposable instance.
    touch-target floor holds at phone width.
 9. Clicked **Reconnect**; status returned to `Online.` before closing the session.
 
+## Correction: unambiguous final-suffix wording (2026-09-24)
+
+The steps above were captured against `apps/web/src/components/App.tsx`'s original status line, which appended a
+bare `Online.`/`Offline.` suffix straight from `connection.online` (the browser `navigator.onLine` reading)
+regardless of the server link state. That produced contradictory copy such as `Disconnected: press Reconnect to
+resume. Online.` on `phone-disconnected.png` (step 8): a member reads "Online" as "the server connection is fine"
+right after being told it is disconnected, when it in fact reports the unrelated fact that the browser's own
+network interface is up.
+
+The suffix now reads `Browser network available.` / `Browser network unavailable.`, so it never collides with the
+server-link vocabulary (`Live`, `Disconnected: press Reconnect to resume.`, `Retrying the connection.`, `Offline:
+sends wait for a connection.`) used elsewhere in the same status line. `phone-disconnected-003.png` reproduces step
+8 (manual Disconnect while the browser stays online) against the corrected copy: `Live Cursor 1 applied.
+Disconnected: press Reconnect to resume. Browser network available. Reconnect`. A focused regression,
+`apps/web/test/app.test.tsx`'s "manual disconnect while the browser stays online reads unambiguous, distinguishing
+server link from network status", asserts the corrected suffix and that the literal string `Online.` no longer
+appears in that state.
+
 ## What this does not cover
 
 - `chrome-devtools-axi`'s `network`/`console` commands surfaced one pre-existing, unrelated Content
