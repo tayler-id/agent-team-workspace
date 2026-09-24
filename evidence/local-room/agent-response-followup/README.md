@@ -5,6 +5,6 @@
 - `room-after-cli.png` captures the browser room view after the CLI response. The browser's tab IDs were observed through `chrome-devtools-axi pages`; this image does not depict browser chrome or prove simultaneous clicks. Independent cross-tab action deduplication remains unqualified.
 - Browser localStorage was empty after the successful browser action. The new unit test covers preserving its pending action ID after a simulated lost response, reading and retrying that ID from a replacement transport (reload-style) and clearing it after receipt; a later explicit transport action generated a different ID.
 - PostgreSQL-backed response test asserts each persisted citation resolves to the exact source message ID, sequence and body.
-- `red-green/` records the exact-parent test replay: the new unit assertion is red on `1718966` because no pending identity is retained, then green at `498f0491c1e2bd4090a1cec9162405d78a59b976` (11 live transport tests pass).
+- `red-green/` records the exact-parent test replay: the new unit assertion is red on `1718966` because no pending identity is retained, then green at `31de97db4ecafcdc3d5d59936d98d9999c507cf1` (11 live transport tests pass).
 
 These local observations do not qualify full L5, S1, hosted CI or independent review.

@@ -1,7 +1,7 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-09-24T01:25:46.971Z
+recorded_at: 2026-09-24T01:26:34.601Z
 parent: 1718966ef5f00901bea024a13bae6006ab6e740d
-head: 498f0491c1e2bd4090a1cec9162405d78a59b976
+head: 31de97db4ecafcdc3d5d59936d98d9999c507cf1
 subject_revision: 1718966ef5f00901bea024a13bae6006ab6e740d
 test_patch_applied_to_subject: true
 test_patch_files: apps/center/test/local-answer.pg.test.ts, apps/web/test/live.test.ts
@@ -13,24 +13,24 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-YR8WJ0
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-huvJfw
 
- ❯ |unit| apps/web/test/live.test.ts (11 tests | 1 failed) 1360ms
-   × local quote retries reuse a persisted action identity, then a later explicit quote gets a fresh identity 21ms
+ ❯ |unit| apps/web/test/live.test.ts (11 tests | 1 failed) 1344ms
+   × local quote retries reuse a persisted action identity, then a later explicit quote gets a fresh identity 15ms
 
  Test Files  1 failed (1)
       Tests  1 failed | 10 passed (11)
-   Start at  21:25:36
-   Duration  1.63s (tests 88%, import 8%, transform 4%)
+   Start at  21:26:24
+   Duration  1.66s (tests 87%, import 8%, transform 5%)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  |unit| apps/web/test/live.test.ts > local quote retries reuse a persisted action identity, then a later explicit quote gets a fresh identity
-AssertionError: expected null to be '9df7c442-2b78-4670-91e8-b5d00b4ce441' // Object.is equality
+AssertionError: expected null to be '91b830f4-b031-4133-b959-70781e7a87f6' // Object.is equality
 
 - Expected:
-"9df7c442-2b78-4670-91e8-b5d00b4ce441"
+"91b830f4-b031-4133-b959-70781e7a87f6"
 
 + Received:
 null
