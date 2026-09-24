@@ -1,0 +1,76 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-24T03:06:45.403Z
+parent: 38fa2484e7cf57f83960279320f34bf017de43c2
+head: 6c2ccd137d88eadac8bfdd9dd1f24e99ae35aa0d
+subject_revision: 38fa2484e7cf57f83960279320f34bf017de43c2
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/live.test.ts
+test_patch_digest: sha256:f7b7d936f72ec64964054bac7e3eba13091f29385daef364ee5a61e7a99de62f
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm --filter @agora/web --filter @agora/web-framework exec vitest run","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-1TOROy/packages/web-framework
+
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  23:06:11
+   Duration  1.86s (tests 87%, import 10%, transform 3%)
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-1TOROy/apps/web
+
+ ❯ |web| test/live.test.ts (17 tests | 2 failed) 1489ms
+   × a browser online event does not claim link: online until a poll actually succeeds 6ms
+   × a snapshot response that arrives after Disconnect is discarded instead of mutating committed state 9ms
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  2 failed | 38 passed (40)
+   Start at  23:06:13
+   Duration  11.90s (tests 75%, environment 16%, import 7%, transform 2%)
+
+undefined
+/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-1TOROy/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/live.test.ts > a browser online event does not claim link: online until a poll actually succeeds
+AssertionError: expected 'online' to be 'retrying' // Object.is equality
+
+Expected: "retrying"
+Received: "online"
+
+ ❯ test/live.test.ts:349:36
+    347|  window.dispatchEvent(new Event('online'));
+    348|  // The 'online' event is only network reachability, not an observed r…
+    349|  expect(transport.getState().link).toBe('retrying');
+       |                                    ^
+    350|  expect(transport.getState().link).not.toBe('online');
+    351|  fail = false;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |web| test/live.test.ts > a snapshot response that arrives after Disconnect is discarded instead of mutating committed state
+AssertionError: expected [ { …(8) } ] to have a length of +0 but got 1
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ test/live.test.ts:406:34
+    404|  resolveSnapshot?.(json(snapshot(1, [message(1, 'late arrival')])));
+    405|  await flush(4);
+    406|  expect(client.getState().rooms).toHaveLength(0); // The late snapshot…
+       |                                  ^
+    407|  expect(transport.getState().link).toBe('disconnected');
+    408| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
