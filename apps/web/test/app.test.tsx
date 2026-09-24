@@ -144,10 +144,9 @@ function liveServer(seeded: number): { readonly add: (body: string) => void } {
 		return String(seq);
 	};
 	for (let n = 1; n <= seeded; n++) add(`seed ${n}`);
-	const json = (body: unknown, status = 200): Promise<Response> => Promise.resolve(new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } }));
+	const json = (body: unknown, status = 200, instance?: string): Promise<Response> => Promise.resolve(new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...(instance === undefined ? {} : { 'x-agora-instance': instance }) } }));
 	vi.stubGlobal('fetch', (url: string, init?: { readonly body?: string }): Promise<Response> => {
-		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('live-server-test-instance', { status: 200 }));
-		if (url.endsWith('/snapshot')) return json({ schema_version: 'agora.local-room.snapshot/v1', scope, cursor: { stream_id: roomId, committed_seq: String(messages.length) }, messages });
+		if (url.endsWith('/snapshot')) return json({ schema_version: 'agora.local-room.snapshot/v1', scope, cursor: { stream_id: roomId, committed_seq: String(messages.length) }, messages }, 200, 'live-server-test-instance');
 		const after = /events\?after=(\d+)/.exec(url)?.[1];
 		if (after !== undefined) return json(messages.slice(Number(after)).map((payload) => ({ schema_version: 'agora.local-room.event/v1', stream_id: roomId, seq: payload['room_seq'], event_id: uuid('ffffffff', Number(payload['room_seq'])), kind: 'local_room.message_created', actor: uuid('dddddddd', 1), occurred_at: '2026-09-23T00:00:00.000Z', payload })));
 		const command = JSON.parse(init?.body ?? '{}') as { command_id: string; body: string };

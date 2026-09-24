@@ -16,7 +16,7 @@ function snapshot(cursor: number, messages: readonly Record<string, unknown>[]):
 function event(seq: number, payload: Record<string, unknown>): Record<string, unknown> {
 	return { schema_version: 'agora.local-room.event/v1', stream_id: roomId, seq: String(seq), event_id: messageId(900 + seq), kind: 'local_room.message_created', actor: 'dddddddd-0000-4000-8000-000000000001', occurred_at: '2026-09-22T00:00:00.000Z', payload };
 }
-const json = (body: unknown, status = 200): Response => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+const json = (body: unknown, status = 200, instance?: string): Response => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...(instance === undefined ? {} : { 'x-agora-instance': instance }) } });
 
 function fakeStorage(): Storage {
 	const store = new Map<string, string>();
@@ -167,11 +167,10 @@ test('a rejected send retries the frozen command and settles once the server acc
 });
 
 const receiptFor = (commandId: string): Response => json({ schema_version: 'agora.local-room.receipt/v1', identity: { command_id: commandId, request_digest: 'sha256:' + 'e'.repeat(64) }, receipt: { command_id: commandId, aggregate_id: roomId, revision: '1', event_cursors: [{ stream_id: roomId, committed_seq: '1' }], receipt_id: messageId(503) }, message_id: messageId(4), replayed: false }, 201);
-function stubMessages(respond: (commandId: string, attempt: number) => Response | Promise<Response>): string[] {
+function stubMessages(respond: (commandId: string, attempt: number) => Response | Promise<Response>, instance = 'launch-a'): string[] {
 	const posted: string[] = [];
 	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
-		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('launch-a'));
-		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, instance));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
 		posted.push(command.command_id);
@@ -186,7 +185,6 @@ test('local quote retries reuse a persisted action identity, then a later explic
 	vi.stubGlobal('localStorage', { getItem: (key: string) => stored.get(key) ?? null, setItem: (key: string, value: string) => { stored.set(key, value); }, removeItem: (key: string) => { stored.delete(key); } });
 	const posted: string[] = [];
 	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
-		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('launch-a'));
 		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
@@ -242,8 +240,7 @@ test.each([
 
 function stubEmptyRoom(cursor = 0, instance?: string): void {
 	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
-		if (instance !== undefined && url.endsWith('/_runtime/identity')) return Promise.resolve(new Response(instance));
-		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(cursor, [])));
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(cursor, []), 200, instance));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		return Promise.reject(new Error(`unexpected request ${url}`));
 	}));
@@ -307,8 +304,7 @@ test('typing a new draft while an earlier send is in flight survives that send\'
 	const [client, transport] = boot;
 	let resolveReceipt: (response: Response) => void = () => undefined;
 	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
-		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('launch-a'));
-		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, 'launch-a'));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		if (url.endsWith('/api/v1/local-room/messages')) return new Promise((resolve) => { resolveReceipt = resolve; });
 		return Promise.reject(new Error(`unexpected request ${url}`));
@@ -399,8 +395,7 @@ test('a send still unsettled when the tab reloads reuses the same command id ins
 	const posted: string[] = [];
 	let neverSettles: Promise<Response> | undefined;
 	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
-		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('launch-a'));
-		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, 'launch-a'));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		if (url.endsWith('/api/v1/local-room/messages')) {
 			const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
@@ -430,9 +425,9 @@ test('a send still unsettled when the tab reloads reuses the same command id ins
 	expect(draftText(reloadedClient)).toEqual([]);
 });
 
-test('an identity route that is down when the draft is typed never persists it, even once the route recovers by reload', async () => {
+test('a snapshot with no verified identity when the draft is typed never persists it, even once it recovers by reload', async () => {
 	const [client, transport] = boot;
-	stubEmptyRoom(0); // No instance arg: /_runtime/identity is unstubbed and rejects, matching a down or missing route.
+	stubEmptyRoom(0); // No instance arg: the snapshot response carries no x-agora-instance header.
 	transport.loadSnapshot();
 	await flush(6);
 	client.apply({ type: 'draft', streamId: roomId, text: 'lost to the outage' });
@@ -444,7 +439,7 @@ test('an identity route that is down when the draft is typed never persists it, 
 	expect(draftText(reloadedClient)).toEqual([]);
 });
 
-test('an identity route that is down at reload fails closed on a draft saved under a verified instance', async () => {
+test('a reload snapshot with no verified identity fails closed on a draft saved under a verified instance', async () => {
 	const [client, transport] = boot;
 	stubEmptyRoom(0, 'launch-a');
 	transport.loadSnapshot();
@@ -452,13 +447,13 @@ test('an identity route that is down at reload fails closed on a draft saved und
 	client.apply({ type: 'draft', streamId: roomId, text: 'saved while healthy' });
 	transport.saveDraft(roomId, 'saved while healthy');
 	const [reloadedClient, reloadedTransport] = reopen();
-	stubEmptyRoom(0); // The route goes down for this reload; the saved instance can't be verified, so it fails closed.
+	stubEmptyRoom(0); // No header on this reload's snapshot; the saved instance can't be verified, so it fails closed.
 	reloadedTransport.loadSnapshot();
 	await flush(6);
 	expect(draftText(reloadedClient)).toEqual([]);
 });
 
-test('a malformed or empty identity body counts as no verified instance, so a saved draft is not restored', async () => {
+test('a malformed or empty identity header counts as no verified instance, so a saved draft is not restored', async () => {
 	const [client, transport] = boot;
 	stubEmptyRoom(0, 'launch-a');
 	transport.loadSnapshot();
@@ -466,22 +461,16 @@ test('a malformed or empty identity body counts as no verified instance, so a sa
 	client.apply({ type: 'draft', streamId: roomId, text: 'saved while healthy' });
 	transport.saveDraft(roomId, 'saved while healthy');
 	const [reloadedClient, reloadedTransport] = reopen();
-	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
-		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('   ')); // Trims to empty.
-		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
-		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
-		return Promise.reject(new Error(`unexpected request ${url}`));
-	}));
+	stubEmptyRoom(0, '   '); // Trims to empty.
 	reloadedTransport.loadSnapshot();
 	await flush(6);
 	expect(draftText(reloadedClient)).toEqual([]);
 });
 
-test('a pending command id from before the reload is not reused once the identity route goes down', async () => {
+test('a pending command id from before the reload is not reused once the reload snapshot carries no verified instance', async () => {
 	const [client, transport] = boot;
 	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
-		if (url.endsWith('/_runtime/identity')) return Promise.resolve(new Response('launch-a'));
-		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, 'launch-a'));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		if (url.endsWith('/api/v1/local-room/messages')) return new Promise(() => undefined); // Never settles before reload.
 		return Promise.reject(new Error(`unexpected request ${url}`));
@@ -494,8 +483,9 @@ test('a pending command id from before the reload is not reused once the identit
 	await flush(4);
 	const posted: string[] = [];
 	const [reloadedClient, reloadedTransport] = reopen();
+	// The reload's own snapshot response comes back with no x-agora-instance header at all: a down or stripped
+	// identity is now indistinguishable from a reset, since both are read off this one response.
 	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
-		if (url.endsWith('/_runtime/identity')) return Promise.reject(new Error('identity route down'));
 		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		if (url.endsWith('/api/v1/local-room/messages')) {
@@ -514,4 +504,29 @@ test('a pending command id from before the reload is not reused once the identit
 	reloadedTransport.submit('88888888-0000-4000-8000-000000000002', 'sha256:' + 'a'.repeat(64), 'uncertain send');
 	await flush(6);
 	expect(posted).toEqual(['88888888-0000-4000-8000-000000000002']);
+});
+
+test('draft identity is read off the snapshot response itself, not a second request a reset could race between', async () => {
+	// Regresses the exact race a review found: fetching identity and the snapshot as two separate requests let a
+	// reset that lands between them attach the OLD instance to the NEW room's cursor-0 snapshot, restoring stale
+	// text. This asserts the fix's structural guarantee directly: exactly one request per resync ever carries
+	// instance data, so there is no second, race-prone request left for a reset to land inside.
+	const [client, transport] = boot;
+	const calls: string[] = [];
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		calls.push(url);
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, 'launch-a'));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'atomic' });
+	transport.saveDraft(roomId, 'atomic');
+	expect(calls.some((c) => c.endsWith('/_runtime/identity'))).toBe(false);
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a');
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['atomic']);
 });

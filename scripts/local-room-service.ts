@@ -78,6 +78,9 @@ try {
 		request.on('error', () => response.destroy());
 		response.setHeader('content-security-policy', "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
 		response.setHeader('cache-control', 'no-store'); response.setHeader('x-content-type-options', 'nosniff');
+		// Stamped on every response, including the snapshot's own, so a browser reading the snapshot body can bind
+		// it to this exact process without a second request a reset could race between: see host/live.ts.
+		response.setHeader('x-agora-instance', owner.launch);
 		if (request.headers.host !== new URL(owner.url).host || request.headers.origin && request.headers.origin !== owner.url) { answer(403, 'loopback origin refused'); return; }
 		const target = new URL(request.url ?? '/', owner.url);
 		if (target.pathname === '/_runtime/identity' && request.method === 'GET') { response.setHeader('x-agora-proof', proof(owner, target.searchParams.get('nonce') ?? '')); answer(200, owner.launch); return; }

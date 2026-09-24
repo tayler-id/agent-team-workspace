@@ -23,7 +23,7 @@ function annotate(presentation: Presentation, messages: readonly Schema<'RoomMes
 	return { authors, times, citations };
 }
 
-async function requestJson(baseUrl: string, path: string, body?: unknown): Promise<unknown> {
+async function requestJson(baseUrl: string, path: string, body?: unknown, onHeaders?: (headers: Headers) => void): Promise<unknown> {
 	const response = await fetch(`${baseUrl}/api/v1/local-room/${path}`, { signal: AbortSignal.timeout(5000), ...(body === undefined ? {} : { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }) });
 	if (!response.ok) {
 		const reason = await response.json().then((v: { reason_code?: unknown }) => typeof v.reason_code === 'string' ? ` ${v.reason_code}` : '', () => '');
@@ -33,6 +33,7 @@ async function requestJson(baseUrl: string, path: string, body?: unknown): Promi
 		error.retryAfterSeconds = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : undefined;
 		throw error;
 	}
+	onHeaders?.(response.headers);
 	return response.json() as Promise<unknown>;
 }
 // Only an unreachable server, a timeout, 408 or 5xx is transient. Any other 4xx, an invalid receipt or a receipt for
@@ -47,19 +48,18 @@ const sleep = (ms: number): Promise<void> => new Promise((resolve) => { setTimeo
 const draftBodyLimit = 4096;
 const draftKey = (scope: Schema<'RoomSnapshot'>['scope']): string => `agora.local-room.draft:${scope.project_id}:${scope.room_id}`;
 const pendingKey = (scope: Schema<'RoomSnapshot'>['scope']): string => `agora.local-room.pending:${scope.project_id}:${scope.room_id}`;
-// /_runtime/identity names the disposable process behind this origin, freshly random on every `local-room start`,
+// x-agora-instance names the disposable process behind this origin, freshly random on every `local-room start`,
 // including the restart a `reset` requires; it never survives a reset even when the reused port and empty cursor do.
-// A missing route, a network error, a non-ok response or an empty body all degrade to undefined here. Persistence
-// (read AND write, below) requires a verified nonempty instance on both sides: two undefined reads never match each
-// other, so an outage that hits the identity route on either save or restore loses that one draft/pending record
-// rather than risk showing one instance's text under another. See docs/site/local-room.md#live-room-ui for the limit.
-async function fetchInstance(baseUrl: string): Promise<string | undefined> {
-	try {
-		const response = await fetch(`${baseUrl}/_runtime/identity`, { signal: AbortSignal.timeout(5000) });
-		if (!response.ok) return undefined;
-		const text = (await response.text()).trim();
-		return text.length > 0 ? text : undefined;
-	} catch { return undefined; }
+// The service (scripts/local-room-service.ts) stamps this header on every response including the snapshot's own, so
+// the identity is read off the SAME response that carried the snapshot body rather than a separate request: a reset
+// landing between two independent fetches could otherwise attach the old instance to the new room's cursor-0
+// snapshot. A missing header or a blank value both degrade to undefined here. Persistence (read AND write, below)
+// requires a verified nonempty instance on both sides: two undefined reads never match each other, so an outage on
+// either save or restore loses that one draft/pending record rather than risk showing one instance's text under
+// another. See docs/site/local-room.md#live-room-ui for the limit.
+function instanceFromHeaders(headers: Headers): string | undefined {
+	const text = (headers.get('x-agora-instance') ?? '').trim();
+	return text.length > 0 ? text : undefined;
 }
 // sessionStorage bounds the draft's lifetime to this tab's session and keeps it private to that tab, so a reset or a
 // fresh instance (a distinct origin/port) never exposes another session's text. The stored cursor guards an
@@ -144,7 +144,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		for (;;) {
 			try {
 				const room = client.getState().rooms.find((r) => r.streamId === streamId);
-				if (!room || room.mode === 'resync') { currentInstance = await fetchInstance(baseUrl); applySnapshot(await requestJson(baseUrl, 'snapshot')); set({ phase: 'idle', error: undefined }); continue; }
+				if (!room || room.mode === 'resync') { applySnapshot(await requestJson(baseUrl, 'snapshot', undefined, (headers) => { currentInstance = instanceFromHeaders(headers); })); set({ phase: 'idle', error: undefined }); continue; }
 				if (room.mode === 'upgrade') { set({ phase: 'error', error: 'upgrade required: reload to resync' }); return; }
 				const count = applyEvents(await requestJson(baseUrl, `events?after=${room.cursor}`));
 				set({ phase: 'idle', error: undefined });
