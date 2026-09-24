@@ -83,19 +83,18 @@ Two seconds later | The status region says `1 new message, 1 unread.` A screen r
 Mark room as read | Last-seen moves to the cursor. Header reads `0 unread` and the notice clears.
 ```
 
-In the phone shell (700 px wide or less) and under any coarse pointer, every button is at least 44 by 44 CSS px. Desktop sizes are unchanged until the approved design baseline sets control sizes. Read state lives in the page session only: a second tab still counts the first tab's messages as unread, and a reload starts at `0 unread`. [Finding verdicts and receipts](repo:evidence/local-room/usability-fixes/README.md) record which review findings reproduced and which did not.
+In the phone shell (700 px wide or less) and under any coarse pointer, every button is at least 44 by 44 CSS px. Wider approved controls keep their width, so Send stays 88 px wide. With a mouse or trackpad on a wider window, buttons keep the approved 40 px height. Read state lives in the page session only: a second tab still counts the first tab's messages as unread, and a reload starts at `0 unread`. [Finding verdicts and receipts](repo:evidence/local-room/usability-fixes/README.md) record which review findings reproduced and which did not.
 
-The approved starting direction for the room's presentation is [the design results](repo:docs/design-handoff/results/README.md): `tokens.json`, the brand and component READMEs, `state-matrix.md` and the desktop and phone frames. This slice does not implement it. Measured against that baseline, the served page differs in these ways:
+The approved direction for the room's presentation is [the design results](repo:docs/design-handoff/results/README.md): `tokens.json`, the brand and component READMEs, `state-matrix.md` and the desktop and phone frames. Since `1d9584d` the served page uses its light tokens, Cal Sans UI and Cal Sans Text, rounded controls and pill buttons, and narrow-screen spacing; [the web shell](local-room-web-shell.md) describes that adaptation. Measured against the full baseline, the page still differs in these ways:
 
-- **Tokens and type.** `apps/web/src/fixture.css` uses system `canvas`/`canvastext` colors, a translucent grey border and Helvetica. The baseline is light only, with `surface-base` `#f6f6f8` and its other surface, ink and grey tokens, Cal Sans UI and Cal Sans Text from `design-system/fonts/`, and IBM Plex Mono for data. The page also still follows the OS dark mode.
-- **Shape and spacing.** The page uses a 0.75rem gap and small radii. The baseline uses a 4px spacing scale, 24px shell and sheet radii, 16px tiles and composer, 12px controls and 999px pills.
+- **Fonts in the served room.** The local runtime's content security policy has no `font-src`, so it blocks the inlined Cal Sans files and the page falls back to `system-ui`. IBM Plex Mono for data is not wired.
 - **Shell.** The page is one column: header, status, timeline, composer. `Screen-Room` puts rail, timeline and pane in one white frame. There is no rail, no pane and no phone nav.
-- **Header.** `RoomHeader` wants a two-tone crumb (project grey, room ink), the lifecycle chip first, the project agent shown as `not_enabled`, member count, repository and search. The page shows plain text and an outlined capitalized badge.
-- **Chips and alerts.** Chips here are outlined. The baseline chip is a neutral chip with one small state dot. The alert here uses a thick left border, and `OfflineBanner` in the state matrix replaces it.
-- **Composer.** `Composer` wants a `surface-inset` box with a toolbar of present agents, Ask center and Create task as soft pills, the Enter-sends hint, and named over-limit, offline, rate-limited and observer states. The page has a bare textarea, a Send button and a text summary of pending commands.
-- **Timeline.** The unread boundary here is centered grey text. The baseline uses a live chip with a faint rule, flat messages and tiles for typed work objects.
+- **Header.** `RoomHeader` wants a two-tone crumb (project grey, room ink), the project agent shown as `not_enabled`, repository and search. The page shows the project and room in one weight.
+- **Chips and alerts.** The lifecycle chip is a filled pill without the baseline's small state dot. The alert still uses a thick left border, and `OfflineBanner` in the state matrix replaces it.
+- **Composer.** `Composer` wants a toolbar of present agents, Ask center and Create task as soft pills, and named over-limit, offline, rate-limited and observer states. The page has a textarea, a Send button and a text summary of pending commands.
+- **Timeline.** The unread boundary here is centered grey text. The baseline uses a live chip with a faint rule and tiles for typed work objects.
 
-The next L4 presentation slice implements this baseline before any claim that the room UI is complete. The kicker says `approved design baseline not yet applied` until then.
+The room UI is not complete until these land.
 
 The narrow development transport is bounded HTTP polling using the existing Hono HTTP surface: `GET /api/v1/local-room/events?after=CURSOR`. Each page is a schema-validated `RoomEventBatch`; an empty page means caught up. Polling uses 250 ms between attempts, a five-second read timeout and cancellation. This does not claim the production R07 WebSocket handshake, subscription or queue protocol. The replaceable adapter leaves that work separate.
 
