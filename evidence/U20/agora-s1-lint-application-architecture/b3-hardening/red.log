@@ -1,0 +1,145 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-24T05:02:45.334Z
+parent: e61d9f210edc6b092dcc33dc2ddb5bcb68bf3163
+head: 25ea947de2556c50c6825cf8448939a47fadf302
+subject_revision: e61d9f210edc6b092dcc33dc2ddb5bcb68bf3163
+test_patch_applied_to_subject: true
+test_patch_files: packages/client-core/test/app-architecture.test.ts
+test_patch_digest: sha256:8c204b38b0020f2b98ca027d17554fd74a6bb1f72d7ba312f81a31deb8d2611b
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-VBJZpL
+
+ ❯ |unit| packages/client-core/test/app-architecture.test.ts (26 tests | 6 failed) 27243ms
+   × owner tables are explicit and test-visible architecture policy 5ms
+   × DOM property assignment and setAttribute-family mutation is receiver-aware; ordinary property writers stay allowed 7ms
+   × untyped mjs/cjs ambiguous DOM mutators are denied by name via the public CLI, closing the disableTypeChecked gap 500ms
+   × JSDoc import() type edges in guarded JavaScript cannot smuggle a forbidden module past import-boundary 493ms
+   × react/jsx-runtime namespace and default imports are allowed everywhere; real React namespace effects stay denied 13ms
+   × removing app-architecture protections makes denial assertions turn red 125ms
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 20 passed (26)
+   Start at  01:01:39
+   Duration  27.43s (tests 100%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > owner tables are explicit and test-visible architecture policy
+AssertionError: expected [ 'exceptionAllows(file, ', …(1) ] to have a length of 3 but got 2
+
+- Expected
++ Received
+
+- 3
++ 2
+
+ ❯ packages/client-core/test/app-architecture.test.ts:103:46
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > DOM property assignment and setAttribute-family mutation is receiver-aware; ordinary property writers stay allowed
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ deny packages/client-core/test/app-architecture.test.ts:303:139
+    301| test('DOM property assignment and setAttribute-family mutation is rece…
+    302|  const allow = async (code: string): Promise<void> => { expect(await h…
+    303|  const deny = async (code: string, needle: string): Promise<void> => {…
+       |                                                                                                                                           ^
+    304|  await deny('export const set = (n: HTMLElement, s: string): void => {…
+    305|  await deny('export const set = (n: HTMLElement, s: string): void => {…
+ ❯ packages/client-core/test/app-architecture.test.ts:304:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > untyped mjs/cjs ambiguous DOM mutators are denied by name via the public CLI, closing the disableTypeChecked gap
+AssertionError: apps/web/src/features/room/mutuntypedmuf2eud2.mjs: expected '[{"filePath":"/private/var/folders/h7…' to contain 'DOM mutation'
+
+- Expected
++ Received
+
+- DOM mutation
++ [{"filePath":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-VBJZpL/apps/web/src/features/room/mutuntypedmuf2eud2.mjs","messages":[{"ruleId":"@typescript-eslint/explicit-module-boundary-types","severity":2,"message":"Argument 'node' should be typed.","line":1,"column":24,"messageId":"missingArgType","endLine":1,"endColumn":28},{"ruleId":"@typescript-eslint/explicit-module-boundary-types","severity":2,"message":"Argument 'child' should be typed.","line":1,"column":30,"messageId":"missingArgType","endLine":1,"endColumn":35},{"ruleId":"@typescript-eslint/explicit-module-boundary-types","severity":2,"message":"Missing return type on function.","line":1,"column":37,"messageId":"missingReturnType","endLine":1,"endColumn":39}],"suppressedMessages":[],"errorCount":3,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0,"source":"export const mutate = (node, child) => { node.append(child); };\n","usedDeprecatedRules":[]}]
++
++
+
+ ❯ packages/client-core/test/app-architecture.test.ts:334:24
+    332|   const { status, out } = publicEslint(row.rel);
+    333|   expect(status, row.rel).toBe(1);
+    334|   expect(out, row.rel).toContain('DOM mutation');
+       |                        ^
+    335|  }
+    336| }, 60_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > JSDoc import() type edges in guarded JavaScript cannot smuggle a forbidden module past import-boundary
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ packages/client-core/test/app-architecture.test.ts:343:24
+    341|  writeProbe(leakRel, "/** @type {import('@agora/storage').Database} */…
+    342|  const leaked = publicEslint(leakRel);
+    343|  expect(leaked.status).toBe(1);
+       |                        ^
+    344|  expect(leaked.out).toContain('agora/import-boundary');
+    345|  expect(leaked.out).toContain('renderer code cannot import @agora/stor…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > react/jsx-runtime namespace and default imports are allowed everywhere; real React namespace effects stay denied
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ packages/client-core/test/app-architecture.test.ts:355:136
+    353|
+    354| test('react/jsx-runtime namespace and default imports are allowed ever…
+    355|  expect(await has("import * as jsxRuntime from 'react/jsx-runtime'; ex…
+       |                                                                                                                                        ^
+    356|  expect(await has("import jsxRuntime from 'react/jsx-dev-runtime'; exp…
+    357|  expect(await has("export async function boot(): Promise<unknown> { re…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > removing app-architecture protections makes denial assertions turn red
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/app-architecture.test.ts:579:68
+    577|   ['agora/import-boundary', feature, "/** @type {import('@agora/storag…
+    578|  ] as const) {
+    579|   expect((await agora(code, file)).some((m) => m.ruleId === rule)).toB…
+       |                                                                    ^
+    580|   const messages = await agora(code, file, new ESLint({ cwd: root, ign…
+    581|   expect(messages.filter((m) => m.ruleId === rule)).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+

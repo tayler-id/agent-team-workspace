@@ -1,0 +1,32 @@
+{
+	"parent": "e61d9f210edc6b092dcc33dc2ddb5bcb68bf3163",
+	"head": "25ea947de2556c50c6825cf8448939a47fadf302",
+	"method": "git diff parent..head; meaningful = added lines that are non-blank and not comment-only (//, /*, *, #); classes: source (code, config, tests), docs_evidence (docs/, evidence/, AGENTS.md, .agents/)",
+	"captain_target": "at most 400 meaningful source lines and 12 source files (D85)",
+	"classes": {
+		"docs_evidence": {
+			"files": 3,
+			"added_lines": 7,
+			"meaningful_lines": 6,
+			"removed_lines": 5
+		},
+		"source": {
+			"files": 7,
+			"added_lines": 163,
+			"meaningful_lines": 137,
+			"removed_lines": 14
+		}
+	},
+	"files": [
+		{ "file": ".agents/skills/verify-agora/SKILL.md", "class": "docs_evidence", "added": 1, "meaningful": 1, "removed": 1 },
+		{ "file": "agora/feature-map.json", "class": "source", "added": 1, "meaningful": 1, "removed": 1 },
+		{ "file": "apps/web/src/host/environment.ts", "class": "source", "added": 7, "meaningful": 4, "removed": 1 },
+		{ "file": "apps/web/src/host/index.ts", "class": "source", "added": 1, "meaningful": 1, "removed": 1 },
+		{ "file": "apps/web/src/main.tsx", "class": "source", "added": 2, "meaningful": 2, "removed": 3 },
+		{ "file": "docs/decisions.tsv", "class": "docs_evidence", "added": 1, "meaningful": 1, "removed": 0 },
+		{ "file": "docs/site/app-architecture.md", "class": "docs_evidence", "added": 5, "meaningful": 4, "removed": 4 },
+		{ "file": "packages/client-core/test/app-architecture.test.ts", "class": "source", "added": 68, "meaningful": 60, "removed": 1 },
+		{ "file": "scripts/boundary-policy.ts", "class": "source", "added": 18, "meaningful": 15, "removed": 3 },
+		{ "file": "scripts/renderer-policy.ts", "class": "source", "added": 66, "meaningful": 54, "removed": 4 }
+	]
+}

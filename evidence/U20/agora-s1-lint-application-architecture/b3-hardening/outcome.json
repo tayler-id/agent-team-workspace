@@ -1,0 +1,41 @@
+{
+	"schema_version": "agora.task-outcome/v1",
+	"task": "agora-s1-lint-application-architecture",
+	"unit": "U20",
+	"slice": "B3",
+	"parent": "e61d9f210edc6b092dcc33dc2ddb5bcb68bf3163",
+	"head": "25ea947de2556c50c6825cf8448939a47fadf302",
+	"result": "pass",
+	"summary": "B3 closes five bypasses an independent re-review found in B2b's checks (evidence/U20/agora-s1-lint-application-architecture/b2b-renderer/outcome.json's own limits already named property-assignment mutators and untyped ambiguous computed-key mutators as unclosed) and one false positive. Each bypass was first reproduced through the public `pnpm exec eslint <file>` CLI on a throwaway probe, confirming user-visible acceptance (exit 0, no diagnostic) before any fix, then re-run after the fix to confirm denial; probes were discarded, never committed. Closed: (1) a JSDoc `@type {import('mod').X}` edge in guarded `.js`/`.mjs`/`.cjs` has no `TSImportType` AST node, so `agora/import-boundary` now scans every comment for `import('...')` and runs the same violation check against the captured specifier; (2) `agora/renderer-footgun`'s DOM-mutation check only covered method calls, so `el.innerHTML = x` / `el.outerHTML = x` / `el.textContent = x` / `el.style = x` and any property write on a `CSSStyleDeclaration` receiver (`el.style.color = x`) were unguarded; a new AssignmentExpression visitor closes this, receiver-aware exactly like the existing method check; (3) `setAttribute`/`setAttributeNS`/`removeAttribute`/`removeAttributeNS`/`toggleAttribute`/`insertAdjacentText` were absent from both mutator sets entirely and are now exclusive mutators; (4) a `.mjs`/`.cjs` file under `tseslint.configs.disableTypeChecked` has no type checker, so ambiguous mutators (`append`/`prepend`/`remove`/`write`) were never checked at all (only exclusive mutators were name-trusted); the no-checker fallback now trusts every mutator name, ambiguous or exclusive, the same way; (5) `(el as unknown as Other).append(x)` changed the statically observed receiver type, hiding a real DOM element from the type-based check; `isDomMutationCall` and the new `isDomPropertyWrite` now also re-check the pre-cast expression's type through `as`/`<T>`/`!`/`satisfies`. The false positive: a default/namespace import of `react/jsx-runtime` or `react/jsx-dev-runtime` (the compiler-emitted JSX runtime, no effect surface) was flagged as a forbidden React default/namespace surface; `reactModuleFromSource` now excludes both from every 'raw React surface' check while leaving real `react` namespace/default effect access denied outside the framework owner.",
+	"red": "evidence/U20/agora-s1-lint-application-architecture/b3-hardening/red.log",
+	"green": "evidence/U20/agora-s1-lint-application-architecture/b3-hardening/green.log",
+	"red_assertions": "5 of 26 app-architecture.test.ts tests fail at parent e61d9f2 (the new DOM property/setAttribute test, the untyped mjs/cjs ambiguous-mutator test, the JSDoc import() test, the jsx-runtime near-miss test, and the three new rows in the guard-negative loop): each names the exact bypass the assertion closes; the 21 pre-existing B1/B2a/B2b assertions stay green at parent",
+	"green_assertions": "26 passed (26)",
+	"guard_negatives": [
+		"Three new rows in 'removing app-architecture protections makes denial assertions turn red' (innerHTML assignment, setAttribute, cast-evasion append, and the JSDoc import() row for import-boundary) turn red one at a time when their rule is disabled via overrideConfig, restored automatically since the override is a disposable ESLint instance",
+		"'owner tables are explicit and test-visible architecture policy' pins the widened exceptionAllows(file, ) call-site count from 2 to 3, making the new JSDoc-scan call site itself test-visible",
+		"Near-miss coverage stays green in the same tests: URLSearchParams/Headers.append, a custom object's .remove()/.setAttribute()/.style/.innerHTML fields, a JSDoc import() of an already-allowed module, and prose mentioning \"import(...)\" without a quoted specifier all remain unflagged"
+	],
+	"commands": [
+		"node scripts/record-red-green.mjs --parent e61d9f2 --head 25ea947 --out evidence/U20/agora-s1-lint-application-architecture/b3-hardening -- pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts",
+		"pnpm lint",
+		"pnpm typecheck",
+		"pnpm boundaries",
+		"pnpm docs:check (pre-existing unrelated markdownlint baseline failures confirmed identical at parent e61d9f2; docs:validate, docs:test and the naming guard, which docs:check also runs, all pass)",
+		"pnpm exec vitest run (apps/web) — 5 files, 42 tests"
+	],
+	"size": {
+		"receipt": "evidence/U20/agora-s1-lint-application-architecture/b3-hardening/size.json",
+		"source_files": 7,
+		"source_meaningful_lines": 137,
+		"captain_target": "400 meaningful lines / 12 source files (D85)",
+		"note": "Counted with the same method as the B2a/B2b size.json (git diff parent..head, non-blank non-comment-only added lines)."
+	},
+	"limits": [
+		"No Client/Host runtime, Feature discovery or product Features",
+		"An untyped .mjs/.cjs file gains no receiver-type disambiguation: every named mutator is now trusted by name alone there, trading a residual false-positive risk on a same-named non-DOM method for closing the true bypass; typed .ts/.tsx files keep full receiver-aware precision",
+		"A dynamic (non-literal) computed style property such as el.style[key] = v where key is not a string-literal/union is not resolved by the JSDoc-adjacent staticPropertyName helper and stays unchecked, consistent with the pre-existing computed-key limits already documented for method mutators",
+		"Fixing the newly-added property-assignment check surfaced a real pre-existing violation in apps/web/src/main.tsx (two direct DOM writes on a Host-returned element); relocated into a new Host adapter (apps/web/src/host/environment.ts's renderMountError) with identical rendered output, verified by apps/web's own 42-test vitest suite staying green"
+	],
+	"test_patch_digest": "sha256:8c204b38b0020f2b98ca027d17554fd74a6bb1f72d7ba312f81a31deb8d2611b"
+}

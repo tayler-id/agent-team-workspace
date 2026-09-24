@@ -1,0 +1,94 @@
+diff --git a/packages/client-core/test/app-architecture.test.ts b/packages/client-core/test/app-architecture.test.ts
+index 501717d..95e0594 100644
+--- a/packages/client-core/test/app-architecture.test.ts
++++ b/packages/client-core/test/app-architecture.test.ts
+@@ -100,7 +100,7 @@ test('owner tables are explicit and test-visible architecture policy', () => {
+ 	expect(b).toContain("export const PACKAGE_OWNERS = ['contracts', 'packages/client-core', 'packages/web-framework', 'packages/domain', 'packages/storage', 'apps/center', 'apps/web', 'apps/worker']");
+ 	for (const s of ["framework: 'apps/web/src/framework'", "client: 'apps/web/src/client'", "host: 'apps/web/src/host'", "features: 'apps/web/src/features'", 'export const domGlobals', 'apps/web/src']) expect(b).toContain(s);
+ 	expect(x).toContain("'agora/import-boundary', 'agora/renderer-footgun'");
+-	expect(b.match(/exceptionAllows\(file, /g)).toHaveLength(2);
++	expect(b.match(/exceptionAllows\(file, /g)).toHaveLength(3);
+ 	expect(e).toContain('noInlineConfig: true');
+ 	expect(e).toMatch(/assertArchitectureExceptionsValid\s*\(/);
+ 	expect(e).toContain('ts,tsx,mts,cts,js,jsx,mjs,cjs');
+@@ -298,6 +298,69 @@ test('DOM mutation is receiver-aware including computed and union keys; ordinary
+ 	expect(out).toContain('DOM mutation');
+ }, 120_000);
+ 
++test('DOM property assignment and setAttribute-family mutation is receiver-aware; ordinary property writers stay allowed', async () => {
++	const allow = async (code: string): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun')).toBe(false); };
++	const deny = async (code: string, needle: string): Promise<void> => { expect(await has(code, feature, 'agora/renderer-footgun', needle)).toBe(true); };
++	await deny('export const set = (n: HTMLElement, s: string): void => { n.innerHTML = s; };', 'innerHTML assignment');
++	await deny('export const set = (n: HTMLElement, s: string): void => { n.outerHTML = s; };', 'outerHTML assignment');
++	await deny('export const set = (n: HTMLElement, s: string): void => { n.textContent = s; };', 'textContent assignment');
++	await deny('export const set = (n: HTMLElement, s: string): void => { n.style = s; };', 'style assignment');
++	await deny('export const set = (n: HTMLElement, s: string): void => { n.style.color = s; };', 'color assignment');
++	await deny("export const set = (n: Element, s: string): void => { n.setAttribute('data-x', s); };", 'setAttribute');
++	await deny("export const set = (n: Element): void => { n.removeAttribute('data-x'); };", 'removeAttribute');
++	// Cast-evasion: wrapping a real DOM receiver in an unrelated type must not hide the mutation.
++	await deny('export const set = (n: HTMLElement, s: string): void => { (n as unknown as { innerHTML: string }).innerHTML = s; };', 'innerHTML assignment');
++	await deny('export const mount = (n: Element, c: Node): void => { (n as unknown as { append(x: Node): void }).append(c); };', 'append');
++	// Ordinary objects that merely happen to have these property/method names stay allowed.
++	await allow('interface Config { style: string; innerHTML: string } export const set = (c: Config, v: string): void => { c.style = v; c.innerHTML = v; };');
++	await allow("export const set = (c: { setAttribute: (k: string, v: string) => void }, v: string): void => { c.setAttribute('k', v); };");
++	const rel = `apps/web/src/features/room/prop${Date.now().toString(36)}.tsx`;
++	writeProbe(rel, "export const set = (n: HTMLElement, s: string): void => { n.innerHTML = s; };\n");
++	const { status, out } = publicEslint(rel);
++	expect(status).toBe(1);
++	expect(out).toContain('innerHTML assignment');
++}, 120_000);
++
++test('untyped mjs/cjs ambiguous DOM mutators are denied by name via the public CLI, closing the disableTypeChecked gap', () => {
++	const stamp = `mutuntyped${Date.now().toString(36)}`;
++	const rows = [
++		{ rel: `apps/web/src/features/room/${stamp}.mjs`, body: 'export const mutate = (node, child) => { node.append(child); };\n' },
++		{ rel: `apps/web/src/features/room/${stamp}.cjs`, body: "module.exports.mutate = (node, child) => { node.prepend(child); };\n" },
++	];
++	for (const row of rows) {
++		writeProbe(row.rel, row.body);
++		const { status, out } = publicEslint(row.rel);
++		expect(status, row.rel).toBe(1);
++		expect(out, row.rel).toContain('DOM mutation');
++	}
++}, 60_000);
++
++test('JSDoc import() type edges in guarded JavaScript cannot smuggle a forbidden module past import-boundary', () => {
++	const stamp = `jsdoc${Date.now().toString(36)}`;
++	const leakRel = `apps/web/src/features/room/${stamp}.mjs`;
++	writeProbe(leakRel, "/** @type {import('@agora/storage').Database} */\nexport const leak = undefined;\n");
++	const leaked = publicEslint(leakRel);
++	expect(leaked.status).toBe(1);
++	expect(leaked.out).toContain('agora/import-boundary');
++	expect(leaked.out).toContain('renderer code cannot import @agora/storage');
++	// Near miss: prose mentioning "import(...)" without a quoted specifier, and a JSDoc import() of an
++	// already-allowed module, must not be flagged.
++	const okRel = `apps/web/src/features/room/${stamp}-ok.mjs`;
++	writeProbe(okRel, "// see the dynamic import() syntax docs\n/** @type {import('react').ReactNode} */\nexport const ok = undefined;\n");
++	const ok = publicEslint(okRel);
++	expect(ok.out).not.toContain('agora/import-boundary');
++}, 60_000);
++
++test('react/jsx-runtime namespace and default imports are allowed everywhere; real React namespace effects stay denied', async () => {
++	expect(await has("import * as jsxRuntime from 'react/jsx-runtime'; export const j = jsxRuntime;", feature, 'agora/renderer-footgun')).toBe(false);
++	expect(await has("import jsxRuntime from 'react/jsx-dev-runtime'; export const j = jsxRuntime;", feature, 'agora/renderer-footgun')).toBe(false);
++	expect(await has("export async function boot(): Promise<unknown> { return import('react/jsx-runtime'); }", feature, 'agora/renderer-footgun')).toBe(false);
++	expect(await has("import * as React from 'react'; export const r = React;", feature, 'agora/renderer-footgun', owners.framework)).toBe(true);
++	const rel = `apps/web/src/features/room/jsxrt${Date.now().toString(36)}.tsx`;
++	writeProbe(rel, "import * as jsxRuntime from 'react/jsx-runtime';\nexport const j = jsxRuntime;\n");
++	expect(publicEslint(rel).out).not.toContain('agora/renderer-footgun');
++}, 60_000);
++
+ test('inline eslint disables cannot suppress Agora rules including bare and line forms', async () => {
+ 	const windowUse = 'export const read = (): string => window.name;';
+ 	expect(await has(`/* eslint-disable */\n${windowUse}`, feature, 'agora/renderer-footgun', 'window')).toBe(true);
+@@ -508,6 +571,10 @@ test('removing app-architecture protections makes denial assertions turn red', a
+ 		['agora/renderer-footgun', feature, "export const a = (n: Element, c: Node, k: 'append' | 'prepend'): void => { n[k](c); };"],
+ 		['agora/renderer-footgun', feature, "export const r = (n: Element, k: 'remove' | 'normalize'): void => { n[k](); };"],
+ 		['agora/renderer-footgun', feature, 'declare const window: Window; export const read = (): string => window.name;'],
++		['agora/renderer-footgun', feature, 'export const set = (n: HTMLElement, s: string): void => { n.innerHTML = s; };'],
++		['agora/renderer-footgun', feature, "export const set = (n: Element, s: string): void => { n.setAttribute('data-x', s); };"],
++		['agora/renderer-footgun', feature, 'export const mount = (n: Element, c: Node): void => { (n as unknown as { append(x: Node): void }).append(c); };'],
++		['agora/import-boundary', feature, "/** @type {import('@agora/storage').Database} */\nexport const leak = undefined;"],
+ 	] as const) {
+ 		expect((await agora(code, file)).some((m) => m.ruleId === rule)).toBe(true);
+ 		const messages = await agora(code, file, new ESLint({ cwd: root, ignore: false, overrideConfig: [{ rules: { [rule]: 'off' } }] }));
