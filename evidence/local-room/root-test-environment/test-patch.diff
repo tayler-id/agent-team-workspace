@@ -1,0 +1,72 @@
+diff --git a/agora/feature-map.json b/agora/feature-map.json
+index 43abe25..527440b 100644
+--- a/agora/feature-map.json
++++ b/agora/feature-map.json
+@@ -232,8 +232,8 @@
+ 		{
+ 			"id": "web-framework-client-host",
+ 			"documentation": "docs/site/local-room-web-shell.md",
+-			"paths": ["packages/web-framework/src", "packages/web-framework/package.json", "packages/web-framework/tsconfig.json", "apps/web/src", "apps/web/package.json", "apps/web/vite.config.ts", "apps/web/vitest.config.ts", "apps/web/tsconfig.json", "apps/web/index.html", "scripts/boundary-policy.ts"],
+-			"public": ["@agora/web-framework createRoomClient", "@agora/web-framework AgoraProvider", "@agora/web-framework EnvironmentPort", "@agora/web-framework named hooks", "pnpm web:dev", "pnpm web:build", "pnpm web:test"],
++			"paths": ["packages/web-framework/src", "packages/web-framework/package.json", "packages/web-framework/tsconfig.json", "apps/web/src", "apps/web/package.json", "apps/web/vite.config.ts", "apps/web/vitest.config.ts", "apps/web/tsconfig.json", "apps/web/index.html", "scripts/boundary-policy.ts", "vitest.config.ts"],
++			"public": ["@agora/web-framework createRoomClient", "@agora/web-framework AgoraProvider", "@agora/web-framework EnvironmentPort", "@agora/web-framework named hooks", "pnpm web:dev", "pnpm web:build", "pnpm web:test", "pnpm test"],
+ 			"scenarios": ["packages/web-framework/test/client.test.ts", "packages/web-framework/test/boundaries.test.ts", "apps/web/test/fixture.test.ts", "apps/web/test/app.test.tsx", "apps/web/test/live.test.ts"],
+ 			"fixtures": ["agora.web-fixture.room/v1 development-only room fixture, no production conversation schema"],
+ 			"platforms": ["node24", "browser"],
+diff --git a/docs/runbooks/development.md b/docs/runbooks/development.md
+index 4d5fe1c..a51f1e1 100644
+--- a/docs/runbooks/development.md
++++ b/docs/runbooks/development.md
+@@ -19,7 +19,7 @@ On macOS, a signed host launcher can reject the correctly installed Rolldown add
+ | `pnpm contracts:check` | Regenerates into a clean directory and fails on any byte of drift or any schema keyword outside the tested subset |
+ | `pnpm contracts:conform` | Runs the golden vectors through the TypeScript and Swift consumers and prints the joint report |
+ | `pnpm client:replay -- --json --swift` | Public lane-7 fixture driver, comparing literal replay snapshots in the core and independent generated-value Swift consumer |
+-| `pnpm test` | Unit and PostgreSQL tests against a throwaway cluster |
++| `pnpm test` | Unit, `apps/web` browser-room (jsdom) and PostgreSQL tests against a throwaway cluster |
+ | `pnpm test:unit` | Unit/contract tests; wrapper lifecycle tests also require PostgreSQL 18 binaries |
+ | `pnpm test:pg` | PostgreSQL tests only, throwaway cluster |
+ | `pnpm migrate` | Applies pending migrations as the owner in `AGORA_MIGRATION_DATABASE_URL` and prints a JSON report |
+diff --git a/docs/site/cli.md b/docs/site/cli.md
+index 9ddd832..f962815 100644
+--- a/docs/site/cli.md
++++ b/docs/site/cli.md
+@@ -40,7 +40,7 @@ This is the complete current contributor command surface, plus a separate invent
+ | `pnpm lint` | Strict ESLint and import/public-type rules; generated TypeScript retains boundary checking |
+ | `pnpm typecheck` | TypeScript packages/tests plus a no-DOM/no-Node core compile lane |
+ | `pnpm boundaries` | Isolated import/export/public-type and application-architecture import-ownership guard negatives; writes `.scratch/boundaries.json` |
+-| `pnpm test` | Unit, contract and real PostgreSQL tests |
++| `pnpm test` | Unit, contract, real PostgreSQL and `apps/web` browser-room tests (jsdom, same environment as `pnpm web:test`) |
+ | `pnpm test:unit` | Unit and contract tests, including mandatory Swift conformance |
+ | `pnpm test:pg` | Throwaway PostgreSQL tests only |
+ | `pnpm check` | Lint, typecheck, documentation, contract drift and tests |
+diff --git a/docs/site/local-room-web-shell.md b/docs/site/local-room-web-shell.md
+index f24d823..746059c 100644
+--- a/docs/site/local-room-web-shell.md
++++ b/docs/site/local-room-web-shell.md
+@@ -43,6 +43,6 @@ flowchart TD
+ 
+ Inspect the [framework barrel](repo:packages/web-framework/src/index.ts), [EnvironmentPort](repo:packages/web-framework/src/environment.ts), [RoomClient and hooks](repo:packages/web-framework/src/client.ts), [Host adapter](repo:apps/web/src/host/environment.ts), [fixture transport](repo:apps/web/src/host/fixture.ts) and [room shell](repo:apps/web/src/components/App.tsx). Behavioral coverage lives in [framework client tests](repo:packages/web-framework/test/client.test.ts), [framework boundary tests](repo:packages/web-framework/test/boundaries.test.ts), [fixture tests](repo:apps/web/test/fixture.test.ts) and [shell tests](repo:apps/web/test/app.test.tsx).
+ 
+-Run `pnpm web:test` for unit and component coverage, `pnpm web:dev` for the live fixture, and `pnpm web:build` for the production bundle. The approved-shell check used the owned local runtime and chrome-devtools-axi at desktop and 390x844 phone widths: no horizontal overflow, message send/read rendered through the live client, and the browser console was clean. This is a visual smoke check, not final visual acceptance or an accessibility audit. The framework and host foundation landed in three earlier dependency-ordered units, with red/green and size evidence under [evidence/local-room/web-framework-foundation/](repo:evidence/local-room/web-framework-foundation/outcome.json), [evidence/local-room/web-framework-host/](repo:evidence/local-room/web-framework-host/outcome.json) and [evidence/local-room/web-framework-shell/](repo:evidence/local-room/web-framework-shell/outcome.json). `.agents/skills/verify-agora/SKILL.md` records the public browser driver checklist.
++Run `pnpm web:test` for unit and component coverage, `pnpm web:dev` for the live fixture, and `pnpm web:build` for the production bundle. The root `pnpm test`/`pnpm check` gate runs these same `apps/web/test/**` files under the same jsdom + React environment (`vitest.config.ts`'s `projects` array points at `apps/web/vitest.config.ts` directly instead of re-declaring a Node-environment glob over them), so a contributor running only the root gate exercises this coverage too, not just `pnpm web:test` in isolation. The approved-shell check used the owned local runtime and chrome-devtools-axi at desktop and 390x844 phone widths: no horizontal overflow, message send/read rendered through the live client, and the browser console was clean. This is a visual smoke check, not final visual acceptance or an accessibility audit. The framework and host foundation landed in three earlier dependency-ordered units, with red/green and size evidence under [evidence/local-room/web-framework-foundation/](repo:evidence/local-room/web-framework-foundation/outcome.json), [evidence/local-room/web-framework-host/](repo:evidence/local-room/web-framework-host/outcome.json) and [evidence/local-room/web-framework-shell/](repo:evidence/local-room/web-framework-shell/outcome.json). `.agents/skills/verify-agora/SKILL.md` records the public browser driver checklist.
+ 
+ Next: [client synchronization](synchronization.md) and [system architecture](architecture.md).
+diff --git a/vitest.config.ts b/vitest.config.ts
+index 4684c02..387c8eb 100644
+--- a/vitest.config.ts
++++ b/vitest.config.ts
+@@ -7,8 +7,13 @@ export default defineConfig({
+ 				// packages/verification/test/project.test.ts hashes every tracked+untracked file under apps/packages/scripts/contracts/agora
+ 				// as its live freshness digest; a concurrent file (e.g. app-architecture.test.ts's owner-stub setup/cleanup) writing into
+ 				// those same trees mid-run flips that digest and makes the instance it started against look stale. Serialize unit files.
+-				test: { name: 'unit', include: ['apps/*/test/**/*.test.ts', 'packages/*/test/**/*.test.ts'], exclude: ['**/*.pg.test.ts'], fileParallelism: false },
++				// apps/web/test is excluded here and run instead through its own project below: those tests need jsdom + the React
++				// plugin (apps/web/vitest.config.ts), which this Node-environment project does not provide.
++				test: { name: 'unit', include: ['apps/*/test/**/*.test.ts', 'packages/*/test/**/*.test.ts'], exclude: ['**/*.pg.test.ts', 'apps/web/test/**'], fileParallelism: false },
+ 			},
++			// Runs apps/web's own tests (including .test.tsx) under its own jsdom + React environment, so the root
++			// gate exercises the same behavior pnpm web:test already proves passes instead of the wrong Node environment.
++			'apps/web/vitest.config.ts',
+ 			{
+ 				// Contract tests drive SwiftPM; one build directory cannot serve two concurrent runs, so files run one at a time.
+ 				test: { name: 'contracts', include: ['contracts/test/**/*.test.ts'], fileParallelism: false, testTimeout: 600_000 },

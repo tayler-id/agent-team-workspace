@@ -1,0 +1,17 @@
+{
+	"schema_version": "agora.evidence.size/v1",
+	"unit": "root-test-environment",
+	"parent": "b9a9efbd0557f1de58da9e47b60e2a39feb3bb26",
+	"head": "6f01c8a698cb64cef6866a04dfa6699285fe780a",
+	"budget": {
+		"meaningful_code_test_lines": 400,
+		"source_files": 12
+	},
+	"counts": {
+		"root_vitest_config_lines": 7,
+		"total_meaningful_code_test_lines": 7,
+		"source_files": ["vitest.config.ts"],
+		"source_files_count": 1,
+		"note": "No test file changed; the fix is a routing/environment change in the root Vitest project config only. agora/feature-map.json, docs/runbooks/development.md, docs/site/cli.md and docs/site/local-room-web-shell.md are documentation/tracking edits, not counted against the code/test cap."
+	}
+}

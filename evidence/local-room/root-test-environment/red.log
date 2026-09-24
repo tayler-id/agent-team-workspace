@@ -1,0 +1,223 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-24T06:17:19.803Z
+parent: b9a9efbd0557f1de58da9e47b60e2a39feb3bb26
+head: 6f01c8a698cb64cef6866a04dfa6699285fe780a
+subject_revision: b9a9efbd0557f1de58da9e47b60e2a39feb3bb26
+test_patch_applied_to_subject: true
+test_patch_files: 
+test_patch_digest: sha256:554b26c483460e34758c1b90b90edc2308f1903ddf1ab3b49183b3910a17b5c5
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit --project web apps/web/test/live.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-gZZCHj
+
+ ❯ |unit| apps/web/test/live.test.ts (18 tests | 11 failed) 1533ms
+   × submit posts the command, applies the receipt and clears the draft without an optimistic insert 18ms
+   × a successful send settles even though the server digest never equals the Host digestText hash 17ms
+   × a 503 retries the frozen command and settles once the server accepts it 23ms
+   × a rejected send retries the frozen command and settles once the server accepts it 1113ms
+   × pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message 25ms
+   × a 400 malformed_command stops retrying, keeps the draft and shows the failure 37ms
+   × a schema-invalid receipt stops retrying, keeps the draft and shows the failure 34ms
+   × a receipt for another command stops retrying, keeps the draft and shows the failure 36ms
+   × disconnect cancels an in-flight command retry without settling it; reconnect resumes and settles the same command 22ms
+   × a browser offline event, not a fabricated heartbeat, distinguishes offline from a live retry backoff 6ms
+   × a browser online event does not claim link: online until a poll actually succeeds 5ms
+
+ Test Files  1 failed (1)
+      Tests  11 failed | 7 passed (18)
+   Start at  02:17:09
+   Duration  1.77s (tests 90%, import 6%, transform 4%)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > submit posts the command, applies the receipt and clears the draft without an optimistic insert
+AssertionError: expected [ { …(3) } ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "streamId": "aaaaaaaa-0000-4000-8000-000000000001",
++     "tag": "unsent",
++     "text": "hello",
++   },
++ ]
+
+ ❯ apps/web/test/live.test.ts:85:35
+     83|  transport.submit('ffffffff-0000-4000-8000-000000000001', 'sha256:' + …
+     84|  await flush(6);
+     85|  expect(client.getState().drafts).toEqual([]);
+       |                                   ^
+     86|  expect(client.getState().commands.find((c) => c.commandId === 'ffffff…
+     87|  expect(room()?.messages).toHaveLength(0); // The receipt settles the …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a successful send settles even though the server digest never equals the Host digestText hash
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ apps/web/test/live.test.ts:111:19
+    109|  transport.submit('22222222-0000-4000-8000-000000000001', 'sha256:' + …
+    110|  await flush(6);
+    111|  expect(attempts).toBe(1); // A server-identity-only match must settle…
+       |                   ^
+    112|  expect(client.getState().drafts).toEqual([]);
+    113|  expect(client.getState().commands.find((c) => c.commandId === '222222…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a 503 retries the frozen command and settles once the server accepts it
+AssertionError: expected +0 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 0
+
+ ❯ apps/web/test/live.test.ts:135:19
+    133|  transport.submit('12121212-0000-4000-8000-000000000001', 'sha256:' + …
+    134|  await flush(12);
+    135|  expect(attempts).toBe(2);
+       |                   ^
+    136|  expect(boot[0].getState().commands.find((c) => c.commandId === '12121…
+    137| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a rejected send retries the frozen command and settles once the server accepts it
+AssertionError: expected +0 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 0
+
+ ❯ apps/web/test/live.test.ts:159:19
+    157|  await new Promise((resolve) => { setTimeout(resolve, 1100); }); // Th…
+    158|  await flush(4);
+    159|  expect(attempts).toBe(2);
+       |                   ^
+    160|  expect(boot[0].getState().commands.find((c) => c.commandId === '11111…
+    161| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message
+AssertionError: expected Set{} to deeply equal Set{ '33333333-0000-4000-8000-000000…' }
+
+- Expected
++ Received
+
+- Set {
+-   "33333333-0000-4000-8000-000000000001",
+- }
++ Set {}
+
+ ❯ apps/web/test/live.test.ts:213:26
+    211|  transport.submit('33333333-0000-4000-8000-000000000002', 'sha256:' + …
+    212|  await flush(12);
+    213|  expect(new Set(posted)).toEqual(new Set(['33333333-0000-4000-8000-000…
+       |                          ^
+    214|  expect(client.getState().commands.map((c) => [c.commandId, c.tag])).t…
+    215|  expect(client.getState().drafts).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a 400 malformed_command stops retrying, keeps the draft and shows the failure
+ FAIL  |unit| apps/web/test/live.test.ts > a receipt for another command stops retrying, keeps the draft and shows the failure
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ apps/web/test/live.test.ts:230:17
+    228|  transport.submit('44444444-0000-4000-8000-000000000001', 'sha256:' + …
+    229|  await flush(20);
+    230|  expect(posted).toHaveLength(1);
+       |                 ^
+    231|  expect(transport.getState().decision).toContain('stop');
+    232|  expect(transport.getState().decision).toContain(shown);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a schema-invalid receipt stops retrying, keeps the draft and shows the failure
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ apps/web/test/live.test.ts:230:17
+    228|  transport.submit('44444444-0000-4000-8000-000000000001', 'sha256:' + …
+    229|  await flush(20);
+    230|  expect(posted).toHaveLength(1);
+       |                 ^
+    231|  expect(transport.getState().decision).toContain('stop');
+    232|  expect(transport.getState().decision).toContain(shown);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > disconnect cancels an in-flight command retry without settling it; reconnect resumes and settles the same command
+AssertionError: expected undefined to be false // Object.is equality
+
+- Expected:
+false
+
++ Received:
+undefined
+
+ ❯ apps/web/test/live.test.ts:294:34
+    292|  transport.submit('66666666-0000-4000-8000-000000000001', 'sha256:' + …
+    293|  await flush(4);
+    294|  expect(messagesSignal?.aborted).toBe(false);
+       |                                  ^
+    295|  transport.disconnect();
+    296|  await flush(4);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a browser offline event, not a fabricated heartbeat, distinguishes offline from a live retry backoff
+ReferenceError: window is not defined
+ ❯ apps/web/test/live.test.ts:323:2
+    321|  expect(transport.getState().link).toBe('retrying');
+    322|  Object.defineProperty(navigator, 'onLine', { value: false, configurab…
+    323|  window.dispatchEvent(new Event('offline'));
+       |  ^
+    324|  expect(transport.getState().link).toBe('offline');
+    325|  expect(transport.getState().online).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a browser online event does not claim link: online until a poll actually succeeds
+ReferenceError: window is not defined
+ ❯ apps/web/test/live.test.ts:347:2
+    345|  await flush(4);
+    346|  expect(transport.getState().link).toBe('retrying'); // Still failing:…
+    347|  window.dispatchEvent(new Event('online'));
+       |  ^
+    348|  // The 'online' event is only network reachability, not an observed r…
+    349|  expect(transport.getState().link).toBe('retrying');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/11]⎯
+
