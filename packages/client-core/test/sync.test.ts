@@ -103,6 +103,19 @@ test('receipts dedupe commands but never fast-forward a timeline; offline sends 
 	expect(synchronize(result.state, { type: 'receipt', receipt }).state).toBe(result.state);
 });
 
+test('your own receipted message is seen whichever of receipt and event lands first; earlier unread goes with it', () => {
+	const other = (seq: string): ClientInput => ({ type: 'event', streamId: room, seq, change: { type: 'message', message: message(`m${seq}`, '1', 'from someone else', seq) } });
+	const own = (seq: string): ClientInput => ({ type: 'event', streamId: room, seq, change: { type: 'message', message: message('mine', '1', 'mine', seq) } });
+	const ownReceipt = (seq: string): ClientInput => ({ type: 'receipt', receipt: { ...receipt, event_cursors: [{ stream_id: room, committed_seq: seq }] } });
+	const view = (s: ClientState) => ({ lastSeen: s.rooms[0]?.lastSeen, unread: s.rooms[0]?.unread });
+	const receiptFirst = drive(snapshot(), other('2'), submit, ownReceipt('3'));
+	expect(view(receiptFirst)).toEqual({ lastSeen: '0', unread: 2 });
+	expect(view(synchronize(receiptFirst, own('3')).state)).toEqual({ lastSeen: '3', unread: 0 });
+	expect(view(drive(snapshot(), other('2'), submit, own('3'), ownReceipt('3')))).toEqual({ lastSeen: '3', unread: 0 });
+	expect(view(drive(snapshot(), submit, own('2'), ownReceipt('2'), other('3')))).toEqual({ lastSeen: '2', unread: 1 });
+	expect(view(drive(snapshot(), other('2'), submit, own('3')))).toEqual({ lastSeen: '0', unread: 3 });
+});
+
 test('retry decisions preserve the original id/digest, refresh stale state and respect denial/rate delay', () => {
 	const pending = drive(snapshot(), submit);
 	for (const [failure, online, digest, type] of [

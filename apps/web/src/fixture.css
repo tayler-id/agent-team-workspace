@@ -60,4 +60,7 @@ h1 { margin: 0; font: 600 24px/1.25 "Cal Sans UI", system-ui, sans-serif; letter
  .composer { padding-top: 8px; }
  .composer textarea { min-height: 72px; }
 }
+/* Touch targets: every button is at least 44x44 CSS px on a phone-width shell or under a coarse pointer (WCAG 2.5.5). */
+:where(.shell.phone) button { min-height: 44px; min-width: 44px; }
+@media (pointer: coarse) { button { min-height: 44px; min-width: 44px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; } }

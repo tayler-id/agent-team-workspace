@@ -59,7 +59,7 @@ export function App({ header, presentation, live = false, onAnswer }: AppProps):
 	const roomStatus = projectStatus(room, connection);
 	const messages = room?.messages, lastSeen = room?.lastSeen;
 	const projected = useMemo(() => projectRows(room, presentation), [messages, lastSeen, presentation]);
-	const announcement = useDelayedAnnouncement(projected.length, announceDelay);
+	const announcement = useDelayedAnnouncement(room?.unread, announceDelay);
 	const composerDisabled = !room || roomStatus.phase === 'revoked';
 	return (
 		<div className={phone ? 'shell phone' : 'shell'} data-viewport={phone ? 'phone' : 'desktop'}>

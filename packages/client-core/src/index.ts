@@ -16,9 +16,20 @@ function copy<T>(value: T): T {
 	return (Array.isArray(value) ? value.map((v: unknown) => copy(v)) : Object.fromEntries(Object.entries(value).map(([k, v]: [string, unknown]) => [k, copy(v)]))) as T;
 }
 export function initialState(): ClientState { return freeze({ rooms: [], commands: [], drafts: [] }); }
-const finish = (state: ClientState, requests: Request[] = [], acknowledgements: Transition['acknowledgements'] = []): Transition => freeze({ state, requests, acknowledgements });
+const finish = (state: ClientState, requests: Request[] = [], acknowledgements: Transition['acknowledgements'] = []): Transition => freeze({ state: seenOwn(state), requests, acknowledgements });
 const putRoom = (state: ClientState, room: Room): ClientState => ({ ...state, rooms: state.rooms.some((r) => r.streamId === room.streamId) ? state.rooms.map((r) => r.streamId === room.streamId ? room : r) : [...state.rooms, room] });
 const unread = (room: Room): Room => ({ ...room, unread: room.messages.filter((m) => m.content.tag === 'visible' && compare(m.createdSeq, room.lastSeen) > 0).length });
+// Sending is reading: once the cursor has applied this client's own receipted event, lastSeen moves up to it,
+// so your message never counts as unread. Receipt order against the event does not matter; the later of the two moves it.
+function seenOwn(state: ClientState): ClientState {
+	const own = state.commands.flatMap((c) => c.tag === 'received' ? c.receipt.event_cursors : []);
+	let rooms = state.rooms;
+	for (const room of state.rooms) {
+		const seq = own.reduce((max, c) => c.stream_id === room.streamId && compare(c.committed_seq, room.cursor) <= 0 && compare(c.committed_seq, max) > 0 ? c.committed_seq : max, room.lastSeen);
+		if (seq !== room.lastSeen) rooms = rooms.map((r) => r === room ? unread({ ...room, lastSeen: seq }) : r);
+	}
+	return rooms === state.rooms ? state : { ...state, rooms };
+}
 const position = (a: Frozen<Message>, b: Frozen<Message>): number => compare(a.createdSeq, b.createdSeq) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 const ordered = (messages: readonly Frozen<Message>[]): readonly Frozen<Message>[] => [...messages].sort(position);
 const halt = (room: Room, mode: 'resync' | 'upgrade'): Room => ({ ...room, mode, pending: [] });
