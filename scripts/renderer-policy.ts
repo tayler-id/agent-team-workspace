@@ -5,10 +5,14 @@ import { WEB_OWNERS, domGlobals, isWebTestOrConfig, webLayer } from './boundary-
 
 const effects = new Set(['useEffect', 'useLayoutEffect', 'useInsertionEffect']);
 const reactSources = new Set(['react', 'react/index.js', 'react/index']);
-const exclusiveMutators = new Set(['appendChild', 'removeChild', 'replaceChild', 'insertBefore', 'replaceChildren', 'replaceWith', 'insertAdjacentElement', 'insertAdjacentHTML', 'writeln']);
+const exclusiveMutators = new Set(['appendChild', 'removeChild', 'replaceChild', 'insertBefore', 'replaceChildren', 'replaceWith', 'insertAdjacentElement', 'insertAdjacentHTML', 'insertAdjacentText', 'writeln', 'setAttribute', 'setAttributeNS', 'removeAttribute', 'removeAttributeNS', 'toggleAttribute']);
 const ambiguousMutators = new Set(['append', 'prepend', 'remove', 'write']);
 const allMutators = new Set([...exclusiveMutators, ...ambiguousMutators]);
 const domMutationHosts = new Set(['Node', 'ParentNode', 'ChildNode', 'Element', 'HTMLElement', 'SVGElement', 'Document', 'DocumentFragment', 'CharacterData', 'Text', 'Comment', 'Range']);
+/** Direct-assignment mutation properties: `el.innerHTML = x`, `el.style = "..."` (a nested `el.style.color = x` is caught separately by its CSSStyleDeclaration receiver, any property). */
+const directMutationProps = new Set(['innerHTML', 'outerHTML', 'textContent', 'style']);
+/** The compiler-emitted JSX runtime carries no effect surface; a default/namespace import of it is not a React-effect bypass. */
+const jsxRuntimeSources = new Set(['react/jsx-runtime', 'react/jsx-dev-runtime']);
 
 const hostOrFramework = (file: string): boolean => { const l = webLayer(file); return l?.kind === 'host' || l?.kind === 'framework'; };
 const isFramework = (file: string): boolean => webLayer(file)?.kind === 'framework';
@@ -65,14 +69,32 @@ function propertyFromDomMutationHost(checker: ts.TypeChecker, receiver: ts.Type,
 	return false;
 }
 
+/** Unwraps `as`/`<T>`/`!`/`satisfies` down to the pre-cast expression, or undefined if there was no cast. */
+function unwrapCast(node: TSESTree.Expression): TSESTree.Expression | undefined {
+	let current: TSESTree.Node = node;
+	let unwrapped = false;
+	while (current.type === AST_NODE_TYPES.TSAsExpression || current.type === AST_NODE_TYPES.TSTypeAssertion || current.type === AST_NODE_TYPES.TSNonNullExpression || current.type === AST_NODE_TYPES.TSSatisfiesExpression) {
+		current = current.expression;
+		unwrapped = true;
+	}
+	return unwrapped ? current : undefined;
+}
+
 function isDomMutationCall(context: TSESLint.RuleContext<'forbidden', []>, member: TSESTree.MemberExpression, method: string): boolean {
 	let services: ReturnType<typeof ESLintUtils.getParserServices> | undefined;
 	try { services = ESLintUtils.getParserServices(context, true); } catch { services = undefined; }
 	const checker = services?.program?.getTypeChecker();
 	const tsObject = services ? services.esTreeNodeToTSNodeMap.get(member.object) : undefined;
-	if (!checker || !tsObject) return exclusiveMutators.has(method);
+	// No type information at all (untyped .mjs/.cjs lanes): a named mutator, ambiguous or not, cannot be
+	// disambiguated from a DOM receiver by structure, so trust the name the same way exclusive mutators already are.
+	if (!checker || !tsObject) return allMutators.has(method);
 	const receiver = checker.getTypeAtLocation(tsObject);
 	if (propertyFromDomMutationHost(checker, receiver, method)) return true;
+	// A cast such as `(el as unknown as Other)` changes the statically observed type at this node; also check
+	// the pre-cast expression so wrapping a real DOM receiver in an unrelated type cannot hide the mutation.
+	const inner = unwrapCast(member.object);
+	const innerNode = inner && services ? services.esTreeNodeToTSNodeMap.get(inner) : undefined;
+	if (innerNode && propertyFromDomMutationHost(checker, checker.getTypeAtLocation(innerNode), method)) return true;
 	if (ambiguousMutators.has(method)) return false;
 	if (exclusiveMutators.has(method)) {
 		const prop = checker.getPropertyOfType(checker.getApparentType(receiver), method);
@@ -81,6 +103,39 @@ function isDomMutationCall(context: TSESLint.RuleContext<'forbidden', []>, membe
 		return true;
 	}
 	return false;
+}
+
+function staticPropertyName(member: TSESTree.MemberExpression): string | undefined {
+	if (!member.computed && member.property.type === AST_NODE_TYPES.Identifier) return member.property.name;
+	if (member.computed && member.property.type === AST_NODE_TYPES.Literal && typeof member.property.value === 'string') return member.property.value;
+	return undefined;
+}
+
+function typeHasSymbolName(checker: ts.TypeChecker, type: ts.Type, name: string, seen = new Set<ts.Type>()): boolean {
+	if (seen.has(type)) return false;
+	seen.add(type);
+	if (type.isUnionOrIntersection()) return type.types.some((part) => typeHasSymbolName(checker, part, name, seen));
+	const symbol = type.getSymbol() ?? type.aliasSymbol;
+	if (symbol?.getName() === name) return true;
+	if (type.flags & ts.TypeFlags.Object) {
+		try { for (const base of checker.getBaseTypes(type as ts.InterfaceType)) if (typeHasSymbolName(checker, base, name, seen)) return true; } catch { /* non-interface */ }
+	}
+	return false;
+}
+
+/** `el.innerHTML = x` / `el.style = "..."` on a DOM host, or `el.style.color = x` (any property, since CSSStyleDeclaration exists only to mutate). Cast-evasion is closed the same way as isDomMutationCall. */
+function isDomPropertyWrite(context: TSESLint.RuleContext<'forbidden', []>, member: TSESTree.MemberExpression): boolean {
+	const propName = staticPropertyName(member);
+	let services: ReturnType<typeof ESLintUtils.getParserServices> | undefined;
+	try { services = ESLintUtils.getParserServices(context, true); } catch { services = undefined; }
+	const checker = services?.program?.getTypeChecker();
+	const objNode = services ? services.esTreeNodeToTSNodeMap.get(member.object) : undefined;
+	if (!checker || !objNode || !services) return propName !== undefined && directMutationProps.has(propName);
+	const candidates = [checker.getTypeAtLocation(objNode)];
+	const inner = unwrapCast(member.object);
+	const innerNode = inner ? services.esTreeNodeToTSNodeMap.get(inner) : undefined;
+	if (innerNode) candidates.push(checker.getTypeAtLocation(innerNode));
+	return candidates.some((t) => typeHasSymbolName(checker, t, 'CSSStyleDeclaration') || (propName !== undefined && directMutationProps.has(propName) && typeIsDomMutationHost(checker, t)));
 }
 
 /** Resolve method names including computed keys and mutator unions (`'append' | 'prepend'`, `'remove' | 'normalize'`). */
@@ -153,7 +208,8 @@ function reactEffectFromCallee(context: TSESLint.RuleContext<'forbidden', []>, c
 }
 
 function reactModuleFromSource(source: TSESTree.Node | null | undefined): string | undefined {
-	return source?.type === AST_NODE_TYPES.Literal && typeof source.value === 'string' && isReactSource(source.value) ? source.value : undefined;
+	const mod = source?.type === AST_NODE_TYPES.Literal && typeof source.value === 'string' && isReactSource(source.value) ? source.value : undefined;
+	return mod && !jsxRuntimeSources.has(mod) ? mod : undefined;
 }
 
 function denyReactEdge(context: TSESLint.RuleContext<'forbidden', []>, node: TSESTree.Node, source: TSESTree.Node | null | undefined, kind: string): void {
@@ -180,7 +236,7 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 		};
 		return {
 			ImportDeclaration(node) {
-				if (typeof node.source.value !== 'string' || !isReactSource(node.source.value) || isFrameworkLike(file)) return;
+				if (typeof node.source.value !== 'string' || !isReactSource(node.source.value) || jsxRuntimeSources.has(node.source.value) || isFrameworkLike(file)) return;
 				for (const spec of node.specifiers) {
 					if (spec.type === AST_NODE_TYPES.ImportDefaultSpecifier || spec.type === AST_NODE_TYPES.ImportNamespaceSpecifier) {
 						report(context, spec, 'react', `default/namespace React import is allowed only in framework owner ${WEB_OWNERS.framework}; import named non-effect APIs instead`);
@@ -227,6 +283,12 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 				const method = methods.find((name) => allMutators.has(name) && isDomMutationCall(context, node, name));
 				if (!method) return;
 				report(context, node.property, method, `DOM mutation via ${method} is allowed only in Host/framework adapters (${WEB_OWNERS.host}); keep Feature UI declarative`);
+			},
+			AssignmentExpression(node) {
+				if (hostOrFramework(file) || node.left.type !== AST_NODE_TYPES.MemberExpression) return;
+				if (!isDomPropertyWrite(context, node.left)) return;
+				const name = staticPropertyName(node.left) ?? 'style';
+				report(context, node.left.property, name, `DOM mutation via ${name} assignment is allowed only in Host/framework adapters (${WEB_OWNERS.host}); keep Feature UI declarative`);
 			},
 			JSXAttribute(node) {
 				if (node.name.type === AST_NODE_TYPES.JSXIdentifier && node.name.name === 'dangerouslySetInnerHTML') {

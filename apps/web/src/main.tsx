@@ -3,7 +3,7 @@ import { AgoraProvider, createRoomClient } from '@agora/web-framework';
 import { createRoot } from 'react-dom/client';
 import { App } from './components/App.tsx';
 import { FixtureControls } from './components/FixtureControls.tsx';
-import { createBrowserEnvironment, createFixtureTransport, getMountRoot, load } from './host/index.ts';
+import { createBrowserEnvironment, createFixtureTransport, getMountRoot, load, renderMountError } from './host/index.ts';
 import room from './fixture/room.json' with { type: 'json' };
 import './fixture.css';
 
@@ -21,6 +21,5 @@ if (loaded.ok) {
 		</AgoraProvider>,
 	);
 } else {
-	container.textContent = `Fixture rejected: ${loaded.error}`;
-	container.setAttribute('role', 'alert');
+	renderMountError(container, `Fixture rejected: ${loaded.error}`);
 }

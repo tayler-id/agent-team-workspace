@@ -1,9 +1,15 @@
 // Application-owned browser Host adapter. The only module allowed to touch window/document/crypto for shell capabilities.
 import type { EnvironmentPort, RoomTransport } from '@agora/web-framework';
 
-/** The composition root's only DOM access: find the element it mounts the app into. */
+/** Find the element the composition root mounts the app into. */
 export function getMountRoot(domId: string): HTMLElement | null {
 	return document.getElementById(domId);
+}
+
+/** The composition root's only other DOM write: render a fatal fixture-rejection message into the mount root. */
+export function renderMountError(container: HTMLElement, message: string): void {
+	container.textContent = message;
+	container.setAttribute('role', 'alert');
 }
 
 export function createBrowserEnvironment(transport: RoomTransport, options: { readonly digestText?: (text: string) => Promise<string> } = {}): EnvironmentPort {

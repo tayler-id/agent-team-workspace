@@ -167,12 +167,12 @@ const globals = domGlobals;
 export const importBoundaryRule: TSESLint.RuleModule<'forbidden'> = {
 	meta: { type: 'problem', schema: [], messages: { forbidden: '{{reason}}' } }, defaultOptions: [],
 	create(context) {
-		let program: ts.Program | null = null;
-		try { program = ESLintUtils.getParserServices(context, true).program; } catch { program = null; }
+		let tsProgram: ts.Program | null = null;
+		try { tsProgram = ESLintUtils.getParserServices(context, true).program; } catch { tsProgram = null; }
 		const file = context.filename;
 		const check = (node: TSESTree.Node, source: TSESTree.Node | null | undefined, typesOnly: boolean): void => {
 			const specifier = source?.type === AST_NODE_TYPES.Literal && typeof source.value === 'string' ? source.value : undefined;
-			const reason = violation(file, specifier, typesOnly, program);
+			const reason = violation(file, specifier, typesOnly, tsProgram);
 			if (!reason || exceptionAllows(file, specifier ?? 'dynamic-import', 'agora/import-boundary')) return;
 			context.report({ node, messageId: 'forbidden', data: { reason } });
 		};
@@ -192,6 +192,21 @@ export const importBoundaryRule: TSESLint.RuleModule<'forbidden'> = {
 				const reference = context.sourceCode.getScope(node).references.find((r) => r.identifier === node);
 				if (reference && !reference.resolved?.defs.length && !exceptionAllows(file, node.name, 'agora/import-boundary')) {
 					context.report({ node, messageId: 'forbidden', data: { reason: `ambient ${node.name} is outside the portable boundary; keep DOM and browser APIs in ${WEB_OWNERS.host}` } });
+				}
+			},
+			// A .js/.mjs/.cjs file under a guarded root has no TSImportType AST node for a JSDoc `@type
+			// {import('mod').X}` edge (the TS parser leaves JSDoc as comment text unless a checker resolves
+			// it); scan comments directly so a forbidden module cannot be smuggled past guarded JS this way.
+			Program(node) {
+				const re = /\bimport\(\s*['"]([^'"]+)['"]\s*\)/g;
+				for (const comment of context.sourceCode.getAllComments()) {
+					for (const match of comment.value.matchAll(re)) {
+						const specifier = match[1] ?? '';
+						const reason = violation(file, specifier, true, tsProgram);
+						if (reason && !exceptionAllows(file, specifier, 'agora/import-boundary')) {
+							context.report({ node, messageId: 'forbidden', data: { reason: `JSDoc ${reason}` } });
+						}
+					}
 				}
 			},
 		};

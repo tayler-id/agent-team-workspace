@@ -102,7 +102,7 @@
 			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/renderer-policy.ts", "scripts/architecture-exceptions.ts", "agora/architecture-exceptions.json", "apps/web", "apps/web/tsconfig.json", "packages/client-core/test/app-architecture.test.ts", "package.json", "tsconfig.json"],
 			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
 			"scenarios": ["packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/boundaries.test.ts"],
-			"fixtures": ["runtime owner paths; extension matrix ts/tsx/mts/cts/js/jsx/mjs/cjs; contracts js/cjs; apps/web non-src relocation; un-owned src two-hop relay; exact-row exceptions; string-literal effect import; declare/computed/mixed-union DOM; load-time fail-closed; guard-weakening"],
+			"fixtures": ["runtime owner paths; extension matrix ts/tsx/mts/cts/js/jsx/mjs/cjs; contracts js/cjs; apps/web non-src relocation; un-owned src two-hop relay; exact-row exceptions; string-literal effect import; declare/computed/mixed-union DOM; load-time fail-closed; guard-weakening; JSDoc import() comment edges; innerHTML/outerHTML/textContent/style property and setAttribute-family method mutation; untyped mjs/cjs ambiguous-mutator name trust; type-cast receiver evasion; react/jsx-runtime namespace allowance"],
 			"platforms": ["node24"],
 			"owner": "U20.B01"
 		},
