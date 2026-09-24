@@ -49,44 +49,54 @@ const draftKey = (scope: Schema<'RoomSnapshot'>['scope']): string => `agora.loca
 const pendingKey = (scope: Schema<'RoomSnapshot'>['scope']): string => `agora.local-room.pending:${scope.project_id}:${scope.room_id}`;
 // /_runtime/identity names the disposable process behind this origin, freshly random on every `local-room start`,
 // including the restart a `reset` requires; it never survives a reset even when the reused port and empty cursor do.
-// A stale server (or a test double) that lacks the route degrades to undefined, which skips the instance check below
-// rather than failing closed, so it never regresses the cursor-only guard that already covers advancing resets.
+// A missing route, a network error, a non-ok response or an empty body all degrade to undefined here. Persistence
+// (read AND write, below) requires a verified nonempty instance on both sides: two undefined reads never match each
+// other, so an outage that hits the identity route on either save or restore loses that one draft/pending record
+// rather than risk showing one instance's text under another. See docs/site/local-room.md#live-room-ui for the limit.
 async function fetchInstance(baseUrl: string): Promise<string | undefined> {
 	try {
 		const response = await fetch(`${baseUrl}/_runtime/identity`, { signal: AbortSignal.timeout(5000) });
-		return response.ok ? (await response.text()).trim() : undefined;
+		if (!response.ok) return undefined;
+		const text = (await response.text()).trim();
+		return text.length > 0 ? text : undefined;
 	} catch { return undefined; }
 }
 // sessionStorage bounds the draft's lifetime to this tab's session and keeps it private to that tab, so a reset or a
 // fresh instance (a distinct origin/port) never exposes another session's text. The stored cursor guards an
 // advancing reset; the stored instance guards the one case a cursor cannot: a reset of a room still at cursor 0.
+// `instance` must be a verified nonempty string, never merely "matches whatever was last saved": an outage on
+// either side fails closed to no draft, rather than trusting an unverifiable identity on either side of the compare.
 function readDraft(scope: Schema<'RoomSnapshot'>['scope'], currentCursor: string, instance: string | undefined): string | undefined {
+	if (instance === undefined) { sessionStorage.removeItem(draftKey(scope)); return undefined; }
 	const raw = sessionStorage.getItem(draftKey(scope));
 	if (!raw) return undefined;
 	try {
 		const parsed = JSON.parse(raw) as { cursor?: unknown; text?: unknown; instance?: unknown };
-		const foreignInstance = instance !== undefined && parsed.instance !== instance;
-		if (typeof parsed.cursor !== 'string' || typeof parsed.text !== 'string' || foreignInstance || BigInt(parsed.cursor) > BigInt(currentCursor)) { sessionStorage.removeItem(draftKey(scope)); return undefined; }
+		if (typeof parsed.cursor !== 'string' || typeof parsed.text !== 'string' || parsed.instance !== instance || BigInt(parsed.cursor) > BigInt(currentCursor)) { sessionStorage.removeItem(draftKey(scope)); return undefined; }
 		return parsed.text;
 	} catch { sessionStorage.removeItem(draftKey(scope)); return undefined; }
 }
 function writeDraft(scope: Schema<'RoomSnapshot'>['scope'], cursor: string, text: string, instance: string | undefined): void {
-	if (text.trim() === '') { sessionStorage.removeItem(draftKey(scope)); return; }
+	if (text.trim() === '' || instance === undefined) { sessionStorage.removeItem(draftKey(scope)); return; }
 	sessionStorage.setItem(draftKey(scope), JSON.stringify({ cursor, text: text.slice(0, draftBodyLimit), instance }));
 }
 // Mirrors an in-flight send's identity across a reload so a POST that already committed is replayed, not repeated:
 // the next Send on the same still-unsettled text reuses this command_id instead of minting one the server has never
 // seen, and the server's own actor/command_id idempotency then returns the original receipt instead of a duplicate.
+// Same verified-nonempty-instance rule as readDraft/writeDraft: an identity outage on either side means the pending
+// id is neither saved nor reused, so a reset can't be mistaken for the still-live instance that started the send.
 function readPending(scope: Schema<'RoomSnapshot'>['scope'], instance: string | undefined, text: string): { commandId: string; requestDigest: string } | undefined {
+	if (instance === undefined) return undefined;
 	const raw = sessionStorage.getItem(pendingKey(scope));
 	if (!raw) return undefined;
 	try {
 		const parsed = JSON.parse(raw) as { instance?: unknown; text?: unknown; commandId?: unknown; requestDigest?: unknown };
-		if (parsed.text !== text || typeof parsed.commandId !== 'string' || typeof parsed.requestDigest !== 'string' || instance !== undefined && parsed.instance !== instance) return undefined;
+		if (parsed.text !== text || typeof parsed.commandId !== 'string' || typeof parsed.requestDigest !== 'string' || parsed.instance !== instance) return undefined;
 		return { commandId: parsed.commandId, requestDigest: parsed.requestDigest };
 	} catch { return undefined; }
 }
 function writePending(scope: Schema<'RoomSnapshot'>['scope'], instance: string | undefined, text: string, commandId: string, requestDigest: string): void {
+	if (instance === undefined) { sessionStorage.removeItem(pendingKey(scope)); return; }
 	sessionStorage.setItem(pendingKey(scope), JSON.stringify({ instance, text, commandId, requestDigest }));
 }
 function clearPendingIfMatches(scope: Schema<'RoomSnapshot'>['scope'], commandId: string): void {
