@@ -40,7 +40,7 @@ This is the complete current contributor command surface, plus a separate invent
 | `pnpm lint` | Strict ESLint and import/public-type rules; generated TypeScript retains boundary checking |
 | `pnpm typecheck` | TypeScript packages/tests plus a no-DOM/no-Node core compile lane |
 | `pnpm boundaries` | Isolated import/export/public-type and application-architecture import-ownership guard negatives; writes `.scratch/boundaries.json` |
-| `pnpm test` | Unit, contract and real PostgreSQL tests |
+| `pnpm test` | Unit, contract, real PostgreSQL and `apps/web` browser-room tests (jsdom, same environment as `pnpm web:test`) |
 | `pnpm test:unit` | Unit and contract tests, including mandatory Swift conformance |
 | `pnpm test:pg` | Throwaway PostgreSQL tests only |
 | `pnpm check` | Lint, typecheck, documentation, contract drift and tests |
