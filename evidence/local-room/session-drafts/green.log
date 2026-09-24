@@ -1,23 +1,23 @@
 # green.log (agora.red-green/v1)
-recorded_at: 2026-09-24T03:15:18.153Z
-parent: 40328065a63c7293e950862568aa2815aa4212cf
-head: 68d8de022f446f98d17bb30338be3020c08feb85
-subject_revision: 68d8de022f446f98d17bb30338be3020c08feb85
+recorded_at: 2026-09-24T03:28:31.014Z
+parent: 14b111a37852341feb8176fab767203adc9e670b
+head: 41f6d9bb6c19c5d13452203a56a78cb22dc5d8d3
+subject_revision: 41f6d9bb6c19c5d13452203a56a78cb22dc5d8d3
 test_patch_applied_to_subject: false
 test_patch_files: apps/web/test/live.test.ts
-test_patch_digest: sha256:ec6cc9ebe2f1d159fdb43cf4a21b779e4225c1164a0fb61f8641c6faf144af27
+test_patch_digest: sha256:e17c6b930e8756c8f821f60209f1fd0159b629807e1ff49b666505652ff5bbe0
 fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
-configuration: {"command":"npx vitest run apps/web/test/live.test.ts","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+configuration: {"command":"pnpm --filter @agora/web exec vitest run test/live.test.ts","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
 toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
 expected: every assertion passes at the head (exit 0)
 observed_exit: 0
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-aqPmTA
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-z8aWVw/apps/web
 
 
  Test Files  1 passed (1)
-      Tests  20 passed (20)
-   Start at  23:15:14
-   Duration  1.78s (tests 90%, import 7%, transform 3%)
+      Tests  24 passed (24)
+   Start at  23:28:27
+   Duration  2.23s (tests 72%, environment 19%, import 5%, transform 3%)
 
