@@ -109,6 +109,11 @@
           "kind": "feature"
         },
         {
+          "id": "evidence-validator",
+          "title": "General evidence validator",
+          "kind": "feature"
+        },
+        {
           "id": "ci",
           "title": "Toolchain readiness",
           "kind": "feature"
@@ -256,6 +261,14 @@
     {
       "path": "scripts/record-red-green.mjs",
       "page": "verification.md"
+    },
+    {
+      "path": "scripts/validate-evidence.mjs",
+      "page": "evidence-validator.md"
+    },
+    {
+      "path": "packages/verification/test/evidence-validator.test.ts",
+      "page": "evidence-validator.md"
     },
     {
       "path": "scripts/foundation.mjs",

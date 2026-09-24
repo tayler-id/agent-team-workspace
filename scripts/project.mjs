@@ -48,8 +48,9 @@ try {
 		const native = json(file); report.artifacts = [artifact(file), artifact(path.join(out, 'command.json'))];
 		if (existsSync('.scratch/project-guards.json')) { save(path.join(out, 'guards.json'), json('.scratch/project-guards.json')); report.artifacts.push(artifact(path.join(out, 'guards.json'))); }
 		const assertions = native.testResults.flatMap(suite => suite.assertionResults);
-		requireThat(run.status === 0 && native.numFailedTests === 0 && native.numPendingTests === 0 && assertions.length === 5 && assertions.every(row => row.status === 'passed') && [1,2,3,4].every(lane => assertions.some(row => row.fullName.startsWith(`project lane ${lane} `))), 'lane_failed');
-		if (action === 'lanes') requireThat(options['--task'] === 'agora-s1-isolate-development', 'U01b lanes 5-10 unavailable; task lanes 1-4 only', 'blocked');
+		requireThat(run.status === 0 && native.numFailedTests === 0 && native.numPendingTests === 0 && assertions.length === manifest.lanes.length + 1 && assertions.every(row => row.status === 'passed') && manifest.lanes.every(lane => assertions.some(row => row.fullName.startsWith(`project lane ${lane.id} `))), 'lane_failed');
+		const unlockedThroughLane = { 'agora-s1-isolate-development': 4, 'agora-s1-validate-project-evidence': 7 };
+		if (action === 'lanes') requireThat(unlockedThroughLane[options['--task']], 'U01b lanes 8-10 unavailable; known tasks unlock lanes 1-4 or 1-7', 'blocked');
 	} else {
 		requireThat(action !== 'verify' || options['--scenario'] === 'policy', 'unknown_scenario', 'usage_error');
 		requireThat(id, 'instance_required', 'usage_error');
