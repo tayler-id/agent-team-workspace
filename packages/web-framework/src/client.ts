@@ -134,7 +134,8 @@ export function useScheduleFocus(): EnvironmentPort['scheduleFocus'] {
 /**
  * Announces a growth in the room's `unread` count after `delayMs`, so a burst of arrivals reads as one notice that
  * repeats the header's unread total. `undefined` (no room loaded) resets the baseline, so the snapshot that loads a
- * room is not an arrival. Any drop, such as marking the room read, clears the notice instead of leaving a stale one.
+ * room is not an arrival. A drop, such as marking the room read, or a new arrival clears the notice at once, so it
+ * never shows a total that disagrees with the header while the next one waits.
  */
 export function useDelayedAnnouncement(unread: number | undefined, delayMs: number): string {
 	const [announcement, setAnnouncement] = useState('');
@@ -144,6 +145,7 @@ export function useDelayedAnnouncement(unread: number | undefined, delayMs: numb
 		const base = announced.current;
 		if (unread === undefined || base === undefined || unread < base) { announced.current = unread; setAnnouncement(''); return; }
 		if (unread === base) return;
+		setAnnouncement('');
 		return defer(() => {
 			announced.current = unread;
 			setAnnouncement(`${unread - base} new message${unread - base === 1 ? '' : 's'}, ${unread} unread.`);

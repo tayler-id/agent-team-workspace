@@ -190,7 +190,9 @@ test('live room: your own send is never unread or announced; arrivals from elsew
 	await wait(2000);
 	expect(status()).toHaveTextContent('1 new message, 1 unread.');
 	server.add('from another tab again');
-	await wait(2100);
+	await wait(100);
+	expect([unread(), status().textContent]).toEqual(['2 unread', expect.not.stringMatching(/new message/)]);
+	await wait(2000);
 	expect([unread(), /\d+ new messages?, \d+ unread\./.exec(status().textContent)?.[0]]).toEqual(['2 unread', '1 new message, 2 unread.']);
 
 	fireEvent.click(screen.getByRole('button', { name: 'Mark room as read' }));
