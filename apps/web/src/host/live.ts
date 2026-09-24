@@ -120,8 +120,12 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			// never sees scope/citations, so it cannot reproduce the server's canonical-command digest to compare against.
 			if (receiptWire.identity.command_id !== commandId) throw new Error('receipt identity mismatch');
 			client.apply({ type: 'receipt', receipt: receiptWire.receipt });
-			client.apply({ type: 'draft', streamId, text: '' });
-			writeDraft(scope, receiptWire.receipt.event_cursors[0]?.committed_seq ?? '0', '');
+			// Only clear the draft if it still holds the text this receipt settled: the user may have already typed a
+			// new, still-unsent message while this one was in flight, and that later text must survive the receipt.
+			if (client.getState().drafts.find((d) => d.streamId === streamId)?.text === text) {
+				client.apply({ type: 'draft', streamId, text: '' });
+				writeDraft(scope, receiptWire.receipt.event_cursors[0]?.committed_seq ?? '0', '');
+			}
 			unsettled.delete(text);
 			set({ decision: undefined });
 		} catch (error) {

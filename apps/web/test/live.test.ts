@@ -300,6 +300,34 @@ test('a successful send clears the persisted draft so a later reload starts empt
 	expect(draftText(reloadedClient)).toEqual([]);
 });
 
+test('typing a new draft while an earlier send is in flight survives that send\'s receipt', async () => {
+	const [client, transport] = boot;
+	let resolveReceipt: (response: Response) => void = () => undefined;
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) return new Promise((resolve) => { resolveReceipt = resolve; });
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'message A' });
+	transport.saveDraft(roomId, 'message A');
+	transport.submit('77777777-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'message A');
+	await flush(2);
+	// While A's receipt is still in flight, the user types a new, distinct, still-unsent message B.
+	client.apply({ type: 'draft', streamId: roomId, text: 'message B' });
+	transport.saveDraft(roomId, 'message B');
+	resolveReceipt(receiptFor('77777777-0000-4000-8000-000000000001'));
+	await flush(6);
+	expect(draftText(client)).toEqual(['message B']);
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom();
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['message B']);
+});
+
 test('a deliberate clear (emptying the box) also drops the persisted draft', async () => {
 	const [client, transport] = boot;
 	stubEmptyRoom();
