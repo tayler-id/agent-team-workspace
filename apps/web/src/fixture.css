@@ -1,37 +1,63 @@
-/* Engineering fixture - visual design pending. Neutral tokens only; the design team owns final presentation. */
-:root { color-scheme: light dark; --border: #8888; --surface: canvas; --text: canvastext; --gap: 0.75rem; }
+/* Live-room presentation follows the approved design tokens; the handoff remains the source of truth. */
+@font-face { font-family: "Cal Sans UI"; src: url("../../../docs/design-handoff/results/design-system/fonts/CalSansUI-Regular.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Cal Sans UI"; src: url("../../../docs/design-handoff/results/design-system/fonts/CalSansUI-Medium.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "Cal Sans UI"; src: url("../../../docs/design-handoff/results/design-system/fonts/CalSansUI-SemiBold.woff2") format("woff2"); font-weight: 600; }
+@font-face { font-family: "Cal Sans Text"; src: url("../../../docs/design-handoff/results/design-system/fonts/CalSansText-Regular.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Cal Sans Text"; src: url("../../../docs/design-handoff/results/design-system/fonts/CalSansText-Medium.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "Cal Sans Text"; src: url("../../../docs/design-handoff/results/design-system/fonts/CalSansText-SemiBold.woff2") format("woff2"); font-weight: 600; }
+:root { color-scheme: light; --surface: #f6f6f8; --raised: #fff; --inset: #f3f3f6; --border: #e8e8ee; --text: #141414; --secondary: #6f6f78; --muted: #a0a0a8; --action: #141414; --focus: #141414; --gap: 16px; --radius: 16px; }
 * { box-sizing: border-box; }
-html, body { margin: 0; max-width: 100%; overflow-x: hidden; }
-/* A named family: Pretext measures the same canvas font string the browser renders, which system-ui aliases break on macOS. */
-body { font: 15px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--text); background: var(--surface); }
-.shell { display: flex; flex-direction: column; height: 100dvh; max-width: 100%; }
-.main { display: flex; flex-direction: column; flex: 1; min-height: 0; }
-.skip-link { position: absolute; left: -999px; }
-.skip-link:focus { position: static; padding: var(--gap); }
-.room-header, .main, .fixture-controls { padding: var(--gap); border-bottom: 1px solid var(--border); max-width: 100%; }
-.meta, .button-row { display: flex; flex-wrap: wrap; gap: var(--gap); align-items: center; }
-.badge { border: 1px solid var(--border); border-radius: 999px; padding: 0.1em 0.6em; font-size: 0.85em; text-transform: capitalize; }
-.status { border: 1px solid var(--border); border-radius: 0.5rem; padding: var(--gap); margin-top: var(--gap); }
-.alert { color: canvastext; border: 1px solid var(--border); border-left-width: 4px; padding: var(--gap); }
-/* The timeline is the scroll container; the virtualizer positions each mounted row absolutely inside the sized list. */
-.timeline { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+html, body, #root { margin: 0; width: 100%; min-height: 100%; max-width: 100%; }
+body { font: 15px/1.5 "Cal Sans Text", "Cal Sans UI", system-ui, -apple-system, sans-serif; color: var(--text); background: var(--surface); }
+button, textarea { font: inherit; color: inherit; }
+button { min-height: 40px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--raised); cursor: pointer; }
+button:hover:not(:disabled) { background: var(--inset); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.shell { display: flex; flex-direction: column; height: 100dvh; min-height: 420px; max-width: 100%; background: var(--surface); }
+.main { display: flex; flex-direction: column; flex: 1; min-height: 0; width: min(100%, 960px); margin: 0 auto; padding: 0 32px; }
+.skip-link { position: absolute; left: -999px; z-index: 5; }
+.skip-link:focus { left: 16px; top: 16px; padding: 12px; background: var(--raised); }
+.room-header { padding: 22px max(24px, calc((100% - 896px) / 2)); border-bottom: 1px solid var(--border); background: var(--raised); }
+.kicker { margin: 0 0 6px; color: var(--secondary); font: 600 11px/14px "Cal Sans UI", system-ui, sans-serif; letter-spacing: .08em; }
+h1 { margin: 0; font: 600 24px/1.25 "Cal Sans UI", system-ui, sans-serif; letter-spacing: -.02em; }
+.meta, .button-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; color: var(--secondary); font-size: 13px; }
+.meta { margin: 12px 0 0; }
+.badge { display: inline-flex; align-items: center; border: 0; border-radius: 999px; padding: 4px 10px; background: var(--inset); color: var(--text); font: 600 12px/16px "Cal Sans UI", system-ui, sans-serif; text-transform: capitalize; }
+.badge[data-state="active"], .badge[data-state="connected"] { background: #d1fae5; }
+.status { border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-top: 14px; background: var(--surface); color: var(--secondary); font-size: 13px; }
+.alert { color: #c62828; border: 1px solid #f87171; border-left-width: 4px; padding: 12px; border-radius: 8px; }
+/* Timeline is the scroll container; the virtualizer positions rows inside its sized list. */
+.timeline { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 12px 0; }
 .timeline .rows { list-style: none; margin: 0; padding: 0; position: relative; width: 100%; }
 .row { position: absolute; top: 0; left: 0; width: 100%; border-top: 1px solid var(--border); }
 .row[data-index="0"] { border-top-color: transparent; }
-.message { padding: var(--gap) 0; max-width: 100%; }
+.message { padding: 14px 10px; max-width: 100%; border-radius: 12px; }
 .message p { margin: 0; white-space: pre-wrap; }
 .message pre { margin: 0; }
 .message p + p, .message p + pre, .message pre + p, .message pre + pre, .message .meta + p, .message .meta + pre { margin-top: 8px; }
-.message.unread { background: color-mix(in srgb, canvastext 6%, transparent); }
-.message .meta { font-size: 0.85em; opacity: 0.8; }
+.message.unread { background: #ebebf0; }
+.message .meta { font-size: 13px; color: var(--secondary); }
 .message p, .message pre { overflow-wrap: anywhere; max-width: 100%; }
-.message pre { overflow-x: auto; padding: var(--gap); border: 1px solid var(--border); border-radius: 0.35rem; }
-.unread-boundary { text-align: center; font-size: 0.8em; opacity: 0.7; }
-.tombstone { font-style: italic; opacity: 0.7; }
-.citations { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.composer textarea { width: 100%; font: inherit; }
-.composer-actions { display: flex; align-items: baseline; gap: var(--gap); flex-wrap: wrap; }
-.empty { padding: calc(var(--gap) * 2); text-align: center; }
+.message pre { overflow-x: auto; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--inset); }
+.unread-boundary { text-align: center; font-size: 12px; color: var(--secondary); }
+.tombstone { font-style: italic; color: var(--secondary); }
+.citations { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.composer { flex: none; padding: 12px 0 max(16px, env(safe-area-inset-bottom)); background: var(--surface); }
+.composer label { display: block; margin-bottom: 8px; color: var(--secondary); font-size: 13px; }
+.composer textarea { display: block; width: 100%; min-height: 88px; resize: vertical; padding: 14px 16px; border: 1px solid var(--border); border-radius: 16px; background: var(--raised); font: inherit; }
+.composer-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.composer-actions button { min-width: 88px; background: var(--action); color: white; border-color: var(--action); }
+.composer-actions p { flex: 1; margin: 0; color: var(--secondary); font-size: 12px; }
+.empty { padding: 32px; text-align: center; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-.shell.phone .room-header, .shell.phone .main { padding: 0.5rem; }
-@media (prefers-reduced-motion: reduce) { * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
+@media (max-width: 700px) {
+ .shell { min-height: 360px; }
+ .room-header { padding: 16px; }
+ .main { padding: 0 16px; }
+ h1 { font-size: 20px; }
+ .meta { gap: 6px 10px; }
+ .composer { padding-top: 8px; }
+ .composer textarea { min-height: 72px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; } }

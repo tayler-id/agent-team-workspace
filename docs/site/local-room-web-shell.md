@@ -25,12 +25,24 @@ FixtureControls | Development-only; the sole importer of the concrete fixture tr
 
 ## Implementation status
 
-**In progress: browser shell and web-framework available; persistence not connected.** The shell runs against a validated development fixture, preserves keyboard, focus, composition Enter, phone/desktop viewport and update-isolation behavior, and passes framework one-writer and environment-boundary tests. There is no PostgreSQL-backed room, no real-server connection and no production conversation schema. Design-handoff results under `docs/design-handoff/results/` are the approved starting direction for implementation, and this shell does not implement them yet. [Live room UI](local-room.md#live-room-ui) lists the mismatches. `docs/technical-spec.md` AC02 remains unqualified.
+**In progress: browser shell, live local transport and approved presentation are available; persistence is not connected.** The shell runs against a validated development fixture or the L1-L3 local runtime, preserves keyboard, focus, composition Enter, phone/desktop viewport and update-isolation behavior, and uses the light surfaces, typography, restrained borders, rounded controls and narrow-screen spacing from the approved handoff. The responsive CSS keeps the header readable, the virtualized timeline independently scrollable and the composer anchored below it; no send/read command path changed. There is no production conversation schema or hosted room. Design references remain authoritative at `docs/design-handoff/results/`; the live shell is a bounded presentation adaptation, not a copy of the proposed full application.
+
+```mermaid
+flowchart TD
+  tokens[Approved tokens and room/phone frames] --> css[fixture.css light responsive shell]
+  css --> header[Readable room header]
+  css --> timeline[Independent virtualized history]
+  css --> composer[Anchored message composer]
+  commands[Existing Client commands] --> timeline
+  commands --> composer
+```
+
+[Live room UI](local-room.md#live-room-ui) tracks remaining connection, delivery and qualification gaps. `docs/technical-spec.md` AC02 remains unqualified.
 
 ## Verification and proof
 
 Inspect the [framework barrel](repo:packages/web-framework/src/index.ts), [EnvironmentPort](repo:packages/web-framework/src/environment.ts), [RoomClient and hooks](repo:packages/web-framework/src/client.ts), [Host adapter](repo:apps/web/src/host/environment.ts), [fixture transport](repo:apps/web/src/host/fixture.ts) and [room shell](repo:apps/web/src/components/App.tsx). Behavioral coverage lives in [framework client tests](repo:packages/web-framework/test/client.test.ts), [framework boundary tests](repo:packages/web-framework/test/boundaries.test.ts), [fixture tests](repo:apps/web/test/fixture.test.ts) and [shell tests](repo:apps/web/test/app.test.tsx).
 
-Run `pnpm web:test` for unit and component coverage, `pnpm web:dev` for the live fixture, and `pnpm web:build` for the production bundle (last measured 125.85 KB gzip against R18's 350 KiB budget; not S1-qualified, so this is a real measurement under the limit, not an R18 claim). This slice landed in three dependency-ordered units, each with its own red/green and size evidence under [evidence/local-room/web-framework-foundation/](repo:evidence/local-room/web-framework-foundation/outcome.json), [evidence/local-room/web-framework-host/](repo:evidence/local-room/web-framework-host/outcome.json) and [evidence/local-room/web-framework-shell/](repo:evidence/local-room/web-framework-shell/outcome.json). `.agents/skills/verify-agora/SKILL.md` records the public browser driver checklist.
+Run `pnpm web:test` for unit and component coverage, `pnpm web:dev` for the live fixture, and `pnpm web:build` for the production bundle. The approved-shell check used the owned local runtime and chrome-devtools-axi at desktop and 390x844 phone widths: no horizontal overflow, message send/read rendered through the live client, and the browser console was clean. This is a visual smoke check, not final visual acceptance or an accessibility audit. This slice landed in three dependency-ordered units, each with its own red/green and size evidence under [evidence/local-room/web-framework-foundation/](repo:evidence/local-room/web-framework-foundation/outcome.json), [evidence/local-room/web-framework-host/](repo:evidence/local-room/web-framework-host/outcome.json) and [evidence/local-room/web-framework-shell/](repo:evidence/local-room/web-framework-shell/outcome.json). `.agents/skills/verify-agora/SKILL.md` records the public browser driver checklist.
 
 Next: [client synchronization](synchronization.md) and [system architecture](architecture.md).

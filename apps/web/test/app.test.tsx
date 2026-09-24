@@ -110,7 +110,7 @@ test('the live route labels itself as the local development room, with no fixtur
 	const client = createRoomClient();
 	const transport = createFixtureTransport(client, fixture);
 	render(<AgoraProvider client={client} environment={createBrowserEnvironment(transport, { digestText: digest })}><App live header={{ project: 'Local project', room: 'Local room', lifecycle: 'active', agentLabel: 'Local agent', members: 1 }} presentation={fixture.presentation} /></AgoraProvider>);
-	expect(screen.getByRole('banner')).toHaveTextContent('Local development room - approved design baseline not yet applied');
+	expect(screen.getByRole('banner')).toHaveTextContent('LOCAL DEVELOPMENT');
 	expect(screen.getByRole('banner').textContent).toMatch(/1 member(?!s)/);
 	expect(screen.getByRole('button', { name: 'Load room snapshot' })).toBeTruthy();
 	expect(screen.getByRole('textbox')).toHaveProperty('maxLength', 4096);

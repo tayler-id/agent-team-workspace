@@ -175,7 +175,7 @@
       "id": "web-framework-client-host",
       "title": "Local room web shell",
       "status": "In progress",
-      "why": "Give the browser one writer Client, named hooks and a typed EnvironmentPort so the room shell cannot own a second timeline, landed in three dependency-ordered slices.",
+      "why": "Give the browser one writer Client and typed EnvironmentPort, with the live room now styled to the approved light tokens and responsive shell while remaining in progress pending broader L4 qualification.",
       "page": "local-room-web-shell.md",
       "proof": [
         "repo:packages/web-framework/src/client.ts",
