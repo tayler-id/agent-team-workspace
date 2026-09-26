@@ -1,5 +1,6 @@
 // Presentation-free projection of client-core state. No React, DOM, or Host imports.
 import type { ClientState } from '@agora/client-core';
+import type { SendPhase } from './environment.ts';
 
 export type Room = ClientState['rooms'][number];
 export type FrozenMessage = Room['messages'][number];
@@ -9,7 +10,10 @@ export interface Row { readonly message: FrozenMessage; readonly author: Author;
 export interface Window { readonly rows: readonly Row[]; readonly older: number; readonly total: number }
 export type RoomPhase = 'empty' | 'loading' | 'live' | 'gap' | 'resync' | 'upgrade' | 'error' | 'revoked';
 export interface RoomStatus { readonly phase: RoomPhase; readonly online: boolean; readonly link: Connection['link']; readonly label: string; readonly detail: string; readonly unread: number; readonly cursor: string | undefined }
-export interface ComposerStatus { readonly draft: string; readonly pending: readonly { commandId: string; tag: 'pending' | 'received' }[]; readonly decision: string | undefined }
+/** Truthful per-command delivery feedback: `sending`/`retrying`/`waiting_connection` come from the transport's own live attempt, `delivered`/`failed` from client-core's own settled command outcome. */
+export type ComposerCommandState = SendPhase | 'delivered' | 'failed';
+export interface ComposerCommand { readonly commandId: string; readonly state: ComposerCommandState; readonly reason: string | undefined }
+export interface ComposerStatus { readonly draft: string; readonly commands: readonly ComposerCommand[]; readonly decision: string | undefined }
 export interface Connection { readonly online: boolean; readonly phase: 'idle' | 'loading' | 'error' | 'revoked'; readonly error: string | undefined; readonly link: 'connecting' | 'online' | 'retrying' | 'offline' | 'disconnected' }
 export interface RoomHeader { readonly project: string; readonly room: string; readonly lifecycle: string; readonly agentLabel: string; readonly members: number }
 
@@ -55,10 +59,14 @@ export function status(room: Room | undefined, connection: Connection): RoomStat
 	}
 }
 
-export function composer(state: ClientState, streamId: string, decision: string | undefined): ComposerStatus {
+export function composer(state: ClientState, streamId: string, sendPhase: Readonly<Record<string, SendPhase>>, decision: string | undefined): ComposerStatus {
 	return {
 		draft: state.drafts.find((d) => d.streamId === streamId)?.text ?? '',
-		pending: state.commands.filter((c) => c.streamId === streamId).map((c) => ({ commandId: c.commandId, tag: c.tag })),
+		commands: state.commands.filter((c) => c.streamId === streamId).map((c): ComposerCommand => {
+			if (c.tag === 'received') return { commandId: c.commandId, state: 'delivered', reason: undefined };
+			if (c.tag === 'denied') return { commandId: c.commandId, state: 'failed', reason: c.reason };
+			return { commandId: c.commandId, state: sendPhase[c.commandId] ?? 'sending', reason: undefined };
+		}),
 		decision,
 	};
 }

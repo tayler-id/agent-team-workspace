@@ -7,12 +7,15 @@
  * manual choice, which a Host adapter must not overwrite with browser events until `reconnect` is called.
  */
 export type ConnectionLink = 'connecting' | 'online' | 'retrying' | 'offline' | 'disconnected';
+/** A command's own delivery phase while client-core still holds it as `pending`; absent once denied or received, where the command's own tag is authoritative. */
+export type SendPhase = 'sending' | 'retrying' | 'waiting_connection';
 export interface TransportConnection {
 	readonly online: boolean;
 	readonly phase: 'idle' | 'loading' | 'error' | 'revoked';
 	readonly error: string | undefined;
 	readonly decision: string | undefined;
 	readonly link: ConnectionLink;
+	readonly sendPhase: Readonly<Record<string, SendPhase>>;
 }
 
 export interface RoomTransport {

@@ -87,6 +87,12 @@ export function useSetDraft(): (streamId: string, text: string) => void {
 	return useCallback((streamId: string, text: string): void => { client.apply({ type: 'draft', streamId, text }); }, [client]);
 }
 
+/** Dismisses a permanently denied command from the composer's list; client-core ignores discard for any other outcome. */
+export function useDiscardCommand(): (commandId: string) => void {
+	const client = useClient();
+	return useCallback((commandId: string): void => { client.apply({ type: 'discard', commandId }); }, [client]);
+}
+
 export function useRoomCommands(): {
 	readonly loadSnapshot: () => void;
 	readonly markSeen: (seq: string) => void;
