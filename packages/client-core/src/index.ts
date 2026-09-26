@@ -1,5 +1,5 @@
 import type { ClientInput, ClientState, CoreEvent, Frozen, Message, Receipt, Request, Transition } from './model.ts';
-export type { ClientInput, ClientState, CoreEvent, Message, Receipt, Request, Snapshot, Transition } from './model.ts';
+export type { ClientInput, ClientState, CoreEvent, Message, Receipt, Request, RetryFailure, Snapshot, Transition } from './model.ts';
 
 type Room = ClientState['rooms'][number];
 const compare = (a: string, b: string): number => BigInt(a) < BigInt(b) ? -1 : BigInt(a) > BigInt(b) ? 1 : 0;
@@ -82,9 +82,9 @@ function commandTransition(state: ClientState, input: Extract<ClientInput, { typ
 		return finish({ ...state, commands: [...state.commands, { commandId, streamId, requestDigest, tag: 'pending' }] }, [{ type: 'send', commandId }]);
 	}
 	if (!previous) return finish(state, [{ type: 'stop', commandId }]);
-	if (previous.tag === 'received') return finish(state, [{ type: 'receipt_known', commandId }]);
+	if (previous.tag === 'received' || previous.tag === 'denied') return finish(state, [{ type: 'receipt_known', commandId }]);
 	switch (input.failure.tag) {
-		case 'denied': return finish(state, [{ type: 'stop', commandId }]);
+		case 'denied': { const reason = input.failure.reason; return finish({ ...state, commands: state.commands.map((c) => c === previous ? { ...c, tag: 'denied', reason } : c) }, [{ type: 'stop', commandId }]); }
 		case 'stale_revision': return finish(state, [{ type: 'refresh_snapshot', commandId }]);
 		case 'rate_limited': return finish(state, [input.online ? { type: 'wait_retry_after', commandId, retryAfterSeconds: input.failure.retryAfterSeconds } : { type: 'wait_connection', commandId }]);
 		case 'timeout': return finish(state, [{ type: input.online ? 'resend_same_command' : 'wait_connection', commandId }]);
@@ -97,6 +97,8 @@ export function synchronize(state: ClientState, value: ClientInput): Transition 
 		case 'clear': return finish(initialState());
 		case 'submit': case 'receipt': case 'retry': return commandTransition(state, input);
 		case 'draft': return finish({ ...state, drafts: [...state.drafts.filter((d) => d.streamId !== input.streamId), ...(input.text ? [{ streamId: input.streamId, text: input.text, tag: 'unsent' as const }] : [])] });
+		// Only a permanently denied command can be dismissed; a live or delivered one ignores discard rather than losing its outcome.
+		case 'discard': { const target = state.commands.find((c) => c.commandId === input.commandId); return target?.tag === 'denied' ? finish({ ...state, commands: state.commands.filter((c) => c !== target) }) : finish(state); }
 		case 'snapshot': case 'event': case 'unsupported': case 'resync': case 'seen': break;
 	}
 	const room = state.rooms.find((r) => r.streamId === input.streamId);

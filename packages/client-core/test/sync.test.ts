@@ -123,7 +123,6 @@ test('retry decisions preserve the original id/digest, refresh stale state and r
 		[{ tag: 'timeout' }, false, 'hash', 'wait_connection'],
 		[{ tag: 'timeout' }, true, 'changed', 'conflict'],
 		[{ tag: 'stale_revision' }, true, 'hash', 'refresh_snapshot'],
-		[{ tag: 'denied' }, true, 'hash', 'stop'],
 		[{ tag: 'rate_limited', retryAfterSeconds: 30 }, true, 'hash', 'wait_retry_after'],
 	] as const) {
 		const result = synchronize(pending, { type: 'retry', commandId: 'c', requestDigest: digest, online, failure });
@@ -131,6 +130,26 @@ test('retry decisions preserve the original id/digest, refresh stale state and r
 		expect(result.state).toBe(pending);
 	}
 	expect(synchronize(drive(snapshot(), submit, { type: 'receipt', receipt }), { type: 'retry', commandId: 'c', requestDigest: 'hash', online: true, failure: { tag: 'timeout' } }).requests).toEqual([{ type: 'receipt_known', commandId: 'c' }]);
+});
+
+test('a permanent denial marks the command failed with its reason, stops without duplicating, and a later resend is a distinct command', () => {
+	const pending = drive(snapshot(), submit);
+	const denied = synchronize(pending, { type: 'retry', commandId: 'c', requestDigest: 'hash', online: true, failure: { tag: 'denied', reason: 'HTTP 400 malformed_command' } });
+	expect(denied.requests).toEqual([{ type: 'stop', commandId: 'c' }]);
+	expect(denied.state.commands).toEqual([{ commandId: 'c', streamId: room, requestDigest: 'hash', tag: 'denied', reason: 'HTTP 400 malformed_command' }]);
+	// A further failure for the same, already-denied command is not re-processed or re-stopped a second time.
+	const again = synchronize(denied.state, { type: 'retry', commandId: 'c', requestDigest: 'hash', online: true, failure: { tag: 'timeout' } });
+	expect(again.requests).toEqual([{ type: 'receipt_known', commandId: 'c' }]);
+	expect(again.state).toBe(denied.state);
+	// Discard drops only a denied command; a still-pending or already-delivered one is untouched.
+	expect(synchronize(pending, { type: 'discard', commandId: 'c' }).state).toBe(pending);
+	const discarded = synchronize(denied.state, { type: 'discard', commandId: 'c' });
+	expect(discarded.state.commands).toEqual([]);
+	const delivered = synchronize(pending, { type: 'receipt', receipt });
+	expect(synchronize(delivered.state, { type: 'discard', commandId: 'c' }).state).toBe(delivered.state);
+	// A deliberate resend after discard is a new command identity, never a resurrection of the denied one.
+	const resent = synchronize(discarded.state, { ...submit, commandId: 'd' });
+	expect(resent.requests).toEqual([{ type: 'send', commandId: 'd' }]);
 });
 
 test('a full gap can still drain, and newer snapshot cursors cannot resurrect older message revisions', () => {
