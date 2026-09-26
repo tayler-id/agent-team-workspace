@@ -161,7 +161,13 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		// The browser's 'online' event reports network reachability, not that this room's own poll or send has
 		// succeeded; a prior fetch failure may still be retrying. Only the poll loop's own next successful read
 		// sets link: 'online' (in poll, above), so this goes to 'retrying' and lets that read confirm it.
-		window.addEventListener('online', () => { set({ online: true, link: connection.link === 'disconnected' ? 'disconnected' : 'retrying' }); resumeWaitingSend(generation); });
+		window.addEventListener('online', () => {
+			// A browser online event while still manually Disconnected must not resume a queued send on the
+			// controller Disconnect already aborted; Reconnect (which builds a fresh one) is what resumes it.
+			const disconnected = connection.link === 'disconnected';
+			set({ online: true, link: disconnected ? 'disconnected' : 'retrying' });
+			if (!disconnected) resumeWaitingSend(generation);
+		});
 		window.addEventListener('offline', () => { set({ online: false, link: connection.link === 'disconnected' ? 'disconnected' : 'offline' }); });
 	}
 	return {
