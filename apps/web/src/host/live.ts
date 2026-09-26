@@ -184,10 +184,14 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		loadSnapshot: () => { if (started) return; started = true; beginPolling(); },
 		submit: (commandId, requestDigest, text) => {
 			if (unsettled.has(text)) return;
-			const online = isOnline();
+			const networkOnline = isOnline();
+			const disconnected = connection.link === 'disconnected';
+			// A manual Disconnect leaves an already-aborted controller behind until Reconnect makes a fresh one; a new
+			// submit must wait for it rather than attempt now and have that abort misread as a permanent HTTP denial.
+			const online = networkOnline && !disconnected;
 			const transition = client.apply({ type: 'submit', commandId, streamId, requestDigest, online });
 			const request = transition.requests[0];
-			set({ decision: transition.requests.map((r) => r.type).join(', ') || undefined, online, link: request?.type === 'wait_connection' ? linkFromOnline(online) : connection.link });
+			set({ decision: transition.requests.map((r) => r.type).join(', ') || undefined, online: networkOnline, link: request?.type === 'wait_connection' && !disconnected ? linkFromOnline(online) : connection.link });
 			// unsettled also guards the offline path: a repeated click on the same unchanged draft must not mint a
 			// second waiting command once the first is already tracked for this exact text.
 			if (request?.type === 'wait_connection') { unsettled.add(text); waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); }
