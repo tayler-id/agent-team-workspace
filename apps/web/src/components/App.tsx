@@ -24,7 +24,7 @@ function Composer({ streamId, disabled }: { readonly streamId: string; readonly 
 	const discard = useDiscardCommand();
 	const { submit } = useRoomCommands();
 	const { busy, run } = useStaleSafeBusy();
-	const status = composerStatus({ rooms: [], drafts, commands }, streamId, connection.sendPhase, connection.decision);
+	const status = composerStatus({ rooms: [], drafts, commands }, streamId, connection.decision, connection.sendPhase);
 	const onSubmit = (event?: SyntheticEvent): void => {
 		event?.preventDefault();
 		if (disabled || busy || status.draft.trim() === '') return;

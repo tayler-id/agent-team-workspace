@@ -77,9 +77,11 @@ function commandTransition(state: ClientState, input: Extract<ClientInput, { typ
 	if (previous && previous.requestDigest !== input.requestDigest) return finish(state, [{ type: 'conflict', commandId }]);
 	if (input.type === 'submit') {
 		if (previous) return finish(state);
-		if (!input.online) return finish(state, [{ type: 'wait_connection', commandId }]);
 		const { streamId, requestDigest } = input;
-		return finish({ ...state, commands: [...state.commands, { commandId, streamId, requestDigest, tag: 'pending' }] }, [{ type: 'send', commandId }]);
+		// Offline still tracks the command as pending, with its own identity, rather than dropping it: a later
+		// offline submit gets its own row alongside it instead of silently overwriting an already-waiting send.
+		const next = { ...state, commands: [...state.commands, { commandId, streamId, requestDigest, tag: 'pending' as const }] };
+		return input.online ? finish(next, [{ type: 'send', commandId }]) : finish(next, [{ type: 'wait_connection', commandId }]);
 	}
 	if (!previous) return finish(state, [{ type: 'stop', commandId }]);
 	if (previous.tag === 'received' || previous.tag === 'denied') return finish(state, [{ type: 'receipt_known', commandId }]);

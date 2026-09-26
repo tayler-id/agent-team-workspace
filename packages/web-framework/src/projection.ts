@@ -59,7 +59,7 @@ export function status(room: Room | undefined, connection: Connection): RoomStat
 	}
 }
 
-export function composer(state: ClientState, streamId: string, sendPhase: Readonly<Record<string, SendPhase>>, decision: string | undefined): ComposerStatus {
+export function composer(state: ClientState, streamId: string, decision: string | undefined, sendPhase: Readonly<Record<string, SendPhase>> = {}): ComposerStatus {
 	return {
 		draft: state.drafts.find((d) => d.streamId === streamId)?.text ?? '',
 		commands: state.commands.filter((c) => c.streamId === streamId).map((c): ComposerCommand => {

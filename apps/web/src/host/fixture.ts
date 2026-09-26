@@ -132,7 +132,13 @@ export function createFixtureTransport(client: RoomClient, fixture: RoomFixture)
 		// Dev-only: the fixture has no real socket to cancel, so disconnect/reconnect only flip the label FixtureControls exercises.
 		disconnect: () => { set({ link: 'disconnected' }); },
 		reconnect: () => { set({ link: state.online ? 'online' : 'offline' }); },
-		submit: (commandId, requestDigest, text) => { const t = client.apply({ type: 'submit', commandId, streamId: fixture.streamId, requestDigest, online: state.online }); set({ decision: describe(t.requests) }); if (t.requests.some((r) => r.type === 'send')) { outbox = [...outbox, { commandId, text }]; setPhase(commandId, 'sending'); } },
+		submit: (commandId, requestDigest, text) => {
+			const t = client.apply({ type: 'submit', commandId, streamId: fixture.streamId, requestDigest, online: state.online });
+			set({ decision: describe(t.requests) });
+			if (t.requests.some((r) => r.type === 'send')) { outbox = [...outbox, { commandId, text }]; setPhase(commandId, 'sending'); }
+			// Offline still tracks the command (see client-core), so its own row must read "Waiting for a connection…", not the default "Sending…".
+			if (t.requests.some((r) => r.type === 'wait_connection')) setPhase(commandId, 'waiting_connection');
+		},
 		deliverReceipt: () => {
 			const entry = outbox[0], current = room();
 			if (!entry || !current) return;

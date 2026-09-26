@@ -259,6 +259,32 @@ test('a live send reports sending then retrying transport phases while the comma
 	expect(client.apply({ type: 'discard', commandId: '55555555-0000-4000-8000-000000000001' }).state.commands).toHaveLength(1); // Still pending: discard is a no-op, never a quiet cancel.
 });
 
+test('two commands submitted while genuinely offline each keep their own identity; reconnecting sends both', async () => {
+	const [client, transport] = boot;
+	const fetchMock = vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) { const command = JSON.parse(init?.body ?? '{}') as { command_id: string }; return Promise.resolve(receiptFor(command.command_id)); }
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	});
+	vi.stubGlobal('fetch', fetchMock);
+	transport.loadSnapshot();
+	await flush(6);
+	Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
+	const first = '88888888-0000-4000-8000-000000000001', second = '88888888-0000-4000-8000-000000000002';
+	transport.submit(first, 'sha256:' + 'a'.repeat(64), 'first offline send');
+	transport.submit(second, 'sha256:' + 'b'.repeat(64), 'second offline send');
+	// Neither offline send is dropped or overwritten by the other; both are tracked with their own identity.
+	expect(client.getState().commands.map((c) => c.commandId)).toEqual([first, second]);
+	expect(client.getState().commands.every((c) => c.tag === 'pending')).toBe(true);
+	expect(transport.getState().sendPhase).toEqual({ [first]: 'waiting_connection', [second]: 'waiting_connection' });
+	Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
+	window.dispatchEvent(new Event('online'));
+	await flush(6);
+	expect(client.getState().commands.map((c) => c.tag)).toEqual(['received', 'received']);
+	expect(transport.getState().sendPhase).toEqual({});
+});
+
 function hangingFetch(onMessagesSignal: (signal: AbortSignal | undefined) => void): { fetchMock: (url: string, init?: { readonly signal?: AbortSignal }) => Promise<Response>; resolveEvents: (events: readonly Record<string, unknown>[]) => void } {
 	let resolveEvents: ((body: readonly Record<string, unknown>[]) => void) | undefined;
 	const fetchMock = vi.fn((url: string, init?: { readonly signal?: AbortSignal }): Promise<Response> => {

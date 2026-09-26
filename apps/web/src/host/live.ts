@@ -51,7 +51,8 @@ const sleep = (ms: number): Promise<void> => new Promise((resolve) => { setTimeo
  * on every disconnect and reconnect; a poll or send retry captures it before each await and checks it after, so a
  * cancelled loop iteration that wakes up late (its fetch aborted, or its backoff timer fires) takes no further
  * action instead of racing a freshly reconnected one. Reconnect resumes polling from the room's own applied cursor
- * (client-core already keeps it) and, if a send was left waiting on `wait_connection`, retries that exact command.
+ * (client-core already keeps it) and retries every command left waiting on `wait_connection`, each by its own exact
+ * identity: distinct commands submitted while offline never overwrite one another or get dropped.
  */
 export function createLiveTransport(client: RoomClient, options: LiveOptions = {}): LiveTransport {
 	const baseUrl = options.baseUrl ?? location.origin;
@@ -63,7 +64,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 	let started = false;
 	let generation = 0;
 	let abort = new AbortController();
-	let waitingForConnection: { readonly commandId: string; readonly requestDigest: string; readonly text: string } | undefined;
+	const waitingForConnection = new Map<string, { readonly requestDigest: string; readonly text: string }>();
 	const unsettled = new Set<string>(); // Draft texts with a command still retrying; a second Send reuses that identity.
 	const listeners = new Set<() => void>();
 	const notify = (): void => { for (const listener of listeners) listener(); };
@@ -128,23 +129,27 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			clearPhase(commandId);
 			set({ decision: undefined });
 		} catch (error) {
-			if (myGeneration !== generation) { waitingForConnection = { commandId, requestDigest, text }; setPhase(commandId, 'waiting_connection'); return; }
+			if (myGeneration !== generation) { waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); return; }
 			const online = isOnline();
 			const transition = client.apply({ type: 'retry', commandId, requestDigest, online, failure: classify(error) });
 			const request = transition.requests[0];
 			if (request?.type === 'stop') { unsettled.delete(text); clearPhase(commandId); }
-			if (request?.type === 'wait_connection') { waitingForConnection = { commandId, requestDigest, text }; setPhase(commandId, 'waiting_connection'); }
+			if (request?.type === 'wait_connection') { waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); }
 			set({ decision: request?.type === 'stop' ? `stop: not sent (${error instanceof Error ? error.message : String(error)}); the draft is kept` : transition.requests.map((r) => r.type).join(', ') || undefined, online, link: request?.type === 'wait_connection' ? linkFromOnline(online) : connection.link });
-			if (request?.type === 'resend_same_command') { setPhase(commandId, 'retrying'); await sleep(retryDelayMs); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection = { commandId, requestDigest, text }; }
-			else if (request?.type === 'wait_retry_after') { setPhase(commandId, 'retrying'); await sleep(request.retryAfterSeconds * 1000); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection = { commandId, requestDigest, text }; }
+			if (request?.type === 'resend_same_command') { setPhase(commandId, 'retrying'); await sleep(retryDelayMs); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection.set(commandId, { requestDigest, text }); }
+			else if (request?.type === 'wait_retry_after') { setPhase(commandId, 'retrying'); await sleep(request.retryAfterSeconds * 1000); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection.set(commandId, { requestDigest, text }); }
 		}
 	}
+	// Resumes every command still waiting on a connection, each by its own frozen id/digest/text: none is dropped
+	// or overwritten by another that was also waiting.
 	function resumeWaitingSend(myGeneration: number): void {
-		if (!waitingForConnection || myGeneration !== generation) return;
-		const send = waitingForConnection;
-		waitingForConnection = undefined;
-		setPhase(send.commandId, 'retrying');
-		void attemptSend(myGeneration, send.commandId, send.requestDigest, send.text);
+		if (myGeneration !== generation || waitingForConnection.size === 0) return;
+		const sends = [...waitingForConnection.entries()];
+		waitingForConnection.clear();
+		for (const [commandId, { requestDigest, text }] of sends) {
+			setPhase(commandId, 'retrying');
+			void attemptSend(myGeneration, commandId, requestDigest, text);
+		}
 	}
 	function beginPolling(): void {
 		const myGeneration = generation;
@@ -183,7 +188,9 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			const transition = client.apply({ type: 'submit', commandId, streamId, requestDigest, online });
 			const request = transition.requests[0];
 			set({ decision: transition.requests.map((r) => r.type).join(', ') || undefined, online, link: request?.type === 'wait_connection' ? linkFromOnline(online) : connection.link });
-			if (request?.type === 'wait_connection') { waitingForConnection = { commandId, requestDigest, text }; setPhase(commandId, 'waiting_connection'); }
+			// unsettled also guards the offline path: a repeated click on the same unchanged draft must not mint a
+			// second waiting command once the first is already tracked for this exact text.
+			if (request?.type === 'wait_connection') { unsettled.add(text); waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); }
 			if (transition.requests.some((r) => r.type === 'send')) { unsettled.add(text); setPhase(commandId, 'sending'); void attemptSend(generation, commandId, requestDigest, text); }
 		},
 		markSeen: (seq) => { client.apply({ type: 'seen', streamId, seq }); },

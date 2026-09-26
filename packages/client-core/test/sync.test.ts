@@ -89,9 +89,15 @@ test('gaps are bounded and invalid snapshot or changed message positions resync 
 
 const submit: ClientInput = { type: 'submit', commandId: 'c', streamId: room, requestDigest: 'hash', online: true };
 const receipt = { command_id: 'c', aggregate_id: 'm', revision: '2', event_cursors: [{ stream_id: room, committed_seq: '2' }], receipt_id: 'receipt' };
-test('receipts dedupe commands but never fast-forward a timeline; offline sends are not queued', () => {
+test('receipts dedupe commands but never fast-forward a timeline; offline sends keep their own identity', () => {
 	const base = drive(snapshot());
-	expect(synchronize(base, { ...submit, type: 'submit', commandId: 'c', streamId: room, requestDigest: 'hash', online: false }).state).toBe(base);
+	const offline = synchronize(base, { ...submit, type: 'submit', commandId: 'c', streamId: room, requestDigest: 'hash', online: false });
+	expect(offline.requests).toEqual([{ type: 'wait_connection', commandId: 'c' }]);
+	expect(offline.state.commands).toEqual([{ commandId: 'c', streamId: room, requestDigest: 'hash', tag: 'pending' }]);
+	// A second offline submit gets its own row; the first is never overwritten or dropped.
+	const second = synchronize(offline.state, { ...submit, type: 'submit', commandId: 'c2', streamId: room, requestDigest: 'hash2', online: false });
+	expect(second.requests).toEqual([{ type: 'wait_connection', commandId: 'c2' }]);
+	expect(second.state.commands.map((c) => c.commandId)).toEqual(['c', 'c2']);
 	const pending = synchronize(base, submit);
 	expect(pending.requests).toEqual([{ type: 'send', commandId: 'c' }]);
 	expect(synchronize(pending.state, submit).requests).toEqual([]);
