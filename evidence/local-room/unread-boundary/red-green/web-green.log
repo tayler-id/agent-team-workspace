@@ -1,0 +1,9 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/apps/web
+
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  22:33:25
+   Duration  1.26s (tests 49%, environment 29%, import 14%, transform 8%)
+

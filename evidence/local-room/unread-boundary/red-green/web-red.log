@@ -1,0 +1,888 @@
+
+ RUN  v5.0.1 /private/tmp/claude-501/agora-red-check/apps/web
+
+ ❯ |web| test/app.test.tsx (8 tests | 1 failed) 638ms
+   × live room: your own send is never unread or announced; arrivals from elsewhere are announced with the header count 181ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/app.test.tsx > live room: your own send is never unread or announced; arrivals from elsewhere are announced with the header count
+TestingLibraryElementError: Unable to find an accessible element with the role "separator" and name "Unread messages start here, 1 new"
+
+Here are the accessible roles:
+
+  link:
+
+  Name "Skip to messages":
+  [36m<a[39m
+    [33mclass[39m=[32m"skip-link"[39m
+    [33mhref[39m=[32m"#timeline-heading"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  banner:
+
+  Name "":
+  [36m<header[39m
+    [33mclass[39m=[32m"room-header"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"kicker"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"meta"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mdir[39m=[32m"auto"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mdir[39m=[32m"auto"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mdir[39m=[32m"auto"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mdir[39m=[32m"auto"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mdir[39m=[32m"auto"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mdir[39m=[32m"auto"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"composer-state"[39m
+    [33mid[39m=[32m"composer-state"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Local project / Local room":
+  [36m<h1[39m
+    [33mclass[39m=[32m"crumb"[39m
+  [36m/>[39m
+
+  Name "Messages":
+  [36m<h2[39m
+    [33mclass[39m=[32m"visually-hidden"[39m
+    [33mid[39m=[32m"timeline-heading"[39m
+  [36m/>[39m
+
+  Name "Composer":
+  [36m<h2[39m
+    [33mclass[39m=[32m"visually-hidden"[39m
+    [33mid[39m=[32m"composer-heading"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Mark room as read":
+  [36m<button[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Disconnect":
+  [36m<button[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Send":
+  [36m<button[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  [36m<div[39m
+    [33maria-live[39m=[32m"polite"[39m
+    [33mclass[39m=[32m"status"[39m
+    [33mdata-link[39m=[32m"online"[39m
+    [33mdata-online[39m=[32m"true"[39m
+    [33mdata-phase[39m=[32m"live"[39m
+    [33mrole[39m=[32m"status"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  main:
+
+  Name "":
+  [36m<main[39m
+    [33mclass[39m=[32m"main"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Messages":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"timeline-heading"[39m
+    [33mclass[39m=[32m"timeline"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  list:
+
+  Name "Messages, 6 total":
+  [36m<ol[39m
+    [33maria-label[39m=[32m"Messages, 6 total"[39m
+    [33mclass[39m=[32m"rows"[39m
+    [33mdata-geometry[39m=[32m"normal 400 16px depends on user agent|16|24|800|0|normal||1"[39m
+    [33mdata-mounted[39m=[32m"6"[39m
+    [33mdata-overscan[39m=[32m"8"[39m
+    [33mdata-sizing[39m=[32m"fallback"[39m
+    [33mdata-total[39m=[32m"6"[39m
+    [33mstyle[39m=[32m"height: 420px;"[39m
+  [36m/>[39m
+
+  Name "Send status":
+  [36m<ul[39m
+    [33maria-label[39m=[32m"Send status"[39m
+    [33maria-live[39m=[32m"polite"[39m
+    [33mclass[39m=[32m"composer-commands"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[39m
+    [33maria-posinset[39m=[32m"1"[39m
+    [33maria-setsize[39m=[32m"6"[39m
+    [33mclass[39m=[32m"row"[39m
+    [33mdata-estimate[39m=[32m"70"[39m
+    [33mdata-index[39m=[32m"0"[39m
+    [33mdata-sizing[39m=[32m"text"[39m
+    [33mstyle[39m=[32m"transform: translateY(0px);"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li[39m
+    [33maria-posinset[39m=[32m"2"[39m
+    [33maria-setsize[39m=[32m"6"[39m
+    [33mclass[39m=[32m"row"[39m
+    [33mdata-estimate[39m=[32m"70"[39m
+    [33mdata-index[39m=[32m"1"[39m
+    [33mdata-sizing[39m=[32m"text"[39m
+    [33mstyle[39m=[32m"transform: translateY(70px);"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li[39m
+    [33maria-posinset[39m=[32m"3"[39m
+    [33maria-setsize[39m=[32m"6"[39m
+    [33mclass[39m=[32m"row"[39m
+    [33mdata-estimate[39m=[32m"70"[39m
+    [33mdata-index[39m=[32m"2"[39m
+    [33mdata-sizing[39m=[32m"text"[39m
+    [33mstyle[39m=[32m"transform: translateY(140px);"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li[39m
+    [33maria-posinset[39m=[32m"4"[39m
+    [33maria-setsize[39m=[32m"6"[39m
+    [33mclass[39m=[32m"row"[39m
+    [33mdata-estimate[39m=[32m"70"[39m
+    [33mdata-index[39m=[32m"3"[39m
+    [33mdata-sizing[39m=[32m"text"[39m
+    [33mstyle[39m=[32m"transform: translateY(210px);"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li[39m
+    [33maria-posinset[39m=[32m"5"[39m
+    [33maria-setsize[39m=[32m"6"[39m
+    [33mclass[39m=[32m"row"[39m
+    [33mdata-estimate[39m=[32m"70"[39m
+    [33mdata-index[39m=[32m"4"[39m
+    [33mdata-sizing[39m=[32m"text"[39m
+    [33mstyle[39m=[32m"transform: translateY(280px);"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li[39m
+    [33maria-posinset[39m=[32m"6"[39m
+    [33maria-setsize[39m=[32m"6"[39m
+    [33mclass[39m=[32m"row"[39m
+    [33mdata-estimate[39m=[32m"70"[39m
+    [33mdata-index[39m=[32m"5"[39m
+    [33mdata-sizing[39m=[32m"text"[39m
+    [33mstyle[39m=[32m"transform: translateY(350px);"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li[39m
+    [33mdata-command-state[39m=[32m"delivered"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  article:
+
+  Name "You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time":
+  [36m<article[39m
+    [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+    [33mclass[39m=[32m"message"[39m
+    [33mdata-commits[39m=[32m"3"[39m
+    [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000001"[39m
+    [33mdata-revision[39m=[32m"1"[39m
+    [33mdata-seq[39m=[32m"1"[39m
+    [33mdata-unread[39m=[32m"false"[39m
+    [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000001"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time":
+  [36m<article[39m
+    [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+    [33mclass[39m=[32m"message"[39m
+    [33mdata-commits[39m=[32m"3"[39m
+    [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000002"[39m
+    [33mdata-revision[39m=[32m"1"[39m
+    [33mdata-seq[39m=[32m"2"[39m
+    [33mdata-unread[39m=[32m"false"[39m
+    [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000002"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time":
+  [36m<article[39m
+    [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+    [33mclass[39m=[32m"message"[39m
+    [33mdata-commits[39m=[32m"3"[39m
+    [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000003"[39m
+    [33mdata-revision[39m=[32m"1"[39m
+    [33mdata-seq[39m=[32m"3"[39m
+    [33mdata-unread[39m=[32m"false"[39m
+    [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000003"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time":
+  [36m<article[39m
+    [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+    [33mclass[39m=[32m"message"[39m
+    [33mdata-commits[39m=[32m"3"[39m
+    [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000004"[39m
+    [33mdata-revision[39m=[32m"1"[39m
+    [33mdata-seq[39m=[32m"4"[39m
+    [33mdata-unread[39m=[32m"false"[39m
+    [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000004"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+
+  Name "You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time":
+  [36m<article[39m
+    [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+    [33mclass[39m=[32m"message"[39m
+    [33mdata-commits[39m=[32m"2"[39m
+    [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000005"[39m
+    [33mdata-revision[39m=[32m"1"[39m
+    [33mdata-seq[39m=[32m"5"[39m
+    [33mdata-unread[39m=[32m"false"[39m
+    [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000005"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time, unread":
+  [36m<article[39m
+    [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time, unread"[39m
+    [33mclass[39m=[32m"message unread"[39m
+    [33mdata-commits[39m=[32m"1"[39m
+    [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000006"[39m
+    [33mdata-revision[39m=[32m"1"[39m
+    [33mdata-seq[39m=[32m"6"[39m
+    [33mdata-unread[39m=[32m"true"[39m
+    [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000006"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  time:
+
+  Name "September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)":
+  [36m<time[39m
+    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+  [36m/>[39m
+
+  Name "September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)":
+  [36m<time[39m
+    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+  [36m/>[39m
+
+  Name "September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)":
+  [36m<time[39m
+    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+  [36m/>[39m
+
+  Name "September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)":
+  [36m<time[39m
+    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+  [36m/>[39m
+
+  Name "September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)":
+  [36m<time[39m
+    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+  [36m/>[39m
+
+  Name "September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)":
+  [36m<time[39m
+    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  separator:
+
+  Name "Unread messages start here":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Unread messages start here"[39m
+    [33mclass[39m=[32m"unread-boundary"[39m
+    [33mrole[39m=[32m"separator"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  form:
+
+  Name "Composer":
+  [36m<form[39m
+    [33maria-labelledby[39m=[32m"composer-heading"[39m
+    [33mclass[39m=[32m"composer"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Message (Enter sends, Shift+Enter adds a line)":
+  [36m<textarea[39m
+    [33maria-describedby[39m=[32m"composer-state"[39m
+    [33mid[39m=[32m"composer-text"[39m
+    [33mmaxlength[39m=[32m"4096"[39m
+    [33mrows[39m=[32m"3"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"shell"[39m
+      [33mdata-viewport[39m=[32m"desktop"[39m
+    [36m>[39m
+      [36m<a[39m
+        [33mclass[39m=[32m"skip-link"[39m
+        [33mhref[39m=[32m"#timeline-heading"[39m
+      [36m>[39m
+        [0mSkip to messages[0m
+      [36m</a>[39m
+      [36m<header[39m
+        [33mclass[39m=[32m"room-header"[39m
+      [36m>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"kicker"[39m
+        [36m>[39m
+          [0mLOCAL DEVELOPMENT[0m
+        [36m</p>[39m
+        [36m<h1[39m
+          [33mclass[39m=[32m"crumb"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"crumb-project"[39m
+          [36m>[39m
+            [0mLocal project[0m
+            [0m /[0m
+          [36m</span>[39m
+          [0m [0m
+          [36m<span[39m
+            [33mclass[39m=[32m"crumb-room"[39m
+          [36m>[39m
+            [0mLocal room[0m
+          [36m</span>[39m
+        [36m</h1>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"meta"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"badge"[39m
+            [33mdata-state[39m=[32m"active"[39m
+          [36m>[39m
+            [0mactive[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"badge"[39m
+            [33mdata-agent-state[39m=[32m"not_enabled"[39m
+          [36m>[39m
+            [0mproject agent · not enabled[0m
+          [36m</span>[39m
+          [36m<span>[39m
+            [0mLocal agent[0m
+            [0m: [0m
+            [0mlocal runtime, no model provider[0m
+          [36m</span>[39m
+          [36m<span>[39m
+            [0m1[0m
+            [0m member[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mdata-unread[39m=[32m"1"[39m
+          [36m>[39m
+            [0m1[0m
+            [0m unread[0m
+          [36m</span>[39m
+          [36m<button[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [0mMark room as read[0m
+          [36m</button>[39m
+        [36m</p>[39m
+        [36m<div[39m
+          [33maria-live[39m=[32m"polite"[39m
+          [33mclass[39m=[32m"status"[39m
+          [33mdata-link[39m=[32m"online"[39m
+          [33mdata-online[39m=[32m"true"[39m
+          [33mdata-phase[39m=[32m"live"[39m
+          [33mrole[39m=[32m"status"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"badge"[39m
+            [33mdata-state[39m=[32m"live"[39m
+          [36m>[39m
+            [0mLive[0m
+          [36m</span>[39m
+          [0m [0m
+          [36m<span>[39m
+            [0mCursor 6 applied.[0m
+          [36m</span>[39m
+          [0m [0m
+          [36m<span>[39m
+            [0mBrowser network available.[0m
+          [36m</span>[39m
+          [0m [0m
+          [36m<button[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [0mDisconnect[0m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"main"[39m
+      [36m>[39m
+        [36m<section[39m
+          [33maria-labelledby[39m=[32m"timeline-heading"[39m
+          [33mclass[39m=[32m"timeline"[39m
+        [36m>[39m
+          [36m<h2[39m
+            [33mclass[39m=[32m"visually-hidden"[39m
+            [33mid[39m=[32m"timeline-heading"[39m
+          [36m>[39m
+            [0mMessages[0m
+          [36m</h2>[39m
+          [36m<ol[39m
+            [33maria-label[39m=[32m"Messages, 6 total"[39m
+            [33mclass[39m=[32m"rows"[39m
+            [33mdata-geometry[39m=[32m"normal 400 16px depends on user agent|16|24|800|0|normal||1"[39m
+            [33mdata-mounted[39m=[32m"6"[39m
+            [33mdata-overscan[39m=[32m"8"[39m
+            [33mdata-sizing[39m=[32m"fallback"[39m
+            [33mdata-total[39m=[32m"6"[39m
+            [33mstyle[39m=[32m"height: 420px;"[39m
+          [36m>[39m
+            [36m<li[39m
+              [33maria-posinset[39m=[32m"1"[39m
+              [33maria-setsize[39m=[32m"6"[39m
+              [33mclass[39m=[32m"row"[39m
+              [33mdata-estimate[39m=[32m"70"[39m
+              [33mdata-index[39m=[32m"0"[39m
+              [33mdata-sizing[39m=[32m"text"[39m
+              [33mstyle[39m=[32m"transform: translateY(0px);"[39m
+            [36m>[39m
+              [36m<article[39m
+                [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+                [33mclass[39m=[32m"message"[39m
+                [33mdata-commits[39m=[32m"3"[39m
+                [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000001"[39m
+                [33mdata-revision[39m=[32m"1"[39m
+                [33mdata-seq[39m=[32m"1"[39m
+                [33mdata-unread[39m=[32m"false"[39m
+                [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000001"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"author"[39m
+                  [36m>[39m
+                    [0mYou[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"kicker"[39m
+                  [36m>[39m
+                    [0mhuman[0m
+                  [36m</span>[39m
+                  [36m<time[39m
+                    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+                    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+                  [36m>[39m
+                    [0mSep 22, 8:00 PM[0m
+                  [36m</time>[39m
+                [36m</div>[39m
+                [36m<p[39m
+                  [33mdir[39m=[32m"auto"[39m
+                [36m>[39m
+                  [0mseed 1[0m
+                [36m</p>[39m
+              [36m</article>[39m
+            [36m</li>[39m
+            [36m<li[39m
+              [33maria-posinset[39m=[32m"2"[39m
+              [33maria-setsize[39m=[32m"6"[39m
+              [33mclass[39m=[32m"row"[39m
+              [33mdata-estimate[39m=[32m"70"[39m
+              [33mdata-index[39m=[32m"1"[39m
+              [33mdata-sizing[39m=[32m"text"[39m
+              [33mstyle[39m=[32m"transform: translateY(70px);"[39m
+            [36m>[39m
+              [36m<article[39m
+                [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+                [33mclass[39m=[32m"message"[39m
+                [33mdata-commits[39m=[32m"3"[39m
+                [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000002"[39m
+                [33mdata-revision[39m=[32m"1"[39m
+                [33mdata-seq[39m=[32m"2"[39m
+                [33mdata-unread[39m=[32m"false"[39m
+                [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000002"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"author"[39m
+                  [36m>[39m
+                    [0mYou[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"kicker"[39m
+                  [36m>[39m
+                    [0mhuman[0m
+                  [36m</span>[39m
+                  [36m<time[39m
+                    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+                    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+                  [36m>[39m
+                    [0mSep 22, 8:00 PM[0m
+                  [36m</time>[39m
+                [36m</div>[39m
+                [36m<p[39m
+                  [33mdir[39m=[32m"auto"[39m
+                [36m>[39m
+                  [0mseed 2[0m
+                [36m</p>[39m
+              [36m</article>[39m
+            [36m</li>[39m
+            [36m<li[39m
+              [33maria-posinset[39m=[32m"3"[39m
+              [33maria-setsize[39m=[32m"6"[39m
+              [33mclass[39m=[32m"row"[39m
+              [33mdata-estimate[39m=[32m"70"[39m
+              [33mdata-index[39m=[32m"2"[39m
+              [33mdata-sizing[39m=[32m"text"[39m
+              [33mstyle[39m=[32m"transform: translateY(140px);"[39m
+            [36m>[39m
+              [36m<article[39m
+                [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+                [33mclass[39m=[32m"message"[39m
+                [33mdata-commits[39m=[32m"3"[39m
+                [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000003"[39m
+                [33mdata-revision[39m=[32m"1"[39m
+                [33mdata-seq[39m=[32m"3"[39m
+                [33mdata-unread[39m=[32m"false"[39m
+                [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000003"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"author"[39m
+                  [36m>[39m
+                    [0mYou[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"kicker"[39m
+                  [36m>[39m
+                    [0mhuman[0m
+                  [36m</span>[39m
+                  [36m<time[39m
+                    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+                    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+                  [36m>[39m
+                    [0mSep 22, 8:00 PM[0m
+                  [36m</time>[39m
+                [36m</div>[39m
+                [36m<p[39m
+                  [33mdir[39m=[32m"auto"[39m
+                [36m>[39m
+                  [0mseed 3[0m
+                [36m</p>[39m
+              [36m</article>[39m
+            [36m</li>[39m
+            [36m<li[39m
+              [33maria-posinset[39m=[32m"4"[39m
+              [33maria-setsize[39m=[32m"6"[39m
+              [33mclass[39m=[32m"row"[39m
+              [33mdata-estimate[39m=[32m"70"[39m
+              [33mdata-index[39m=[32m"3"[39m
+              [33mdata-sizing[39m=[32m"text"[39m
+              [33mstyle[39m=[32m"transform: translateY(210px);"[39m
+            [36m>[39m
+              [36m<article[39m
+                [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+                [33mclass[39m=[32m"message"[39m
+                [33mdata-commits[39m=[32m"3"[39m
+                [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000004"[39m
+                [33mdata-revision[39m=[32m"1"[39m
+                [33mdata-seq[39m=[32m"4"[39m
+                [33mdata-unread[39m=[32m"false"[39m
+                [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000004"[39m
+                [33mtabindex[39m=[32m"0"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"author"[39m
+                  [36m>[39m
+                    [0mYou[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"kicker"[39m
+                  [36m>[39m
+                    [0mhuman[0m
+                  [36m</span>[39m
+                  [36m<time[39m
+                    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+                    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+                  [36m>[39m
+                    [0mSep 22, 8:00 PM[0m
+                  [36m</time>[39m
+                [36m</div>[39m
+                [36m<p[39m
+                  [33mdir[39m=[32m"auto"[39m
+                [36m>[39m
+                  [0mseed 4[0m
+                [36m</p>[39m
+              [36m</article>[39m
+            [36m</li>[39m
+            [36m<li[39m
+              [33maria-posinset[39m=[32m"5"[39m
+              [33maria-setsize[39m=[32m"6"[39m
+              [33mclass[39m=[32m"row"[39m
+              [33mdata-estimate[39m=[32m"70"[39m
+              [33mdata-index[39m=[32m"4"[39m
+              [33mdata-sizing[39m=[32m"text"[39m
+              [33mstyle[39m=[32m"transform: translateY(280px);"[39m
+            [36m>[39m
+              [36m<article[39m
+                [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time"[39m
+                [33mclass[39m=[32m"message"[39m
+                [33mdata-commits[39m=[32m"2"[39m
+                [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000005"[39m
+                [33mdata-revision[39m=[32m"1"[39m
+                [33mdata-seq[39m=[32m"5"[39m
+                [33mdata-unread[39m=[32m"false"[39m
+                [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000005"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"author"[39m
+                  [36m>[39m
+                    [0mYou[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"kicker"[39m
+                  [36m>[39m
+                    [0mhuman[0m
+                  [36m</span>[39m
+                  [36m<time[39m
+                    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+                    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+                  [36m>[39m
+                    [0mSep 22, 8:00 PM[0m
+                  [36m</time>[39m
+                [36m</div>[39m
+                [36m<p[39m
+                  [33mdir[39m=[32m"auto"[39m
+                [36m>[39m
+                  [0mmy own message[0m
+                [36m</p>[39m
+              [36m</article>[39m
+            [36m</li>[39m
+            [36m<li[39m
+              [33maria-posinset[39m=[32m"6"[39m
+              [33maria-setsize[39m=[32m"6"[39m
+              [33mclass[39m=[32m"row"[39m
+              [33mdata-estimate[39m=[32m"70"[39m
+              [33mdata-index[39m=[32m"5"[39m
+              [33mdata-sizing[39m=[32m"text"[39m
+              [33mstyle[39m=[32m"transform: translateY(350px);"[39m
+            [36m>[39m
+              [36m<article[39m
+                [33maria-label[39m=[32m"You, human, September 22, 2026 at 8:00:00 PM Eastern Daylight Time, unread"[39m
+                [33mclass[39m=[32m"message unread"[39m
+                [33mdata-commits[39m=[32m"1"[39m
+                [33mdata-message-id[39m=[32m"cccccccc-0000-4000-8000-000000000006"[39m
+                [33mdata-revision[39m=[32m"1"[39m
+                [33mdata-seq[39m=[32m"6"[39m
+                [33mdata-unread[39m=[32m"true"[39m
+                [33mid[39m=[32m"message-cccccccc-0000-4000-8000-000000000006"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33maria-label[39m=[32m"Unread messages start here"[39m
+                  [33mclass[39m=[32m"unread-boundary"[39m
+                  [33mrole[39m=[32m"separator"[39m
+                [36m>[39m
+                  [0mNew[0m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"author"[39m
+                  [36m>[39m
+                    [0mYou[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"kicker"[39m
+                  [36m>[39m
+                    [0mhuman[0m
+                  [36m</span>[39m
+                  [36m<time[39m
+                    [33mdatetime[39m=[32m"2026-09-23T00:00:00.000Z"[39m
+                    [33mtitle[39m=[32m"September 22, 2026 at 8:00:00 PM Eastern Daylight Time (2026-09-23T00:00:00.000Z)"[39m
+                  [36m>[39m
+                    [0mSep 22, 8:00 PM[0m
+                  [36m</time>[39m
+                [36m</div>[39m
+                [36m<p[39m
+                  [33mdir[39m=[32m"auto"[39m
+                [36m>[39m
+                  [0mfrom another tab[0m
+                [36m</p>[39m
+              [36m</article>[39m
+            [36m</li>[39m
+          [36m</ol>[39m
+        [36m</section>[39m
+        [36m<form[39m
+          [33maria-labelledby[39m=[32m"composer-heading"[39m
+          [33mclass[39m=[32m"composer"[39m
+        [36m>[39m
+          [36m<h2[39m
+            [33mclass[39m=[32m"visually-hidden"[39m
+            [33mid[39m=[32m"composer-heading"[39m
+          [36m>[39m
+            [0mComposer[0m
+          [36m</h2>[39m
+          [36m<label[39m
+            [33mfor[39m=[32m"composer-text"[39m
+          [36m>[39m
+            [0mMessage (Enter sends, Shift+Enter adds a line)[0m
+          [36m</label>[39m
+          [36m<textarea[39m
+            [33maria-describedby[39m=[32m"composer-state"[39m
+            [33mid[39m=[32m"composer-text"[39m
+            [33mmaxlength[39m=[32m"4096"[39m
+            [33mrows[39m=[32m"3"[39m
+          [36m/>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"composer-actions"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mtype[39m=[32m"submit"[39m
+            [36m>[39m
+              [0mSend[0m
+            [36m</button>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"composer-state"[39m
+              [33mid[39m=[32m"composer-state"[39m
+            [36m>[39m
+              [0mNo draft.[0m
+            [36m</p>[39m
+            [36m<ul[39m
+              [33maria-label[39m=[32m"Send status"[39m
+              [33maria-live[39m=[32m"polite"[39m
+              [33mclass[39m=[32m"composer-commands"[39m
+            [36m>[39m
+              [36m<li[39m
+                [33mdata-command-state[39m=[32m"delivered"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mDelivered.[0m
+                [36m</span>[39m
+              [36m</li>[39m
+            [36m</ul>[39m
+          [36m</div>[39m
+        [36m</form>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/app.test.tsx:248:16
+    246|  expect(unread()).toBe('1 unread');
+    247|  expect(status().textContent).not.toMatch(/new message/);
+    248|  expect(screen.getByRole('separator', { name: 'Unread messages start h…
+       |                ^
+    249|  await wait(2000);
+    250|  expect(status()).toHaveTextContent('1 new message, 1 unread.');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  22:33:12
+   Duration  1.39s (tests 48%, environment 29%, import 14%, transform 8%)
+
+undefined
+/private/tmp/claude-501/agora-red-check/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run test/app.test.tsx

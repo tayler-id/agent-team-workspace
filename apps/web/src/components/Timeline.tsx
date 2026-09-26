@@ -6,11 +6,11 @@ import { classify } from '../rows.ts';
 
 export const kindLabel: Readonly<Record<Row['author']['kind'], string>> = { human: 'human', agent: 'local agent (fixture)', system: 'system' };
 
-interface RowProps { readonly streamId: string; readonly row: Row; readonly presentation: Presentation; readonly active: boolean; readonly onCite: (messageId: string) => void; readonly onAnswer?: ((messageId: string) => void) | undefined; readonly answerBusy?: boolean | undefined; readonly answered?: boolean | undefined }
+interface RowProps { readonly streamId: string; readonly row: Row; readonly presentation: Presentation; readonly active: boolean; readonly unreadCount: number; readonly onCite: (messageId: string) => void; readonly onAnswer?: ((messageId: string) => void) | undefined; readonly answerBusy?: boolean | undefined; readonly answered?: boolean | undefined }
 
 // Each row subscribes to its own message reference. An unrelated connection or command update leaves the
 // reference untouched, so the row does not commit; data-commits exposes the count to the browser verification.
-const MessageRow = memo(function MessageRow({ streamId, row, presentation, active, onCite, onAnswer, answerBusy, answered }: RowProps): ReactElement {
+const MessageRow = memo(function MessageRow({ streamId, row, presentation, active, unreadCount, onCite, onAnswer, answerBusy, answered }: RowProps): ReactElement {
 	const message = useClientSelector((state) => messageById(state.rooms.find((r) => r.streamId === streamId), row.message.id)) ?? row.message;
 	const commits = useRef(0);
 	commits.current += 1;
@@ -20,7 +20,12 @@ const MessageRow = memo(function MessageRow({ streamId, row, presentation, activ
 	const label = `${row.author.name}, ${kind}, ${shown.spoken}${deleted ? ', deleted message' : ''}${row.edited ? ', edited' : ''}${row.unread ? ', unread' : ''}`;
 	return (
 		<article id={rowDomId(message.id)} tabIndex={active ? 0 : -1} aria-label={label} data-message-id={message.id} data-unread={row.unread} data-commits={commits.current} data-seq={message.createdSeq} data-revision={message.revision} className={row.unread ? 'message unread' : 'message'}>
-			{row.firstUnread && <div role="separator" aria-label="Unread messages start here" className="unread-boundary">New</div>}
+			{row.firstUnread && (
+				<div role="separator" aria-label={`Unread messages start here, ${unreadCount} new`} className="unread-boundary">
+					<span className="chip live"><span className="dot" aria-hidden="true" />{unreadCount} new</span>
+					<i aria-hidden="true" />
+				</div>
+			)}
 			<div className="meta">
 				<span className="author">{row.author.name}</span>
 				<span className="kicker">{kind}</span>
@@ -41,6 +46,7 @@ export interface TimelineProps { readonly streamId: string; readonly rows: reado
 export function Timeline({ streamId, rows, presentation, onCite, focusRequest, onAnswer, answerBusy }: TimelineProps): ReactElement {
 	const { scroller, list, items, totalSize, active, sizerKind, geometryKeyValue, measureElement, move } = useTimelineVirtualizer(rows, focusRequest);
 	const answered = new Set(rows.filter((row) => row.author.kind === 'agent').flatMap((row) => row.citations));
+	const unreadCount = rows.reduce((count, row) => row.unread ? count + 1 : count, 0);
 	return (
 		<section aria-labelledby="timeline-heading" className="timeline" ref={scroller}>
 			<h2 id="timeline-heading" className="visually-hidden">Messages</h2>
@@ -48,7 +54,7 @@ export function Timeline({ streamId, rows, presentation, onCite, focusRequest, o
 			<ol ref={list} aria-label={`Messages, ${rows.length.toLocaleString('en-US')} total`} className="rows" onKeyDown={move} style={{ height: totalSize }} data-total={rows.length} data-mounted={items.length} data-overscan={overscan} data-sizing={sizerKind} data-geometry={geometryKeyValue}>
 				{items.map((item) => { const row = rows[item.index]; return row && (
 					<li key={item.key} className="row" data-index={item.index} data-estimate={item.size} data-sizing={classify(row).kind} aria-setsize={rows.length} aria-posinset={item.index + 1} ref={measureElement} style={{ transform: `translateY(${item.start}px)` }}>
-						<MessageRow streamId={streamId} row={row} presentation={presentation} active={item.index === active} onCite={onCite} onAnswer={onAnswer} answerBusy={answerBusy} answered={answered.has(row.message.id)} />
+						<MessageRow streamId={streamId} row={row} presentation={presentation} active={item.index === active} unreadCount={unreadCount} onCite={onCite} onAnswer={onAnswer} answerBusy={answerBusy} answered={answered.has(row.message.id)} />
 					</li>); })}
 			</ol>
 		</section>

@@ -245,17 +245,20 @@ test('live room: your own send is never unread or announced; arrivals from elsew
 	await wait(100);
 	expect(unread()).toBe('1 unread');
 	expect(status().textContent).not.toMatch(/new message/);
+	expect(screen.getByRole('separator', { name: 'Unread messages start here, 1 new' })).toHaveTextContent('1 new');
 	await wait(2000);
 	expect(status()).toHaveTextContent('1 new message, 1 unread.');
 	server.add('from another tab again');
 	await wait(100);
 	expect([unread(), status().textContent]).toEqual(['2 unread', expect.not.stringMatching(/new message/)]);
+	expect(screen.getAllByRole('separator', { name: 'Unread messages start here, 2 new' })).toHaveLength(1);
 	await wait(2000);
 	expect([unread(), /\d+ new messages?, \d+ unread\./.exec(status().textContent)?.[0]]).toEqual(['2 unread', '1 new message, 2 unread.']);
 
 	fireEvent.click(screen.getByRole('button', { name: 'Mark room as read' }));
 	expect(unread()).toBe('0 unread');
 	expect(status().textContent).not.toMatch(/new message/);
+	expect(screen.queryByRole('separator')).toBeNull();
 	server.add('burst one');
 	await wait(500);
 	server.add('burst two');

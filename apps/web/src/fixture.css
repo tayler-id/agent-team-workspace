@@ -5,7 +5,7 @@
 @font-face { font-family: "Cal Sans Text"; src: url("../../../docs/design-handoff/results/design-system/fonts/CalSansText-Regular.woff2") format("woff2"); font-weight: 400; }
 @font-face { font-family: "Cal Sans Text"; src: url("../../../docs/design-handoff/results/design-system/fonts/CalSansText-Medium.woff2") format("woff2"); font-weight: 500; }
 @font-face { font-family: "Cal Sans Text"; src: url("../../../docs/design-handoff/results/design-system/fonts/CalSansText-SemiBold.woff2") format("woff2"); font-weight: 600; }
-:root { color-scheme: light; --surface: #f6f6f8; --raised: #fff; --inset: #f3f3f6; --border: #e8e8ee; --text: #141414; --secondary: #6f6f78; --muted: #a0a0a8; --action: #141414; --focus: #141414; --gap: 16px; --radius: 16px; }
+:root { color-scheme: light; --surface: #f6f6f8; --raised: #fff; --inset: #f3f3f6; --border: #e8e8ee; --text: #141414; --secondary: #6f6f78; --muted: #a0a0a8; --action: #141414; --focus: #141414; --gap: 16px; --radius: 16px; --signal-live: #8b6cf6; }
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; width: 100%; min-height: 100%; max-width: 100%; }
 body { font: 15px/1.5 "Cal Sans Text", "Cal Sans UI", system-ui, -apple-system, sans-serif; color: var(--text); background: var(--surface); }
@@ -45,7 +45,11 @@ h1 { margin: 0; font: 600 24px/1.25 "Cal Sans UI", system-ui, sans-serif; letter
 .message time { white-space: nowrap; }
 .message p, .message pre { overflow-wrap: anywhere; max-width: 100%; }
 .message pre { overflow-x: auto; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--inset); }
-.unread-boundary { text-align: center; font-size: 12px; color: var(--secondary); }
+.unread-boundary { display: flex; align-items: center; gap: 12px; padding: 8px 10px 0; }
+.unread-boundary .chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 4px 10px; min-height: 24px; background: var(--inset); color: var(--text); font: 600 12px/16px "Cal Sans UI", system-ui, sans-serif; white-space: nowrap; }
+.unread-boundary .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--signal-live); flex: none; animation: unread-pulse 1.6s ease-in-out infinite; }
+.unread-boundary i { flex: 1; height: 1px; background: var(--muted); font-style: normal; }
+@keyframes unread-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 .tombstone { font-style: italic; color: var(--secondary); }
 .citations { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .composer { flex: none; padding: 12px 0 max(16px, env(safe-area-inset-bottom)); background: var(--surface); }

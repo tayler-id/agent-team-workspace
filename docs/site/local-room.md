@@ -115,6 +115,8 @@ The header shows `N unread` and a **Mark room as read** button. A message you se
 
 The status region is a polite live region. When unread grows, it waits 2 seconds so a burst reads as one notice, then says `1 new message, 2 unread.`, the same total as the header. Loading the room, reloading, and your own sends announce nothing. Marking the room read, or the next arrival, clears the old notice at once, so it never shows a total the header disagrees with. Arrow keys, Page Up, Page Down, Home and End move focus between messages. Only one message sits in the Tab order.
 
+The first unread message also carries its own boundary marker, matching [`Screen-Room`](repo:docs/design-handoff/results/design-system/components/Screen-Room/README.md)'s "live chip and a faint rule": a pill reading `N new` with a small live dot, followed by a hairline that runs to the row's edge. It is a `role="separator"` naming the same count out loud (`aria-label="Unread messages start here, N new"`), so a screen reader gets the count without waiting for the debounced status announcement above. It moves with the real unread cursor: it appears on the message where `firstUnread` first turns true, and disappears the moment **Mark room as read** (or the next read) advances the cursor past it, exactly like the boundary it replaces. The dot's pulse is muted like every other animation under `prefers-reduced-motion: reduce`.
+
 ```flow
 You send | The receipt settles your command. Client core remembers the committed sequence it names but does not move the cursor.
 Your event arrives | Polling applies the event. Its sequence is now at or below the cursor, so last-seen rises to it. Header stays `0 unread`, no New boundary, no announcement.
@@ -132,7 +134,7 @@ The approved direction for the room's presentation is [the design results](repo:
 - **Header.** The crumb is now two-tone (project grey, room ink) and the project agent's `not_enabled` state is its own explicit chip beside the lifecycle chip, matching `RoomHeader`; see [header alignment](repo:evidence/local-room/header-alignment/README.md). `RoomHeader` still wants repository and search, which this single-person local-only prototype does not have and does not claim.
 - **Chips and alerts.** The lifecycle chip is a filled pill without the baseline's small state dot. The alert still uses a thick left border, and `OfflineBanner` in the state matrix replaces it.
 - **Composer.** `Composer` wants a toolbar of present agents, Ask center and Create task as soft pills, and named over-limit, offline, rate-limited and observer states. The page has a textarea, a Send button and one text line per command naming its own delivery state.
-- **Timeline.** The unread boundary here is centered grey text. The baseline uses a live chip with a faint rule and tiles for typed work objects.
+- **Timeline.** The unread boundary is now the baseline's live chip and faint rule, see [unread boundary](repo:evidence/local-room/unread-boundary/README.md). The baseline's tiles for typed work objects are not implemented; messages still render as plain text and code blocks.
 
 The room UI is not complete until these land.
 
