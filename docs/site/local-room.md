@@ -101,13 +101,13 @@ Failed | client-core marked the command's tag `denied` with the failure's reason
 
 ```flow
 Sent | You press Send; the command gets one ID that never changes for this attempt.
-Retried | The first response never arrived, or the server was briefly unreachable or overloaded (a real 429 was reproduced by firing enough concurrent sends to trip the room's own rate limiter); the same ID is resent.
+Retried | The first response never arrived, or the server was briefly unreachable or overloaded (`408`, `5xx` or `429`); the same ID is resent, proven against a mocked server in apps/web/test/live.test.ts.
 Recognized | If the earlier attempt had actually committed, the room recognizes the identical ID and digest and returns the original receipt rather than creating a second message.
 Delivered | The command settles once, and exactly one message appears in the room.
-Rejected | A genuine problem (an oversized body, for example) stops retries at once; Discard clears the failed line without touching your draft or resending anything.
+Rejected | A genuine problem (an oversized body, for example) stops retries at once and commits nothing; Discard clears the failed line without touching your draft or resending anything.
 ```
 
-[`evidence/local-room/delivery-feedback/receipt-failure-browser/README.md`](repo:evidence/local-room/delivery-feedback/receipt-failure-browser/README.md) drives the real served room for a lost receipt, a transient failure, a real 429 under genuine concurrent load, and a permanent rejection, and confirms each retried command still commits exactly once.
+[`evidence/local-room/delivery-feedback/receipt-failure-browser/README.md`](repo:evidence/local-room/delivery-feedback/receipt-failure-browser/README.md) drives the real served room: a lost receipt (the request truly commits server-side, only its response is dropped) and a simulated transient failure each retry the same command ID against the real server and commit exactly once; the room's own rate limiter is separately shown to return genuine `429`s under real concurrent load; the permanent rejection commits nothing and leaves the draft for Discard.
 
 #### Unread, announcements and touch targets
 

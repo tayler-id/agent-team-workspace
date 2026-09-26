@@ -27,17 +27,18 @@ Launch `409c6ba1-2031-4b8a-818f-bf0da115cc1b`, served at `http://127.0.0.1:54147
 
 The service's own rate limiter (`scripts/local-room-service.ts`) is a real token bucket (60 tokens, refilling
 at 60/s). From the page's own JavaScript console, 90 concurrent real `POST /messages` requests were fired at
-once, distinct `command_id` each: 39 landed `201`, 51 came back genuine `429 rate limit` with a real
-`retry-after` header, all captured in the browser's own Network panel
+once, each a distinct `command_id`, deliberately bypassing the composer: 39 landed `201`, 51 came back genuine
+`429 rate limit` with a real `retry-after` header, all captured in the browser's own Network panel
 (`mcp__claude-in-chrome__read_network_requests`). This is the same real mechanism
 `apps/center/test/runtime.pg.test.ts`'s `"rate denial stores nothing"` test exercises server-side; here it is
 observed end to end through the browser's real network stack, not asserted against a mock.
 
-`classify()` in `apps/web/src/host/live.ts` already maps a real `429` to `rate_limited`, which the composer
-renders as `Retrying…` until the same frozen command lands. Client-core's own unit suite
-(`apps/web/test/live.test.ts`, `"a rejected send retries the frozen command..."`) proves that mapping keeps
-the exact command identity across the retry; this step's contribution is proving the server truly returns 429
-under real concurrency, not only in a controlled test fixture.
+This step proves only that the real server genuinely returns `429` under real concurrency; it does not drive
+the composer's own send through a real `429`, and it does not show one command ID being retried, because
+each of the 90 requests used its own distinct ID. `classify()` in `apps/web/src/host/live.ts` maps a real
+`429` to `rate_limited`, and the exact-identity retry across that mapping is what
+`apps/web/test/live.test.ts` (`"a rejected send retries the frozen command..."`) proves, against a mocked
+server. Steps 2 and 3 below are what prove that retry mapping against the real server instead.
 
 ## 2. Simulated transient failure through the real server (503, then a real receipt)
 
@@ -80,9 +81,12 @@ assistive tech as it changes, and the recovery control is a plainly labeled
 ## No duplicate committed messages
 
 `node scripts/local-room.ts history --instance receipt-failure-browser` after all four scenarios shows one
-row per attempted send body, each keyed to a single `command_id`; the two commands that retried
-(`simulated-503-then-real-success`, `simulated-lost-receipt-then-replay`) each committed exactly once despite
-their server-side request landing twice.
+row per attempted send body, each keyed to a single `command_id`. The two commands that retried committed
+exactly once each: `simulated-lost-receipt-then-replay`'s real server-side request genuinely landed twice
+(the dropped-response attempt and the retry, both real, §3 above); `simulated-503-then-real-success`'s first
+attempt never reached the server at all (the `503` was returned entirely by the page's own interceptor), so
+only its retry is a real server-side request. The oversized-body command (§4) committed zero messages, by
+design: a permanent rejection stops retries and persists nothing.
 
 ## Cleanup
 
