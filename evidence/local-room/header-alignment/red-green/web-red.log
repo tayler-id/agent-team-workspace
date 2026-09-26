@@ -1,0 +1,37 @@
+
+ RUN  v5.0.1 /private/tmp/claude-501/-Users-taylerramsay--treehouse-agent-team-workspace-50d2db-4-agent-team-workspace/81481ef7-eb52-441f-8c6e-0432bbb9396a/scratchpad/parent-worktree
+
+ ❯ |web| test/app.test.tsx (8 tests | 1 failed) 606ms
+   × room header two-tone crumb names the project agent as not enabled without a repository, search or member-identity claim 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/app.test.tsx > room header two-tone crumb names the project agent as not enabled without a repository, search or member-identity claim
+TestingLibraryElementError: Unable to find an element with the text: Agora local room fixture /. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<h1>[39m
+  [0mAgora local room fixture[0m
+  [0m · [0m
+  [0mGeneral room[0m
+[36m</h1>[39m
+ ❯ Object.getElementError ../../../../../../../../../Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../../../../../../../../Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../../../../../../../../Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../../../../../../../../Users/taylerramsay/.treehouse/agent-team-workspace-50d2db/4/agent-team-workspace/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/app.test.tsx:86:25
+     84|  const banner = screen.getByRole('banner');
+     85|  const heading = within(banner).getByRole('heading', { level: 1 });
+     86|  expect(within(heading).getByText(`${fixture.header.project} /`).class…
+       |                         ^
+     87|  expect(within(heading).getByText(fixture.header.room).className).toBe…
+     88|  const agentBadge = banner.querySelector('[data-agent-state="not_enabl…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  22:01:27
+   Duration  1.33s (tests 48%, environment 31%, import 14%, transform 7%)
+

@@ -279,6 +279,13 @@
 			"public": ["@agora/client-core Command tag 'denied' with its reason, and the 'discard' input that removes only a denied command", "@agora/web-framework useDiscardCommand, SendPhase ('sending' | 'retrying' | 'waiting_connection'), ComposerStatus.commands", "composer per-command Sending/Retrying/Waiting for a connection/Delivered/Failed rows with a Discard, edit and send again affordance on a failed one"],
 			"contracts": [], "scenarios": ["packages/client-core/test/sync.test.ts", "apps/web/test/live.test.ts", "apps/web/test/app.test.tsx", "evidence/local-room/delivery-feedback/receipt-failure-browser/README.md"],
 			"fixtures": ["fake local-room fetch server returning a real 400 malformed_command in apps/web/test/live.test.ts; FixtureControls 'Fail send: denied' in apps/web/test/app.test.tsx; real served-room browser drive for a lost receipt, a transient failure, a real 429 under genuine concurrent load, and a permanent rejection in evidence/local-room/delivery-feedback/receipt-failure-browser/"], "platforms": ["node24", "browser"]
+		},
+		{
+			"id": "local-room-header-alignment", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-header-alignment",
+			"paths": ["apps/web/src/components/App.tsx", "apps/web/src/fixture.css"],
+			"public": ["RoomHeader two-tone project/room crumb (.crumb-project grey, .crumb-room ink)", "explicit project-agent not_enabled status chip (data-agent-state=\"not_enabled\") separate from the lifecycle chip"],
+			"contracts": [], "scenarios": ["apps/web/test/app.test.tsx"],
+			"fixtures": ["real served local room driven at 1440x900 and 390x844 in evidence/local-room/header-alignment/README.md"], "platforms": ["node24", "browser"]
 		}
 	]
 }
