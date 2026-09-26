@@ -1,0 +1,44 @@
+diff --git a/apps/web/test/live.test.ts b/apps/web/test/live.test.ts
+index 21d3af3..2d7d35e 100644
+--- a/apps/web/test/live.test.ts
++++ b/apps/web/test/live.test.ts
+@@ -285,6 +285,39 @@ test('two commands submitted while genuinely offline each keep their own identit
+ 	expect(transport.getState().sendPhase).toEqual({});
+ });
+ 
++test('a send typed after a manual Disconnect waits for Reconnect; it must never attempt on the already-aborted signal and read back as a permanent denial', async () => {
++	const [client, transport] = boot;
++	const commandId = '99999999-0000-4000-8000-000000000001';
++	const fetchMock = vi.fn((url: string, init?: { readonly signal?: AbortSignal; readonly body?: string }): Promise<Response> => {
++		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
++		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
++		if (url.endsWith('/api/v1/local-room/messages')) {
++			// A real fetch() rejects immediately when handed an already-aborted signal; disconnect() aborts the
++			// transport's controller and reconnect() only replaces it later, so this is the exact hazard a send
++			// typed while still Disconnected must never reach.
++			if (init?.signal?.aborted) return Promise.reject(Object.assign(new Error('aborted'), { name: 'AbortError' }));
++			const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
++			return Promise.resolve(receiptFor(command.command_id));
++		}
++		return Promise.reject(new Error(`unexpected request ${url}`));
++	});
++	vi.stubGlobal('fetch', fetchMock);
++	transport.loadSnapshot();
++	await flush(6);
++	transport.disconnect();
++	expect(transport.getState().link).toBe('disconnected');
++	transport.submit(commandId, 'sha256:' + 'a'.repeat(64), 'typed while disconnected');
++	// Waits for Reconnect rather than attempting on the aborted signal; never touches /messages while disconnected.
++	expect(client.getState().commands.find((c) => c.commandId === commandId)?.tag).toBe('pending');
++	expect(transport.getState().sendPhase[commandId]).toBe('waiting_connection');
++	expect(fetchMock.mock.calls.some(([url]) => url.endsWith('/messages'))).toBe(false);
++	transport.reconnect();
++	await flush(6);
++	// Settles once reconnected, with exactly one attempt: no false denial, no duplicate send.
++	expect(client.getState().commands.find((c) => c.commandId === commandId)?.tag).toBe('received');
++	expect(fetchMock.mock.calls.filter(([url]) => url.endsWith('/messages'))).toHaveLength(1);
++});
++
+ function hangingFetch(onMessagesSignal: (signal: AbortSignal | undefined) => void): { fetchMock: (url: string, init?: { readonly signal?: AbortSignal }) => Promise<Response>; resolveEvents: (events: readonly Record<string, unknown>[]) => void } {
+ 	let resolveEvents: ((body: readonly Record<string, unknown>[]) => void) | undefined;
+ 	const fetchMock = vi.fn((url: string, init?: { readonly signal?: AbortSignal }): Promise<Response> => {

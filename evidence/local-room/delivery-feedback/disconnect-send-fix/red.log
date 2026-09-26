@@ -1,0 +1,44 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-26T01:06:08.463Z
+parent: 002b34228eaa02902134e8b1c74723928d4c9a79
+head: 4f3b42161f8dc50b2a323b0b97f27354052a454f
+subject_revision: 002b34228eaa02902134e8b1c74723928d4c9a79
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/live.test.ts
+test_patch_digest: sha256:15d9c8c3a8e4cacc7f6bac684f3c031eff023efcebeed4d32922eb007940d976
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"bash -c cd apps/web && pnpm exec vitest run test/live.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-KMkzBe/apps/web
+
+ ❯ |web| test/live.test.ts (21 tests | 1 failed) 1551ms
+   × a send typed after a manual Disconnect waits for Reconnect; it must never attempt on the already-aborted signal and read back as a permanent denial 14ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 20 passed (21)
+   Start at  21:05:57
+   Duration  2.23s (tests 72%, environment 20%, import 5%, transform 3%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/live.test.ts > a send typed after a manual Disconnect waits for Reconnect; it must never attempt on the already-aborted signal and read back as a permanent denial
+AssertionError: expected 'sending' to be 'waiting_connection' // Object.is equality
+
+Expected: "waiting_connection"
+Received: "sending"
+
+ ❯ test/live.test.ts:312:52
+    310|  // Waits for Reconnect rather than attempting on the aborted signal; …
+    311|  expect(client.getState().commands.find((c) => c.commandId === command…
+    312|  expect(transport.getState().sendPhase[commandId]).toBe('waiting_conne…
+       |                                                    ^
+    313|  expect(fetchMock.mock.calls.some(([url]) => url.endsWith('/messages')…
+    314|  transport.reconnect();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
