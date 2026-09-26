@@ -31,8 +31,9 @@ for (const size of sizes) {
 
 	const before = await page.evaluate(() => ({ separators: document.querySelectorAll('[role="separator"]').length }));
 
-	// A real unread transition: this message arrives from outside the browser's own composer (a second
-	// principal in the same room), so the poller lands it as unread and the boundary marker must appear.
+	// A real unread transition: this message arrives from a separate client posting directly to the
+	// server (the CLI, the same single local principal as the browser, not a second person), bypassing
+	// the browser's own composer, so the poller lands it as unread and the boundary marker must appear.
 	sendFromElsewhere(`unread boundary check for ${size.name}`);
 	await page.waitForSelector('[role="separator"]', { timeout: 15000 });
 

@@ -292,7 +292,7 @@
 			"paths": ["apps/web/src/components/Timeline.tsx", "apps/web/src/fixture.css"],
 			"public": ["Timeline first-unread marker as a live chip (\"N new\" with a pulsing dot) and a faint hairline rule, matching Screen-Room/TimelineMessage", "marker accessible name aria-label=\"Unread messages start here, N new\" naming the real unread count"],
 			"contracts": [], "scenarios": ["apps/web/test/app.test.tsx", "evidence/local-room/unread-boundary/README.md"],
-			"fixtures": ["real served local room driven with Playwright through an actual unread transition (a second principal posts via `local-room.ts send`, not just an empty room) at asserted 1440x900 and 390x844 CSS-pixel viewports in evidence/local-room/unread-boundary/README.md"], "platforms": ["node24", "browser"]
+			"fixtures": ["real served local room driven with Playwright through an actual unread transition (a separate client posts via `local-room.ts send` as the room's one local principal, not a second authenticated principal, and not just an empty room) at asserted 1440x900 and 390x844 CSS-pixel viewports in evidence/local-room/unread-boundary/README.md"], "platforms": ["node24", "browser"]
 		}
 	]
 }
