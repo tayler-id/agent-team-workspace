@@ -277,8 +277,8 @@
 			"id": "local-room-delivery-feedback", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-delivery-feedback",
 			"paths": ["packages/client-core/src/model.ts", "packages/client-core/src/index.ts", "packages/web-framework/src/environment.ts", "packages/web-framework/src/projection.ts", "packages/web-framework/src/client.ts", "apps/web/src/host/live.ts", "apps/web/src/host/fixture.ts", "apps/web/src/components/App.tsx"],
 			"public": ["@agora/client-core Command tag 'denied' with its reason, and the 'discard' input that removes only a denied command", "@agora/web-framework useDiscardCommand, SendPhase ('sending' | 'retrying' | 'waiting_connection'), ComposerStatus.commands", "composer per-command Sending/Retrying/Waiting for a connection/Delivered/Failed rows with a Discard, edit and send again affordance on a failed one"],
-			"contracts": [], "scenarios": ["packages/client-core/test/sync.test.ts", "apps/web/test/live.test.ts", "apps/web/test/app.test.tsx"],
-			"fixtures": ["fake local-room fetch server returning a real 400 malformed_command in apps/web/test/live.test.ts; FixtureControls 'Fail send: denied' in apps/web/test/app.test.tsx"], "platforms": ["node24", "browser"]
+			"contracts": [], "scenarios": ["packages/client-core/test/sync.test.ts", "apps/web/test/live.test.ts", "apps/web/test/app.test.tsx", "evidence/local-room/delivery-feedback/receipt-failure-browser/README.md"],
+			"fixtures": ["fake local-room fetch server returning a real 400 malformed_command in apps/web/test/live.test.ts; FixtureControls 'Fail send: denied' in apps/web/test/app.test.tsx; real served-room browser drive for a lost receipt, a transient failure, a real 429 under genuine concurrent load, and a permanent rejection in evidence/local-room/delivery-feedback/receipt-failure-browser/"], "platforms": ["node24", "browser"]
 		}
 	]
 }

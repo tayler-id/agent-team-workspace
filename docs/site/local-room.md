@@ -91,6 +91,24 @@ Failed | client-core marked the command's tag `denied` with the failure's reason
 
 `denied` is a permanent outcome, never a transient one: client-core marks the command `denied` once, the transport stops retrying it, and neither side revisits it. `discard` (a new `ClientInput`) only removes a command already tagged `denied` from `state.commands`; it is a no-op on a still-pending or already-delivered command, so it can never cancel an in-flight send or erase a real receipt. Discarding never touches the draft text and never itself sends anything, so a permanent rejection can neither quietly retry itself nor be discarded into a duplicate: the next send is always a deliberately new command ID, exactly like editing the draft and pressing Send today. [`packages/client-core/test/sync.test.ts`](repo:packages/client-core/test/sync.test.ts) proves the denial/discard/resend identity chain against the pure core; [`apps/web/test/live.test.ts`](repo:apps/web/test/live.test.ts) proves the same real 400 `malformed_command` response reaches this state over the live HTTP transport, alongside the existing sending/retrying phase transitions; [`apps/web/test/app.test.tsx`](repo:apps/web/test/app.test.tsx) drives Discard through the rendered composer.
 
+#### What happens when a send is lost, delayed or rejected
+
+**What**: every send you make keeps one identity (its command ID) from the moment you press Send until it is either delivered or permanently failed. If the network drops a response, if the server is briefly overloaded, or if the room disconnects, the composer keeps retrying that exact same command instead of starting a new one. Only a genuine rejection (a body that is too long, for example) stops the retries and asks you to act.
+
+**Why**: without a stable identity, a retry after a lost response could look like a second message to the server. The room already recognizes a repeated `(command_id, request_digest)` pair as the same request and answers with the original receipt instead of creating a duplicate, so retrying is always safe.
+
+**How**: `apps/web/src/host/live.ts` classifies each failed attempt (unreachable, timeout, `408`, `5xx`, `429`, or a genuine `4xx`) and either resends the frozen command or marks it permanently failed; `@agora/client-core` is the single source of truth for which commands are still pending, delivered or failed, so the composer's status lines and the Discard button always agree with what actually happened.
+
+```flow
+Sent | You press Send; the command gets one ID that never changes for this attempt.
+Retried | The first response never arrived, or the server was briefly unreachable or overloaded (a real 429 was reproduced by firing enough concurrent sends to trip the room's own rate limiter); the same ID is resent.
+Recognized | If the earlier attempt had actually committed, the room recognizes the identical ID and digest and returns the original receipt rather than creating a second message.
+Delivered | The command settles once, and exactly one message appears in the room.
+Rejected | A genuine problem (an oversized body, for example) stops retries at once; Discard clears the failed line without touching your draft or resending anything.
+```
+
+[`evidence/local-room/delivery-feedback/receipt-failure-browser/README.md`](repo:evidence/local-room/delivery-feedback/receipt-failure-browser/README.md) drives the real served room for a lost receipt, a transient failure, a real 429 under genuine concurrent load, and a permanent rejection, and confirms each retried command still commits exactly once.
+
 #### Unread, announcements and touch targets
 
 The header shows `N unread` and a **Mark room as read** button. A message you send never counts as unread. Once client core has applied the event named by your own send receipt, it moves the room's last-seen sequence up to that message, whichever of the two arrives first. Anything older that was still unread is marked read with it, because unread is one last-seen sequence per room. Matrix moves its read marker the same way when you post.
