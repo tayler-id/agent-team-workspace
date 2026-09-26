@@ -1,0 +1,82 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-26T00:50:06.541Z
+parent: 842a944b6384751a492a4bddd364320152d54478
+head: f8b2b859acd02434f0aadbcccd57e1daff8522de
+subject_revision: 842a944b6384751a492a4bddd364320152d54478
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/live.test.ts, packages/client-core/test/sync.test.ts
+test_patch_digest: sha256:2f887312b0b916ba108143d7daa9ef51fa10534d8be9a35977713c32df5a8d18
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"bash -c pnpm exec vitest run --project unit packages/client-core/test/sync.test.ts && cd apps/web && pnpm exec vitest run test/live.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-2qmpK2
+
+ ❯ |unit| packages/client-core/test/sync.test.ts (14 tests | 2 failed) 129ms
+   × receipts dedupe commands but never fast-forward a timeline; offline sends keep their own identity 3ms
+   × a permanent denial marks the command failed with its reason, stops without duplicating, and a later resend is a distinct command 1ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 12 passed (14)
+   Start at  20:49:57
+   Duration  217ms (tests 83%, transform 12%, import 4%, worker 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > receipts dedupe commands but never fast-forward a timeline; offline sends keep their own identity
+AssertionError: expected [] to deeply equal [ { commandId: 'c', …(3) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "commandId": "c",
+-     "requestDigest": "hash",
+-     "streamId": "11111111-1111-4111-8111-111111111111",
+-     "tag": "pending",
+-   },
+- ]
++ []
+
+ ❯ packages/client-core/test/sync.test.ts:96:33
+     94|  const offline = synchronize(base, { ...submit, type: 'submit', comman…
+     95|  expect(offline.requests).toEqual([{ type: 'wait_connection', commandI…
+     96|  expect(offline.state.commands).toEqual([{ commandId: 'c', streamId: r…
+       |                                 ^
+     97|  // A second offline submit gets its own row; the first is never overw…
+     98|  const second = synchronize(offline.state, { ...submit, type: 'submit'…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |unit| packages/client-core/test/sync.test.ts > a permanent denial marks the command failed with its reason, stops without duplicating, and a later resend is a distinct command
+AssertionError: expected [ { commandId: 'c', …(3) } ] to deeply equal [ { commandId: 'c', …(4) } ]
+
+- Expected
++ Received
+
+  [
+    {
+      "commandId": "c",
+-     "reason": "HTTP 400 malformed_command",
+      "requestDigest": "hash",
+      "streamId": "11111111-1111-4111-8111-111111111111",
+-     "tag": "denied",
++     "tag": "pending",
+    },
+  ]
+
+ ❯ packages/client-core/test/sync.test.ts:145:32
+    143|  const denied = synchronize(pending, { type: 'retry', commandId: 'c', …
+    144|  expect(denied.requests).toEqual([{ type: 'stop', commandId: 'c' }]);
+    145|  expect(denied.state.commands).toEqual([{ commandId: 'c', streamId: ro…
+       |                                ^
+    146|  // A further failure for the same, already-denied command is not re-p…
+    147|  const again = synchronize(denied.state, { type: 'retry', commandId: '…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

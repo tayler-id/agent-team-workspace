@@ -1,0 +1,120 @@
+diff --git a/apps/web/test/live.test.ts b/apps/web/test/live.test.ts
+index e69fed7..21d3af3 100644
+--- a/apps/web/test/live.test.ts
++++ b/apps/web/test/live.test.ts
+@@ -231,6 +231,58 @@ test.each([
+ 	expect(transport.getState().decision).toContain('stop');
+ 	expect(transport.getState().decision).toContain(shown);
+ 	expect(client.getState().drafts.map((d) => d.text)).toEqual(['rejected']);
++	// The permanent outcome is client-core's own settled command state, carrying the real reason, not just the transient decision string.
++	const denied = client.getState().commands.find((c) => c.commandId === '44444444-0000-4000-8000-000000000001');
++	expect(denied?.tag).toBe('denied');
++	expect(denied?.tag === 'denied' && denied.reason).toContain(shown);
++	expect(transport.getState().sendPhase).toEqual({}); // A settled command carries no transient transport phase; its own tag is authoritative.
++});
++
++test('a live send reports sending then retrying transport phases while the command is still pending, and discard removes only a denied one', async () => {
++	const [client, transport] = boot;
++	let attempts = 0;
++	const fetchMock = vi.fn((url: string): Promise<Response> => {
++		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
++		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
++		if (url.endsWith('/api/v1/local-room/messages')) { attempts += 1; return Promise.reject(new TypeError('Failed to fetch')); }
++		return Promise.reject(new Error(`unexpected request ${url}`));
++	});
++	vi.stubGlobal('fetch', fetchMock);
++	transport.loadSnapshot();
++	await flush(6);
++	transport.submit('55555555-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'watch the phase');
++	expect(transport.getState().sendPhase).toEqual({ '55555555-0000-4000-8000-000000000001': 'sending' });
++	await flush(4);
++	expect(attempts).toBeGreaterThan(0);
++	expect(transport.getState().sendPhase).toEqual({ '55555555-0000-4000-8000-000000000001': 'retrying' });
++	expect(client.getState().commands.find((c) => c.commandId === '55555555-0000-4000-8000-000000000001')?.tag).toBe('pending');
++	expect(client.apply({ type: 'discard', commandId: '55555555-0000-4000-8000-000000000001' }).state.commands).toHaveLength(1); // Still pending: discard is a no-op, never a quiet cancel.
++});
++
++test('two commands submitted while genuinely offline each keep their own identity; reconnecting sends both', async () => {
++	const [client, transport] = boot;
++	const fetchMock = vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
++		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
++		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
++		if (url.endsWith('/api/v1/local-room/messages')) { const command = JSON.parse(init?.body ?? '{}') as { command_id: string }; return Promise.resolve(receiptFor(command.command_id)); }
++		return Promise.reject(new Error(`unexpected request ${url}`));
++	});
++	vi.stubGlobal('fetch', fetchMock);
++	transport.loadSnapshot();
++	await flush(6);
++	Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
++	const first = '88888888-0000-4000-8000-000000000001', second = '88888888-0000-4000-8000-000000000002';
++	transport.submit(first, 'sha256:' + 'a'.repeat(64), 'first offline send');
++	transport.submit(second, 'sha256:' + 'b'.repeat(64), 'second offline send');
++	// Neither offline send is dropped or overwritten by the other; both are tracked with their own identity.
++	expect(client.getState().commands.map((c) => c.commandId)).toEqual([first, second]);
++	expect(client.getState().commands.every((c) => c.tag === 'pending')).toBe(true);
++	expect(transport.getState().sendPhase).toEqual({ [first]: 'waiting_connection', [second]: 'waiting_connection' });
++	Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
++	window.dispatchEvent(new Event('online'));
++	await flush(6);
++	expect(client.getState().commands.map((c) => c.tag)).toEqual(['received', 'received']);
++	expect(transport.getState().sendPhase).toEqual({});
+ });
+ 
+ function hangingFetch(onMessagesSignal: (signal: AbortSignal | undefined) => void): { fetchMock: (url: string, init?: { readonly signal?: AbortSignal }) => Promise<Response>; resolveEvents: (events: readonly Record<string, unknown>[]) => void } {
+diff --git a/packages/client-core/test/sync.test.ts b/packages/client-core/test/sync.test.ts
+index b876f28..7a78f05 100644
+--- a/packages/client-core/test/sync.test.ts
++++ b/packages/client-core/test/sync.test.ts
+@@ -89,9 +89,15 @@ test('gaps are bounded and invalid snapshot or changed message positions resync
+ 
+ const submit: ClientInput = { type: 'submit', commandId: 'c', streamId: room, requestDigest: 'hash', online: true };
+ const receipt = { command_id: 'c', aggregate_id: 'm', revision: '2', event_cursors: [{ stream_id: room, committed_seq: '2' }], receipt_id: 'receipt' };
+-test('receipts dedupe commands but never fast-forward a timeline; offline sends are not queued', () => {
++test('receipts dedupe commands but never fast-forward a timeline; offline sends keep their own identity', () => {
+ 	const base = drive(snapshot());
+-	expect(synchronize(base, { ...submit, type: 'submit', commandId: 'c', streamId: room, requestDigest: 'hash', online: false }).state).toBe(base);
++	const offline = synchronize(base, { ...submit, type: 'submit', commandId: 'c', streamId: room, requestDigest: 'hash', online: false });
++	expect(offline.requests).toEqual([{ type: 'wait_connection', commandId: 'c' }]);
++	expect(offline.state.commands).toEqual([{ commandId: 'c', streamId: room, requestDigest: 'hash', tag: 'pending' }]);
++	// A second offline submit gets its own row; the first is never overwritten or dropped.
++	const second = synchronize(offline.state, { ...submit, type: 'submit', commandId: 'c2', streamId: room, requestDigest: 'hash2', online: false });
++	expect(second.requests).toEqual([{ type: 'wait_connection', commandId: 'c2' }]);
++	expect(second.state.commands.map((c) => c.commandId)).toEqual(['c', 'c2']);
+ 	const pending = synchronize(base, submit);
+ 	expect(pending.requests).toEqual([{ type: 'send', commandId: 'c' }]);
+ 	expect(synchronize(pending.state, submit).requests).toEqual([]);
+@@ -123,7 +129,6 @@ test('retry decisions preserve the original id/digest, refresh stale state and r
+ 		[{ tag: 'timeout' }, false, 'hash', 'wait_connection'],
+ 		[{ tag: 'timeout' }, true, 'changed', 'conflict'],
+ 		[{ tag: 'stale_revision' }, true, 'hash', 'refresh_snapshot'],
+-		[{ tag: 'denied' }, true, 'hash', 'stop'],
+ 		[{ tag: 'rate_limited', retryAfterSeconds: 30 }, true, 'hash', 'wait_retry_after'],
+ 	] as const) {
+ 		const result = synchronize(pending, { type: 'retry', commandId: 'c', requestDigest: digest, online, failure });
+@@ -133,6 +138,26 @@ test('retry decisions preserve the original id/digest, refresh stale state and r
+ 	expect(synchronize(drive(snapshot(), submit, { type: 'receipt', receipt }), { type: 'retry', commandId: 'c', requestDigest: 'hash', online: true, failure: { tag: 'timeout' } }).requests).toEqual([{ type: 'receipt_known', commandId: 'c' }]);
+ });
+ 
++test('a permanent denial marks the command failed with its reason, stops without duplicating, and a later resend is a distinct command', () => {
++	const pending = drive(snapshot(), submit);
++	const denied = synchronize(pending, { type: 'retry', commandId: 'c', requestDigest: 'hash', online: true, failure: { tag: 'denied', reason: 'HTTP 400 malformed_command' } });
++	expect(denied.requests).toEqual([{ type: 'stop', commandId: 'c' }]);
++	expect(denied.state.commands).toEqual([{ commandId: 'c', streamId: room, requestDigest: 'hash', tag: 'denied', reason: 'HTTP 400 malformed_command' }]);
++	// A further failure for the same, already-denied command is not re-processed or re-stopped a second time.
++	const again = synchronize(denied.state, { type: 'retry', commandId: 'c', requestDigest: 'hash', online: true, failure: { tag: 'timeout' } });
++	expect(again.requests).toEqual([{ type: 'receipt_known', commandId: 'c' }]);
++	expect(again.state).toBe(denied.state);
++	// Discard drops only a denied command; a still-pending or already-delivered one is untouched.
++	expect(synchronize(pending, { type: 'discard', commandId: 'c' }).state).toBe(pending);
++	const discarded = synchronize(denied.state, { type: 'discard', commandId: 'c' });
++	expect(discarded.state.commands).toEqual([]);
++	const delivered = synchronize(pending, { type: 'receipt', receipt });
++	expect(synchronize(delivered.state, { type: 'discard', commandId: 'c' }).state).toBe(delivered.state);
++	// A deliberate resend after discard is a new command identity, never a resurrection of the denied one.
++	const resent = synchronize(discarded.state, { ...submit, commandId: 'd' });
++	expect(resent.requests).toEqual([{ type: 'send', commandId: 'd' }]);
++});
++
+ test('a full gap can still drain, and newer snapshot cursors cannot resurrect older message revisions', () => {
+ 	const buffered = drive(snapshot(), ...Array.from({ length: 1000 }, (_, i) => event(String(i + 3))));
+ 	expect(synchronize(buffered, event('2')).state.rooms[0]?.cursor).toBe('1002');
