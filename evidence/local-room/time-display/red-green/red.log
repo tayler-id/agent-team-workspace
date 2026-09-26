@@ -1,0 +1,64 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-26T00:16:49.968Z
+parent: 179349be9bf49694aa98eb041c53746438ab5ca8
+head: 0c11803ecf6b817af2c9f406546bd993448b4e4d
+subject_revision: 179349be9bf49694aa98eb041c53746438ab5ca8
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/message-time.test.ts, docs/site/test/corpus.test.ts
+test_patch_digest: sha256:3c5351e0020f8b85ee4bf3f320ed78cb7422018c3347c64875bbb4638912fd97
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/message-time.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-s7EB8b/apps/web
+
+ ❯ |web| test/message-time.test.ts (4 tests | 3 failed) 84ms
+   × valid wire times follow the viewer locale, timezone and calendar day, including day and year boundaries 2ms
+   × malformed timestamps stay explicit and overflow dates are not rolled into another day 0ms
+   × the served shell shows a readable time and keeps the wire created_at for inspection 81ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 1 passed (4)
+   Start at  20:16:41
+   Duration  791ms (environment 53%, import 24%, tests 12%, transform 11%)
+
+undefined
+/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-s7EB8b/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/message-time.test.ts
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/message-time.test.ts > valid wire times follow the viewer locale, timezone and calendar day, including day and year boundaries
+TypeError: formatMessageTime is not a function
+ ❯ test/message-time.test.ts:23:9
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  |web| test/message-time.test.ts > malformed timestamps stay explicit and overflow dates are not rolled into another day
+TypeError: formatMessageTime is not a function
+ ❯ test/message-time.test.ts:34:9
+     32|
+     33| test('malformed timestamps stay explicit and overflow dates are not ro…
+     34|  expect(formatMessageTime('', ctx('en-US', 'UTC', '2026-09-21T12:00:00…
+       |         ^
+     35|  for (const raw of ['2026-09-20T18:00:00+00:00', '2026-02-31T00:00:00Z…
+     36|   expect(wireInstant(raw)).toBeUndefined();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  |web| test/message-time.test.ts > the served shell shows a readable time and keeps the wire created_at for inspection
+AssertionError: expected '2026-09-22T00:00:00Z' not to be '2026-09-22T00:00:00Z' // Object.is equality
+ ❯ test/message-time.test.ts:67:32
+     65|  const time = first?.querySelector('time');
+     66|  expect(time?.getAttribute('datetime')).toBe('2026-09-22T00:00:00Z');
+     67|  expect(time?.textContent).not.toBe('2026-09-22T00:00:00Z');
+       |                                ^
+     68|  const resolved = new Intl.DateTimeFormat().resolvedOptions();
+     69|  expect(time?.textContent).toBe(formatMessageTime('2026-09-22T00:00:00…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
