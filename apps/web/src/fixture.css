@@ -21,10 +21,14 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .room-header { padding: 22px max(24px, calc((100% - 896px) / 2)); border-bottom: 1px solid var(--border); background: var(--raised); }
 .kicker { margin: 0 0 6px; color: var(--secondary); font: 600 11px/14px "Cal Sans UI", system-ui, sans-serif; letter-spacing: .08em; }
 h1 { margin: 0; font: 600 24px/1.25 "Cal Sans UI", system-ui, sans-serif; letter-spacing: -.02em; }
+.crumb { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; }
+.crumb-project { color: var(--secondary); }
+.crumb-room { color: var(--text); }
 .meta, .button-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; color: var(--secondary); font-size: 13px; }
 .meta { margin: 12px 0 0; }
 .badge { display: inline-flex; align-items: center; border: 0; border-radius: 999px; padding: 4px 10px; background: var(--inset); color: var(--text); font: 600 12px/16px "Cal Sans UI", system-ui, sans-serif; text-transform: capitalize; }
 .badge[data-state="active"], .badge[data-state="connected"] { background: #d1fae5; }
+.badge[data-agent-state="not_enabled"] { color: var(--secondary); text-transform: none; }
 .status { border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-top: 14px; background: var(--surface); color: var(--secondary); font-size: 13px; }
 .alert { color: #c62828; border: 1px solid #f87171; border-left-width: 4px; padding: 12px; border-radius: 8px; }
 /* Timeline is the scroll container; the virtualizer positions rows inside its sized list. */

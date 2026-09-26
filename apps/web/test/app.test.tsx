@@ -79,6 +79,22 @@ test('phases, isolation, draft/submit/revoke and phone viewport', async () => {
 	expect(screen.getByRole('main').parentElement?.dataset['viewport']).toBe('phone');
 });
 
+test('room header two-tone crumb names the project agent as not enabled without a repository, search or member-identity claim', () => {
+	mount();
+	const banner = screen.getByRole('banner');
+	const heading = within(banner).getByRole('heading', { level: 1 });
+	expect(within(heading).getByText(`${fixture.header.project} /`).className).toBe('crumb-project');
+	expect(within(heading).getByText(fixture.header.room).className).toBe('crumb-room');
+	const agentBadge = banner.querySelector('[data-agent-state="not_enabled"]');
+	if (!agentBadge) throw new Error('missing project-agent not_enabled badge');
+	expect(agentBadge.textContent).toBe('project agent · not enabled');
+	expect(banner).toHaveTextContent(`${fixture.header.agentLabel}: read-only, local fixture, no live provider`);
+	expect(banner).toHaveTextContent(`${fixture.header.members} members`);
+	expect(within(banner).queryByText(/repository/i)).toBeNull();
+	expect(within(banner).queryByRole('searchbox')).toBeNull();
+	expect(within(banner).queryByRole('button', { name: /search/i })).toBeNull();
+});
+
 test('manual disconnect while the browser stays online reads unambiguous, distinguishing server link from network status', () => {
 	const { transport } = mount();
 	fireEvent.click(screen.getByRole('button', { name: 'Load fixture snapshot' }));

@@ -84,10 +84,11 @@ export function App({ header, presentation, live = false, onAnswer }: AppProps):
 			<a href="#timeline-heading" className="skip-link">Skip to messages</a>
 			<header className="room-header">
 				<p className="kicker">{live ? 'LOCAL DEVELOPMENT' : 'ENGINEERING FIXTURE'}</p>
-				<h1>{header.project} · {header.room}</h1>
+				<h1 className="crumb"><span className="crumb-project">{header.project} /</span> <span className="crumb-room">{header.room}</span></h1>
 				<p className="meta">
 					<span className="badge" data-state={header.lifecycle}>{header.lifecycle.replaceAll('_', ' ')}</span>
-					<span>{header.agentLabel} ({live ? 'local runtime, no model provider' : 'read-only, local fixture, no live provider'})</span>
+					<span className="badge" data-agent-state="not_enabled">project agent · not enabled</span>
+					<span>{header.agentLabel}: {live ? 'local runtime, no model provider' : 'read-only, local fixture, no live provider'}</span>
 					<span>{header.members} member{header.members === 1 ? '' : 's'}</span>
 					<span data-unread={roomStatus.unread}>{roomStatus.unread} unread</span>
 					{room && roomStatus.unread > 0 && <button type="button" onClick={() => { commands.markSeen(room.cursor); }}>Mark room as read</button>}
