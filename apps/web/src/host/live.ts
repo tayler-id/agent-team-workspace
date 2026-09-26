@@ -128,7 +128,11 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		const command: Schema<'SendRoomMessageCommand'> = { schema_version: 'agora.local-room.send-message/v1', command_id: commandId, scope, body: text, citations: [] };
 		try {
 			const receiptWire = validate('RoomCommandReceipt', await requestJson(baseUrl, 'messages', abort.signal, command));
-			if (myGeneration !== generation) return;
+			// A late success is still authoritative even if this attempt's generation is now stale (an instant
+			// Disconnect-then-Reconnect can race ahead of it): the command committed server-side, so applying the
+			// receipt is unconditional on generation. Applying one is local bookkeeping, not a network action, so
+			// it is always safe; waitingForConnection.delete is a no-op unless something had already re-queued this
+			// same commandId, in which case the now-settled command must not be attempted again.
 			// Only command_id is checked: EnvironmentPort.digestText hashes raw text for client-core's own local dedup and
 			// never sees scope/citations, so it cannot reproduce the server's canonical-command digest to compare against.
 			if (receiptWire.identity.command_id !== commandId) throw new Error('receipt identity mismatch');
@@ -136,6 +140,7 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			client.apply({ type: 'draft', streamId, text: '' });
 			unsettled.delete(text);
 			clearPhase(commandId);
+			waitingForConnection.delete(commandId);
 			set({ decision: undefined });
 		} catch (error) {
 			if (myGeneration !== generation) { becomeStale(commandId, requestDigest, text); return; }
