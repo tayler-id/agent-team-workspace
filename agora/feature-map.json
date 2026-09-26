@@ -285,7 +285,7 @@
 			"paths": ["apps/web/src/components/App.tsx", "apps/web/src/fixture.css"],
 			"public": ["RoomHeader two-tone project/room crumb (.crumb-project grey, .crumb-room ink)", "explicit project-agent not_enabled status chip (data-agent-state=\"not_enabled\") separate from the lifecycle chip"],
 			"contracts": [], "scenarios": ["apps/web/test/app.test.tsx"],
-			"fixtures": ["real served local room driven at 1440x900 and 390x844 in evidence/local-room/header-alignment/README.md"], "platforms": ["node24", "browser"]
+			"fixtures": ["real served local room driven with Playwright at asserted 1440x900 and 390x844 CSS-pixel viewports in evidence/local-room/header-alignment/README.md"], "platforms": ["node24", "browser"]
 		}
 	]
 }
