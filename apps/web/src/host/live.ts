@@ -1,8 +1,8 @@
 // Live Host transport: local-room L1-L3 HTTP wire (snapshot/events/messages) behind RoomTransport.
 // Built under the precompiled browser validator so strict CSP (no unsafe-eval) still holds; see scripts/local-room-service.ts.
 import { createWireValidator, type ComponentName, type Schema } from '@agora/contracts';
-import type { Message } from '@agora/client-core';
-import type { Author, ConnectionLink, Presentation, RoomClient, RoomTransport, TransportConnection } from '@agora/web-framework';
+import type { Message, RetryFailure } from '@agora/client-core';
+import type { Author, ConnectionLink, Presentation, RoomClient, RoomTransport, SendPhase, TransportConnection } from '@agora/web-framework';
 
 export interface LiveTransport extends RoomTransport { readonly getPresentation: () => Presentation; answer(selectedIds: readonly string[]): Promise<void> }
 export interface LiveOptions { readonly baseUrl?: string; readonly pollDelayMs?: number; readonly errorDelayMs?: number; readonly retryDelayMs?: number }
@@ -38,11 +38,11 @@ async function requestJson(baseUrl: string, path: string, signal: AbortSignal, b
 }
 // Only an unreachable server, a timeout, 408 or 5xx is transient. Any other 4xx, an invalid receipt or a receipt for
 // another command would fail the same way again, so the core stops instead of spending the rate budget forever.
-function classify(error: unknown): { tag: 'timeout' | 'denied' } | { tag: 'rate_limited'; retryAfterSeconds: number } {
+function classify(error: unknown): RetryFailure {
 	const status = (error as { status?: number } | undefined)?.status;
 	if (status === 429) return { tag: 'rate_limited', retryAfterSeconds: (error as { retryAfterSeconds?: number }).retryAfterSeconds ?? 30 };
 	const transient = status === undefined ? error instanceof TypeError || (error as Error | undefined)?.name === 'TimeoutError' : status === 408 || status >= 500;
-	return { tag: transient ? 'timeout' : 'denied' };
+	return transient ? { tag: 'timeout' } : { tag: 'denied', reason: error instanceof Error ? error.message : String(error) };
 }
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -56,7 +56,7 @@ const sleep = (ms: number): Promise<void> => new Promise((resolve) => { setTimeo
 export function createLiveTransport(client: RoomClient, options: LiveOptions = {}): LiveTransport {
 	const baseUrl = options.baseUrl ?? location.origin;
 	const pollDelayMs = options.pollDelayMs ?? 250, errorDelayMs = options.errorDelayMs ?? 1000, retryDelayMs = options.retryDelayMs ?? 1000;
-	let connection: TransportConnection = { online: isOnline(), phase: 'idle', error: undefined, decision: undefined, link: 'connecting' };
+	let connection: TransportConnection = { online: isOnline(), phase: 'idle', error: undefined, decision: undefined, link: 'connecting', sendPhase: {} };
 	let presentation = emptyPresentation;
 	let scope: Schema<'RoomSnapshot'>['scope'] | undefined;
 	let streamId = '';
@@ -69,6 +69,9 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 	const notify = (): void => { for (const listener of listeners) listener(); };
 	const set = (patch: Partial<TransportConnection>): void => { connection = { ...connection, ...patch }; notify(); };
 	const linkFromOnline = (online: boolean): ConnectionLink => online ? 'retrying' : 'offline';
+	// Transport-owned attempt phase for a still-`pending` command; cleared once client-core settles it (received or denied) so its own tag becomes authoritative.
+	const setPhase = (commandId: string, phase: SendPhase): void => { set({ sendPhase: { ...connection.sendPhase, [commandId]: phase } }); };
+	const clearPhase = (commandId: string): void => { if (!(commandId in connection.sendPhase)) return; set({ sendPhase: Object.fromEntries(Object.entries(connection.sendPhase).filter(([id]) => id !== commandId)) }); };
 
 	function applySnapshot(value: unknown): void {
 		const snapshot = validate('RoomSnapshot', value);
@@ -122,23 +125,25 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			client.apply({ type: 'receipt', receipt: receiptWire.receipt });
 			client.apply({ type: 'draft', streamId, text: '' });
 			unsettled.delete(text);
+			clearPhase(commandId);
 			set({ decision: undefined });
 		} catch (error) {
-			if (myGeneration !== generation) { waitingForConnection = { commandId, requestDigest, text }; return; }
+			if (myGeneration !== generation) { waitingForConnection = { commandId, requestDigest, text }; setPhase(commandId, 'waiting_connection'); return; }
 			const online = isOnline();
 			const transition = client.apply({ type: 'retry', commandId, requestDigest, online, failure: classify(error) });
 			const request = transition.requests[0];
-			if (request?.type === 'stop') unsettled.delete(text);
-			if (request?.type === 'wait_connection') waitingForConnection = { commandId, requestDigest, text };
+			if (request?.type === 'stop') { unsettled.delete(text); clearPhase(commandId); }
+			if (request?.type === 'wait_connection') { waitingForConnection = { commandId, requestDigest, text }; setPhase(commandId, 'waiting_connection'); }
 			set({ decision: request?.type === 'stop' ? `stop: not sent (${error instanceof Error ? error.message : String(error)}); the draft is kept` : transition.requests.map((r) => r.type).join(', ') || undefined, online, link: request?.type === 'wait_connection' ? linkFromOnline(online) : connection.link });
-			if (request?.type === 'resend_same_command') { await sleep(retryDelayMs); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection = { commandId, requestDigest, text }; }
-			else if (request?.type === 'wait_retry_after') { await sleep(request.retryAfterSeconds * 1000); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection = { commandId, requestDigest, text }; }
+			if (request?.type === 'resend_same_command') { setPhase(commandId, 'retrying'); await sleep(retryDelayMs); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection = { commandId, requestDigest, text }; }
+			else if (request?.type === 'wait_retry_after') { setPhase(commandId, 'retrying'); await sleep(request.retryAfterSeconds * 1000); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection = { commandId, requestDigest, text }; }
 		}
 	}
 	function resumeWaitingSend(myGeneration: number): void {
 		if (!waitingForConnection || myGeneration !== generation) return;
 		const send = waitingForConnection;
 		waitingForConnection = undefined;
+		setPhase(send.commandId, 'retrying');
 		void attemptSend(myGeneration, send.commandId, send.requestDigest, send.text);
 	}
 	function beginPolling(): void {
@@ -178,8 +183,8 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			const transition = client.apply({ type: 'submit', commandId, streamId, requestDigest, online });
 			const request = transition.requests[0];
 			set({ decision: transition.requests.map((r) => r.type).join(', ') || undefined, online, link: request?.type === 'wait_connection' ? linkFromOnline(online) : connection.link });
-			if (request?.type === 'wait_connection') waitingForConnection = { commandId, requestDigest, text };
-			if (transition.requests.some((r) => r.type === 'send')) { unsettled.add(text); void attemptSend(generation, commandId, requestDigest, text); }
+			if (request?.type === 'wait_connection') { waitingForConnection = { commandId, requestDigest, text }; setPhase(commandId, 'waiting_connection'); }
+			if (transition.requests.some((r) => r.type === 'send')) { unsettled.add(text); setPhase(commandId, 'sending'); void attemptSend(generation, commandId, requestDigest, text); }
 		},
 		markSeen: (seq) => { client.apply({ type: 'seen', streamId, seq }); },
 		disconnect: () => {

@@ -66,9 +66,9 @@ test('phases, isolation, draft/submit/revoke and phone viewport', async () => {
 	expect(box).toHaveProperty('value', 'keep me');
 	fireEvent.keyDown(box, { key: 'Enter' });
 	await act(async () => { await Promise.resolve(); await Promise.resolve(); });
-	expect(screen.getByText(/1 pending command awaiting a receipt/)).toBeTruthy();
+	expect(screen.getByText('Sending…')).toBeTruthy();
 	fireEvent.click(screen.getByRole('button', { name: 'Fail send: rate limited' }));
-	expect(screen.getByText(/Last core decision: wait_retry_after 30s/)).toBeTruthy();
+	expect(screen.getByText('Retrying…')).toBeTruthy();
 	fireEvent.click(screen.getByRole('button', { name: 'Deliver fixture receipt' }));
 	expect(box).toHaveProperty('value', '');
 	fireEvent.change(box, { target: { value: 'private' } });
@@ -125,6 +125,29 @@ test('keyboard roving, virtualized large rooms, citations, announcement and no a
 	for (const relative of ['src/components/App.tsx', 'src/components/FixtureControls.tsx']) {
 		expect(readFileSync(resolve(import.meta.dirname, '..', relative), 'utf8').includes('createRoomClient')).toBe(false);
 	}
+});
+
+test('a permanently denied send shows its reason and a Discard recovery affordance; discarding never clears the draft or auto-retries', async () => {
+	const { client } = mount();
+	fireEvent.click(screen.getByRole('button', { name: 'Load fixture snapshot' }));
+	const box = screen.getByRole('textbox', { name: /Message/ });
+	fireEvent.change(box, { target: { value: 'rejected body' } });
+	fireEvent.keyDown(box, { key: 'Enter' });
+	await act(async () => { await Promise.resolve(); await Promise.resolve(); });
+	fireEvent.click(screen.getByRole('button', { name: 'Fail send: denied' }));
+	expect(screen.getByText(/^Failed: /)).toBeTruthy();
+	expect(box).toHaveProperty('value', 'rejected body'); // The draft survives a permanent denial.
+	const denied = client.getState().commands.find((c) => c.tag === 'denied');
+	if (!denied) throw new Error('expected a denied command');
+	fireEvent.click(screen.getByRole('button', { name: 'Discard, edit and send again' }));
+	expect(client.getState().commands).toEqual([]); // Discard removes the failed record; it never fires another send.
+	expect(box).toHaveProperty('value', 'rejected body');
+	fireEvent.keyDown(box, { key: 'Enter' });
+	await act(async () => { await Promise.resolve(); await Promise.resolve(); });
+	const resent = client.getState().commands.find((c) => c.tag !== 'denied');
+	expect(resent?.commandId).not.toBe(denied.commandId); // A deliberate resend is a new command identity, not a resurrection.
+	fireEvent.click(screen.getByRole('button', { name: 'Deliver fixture receipt' }));
+	expect(box).toHaveProperty('value', '');
 });
 
 test('every button in the phone shell has at least a 44x44 CSS px touch target; desktop sizing is unchanged', () => {

@@ -231,6 +231,32 @@ test.each([
 	expect(transport.getState().decision).toContain('stop');
 	expect(transport.getState().decision).toContain(shown);
 	expect(client.getState().drafts.map((d) => d.text)).toEqual(['rejected']);
+	// The permanent outcome is client-core's own settled command state, carrying the real reason, not just the transient decision string.
+	const denied = client.getState().commands.find((c) => c.commandId === '44444444-0000-4000-8000-000000000001');
+	expect(denied?.tag).toBe('denied');
+	expect(denied?.tag === 'denied' && denied.reason).toContain(shown);
+	expect(transport.getState().sendPhase).toEqual({}); // A settled command carries no transient transport phase; its own tag is authoritative.
+});
+
+test('a live send reports sending then retrying transport phases while the command is still pending, and discard removes only a denied one', async () => {
+	const [client, transport] = boot;
+	let attempts = 0;
+	const fetchMock = vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) { attempts += 1; return Promise.reject(new TypeError('Failed to fetch')); }
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	});
+	vi.stubGlobal('fetch', fetchMock);
+	transport.loadSnapshot();
+	await flush(6);
+	transport.submit('55555555-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'watch the phase');
+	expect(transport.getState().sendPhase).toEqual({ '55555555-0000-4000-8000-000000000001': 'sending' });
+	await flush(4);
+	expect(attempts).toBeGreaterThan(0);
+	expect(transport.getState().sendPhase).toEqual({ '55555555-0000-4000-8000-000000000001': 'retrying' });
+	expect(client.getState().commands.find((c) => c.commandId === '55555555-0000-4000-8000-000000000001')?.tag).toBe('pending');
+	expect(client.apply({ type: 'discard', commandId: '55555555-0000-4000-8000-000000000001' }).state.commands).toHaveLength(1); // Still pending: discard is a no-op, never a quiet cancel.
 });
 
 function hangingFetch(onMessagesSignal: (signal: AbortSignal | undefined) => void): { fetchMock: (url: string, init?: { readonly signal?: AbortSignal }) => Promise<Response>; resolveEvents: (events: readonly Record<string, unknown>[]) => void } {

@@ -1,7 +1,7 @@
 // Development-only fixture adapter + transport behind RoomTransport. Production components never import this.
 import { createWireValidator, type Schema } from '@agora/contracts';
 import type { ClientInput, CoreEvent, Receipt, Request, Snapshot } from '@agora/client-core';
-import type { Author, Presentation, Room, RoomClient, RoomHeader, RoomTransport, TransportConnection } from '@agora/web-framework';
+import type { Author, Presentation, Room, RoomClient, RoomHeader, RoomTransport, SendPhase, TransportConnection } from '@agora/web-framework';
 import { corpusBody, corpusTombstone } from '../fixture/corpus.ts';
 
 export interface RoomFixture { readonly streamId: string; readonly header: RoomHeader; readonly snapshot: Snapshot; readonly events: readonly CoreEvent[]; readonly presentation: Presentation; readonly receipt: Receipt }
@@ -98,10 +98,12 @@ export function largeSnapshot(streamId: string, count: number): Snapshot {
 }
 
 export function createFixtureTransport(client: RoomClient, fixture: RoomFixture): FixtureTransport {
-	let state: TransportConnection = { online: true, phase: 'idle', error: undefined, decision: undefined, link: 'online' };
+	let state: TransportConnection = { online: true, phase: 'idle', error: undefined, decision: undefined, link: 'online', sendPhase: {} };
 	let nextEvent = 0, last: CoreEvent | undefined, skipped: CoreEvent | undefined, outbox: readonly { commandId: string; text: string }[] = [];
 	const listeners = new Set<() => void>();
 	const set = (patch: Partial<TransportConnection>): void => { state = { ...state, ...patch }; for (const l of listeners) l(); };
+	const setPhase = (commandId: string, phase: SendPhase): void => { set({ sendPhase: { ...state.sendPhase, [commandId]: phase } }); };
+	const clearPhase = (commandId: string): void => { if (!(commandId in state.sendPhase)) return; set({ sendPhase: Object.fromEntries(Object.entries(state.sendPhase).filter(([id]) => id !== commandId)) }); };
 	const room = (): Room | undefined => client.getState().rooms.find((r) => r.streamId === fixture.streamId);
 	const dispatch = (input: ClientInput): void => { set({ decision: describe(client.apply(input).requests) }); };
 	const deliver = (event: CoreEvent): void => { last = event; dispatch(event); };
@@ -126,23 +128,24 @@ export function createFixtureTransport(client: RoomClient, fixture: RoomFixture)
 		unsupported: () => { dispatch({ type: 'unsupported', streamId: fixture.streamId }); },
 		resync: () => { dispatch({ type: 'resync', streamId: fixture.streamId }); },
 		setOnline: (online) => { set({ online, link: state.link === 'disconnected' ? 'disconnected' : online ? 'online' : 'offline' }); },
-		revoke: () => { dispatch({ type: 'clear', reason: 'revoked' }); set({ phase: 'revoked' }); outbox = []; },
+		revoke: () => { dispatch({ type: 'clear', reason: 'revoked' }); set({ phase: 'revoked', sendPhase: {} }); outbox = []; },
 		// Dev-only: the fixture has no real socket to cancel, so disconnect/reconnect only flip the label FixtureControls exercises.
 		disconnect: () => { set({ link: 'disconnected' }); },
 		reconnect: () => { set({ link: state.online ? 'online' : 'offline' }); },
-		submit: (commandId, requestDigest, text) => { const t = client.apply({ type: 'submit', commandId, streamId: fixture.streamId, requestDigest, online: state.online }); set({ decision: describe(t.requests) }); if (t.requests.some((r) => r.type === 'send')) outbox = [...outbox, { commandId, text }]; },
+		submit: (commandId, requestDigest, text) => { const t = client.apply({ type: 'submit', commandId, streamId: fixture.streamId, requestDigest, online: state.online }); set({ decision: describe(t.requests) }); if (t.requests.some((r) => r.type === 'send')) { outbox = [...outbox, { commandId, text }]; setPhase(commandId, 'sending'); } },
 		deliverReceipt: () => {
 			const entry = outbox[0], current = room();
 			if (!entry || !current) return;
 			const seq = nextSeq(current.cursor), messageId = `cccccccc-0000-4000-8000-${BigInt(seq).toString(16).padStart(12, '0')}`;
 			dispatch({ type: 'receipt', receipt: { ...fixture.receipt, command_id: entry.commandId, aggregate_id: messageId, event_cursors: [{ stream_id: fixture.streamId, committed_seq: seq }] } });
 			deliver({ type: 'event', streamId: fixture.streamId, seq, change: { type: 'message', message: { id: messageId, createdSeq: seq, revision: '1', content: { tag: 'visible', body: entry.text } } } });
-			dispatch({ type: 'draft', streamId: fixture.streamId, text: '' }); outbox = outbox.slice(1);
+			dispatch({ type: 'draft', streamId: fixture.streamId, text: '' }); clearPhase(entry.commandId); outbox = outbox.slice(1);
 		},
 		fail: (failure) => {
 			const entry = outbox[0], command = client.getState().commands.find((c) => c.commandId === entry?.commandId);
 			if (!entry || !command) return;
-			dispatch({ type: 'retry', commandId: entry.commandId, requestDigest: command.requestDigest, online: state.online, failure: failure === 'rate_limited' ? { tag: failure, retryAfterSeconds: 30 } : { tag: failure } });
+			dispatch({ type: 'retry', commandId: entry.commandId, requestDigest: command.requestDigest, online: state.online, failure: failure === 'rate_limited' ? { tag: failure, retryAfterSeconds: 30 } : failure === 'denied' ? { tag: failure, reason: `simulated ${failure}` } : { tag: failure } });
+			if (failure === 'denied') clearPhase(entry.commandId); else setPhase(entry.commandId, 'retrying');
 		},
 		markSeen: (seq) => { dispatch({ type: 'seen', streamId: fixture.streamId, seq }); },
 	};

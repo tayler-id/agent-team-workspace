@@ -1,4 +1,4 @@
-import { composer as composerStatus, rows as projectRows, status as projectStatus, useClientSelector, useDeferredFocus, useDelayedAnnouncement, useEnvironment, useMediaQuery, useRoomCommands, useSetDraft, useStaleSafeBusy, useTransportState, type Presentation, type RoomHeader } from '@agora/web-framework';
+import { composer as composerStatus, rows as projectRows, status as projectStatus, useClientSelector, useDeferredFocus, useDelayedAnnouncement, useDiscardCommand, useEnvironment, useMediaQuery, useRoomCommands, useSetDraft, useStaleSafeBusy, useTransportState, type ComposerCommand, type Presentation, type RoomHeader } from '@agora/web-framework';
 import { useMemo, useState, type ReactElement, type SyntheticEvent } from 'react';
 import { useHashDeepLink } from '../framework/index.ts';
 import { Timeline } from './Timeline.tsx';
@@ -7,15 +7,24 @@ export interface AppProps { readonly header: RoomHeader; readonly presentation: 
 const phoneQuery = '(max-width: 700px)';
 const announceDelay = 2000;
 
+// Truthful per-command labels: `sending`/`retrying`/`waiting_connection` are the transport's own live attempt, `delivered`/`failed` are client-core's own settled outcome.
+const commandLabel: Readonly<Record<ComposerCommand['state'], (reason: string | undefined) => string>> = {
+	sending: () => 'Sending…',
+	retrying: () => 'Retrying…',
+	waiting_connection: () => 'Waiting for a connection…',
+	delivered: () => 'Delivered.',
+	failed: (reason) => `Failed: ${reason ?? 'not sent'}.`,
+};
+
 function Composer({ streamId, disabled }: { readonly streamId: string; readonly disabled: boolean }): ReactElement {
 	const connection = useTransportState();
 	const drafts = useClientSelector((state) => state.drafts);
 	const commands = useClientSelector((state) => state.commands);
 	const setDraft = useSetDraft();
+	const discard = useDiscardCommand();
 	const { submit } = useRoomCommands();
 	const { busy, run } = useStaleSafeBusy();
-	const status = composerStatus({ rooms: [], drafts, commands }, streamId, undefined);
-	const pending = status.pending.filter((c) => c.tag === 'pending').length;
+	const status = composerStatus({ rooms: [], drafts, commands }, streamId, connection.sendPhase, connection.decision);
 	const onSubmit = (event?: SyntheticEvent): void => {
 		event?.preventDefault();
 		if (disabled || busy || status.draft.trim() === '') return;
@@ -31,11 +40,19 @@ function Composer({ streamId, disabled }: { readonly streamId: string; readonly 
 				<button type="submit" disabled={disabled || busy}>Send</button>
 				<p id="composer-state" className="composer-state">
 					{disabled ? 'Composer unavailable: no room loaded or access revoked.' : status.draft ? `Unsent draft (${status.draft.length} characters).` : 'No draft.'}
-					{pending > 0 && ` ${pending} pending command${pending === 1 ? '' : 's'} awaiting a receipt.`}
-					{connection.decision && ` Last core decision: ${connection.decision}.`}
 					{!connection.online && ' Offline: a send waits for a connection and is never queued as accepted.'}
 					{connection.link === 'disconnected' && ' Disconnected: a send waits for Reconnect and is never queued as accepted.'}
 				</p>
+				{status.commands.length > 0 && (
+					<ul className="composer-commands" aria-live="polite" aria-label="Send status">
+						{status.commands.map((command) => (
+							<li key={command.commandId} data-command-state={command.state}>
+								<span>{commandLabel[command.state](command.reason)}</span>
+								{command.state === 'failed' && <button type="button" onClick={() => { discard(command.commandId); }}>Discard, edit and send again</button>}
+							</li>
+						))}
+					</ul>
+				)}
 			</div>
 		</form>
 	);
