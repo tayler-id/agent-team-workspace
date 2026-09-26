@@ -352,6 +352,42 @@ test('a browser online event while still manually Disconnected must not resume a
 	expect(fetchMock.mock.calls.filter(([url]) => url.endsWith('/messages'))).toHaveLength(1);
 });
 
+test('an in-flight send survives an instant Disconnect-then-Reconnect even when the old fetch only rejects afterward', async () => {
+	const [client, transport] = boot;
+	const commandId = 'bbbbbbbb-2222-4000-8000-000000000001';
+	let rejectFirstAttempt: ((reason: unknown) => void) | undefined;
+	let attempts = 0;
+	const fetchMock = vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) {
+			attempts += 1;
+			// The first attempt is deferred: it settles only when the test explicitly rejects it below, after
+			// disconnect() and reconnect() have both already run — the exact interleaving under review, where
+			// beginPolling's own drain of waitingForConnection happens before this stale rejection gets a turn.
+			if (attempts === 1) return new Promise<Response>((_resolve, reject) => { rejectFirstAttempt = reject; });
+			const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+			return Promise.resolve(receiptFor(command.command_id));
+		}
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	});
+	vi.stubGlobal('fetch', fetchMock);
+	transport.loadSnapshot();
+	await flush(6);
+	transport.submit(commandId, 'sha256:' + 'a'.repeat(64), 'in flight when disconnected');
+	await flush(2);
+	expect(rejectFirstAttempt).toBeDefined();
+	transport.disconnect();
+	transport.reconnect(); // Instant: beginPolling's resumeWaitingSend runs and finds nothing queued yet.
+	expect(transport.getState().link).not.toBe('disconnected');
+	// Only now does the first attempt's rejection arrive.
+	rejectFirstAttempt?.(Object.assign(new Error('aborted'), { name: 'AbortError' }));
+	await flush(6);
+	// Resumed once in the new generation instead of stranded, and never duplicated.
+	expect(client.getState().commands.find((c) => c.commandId === commandId)?.tag).toBe('received');
+	expect(attempts).toBe(2);
+});
+
 function hangingFetch(onMessagesSignal: (signal: AbortSignal | undefined) => void): { fetchMock: (url: string, init?: { readonly signal?: AbortSignal }) => Promise<Response>; resolveEvents: (events: readonly Record<string, unknown>[]) => void } {
 	let resolveEvents: ((body: readonly Record<string, unknown>[]) => void) | undefined;
 	const fetchMock = vi.fn((url: string, init?: { readonly signal?: AbortSignal }): Promise<Response> => {

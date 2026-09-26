@@ -114,6 +114,15 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			}
 		}
 	}
+	// A stale attempt's rejection can arrive after an instant Disconnect-then-Reconnect: beginPolling's own drain of
+	// waitingForConnection runs synchronously inside reconnect(), before this async catch gets a turn, so writing
+	// into the map here would strand the command until some later, unrelated resume. If reconnect() already ran
+	// (link is no longer 'disconnected'), resume right away in the current generation instead of only queuing.
+	function becomeStale(commandId: string, requestDigest: string, text: string): void {
+		if (connection.link === 'disconnected') { waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); return; }
+		setPhase(commandId, 'retrying');
+		void attemptSend(generation, commandId, requestDigest, text);
+	}
 	async function attemptSend(myGeneration: number, commandId: string, requestDigest: string, text: string): Promise<void> {
 		if (!scope) return;
 		const command: Schema<'SendRoomMessageCommand'> = { schema_version: 'agora.local-room.send-message/v1', command_id: commandId, scope, body: text, citations: [] };
@@ -129,15 +138,15 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			clearPhase(commandId);
 			set({ decision: undefined });
 		} catch (error) {
-			if (myGeneration !== generation) { waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); return; }
+			if (myGeneration !== generation) { becomeStale(commandId, requestDigest, text); return; }
 			const online = isOnline();
 			const transition = client.apply({ type: 'retry', commandId, requestDigest, online, failure: classify(error) });
 			const request = transition.requests[0];
 			if (request?.type === 'stop') { unsettled.delete(text); clearPhase(commandId); }
 			if (request?.type === 'wait_connection') { waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); }
 			set({ decision: request?.type === 'stop' ? `stop: not sent (${error instanceof Error ? error.message : String(error)}); the draft is kept` : transition.requests.map((r) => r.type).join(', ') || undefined, online, link: request?.type === 'wait_connection' ? linkFromOnline(online) : connection.link });
-			if (request?.type === 'resend_same_command') { setPhase(commandId, 'retrying'); await sleep(retryDelayMs); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection.set(commandId, { requestDigest, text }); }
-			else if (request?.type === 'wait_retry_after') { setPhase(commandId, 'retrying'); await sleep(request.retryAfterSeconds * 1000); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else waitingForConnection.set(commandId, { requestDigest, text }); }
+			if (request?.type === 'resend_same_command') { setPhase(commandId, 'retrying'); await sleep(retryDelayMs); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else becomeStale(commandId, requestDigest, text); }
+			else if (request?.type === 'wait_retry_after') { setPhase(commandId, 'retrying'); await sleep(request.retryAfterSeconds * 1000); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else becomeStale(commandId, requestDigest, text); }
 		}
 	}
 	// Resumes every command still waiting on a connection, each by its own frozen id/digest/text: none is dropped
