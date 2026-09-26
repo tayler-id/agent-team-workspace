@@ -4,6 +4,7 @@ export { createLiveTransport, type LiveOptions, type LiveTransport } from './liv
 export { observeFonts, observeWidth, prefersReducedMotion, readGeometry } from './geometry.ts';
 export { fallbackSizer, geometryKey, type SizerFactory, type TextGeometry, type TextSizer } from './text-sizing.ts';
 export { pretextSizer, pretextSupported } from './pretext.ts';
+export { displayMessageTime, formatMessageTime, wireInstant, type MessageTimeDisplay, type TimeContext } from './message-time.ts';
 import { pretextSizer, pretextSupported } from './pretext.ts';
 import { fallbackSizer, type TextGeometry, type TextSizer } from './text-sizing.ts';
 

@@ -240,6 +240,16 @@
 			"owner": "agora-web-shell-integrate"
 		},
 		{
+			"id": "local-room-time-display",
+			"documentation": "docs/site/local-room-time-display.md",
+			"owner": "agora-live-room-time-display",
+			"paths": ["apps/web/src/host/message-time.ts", "apps/web/src/host/index.ts", "apps/web/src/components/Timeline.tsx", "apps/web/src/fixture.css", "apps/web/test/message-time.test.ts"],
+			"public": ["apps/web/src/host/message-time.ts formatMessageTime", "apps/web/src/host/message-time.ts displayMessageTime"],
+			"scenarios": ["apps/web/test/message-time.test.ts", "browser: fixture shell at 390x844 CSS px and 1440x900"],
+			"fixtures": ["agora.web-fixture.room/v1 presentation times remain wire timestamps; display does not rewrite created_at"],
+			"platforms": ["node24", "browser"]
+		},
+		{
 			"id": "local-room-timeline-virtualization",
 			"documentation": "docs/site/local-room-timeline-virtualization.md",
 			"paths": ["apps/web/src/framework", "apps/web/src/components/Timeline.tsx", "apps/web/src/rows.ts", "apps/web/src/host/text-sizing.ts", "apps/web/src/host/pretext.ts", "apps/web/src/host/geometry.ts", "apps/web/package.json", "scripts/boundary-policy.ts", "packages/client-core/test/pretext-boundary.test.ts"],

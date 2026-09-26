@@ -139,6 +139,11 @@
           "kind": "feature"
         },
         {
+          "id": "local-room-time-display",
+          "title": "Message times",
+          "kind": "feature"
+        },
+        {
           "id": "memory",
           "title": "Data and memory",
           "kind": "guide"

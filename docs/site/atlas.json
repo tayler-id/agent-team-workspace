@@ -205,6 +205,21 @@
       ]
     },
     {
+      "id": "local-room-time-display",
+      "title": "Message times",
+      "status": "In progress",
+      "why": "Show a locale-aware reading of the stored wire created_at, keep that value available for inspection, and leave committed-sequence order unchanged.",
+      "page": "local-room-time-display.md",
+      "proof": [
+        "repo:apps/web/src/host/message-time.ts",
+        "repo:apps/web/src/components/Timeline.tsx",
+        "repo:apps/web/test/message-time.test.ts",
+        "repo:evidence/local-room/time-display/phone-390x844.png",
+        "repo:evidence/local-room/time-display/desktop-1440x900.png",
+        "repo:evidence/local-room/time-display/README.md"
+      ]
+    },
+    {
       "id": "agora-application-architecture",
       "title": "Agora application architecture",
       "status": "Planned",

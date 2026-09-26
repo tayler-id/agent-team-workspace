@@ -38,6 +38,7 @@ h1 { margin: 0; font: 600 24px/1.25 "Cal Sans UI", system-ui, sans-serif; letter
 .message p + p, .message p + pre, .message pre + p, .message pre + pre, .message .meta + p, .message .meta + pre { margin-top: 8px; }
 .message.unread { background: #ebebf0; }
 .message .meta { font-size: 13px; color: var(--secondary); }
+.message time { white-space: nowrap; }
 .message p, .message pre { overflow-wrap: anywhere; max-width: 100%; }
 .message pre { overflow-x: auto; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--inset); }
 .unread-boundary { text-align: center; font-size: 12px; color: var(--secondary); }

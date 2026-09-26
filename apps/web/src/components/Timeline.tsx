@@ -1,6 +1,7 @@
 import { messageById, segments, useClientSelector, type Presentation, type Row } from '@agora/web-framework';
 import { memo, useRef, type ReactElement } from 'react';
 import { overscan, rowDomId, useTimelineVirtualizer } from '../framework/index.ts';
+import { displayMessageTime } from '../host/index.ts';
 import { classify } from '../rows.ts';
 
 export const kindLabel: Readonly<Record<Row['author']['kind'], string>> = { human: 'human', agent: 'local agent (fixture)', system: 'system' };
@@ -15,14 +16,15 @@ const MessageRow = memo(function MessageRow({ streamId, row, presentation, activ
 	commits.current += 1;
 	const deleted = message.content.tag === 'tombstone';
 	const kind = kindLabel[row.author.kind];
-	const label = `${row.author.name}, ${kind}, ${row.time || 'no time'}${deleted ? ', deleted message' : ''}${row.edited ? ', edited' : ''}${row.unread ? ', unread' : ''}`;
+	const shown = displayMessageTime(row.time);
+	const label = `${row.author.name}, ${kind}, ${shown.spoken}${deleted ? ', deleted message' : ''}${row.edited ? ', edited' : ''}${row.unread ? ', unread' : ''}`;
 	return (
 		<article id={rowDomId(message.id)} tabIndex={active ? 0 : -1} aria-label={label} data-message-id={message.id} data-unread={row.unread} data-commits={commits.current} data-seq={message.createdSeq} data-revision={message.revision} className={row.unread ? 'message unread' : 'message'}>
 			{row.firstUnread && <div role="separator" aria-label="Unread messages start here" className="unread-boundary">New</div>}
 			<div className="meta">
 				<span className="author">{row.author.name}</span>
 				<span className="kicker">{kind}</span>
-				<time dateTime={row.time}>{row.time}</time>
+				<time dateTime={shown.dateTime} title={shown.inspected}>{shown.visible}</time>
 				{row.edited && <span className="kicker">edited (revision {message.revision})</span>}
 			</div>
 			{deleted ? <p className="tombstone">Deleted message (tombstone, revision {message.revision})</p> : segments(message.content.body).map((segment, i) => segment.kind === 'code' ? <pre key={i}><code>{segment.value}</code></pre> : <p key={i} dir="auto">{segment.value}</p>)}
