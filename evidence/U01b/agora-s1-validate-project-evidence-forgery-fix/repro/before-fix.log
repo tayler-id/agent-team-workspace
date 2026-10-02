@@ -1,0 +1,20 @@
+subject: a226663b308adfebe29a690344ea2a18ced8974b
+### F1 attacker-chosen key /dev/null
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/k-null","outcome":"pass","reason_code":null}
+exit=0
+### F1 attacker-chosen key package.json (tracked, known to everyone)
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/k-pkg","outcome":"pass","reason_code":null}
+exit=0
+### F2 artifact replaced after signing, only the unsigned digest updated
+producer.signature unchanged: true
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/swap","outcome":"pass","reason_code":null}
+exit=0
+### F3 non-numeric red exit (killed by signal)
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/nan","outcome":"pass","reason_code":null}
+exit=0
+### F2 on a real recorder-signed bundle: green.log replaced by someone without the key, digest updated
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/real","outcome":"pass","reason_code":null}
+exit=0 (unmodified copy)
+producer.signature unchanged: true
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/real","outcome":"pass","reason_code":null}
+exit=0

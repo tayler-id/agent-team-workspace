@@ -4,10 +4,12 @@ Branch `fm/agora-handoff-consolidation`, task `agora-handoff-consolidation`. It 
 `main` at `e521cf815c9f0383feb110afabc1e8a45a9b1095` and merges every branch that still held
 unlanded Agora work. Git can't name a commit inside that same commit, so the exact final head is
 the one whose receipt `node scripts/local-checks.mjs verify fm/agora-handoff-consolidation`
-reports. The served code was last changed at `649f8c3`; later commits add only evidence and docs.
+reports. The served room code was last changed at `649f8c3`, and the evidence validator at
+`549a219`. Later commits add only evidence and docs.
 
-Nothing here is 100% done. Two security approvals are still open (below), so this branch must
-not land on `main` until both are given.
+Nothing here is 100% done. An independent security review of `a226663` blocked landing on an
+evidence-validator defect. The captain authorized fixing it before the approved merge, and the fix
+is on this branch from `549a219`. The new head needs that reviewer's re-review before it lands.
 
 ## What was integrated
 
@@ -25,7 +27,7 @@ posted at once. The connection controls on `main` can hold a send on `wait_conne
 it later on Reconnect. A reload during that later POST resent the text under a new id and
 committed a duplicate. Commit `649f8c3` saves the pending id for a held send too. Red/green:
 `evidence/local-room/session-drafts-held-send/` (red fails only the new test; green 39/39).
-The same bundle passes `scripts/validate-evidence.mjs`.
+That bundle uses the v1 manifest, which the fixed validator refuses as `unsupported_manifest`.
 
 While resolving the snapshot poll, I also moved the identity read behind main's
 disconnect-generation check. A snapshot response that arrives after Disconnect is discarded,
@@ -37,11 +39,16 @@ and now it can't set the instance id either.
 - Served-room browser drive of drafts at 1440x900 and 390x844 with reload, same-port reset at
   cursor 0, and a held send replayed after reload with no duplicate:
   `evidence/local-room/session-drafts-integrated/README.md`.
-- Evidence validator negatives. `validator-guards.log` disables the head, artifact-digest and
-  signature checks one at a time. Each turns its own lane red, and the restored file has the
-  same SHA-256 and passes. `real-bundle-rejections.log` tampers a copy of a real committed bundle
-  and gets `artifact_mismatch`, `wrong_head`, `wrong_base`, `missing_proof`,
-  `producer_signature_invalid` and `unsupported_target`. Both logs are in this directory.
+- Evidence validator forgery fix (`549a219`). Before the fix, the real script passed every
+  forgery the review reproduced: a bundle naming `package.json` or `/dev/null` as its own key,
+  an artifact replaced with only its digest updated, and a signal-killed red. After the fix it
+  refuses each one. The record has red/green, before and after logs from one reproduction
+  script, and three guard negatives:
+  `evidence/U01b/agora-s1-validate-project-evidence-forgery-fix/README.md`.
+- Earlier validator negatives at `a226663`: `validator-guards.log` and
+  `real-bundle-rejections.log` in this directory. They prove each check line was tested, and
+  the review showed they were not sufficient: the tampering never updated a digest, so it never
+  reached the gap.
 - The full local-check gate (`node scripts/local-checks.mjs run`) on the final head. Its receipt
   sits in the git directory, not the tree.
 
@@ -56,20 +63,20 @@ the verify-agora setup step (`python3 -m venv .scratch/python`, install
 
 ## Open approvals (not given)
 
-1. **Independent exact-head security review of the evidence validator.** The task requires it
-   (`docs/task-breakdown.md`, `agora-s1-validate-project-evidence`). I found no review record for
-   `d767ce0`, and my own checks don't count as that review. Scope for the reviewer:
-   `scripts/validate-evidence.mjs`, `scripts/record-red-green.mjs`, `scripts/project.mjs`,
-   `scripts/project-checks.mjs`, `packages/verification/test/evidence-validator.test.ts`, as
-   merged on this branch (unchanged from `d767ce0` apart from the merge). Known weakness for the
-   reviewer: the HMAC producer key is a per-checkout untracked file, so the signature proves only
-   "recorded in this checkout", and a bundle from another checkout fails with
-   `producer_signature_invalid`.
-2. **Security-sensitive landing approval for session drafts.** This change stores private unsent
-   text in the browser. Firstmate's last review instruction to that task said explicit landing
-   approval is required after an exact-head review. That approval is not on record. Review scope:
-   `apps/web/src/host/live.ts`, `scripts/local-room-service.ts` (identity header) and the merge
-   resolution in `6574581` plus `649f8c3`.
+1. **Re-review of the evidence-validator fix.** Independent review `agora-handoff-security-review`
+   of `a226663` blocked on findings F1-F3. The fix (`549a219`, evidence `de4f5fb`) needs that
+   reviewer's re-review at this branch's final head; my own checks don't count. Scope:
+   `scripts/validate-evidence.mjs`, `scripts/project-evidence.mjs`,
+   `scripts/record-red-green.mjs`, `packages/verification/test/evidence-validator.test.ts`.
+   Still open, and not claimed as fixed: the remaining F3 items (configuration, command and
+   test patch aren't compared with the repository; no ancestry check) and F4 (a value-less
+   `--head` falls back to the default). The trust class stays `owner_attested`: a signature
+   proves the key holder signed the bundle, not that the tests were honest.
+2. **Session drafts.** The same review passed the draft storage at `a226663`, with four
+   non-blocking findings left unfixed on purpose. D1: a stale pending id can swallow a later
+   identical message. D2: pending text outlives a reset in the same tab. D3: one pending slot per
+   room. D4: a `sessionStorage` write error is not caught. Landing approval for private text in
+   browser storage belongs to Firstmate and the captain.
 3. **Code-block paint bug.** The decision is held by the captain under key
    `code-block-pre-wrap-tradeoff`. Options: ship `white-space: pre-wrap`, keep it as a known
    issue, or design a threshold or truncation variant. Nothing is implemented.
@@ -123,8 +130,9 @@ pnpm web:test
 node scripts/local-room.ts doctor
 node scripts/local-room.ts start --instance dev   # open the printed url
 node scripts/local-room.ts stop --instance dev
-node scripts/validate-evidence.mjs --dir evidence/local-room/session-drafts-held-send \
-  --head 649f8c39bd9e4efecc7175c8aa13fa63e5a239fd --base 850c91336750f8d4d5568c923b7e5a5ad859cfcd
+node scripts/validate-evidence.mjs --dir evidence/U01b/agora-s1-validate-project-evidence-forgery-fix \
+  --head 549a21930b51f2694fdb551411499eeaadcb3889 --base a226663b308adfebe29a690344ea2a18ced8974b
+bash evidence/U01b/agora-s1-validate-project-evidence-forgery-fix/repro/repro.sh  # forgery repro
 node scripts/local-checks.mjs run          # exact-head receipt; verify with `verify HEAD`
 ```
 
@@ -139,9 +147,9 @@ docs/technical-spec.md and docs/task-breakdown.md. Work only on your own branch.
 force-update, and never delete any branch, stash or copy.
 
 1. Run `node scripts/local-checks.mjs status` and `verify fm/agora-handoff-consolidation`. Do not
-   land that branch until both security approvals in the handoff's "Open approvals" are recorded
-   by someone other than the author. If you are asked to do one of those reviews, review only
-   the listed files at that exact head and write the findings under evidence/.
+   land that branch until the evidence-validator re-review in the handoff's "Open approvals"
+   is recorded by someone other than the author. If you are asked to do that review, review
+   only the listed files at that exact head and write the findings under evidence/.
 2. Pick the next open S1 task from docs/task-breakdown.md in prerequisite order. Every behavior
    change needs a failing test watched red first, `node scripts/record-red-green.mjs` receipts
    under evidence/<unit>/<task>/, an agora/feature-map.json entry, and a docs/site page update

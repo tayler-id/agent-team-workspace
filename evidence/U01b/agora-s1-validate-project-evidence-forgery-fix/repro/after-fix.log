@@ -1,0 +1,33 @@
+subject: de4f5fb8a18711ffcd953993745591093bd49686
+### F1 attacker-chosen key /dev/null
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/k-null","outcome":"fail","reason_code":"unsupported_manifest"}
+exit=1
+### F1 attacker-chosen key package.json (tracked, known to everyone)
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/k-pkg","outcome":"fail","reason_code":"unsupported_manifest"}
+exit=1
+### F2 artifact replaced after signing, only the unsigned digest updated
+producer.signature unchanged: true
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/swap","outcome":"fail","reason_code":"unsupported_manifest"}
+exit=1
+### F3 non-numeric red exit (killed by signal)
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/nan","outcome":"fail","reason_code":"unsupported_manifest"}
+exit=1
+### F2 on a real recorder-signed bundle: green.log replaced by someone without the key, digest updated
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/real","outcome":"fail","reason_code":"unsupported_manifest"}
+exit=1 (unmodified copy)
+producer.signature unchanged: true
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/real","outcome":"fail","reason_code":"unsupported_manifest"}
+exit=1
+### v2: unmodified copy of the real recorder-signed bundle
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/v2","outcome":"pass","reason_code":null}
+exit=0
+### v2 F2: green.log replaced without the key, digest updated
+producer.signature unchanged: true
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/v2","outcome":"fail","reason_code":"producer_signature_invalid"}
+exit=1
+### v2 F1: whole manifest re-signed with package.json and key_file: package.json
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/v2","outcome":"fail","reason_code":"producer_signature_invalid"}
+exit=1
+### v2 F3: red observed_exit null, re-signed with the owner's own key (only the strict parser can refuse it)
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/forge/run/v2","outcome":"fail","reason_code":"malformed_exit"}
+exit=1

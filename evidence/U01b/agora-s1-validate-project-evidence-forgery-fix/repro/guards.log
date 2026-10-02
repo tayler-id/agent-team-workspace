@@ -1,0 +1,42 @@
+subject: de4f5fb8a18711ffcd953993745591093bd49686
+8159b46beaed77a072a1226566cb93d9e199f8eb250ad4f743b9518c0b6561f3  scripts/validate-evidence.mjs
+5fa12c1e60613b2439529aa3cef6fdda1ce9b658c1ad86c2c7d9ab2d4fac1728  scripts/project-evidence.mjs
+### G1 key taken from the manifest's key_file again
+ scripts/validate-evidence.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 5 rejects wrong head, wrong base and mismatched configuration 465ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target 670ms
+ × |unit| packages/verification/test/evidence-validator.test.ts > project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red 319ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 'pass' to be 'fail' // Object.is equality
+ ❯ packages/verification/test/evidence-validator.test.ts:132:63
+      Tests  1 failed | 2 passed (3)
+### G2 lenient exit parsing (Number of any token)
+ scripts/project-evidence.mjs | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 5 rejects wrong head, wrong base and mismatched configuration 427ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target 616ms
+ × |unit| packages/verification/test/evidence-validator.test.ts > project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red 617ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 'pass' to be 'fail' // Object.is equality
+ ❯ packages/verification/test/evidence-validator.test.ts:143:65
+      Tests  1 failed | 2 passed (3)
+### G3 signature comparison disabled
+ scripts/validate-evidence.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 5 rejects wrong head, wrong base and mismatched configuration 486ms
+ × |unit| packages/verification/test/evidence-validator.test.ts > project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target 598ms
+ × |unit| packages/verification/test/evidence-validator.test.ts > project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red 325ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 'pass' to be 'fail' // Object.is equality
+ ❯ packages/verification/test/evidence-validator.test.ts:112:63
+AssertionError: expected 'pass' to be 'fail' // Object.is equality
+ ❯ packages/verification/test/evidence-validator.test.ts:132:63
+      Tests  2 failed | 1 passed (3)
+8159b46beaed77a072a1226566cb93d9e199f8eb250ad4f743b9518c0b6561f3  scripts/validate-evidence.mjs
+5fa12c1e60613b2439529aa3cef6fdda1ce9b658c1ad86c2c7d9ab2d4fac1728  scripts/project-evidence.mjs
+### restored
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 5 rejects wrong head, wrong base and mismatched configuration 579ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target 712ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red 1341ms
+      Tests  3 passed (3)
