@@ -14,7 +14,7 @@ const policy = (ids = ['gate', 'second']) => JSON.stringify({ schema_version: 'a
 const commit = (cwd: string, message: string) => { git(cwd, 'add', '-A'); assert.equal(git(cwd, 'commit', '-q', '-m', message).status, 0); return git(cwd, 'rev-parse', 'HEAD').stdout.trim(); };
 
 // A throwaway repository on main with the real tool and hook, a two-check policy, hooks installed.
-type Receipt = { outcome: string; commit: string; checks: { id: string }[] };
+interface Receipt { outcome: string; commit: string; checks: { id: string }[] }
 const readReceipt = (file: string) => JSON.parse(readFileSync(file, 'utf8')) as Receipt;
 const made: string[] = [];
 after(() => { for (const dir of made) rmSync(dir, { recursive: true, force: true }); });
