@@ -1,0 +1,74 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-24T03:28:31.013Z
+parent: 14b111a37852341feb8176fab767203adc9e670b
+head: 41f6d9bb6c19c5d13452203a56a78cb22dc5d8d3
+subject_revision: 14b111a37852341feb8176fab767203adc9e670b
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/live.test.ts
+test_patch_digest: sha256:e17c6b930e8756c8f821f60209f1fd0159b629807e1ff49b666505652ff5bbe0
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm --filter @agora/web exec vitest run test/live.test.ts","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-II4TMP/apps/web
+
+ ❯ |web| test/live.test.ts (24 tests | 2 failed) 1566ms
+   × an identity route that is down at reload fails closed on a draft saved under a verified instance 18ms
+   × a pending command id from before the reload is not reused once the identity route goes down 21ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 22 passed (24)
+   Start at  23:28:20
+   Duration  2.26s (tests 71%, environment 20%, import 5%, transform 3%)
+
+undefined
+/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-II4TMP/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run test/live.test.ts
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/live.test.ts > an identity route that is down at reload fails closed on a draft saved under a verified instance
+AssertionError: expected [ 'saved while healthy' ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "saved while healthy",
++ ]
+
+ ❯ test/live.test.ts:458:36
+    456|  reloadedTransport.loadSnapshot();
+    457|  await flush(6);
+    458|  expect(draftText(reloadedClient)).toEqual([]);
+       |                                    ^
+    459| });
+    460|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |web| test/live.test.ts > a pending command id from before the reload is not reused once the identity route goes down
+AssertionError: expected [ 'uncertain send' ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "uncertain send",
++ ]
+
+ ❯ test/live.test.ts:512:36
+    510|  // Without a verified instance to compare against, the saved pending …
+    511|  // the draft is not restored either: a fresh Send mints its own new c…
+    512|  expect(draftText(reloadedClient)).toEqual([]);
+       |                                    ^
+    513|  reloadedClient.apply({ type: 'draft', streamId: roomId, text: 'uncert…
+    514|  reloadedTransport.submit('88888888-0000-4000-8000-000000000002', 'sha…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

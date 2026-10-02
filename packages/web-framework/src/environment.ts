@@ -29,6 +29,8 @@ export interface RoomTransport {
 	readonly disconnect: () => void;
 	/** Resumes polling from the last applied cursor and, if a send was waiting on `wait_connection`, retries it. */
 	readonly reconnect: () => void;
+	/** Persist (or, for empty text, clear) the composer's unsent draft for this stream. A no-op Host may ignore it. */
+	readonly saveDraft: (streamId: string, text: string) => void;
 }
 
 export interface EnvironmentPort {

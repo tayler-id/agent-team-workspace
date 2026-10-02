@@ -24,7 +24,7 @@ function annotate(presentation: Presentation, messages: readonly Schema<'RoomMes
 }
 const isOnline = (): boolean => typeof navigator === 'undefined' || navigator.onLine;
 
-async function requestJson(baseUrl: string, path: string, signal: AbortSignal, body?: unknown): Promise<unknown> {
+async function requestJson(baseUrl: string, path: string, signal: AbortSignal, body?: unknown, onHeaders?: (headers: Headers) => void): Promise<unknown> {
 	const response = await fetch(`${baseUrl}/api/v1/local-room/${path}`, { signal: AbortSignal.any([AbortSignal.timeout(5000), signal]), ...(body === undefined ? {} : { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }) });
 	if (!response.ok) {
 		const reason = await response.json().then((v: { reason_code?: unknown }) => typeof v.reason_code === 'string' ? ` ${v.reason_code}` : '', () => '');
@@ -34,6 +34,7 @@ async function requestJson(baseUrl: string, path: string, signal: AbortSignal, b
 		error.retryAfterSeconds = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : undefined;
 		throw error;
 	}
+	onHeaders?.(response.headers);
 	return response.json() as Promise<unknown>;
 }
 // Only an unreachable server, a timeout, 408 or 5xx is transient. Any other 4xx, an invalid receipt or a receipt for
@@ -45,6 +46,66 @@ function classify(error: unknown): RetryFailure {
 	return transient ? { tag: 'timeout' } : { tag: 'denied', reason: error instanceof Error ? error.message : String(error) };
 }
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => { setTimeout(resolve, ms); });
+const draftBodyLimit = 4096;
+const draftKey = (scope: Schema<'RoomSnapshot'>['scope']): string => `agora.local-room.draft:${scope.project_id}:${scope.room_id}`;
+const pendingKey = (scope: Schema<'RoomSnapshot'>['scope']): string => `agora.local-room.pending:${scope.project_id}:${scope.room_id}`;
+// x-agora-instance names the disposable process behind this origin, freshly random on every `local-room start`,
+// including the restart a `reset` requires; it never survives a reset even when the reused port and empty cursor do.
+// The service (scripts/local-room-service.ts) stamps this header on every response including the snapshot's own, so
+// the identity is read off the SAME response that carried the snapshot body rather than a separate request: a reset
+// landing between two independent fetches could otherwise attach the old instance to the new room's cursor-0
+// snapshot. A missing header or a blank value both degrade to undefined here. Persistence (read AND write, below)
+// requires a verified nonempty instance on both sides: two undefined reads never match each other, so an outage on
+// either save or restore loses that one draft/pending record rather than risk showing one instance's text under
+// another. See docs/site/local-room.md#live-room-ui for the limit.
+function instanceFromHeaders(headers: Headers): string | undefined {
+	const text = (headers.get('x-agora-instance') ?? '').trim();
+	return text.length > 0 ? text : undefined;
+}
+// sessionStorage bounds the draft's lifetime to this tab's session and keeps it private to that tab, so a reset or a
+// fresh instance (a distinct origin/port) never exposes another session's text. The stored cursor guards an
+// advancing reset; the stored instance guards the one case a cursor cannot: a reset of a room still at cursor 0.
+// `instance` must be a verified nonempty string, never merely "matches whatever was last saved": an outage on
+// either side fails closed to no draft, rather than trusting an unverifiable identity on either side of the compare.
+function readDraft(scope: Schema<'RoomSnapshot'>['scope'], currentCursor: string, instance: string | undefined): string | undefined {
+	if (instance === undefined) { sessionStorage.removeItem(draftKey(scope)); return undefined; }
+	const raw = sessionStorage.getItem(draftKey(scope));
+	if (!raw) return undefined;
+	try {
+		const parsed = JSON.parse(raw) as { cursor?: unknown; text?: unknown; instance?: unknown };
+		if (typeof parsed.cursor !== 'string' || typeof parsed.text !== 'string' || parsed.instance !== instance || BigInt(parsed.cursor) > BigInt(currentCursor)) { sessionStorage.removeItem(draftKey(scope)); return undefined; }
+		return parsed.text;
+	} catch { sessionStorage.removeItem(draftKey(scope)); return undefined; }
+}
+function writeDraft(scope: Schema<'RoomSnapshot'>['scope'], cursor: string, text: string, instance: string | undefined): void {
+	if (text.trim() === '' || instance === undefined) { sessionStorage.removeItem(draftKey(scope)); return; }
+	sessionStorage.setItem(draftKey(scope), JSON.stringify({ cursor, text: text.slice(0, draftBodyLimit), instance }));
+}
+// Mirrors an in-flight send's identity across a reload so a POST that already committed is replayed, not repeated:
+// the next Send on the same still-unsettled text reuses this command_id instead of minting one the server has never
+// seen, and the server's own actor/command_id idempotency then returns the original receipt instead of a duplicate.
+// Same verified-nonempty-instance rule as readDraft/writeDraft: an identity outage on either side means the pending
+// id is neither saved nor reused, so a reset can't be mistaken for the still-live instance that started the send.
+function readPending(scope: Schema<'RoomSnapshot'>['scope'], instance: string | undefined, text: string): { commandId: string; requestDigest: string } | undefined {
+	if (instance === undefined) return undefined;
+	const raw = sessionStorage.getItem(pendingKey(scope));
+	if (!raw) return undefined;
+	try {
+		const parsed = JSON.parse(raw) as { instance?: unknown; text?: unknown; commandId?: unknown; requestDigest?: unknown };
+		if (parsed.text !== text || typeof parsed.commandId !== 'string' || typeof parsed.requestDigest !== 'string' || parsed.instance !== instance) return undefined;
+		return { commandId: parsed.commandId, requestDigest: parsed.requestDigest };
+	} catch { return undefined; }
+}
+function writePending(scope: Schema<'RoomSnapshot'>['scope'], instance: string | undefined, text: string, commandId: string, requestDigest: string): void {
+	if (instance === undefined) { sessionStorage.removeItem(pendingKey(scope)); return; }
+	sessionStorage.setItem(pendingKey(scope), JSON.stringify({ instance, text, commandId, requestDigest }));
+}
+function clearPendingIfMatches(scope: Schema<'RoomSnapshot'>['scope'], commandId: string): void {
+	const raw = sessionStorage.getItem(pendingKey(scope));
+	if (!raw) return;
+	try { if ((JSON.parse(raw) as { commandId?: unknown }).commandId === commandId) sessionStorage.removeItem(pendingKey(scope)); }
+	catch { sessionStorage.removeItem(pendingKey(scope)); }
+}
 
 /**
  * One browser connection to the fixed local room, with a manual Disconnect/Reconnect control. `generation` is bumped
@@ -65,6 +126,8 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 	let generation = 0;
 	let abort = new AbortController();
 	const waitingForConnection = new Map<string, { readonly requestDigest: string; readonly text: string }>();
+	let draftRestored = false; // Restore a saved draft only once per page load, not on every later resync.
+	let currentInstance: string | undefined; // This origin's current disposable process identity, if the route answered.
 	const unsettled = new Set<string>(); // Draft texts with a command still retrying; a second Send reuses that identity.
 	const listeners = new Set<() => void>();
 	const notify = (): void => { for (const listener of listeners) listener(); };
@@ -79,6 +142,11 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		scope = snapshot.scope; streamId = snapshot.cursor.stream_id;
 		presentation = annotate(emptyPresentation, snapshot.messages);
 		client.apply({ type: 'snapshot', streamId, cursor: snapshot.cursor.committed_seq, lastSeen: snapshot.cursor.committed_seq, messages: snapshot.messages.map(toMessage), runs: [] });
+		if (!draftRestored) {
+			draftRestored = true;
+			const saved = readDraft(scope, snapshot.cursor.committed_seq, currentInstance);
+			if (saved !== undefined) client.apply({ type: 'draft', streamId, text: saved });
+		}
 	}
 	function applyEvents(value: unknown): number {
 		const events = validate('RoomEventBatch', value);
@@ -92,8 +160,10 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			try {
 				const room = client.getState().rooms.find((r) => r.streamId === streamId);
 				if (!room || room.mode === 'resync') {
-					const value = await requestJson(baseUrl, 'snapshot', abort.signal);
+					let instance: string | undefined;
+					const value = await requestJson(baseUrl, 'snapshot', abort.signal, undefined, (headers) => { instance = instanceFromHeaders(headers); });
 					if (myGeneration !== generation) return; // A late response after Disconnect must not mutate committed state.
+					currentInstance = instance; // Bound to this same response's snapshot body, never to a separate request.
 					applySnapshot(value);
 					set({ phase: 'idle', error: undefined, online: true, link: 'online' });
 					continue;
@@ -137,17 +207,23 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			// never sees scope/citations, so it cannot reproduce the server's canonical-command digest to compare against.
 			if (receiptWire.identity.command_id !== commandId) throw new Error('receipt identity mismatch');
 			client.apply({ type: 'receipt', receipt: receiptWire.receipt });
-			client.apply({ type: 'draft', streamId, text: '' });
+			// Only clear the draft if it still holds the text this receipt settled: the user may have already typed a
+			// new, still-unsent message while this one was in flight, and that later text must survive the receipt.
+			if (client.getState().drafts.find((d) => d.streamId === streamId)?.text === text) {
+				client.apply({ type: 'draft', streamId, text: '' });
+				writeDraft(scope, receiptWire.receipt.event_cursors[0]?.committed_seq ?? '0', '', currentInstance);
+			}
 			unsettled.delete(text);
 			clearPhase(commandId);
 			waitingForConnection.delete(commandId);
+			clearPendingIfMatches(scope, commandId);
 			set({ decision: undefined });
 		} catch (error) {
 			if (myGeneration !== generation) { becomeStale(commandId, requestDigest, text); return; }
 			const online = isOnline();
 			const transition = client.apply({ type: 'retry', commandId, requestDigest, online, failure: classify(error) });
 			const request = transition.requests[0];
-			if (request?.type === 'stop') { unsettled.delete(text); clearPhase(commandId); }
+			if (request?.type === 'stop') { unsettled.delete(text); clearPhase(commandId); clearPendingIfMatches(scope, commandId); }
 			if (request?.type === 'wait_connection') { waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); }
 			set({ decision: request?.type === 'stop' ? `stop: not sent (${error instanceof Error ? error.message : String(error)}); the draft is kept` : transition.requests.map((r) => r.type).join(', ') || undefined, online, link: request?.type === 'wait_connection' ? linkFromOnline(online) : connection.link });
 			if (request?.type === 'resend_same_command') { setPhase(commandId, 'retrying'); await sleep(retryDelayMs); if (myGeneration === generation) void attemptSend(myGeneration, commandId, requestDigest, text); else becomeStale(commandId, requestDigest, text); }
@@ -204,6 +280,9 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 		loadSnapshot: () => { if (started) return; started = true; beginPolling(); },
 		submit: (commandId, requestDigest, text) => {
 			if (unsettled.has(text)) return;
+			// A saved pending identity for this exact still-unsent text (from before a reload) is reused rather than
+			// the fresh id the caller minted, so a POST that already committed replays instead of duplicating.
+			if (scope) { const saved = readPending(scope, currentInstance, text); if (saved) { commandId = saved.commandId; requestDigest = saved.requestDigest; } }
 			const networkOnline = isOnline();
 			const disconnected = connection.link === 'disconnected';
 			// A manual Disconnect leaves an already-aborted controller behind until Reconnect makes a fresh one; a new
@@ -215,7 +294,12 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			// unsettled also guards the offline path: a repeated click on the same unchanged draft must not mint a
 			// second waiting command once the first is already tracked for this exact text.
 			if (request?.type === 'wait_connection') { unsettled.add(text); waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); }
-			if (transition.requests.some((r) => r.type === 'send')) { unsettled.add(text); setPhase(commandId, 'sending'); void attemptSend(generation, commandId, requestDigest, text); }
+			if (transition.requests.some((r) => r.type === 'send')) {
+				if (scope) writePending(scope, currentInstance, text, commandId, requestDigest);
+				unsettled.add(text);
+				setPhase(commandId, 'sending');
+				void attemptSend(generation, commandId, requestDigest, text);
+			}
 		},
 		markSeen: (seq) => { client.apply({ type: 'seen', streamId, seq }); },
 		disconnect: () => {
@@ -230,5 +314,6 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			started = true;
 			beginPolling();
 		},
+		saveDraft: (draftStreamId, text) => { if (scope && draftStreamId === streamId) writeDraft(scope, client.getState().rooms.find((r) => r.streamId === streamId)?.cursor ?? '0', text, currentInstance); },
 	};
 }

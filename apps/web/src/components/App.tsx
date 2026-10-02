@@ -22,6 +22,7 @@ function Composer({ streamId, disabled }: { readonly streamId: string; readonly 
 	const commands = useClientSelector((state) => state.commands);
 	const setDraft = useSetDraft();
 	const discard = useDiscardCommand();
+	const { transport } = useEnvironment();
 	const { submit } = useRoomCommands();
 	const { busy, run } = useStaleSafeBusy();
 	const status = composerStatus({ rooms: [], drafts, commands }, streamId, connection.decision, connection.sendPhase);
@@ -35,7 +36,7 @@ function Composer({ streamId, disabled }: { readonly streamId: string; readonly 
 		<form className="composer" aria-labelledby="composer-heading" onSubmit={onSubmit}>
 			<h2 id="composer-heading" className="visually-hidden">Composer</h2>
 			<label htmlFor="composer-text">Message (Enter sends, Shift+Enter adds a line)</label>
-			<textarea id="composer-text" value={status.draft} disabled={disabled} rows={3} maxLength={4096} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); onSubmit(); } }} onChange={(event) => { setDraft(streamId, event.target.value); }} aria-describedby="composer-state" />
+			<textarea id="composer-text" value={status.draft} disabled={disabled} rows={3} maxLength={4096} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); onSubmit(); } }} onChange={(event) => { setDraft(streamId, event.target.value); transport.saveDraft(streamId, event.target.value); }} aria-describedby="composer-state" />
 			<div className="composer-actions">
 				<button type="submit" disabled={disabled || busy}>Send</button>
 				<p id="composer-state" className="composer-state">

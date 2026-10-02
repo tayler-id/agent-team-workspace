@@ -1,0 +1,225 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-24T04:02:34.934Z
+parent: 4c29595650ab70addeca7ff356b0830f9aa96746
+head: b62664cc6f2126b11faf825c00490099a3558937
+subject_revision: 4c29595650ab70addeca7ff356b0830f9aa96746
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/live.test.ts
+test_patch_digest: sha256:e55ed6799f06fcd8fb59982d22667308af8fe5e3ac903bb8d82acec89d2dd587
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"npx vitest run apps/web/test/live.test.ts --project unit","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-63EPG6
+
+ ❯ |unit| apps/web/test/live.test.ts (25 tests | 11 failed) 1689ms
+   × local quote retries reuse a persisted action identity, then a later explicit quote gets a fresh identity 17ms
+   × pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message 28ms
+   × a 400 malformed_command stops retrying, keeps the draft and shows the failure 38ms
+   × a schema-invalid receipt stops retrying, keeps the draft and shows the failure 39ms
+   × a receipt for another command stops retrying, keeps the draft and shows the failure 40ms
+   × an unsent draft survives a reload in the same tab 19ms
+   × a failed send keeps the draft persisted for the next reload 28ms
+   × typing a new draft while an earlier send is in flight survives that send's receipt 30ms
+   × an unsent draft at cursor 0 survives an ordinary reload of the same instance 22ms
+   × a send still unsettled when the tab reloads reuses the same command id instead of duplicating it 26ms
+   × draft identity is read off the snapshot response itself, not a second request a reset could race between 11ms
+
+ Test Files  1 failed (1)
+      Tests  11 failed | 14 passed (25)
+   Start at  00:02:24
+   Duration  1.94s (tests 91%, import 6%, transform 3%)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > local quote retries reuse a persisted action identity, then a later explicit quote gets a fresh identity
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ apps/web/test/live.test.ts:196:48
+    194|  transport.loadSnapshot();
+    195|  await flush(6);
+    196|  await expect(transport.answer([messageId(1)])).rejects.toThrow('Faile…
+       |                                                ^
+    197|  const pending = stored.get(`agora.local-answer.pending:${projectId}:$…
+    198|  expect(pending).toBe(posted[0]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > pressing Send again on an unchanged unsettled draft reuses the pending identity and persists one message
+AssertionError: expected Set{ undefined, …(1) } to deeply equal Set{ '33333333-0000-4000-8000-000000…' }
+
+- Expected
++ Received
+
+  Set {
+    "33333333-0000-4000-8000-000000000001",
++   undefined,
+  }
+
+ ❯ apps/web/test/live.test.ts:218:26
+    216|  transport.submit('33333333-0000-4000-8000-000000000002', 'sha256:' + …
+    217|  await flush(12);
+    218|  expect(new Set(posted)).toEqual(new Set(['33333333-0000-4000-8000-000…
+       |                          ^
+    219|  expect(client.getState().commands.map((c) => [c.commandId, c.tag])).t…
+    220|  expect(client.getState().drafts).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a 400 malformed_command stops retrying, keeps the draft and shows the failure
+ FAIL  |unit| apps/web/test/live.test.ts > a schema-invalid receipt stops retrying, keeps the draft and shows the failure
+ FAIL  |unit| apps/web/test/live.test.ts > a receipt for another command stops retrying, keeps the draft and shows the failure
+AssertionError: expected [ undefined, …(1) ] to have a length of 1 but got 2
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ apps/web/test/live.test.ts:235:17
+    233|  transport.submit('44444444-0000-4000-8000-000000000001', 'sha256:' + …
+    234|  await flush(20);
+    235|  expect(posted).toHaveLength(1);
+       |                 ^
+    236|  expect(transport.getState().decision).toContain('stop');
+    237|  expect(transport.getState().decision).toContain(shown);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > an unsent draft survives a reload in the same tab
+AssertionError: expected [] to deeply equal [ 'not sent yet' ]
+
+- Expected
++ Received
+
+- [
+-   "not sent yet",
+- ]
++ []
+
+ ❯ apps/web/test/live.test.ts:267:36
+    265|  reloadedTransport.loadSnapshot();
+    266|  await flush(6);
+    267|  expect(draftText(reloadedClient)).toEqual(['not sent yet']);
+       |                                    ^
+    268| });
+    269|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a failed send keeps the draft persisted for the next reload
+AssertionError: expected [] to deeply equal [ 'still trying' ]
+
+- Expected
++ Received
+
+- [
+-   "still trying",
+- ]
++ []
+
+ ❯ apps/web/test/live.test.ts:283:36
+    281|  reloadedTransport.loadSnapshot();
+    282|  await flush(6);
+    283|  expect(draftText(reloadedClient)).toEqual(['still trying']);
+       |                                    ^
+    284| });
+    285|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > typing a new draft while an earlier send is in flight survives that send's receipt
+AssertionError: expected [] to deeply equal [ 'message B' ]
+
+- Expected
++ Received
+
+- [
+-   "message B",
+- ]
++ []
+
+ ❯ apps/web/test/live.test.ts:328:36
+    326|  reloadedTransport.loadSnapshot();
+    327|  await flush(6);
+    328|  expect(draftText(reloadedClient)).toEqual(['message B']);
+       |                                    ^
+    329| });
+    330|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > an unsent draft at cursor 0 survives an ordinary reload of the same instance
+AssertionError: expected [] to deeply equal [ 'still typing' ]
+
+- Expected
++ Received
+
+- [
+-   "still typing",
+- ]
++ []
+
+ ❯ apps/web/test/live.test.ts:374:36
+    372|  reloadedTransport.loadSnapshot();
+    373|  await flush(6);
+    374|  expect(draftText(reloadedClient)).toEqual(['still typing']);
+       |                                    ^
+    375| });
+    376|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > a send still unsettled when the tab reloads reuses the same command id instead of duplicating it
+AssertionError: expected [] to deeply equal [ 'uncertain send' ]
+
+- Expected
++ Received
+
+- [
+-   "uncertain send",
+- ]
++ []
+
+ ❯ apps/web/test/live.test.ts:420:36
+    418|  reloadedTransport.loadSnapshot();
+    419|  await flush(6);
+    420|  expect(draftText(reloadedClient)).toEqual(['uncertain send']);
+       |                                    ^
+    421|  // A fresh id minted for the retry must be discarded in favor of the …
+    422|  reloadedTransport.submit('99999999-0000-4000-8000-000000000002', 'sha…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+ FAIL  |unit| apps/web/test/live.test.ts > draft identity is read off the snapshot response itself, not a second request a reset could race between
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ apps/web/test/live.test.ts:526:62
+    524|  client.apply({ type: 'draft', streamId: roomId, text: 'atomic' });
+    525|  transport.saveDraft(roomId, 'atomic');
+    526|  expect(calls.some((c) => c.endsWith('/_runtime/identity'))).toBe(fals…
+       |                                                              ^
+    527|  const [reloadedClient, reloadedTransport] = reopen();
+    528|  stubEmptyRoom(0, 'launch-a');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+

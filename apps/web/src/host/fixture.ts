@@ -154,5 +154,7 @@ export function createFixtureTransport(client: RoomClient, fixture: RoomFixture)
 			if (failure === 'denied') clearPhase(entry.commandId); else setPhase(entry.commandId, 'retrying');
 		},
 		markSeen: (seq) => { dispatch({ type: 'seen', streamId: fixture.streamId, seq }); },
+		// The engineering fixture never reloads a real page, so it keeps no browser-side draft.
+		saveDraft: () => undefined,
 	};
 }

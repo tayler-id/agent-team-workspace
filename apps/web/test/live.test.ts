@@ -16,10 +16,16 @@ function snapshot(cursor: number, messages: readonly Record<string, unknown>[]):
 function event(seq: number, payload: Record<string, unknown>): Record<string, unknown> {
 	return { schema_version: 'agora.local-room.event/v1', stream_id: roomId, seq: String(seq), event_id: messageId(900 + seq), kind: 'local_room.message_created', actor: 'dddddddd-0000-4000-8000-000000000001', occurred_at: '2026-09-22T00:00:00.000Z', payload };
 }
-const json = (body: unknown, status = 200): Response => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+const json = (body: unknown, status = 200, instance?: string): Response => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...(instance === undefined ? {} : { 'x-agora-instance': instance }) } });
+
+function fakeStorage(): Storage {
+	const store = new Map<string, string>();
+	return { getItem: (key: string) => store.get(key) ?? null, setItem: (key: string, value: string) => { store.set(key, value); }, removeItem: (key: string) => { store.delete(key); }, clear: () => { store.clear(); }, key: () => null, get length() { return store.size; } };
+}
 
 let boot: [RoomClient, LiveTransport];
 beforeEach(() => {
+	vi.stubGlobal('sessionStorage', fakeStorage());
 	const client = createRoomClient();
 	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0, retryDelayMs: 0 });
 	boot = [client, transport];
@@ -161,10 +167,10 @@ test('a rejected send retries the frozen command and settles once the server acc
 });
 
 const receiptFor = (commandId: string): Response => json({ schema_version: 'agora.local-room.receipt/v1', identity: { command_id: commandId, request_digest: 'sha256:' + 'e'.repeat(64) }, receipt: { command_id: commandId, aggregate_id: roomId, revision: '1', event_cursors: [{ stream_id: roomId, committed_seq: '1' }], receipt_id: messageId(503) }, message_id: messageId(4), replayed: false }, 201);
-function stubMessages(respond: (commandId: string, attempt: number) => Response | Promise<Response>): string[] {
+function stubMessages(respond: (commandId: string, attempt: number) => Response | Promise<Response>, instance = 'launch-a'): string[] {
 	const posted: string[] = [];
 	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
-		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, instance));
 		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
 		const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
 		posted.push(command.command_id);
@@ -617,4 +623,297 @@ test('an events response that arrives after Disconnect is discarded instead of m
 	await flush(4);
 	expect(client.getState().rooms.find((r) => r.streamId === roomId)?.cursor).toBe('0'); // The late event must not advance the cursor after Disconnect.
 	expect(transport.getState().link).toBe('disconnected');
+});
+
+function stubEmptyRoom(cursor = 0, instance?: string): void {
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(cursor, []), 200, instance));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+}
+// Simulates a reload: a fresh page loads a fresh client/transport but keeps the same tab's sessionStorage.
+function reopen(): [RoomClient, LiveTransport] {
+	const client = createRoomClient();
+	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0, retryDelayMs: 0 });
+	return [client, transport];
+}
+const draftText = (c: RoomClient): readonly string[] => c.getState().drafts.map((d) => d.text);
+
+test('an unsent draft survives a reload in the same tab', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(0, 'launch-a');
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'not sent yet' });
+	transport.saveDraft(roomId, 'not sent yet');
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a');
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['not sent yet']);
+});
+
+test('a failed send keeps the draft persisted for the next reload', async () => {
+	const [client, transport] = boot;
+	stubMessages(() => new Response('down', { status: 503 }));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'still trying' });
+	transport.saveDraft(roomId, 'still trying');
+	transport.submit('55555555-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'still trying');
+	await flush(6);
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a'); // stubMessages answers identity with 'launch-a'; keep the same verified process.
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['still trying']);
+});
+
+test('a successful send clears the persisted draft so a later reload starts empty', async () => {
+	const [client, transport] = boot;
+	stubMessages(() => receiptFor('66666666-0000-4000-8000-000000000001'));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'about to send' });
+	transport.saveDraft(roomId, 'about to send');
+	transport.submit('66666666-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'about to send');
+	await flush(6);
+	expect(draftText(client)).toEqual([]);
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(1, 'launch-a');
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('typing a new draft while an earlier send is in flight survives that send\'s receipt', async () => {
+	const [client, transport] = boot;
+	let resolveReceipt: (response: Response) => void = () => undefined;
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, 'launch-a'));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) return new Promise((resolve) => { resolveReceipt = resolve; });
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'message A' });
+	transport.saveDraft(roomId, 'message A');
+	transport.submit('77777777-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'message A');
+	await flush(2);
+	// While A's receipt is still in flight, the user types a new, distinct, still-unsent message B.
+	client.apply({ type: 'draft', streamId: roomId, text: 'message B' });
+	transport.saveDraft(roomId, 'message B');
+	resolveReceipt(receiptFor('77777777-0000-4000-8000-000000000001'));
+	await flush(6);
+	expect(draftText(client)).toEqual(['message B']);
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a');
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['message B']);
+});
+
+test('a deliberate clear (emptying the box) also drops the persisted draft', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(0, 'launch-a');
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'typed then undone' });
+	transport.saveDraft(roomId, 'typed then undone');
+	client.apply({ type: 'draft', streamId: roomId, text: '' });
+	transport.saveDraft(roomId, '');
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a');
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('a room reset to a lower cursor discards a stale draft instead of exposing old text', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(5, 'launch-a');
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'from before the reset' });
+	transport.saveDraft(roomId, 'from before the reset');
+	// A disposable reset drops all data and restarts the same room at a fresh, lower cursor (same verified instance
+	// here isolates the cursor guard from the separate instance guard covered by the cursor-0 tests below).
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a');
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('an unsent draft at cursor 0 survives an ordinary reload of the same instance', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(0, 'launch-a');
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'still typing' });
+	transport.saveDraft(roomId, 'still typing');
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a'); // Same reused port, same disposable process: an ordinary reload, not a reset.
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['still typing']);
+});
+
+test('a same-origin reset still at cursor 0 is told apart from an ordinary reload by process identity', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(0, 'launch-a');
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'from before the reset' });
+	transport.saveDraft(roomId, 'from before the reset');
+	// A disposable reset tears the whole process down and restarts it: the reused port keeps the cursor at the same
+	// 0, which a cursor-only check cannot tell from a reload, but `local-room start` mints a fresh process identity.
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-b');
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('a send still unsettled when the tab reloads reuses the same command id instead of duplicating it', async () => {
+	const [client, transport] = boot;
+	const posted: string[] = [];
+	let neverSettles: Promise<Response> | undefined;
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, 'launch-a'));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) {
+			const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+			posted.push(command.command_id);
+			// The first attempt's response never arrives before the reload, matching a page that reloads while the
+			// POST is still uncertain: it may already have committed on the server.
+			if (posted.length === 1) { neverSettles = new Promise(() => undefined); return neverSettles; }
+			return Promise.resolve(receiptFor(command.command_id));
+		}
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'uncertain send' });
+	transport.saveDraft(roomId, 'uncertain send');
+	transport.submit('99999999-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'uncertain send');
+	await flush(4);
+	expect(posted).toEqual(['99999999-0000-4000-8000-000000000001']);
+	const [reloadedClient, reloadedTransport] = reopen();
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['uncertain send']);
+	// A fresh id minted for the retry must be discarded in favor of the id already posted before the reload.
+	reloadedTransport.submit('99999999-0000-4000-8000-000000000002', 'sha256:' + 'a'.repeat(64), 'uncertain send');
+	await flush(6);
+	expect(posted).toEqual(['99999999-0000-4000-8000-000000000001', '99999999-0000-4000-8000-000000000001']);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('a snapshot with no verified identity when the draft is typed never persists it, even once it recovers by reload', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(0); // No instance arg: the snapshot response carries no x-agora-instance header.
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'lost to the outage' });
+	transport.saveDraft(roomId, 'lost to the outage');
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a'); // The route is back, but nothing was ever saved to restore.
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('a reload snapshot with no verified identity fails closed on a draft saved under a verified instance', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(0, 'launch-a');
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'saved while healthy' });
+	transport.saveDraft(roomId, 'saved while healthy');
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0); // No header on this reload's snapshot; the saved instance can't be verified, so it fails closed.
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('a malformed or empty identity header counts as no verified instance, so a saved draft is not restored', async () => {
+	const [client, transport] = boot;
+	stubEmptyRoom(0, 'launch-a');
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'saved while healthy' });
+	transport.saveDraft(roomId, 'saved while healthy');
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, '   '); // Trims to empty.
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
+test('a pending command id from before the reload is not reused once the reload snapshot carries no verified instance', async () => {
+	const [client, transport] = boot;
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, 'launch-a'));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) return new Promise(() => undefined); // Never settles before reload.
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'uncertain send' });
+	transport.saveDraft(roomId, 'uncertain send');
+	transport.submit('88888888-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'uncertain send');
+	await flush(4);
+	const posted: string[] = [];
+	const [reloadedClient, reloadedTransport] = reopen();
+	// The reload's own snapshot response comes back with no x-agora-instance header at all: a down or stripped
+	// identity is now indistinguishable from a reset, since both are read off this one response.
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, [])));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) {
+			const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+			posted.push(command.command_id);
+			return Promise.resolve(receiptFor(command.command_id));
+		}
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	// Without a verified instance to compare against, the saved pending id from before the reload is not trusted, so
+	// the draft is not restored either: a fresh Send mints its own new command id instead of replaying the old one.
+	expect(draftText(reloadedClient)).toEqual([]);
+	reloadedClient.apply({ type: 'draft', streamId: roomId, text: 'uncertain send' });
+	reloadedTransport.submit('88888888-0000-4000-8000-000000000002', 'sha256:' + 'a'.repeat(64), 'uncertain send');
+	await flush(6);
+	expect(posted).toEqual(['88888888-0000-4000-8000-000000000002']);
+});
+
+test('draft identity is read off the snapshot response itself, not a second request a reset could race between', async () => {
+	// Regresses the exact race a review found: fetching identity and the snapshot as two separate requests let a
+	// reset that lands between them attach the OLD instance to the NEW room's cursor-0 snapshot, restoring stale
+	// text. This asserts the fix's structural guarantee directly: exactly one request per resync ever carries
+	// instance data, so there is no second, race-prone request left for a reset to land inside.
+	const [client, transport] = boot;
+	const calls: string[] = [];
+	vi.stubGlobal('fetch', vi.fn((url: string): Promise<Response> => {
+		calls.push(url);
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, 'launch-a'));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	client.apply({ type: 'draft', streamId: roomId, text: 'atomic' });
+	transport.saveDraft(roomId, 'atomic');
+	expect(calls.some((c) => c.endsWith('/_runtime/identity'))).toBe(false);
+	const [reloadedClient, reloadedTransport] = reopen();
+	stubEmptyRoom(0, 'launch-a');
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	expect(draftText(reloadedClient)).toEqual(['atomic']);
 });
