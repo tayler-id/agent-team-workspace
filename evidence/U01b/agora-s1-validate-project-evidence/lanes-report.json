@@ -1,0 +1,33 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "lanes",
+  "versions": {
+    "code": "996a339955aa4f3c06c3cfd014ec407de629f390",
+    "config": "sha256:dbd8742c8c852eed6451bac3ce4a7175513ba2bfc9ae87145d3d5ec08d0af37e",
+    "fixture": "sha256:d0b408ef3c4b0465aadb14938a051d8eab46fb8d82e0a2413db1f21f8af504bc"
+  },
+  "outcome": "pass",
+  "diagnostics": [],
+  "artifacts": [
+    {
+      "path": "evidence/U01b/agora-s1-validate-project-evidence/lanes/lanes.json",
+      "digest": "sha256:88aebf08ca43971a8b514b9c6c72ab0629edfbf3550162e38378e249e72f897e",
+      "byte_length": 3424,
+      "media_type": "application/json"
+    },
+    {
+      "path": "evidence/U01b/agora-s1-validate-project-evidence/lanes/command.json",
+      "digest": "sha256:6de9737f456f68f2f70ea61b2fba2bc5a40aacd3096e881dec8e58d9e81d78c0",
+      "byte_length": 425,
+      "media_type": "application/json"
+    },
+    {
+      "path": "evidence/U01b/agora-s1-validate-project-evidence/lanes/guards.json",
+      "digest": "sha256:1d8ef3ea49530eae290f760562d20ebc4ff87a6a5f9445ce6daf58d1c683c296",
+      "byte_length": 1042,
+      "media_type": "application/json"
+    }
+  ],
+  "started_at": "2026-09-24T01:05:53.515Z",
+  "finished_at": "2026-09-24T01:06:17.145Z"
+}

@@ -41,7 +41,7 @@ export function mapped() {
 	const entry = features.find(feature => feature.id === 'project-controls');
 	requireThat(entry?.last_verified_subject?.requires_live_pass === true && ['policy', 'packages/verification/test/project.test.ts'].every(id => entry.scenarios.includes(id)), 'feature_map_drift');
 	requireThat(['scripts/project.mjs', 'scripts/project-host.mjs', 'scripts/project-checks.mjs', 'apps/center/src/verification.mjs', 'packages/verification/fixture', 'agora/project.json', '.agents/skills/verify-agora/SKILL.md'].every(file => entry.paths.includes(file)), 'feature_map_drift');
-	requireThat(manifest.scenarios.join(',') === 'policy,controls,guards' && manifest.lanes.map(row => row.id).join(',') === '1,2,3,4', 'scenario_drift');
+	requireThat(manifest.scenarios.join(',') === 'policy,controls,guards' && manifest.lanes.map(row => row.id).join(',') === '1,2,3,4,5,6,7', 'scenario_drift');
 	return manifest;
 }
 export function validateReport(report, exit) {

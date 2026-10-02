@@ -22,6 +22,8 @@ A behavior test must fail for its intended assertion at a working parent harness
 
 Every guard also needs a negative fixture. Disable that exact guard in an isolated test copy: its assertion must turn red. Merely obtaining a nonzero process exit does not prove the check is useful.
 
+U01b.B02's [general evidence validator](evidence-validator.md) reads a recorded `evidence/<unit>/<task>/` bundle back and refuses a forged, stale or repackaged one; that page covers what it checks and why.
+
 ## Three distinct gates
 
 | Gate | What it proves | What it does not prove |

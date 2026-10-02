@@ -15,9 +15,12 @@
     {"id": 1, "predicate": "literal allow/deny and two persisted records in both applications"},
     {"id": 2, "predicate": "distinct ports, databases, objects, process identities; stop one preserves the other"},
     {"id": 3, "predicate": "unknown scenarios, malformed reports, missing and altered artifacts refuse"},
-    {"id": 4, "predicate": "changed skill and deleted feature-map coverage refuse"}
+    {"id": 4, "predicate": "changed skill and deleted feature-map coverage refuse"},
+    {"id": 5, "predicate": "wrong head, wrong base and mismatched configuration refuse"},
+    {"id": 6, "predicate": "missing proof, mutated artifact bytes and an unsupported target refuse"},
+    {"id": 7, "predicate": "exit/outcome mismatch and a stale or forged producer signature refuse; weakening the signature check turns its own assertion red"}
   ],
-  "driver": ["pnpm", "exec", "vitest", "run", "--project", "unit", "packages/verification/test/project.test.ts"],
+  "driver": ["pnpm", "exec", "vitest", "run", "--project", "unit", "packages/verification/test/project.test.ts", "packages/verification/test/evidence-validator.test.ts"],
   "timeout_ms": 300000,
   "target": "local-foundation-fixture",
   "cleanup": "stop by instance and live cleanup handle; preserve evidence"

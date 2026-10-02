@@ -1,0 +1,72 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-09-24T01:05:43.331Z
+parent: 1718966ef5f00901bea024a13bae6006ab6e740d
+head: ace9aa4eadbf86670bf9651736b082db80980f36
+subject_revision: 1718966ef5f00901bea024a13bae6006ab6e740d
+test_patch_applied_to_subject: true
+test_patch_files: docs/site/test/corpus.test.ts, packages/verification/test/evidence-validator.test.ts
+test_patch_digest: sha256:2c434144007cf2100c349ab38de83633c65149fb0cdbb4967c4911eb9f4ab3bf
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/verification/test/project.test.ts packages/verification/test/evidence-validator.test.ts","vitest_config":"sha256:6b7097123b8e4fdbe05d4659c0fe770bcef912487c7372f77024b1b8fecbd121","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-gg62lb
+
+ ❯ |unit| packages/verification/test/evidence-validator.test.ts (3 tests | 3 failed) 62ms
+   × project lane 5 rejects wrong head, wrong base and mismatched configuration 22ms
+   × project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target 19ms
+   × project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red 20ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  3 failed | 5 passed (8)
+   Start at  21:04:48
+   Duration  22.85s (tests 100%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/evidence-validator.test.ts > project lane 5 rejects wrong head, wrong base and mismatched configuration
+SyntaxError: Unexpected end of JSON input
+ ❯ runValidator packages/verification/test/evidence-validator.test.ts:19:7
+     17| const readManifest = (dir: string) => JSON.parse(fs.readFileSync(path.…
+     18| const runValidator = (validatorPath: string, dir: string) =>
+     19|  JSON.parse(spawnSync(process.execPath, [validatorPath, '--dir', dir, …
+       |       ^
+     20| const run = (dir: string) => runValidator('scripts/validate-evidence.m…
+     21| const artifact = (dir: string, name: string): Artifact => { const byte…
+ ❯ run packages/verification/test/evidence-validator.test.ts:20:30
+ ❯ packages/verification/test/evidence-validator.test.ts:49:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  |unit| packages/verification/test/evidence-validator.test.ts > project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target
+SyntaxError: Unexpected end of JSON input
+ ❯ runValidator packages/verification/test/evidence-validator.test.ts:19:7
+     17| const readManifest = (dir: string) => JSON.parse(fs.readFileSync(path.…
+     18| const runValidator = (validatorPath: string, dir: string) =>
+     19|  JSON.parse(spawnSync(process.execPath, [validatorPath, '--dir', dir, …
+       |       ^
+     20| const run = (dir: string) => runValidator('scripts/validate-evidence.m…
+     21| const artifact = (dir: string, name: string): Artifact => { const byte…
+ ❯ run packages/verification/test/evidence-validator.test.ts:20:30
+ ❯ packages/verification/test/evidence-validator.test.ts:67:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  |unit| packages/verification/test/evidence-validator.test.ts > project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red
+SyntaxError: Unexpected end of JSON input
+ ❯ runValidator packages/verification/test/evidence-validator.test.ts:19:7
+     17| const readManifest = (dir: string) => JSON.parse(fs.readFileSync(path.…
+     18| const runValidator = (validatorPath: string, dir: string) =>
+     19|  JSON.parse(spawnSync(process.execPath, [validatorPath, '--dir', dir, …
+       |       ^
+     20| const run = (dir: string) => runValidator('scripts/validate-evidence.m…
+     21| const artifact = (dir: string, name: string): Artifact => { const byte…
+ ❯ run packages/verification/test/evidence-validator.test.ts:20:30
+ ❯ packages/verification/test/evidence-validator.test.ts:84:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
