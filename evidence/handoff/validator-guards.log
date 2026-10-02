@@ -1,0 +1,31 @@
+627a561067db66951071aee1dfdbc9e50a2ceefb106a3b27732611755d149ecf  scripts/validate-evidence.mjs
+ scripts/validate-evidence.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+### signature check disabled
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 5 rejects wrong head, wrong base and mismatched configuration 416ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target 389ms
+ × |unit| packages/verification/test/evidence-validator.test.ts > project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red 398ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 2 passed (3)
+ scripts/validate-evidence.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+### artifact digest check disabled
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 5 rejects wrong head, wrong base and mismatched configuration 411ms
+ × |unit| packages/verification/test/evidence-validator.test.ts > project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target 208ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red 729ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 2 passed (3)
+ scripts/validate-evidence.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+### head binding disabled
+ × |unit| packages/verification/test/evidence-validator.test.ts > project lane 5 rejects wrong head, wrong base and mismatched configuration 216ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target 423ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red 772ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 2 passed (3)
+627a561067db66951071aee1dfdbc9e50a2ceefb106a3b27732611755d149ecf  scripts/validate-evidence.mjs
+### restored
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 5 rejects wrong head, wrong base and mismatched configuration 400ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 6 rejects missing proof, mutated artifact bytes and an unsupported target 397ms
+ ✓ |unit| packages/verification/test/evidence-validator.test.ts > project lane 7 rejects exit/outcome mismatch and a stale or forged producer signature; weakening turns its own assertion red 697ms
+      Tests  3 passed (3)

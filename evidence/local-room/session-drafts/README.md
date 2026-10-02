@@ -5,6 +5,10 @@ and an in-flight send's command id to `sessionStorage`, gated on `GET /_runtime/
 reset or a different disposable instance can never surface another instance's text. Full design
 in `docs/site/local-room.md#unsent-drafts-across-reload`.
 
+The identity gate described above was replaced by the `x-agora-instance` header on the snapshot
+response itself (`b62664c`). The browser transcript below predates that change; the drive after
+integration is `evidence/local-room/session-drafts-integrated/README.md`.
+
 ## Proof
 
 - `red.log`, `green.log`, `test-patch.diff`: `record-red-green.mjs` for

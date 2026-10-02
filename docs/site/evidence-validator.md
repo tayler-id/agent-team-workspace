@@ -26,7 +26,7 @@ Verify the producer signature | Recompute the HMAC over the producer fields with
 
 ## Implementation status
 
-**In progress pending independent exact-head review.** The validator, its recorder integration and three native lane tests exist, including a guard-weakening copy of the signature check. No U01b milestone verdict, FG05/FG06, trusted CI, a real cryptographic identity beyond the local owner-attested key, browser product UI or production execution is claimed.
+**In progress pending independent exact-head review.** The validator, its recorder integration and three native lane tests exist, including a guard-weakening copy of the signature check. No U01b milestone verdict, FG05/FG06, trusted CI, a real cryptographic identity beyond the local owner-attested key, browser product UI or production execution is claimed. The producer key is per checkout (`.scratch/producer.key`, untracked), so a bundle validates only in the checkout that recorded it: from another checkout the committed U01b bundle reports `producer_signature_invalid`, and bundles recorded before this validator have no `manifest.json` and report `missing_proof`. Run the validator with `--head` and `--base` set to the bundle's own recorded revisions, because the defaults are the current `HEAD` and its merge base with `main`.
 
 ## Verification and proof
 

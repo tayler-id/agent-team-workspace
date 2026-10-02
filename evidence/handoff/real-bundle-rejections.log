@@ -1,0 +1,21 @@
+### unmodified copy
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/tamper","outcome":"pass","reason_code":null}
+exit=0
+### one byte appended to red.log
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/tamper","outcome":"fail","reason_code":"artifact_mismatch"}
+exit=1
+### wrong expected head (main)
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/tamper","outcome":"fail","reason_code":"wrong_head"}
+exit=1
+### wrong expected base
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/tamper","outcome":"fail","reason_code":"wrong_base"}
+exit=1
+### test-patch.diff deleted
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/tamper","outcome":"fail","reason_code":"missing_proof"}
+exit=1
+### forged producer signature
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/tamper","outcome":"fail","reason_code":"producer_signature_invalid"}
+exit=1
+### unsupported target
+{"schema_version":"agora.evidence-validation/v1","dir":".scratch/tamper","outcome":"fail","reason_code":"unsupported_target"}
+exit=1

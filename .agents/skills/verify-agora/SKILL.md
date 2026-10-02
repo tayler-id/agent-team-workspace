@@ -145,7 +145,34 @@ CHROME_DEVTOOLS_AXI_SESSION=verify-l4-rm chrome-devtools-axi eval 'JSON.stringif
 CHROME_DEVTOOLS_AXI_SESSION=verify-l4-rm chrome-devtools-axi stop
 ```
 
-L4 predicates: focus lands on `composer-text` after two Tabs and stays there after Enter; both tabs and the CLI message show in both tabs without a reload, in the same order; markup renders as text (`b` count 0) and the page has one `main`. With the service stopped, the double Enter leaves `1 pending command`, and after `start` history holds exactly one `sent while down`. Background tabs are throttled, so select a tab before expecting it to catch up. The 4097-character body produces exactly one `/messages` 400 with no retry, and the composer shows `stop: not sent (HTTP 400 malformed_command); the draft is kept`. Reload shows the same persisted order. At 390x844, `scrollWidth` equals `clientWidth` and the shell reports `phone`. The console has no messages. The reduced-motion probe reports `reduce: true` and zero running animations. This proves the first L4 slice only. It does not prove a manual disconnect, per-command delivery states, session drafts or a browser receipt failure, which are not built.
+L4 predicates: focus lands on `composer-text` after two Tabs and stays there after Enter; both tabs and the CLI message show in both tabs without a reload, in the same order; markup renders as text (`b` count 0) and the page has one `main`. With the service stopped, the double Enter leaves `1 pending command`, and after `start` history holds exactly one `sent while down`. Background tabs are throttled, so select a tab before expecting it to catch up. The 4097-character body produces exactly one `/messages` 400 with no retry, and the composer shows `stop: not sent (HTTP 400 malformed_command); the draft is kept`. Reload shows the same persisted order. At 390x844, `scrollWidth` equals `clientWidth` and the shell reports `phone`. The console has no messages. The reduced-motion probe reports `reduce: true` and zero running animations. This proves the first L4 slice only. Manual Disconnect/Reconnect, per-command delivery states and session drafts have since landed. Since then the composer shows per-command lines (`Failed: HTTP 400 malformed_command.`) instead of the aggregate pending count and the `stop:` text above, and the console shows one known CSP block on a `data:` font. Those two predicates were not re-run at the handoff head; see `evidence/handoff/README.md`. Browser receipt-failure proof lives in `evidence/local-room/delivery-feedback/receipt-failure-browser/README.md`.
+
+For L4 session drafts, drive one tab of a fresh instance. Use placeholder text only. `PORT` is the port in the start report's `url`:
+
+```sh
+export CHROME_DEVTOOLS_AXI_SESSION=verify-drafts
+curl -s -D - -o /dev/null "$URL/api/v1/local-room/snapshot"   # x-agora-instance equals the start report's launch
+DRAFTS='JSON.stringify({w:innerWidth,composer:document.getElementById("composer-text").value,state:document.getElementById("composer-state").textContent,keys:Object.keys(sessionStorage).map(k=>k.split(":")[0]),overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth})'
+chrome-devtools-axi open "$URL"; chrome-devtools-axi emulate --viewport "1440x900x1"
+chrome-devtools-axi eval 'document.getElementById("composer-text").focus()'; chrome-devtools-axi type 'placeholder draft one'
+chrome-devtools-axi open "$URL"; chrome-devtools-axi eval "$DRAFTS"               # draft restored
+node scripts/local-room.ts stop --instance "$INSTANCE"
+node scripts/local-room.ts reset --instance "$INSTANCE" --confirm-disposable
+node scripts/local-room.ts start --instance "$INSTANCE" --port "$PORT"
+chrome-devtools-axi open "$URL"; chrome-devtools-axi eval "$DRAFTS"               # No draft., keys []
+chrome-devtools-axi eval '[...document.querySelectorAll("button")].find(b=>b.textContent==="Disconnect").click()'
+chrome-devtools-axi eval 'document.getElementById("composer-text").focus()'; chrome-devtools-axi type 'placeholder held send'; chrome-devtools-axi press Enter
+chrome-devtools-axi eval "$DRAFTS"                                                 # keys include agora.local-room.pending
+chrome-devtools-axi eval '(async()=>{const p=JSON.parse(sessionStorage.getItem(Object.keys(sessionStorage).find(k=>k.startsWith("agora.local-room.pending:"))));const s=await (await fetch("/api/v1/local-room/snapshot")).json();const r=await fetch("/api/v1/local-room/messages",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({schema_version:"agora.local-room.send-message/v1",command_id:p.commandId,scope:s.scope,body:p.text,citations:[]})});return r.status})()'
+chrome-devtools-axi open "$URL"; chrome-devtools-axi eval 'document.getElementById("composer-text").focus()'; chrome-devtools-axi press Enter
+node scripts/local-room.ts history --instance "$INSTANCE"                          # one 'placeholder held send'
+chrome-devtools-axi emulate --viewport "390x844x3,mobile,touch"
+chrome-devtools-axi eval 'document.getElementById("composer-text").focus()'; chrome-devtools-axi type 'placeholder phone draft'
+chrome-devtools-axi open "$URL"; chrome-devtools-axi eval "$DRAFTS"; chrome-devtools-axi screenshot "$OUT/390x844-drafts.png"
+chrome-devtools-axi console --type error; chrome-devtools-axi stop
+```
+
+Session-draft predicates: the reload restores the draft at both viewports with `overflow` 0. After the same-port reset the composer reads `No draft.` and `sessionStorage` is empty. A send held by Disconnect writes an `agora.local-room.pending` key. After the out-of-band commit, reload and Send, the page makes one `/messages` request, the composer and storage clear, and `history` holds exactly one `placeholder held send` under the pending record's command id. The only console error is the known `data:` font CSP block. A duplicated tab, a live in-flight POST at reload and an identity outage are not driven here; `apps/web/test/live.test.ts` covers the last two with mocked fetch. The integrated run is in `evidence/local-room/session-drafts-integrated/README.md`.
 
 Pass predicates:
 
