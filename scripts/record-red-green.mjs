@@ -2,10 +2,11 @@
 // worktree, runs the test command there (red), then runs the same command at the head (green).
 // Usage: node scripts/record-red-green.mjs --parent SHA --head SHA --out DIR [-- test command...]
 import { spawnSync } from 'node:child_process';
-import { createHash, createHmac, randomBytes, randomUUID } from 'node:crypto';
+import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { defaultKeyFile, manifestSchema, sign } from './project-evidence.mjs';
 
 const args = process.argv.slice(2);
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
@@ -101,23 +102,25 @@ const green = runAt(headSha, 'green', false);
 writeFileSync(path.join(out, 'red.log'), `${header('red', parentSha, true)}expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)\nobserved_exit: ${red.exit}\n\n${red.output}`);
 writeFileSync(path.join(out, 'green.log'), `${header('green', headSha, false)}expected: every assertion passes at the head (exit 0)\nobserved_exit: ${green.exit}\n\n${green.output}`);
 writeFileSync(path.join(out, 'test-patch.diff'), testPatch);
-const outcome = red.exit !== 0 && green.exit === 0 ? 'pass' : 'fail';
+// A red killed by a signal or timeout has exit null: that is no evidence the assertions failed, so it is not a red.
+const outcome = Number.isInteger(red.exit) && red.exit !== 0 && green.exit === 0 ? 'pass' : 'fail';
 
-// U01b.B02 owner-attested manifest: a local, per-checkout HMAC key signs the producer fields so
-// the general evidence validator (scripts/validate-evidence.mjs) can detect a forged or replayed report.
-const keyFile = '.scratch/producer.key';
+// U01b.B02 owner-attested manifest: this checkout's own HMAC key signs the whole manifest, artifact digests
+// included, so the general evidence validator (scripts/validate-evidence.mjs) holding the same key can detect
+// a forged, edited or re-packaged bundle. The manifest never names the key.
+const keyFile = path.join(git('rev-parse', '--show-toplevel').trim(), defaultKeyFile);
 mkdirSync(path.dirname(keyFile), { recursive: true });
 if (!existsSync(keyFile)) writeFileSync(keyFile, randomBytes(32), { mode: 0o600, flag: 'wx' });
 const artifact = (name) => { const bytes = readFileSync(path.join(out, name)); return { file: name, digest: sha256(bytes), byte_length: bytes.length }; };
-const producerFields = { trust_class: 'owner_attested', boot_id: randomUUID(), head: headSha, base: parentSha, outcome };
-const signature = createHmac('sha256', readFileSync(keyFile)).update(JSON.stringify(producerFields, Object.keys(producerFields).sort())).digest('hex');
-writeFileSync(path.join(out, 'manifest.json'), JSON.stringify({
-	schema_version: 'agora.evidence-manifest/v1',
+const manifest = {
+	schema_version: manifestSchema,
 	target: 'local-foundation-fixture',
 	outcome,
 	artifacts: ['red.log', 'green.log', 'test-patch.diff'].map(artifact),
-	producer: { ...producerFields, key_file: keyFile, signature },
-}, null, 2) + '\n');
+	producer: { trust_class: 'owner_attested', boot_id: randomUUID(), head: headSha, base: parentSha, outcome },
+};
+manifest.producer.signature = sign(readFileSync(keyFile), manifest);
+writeFileSync(path.join(out, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 
 console.log(JSON.stringify({ schema_version: 'agora.red-green/v1', outcome, parent: parentSha, head: headSha, red_exit: red.exit, green_exit: green.exit, test_patch_digest: sha256(testPatch), out }));
 process.exit(outcome === 'pass' ? 0 : 1);

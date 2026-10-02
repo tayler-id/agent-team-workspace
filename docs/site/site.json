@@ -281,6 +281,10 @@
       "page": "evidence-validator.md"
     },
     {
+      "path": "scripts/project-evidence.mjs",
+      "page": "evidence-validator.md"
+    },
+    {
       "path": "packages/verification/test/evidence-validator.test.ts",
       "page": "evidence-validator.md"
     },

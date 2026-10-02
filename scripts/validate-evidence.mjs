@@ -1,18 +1,19 @@
 // U01b.B02 general evidence validator: checks a recorded evidence/<unit>/<task>/ bundle
 // (red.log, green.log, test-patch.diff, manifest.json from record-red-green.mjs) against the
 // exact expected head/base, configuration, producer signature, artifact bytes and exit outcome.
-// Usage: node scripts/validate-evidence.mjs --dir DIR [--head SHA] [--base SHA] [--target NAME]
-import { createHmac } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+// The signing key is the verifier's choice (--key, default this checkout's .scratch/producer.key), never the bundle's.
+// Usage: node scripts/validate-evidence.mjs --dir DIR [--head SHA] [--base SHA] [--target NAME] [--key FILE]
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
+import { defaultKeyFile, manifestSchema, observedExit, sign } from './project-evidence.mjs';
 import { exits, hash, requireThat } from './project-checks.mjs';
 
 const args = process.argv.slice(2);
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const dir = option('--dir');
 if (!dir) {
-	console.error('usage: node scripts/validate-evidence.mjs --dir DIR [--head SHA] [--base SHA] [--target NAME]');
+	console.error('usage: node scripts/validate-evidence.mjs --dir DIR [--head SHA] [--base SHA] [--target NAME] [--key FILE]');
 	process.exit(64);
 }
 
@@ -31,7 +32,7 @@ function log(text) {
 		head: header(text, 'head'),
 		parent: header(text, 'parent'),
 		configuration: JSON.parse(header(text, 'configuration')),
-		observedExit: Number(text.match(/observed_exit: (-?\d+)/)?.[1]),
+		observedExit: observedExit(text),
 	};
 }
 
@@ -40,12 +41,14 @@ try {
 	const file = (name) => path.join(dir, name);
 	requireThat(['manifest.json', 'red.log', 'green.log', 'test-patch.diff'].every((name) => existsSync(file(name))), 'missing_proof');
 	const manifest = JSON.parse(readFileSync(file('manifest.json'), 'utf8'));
+	requireThat(manifest.schema_version === manifestSchema, 'unsupported_manifest');
 	const red = log(readFileSync(file('red.log'), 'utf8'));
 	const green = log(readFileSync(file('green.log'), 'utf8'));
 
 	const expectedHead = option('--head') ?? git('rev-parse', 'HEAD');
 	const expectedBase = option('--base') ?? git('merge-base', expectedHead, 'main');
 	const expectedTarget = option('--target') ?? 'local-foundation-fixture';
+	const keyFile = option('--key') ?? path.join(git('rev-parse', '--show-toplevel'), defaultKeyFile);
 
 	requireThat(red.head === expectedHead && green.head === expectedHead, 'wrong_head');
 	requireThat(red.parent === expectedBase && green.parent === expectedBase, 'wrong_base');
@@ -58,15 +61,16 @@ try {
 		requireThat(entry && entry.digest === hash(bytes) && entry.byte_length === bytes.length, 'artifact_mismatch');
 	}
 
+	requireThat(red.observedExit !== undefined && green.observedExit !== undefined, 'malformed_exit');
 	requireThat(red.observedExit !== 0 && green.observedExit === 0, 'exit_mismatch');
 	requireThat(manifest.outcome === 'pass', 'outcome_mismatch');
 
 	const producer = manifest.producer ?? {};
-	requireThat(producer.trust_class === 'owner_attested' && producer.key_file && existsSync(producer.key_file), 'stale_producer');
-	const { signature, key_file: keyFile, ...signed } = producer;
-	const canonical = JSON.stringify(signed, Object.keys(signed).sort());
-	const expectedSignature = createHmac('sha256', readFileSync(keyFile)).update(canonical).digest('hex');
+	requireThat(producer.trust_class === 'owner_attested' && existsSync(keyFile) && statSync(keyFile).isFile(), 'stale_producer');
+	const { signature } = producer;
+	const expectedSignature = sign(readFileSync(keyFile), manifest);
 	requireThat(signature === expectedSignature, 'producer_signature_invalid');
+	requireThat(producer.head === expectedHead && producer.base === expectedBase && producer.outcome === manifest.outcome, 'producer_mismatch');
 } catch (error) {
 	report.outcome = error.outcome ?? 'fail';
 	report.reason_code = error.message;

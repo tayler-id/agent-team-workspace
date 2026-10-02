@@ -78,8 +78,8 @@
 		{
 			"id": "evidence-validator",
 			"documentation": "docs/site/evidence-validator.md",
-			"paths": ["scripts/validate-evidence.mjs", "scripts/record-red-green.mjs", "scripts/project.mjs", "scripts/project-checks.mjs", "agora/project.json"],
-			"public": ["node scripts/validate-evidence.mjs --dir DIR [--head SHA] [--base SHA] [--target NAME]", "pnpm agora project lanes --unit U01b --task agora-s1-validate-project-evidence"],
+			"paths": ["scripts/validate-evidence.mjs", "scripts/project-evidence.mjs", "scripts/record-red-green.mjs", "scripts/project.mjs", "scripts/project-checks.mjs", "agora/project.json"],
+			"public": ["node scripts/validate-evidence.mjs --dir DIR [--head SHA] [--base SHA] [--target NAME] [--key FILE]", "pnpm agora project lanes --unit U01b --task agora-s1-validate-project-evidence"],
 			"scenarios": ["packages/verification/test/project.test.ts", "packages/verification/test/evidence-validator.test.ts"],
 			"fixtures": ["synthetic red.log/green.log/manifest.json bundles at fixed head/base", "tampered/missing/mutated artifact, producer key and target negatives", "guard-weakening copy of the signature check"],
 			"platforms": ["node24"],
