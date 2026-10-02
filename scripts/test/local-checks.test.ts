@@ -14,6 +14,8 @@ const policy = (ids = ['gate', 'second']) => JSON.stringify({ schema_version: 'a
 const commit = (cwd: string, message: string) => { git(cwd, 'add', '-A'); assert.equal(git(cwd, 'commit', '-q', '-m', message).status, 0); return git(cwd, 'rev-parse', 'HEAD').stdout.trim(); };
 
 // A throwaway repository on main with the real tool and hook, a two-check policy, hooks installed.
+type Receipt = { outcome: string; commit: string; checks: { id: string }[] };
+const readReceipt = (file: string) => JSON.parse(readFileSync(file, 'utf8')) as Receipt;
 const made: string[] = [];
 after(() => { for (const dir of made) rmSync(dir, { recursive: true, force: true }); });
 const repo = () => {
@@ -67,9 +69,9 @@ await test('a red check records a failing receipt and blocks landing', () => {
 	const dir = repo(); const before = head(dir);
 	branch(dir, 'fm/red', 'broken');
 	refused(tool(dir, 'run'), /fail/);
-	const receipt = JSON.parse(readFileSync(path.join(dir, '.git/agora-local-checks', `${git(dir, 'rev-parse', 'HEAD').stdout.trim()}.json`), 'utf8'));
+	const receipt = readReceipt(path.join(dir, '.git/agora-local-checks', `${git(dir, 'rev-parse', 'HEAD').stdout.trim()}.json`));
 	assert.equal(receipt.outcome, 'fail');
-	assert.deepEqual(receipt.checks.map((c: { id: string }) => c.id), ['gate']);
+	assert.deepEqual(receipt.checks.map(c => c.id), ['gate']);
 	refused(land(dir, 'fm/red'), /is fail/);
 	assert.equal(head(dir), before);
 });
@@ -114,7 +116,7 @@ await test('a receipt missing a required check or naming another commit is rejec
 	const dir = repo(); const sha = branch(dir, 'fm/a');
 	tool(dir, 'run');
 	const file = path.join(dir, '.git/agora-local-checks', `${sha}.json`);
-	const receipt = JSON.parse(readFileSync(file, 'utf8'));
+	const receipt = readReceipt(file);
 	writeFileSync(file, JSON.stringify({ ...receipt, checks: receipt.checks.slice(0, 1) }));
 	refused(tool(dir, 'verify', 'fm/a'), /lacks a passing run of "second"/);
 	writeFileSync(file, JSON.stringify({ ...receipt, commit: 'f'.repeat(40) }));
