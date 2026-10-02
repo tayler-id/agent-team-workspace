@@ -114,6 +114,11 @@
           "kind": "feature"
         },
         {
+          "id": "local-checks",
+          "title": "Mandatory local checks",
+          "kind": "feature"
+        },
+        {
           "id": "contracts",
           "title": "Portable contracts",
           "kind": "feature"
@@ -257,6 +262,10 @@
     {
       "path": "scripts/ci-doctor.mjs",
       "page": "ci.md"
+    },
+    {
+      "path": "scripts/local-checks.mjs",
+      "page": "local-checks.md"
     },
     {
       "path": "scripts/record-red-green.mjs",

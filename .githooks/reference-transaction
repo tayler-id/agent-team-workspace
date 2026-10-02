@@ -1,0 +1,8 @@
+#!/bin/sh
+# Refuses a protected-branch update that has no passing local-checks receipt for the exact new commit.
+# Enforced by scripts/local-checks.mjs; installed by `node scripts/local-checks.mjs install`.
+[ "$1" = prepared ] || { cat >/dev/null; exit 0; }
+d=$(dirname "$0")
+tool="$d/local-checks.mjs"
+[ -f "$tool" ] || tool="$d/../scripts/local-checks.mjs"
+exec node "$tool" hook

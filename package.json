@@ -31,6 +31,9 @@
 		"web:dev": "pnpm --filter @agora/web dev",
 		"web:build": "pnpm --filter @agora/web build",
 		"web:test": "pnpm --filter @agora/web exec vitest run --config vitest.config.ts",
+		"checks:run": "node scripts/local-checks.mjs run",
+		"checks:verify": "node scripts/local-checks.mjs verify",
+		"checks:install": "node scripts/local-checks.mjs install",
 		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test"
 	},
 	"devDependencies": {

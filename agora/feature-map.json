@@ -36,6 +36,15 @@
 			"invalidation": "Any mapped input or runtime/native installation change requires a fresh doctor and test pass."
 		},
 		{
+			"id": "local-checks-gate", "documentation": "docs/site/local-checks.md", "owner": "local checks",
+			"paths": ["scripts/local-checks.mjs", ".githooks/reference-transaction", "agora/local-checks.json", "scripts/test/local-checks.test.ts"],
+			"public": ["node scripts/local-checks.mjs run", "node scripts/local-checks.mjs verify <rev>", "node scripts/local-checks.mjs install", "node scripts/local-checks.mjs status"],
+			"scenarios": ["node --test scripts/test/local-checks.test.ts", "no receipt", "green receipt lands", "red receipt", "amended or rebased candidate", "dirty tree", "dropped check", "deleted guard files", "forged receipt", "direct commit on main", "update-ref"],
+			"fixtures": ["throwaway git repositories with the real tool and hook and a two-check policy"],
+			"platforms": ["node24", "git2.28+"],
+			"invalidation": "Any mapped path change requires the test file to pass again, and a changed tool or hook must be reinstalled with node scripts/local-checks.mjs install."
+		},
+		{
 			"id": "local-room-agent-core",
 			"documentation": "docs/site/local-room.md",
 			"paths": ["packages/domain/src/local-answer", "packages/domain/package.json", "packages/domain/test/local-answer.test.ts", "packages/domain/test/local-answer-guards.test.ts"],

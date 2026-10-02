@@ -47,6 +47,18 @@
       ]
     },
     {
+      "id": "local-checks",
+      "title": "Mandatory local checks",
+      "status": "In progress",
+      "why": "A landing on local main needs a passing receipt for that exact commit; the hook is active only after install, and the Firstmate landing tool still has to call verify.",
+      "page": "local-checks.md",
+      "proof": [
+        "repo:scripts/local-checks.mjs",
+        "repo:scripts/test/local-checks.test.ts",
+        "repo:agora/local-checks.json"
+      ]
+    },
+    {
       "id": "project-controls",
       "title": "Owned project verification",
       "status": "In progress",

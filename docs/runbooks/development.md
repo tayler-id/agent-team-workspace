@@ -12,6 +12,7 @@ On macOS, a signed host launcher can reject the correctly installed Rolldown add
 | --- | --- |
 | `pnpm install --frozen-lockfile` | Installs the locked dependency set for all workspace packages |
 | `pnpm typecheck` | Strict workspace compilation, then a separate ES2024-only client-core compile with no Node or DOM globals |
+| `pnpm checks:run` | Runs the mandatory local check set at the clean current commit and writes its receipt; `pnpm checks:verify <rev>` and `pnpm checks:install` read and arm it. See [mandatory local checks](../site/local-checks.md) |
 | `pnpm lint` | Strict typed lint plus import and transitive public-type boundaries |
 | `pnpm boundaries` | Lane 8: forbidden import forms, public SDK/DOM leaks, private-path exports and no-platform compile negatives |
 | `pnpm docs:check` | markdownlint over authored Markdown, then the semantic design gate |

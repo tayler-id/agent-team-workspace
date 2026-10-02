@@ -1,0 +1,11 @@
+{
+	"schema_version": "agora.local-checks/v1",
+	"protected_refs": ["refs/heads/main"],
+	"guard_files": ["scripts/local-checks.mjs", ".githooks/reference-transaction", "agora/local-checks.json"],
+	"checks": [
+		{ "id": "doctor", "command": "node scripts/ci-doctor.mjs" },
+		{ "id": "check", "command": "pnpm check" },
+		{ "id": "web-build", "command": "pnpm web:build" },
+		{ "id": "local-checks-tests", "command": "node --test scripts/test/local-checks.test.ts" }
+	]
+}
