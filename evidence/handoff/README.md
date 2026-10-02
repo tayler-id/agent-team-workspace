@@ -48,6 +48,11 @@ and now it can't set the instance id either.
 Host note: the machine's default Node is 24.16.0. These runs used the official 24.21.0
 `darwin-arm64` build from nodejs.org, checked against its `SHASUMS256.txt` and placed first on
 `PATH`. This matches the precedent in `evidence/local-checks/gate/README.md`.
+The first gate run, at `42bd807`, went red. `packages/verification/test/project.test.ts` lanes 1
+and 2 reported `blocked_prerequisite` ("Install the locked Python requirements") because the
+system Python lacked `jsonschema`, while the other 290 tests passed. The rerun used the venv from
+the verify-agora setup step (`python3 -m venv .scratch/python`, install
+`packages/verification/fixture/requirements.txt`, put `.scratch/python/bin` first on `PATH`).
 
 ## Open approvals (not given)
 
