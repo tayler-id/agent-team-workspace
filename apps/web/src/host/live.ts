@@ -293,9 +293,10 @@ export function createLiveTransport(client: RoomClient, options: LiveOptions = {
 			set({ decision: transition.requests.map((r) => r.type).join(', ') || undefined, online: networkOnline, link: request?.type === 'wait_connection' && !disconnected ? linkFromOnline(online) : connection.link });
 			// unsettled also guards the offline path: a repeated click on the same unchanged draft must not mint a
 			// second waiting command once the first is already tracked for this exact text.
+			// A held command is mirrored too: Reconnect posts it later, and a reload during that POST must replay it.
+			if (scope && (request?.type === 'wait_connection' || transition.requests.some((r) => r.type === 'send'))) writePending(scope, currentInstance, text, commandId, requestDigest);
 			if (request?.type === 'wait_connection') { unsettled.add(text); waitingForConnection.set(commandId, { requestDigest, text }); setPhase(commandId, 'waiting_connection'); }
 			if (transition.requests.some((r) => r.type === 'send')) {
-				if (scope) writePending(scope, currentInstance, text, commandId, requestDigest);
 				unsettled.add(text);
 				setPhase(commandId, 'sending');
 				void attemptSend(generation, commandId, requestDigest, text);

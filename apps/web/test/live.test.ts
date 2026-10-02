@@ -812,6 +812,39 @@ test('a send still unsettled when the tab reloads reuses the same command id ins
 	expect(draftText(reloadedClient)).toEqual([]);
 });
 
+test('a send held for Reconnect, then posted and still unsettled at reload, reuses its command id instead of duplicating it', async () => {
+	const [client, transport] = boot;
+	const posted: string[] = [];
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/api/v1/local-room/snapshot')) return Promise.resolve(json(snapshot(0, []), 200, 'launch-a'));
+		if (url.includes('/api/v1/local-room/events?after=')) return Promise.resolve(json([]));
+		if (url.endsWith('/api/v1/local-room/messages')) {
+			const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+			posted.push(command.command_id);
+			// Reconnect's POST may commit on the server, but its response never arrives before the reload.
+			if (posted.length === 1) return new Promise(() => undefined);
+			return Promise.resolve(receiptFor(command.command_id));
+		}
+		return Promise.reject(new Error(`unexpected request ${url}`));
+	}));
+	transport.loadSnapshot();
+	await flush(6);
+	transport.disconnect();
+	client.apply({ type: 'draft', streamId: roomId, text: 'held send' });
+	transport.saveDraft(roomId, 'held send');
+	transport.submit('abababab-0000-4000-8000-000000000001', 'sha256:' + 'a'.repeat(64), 'held send');
+	transport.reconnect();
+	await flush(6);
+	expect(posted).toEqual(['abababab-0000-4000-8000-000000000001']);
+	const [reloadedClient, reloadedTransport] = reopen();
+	reloadedTransport.loadSnapshot();
+	await flush(6);
+	reloadedTransport.submit('abababab-0000-4000-8000-000000000002', 'sha256:' + 'a'.repeat(64), 'held send');
+	await flush(6);
+	expect(posted).toEqual(['abababab-0000-4000-8000-000000000001', 'abababab-0000-4000-8000-000000000001']);
+	expect(draftText(reloadedClient)).toEqual([]);
+});
+
 test('a snapshot with no verified identity when the draft is typed never persists it, even once it recovers by reload', async () => {
 	const [client, transport] = boot;
 	stubEmptyRoom(0); // No instance arg: the snapshot response carries no x-agora-instance header.
