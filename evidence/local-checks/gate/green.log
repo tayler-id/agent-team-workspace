@@ -1,0 +1,33 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-10-02T13:20:20.312Z
+parent: 5ebf394e0374bdaf72f7f378fcd7d5eadb937b7a
+head: f95be5ac6c51a803348c587c7f536d65caf133d5
+subject_revision: f95be5ac6c51a803348c587c7f536d65caf133d5
+test_patch_applied_to_subject: false
+test_patch_files: scripts/test/local-checks.test.ts
+test_patch_digest: sha256:eb4bb498e94737402780b11e89cef5b7dd5a4e3a1513c2edc53bcc44f7b80822
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node --test scripts/test/local-checks.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+✔ status reports a missing hook and an installed one (235.208208ms)
+✔ landing with no receipt is refused and main does not move (992.901458ms)
+✔ a green run lets the exact commit land (993.462458ms)
+✔ a red check records a failing receipt and blocks landing (846.91025ms)
+✔ any change to the candidate invalidates its receipt, including a content-identical rewrite (1583.194875ms)
+✔ run refuses a dirty worktree (543.026916ms)
+✔ a candidate cannot drop a check that main already requires (881.654ms)
+✔ a candidate cannot delete the gate files (818.273ms)
+✔ a receipt missing a required check or naming another commit is rejected (895.847708ms)
+✔ direct commits on main are refused as well (395.346458ms)
+✔ git update-ref cannot move main past the hook either (658.620625ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8903.605542

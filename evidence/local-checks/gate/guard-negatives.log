@@ -1,0 +1,9 @@
+tree-commit-check RED ℹ fail 1
+base-drop RED ℹ fail 1
+guard-files RED ℹ fail 1
+outcome RED ℹ fail 1
+required-ids RED ℹ fail 1
+dirty RED ℹ fail 1
+hook-noop RED ℹ fail 7
+protected RED ℹ fail 7
+old-install-in-tree RED ℹ fail 8

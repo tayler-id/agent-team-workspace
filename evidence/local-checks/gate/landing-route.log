@@ -1,0 +1,18 @@
+Real Firstmate landing tool bin/fm-merge-local.sh (unmodified) against a throwaway project
+with the committed tool, hook and a one-check policy installed. Sandbox state and home were
+scratch directories; no Firstmate state or project was touched. Watcher warnings trimmed.
+
+--- 1 no receipt
+local-checks: REFUSED update of refs/heads/main: no receipt for 33228019f3c5; run `node scripts/local-checks.mjs run` at that exact commit
+fatal: ref updates aborted by hook
+main stays 2488bae
+
+--- 2 green receipt, then the candidate is amended (new hash, same content)
+local-checks: pass for 33228019f3c547f128e322bcc2b832490b118696
+local-checks: REFUSED update of refs/heads/main: no receipt for 9832e93ac908; run `node scripts/local-checks.mjs run` at that exact commit
+fatal: ref updates aborted by hook
+main stays 2488bae
+
+--- 3 run at the exact amended head
+local-checks: pass for 9832e93ac908353dc46619f1e9c6a08551058d7a
+merged fm/lcsandbox into local main (2488bae -> 9832e93)

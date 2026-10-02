@@ -1,0 +1,253 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-02T13:20:20.310Z
+parent: 5ebf394e0374bdaf72f7f378fcd7d5eadb937b7a
+head: f95be5ac6c51a803348c587c7f536d65caf133d5
+subject_revision: 5ebf394e0374bdaf72f7f378fcd7d5eadb937b7a
+test_patch_applied_to_subject: true
+test_patch_files: scripts/test/local-checks.test.ts
+test_patch_digest: sha256:eb4bb498e94737402780b11e89cef5b7dd5a4e3a1513c2edc53bcc44f7b80822
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node --test scripts/test/local-checks.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+✖ status reports a missing hook and an installed one (30.050667ms)
+✖ landing with no receipt is refused and main does not move (25.962666ms)
+✖ a green run lets the exact commit land (26.106542ms)
+✖ a red check records a failing receipt and blocks landing (27.365125ms)
+✖ any change to the candidate invalidates its receipt, including a content-identical rewrite (26.368708ms)
+✖ run refuses a dirty worktree (25.442792ms)
+✖ a candidate cannot drop a check that main already requires (25.2065ms)
+✖ a candidate cannot delete the gate files (26.877208ms)
+✖ a receipt missing a required check or naming another commit is rejected (25.331333ms)
+✖ direct commits on main are refused as well (25.10975ms)
+✖ git update-ref cannot move main past the hook either (25.696542ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 0
+ℹ fail 11
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 359.898417
+
+✖ failing tests:
+
+test at scripts/test/local-checks.test.ts:40:7
+✖ status reports a missing hook and an installed one (30.050667ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-jQX9QN/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:41:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at async file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:40:1 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-jQX9QN/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:50:7
+✖ landing with no receipt is refused and main does not move (25.962666ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-IdXiHg/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:51:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:50:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-IdXiHg/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:58:7
+✖ a green run lets the exact commit land (26.106542ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-0FrvcO/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:59:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:58:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-0FrvcO/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:66:7
+✖ a red check records a failing receipt and blocks landing (27.365125ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-YxLezZ/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:67:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:66:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-YxLezZ/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:77:7
+✖ any change to the candidate invalidates its receipt, including a content-identical rewrite (26.368708ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-rpEwBF/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:78:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:77:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-rpEwBF/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:89:7
+✖ run refuses a dirty worktree (25.442792ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-iKcqGy/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:90:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:89:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-iKcqGy/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:95:7
+✖ a candidate cannot drop a check that main already requires (25.2065ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-TQcTOR/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:96:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:95:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-TQcTOR/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:105:7
+✖ a candidate cannot delete the gate files (26.877208ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-EuCJSZ/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:106:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:105:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-EuCJSZ/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:113:7
+✖ a receipt missing a required check or naming another commit is rejected (25.331333ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-BFBz90/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:114:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:113:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-BFBz90/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:124:7
+✖ direct commits on main are refused as well (25.10975ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-uQNa0t/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:125:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:124:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-uQNa0t/scripts/local-checks.mjs'
+  }
+
+test at scripts/test/local-checks.test.ts:131:7
+✖ git update-ref cannot move main past the hook either (25.696542ms)
+  Error: ENOENT: no such file or directory, copyfile '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs' -> '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-CutmiY/scripts/local-checks.mjs'
+      at copyFileSync (node:fs:3200:11)
+      at repo (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:26:2)
+      at TestContext.<anonymous> (file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:132:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/test/local-checks.test.ts:131:7 {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'copyfile',
+    path: '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lnJitL/scripts/local-checks.mjs',
+    dest: '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-lc-CutmiY/scripts/local-checks.mjs'
+  }
