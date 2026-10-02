@@ -10,6 +10,8 @@ For operators, the rule that nothing lands on local `main` until the whole Agora
 
 The required set is `ci-doctor`, then `pnpm check` (lint, typecheck, docs, contract drift, every unit, jsdom, PostgreSQL and contract test, including the boundary and application-architecture suites), then `pnpm web:build`, then the gate's own behavioral tests. `pnpm boundaries` is not listed because `pnpm check` already runs the same test files.
 
+Prerequisites are the ones [verify-agora](repo:.agents/skills/verify-agora/SKILL.md) lists. That means the exact Node in `.node-version`, pnpm 10.34.1, PostgreSQL 18, Swift 6, and a Python 3 on `PATH` with the locked validator from `packages/verification/fixture/requirements.txt`. A missing prerequisite turns a check red, never skipped, so no receipt is written.
+
 ## Why it exists
 
 Before this, `pnpm check` was a habit. Firstmate's local landing is `git merge --ff-only` on the primary checkout, and git did not care whether anyone had run it. A red check, a missing run or a commit rebased after the run all landed the same way.

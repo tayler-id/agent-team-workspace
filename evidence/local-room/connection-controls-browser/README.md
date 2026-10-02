@@ -7,7 +7,7 @@ viewports, matching `.agents/skills/verify-agora/SKILL.md`'s L4 drive recipe.
 
 ## Setup
 
-```
+```sh
 node scripts/local-room.ts doctor
 node scripts/local-room.ts start --instance verify-conn-1790219552
 ```
@@ -38,12 +38,12 @@ report before `reset --confirm-disposable` removed the disposable instance.
 
 ## Phone (390x844, mobile+touch emulation)
 
-7. Switched viewport to phone; `document.documentElement.{clientWidth,scrollWidth}` both read 390 (no
+- Step 7. Switched viewport to phone; `document.documentElement.{clientWidth,scrollWidth}` both read 390 (no
    horizontal overflow) at cursor 3, status `Online.` (`phone-online.png`).
-8. Clicked **Disconnect** on the phone viewport; status and button flipped the same way as desktop
+- Step 8. Clicked **Disconnect** on the phone viewport; status and button flipped the same way as desktop
    (`phone-disconnected.png`). The Reconnect button's bounding rect measured 94.7x44 CSS px — the 44px
    touch-target floor holds at phone width.
-9. Clicked **Reconnect**; status returned to `Online.` before closing the session.
+- Step 9. Clicked **Reconnect**; status returned to `Online.` before closing the session.
 
 ## Correction: unambiguous final-suffix wording (2026-09-24)
 
