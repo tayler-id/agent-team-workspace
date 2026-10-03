@@ -8,7 +8,7 @@ For operators, the rule that nothing lands on local `main` until the whole Agora
 
 `node scripts/local-checks.mjs run` runs every check in [agora/local-checks.json](repo:agora/local-checks.json) against a clean checkout at its current commit, stops at the first red one and writes a receipt for that commit under the git directory. `verify <rev>` answers whether a commit has a complete passing receipt. `install` makes the guard active for this clone. `status` fails when it is not active or has gone stale.
 
-The required set is `ci-doctor`, then `pnpm check` (lint, typecheck, docs, contract drift, every unit, jsdom, PostgreSQL and contract test, including the boundary and application-architecture suites), then `pnpm web:build`, then the gate's own behavioral tests. `pnpm boundaries` is not listed because `pnpm check` already runs the same test files.
+The required set is `ci-doctor`, then `pnpm check` (the steps [the development runbook](repo:docs/runbooks/development.md) lists, which cover every unit, jsdom, PostgreSQL and contract test, including the boundary and application-architecture suites), then `pnpm web:build`, then the gate's own behavioral tests. `pnpm boundaries` is not listed because `pnpm check` already runs the same test files.
 
 Prerequisites are the ones [verify-agora](repo:.agents/skills/verify-agora/SKILL.md) lists. That means the exact Node in `.node-version`, pnpm 10.34.1, PostgreSQL 18, Swift 6, and a Python 3 on `PATH` with the locked validator from `packages/verification/fixture/requirements.txt`. A missing prerequisite turns a check red, never skipped, so no receipt is written.
 

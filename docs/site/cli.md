@@ -43,7 +43,8 @@ This is the complete current contributor command surface, plus a separate invent
 | `pnpm test` | Unit, contract, real PostgreSQL and `apps/web` browser-room tests (jsdom, same environment as `pnpm web:test`) |
 | `pnpm test:unit` | Unit and contract tests, including mandatory Swift conformance |
 | `pnpm test:pg` | Throwaway PostgreSQL tests only |
-| `pnpm check` | Lint, typecheck, documentation, contract drift and tests |
+| `pnpm features:check` | Generated Feature inventory drift, then the discovery tests; `pnpm features:generate` rewrites the inventory. See [Feature discovery](feature-discovery.md) |
+| `pnpm check` | Every step [the development runbook](repo:docs/runbooks/development.md) lists for it |
 
 ## Contract tools
 
