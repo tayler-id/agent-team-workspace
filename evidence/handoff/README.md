@@ -86,7 +86,8 @@ the verify-agora setup step (`python3 -m venv .scratch/python`, install
    unchanged. `docs/site/local-room-web-shell.md` explains the fix and
    `evidence/U01d/production-browser-csp/` holds its proof. Its red/green receipt names fix head
    `1111c95` on base `15619b1`. The recorder signed it with the key it generated in the review
-   checkout, so another clone's validator reports `producer_signature_invalid`. The pre-rebase
+   checkout. Another clone's validator reports `producer_signature_invalid` with that clone's own
+   key, or `stale_producer` when it has none. The pre-rebase
    receipt for `a9efaa6` is kept under `history/a9efaa6/`. The fix needs independent review
    before it lands. Do not loosen the CSP.
 
