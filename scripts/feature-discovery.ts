@@ -73,8 +73,10 @@ export function discoverFeatures(files: readonly string[], readText: (file: stri
 				const file = `${where}/${RESERVED.dependencies}`;
 				try {
 					const parsed: unknown = JSON.parse(readText(file));
-					if (!Array.isArray(parsed) || parsed.some((d) => typeof d !== 'string')) throw new Error('expected a JSON array of Feature names');
-					dependencies = [...new Set(parsed as string[])].sort();
+					if (!Array.isArray(parsed) || parsed.some((d) => typeof d !== 'string' || !NAME.test(d)) || new Set(parsed).size !== parsed.length) {
+						throw new Error(`expected a JSON array of distinct Feature names matching ${NAME.source}`);
+					}
+					dependencies = [...(parsed as string[])].sort();
 				} catch (error) {
 					problems.push(`${file}: ${(error as Error).message}; supported owner is ${owner}`);
 				}

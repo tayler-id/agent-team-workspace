@@ -1,5 +1,5 @@
 // Generates agora/feature-inventory.json from the Feature directories on disk, or with --check fails on any difference.
-// Usage: node scripts/feature-inventory.ts [--check] [--root DIR]
+// Usage: node scripts/feature-inventory.ts [--check]
 // Exit codes follow R12: 0 pass, 1 drift or rejected Feature layout.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { DiscoveryError, discoverFeatures, renderInventory } from './feature-discovery.ts';
 
 const argv = process.argv.slice(2);
-const root = path.resolve(argv.includes('--root') ? (argv[argv.indexOf('--root') + 1] ?? '.') : path.join(path.dirname(fileURLToPath(import.meta.url)), '..'));
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const target = path.join(root, 'agora/feature-inventory.json');
 const SKIP = new Set(['node_modules', 'dist', 'coverage', '.scratch']);
 

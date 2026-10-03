@@ -8,7 +8,7 @@ The reserved shape is fixed here. Roots are `src/features/<name>/` inside each p
 
 - `entrypoint.ts` is required.
 - `timeline-card.tsx` is optional.
-- `dependencies.json` is optional and holds a JSON array of Feature names.
+- `dependencies.json` is optional and holds a JSON array of distinct Feature names, one entry per declared dependency.
 
 The architecture docs call these filenames illustrative. This slice fixed the minimum consistent shape from [the technical specification](repo:docs/technical-spec.md) R25 and [the application architecture page](agora-application-architecture.md), so later units extend one set of names instead of inventing a second.
 
@@ -18,14 +18,15 @@ The architecture docs call these filenames illustrative. This slice fixed the mi
 
 `node scripts/feature-inventory.ts --check` regenerates in memory and exits 1 when anything is wrong. The package scripts `pnpm features:generate` and `pnpm features:check` wrap the two commands.
 
-Discovery rejects four kinds of input, and each message names the supported owner and the conventional path.
+Discovery rejects five kinds of input, and each message names the supported owner and the conventional path.
 
 - A reserved file, or a `features` directory, outside the conventional path.
 - A Feature folder with no `entrypoint.ts`.
 - An invalid name, or two names that collide when compared case-insensitively.
+- A `dependencies.json` that is not a JSON array of distinct names matching `^[a-z][a-z0-9-]*$`.
 - An inventory that differs from what the tree produces, including a hand edit.
 
-`dependencies.json` is read only so its names land in the inventory. Discovery does not check that they resolve and does not restrict imports between Features.
+Discovery is the only parser of `dependencies.json`. R25 requires the build-time scan that reads Entrypoints to read it too, and the sorted names land in the row's `dependencies` field. The declarations slice (U20.B02, `agora-s1-declare-feature-dependencies`) owns the declaration format and import enforcement. It reads `dependencies` from the inventory instead of parsing the file again, and it checks that each name resolves to a Feature. Discovery does not resolve names and does not restrict imports between Features.
 
 ## Why it exists
 
@@ -45,10 +46,10 @@ The inventory is output only. Editing it by hand turns `--check` red, and the fi
 
 ## Implementation status
 
-**Built for U21.B01 only.** `apps/web/src/features/room` and `apps/web/src/features/notes` were empty placeholder folders and each now holds a stub `entrypoint.ts` so the inventory has real rows. No product code moved into them. This slice does not migrate real product Features, does not enforce Feature-to-Feature imports (the separate declarations slice owns that), and does not qualify U21. Live lanes, the performance probe and exact-head receipts remain open.
+**Built for U21.B01 only.** `apps/web/src/features/room` and `apps/web/src/features/notes` were empty placeholder folders and each now holds a stub `entrypoint.ts` so the inventory has real rows. No product code moved into them. This slice does not migrate real product Features, does not resolve declared dependencies or enforce Feature-to-Feature imports (U20.B02 owns both and reads the parsed list from the inventory), and does not qualify U21. Live lanes, the performance probe and exact-head receipts remain open.
 
 ## Verification and proof
 
-Inspect [the discovery module](repo:scripts/feature-discovery.ts), [the inventory CLI](repo:scripts/feature-inventory.ts), [its tests](repo:scripts/test/feature-discovery.test.ts) and [the generated inventory](repo:agora/feature-inventory.json). Run `pnpm features:check`. The tests cover a well-formed Feature, a misplaced path, a missing entrypoint, a duplicate name, drift on a hand-edited inventory, a guard-disabled run that turns the drift assertion red, and an idempotent regenerate. [verify-agora](repo:.agents/skills/verify-agora/SKILL.md) holds the literal setup, drive and cleanup commands, including a disposable-copy negative.
+Inspect [the discovery module](repo:scripts/feature-discovery.ts), [the inventory CLI](repo:scripts/feature-inventory.ts), [its tests](repo:scripts/test/feature-discovery.test.ts) and [the generated inventory](repo:agora/feature-inventory.json). Run `pnpm features:check`. The tests cover a well-formed Feature, a malformed `dependencies.json`, a misplaced path, a missing entrypoint, a duplicate name, drift on a hand-edited inventory, a guard-disabled run that turns the drift assertion red, and an idempotent regenerate. [verify-agora](repo:.agents/skills/verify-agora/SKILL.md) holds the literal setup, drive and cleanup commands, including a disposable-copy negative.
 
 Next: [application architecture boundaries](app-architecture.md) for the U20 import rules, and [the full R25 specification](agora-application-architecture.md) for the units still ahead.

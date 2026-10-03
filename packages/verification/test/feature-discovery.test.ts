@@ -33,11 +33,15 @@ test('finds a well-formed Feature without registration, per owning package', asy
 	expect(rows[2]?.root).toBe('packages/x/features/note');
 });
 
-test('reads dependencies.json into the row, sorted and deduplicated', async () => {
+test('reads dependencies.json into the row, sorted, and accepts only distinct Feature names', async () => {
 	const { discoverFeatures } = await discovery();
-	const rows = discoverFeatures(['apps/web/src/features/a/entrypoint.ts', 'apps/web/src/features/a/dependencies.json'], () => '["z","b","b"]');
-	expect(rows[0]?.dependencies).toEqual(['b', 'z']);
-	expect((await problems(['apps/web/src/features/a/entrypoint.ts', 'apps/web/src/features/a/dependencies.json'], () => '{}'))[0]).toMatch(/expected a JSON array of Feature names/);
+	const files = ['apps/web/src/features/a/entrypoint.ts', 'apps/web/src/features/a/dependencies.json'];
+	expect(discoverFeatures(files, () => '["z","b"]')[0]?.dependencies).toEqual(['b', 'z']);
+	for (const body of ['{}', '[1]', '["b","b"]', '["Room"]', '["../b"]']) {
+		expect(await problems(files, () => body), body).toEqual([
+			'apps/web/src/features/a/dependencies.json: expected a JSON array of distinct Feature names matching ^[a-z][a-z0-9-]*$; supported owner is apps/web/src/features/<name>/',
+		]);
+	}
 });
 
 test('rejects Feature files outside src/features/<name>/ and names owner and path', async () => {
