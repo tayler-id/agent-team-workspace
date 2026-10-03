@@ -26,11 +26,11 @@ Discovery rejects five kinds of input, and each message names the supported owne
 - A `dependencies.json` that is not a JSON array of distinct names matching `^[a-z][a-z0-9-]*$`.
 - An inventory that differs from what the tree produces, including a hand edit.
 
-Discovery is the only parser of `dependencies.json`. R25 requires the build-time scan that reads Entrypoints to read it too, and the sorted names land in the row's `dependencies` field. The declarations slice (U20.B02, `agora-s1-declare-feature-dependencies`) owns the declaration format and import enforcement. It reads `dependencies` from the inventory instead of parsing the file again, and it checks that each name resolves to a Feature. Discovery does not resolve names and does not restrict imports between Features.
+R25 says the build-time scan that reads Entrypoints also reads `dependencies.json`, so discovery parses it and writes the sorted names to the row's `dependencies` field. The parser accepts R25's stated format, one entry per declared Feature name, and nothing looser. Decision D102 gives the declaration format and import enforcement to the declarations slice (U20.B02, `agora-s1-declare-feature-dependencies`), which has not landed on this branch. If that slice changes the format, this parser changes with it. On this branch discovery is the only code that parses the file. Having U20.B02 read the inventory's `dependencies` field instead of parsing the file a second time is a proposal. No such wiring exists, and the U20.B02 plan text does not record it yet. Discovery does not check that names resolve to a Feature and does not restrict imports between Features.
 
 ## Why it exists
 
-R25 says a Feature is found, not registered. A registry file drifts from the tree, and a hand-written list lets a Feature exist without an entrypoint. Generating the inventory from the folder convention makes the tree the single source, and the check makes a stale or edited inventory a failing command. Later units, such as the Client and Host boundary, read the inventory instead of globbing on their own.
+R25 says a Feature is found, not registered. A registry file drifts from the tree, and a hand-written list lets a Feature exist without an entrypoint. Generating the inventory from the folder convention makes the tree the single source, and the check makes a stale or edited inventory a failing command. Later units, such as the Client and Host boundary, are meant to read the inventory instead of globbing on their own. None of them exists yet.
 
 ## How it works
 
@@ -46,7 +46,7 @@ The inventory is output only. Editing it by hand turns `--check` red, and the fi
 
 ## Implementation status
 
-**Built for U21.B01 only.** `apps/web/src/features/room` and `apps/web/src/features/notes` were empty placeholder folders and each now holds a stub `entrypoint.ts` so the inventory has real rows. No product code moved into them. This slice does not migrate real product Features, does not resolve declared dependencies or enforce Feature-to-Feature imports (U20.B02 owns both and reads the parsed list from the inventory), and does not qualify U21. Live lanes, the performance probe and exact-head receipts remain open.
+**Built for U21.B01 only.** `apps/web/src/features/room` and `apps/web/src/features/notes` were empty placeholder folders and each now holds a stub `entrypoint.ts` so the inventory has real rows. No product code moved into them. This slice does not migrate real product Features, does not resolve declared dependencies or enforce Feature-to-Feature imports (both belong to U20.B02, which has not landed), and does not qualify U21 or U20. Live lanes, the performance probe and exact-head receipts remain open.
 
 ## Verification and proof
 
