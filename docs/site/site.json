@@ -302,6 +302,14 @@
       "page": "trusted-checks.md"
     },
     {
+      "path": "scripts/trusted-report.mjs",
+      "page": "trusted-checks.md"
+    },
+    {
+      "path": "packages/verification/test/trusted-report.test.ts",
+      "page": "trusted-checks.md"
+    },
+    {
       "path": "scripts/foundation.mjs",
       "page": "test-first.md"
     },

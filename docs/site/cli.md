@@ -22,7 +22,7 @@ This is the complete current contributor command surface, plus a separate invent
 
 ## Trusted checks
 
-`node scripts/trusted-checks.mjs evaluate --kind run|checks|protection|workflows --input FILE [--policy FILE] [--project agora|python-fixture] --json` decides one GitHub read-back against [agora/trusted-checks.json](repo:agora/trusted-checks.json) and prints `agora.trusted-checks-report/v1` with sorted denial codes. `policy` prints the selected project's policy. Exit 0 pass, 1 fail, 2 blocked prerequisite (unenrolled App or key, missing repository, paid-plan 403), 64 usage. See [trusted checks](trusted-checks.md).
+`node scripts/trusted-checks.mjs evaluate --kind run|checks|protection|workflows --input FILE [--policy FILE] [--project agora|python-fixture] --json` decides one GitHub read-back against [agora/trusted-checks.json](repo:agora/trusted-checks.json) and prints `agora.trusted-checks-report/v1` with sorted denial codes. `policy` prints the selected project's policy. `node scripts/trusted-report.mjs --run-id ID --json` is the default-branch reporter that `agora-report.yml` runs; it needs `GITHUB_TOKEN`, `AGORA_REPORTER_APP_KEY` and `AGORA_REPORTING_SIGNING_KEY` and an enrolled policy. Exit 0 pass, 1 fail, 2 blocked prerequisite (unenrolled App or key, missing repository, paid-plan 403), 64 usage. See [trusted checks](trusted-checks.md).
 
 ## Documentation commands
 

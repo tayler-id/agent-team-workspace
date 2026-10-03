@@ -72,7 +72,7 @@
       "status": "In progress",
       "why": "Only the project's own reporting App, on the exact head and with a signed receipt, can satisfy a required check; live protection and App setup are blocked on human prerequisites.",
       "page": "trusted-checks.md",
-      "proof": ["repo:scripts/trusted-checks.mjs", "repo:packages/verification/test/trusted-checks.test.ts", "repo:agora/trusted-checks.json"]
+      "proof": ["repo:scripts/trusted-checks.mjs", "repo:scripts/trusted-report.mjs", "repo:packages/verification/test/trusted-checks.test.ts", "repo:packages/verification/test/trusted-report.test.ts", "repo:agora/trusted-checks.json"]
     },
     {
       "id": "task-proof",

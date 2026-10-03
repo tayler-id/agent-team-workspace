@@ -46,10 +46,11 @@ Read-only. `policy` must exit 0 and print the Agora project. Run the live read-b
 ```sh
 node scripts/trusted-checks.mjs policy --json
 gh api repos/tayler-id/agent-team-workspace --jq '{id,private,visibility,default_branch}'
-gh api repos/tayler-id/agent-team-workspace/branches/main/protection
+gh api repos/tayler-id/agent-team-workspace/branches/main/protection > .scratch/protection.json
+node scripts/trusted-checks.mjs evaluate --kind protection --input .scratch/protection.json --json
 ```
 
-The protection read-back currently returns HTTP 403 "Upgrade to GitHub Pro or make this repository public to enable this feature." Record it as `plan_upgrade_required`.
+The protection read-back currently returns HTTP 403 "Upgrade to GitHub Pro or make this repository public to enable this feature." With the committed policy the evaluation exits 2 with `reporting_app_unenrolled` first; against an enrolled policy the same body exits 2 with `plan_upgrade_required`.
 
 ## Launch
 
@@ -210,10 +211,10 @@ For U01b.B01's project verification controls: every required command must exit z
 
 ### Trusted checks drive (U01b.B03)
 
-Lanes 8-10 drive `node scripts/trusted-checks.mjs evaluate` through the public CLI. Pass means all three lanes pass and the project runner reports `outcome: pass` for the task. Lane 8 passes only a protection read-back with strict exact-App checks, review, stale dismissal, code-owner review, enforced admins and no bypass. Lane 9 must name `wrong_producer` for a check from the GitHub Actions App, `receipt_signature_invalid` for a candidate-signed receipt and `workflow_revision_mismatch` for a modified driver. The committed workflows must pass `--kind workflows` against the committed policy, and edited copies must name `driver_secret_reference` and `reporter_candidate_reference`. Lane 9's isolated copy that trusts any App must lose `wrong_producer`. Lane 10 must fail a failed dependency with its skipped dependent and a required job given `needs`, `if` or `continue-on-error`, and its copy that accepts any conclusion must pass a skipped job.
+Lanes 8-10 drive `node scripts/trusted-checks.mjs evaluate` through the public CLI. Pass means all three lanes pass and the project runner reports `outcome: pass` for the task. Lane 8 passes only a protection read-back with strict exact-App checks, review, stale dismissal, code-owner review, enforced admins and no bypass. Lane 9 must name `wrong_producer` for a check from the GitHub Actions App, `receipt_signature_invalid` for a candidate-signed receipt and `workflow_revision_mismatch` for a modified driver. The committed workflows must pass `--kind workflows` against the committed policy, and edited copies must name `driver_secret_reference` and `reporter_candidate_reference`. Lane 9's isolated copy that trusts any App must lose `wrong_producer`. Lane 10 must fail a failed dependency with its skipped dependent and a required job given `needs`, `if` or `continue-on-error`, and its copy that accepts any conclusion must pass a skipped job. The reporter tests must report 4 passed against their loopback fake API, including the credential canary reading `true` once for the real reporter and three times for the weakened copy.
 
 ```sh
-pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts
+pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts packages/verification/test/trusted-report.test.ts
 node -e 'const f=p=>[p,require("fs").readFileSync(p,"utf8")];require("fs").writeFileSync(".scratch/workflows.json",JSON.stringify({files:Object.fromEntries([f(".github/workflows/agora-ci.yml"),f(".github/workflows/agora-report.yml")])}))'
 node scripts/trusted-checks.mjs evaluate --kind workflows --input .scratch/workflows.json --json
 pnpm -s agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks --artifacts ".scratch/trusted-lanes-$(date +%s)" --json
@@ -369,4 +370,4 @@ Evidence files under `evidence/` must survive cleanup; the cluster and worktrees
 
 ### Trusted checks cleanup (U01b.B03)
 
-The lane suite deletes its own `.scratch/trusted-checks-*` directory in `afterAll`. Confirm none remain with `find .scratch -maxdepth 1 -name 'trusted-checks-*'`. Lane runner output under `.scratch/trusted-lanes-*` and receipts under `evidence/` stay.
+The lane suite and the reporter tests delete their own `.scratch/trusted-checks-*` and `.scratch/trusted-report-*` directories in `afterAll`, and the reporter removes its `agora-report-*` temporary input. Confirm none remain with `find .scratch -maxdepth 1 \( -name 'trusted-checks-*' -o -name 'trusted-report-*' \)` and `ls "${TMPDIR:-/tmp}" | grep agora-report-`. Lane runner output under `.scratch/trusted-lanes-*` and receipts under `evidence/` stay.

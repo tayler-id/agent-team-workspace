@@ -92,6 +92,7 @@ test('project lane 8 reads protection back against exact App IDs, review and no 
 	expect(denials('protection', protection({ required_pull_request_reviews: undefined }))).toEqual(['reviews_insufficient']);
 	expect(evaluate('protection', { error: { status: 403, message: 'Upgrade to GitHub Pro or make this repository public to enable this feature.' } })).toMatchObject({ outcome: 'blocked', denials: ['plan_upgrade_required'] });
 	expect(evaluate('protection', { error: { status: 404, message: 'Branch not protected' } })).toMatchObject({ outcome: 'fail', denials: ['protection_missing'] });
+	expect(evaluate('protection', { message: 'Upgrade to GitHub Pro or make this repository public to enable this feature.', documentation_url: 'https://docs.github.com/rest/branches/branch-protection#get-branch-protection', status: '403' })).toMatchObject({ outcome: 'blocked', denials: ['plan_upgrade_required'] });
 	// The committed policy names no App or key yet, and the fixture repository does not exist: both block, never pass.
 	expect(evaluate('protection', protection(), { policy: 'agora/trusted-checks.json' })).toMatchObject({ outcome: 'blocked', denials: ['reporting_app_unenrolled'] });
 	expect(evaluate('protection', protection(), { policy: 'agora/trusted-checks.json', project: 'python-fixture' })).toMatchObject({ outcome: 'blocked', denials: ['repository_unprovisioned'] });

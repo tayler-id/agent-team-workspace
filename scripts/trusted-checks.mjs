@@ -73,10 +73,12 @@ function evaluateChecks(project, input) {
 }
 
 // Lane 8 read-back of GET /repos/{owner}/{repo}/branches/{branch}/protection, or the error GitHub returned.
+// GitHub's own error body ({message, status}) is accepted as returned, so `gh api ... > FILE` feeds it directly.
 function evaluateProtection(project, input) {
-	if (input.error) {
-		if (input.error.status === 403 && /Upgrade to GitHub Pro/.test(input.error.message)) throw stop('plan_upgrade_required', 'blocked');
-		if (input.error.status === 404) return { denials: ['protection_missing'] };
+	const error = input.error ?? (typeof input.message === 'string' && !input.url ? { status: Number(input.status), message: input.message } : undefined);
+	if (error) {
+		if (error.status === 403 && /Upgrade to GitHub Pro/.test(error.message)) throw stop('plan_upgrade_required', 'blocked');
+		if (error.status === 404) return { denials: ['protection_missing'] };
 		throw stop('protection_unreadable', 'blocked');
 	}
 	const denials = [];
