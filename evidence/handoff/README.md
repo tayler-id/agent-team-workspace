@@ -80,9 +80,12 @@ the verify-agora setup step (`python3 -m venv .scratch/python`, install
 3. **Code-block paint bug.** The decision is held by the captain under key
    `code-block-pre-wrap-tradeoff`. Options: ship `white-space: pre-wrap`, keep it as a known
    issue, or design a threshold or truncation variant. Nothing is implemented.
-4. **Production preview.** The `pnpm web:build` output renders blank under the strict CSP
-   because Ajv compiles schemas with `eval`. The served dev room avoids this with standalone Ajv.
-   A fix is not approved. Do not loosen the CSP.
+4. **Production preview.** The `pnpm web:build` output rendered blank under the strict CSP
+   because Ajv compiles schemas with `eval`. Branch `fm/agora-production-browser-slice` builds it
+   with the same build-time standalone validators the served room uses and keeps the CSP
+   unchanged. `docs/site/local-room-web-shell.md` explains the fix and
+   `evidence/U01d/production-browser-csp/` holds its proof. The fix needs independent review
+   before it lands. Do not loosen the CSP.
 
 ## Not re-verified here
 
