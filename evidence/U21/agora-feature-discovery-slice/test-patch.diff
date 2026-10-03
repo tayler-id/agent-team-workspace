@@ -1,0 +1,144 @@
+diff --git a/docs/site/test/corpus.test.ts b/docs/site/test/corpus.test.ts
+index fbc69b3..e949070 100644
+--- a/docs/site/test/corpus.test.ts
++++ b/docs/site/test/corpus.test.ts
+@@ -8,8 +8,8 @@ const result = build();
+ const root = path.resolve(import.meta.dirname, '../../../.docs-dist');
+ const html = file => existsSync(path.join(root, file)) ? readFileSync(path.join(root, file), 'utf8') : '';
+ test('the same public build driver produces a valid baseline before corpus assertions', () => assert.equal(result.outcome, 'pass'));
+-test('the complete corpus has 35 pages and both audience tracks', () => {
+-	assert.equal(result.pages, 35, 'complete audience corpus');
++test('the complete corpus has 36 pages and both audience tracks', () => {
++	assert.equal(result.pages, 36, 'complete audience corpus');
+ 	assert.match(html('ci.html'), /prerequisite diagnosis before tests/);
+ 	assert.match(html('project-controls.html'), /socket-only PostgreSQL/);
+ 	assert.match(html('checking-a-project.html'), /non-production foundation fixtures/);
+diff --git a/scripts/test/feature-discovery.test.ts b/scripts/test/feature-discovery.test.ts
+new file mode 100644
+index 0000000..4fedf38
+--- /dev/null
++++ b/scripts/test/feature-discovery.test.ts
+@@ -0,0 +1,123 @@
++import assert from 'node:assert/strict';
++import { spawnSync, type SpawnSyncReturns } from 'node:child_process';
++import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
++import os from 'node:os';
++import path from 'node:path';
++import { test } from 'node:test';
++import { fileURLToPath } from 'node:url';
++import { DiscoveryError, discoverFeatures } from '../feature-discovery.ts';
++
++const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
++const noText = (): string => '[]';
++const problems = (files: string[], text = noText): string[] => {
++	try {
++		discoverFeatures(files, text);
++	} catch (error) {
++		if (error instanceof DiscoveryError) return error.problems;
++		throw error;
++	}
++	return [];
++};
++
++void test('finds a well-formed Feature without registration, per owning package', () => {
++	const rows = discoverFeatures(
++		['apps/web/src/features/room/entrypoint.ts', 'apps/web/src/features/room/timeline-card.tsx', 'apps/web/src/features/room/view.tsx', 'apps/center/src/features/room/entrypoint.ts', 'packages/x/features/note/entrypoint.ts'],
++		noText,
++	);
++	assert.deepEqual(rows.map((r) => [r.package, r.name, r.timelineCard]), [
++		['apps/center', 'room', null],
++		['apps/web', 'room', 'apps/web/src/features/room/timeline-card.tsx'],
++		['packages/x', 'note', null],
++	]);
++	assert.equal(rows[2]?.root, 'packages/x/features/note');
++});
++
++void test('reads dependencies.json into the row, sorted and deduplicated', () => {
++	const rows = discoverFeatures(['apps/web/src/features/a/entrypoint.ts', 'apps/web/src/features/a/dependencies.json'], () => '["z","b","b"]');
++	assert.deepEqual(rows[0]?.dependencies, ['b', 'z']);
++	assert.match(problems(['apps/web/src/features/a/entrypoint.ts', 'apps/web/src/features/a/dependencies.json'], () => '{}')[0] ?? '', /expected a JSON array of Feature names/);
++});
++
++void test('rejects Feature files outside src/features/<name>/ and names owner and path', () => {
++	for (const file of ['apps/web/src/components/features/room/entrypoint.ts', 'apps/web/src/room/entrypoint.ts', 'apps/web/features/room/entrypoint.ts']) {
++		assert.deepEqual(problems(['apps/web/src/main.tsx', file]), [`${file}: Feature file outside the conventional path; supported owner is apps/web, conventional path is apps/web/src/features/<name>/`]);
++	}
++	assert.match(problems(['apps/web/src/features/a/b/entrypoint.ts'])[0] ?? '', /nested inside Feature a/);
++});
++
++void test('rejects a Feature missing its entrypoint', () => {
++	assert.deepEqual(problems(['apps/web/src/features/notes/index.ts', 'apps/web/src/features/notes/timeline-card.tsx']), [
++		'apps/web/src/features/notes: missing reserved entrypoint.ts; supported owner is apps/web/src/features/<name>/',
++	]);
++});
++
++void test('rejects invalid and colliding names', () => {
++	assert.match(problems(['apps/web/src/features/Room/entrypoint.ts'])[0] ?? '', /lowercase kebab-case/);
++	assert.match(problems(['apps/web/src/features/Room/entrypoint.ts', 'apps/web/src/features/room/entrypoint.ts']).join('\n'), /duplicate Feature name, also declared by apps\/web\/src\/features\/Room/);
++});
++
++const put = (dir: string, rel: string, body = 'export {};\n'): void => {
++	mkdirSync(path.dirname(path.join(dir, rel)), { recursive: true });
++	writeFileSync(path.join(dir, rel), body);
++};
++// The CLI tests run against a throwaway copy of the scripts and a namespaced fixture tree.
++const fixture = (): { dir: string; run: (args?: string[], script?: string) => SpawnSyncReturns<string> } => {
++	const dir = mkdtempSync(path.join(os.tmpdir(), 'agora-u21-'));
++	mkdirSync(path.join(dir, 'agora'));
++	mkdirSync(path.join(dir, 'scripts'));
++	for (const f of ['feature-discovery.ts', 'feature-inventory.ts']) cpSync(path.join(repo, 'scripts', f), path.join(dir, 'scripts', f));
++	put(dir, 'apps/web/src/features/room/entrypoint.ts');
++	put(dir, 'apps/web/src/features/room/timeline-card.tsx');
++	return { dir, run: (args = [], script = 'feature-inventory.ts') => spawnSync(process.execPath, [path.join(dir, 'scripts', script), ...args], { encoding: 'utf8' }) };
++};
++
++void test('generate is idempotent, check detects a hand-edited row, and removing a Feature drops it', () => {
++	const { dir, run } = fixture();
++	try {
++		assert.equal(run().status, 0);
++		const inventory = path.join(dir, 'agora/feature-inventory.json');
++		const first = readFileSync(inventory, 'utf8');
++		assert.match(run().stdout, /unchanged/);
++		assert.equal(readFileSync(inventory, 'utf8'), first);
++		assert.equal(run(['--check']).status, 0);
++
++		put(dir, 'apps/web/src/features/newcomer/entrypoint.ts');
++		assert.equal(run(['--check']).status, 1, 'a new Feature that is not generated yet is drift');
++		run();
++		assert.match(readFileSync(inventory, 'utf8'), /"name": "newcomer"/);
++
++		writeFileSync(inventory, readFileSync(inventory, 'utf8').replace('"name": "newcomer"', '"name": "sneaky"'));
++		const drift = run(['--check']);
++		assert.equal(drift.status, 1);
++		assert.match(drift.stderr, /differs from the Feature directories on disk/);
++
++		rmSync(path.join(dir, 'apps/web/src/features/newcomer'), { recursive: true });
++		run();
++		assert.doesNotMatch(readFileSync(inventory, 'utf8'), /newcomer|sneaky/);
++	} finally {
++		rmSync(dir, { recursive: true, force: true });
++	}
++});
++
++void test('guard negative: with the drift comparison disabled the hand-edit assertion turns red', () => {
++	const { dir, run } = fixture();
++	try {
++		run();
++		const inventory = path.join(dir, 'agora/feature-inventory.json');
++		writeFileSync(inventory, readFileSync(inventory, 'utf8').replace('"name": "room"', '"name": "forged"'));
++		assert.equal(run(['--check']).status, 1);
++		const script = path.join(dir, 'scripts/feature-inventory.ts');
++		const source = readFileSync(script, 'utf8');
++		const weakened = source.replace('if (current !== text) throw new DiscoveryError', 'if (false) throw new DiscoveryError');
++		assert.notEqual(weakened, source, 'the drift guard line must exist to be disabled');
++		writeFileSync(script, weakened);
++		assert.equal(run(['--check']).status, 0, 'the same assertion passes once the guard is off, proving the guard is what rejects');
++	} finally {
++		rmSync(dir, { recursive: true, force: true });
++	}
++});
++
++void test('the committed inventory matches the live repository', () => {
++	const result = spawnSync(process.execPath, [path.join(repo, 'scripts/feature-inventory.ts'), '--check'], { encoding: 'utf8' });
++	assert.equal(result.status, 0, result.stderr);
++});
