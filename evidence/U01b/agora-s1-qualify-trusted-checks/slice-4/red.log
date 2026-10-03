@@ -1,0 +1,78 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-03T21:49:26.236Z
+parent: 13e733c2b6b022fe0ccbb911190ff5d4d7e884e1
+head: db70b1acb6762527351ff2bed66dd01230c66174
+subject_revision: 13e733c2b6b022fe0ccbb911190ff5d4d7e884e1
+test_patch_applied_to_subject: true
+test_patch_files: packages/verification/test/trusted-checks.test.ts, packages/verification/test/trusted-report.test.ts
+test_patch_digest: sha256:eb7fc840c2e7f1400c817ee2cfd641c88ab4afb9bd8947227f15325d89d65328
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts packages/verification/test/trusted-report.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-zU7vQb
+
+ ❯ |unit| packages/verification/test/trusted-checks.test.ts (3 tests | 1 failed) 1804ms
+   × project lane 9 denies candidate-authored reports and wrong-workflow receipts 724ms
+ ❯ |unit| packages/verification/test/trusted-report.test.ts (5 tests | 1 failed) 766ms
+   × a pull request that edits the reporter gets a failing agora/policy without its copy being fetched 111ms
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 6 passed (8)
+   Start at  17:49:12
+   Duration  2.75s (tests 97%, import 2%, transform 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/trusted-checks.test.ts > project lane 9 denies candidate-authored reports and wrong-workflow receipts
+AssertionError: expected [ 'reporter_candidate_reference' ] to deeply equal [ 'reporter_workflow_not_allowlisted' ]
+
+- Expected
++ Received
+
+  [
+-   "reporter_workflow_not_allowlisted",
++   "reporter_candidate_reference",
+  ]
+
+ ❯ packages/verification/test/trusted-checks.test.ts:134:102
+    132|   w => { job(w, 'report').permissions = { contents: 'write' }; },
+    133|  ];
+    134|  for (const change of reporterEdits) expect(denials('workflows', workf…
+       |                                                                                                      ^
+    135|  // Candidate edits to sensitive paths are read as paths and fail agor…
+    136|  expect(evaluate('workflows', workflows({}, ['docs/site/index.md', 'pa…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |unit| packages/verification/test/trusted-report.test.ts > a pull request that edits the reporter gets a failing agora/policy without its copy being fetched
+AssertionError: expected { …(7) } to match object { outcome: 'fail', denials: [ …(2) ] }
+(5 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "denials": [
+-     "sensitive_path_changed:.github/workflows/agora-report.yml",
+-     "sensitive_path_changed:scripts/trusted-report.mjs",
+-   ],
+-   "outcome": "fail",
++   "denials": [],
++   "outcome": "pass",
+  }
+
+ ❯ packages/verification/test/trusted-report.test.ts:140:24
+    138|  files = [{ filename: 'packages/domain/src/index.ts' }, { filename: RE…
+    139|  const result = await reporter(credentials);
+    140|  expect(result.report).toMatchObject({ outcome: 'fail', denials: [`sen…
+       |                        ^
+    141|  expect(published().map(run => [run.name, run.conclusion])).toEqual([[…
+    142|  expect(mergeSide(published()).denials).toEqual(['check_not_success:ag…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

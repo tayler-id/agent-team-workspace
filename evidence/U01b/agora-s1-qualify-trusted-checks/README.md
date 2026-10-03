@@ -26,9 +26,45 @@ not claim FG06, lanes 8-10 at the milestone level, or the U01b milestone.
 | `0aee796` | Slice 3: the reporter |
 | `b943f93` | Fix: an `Applicability: coverage` record lets a test-only commit skip red |
 | `6b71d63` | Coverage: four rules the first guard sweep found untested |
+| `d5c32d7`..`13e733c` | CI fixes: per-commit red-green, `tests` on `macos-15`, web jsdom timeout |
+| `db70b1a` | Slice 4, review F2/F3: exact reporter allowlist, sensitive-path policy, dormant reporter, docs correction |
 
 `docs/site/trusted-checks.md` explains the design. Decision D111 records why the workflows are
 canonical JSON-subset YAML and why the reporter reads job conclusions from GitHub's jobs API.
+
+## Independent review and slice 4
+
+The independent security review (firstmate's `agora-trusted-checks-security-review` report) passed
+`13e733c` as dormant machinery only and blocked enrollment on four findings. Slice 4 closes two:
+
+- **F3.** The reporter workflow must now equal `reporter.allowlist` in the policy exactly. Lane 9
+  asserts fourteen bypass forms, each passing the old text patterns, as
+  `reporter_workflow_not_allowlisted`, including a `display_title` step, `toJSON(secrets)`,
+  `secrets['OTHER']`, a fork checkout, a job-level secret, a third-party action and a dropped `if`.
+- **F2.** `agora/policy` now fails with `sensitive_path_changed:PATH` when the pull request changes
+  `.github/`, the policy, either trusted script or the CI scripts. The reporter lists changed paths
+  through `pulls/{n}/files` and never fetches or runs candidate copies. The reporter suite
+  reproduces the review's S1 (a pull request editing the reporter) and now gets a failing
+  `agora/policy` that merge refuses.
+- **Docs.** `docs/site/trusted-checks.md` no longer says a candidate cannot produce a passing
+  result for itself. It says what `agora/evidence` proves today: the candidate's own scripts passed
+  under the reviewed workflow.
+- **Dormant operation.** `agora-report` runs only when the repository variable
+  `AGORA_REPORTER_ENABLED` is `true`. Until enrollment, GitHub skips it on every pull request, so it
+  is no longer red on every pull request. It publishes no check and holds no credential, and the
+  decision tool still refuses an unenrolled policy. The variable reads back 404 today. This
+  workflow change needs the same independent review as the rest.
+
+Open before enrollment, as following slices:
+
+- **F1.** The driver's commands still come from the candidate's tree (`package.json` scripts,
+  `scripts/`, configuration). Run them from a default-branch checkout with the candidate as data.
+- **F4.** Add `environment` and `app` read-back kinds that prove `agora-reporter` is limited to
+  `main` with exactly the two secrets and that the App is checks-only on one repository.
+- **F5.** `checks` still needs reshaped input (`app_id`, a top-level `head_sha`). Accept GitHub's
+  raw rows before the first live merge read-back.
+- F6 to F8 (red-green granularity, 40-hex SHA and Ed25519-only key checks, driver `branches` and
+  protection extras) stay backlog, each test-first.
 
 ## Red and green
 
@@ -41,6 +77,9 @@ and each bundle passes `scripts/validate-evidence.mjs` with its exact head and p
   error there. Green 3/3.
 - `slice-3/` (parent `d5c32d7`): red is `5 failed | 2 passed`. The four reporter tests fail on
   the harness outcome, and lane 8 fails on GitHub's raw 403 body. Green 7/7.
+- `slice-4/` (parent `13e733c`): red is `2 failed | 6 passed`. Lane 9 fails on the bypass forms
+  the old pattern rules passed, and the new reporter case fails because the old reporter published
+  `agora/policy` as `success`. Green 8/8.
 - `attempts/` holds two rejected recordings of slice 1. One failed to load because a fresh
   worktree had no `.scratch`, which is infrastructure, not red. The other went red on the
   exit-code map instead of behavior. Both were fixed before the kept recording.
@@ -56,6 +95,8 @@ publishing credential and the conclusion mapping.
 - `guards/sweep-first.log` at `0aee796`: 55 mutations, 4 survived (`pull_request_missing`,
   job-level driver permissions, `reporter_trigger`, `reporter_permissions`).
 - `guards/sweep.log` at `6b71d63`: 55 mutations, 0 survived, restored tree green.
+- `guards/sweep-slice4.log` at `db70b1a`: 52 mutations (six pattern rules removed, three rules
+  added), 0 survived, restored tree green.
 
 The suites also carry their own in-test guard negatives. Lane 9 runs a copy that trusts any
 App, lane 10 a copy that accepts any job conclusion, and the reporter tests a copy that passes
@@ -77,6 +118,18 @@ its whole environment to the decision process.
   `check_missing` for both.
 - The committed workflows pass `--kind workflows` under the committed policy.
 
+## Plan versus token scope
+
+`live/plan-vs-scope.log` is read-only. The same Vault-issued token (scopes `gist, read:org, repo,
+workflow`) has admin permission on both this private repository and the public
+`tayler-id/agent-platform`. On the public repository, `GET .../branches/main/protection` answers
+404 "Branch not protected", so the endpoint and token work. On this private repository it answers
+403 "Upgrade to GitHub Pro or make this repository public to enable this feature." The only
+difference is visibility. Established: authentication and scope are not the cause, and GitHub's
+own message names the plan. Unknown: the account's billing plan (`/user` returns no `plan` field
+without the `user` scope) and any entitlement GitHub might grant another way. This is not proof of
+what the account pays for.
+
 ## Live prerequisites (human, not done here)
 
 Nothing was purchased, no account security changed, no App registered or installed, and no
@@ -94,7 +147,8 @@ real reporter run:
 3. **Reporting key.** Generate an Ed25519 key offline (`openssl genpkey -algorithm ed25519`).
    Put the public key PEM in `reporter.public_key` in the same reviewed change.
 4. **Environment.** Create the `agora-reporter` environment with deployment branches limited to
-   `main`. Add the App private key as `AGORA_REPORTER_APP_KEY` and the Ed25519 private key as
+   `main` before adding any secret, then set the repository variable `AGORA_REPORTER_ENABLED` to
+   `true` last. Add the App private key as `AGORA_REPORTER_APP_KEY` and the Ed25519 private key as
    `AGORA_REPORTING_SIGNING_KEY`.
 5. **Protection on `main`.** Require a pull request with one approval from someone other than
    the author, dismiss stale approvals, require code-owner review, and require strict status
