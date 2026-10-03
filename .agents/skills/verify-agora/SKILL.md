@@ -332,7 +332,9 @@ rm "$D/apps/web/src/features/room/entrypoint.ts"
 (cd "$D" && node scripts/feature-inventory.ts --check; echo "exit $?")
 ```
 
-Other negatives to repeat the same way are a `timeline-card.tsx` outside a Feature path, an uppercase or case-colliding folder name, and a hand edit to the copied inventory. Each must exit 1.
+Other negatives to repeat the same way are a `timeline-card.tsx` outside a Feature path, an uppercase folder name (`mv room Room`), and a hand edit to the copied inventory. Each must exit 1 on any filesystem.
+
+The case-colliding negative puts `Room/` next to `room/`, and it needs a case-sensitive filesystem such as Linux CI or a case-sensitive APFS volume. There it must exit 1 with `duplicate Feature name`. On the default case-insensitive macOS volume, `mkdir Room` fails with `File exists` and `--check` exits 0, because only one folder exists on disk. Record that run as untested on this host, not as a guard failure. The unit test `rejects invalid and colliding names` covers the collision on every platform.
 
 Cleanup removes only the directory this run created.
 
