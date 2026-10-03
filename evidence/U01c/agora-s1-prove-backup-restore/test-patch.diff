@@ -1,9 +1,24 @@
+diff --git a/docs/site/test/corpus.test.ts b/docs/site/test/corpus.test.ts
+index fbc69b3..e949070 100644
+--- a/docs/site/test/corpus.test.ts
++++ b/docs/site/test/corpus.test.ts
+@@ -8,8 +8,8 @@ const result = build();
+ const root = path.resolve(import.meta.dirname, '../../../.docs-dist');
+ const html = file => existsSync(path.join(root, file)) ? readFileSync(path.join(root, file), 'utf8') : '';
+ test('the same public build driver produces a valid baseline before corpus assertions', () => assert.equal(result.outcome, 'pass'));
+-test('the complete corpus has 35 pages and both audience tracks', () => {
+-	assert.equal(result.pages, 35, 'complete audience corpus');
++test('the complete corpus has 36 pages and both audience tracks', () => {
++	assert.equal(result.pages, 36, 'complete audience corpus');
+ 	assert.match(html('ci.html'), /prerequisite diagnosis before tests/);
+ 	assert.match(html('project-controls.html'), /socket-only PostgreSQL/);
+ 	assert.match(html('checking-a-project.html'), /non-production foundation fixtures/);
 diff --git a/packages/storage/test/backup.pg.test.ts b/packages/storage/test/backup.pg.test.ts
 new file mode 100644
-index 0000000..e52303e
+index 0000000..9d0a70c
 --- /dev/null
 +++ b/packages/storage/test/backup.pg.test.ts
-@@ -0,0 +1,150 @@
+@@ -0,0 +1,151 @@
 +import { spawnSync } from 'node:child_process';
 +import { randomUUID } from 'node:crypto';
 +import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -123,7 +138,8 @@ index 0000000..e52303e
 +	const copy = join(root, 'corrupt');
 +	cpSync(backup, copy, { recursive: true });
 +	const sealed = readFileSync(join(copy, 'database.agb'));
-+	sealed[Math.floor(sealed.length / 2)] ^= 0xff;
++	const middle = Math.floor(sealed.length / 2);
++	sealed.writeUInt8(sealed.readUInt8(middle) ^ 0xff, middle);
 +	writeFileSync(join(copy, 'database.agb'), sealed);
 +	await deniedRestore(copy, join(keys, 'good'), 'corrupt', 'database.agb');
 +});

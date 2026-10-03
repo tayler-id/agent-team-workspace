@@ -11,7 +11,7 @@ venv from `packages/verification/fixture/requirements.txt` first on `PATH`.
 ## Red and green
 
 `red.log`, `green.log`, `test-patch.diff` and `manifest.json` come from
-`node scripts/record-red-green.mjs --parent a62662e --head 54169fa` with the command
+`node scripts/record-red-green.mjs --parent a62662e --head 11c4e75` with the command
 `node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts`.
 At the parent all 7 tests fail on CLI exit status and receipt assertions
 (`expected { status: 1, receipt: undefined } ...`), because `scripts/backup.ts` does not

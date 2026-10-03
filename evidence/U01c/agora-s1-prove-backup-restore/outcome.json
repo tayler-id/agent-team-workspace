@@ -5,7 +5,7 @@
   "build": "U01c.B01",
   "slice": "encrypted backup artifact and same-cluster verified restore integrity",
   "parent": "a62662e8788a072289b14b82f80cc970e1bd6943",
-  "implementation": "54169faa4667e0eadc355c609527c193ac705819",
+  "implementation": "11c4e758ad699ae00b3b006c5f5e3714afd5be4a",
   "task_outcome": "slice_pass",
   "milestone_outcome": "not_claimed",
   "red_green": { "red_exit": 1, "green_exit": 0, "tests": 7 },

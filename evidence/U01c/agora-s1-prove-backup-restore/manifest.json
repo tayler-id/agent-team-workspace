@@ -5,26 +5,26 @@
   "artifacts": [
     {
       "file": "red.log",
-      "digest": "sha256:9ec961cb3748e8da76e5d79171d309a6ffce66d2b48b4d933496c299e957cd27",
-      "byte_length": 8533
+      "digest": "sha256:873ee54001c8ae3ff1ff663286aba1e3906ab781ab5800c9e602c568c0ce907f",
+      "byte_length": 8563
     },
     {
       "file": "green.log",
-      "digest": "sha256:56c917ca1d6683799a9e6f315861b98bd76644c928666957e0e002b1d3871922",
-      "byte_length": 2630
+      "digest": "sha256:4a978c1b06a0caa33d370ca02da40a9dea0f7e9f6cc567076908eac91774a324",
+      "byte_length": 2660
     },
     {
       "file": "test-patch.diff",
-      "digest": "sha256:580fa76b6fd6e2fce1365cf10d09c472cfcc5a8f007c53cd968512f3a6c38e0a",
-      "byte_length": 10239
+      "digest": "sha256:5a971ff16a87865c2896a05a5a8f8e32bebddfd39a02d6dcf0c9ece7dd7e02cb",
+      "byte_length": 11337
     }
   ],
   "producer": {
     "trust_class": "owner_attested",
-    "boot_id": "ff5b8349-abe3-4e3d-aa09-e0275053eddc",
-    "head": "54169faa4667e0eadc355c609527c193ac705819",
+    "boot_id": "4ffb528a-d840-4c88-b3ad-e32e19f107b3",
+    "head": "11c4e758ad699ae00b3b006c5f5e3714afd5be4a",
     "base": "a62662e8788a072289b14b82f80cc970e1bd6943",
     "outcome": "pass",
-    "signature": "94f95cfdae49f95d5e913fc117ec138dd0610db0228794236238d9c28a9c67b3"
+    "signature": "b42f08fcd301793d45b5a7594e1597e5b8cd2ed5b6f93649e7c46fb44ad14928"
   }
 }

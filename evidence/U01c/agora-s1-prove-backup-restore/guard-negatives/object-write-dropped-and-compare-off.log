@@ -1,17 +1,17 @@
 
  RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
 
- ❯ |pg| packages/storage/test/backup.pg.test.ts (7 tests | 1 failed) 2420ms
-   × restore rebuilds the same rows, objects and schema in a second database 277ms
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (7 tests | 1 failed) 4854ms
+   × restore rebuilds the same rows, objects and schema in a second database 372ms
 
  Test Files  1 failed (1)
       Tests  1 failed | 6 passed (7)
-   Start at  17:12:31
-   Duration  2.75s (tests 90%, import 8%, transform 2%)
+   Start at  17:16:21
+   Duration  5.25s (tests 94%, import 5%, transform 1%)
 
-{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"b52628e7-5b71-446d-b955-a890cae2cbe8","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8"}
-{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"b52628e7-5b71-446d-b955-a890cae2cbe8","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8","pid":91066}
-{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"b52628e7-5b71-446d-b955-a890cae2cbe8","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8","socket_dir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8","pid":91066,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"5a3d6e7c-9458-4856-b50f-80fe3efd2802","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-5a3d6e7c-9458-4856-b50f-80fe3efd2802"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"5a3d6e7c-9458-4856-b50f-80fe3efd2802","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-5a3d6e7c-9458-4856-b50f-80fe3efd2802","pid":63983}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"5a3d6e7c-9458-4856-b50f-80fe3efd2802","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-5a3d6e7c-9458-4856-b50f-80fe3efd2802","socket_dir":"/private/tmp/agora-p0c-5a3d6e7c-9458-4856-b50f-80fe3efd2802","pid":63983,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -24,9 +24,9 @@ AssertionError: expected { status: +0, receipt: { …(7) } } to deeply equal { s
 @@ -1,11 +1,11 @@
   {
     "receipt": {
-      "backup_id": "97807753-3116-481c-b310-e54e9e42b0bf",
-      "inventory_digest": "sha256:8c61ccb9d251e612145b58d42cc3e592ec4dd7a64f9f81aed293b07de6909974",
-      "key_id": "sha256:14d3f7963e100ee1db7c8809be879e03d6231a7117dbefe2f3bc5a1617fed561",
+      "backup_id": "d4ec6f0d-6f21-4b61-a70e-148bc1cbd07d",
+      "inventory_digest": "sha256:b55e80994eb8427d60a1a04a224b0c6e6db872d9e8ba832d1210ab15da2bad89",
+      "key_id": "sha256:b97f463ffadfbc9f7b2ea91536b68e5b895dcb1d20ce03bda248ccdc807c1bcb",
 -     "objects": 3,
 +     "objects": 2,
       "outcome": "restored",
@@ -35,9 +35,9 @@ AssertionError: expected { status: +0, receipt: { …(7) } } to deeply equal { s
     },
     "status": 0,
 
- ❯ packages/storage/test/backup.pg.test.ts:136:155
+ ❯ packages/storage/test/backup.pg.test.ts:137:155
 
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 
-{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8"}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-5a3d6e7c-9458-4856-b50f-80fe3efd2802"}
