@@ -22,7 +22,7 @@ Ready for tests | Run behavioral checks separately; prerequisite success proves 
 
 ## Implementation status
 
-**Implemented P0b, review pending:** exact toolchain/native diagnosis is checked; the wider CI program remains unqualified. Mandatory CI, PostgreSQL socket hardening, React guardrails and hosted enforcement do not yet exist. This visual explains execution order, not an approved product design system.
+**Implemented P0b, review pending:** exact toolchain/native diagnosis is checked; the wider CI program remains unqualified. Hosted CI now runs as `agora-ci` on every pull request, but its results do not gate merges yet: the reporting App, its key and branch protection are blocked human prerequisites, see [trusted checks](trusted-checks.md). PostgreSQL socket hardening and React guardrails do not yet exist. This visual explains execution order, not an approved product design system.
 
 ## Verification and proof
 

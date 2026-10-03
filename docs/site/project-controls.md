@@ -6,7 +6,7 @@ U01b.B01 adds real, project-owned fixture controls, not a worker or production s
 
 ## What it does
 
-Doctor checks prerequisites without starting anything. Start allocates an instance and waits for its live identity. Verify drives HTTP and compares literal decisions, persisted database rows and object bytes. Evidence rechecks the instance, head, configuration and artifacts. Stop removes only that instance's live resources while keeping receipts. [The manifest](repo:agora/project.json) binds task lanes 1-4 to a fixed test driver, target, predicates, timeout and cleanup policy. The [contract source](repo:contracts/schemas/cli.schema.json) closes reports, instance metadata and journal responses.
+Doctor checks prerequisites without starting anything. Start allocates an instance and waits for its live identity. Verify drives HTTP and compares literal decisions, persisted database rows and object bytes. Evidence rechecks the instance, head, configuration and artifacts. Stop removes only that instance's live resources while keeping receipts. [The manifest](repo:agora/project.json) binds task lanes 1-10 to a fixed test driver, target, predicates, timeout and cleanup policy; lanes 5-7 belong to the [evidence validator](evidence-validator.md) and 8-10 to [trusted checks](trusted-checks.md). The [contract source](repo:contracts/schemas/cli.schema.json) closes reports, instance metadata and journal responses.
 
 ## Why it exists
 
