@@ -328,6 +328,18 @@
 			"public": ["RoomTransport.saveDraft", "sessionStorage-scoped unsent draft under agora.local-room.draft:PROJECT:ROOM and pending-send identity under agora.local-room.pending:PROJECT:ROOM, both stamped with the process identity read off the snapshot response's own x-agora-instance header (scripts/local-room-service.ts), restored once per page load"],
 			"contracts": [], "scenarios": ["apps/web/test/live.test.ts: reload restores an unsent draft, a failed send keeps it, a successful send clears it, a deliberate clear drops it, a reset to a lower cursor discards a stale one, a reset still at cursor 0 is told apart from an ordinary reload by process identity, an ordinary same-instance reload at cursor 0 still restores the draft, a send still unsettled at reload reuses its command id instead of duplicating, a send held on wait_connection and posted by Reconnect reuses its command id after a reload, a missing or blank identity header fails closed on both draft and pending reads, identity is read off the snapshot response itself rather than a second request a reset could race between"],
 			"fixtures": ["one fixed local room; fake fetch server and an in-memory sessionStorage double in apps/web/test/live.test.ts"], "platforms": ["node24", "browser"]
+		},
+		{
+			"id": "ci-candidate-workflow",
+			"documentation": "docs/site/ci.md",
+			"owner": "agora-ci-bootstrap-slice",
+			"paths": [".github/workflows/agora-ci.yml", "scripts/ci-setup.sh", "scripts/ci-red-green.sh", "packages/verification/test/ci-workflow.test.ts", "apps/web/vitest.config.ts"],
+			"public": ["pull_request checks named doctor, static, contracts, docs, tests, red-green and guards from .github/workflows/agora-ci.yml", "bash scripts/ci-setup.sh [postgres] [python] [swift]", "bash scripts/ci-red-green.sh BASE_SHA HEAD_SHA"],
+			"contracts": [],
+			"scenarios": ["packages/verification/test/ci-workflow.test.ts: parsed workflow has only the main pull_request trigger, contents read, pinned actions, non-persisted checkout credentials, no secret or reporter reference, exactly the seven jobs with their driver commands, every named pnpm script and file exists; the red-green script accepts a documentation-only change, skips red for a commit that changes only tests, docs or evidence, still demands red for a commit that changes source, scripts or configuration with its test, and rejects a source change with no changed test", "deliberate failing-test negative: an isolated copy with one failing test makes pnpm test exit non-zero"],
+			"fixtures": ["temporary git repositories created per test"],
+			"platforms": ["ubuntu-24.04", "macos-15", "node24.21.0", "pnpm10.34.1"],
+			"invalidation": "Ordinary candidate CI only. It is not a trusted evidence signature, an agora/evidence check, or merge authority; the credential-bearing reporter and U01b qualification stay a separate security task."
 		}
 	]
 }

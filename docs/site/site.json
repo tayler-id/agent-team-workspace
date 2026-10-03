@@ -274,6 +274,18 @@
       "page": "ci.md"
     },
     {
+      "path": "scripts/ci-setup.sh",
+      "page": "ci.md"
+    },
+    {
+      "path": "scripts/ci-red-green.sh",
+      "page": "ci.md"
+    },
+    {
+      "path": "packages/verification/test/ci-workflow.test.ts",
+      "page": "ci.md"
+    },
+    {
       "path": "scripts/local-checks.mjs",
       "page": "local-checks.md"
     },

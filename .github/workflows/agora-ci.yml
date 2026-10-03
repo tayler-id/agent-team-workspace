@@ -1,0 +1,200 @@
+{
+	"name": "agora-ci",
+	"on": {
+		"pull_request": {
+			"branches": [
+				"main"
+			]
+		}
+	},
+	"permissions": {
+		"contents": "read"
+	},
+	"concurrency": {
+		"group": "agora-ci-${{ github.event.pull_request.number }}",
+		"cancel-in-progress": true
+	},
+	"jobs": {
+		"doctor": {
+			"runs-on": "ubuntu-24.04",
+			"timeout-minutes": 45,
+			"steps": [
+				{
+					"uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+					"with": {
+						"fetch-depth": 0,
+						"persist-credentials": false
+					}
+				},
+				{
+					"uses": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+					"with": {
+						"node-version-file": ".node-version"
+					}
+				},
+				{
+					"run": "bash scripts/ci-setup.sh"
+				},
+				{
+					"run": "node scripts/ci-doctor.mjs --json"
+				}
+			]
+		},
+		"static": {
+			"runs-on": "ubuntu-24.04",
+			"timeout-minutes": 45,
+			"steps": [
+				{
+					"uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+					"with": {
+						"fetch-depth": 0,
+						"persist-credentials": false
+					}
+				},
+				{
+					"uses": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+					"with": {
+						"node-version-file": ".node-version"
+					}
+				},
+				{
+					"run": "bash scripts/ci-setup.sh"
+				},
+				{
+					"run": "pnpm lint"
+				},
+				{
+					"run": "pnpm typecheck"
+				}
+			]
+		},
+		"contracts": {
+			"runs-on": "ubuntu-24.04",
+			"timeout-minutes": 45,
+			"steps": [
+				{
+					"uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+					"with": {
+						"fetch-depth": 0,
+						"persist-credentials": false
+					}
+				},
+				{
+					"uses": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+					"with": {
+						"node-version-file": ".node-version"
+					}
+				},
+				{
+					"run": "bash scripts/ci-setup.sh swift"
+				},
+				{
+					"run": "pnpm contracts:check"
+				},
+				{
+					"run": "pnpm boundaries"
+				}
+			]
+		},
+		"docs": {
+			"runs-on": "ubuntu-24.04",
+			"timeout-minutes": 45,
+			"steps": [
+				{
+					"uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+					"with": {
+						"fetch-depth": 0,
+						"persist-credentials": false
+					}
+				},
+				{
+					"uses": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+					"with": {
+						"node-version-file": ".node-version"
+					}
+				},
+				{
+					"run": "bash scripts/ci-setup.sh"
+				},
+				{
+					"run": "pnpm docs:check"
+				}
+			]
+		},
+		"tests": {
+			"runs-on": "macos-15",
+			"timeout-minutes": 45,
+			"steps": [
+				{
+					"uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+					"with": {
+						"fetch-depth": 0,
+						"persist-credentials": false
+					}
+				},
+				{
+					"uses": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+					"with": {
+						"node-version-file": ".node-version"
+					}
+				},
+				{
+					"run": "bash scripts/ci-setup.sh postgres python swift"
+				},
+				{
+					"run": "pnpm test"
+				}
+			]
+		},
+		"red-green": {
+			"runs-on": "ubuntu-24.04",
+			"timeout-minutes": 45,
+			"steps": [
+				{
+					"uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+					"with": {
+						"fetch-depth": 0,
+						"persist-credentials": false
+					}
+				},
+				{
+					"uses": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+					"with": {
+						"node-version-file": ".node-version"
+					}
+				},
+				{
+					"run": "bash scripts/ci-setup.sh postgres python swift"
+				},
+				{
+					"run": "bash scripts/ci-red-green.sh \"${{ github.event.pull_request.base.sha }}\" \"${{ github.event.pull_request.head.sha }}\""
+				}
+			]
+		},
+		"guards": {
+			"runs-on": "ubuntu-24.04",
+			"timeout-minutes": 45,
+			"steps": [
+				{
+					"uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+					"with": {
+						"fetch-depth": 0,
+						"persist-credentials": false
+					}
+				},
+				{
+					"uses": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+					"with": {
+						"node-version-file": ".node-version"
+					}
+				},
+				{
+					"run": "bash scripts/ci-setup.sh postgres python"
+				},
+				{
+					"run": "pnpm -s agora project lanes --unit U01b --task agora-s1-validate-project-evidence --artifacts .scratch/ci-lanes --json"
+				}
+			]
+		}
+	}
+}
