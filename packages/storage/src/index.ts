@@ -4,6 +4,7 @@ export { createPostgresLocalRoom, SNAPSHOT_LIMIT } from './local-room.ts';
 export { MigrationPrerequisiteError, type MigrationReport } from './migrate.ts';
 export {
 	BackupDeniedError,
+	captureDatabase,
 	compareInventory,
 	createBackupKeyFile,
 	inventoryDatabase,

@@ -69,26 +69,40 @@ export function openBlob(key: BackupKey, sealed: Uint8Array, label: string): Uin
 	}
 }
 
-// The role must bypass row-level security, or the counts and digests cover only the rows its scope can see.
-export async function inventoryDatabase(connectionString: string): Promise<TableInventory[]> {
+// One repeatable-read, read-only transaction, so every count comes from one snapshot.
+async function withSnapshot<T>(connectionString: string, work: (client: Client) => Promise<T>): Promise<T> {
 	const client = new Client({ connectionString, connectionTimeoutMillis: 2_000 });
 	client.on('error', () => undefined);
 	try {
 		await client.connect();
 		await client.query('begin isolation level repeatable read read only');
-		const tables = await client.query<{ table: string; ident: string }>(`select n.nspname || '.' || c.relname as "table", format('%I.%I', n.nspname, c.relname) as ident
-			from pg_class c join pg_namespace n on n.oid = c.relnamespace
-			where c.relkind in ('r', 'p') and n.nspname not in ('pg_catalog', 'information_schema') and n.nspname not like 'pg\\_toast%'
-			order by n.nspname collate "C", c.relname collate "C"`);
-		const inventory: TableInventory[] = [];
-		for (const { table, ident } of tables.rows) {
-			const result = await client.query<{ rows: string; hex: string }>(`select count(*)::text as rows, encode(sha256(convert_to(coalesce(string_agg(t::text, E'\\n' order by t::text collate "C"), ''), 'UTF8')), 'hex') as hex from ${ident} t`);
-			for (const row of result.rows) inventory.push({ table, rows: row.rows, digest: `sha256:${row.hex}` });
-		}
-		return inventory;
+		return await work(client);
 	} finally {
 		await client.end();
 	}
+}
+
+// The role must bypass row-level security, or the counts and digests cover only the rows its scope can see.
+export const inventoryDatabase = (connectionString: string): Promise<TableInventory[]> => withSnapshot(connectionString, readTables);
+
+// The dump runs against this transaction's exported snapshot, so the sealed counts describe exactly the dumped rows.
+export const captureDatabase = <T extends Uint8Array>(connectionString: string, dump: (snapshot: string) => T): Promise<{ dump: T; tables: TableInventory[] }> => withSnapshot(connectionString, async (client) => {
+	const exported = (await client.query<{ id: string }>('select pg_export_snapshot() as id')).rows[0];
+	if (!exported) throw new Error('pg_export_snapshot returned no snapshot');
+	return { dump: dump(exported.id), tables: await readTables(client) };
+});
+
+async function readTables(client: Client): Promise<TableInventory[]> {
+	const tables = await client.query<{ table: string; ident: string }>(`select n.nspname || '.' || c.relname as "table", format('%I.%I', n.nspname, c.relname) as ident
+		from pg_class c join pg_namespace n on n.oid = c.relnamespace
+		where c.relkind in ('r', 'p') and n.nspname not in ('pg_catalog', 'information_schema') and n.nspname not like 'pg\\_toast%'
+		order by n.nspname collate "C", c.relname collate "C"`);
+	const inventory: TableInventory[] = [];
+	for (const { table, ident } of tables.rows) {
+		const result = await client.query<{ rows: string; hex: string }>(`select count(*)::text as rows, encode(sha256(convert_to(coalesce(string_agg(t::text, E'\\n' order by t::text collate "C"), ''), 'UTF8')), 'hex') as hex from ${ident} t`);
+		for (const row of result.rows) inventory.push({ table, rows: row.rows, digest: `sha256:${row.hex}` });
+	}
+	return inventory;
 }
 
 export function inventoryObjects(dir: string): ObjectInventory[] {

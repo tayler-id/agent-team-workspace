@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { BackupDeniedError, compareInventory, createBackupKeyFile, inventoryDatabase, inventoryDigest, inventoryObjects, loadBackupKey, openBlob, sealBlob, type BackupKey, type IntegrityInventory } from '../packages/storage/src/index.ts';
+import { BackupDeniedError, captureDatabase, compareInventory, createBackupKeyFile, inventoryDatabase, inventoryDigest, inventoryObjects, loadBackupKey, openBlob, sealBlob, type BackupKey, type IntegrityInventory } from '../packages/storage/src/index.ts';
 
 // Exit codes follow scripts/project-checks.mjs: 0 pass, 1 denied, 64 usage, 70 infrastructure failure.
 interface BackupHeader { schema_version: 'agora.backup/v1'; backup_id: string; key_id: string; cipher: 'aes-256-gcm' }
@@ -44,10 +44,9 @@ const writeNew = (file: string, bytes: Uint8Array | string): void => { writeFile
 async function create(o: Map<string, string>, key: BackupKey): Promise<object> {
 	const url = o.get('--database-url') ?? '', source = o.get('--objects') ?? '', out = o.get('--out') ?? '';
 	const objects = inventoryObjects(source);
-	const dump = tool('pg_dump', ['--format=custom', '--no-password', '--dbname', url]);
+	const { dump, tables } = await captureDatabase(url, (snapshot) => tool('pg_dump', ['--format=custom', '--no-password', `--snapshot=${snapshot}`, '--dbname', url]));
 	// The custom-format TOC records the source server version; pg_restore --list reads it without a target.
 	const database_version = /Dumped from database version: (.+)/.exec(tool('pg_restore', ['--list'], dump).toString('utf8'))?.[1]?.trim() ?? 'unknown';
-	const tables = await inventoryDatabase(url);
 	const inventory: IntegrityInventory = { tables, objects };
 	const header: BackupHeader = { schema_version: 'agora.backup/v1', backup_id: randomUUID(), key_id: key.keyId, cipher: 'aes-256-gcm' };
 	const id = header.backup_id;
