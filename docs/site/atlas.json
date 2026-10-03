@@ -53,7 +53,6 @@
       "why": "Ordinary unprivileged GitHub test execution for pull requests to main. It is not trusted evidence, not merge authority, and the credential-bearing reporter remains a separate unqualified security task.",
       "page": "ci.md",
       "proof": [
-        "repo:.github/workflows/agora-ci.yml",
         "repo:packages/verification/test/ci-workflow.test.ts",
         "repo:scripts/ci-red-green.sh"
       ]

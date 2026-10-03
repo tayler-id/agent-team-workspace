@@ -34,7 +34,7 @@ The document-semantics gate (`node scripts/verify-design.mjs`) runs its rejectio
 
 ## Candidate pull request checks
 
-For contributors, every pull request to `main` runs [the candidate workflow](repo:.github/workflows/agora-ci.yml) on GitHub. It is ordinary, unprivileged test execution. It is not a trusted evidence signature, it publishes no `agora/evidence` or `agora/policy` check, and it grants no merge authority. The credential-bearing reporter and the U01b qualification are a separate security task and stay unqualified here.
+For contributors, every pull request to `main` runs the candidate workflow `.github/workflows/agora-ci.yml` on GitHub. It is ordinary, unprivileged test execution. It is not a trusted evidence signature, it publishes no `agora/evidence` or `agora/policy` check, and it grants no merge authority. The credential-bearing reporter and the U01b qualification are a separate security task and stay unqualified here.
 
 Seven jobs, one per verification area, each run in its own fresh checkout:
 
@@ -60,4 +60,3 @@ Result | Each job reports as a GitHub Actions check. A red job means that area f
 The workflow keeps the Node and pnpm versions pinned (`.node-version`, `packageManager`), pins both actions by commit, grants `contents: read` only, references no secret, and sets `persist-credentials: false`. [The workflow test](repo:packages/verification/test/ci-workflow.test.ts) parses the committed workflow and asserts those facts and the seven command lists, so a change that removes a job or widens a permission fails `pnpm test`.
 
 Pull requests opened before this workflow reached `main` show no checks. GitHub runs the workflow only on a `pull_request` event, so rebase, push a new commit or close and reopen the pull request to start it. The local gate (`node scripts/local-checks.mjs run`) stays mandatory for landing; these checks do not replace it.
-

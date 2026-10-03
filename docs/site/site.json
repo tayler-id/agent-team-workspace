@@ -269,10 +269,6 @@
       "page": "ci.md"
     },
     {
-      "path": ".github/workflows/agora-ci.yml",
-      "page": "ci.md"
-    },
-    {
       "path": "scripts/ci-setup.sh",
       "page": "ci.md"
     },
