@@ -1,0 +1,105 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-03T21:30:41.203Z
+parent: a62662e8788a072289b14b82f80cc970e1bd6943
+head: e6cb6672b07d54ea549248645a41b2b0d7bd045f
+subject_revision: a62662e8788a072289b14b82f80cc970e1bd6943
+test_patch_applied_to_subject: true
+test_patch_files: docs/site/test/corpus.test.ts, packages/client-core/test/client-state-owner.test.ts
+test_patch_digest: sha256:176ffa725a88d98fad681c315a4425eef5e30828e437e23365dae997bd3aed00
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/client-state-owner.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-lKqiTm
+
+ ❯ |unit| packages/client-core/test/client-state-owner.test.ts (6 tests | 4 failed) 1348ms
+   × a component holding durable Client state in React state is rejected and names the Client hooks 1153ms
+   × a re-exported alias of a durable type is still caught, and the diagnostic names the sanctioned writer 30ms
+   × a component importing the Client core runtime or constructing a Client bypasses the named hooks 18ms
+   × a component calling the transport directly is rejected, while reading its identity is accepted 17ms
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 2 passed (6)
+   Start at  17:30:28
+   Duration  1.48s (tests 94%, import 5%, transform 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/client-state-owner.test.ts > a component holding durable Client state in React state is rejected and names the Client hooks
+AssertionError: apps/web/src/components/App.tsx: import { useState } from 'react';
+import { useClientSelector } from '@agora/web-framework';
+export function C(): null { const room = useClientSelector((s) => s.rooms[0]); const [copy] = useState(room); void room; return null; }
+: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/client-state-owner.test.ts:30:115
+     28|  ];
+     29|  for (const code of copies) {
+     30|   for (const file of [component, feature]) expect(await hit(code, file…
+       |                                                                                                                   ^
+     31|  }
+     32| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  |unit| packages/client-core/test/client-state-owner.test.ts > a re-exported alias of a durable type is still caught, and the diagnostic names the sanctioned writer
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ packages/client-core/test/client-state-owner.test.ts:37:19
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  |unit| packages/client-core/test/client-state-owner.test.ts > a component importing the Client core runtime or constructing a Client bypasses the named hooks
+AssertionError: apps/web/src/components/App.tsx: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/client-state-owner.test.ts:62:137
+     60| test('a component importing the Client core runtime or constructing a …
+     61|  for (const file of [component, feature]) {
+     62|   expect(await hit("import { synchronize } from '@agora/client-core'; …
+       |                                                                                                                                         ^
+     63|   expect(await hit("import { initialState as init } from '@agora/clien…
+     64|   expect(await hit("export { initialState } from '@agora/client-core';…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  |unit| packages/client-core/test/client-state-owner.test.ts > a component calling the transport directly is rejected, while reading its identity is accepted
+AssertionError: transport.submit('c', 'd', 'hi'): expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/client-state-owner.test.ts:73:69
+     71|  const call = (body: string): string => `import { useEnvironment } fro…
+     72|  for (const body of ["transport.submit('c', 'd', 'hi')", 'transport.ma…
+     73|   expect(await hit(call(body), component, 'useRoomCommands'), body).to…
+       |                                                                     ^
+     74|  }
+     75|  expect(await owner(call('void transport.streamId'), component)).toEqu…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
