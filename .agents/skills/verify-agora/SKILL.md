@@ -85,17 +85,18 @@ Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/Postgre
 
 ### Production build (built room)
 
-Build the fixture room with its real `apps/web/vite.config.ts`, then serve the output on the owned port. `OUT` is `evidence/U01d/production-browser-csp/browser` for the retained run or a scratch path for a rerun. Record both PIDs. `$!` is the pnpm wrapper, and the `lsof` line records the vite listener that Cleanup stops.
+Build the fixture room with its real `apps/web/vite.config.ts`, then serve the output on the owned port. `OUT` is `evidence/U01d/production-browser-csp/browser` for the retained run or a scratch path for a rerun. `RUN` is ignored scratch that holds the preview log and both PIDs, so no process handle lands in evidence. `$!` is the pnpm wrapper, and the `lsof` line records the vite listener that Cleanup stops.
 
 ```sh
 OUT=evidence/U01d/production-browser-csp/browser
-mkdir -p "$OUT"
+RUN=.scratch/built-room-preview
+mkdir -p "$OUT" "$RUN"
 pnpm web:build
 grep -o 'http-equiv="Content-Security-Policy" content="[^"]*"' apps/web/dist/index.html > "$OUT/csp.txt"
-pnpm --filter @agora/web exec vite preview --strictPort --port 4394 --host 127.0.0.1 > "$OUT/preview.log" 2>&1 &
-echo $! > "$OUT/preview-wrapper.pid"
+pnpm --filter @agora/web exec vite preview --strictPort --port 4394 --host 127.0.0.1 > "$RUN/preview.log" 2>&1 &
+echo $! > "$RUN/preview-wrapper.pid"
 for i in $(seq 50); do curl -sf -o /dev/null http://127.0.0.1:4394/ && break; sleep 0.2; done
-lsof -nP -t -iTCP:4394 -sTCP:LISTEN > "$OUT/preview.pid"
+lsof -nP -t -iTCP:4394 -sTCP:LISTEN > "$RUN/preview.pid"
 ```
 
 The `content` value in `csp.txt` must equal `default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'`, with each single quote escaped as `&#39;` and no `unsafe-eval` or `unsafe-inline`. `preview.pid` must hold one PID. A build that exits 0 is not the proof; the Drive probe is.
@@ -243,7 +244,7 @@ chrome-devtools-axi screenshot "$OUT/390x844.png"
 chrome-devtools-axi console --type error > "$OUT/390x844-console-errors.txt"
 chrome-devtools-axi console > "$OUT/390x844-console.txt"
 pnpm web:test
-pnpm exec vitest run --project web apps/web/test/built-room.test.ts
+pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/built-room.test.ts
 ```
 
 Built-room predicates: both probes report `rootChildren` above 0, `fixture: true` and `rejected: false`; the 390x844 probe reports `fits: true`. `chrome-devtools-axi console` reports the page loaded by the latest `open`, so each viewport gets its own capture. The only expected console error is a `favicon.ico` 404 on the first load, because the app ships no favicon; any CSP issue fails the run. The rejection path in a real browser (a bundle copy with a non-UUID stream id renders `Fixture rejected: snapshot failed FixtureSyncSnapshot validation`) and the send-plus-receipt drive are in `evidence/U01d/production-browser-csp/browser/drive.sh.txt`. Both `*-console-errors.txt` files read `<no console messages found>`, and neither `*-console.txt` file has an `EvalError`, an `unsafe-eval` mention or a Content Security Policy issue. `1440x900-loaded.txt` reports `true`. The first two screenshots show the room header, the empty timeline with its Load fixture snapshot button and the composer, not a blank page; `1440x900-loaded.png` shows the fixture messages. `pnpm web:test` exits 0, and the focused run reports `Tests 3 passed (3)`. `apps/web/test/built-room.test.ts` builds into its own `.scratch/built-room-<pid>` directory, checks the unchanged policy, renders the bundle under `node --disallow-code-generation-from-strings`, and expects a bundle copy with one corrupted fixture value to render `Fixture rejected: snapshot failed FixtureSyncSnapshot validation`. The before-fix reproduction at the parent shows `rootChildren: 0` and an `EvalError` naming `script-src 'self'`; it lives in `evidence/U01d/production-browser-csp/reproduction/`.
@@ -349,7 +350,7 @@ The selected red must be `expected 'unavailable' to be 'pass'` after doctor pass
 Record red/green with the parent that lacks the plugin and the committed fix head, never a moving branch name:
 
 ```sh
-node scripts/record-red-green.mjs --parent PARENT --head HEAD --out evidence/U01d/production-browser-csp -- pnpm exec vitest run --project web apps/web/test/built-room.test.ts
+node scripts/record-red-green.mjs --parent PARENT --head HEAD --out evidence/U01d/production-browser-csp -- pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/built-room.test.ts
 ```
 
 Red must fail the render and rejection assertions on an `EvalError` from string code generation while the unchanged-policy assertion passes; a build failure, missing runner or import error is not red proof. Green must report `Tests 3 passed (3)`. Retain `csp.txt`, both probe files, `1440x900-loaded.txt`, the three screenshots and the four console captures from Drive under `evidence/U01d/production-browser-csp/browser/`.
@@ -418,13 +419,13 @@ For the project verification controls (U01b.B01), the final cleanup command abov
 Stop only the recorded preview listener and the named browser session, then prove the port is free:
 
 ```sh
-kill "$(cat "$OUT/preview.pid")"
+kill "$(cat "$RUN/preview.pid")"
 CHROME_DEVTOOLS_AXI_SESSION=verify-built-room chrome-devtools-axi stop
-for i in $(seq 25); do kill -0 "$(cat "$OUT/preview-wrapper.pid")" 2>/dev/null || break; sleep 0.2; done
+for i in $(seq 25); do kill -0 "$(cat "$RUN/preview-wrapper.pid")" 2>/dev/null || break; sleep 0.2; done
 lsof -nP -iTCP:4394 -sTCP:LISTEN
-kill -0 "$(cat "$OUT/preview-wrapper.pid")" 2>/dev/null && echo wrapper-still-running
+kill -0 "$(cat "$RUN/preview-wrapper.pid")" 2>/dev/null && echo wrapper-still-running
 ```
 
-`lsof` and the wrapper check must print nothing. If either does, the recorded process did not exit; report it and do not kill other vite or Chrome processes by name. `apps/web/dist` is ignored build output and may stay; the regression test removes its own `.scratch/built-room-<pid>` directory.
+`lsof` and the wrapper check must print nothing. If either does, the recorded process did not exit; report it, keep `$RUN` for diagnosis and do not kill other vite or Chrome processes by name. Otherwise delete `$RUN`, which held only this run's log and PIDs. `apps/web/dist` is ignored build output and may stay; the regression test removes its own `.scratch/built-room-<pid>` directory.
 
 Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.
