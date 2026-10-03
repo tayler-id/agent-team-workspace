@@ -21,6 +21,7 @@ export interface BackupKey { readonly keyId: string; readonly bytes: Uint8Array 
 
 export interface TableInventory { table: string; rows: string; digest: string }
 export interface ObjectInventory { name: string; byte_length: number; digest: string }
+export interface ObjectFile { name: string; bytes: Uint8Array }
 export interface IntegrityInventory { tables: TableInventory[]; objects: ObjectInventory[] }
 
 const MAGIC = Buffer.from('AGB1', 'ascii');
@@ -105,14 +106,15 @@ async function readTables(client: Client): Promise<TableInventory[]> {
 	return inventory;
 }
 
-export function inventoryObjects(dir: string): ObjectInventory[] {
+export function readObjects(dir: string): ObjectFile[] {
 	const entries = readdirSync(dir, { withFileTypes: true }).sort((a, b) => byCodePoint(a.name, b.name));
 	return entries.map((entry) => {
 		if (!entry.isFile()) throw new Error(`objects directory holds a non-regular entry: ${entry.name}`);
-		const bytes = readFileSync(path.join(dir, entry.name));
-		return { name: entry.name, byte_length: bytes.length, digest: sha256(bytes) };
+		return { name: entry.name, bytes: readFileSync(path.join(dir, entry.name)) };
 	});
 }
+
+export const inventoryObject = ({ name, bytes }: ObjectFile): ObjectInventory => ({ name, byte_length: bytes.length, digest: sha256(bytes) });
 
 export function compareInventory(expected: IntegrityInventory, observed: IntegrityInventory): string[] {
 	const subjects = (inventory: IntegrityInventory): Map<string, string> => new Map([...inventory.tables.map((t) => [`table:${t.table}`, `${t.rows}|${t.digest}`] as const), ...inventory.objects.map((o) => [`object:${o.name}`, `${o.byte_length}|${o.digest}`] as const)]);

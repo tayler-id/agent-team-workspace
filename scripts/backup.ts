@@ -1,12 +1,12 @@
 import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, rmdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { BackupDeniedError, captureDatabase, compareInventory, createBackupKeyFile, inventoryDatabase, inventoryDigest, inventoryObjects, loadBackupKey, openBlob, sealBlob, type BackupKey, type IntegrityInventory } from '../packages/storage/src/index.ts';
+import { BackupDeniedError, captureDatabase, compareInventory, createBackupKeyFile, inventoryDatabase, inventoryDigest, inventoryObject, loadBackupKey, openBlob, readObjects, sealBlob, type BackupKey, type IntegrityInventory } from '../packages/storage/src/index.ts';
 
 // Exit codes follow scripts/project-checks.mjs: 0 pass, 1 denied, 64 usage, 70 infrastructure failure.
 interface BackupHeader { schema_version: 'agora.backup/v1'; backup_id: string; key_id: string; cipher: 'aes-256-gcm' }
-interface Manifest { backup_id: string; created_at: string; database_version: string; inventory: IntegrityInventory; objects: { file: string; name: string }[] }
+interface Manifest { backup_id: string; created_at: string; inventory: IntegrityInventory; objects: { file: string; name: string }[] }
 class UsageError extends Error {}
 const COMMANDS: Record<string, string[]> = {
 	keygen: ['--key'],
@@ -43,23 +43,21 @@ const writeNew = (file: string, bytes: Uint8Array | string): void => { writeFile
 
 async function create(o: Map<string, string>, key: BackupKey): Promise<object> {
 	const url = o.get('--database-url') ?? '', source = o.get('--objects') ?? '', out = o.get('--out') ?? '';
-	const objects = inventoryObjects(source);
+	const objects = readObjects(source);
 	const { dump, tables } = await captureDatabase(url, (snapshot) => tool('pg_dump', ['--format=custom', '--no-password', `--snapshot=${snapshot}`, '--dbname', url]));
-	// The custom-format TOC records the source server version; pg_restore --list reads it without a target.
-	const database_version = /Dumped from database version: (.+)/.exec(tool('pg_restore', ['--list'], dump).toString('utf8'))?.[1]?.trim() ?? 'unknown';
-	const inventory: IntegrityInventory = { tables, objects };
+	const inventory: IntegrityInventory = { tables, objects: objects.map(inventoryObject) };
 	const header: BackupHeader = { schema_version: 'agora.backup/v1', backup_id: randomUUID(), key_id: key.keyId, cipher: 'aes-256-gcm' };
 	const id = header.backup_id;
 	mkdirSync(out, { mode: 0o700 });
 	mkdirSync(path.join(out, 'objects'), { mode: 0o700 });
 	writeNew(path.join(out, 'backup.json'), `${JSON.stringify(header)}\n`);
 	writeNew(path.join(out, 'database.agb'), sealBlob(key, dump, `${id}/database`));
-	const files = objects.map(({ name }, i) => {
+	const files = objects.map(({ name, bytes }, i) => {
 		const file = `objects/${String(i + 1).padStart(4, '0')}.agb`;
-		writeNew(path.join(out, file), sealBlob(key, readFileSync(path.join(source, name)), `${id}/${file.slice(0, -4)}`));
+		writeNew(path.join(out, file), sealBlob(key, bytes, `${id}/${file.slice(0, -4)}`));
 		return { file, name };
 	});
-	const manifest: Manifest = { backup_id: id, created_at: new Date().toISOString(), database_version, inventory, objects: files };
+	const manifest: Manifest = { backup_id: id, created_at: new Date().toISOString(), inventory, objects: files };
 	writeNew(path.join(out, 'manifest.agb'), sealBlob(key, Buffer.from(JSON.stringify(manifest), 'utf8'), `${id}/manifest`));
 	return { schema_version: SCHEMAS['create'], outcome: 'created', backup_id: id, key_id: key.keyId, inventory_digest: inventoryDigest(inventory), tables: tables.length, objects: objects.length };
 }
@@ -87,11 +85,12 @@ async function restore(o: Map<string, string>, key: BackupKey): Promise<object> 
 	});
 	// Nothing above touches the target; the emptiness checks are the first reads of it.
 	if ((await inventoryDatabase(url)).length > 0) throw new BackupDeniedError('target_not_empty', 'database');
-	if (existsSync(target)) throw new BackupDeniedError('target_not_empty', 'objects');
-	tool('pg_restore', ['--exit-on-error', '--single-transaction', '--no-password', '--dbname', url], Buffer.from(dump));
-	mkdirSync(target, { mode: 0o700 });
+	try { mkdirSync(target, { mode: 0o700 }); }
+	catch (error) { if ((error as NodeJS.ErrnoException).code === 'EEXIST') throw new BackupDeniedError('target_not_empty', 'objects'); throw error; }
+	try { tool('pg_restore', ['--exit-on-error', '--single-transaction', '--no-password', '--dbname', url], Buffer.from(dump)); }
+	catch (error) { rmdirSync(target); throw error; }
 	for (const { name, bytes } of objects) writeNew(path.join(target, name), bytes);
-	const observed: IntegrityInventory = { tables: await inventoryDatabase(url), objects: inventoryObjects(target) };
+	const observed: IntegrityInventory = { tables: await inventoryDatabase(url), objects: readObjects(target).map(inventoryObject) };
 	const [mismatch] = compareInventory(manifest.inventory, observed);
 	if (mismatch) throw new BackupDeniedError('integrity_mismatch', mismatch);
 	return { schema_version: SCHEMAS['restore'], outcome: 'restored', backup_id: id, key_id: key.keyId, inventory_digest: inventoryDigest(manifest.inventory), tables: observed.tables.length, objects: observed.objects.length };

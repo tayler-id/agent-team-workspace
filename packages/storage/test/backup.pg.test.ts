@@ -31,8 +31,9 @@ const created: { key_id?: string; inventory_digest?: string; tables?: number } =
 
 // Every run must print exactly one JSON line; anything else yields undefined so the literal assertions fail.
 // Asynchronous, so a concurrent writer in this process keeps running while create works.
-function cli(...args: string[]): Promise<{ status: number | null; receipt: unknown }> {
-	const child = spawn(process.execPath, ['scripts/backup.ts', ...args], { cwd: repoRoot, stdio: ['ignore', 'pipe', 'ignore'] });
+const cli = (...args: string[]) => cliWith(process.env, ...args);
+function cliWith(env: NodeJS.ProcessEnv, ...args: string[]): Promise<{ status: number | null; receipt: unknown }> {
+	const child = spawn(process.execPath, ['scripts/backup.ts', ...args], { cwd: repoRoot, env, stdio: ['ignore', 'pipe', 'ignore'] });
 	let stdout = '';
 	child.stdout.on('data', (chunk: Buffer) => { stdout += chunk.toString('utf8'); });
 	return new Promise((resolve) => child.on('close', (status) => {
@@ -52,6 +53,14 @@ function seal(key: Buffer, plaintext: Buffer, label: string): Buffer {
 	const cipher = createCipheriv('aes-256-gcm', key, nonce).setAAD(Buffer.from(label));
 	const ciphertext = Buffer.concat([cipher.update(plaintext), cipher.final()]);
 	return Buffer.concat([Buffer.from('AGB1'), nonce, cipher.getAuthTag(), ciphertext]);
+}
+
+// A PostgreSQL binary directory holding one replaced tool, selected through the CLI's documented AGORA_PG_BIN.
+function fakeBin(name: string, tool: string, script: string): NodeJS.ProcessEnv {
+	const dir = join(root, name);
+	mkdirSync(dir);
+	writeFileSync(join(dir, tool), `#!/bin/sh\n${script}\n`, { mode: 0o755 });
+	return { ...process.env, AGORA_PG_BIN: dir };
 }
 
 const open = (url: string, name: string): Database => { const db = openDatabase(withDatabase(url, name)); opened.push(db); return db; };
@@ -199,4 +208,32 @@ test('a backup taken while rows are being written restores to exactly its sealed
 	expect(made.status).toBe(0);
 	const target = await newTarget();
 	expect(await cli('restore', '--backup', raced, '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, target), '--objects', join(root, 'raced-objects'))).toEqual({ status: 0, receipt: expect.objectContaining({ outcome: 'restored', inventory_digest: (made.receipt as { inventory_digest: string }).inventory_digest }) as unknown });
+});
+
+test('an object rewritten while pg_dump runs is sealed and restored as the bytes create inventoried', async () => {
+	const moving = join(root, 'moving-objects');
+	cpSync(objects, moving, { recursive: true });
+	const pgDump = process.env['AGORA_PG_BIN'] ? join(process.env['AGORA_PG_BIN'], 'pg_dump') : 'pg_dump';
+	const env = fakeBin('bin-rewrite', 'pg_dump', `printf 'rewritten during pg_dump\\n' > '${join(moving, 'alpha.txt')}'\nexec '${pgDump}' "$@"`);
+	const made = await cliWith(env, 'create', '--database-url', withDatabase(superuserUrl, source), '--objects', moving, '--key', join(keys, 'good'), '--out', join(root, 'moving'));
+	expect(made.status).toBe(0);
+	expect(readFileSync(join(moving, 'alpha.txt'), 'utf8')).toBe('rewritten during pg_dump\n');
+	const target = await newTarget();
+	const objectsOut = join(root, 'moving-restored');
+	expect(await cli('restore', '--backup', join(root, 'moving'), '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, target), '--objects', objectsOut)).toEqual({ status: 0, receipt: expect.objectContaining({ outcome: 'restored', inventory_digest: (made.receipt as { inventory_digest: string }).inventory_digest }) as unknown });
+	expect(readFileSync(join(objectsOut, 'alpha.txt')).equals(files['alpha.txt'] ?? Buffer.alloc(0))).toBe(true);
+});
+
+test('an objects path whose parent is missing fails before any row is restored', async () => {
+	const target = await newTarget();
+	expect(await cli('restore', '--backup', backup, '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, target), '--objects', join(root, 'absent-parent', 'objects'))).toEqual({ status: 70, receipt: { schema_version: 'agora.restore-receipt/v1', outcome: 'infrastructure_failure', message: expect.stringContaining('ENOENT') as string } });
+	expect(await userTables(target)).toBe(0);
+});
+
+test('a failed pg_restore removes the objects directory it claimed', async () => {
+	const target = await newTarget();
+	const objectsOut = join(root, 'failed-restore-objects');
+	expect(await cliWith(fakeBin('bin-fail', 'pg_restore', 'cat > /dev/null; exit 1'), 'restore', '--backup', backup, '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, target), '--objects', objectsOut)).toEqual({ status: 70, receipt: { schema_version: 'agora.restore-receipt/v1', outcome: 'infrastructure_failure', message: 'pg_restore failed (1): ' } });
+	expect(existsSync(objectsOut)).toBe(false);
+	expect(await userTables(target)).toBe(0);
 });
