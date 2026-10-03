@@ -1,0 +1,51 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-03T22:18:40.115Z
+parent: a2e42e217abc24e3f94e249f64d49e3e4d5591f1
+head: 8c528418879eed414830b2024e587c45d51b3eaf
+subject_revision: a2e42e217abc24e3f94e249f64d49e3e4d5591f1
+test_patch_applied_to_subject: true
+test_patch_files: packages/verification/test/ci-workflow.test.ts
+test_patch_digest: sha256:df8642ce8be1bd5fffd56d8566508e5cd54e91fb83d61440b56dec304aa7c9bc
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node scripts/with-test-postgres.mjs pnpm exec vitest run packages/verification/test/ci-workflow.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-febnHs
+
+ ❯ |unit| packages/verification/test/ci-workflow.test.ts (7 tests | 1 failed) 1328ms
+   × red-green job skips red for a commit that changes only tests, docs or evidence 221ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  18:18:29
+   Duration  1.42s (tests 98%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"0a18fd52-0107-4434-acc4-3fa770a7966a","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-TV9lwd","socketDir":"/private/tmp/agora-p0c-0a18fd52-0107-4434-acc4-3fa770a7966a"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"0a18fd52-0107-4434-acc4-3fa770a7966a","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-TV9lwd","socketDir":"/private/tmp/agora-p0c-0a18fd52-0107-4434-acc4-3fa770a7966a","pid":59550}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"0a18fd52-0107-4434-acc4-3fa770a7966a","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-TV9lwd","socketDir":"/private/tmp/agora-p0c-0a18fd52-0107-4434-acc4-3fa770a7966a","socket_dir":"/private/tmp/agora-p0c-0a18fd52-0107-4434-acc4-3fa770a7966a","pid":59550,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/ci-workflow.test.ts > red-green job skips red for a commit that changes only tests, docs or evidence
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ packages/verification/test/ci-workflow.test.ts:94:24
+     92| test('red-green job skips red for a commit that changes only tests, do…
+     93|  const result = redGreen('packages/storage/test/thing.test.ts');
+     94|  expect(result.status).toBe(0);
+       |                        ^
+     95|  expect(result.stdout).toContain('changes only tests, docs or evidence…
+     96| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-TV9lwd","socketDir":"/private/tmp/agora-p0c-0a18fd52-0107-4434-acc4-3fa770a7966a"}
