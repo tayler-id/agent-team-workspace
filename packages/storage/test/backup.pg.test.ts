@@ -1,8 +1,8 @@
 import { spawn } from 'node:child_process';
 import { createCipheriv, createDecipheriv, randomBytes, randomUUID } from 'node:crypto';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { delimiter, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, expect, test } from 'vitest';
 import { Pool } from 'pg';
@@ -55,10 +55,19 @@ function seal(key: Buffer, plaintext: Buffer, label: string): Buffer {
 	return Buffer.concat([Buffer.from('AGB1'), nonce, cipher.getAuthTag(), ciphertext]);
 }
 
-// A PostgreSQL binary directory holding one replaced tool, selected through the CLI's documented AGORA_PG_BIN.
+// The binary the CLI itself would run: from AGORA_PG_BIN when set, otherwise the first match on PATH.
+function realPgBin(tool: string): string {
+	const dirs = process.env['AGORA_PG_BIN'] ? [process.env['AGORA_PG_BIN']] : (process.env['PATH'] ?? '').split(delimiter);
+	const found = dirs.map((dir) => join(dir, tool)).find((file) => existsSync(file));
+	if (!found) throw new Error(`${tool} not found`);
+	return found;
+}
+
+// A PostgreSQL binary directory with one tool replaced by a script and the others linked to the real binaries, selected through the CLI's documented AGORA_PG_BIN.
 function fakeBin(name: string, tool: string, script: string): NodeJS.ProcessEnv {
 	const dir = join(root, name);
 	mkdirSync(dir);
+	for (const other of ['pg_dump', 'pg_restore', 'psql']) if (other !== tool) symlinkSync(realPgBin(other), join(dir, other));
 	writeFileSync(join(dir, tool), `#!/bin/sh\n${script}\n`, { mode: 0o755 });
 	return { ...process.env, AGORA_PG_BIN: dir };
 }
@@ -213,8 +222,7 @@ test('a backup taken while rows are being written restores to exactly its sealed
 test('an object rewritten while pg_dump runs is sealed and restored as the bytes create inventoried', async () => {
 	const moving = join(root, 'moving-objects');
 	cpSync(objects, moving, { recursive: true });
-	const pgDump = process.env['AGORA_PG_BIN'] ? join(process.env['AGORA_PG_BIN'], 'pg_dump') : 'pg_dump';
-	const env = fakeBin('bin-rewrite', 'pg_dump', `printf 'rewritten during pg_dump\\n' > '${join(moving, 'alpha.txt')}'\nexec '${pgDump}' "$@"`);
+	const env = fakeBin('bin-rewrite', 'pg_dump', `printf 'rewritten during pg_dump\\n' > '${join(moving, 'alpha.txt')}'\nexec '${realPgBin('pg_dump')}' "$@"`);
 	const made = await cliWith(env, 'create', '--database-url', withDatabase(superuserUrl, source), '--objects', moving, '--key', join(keys, 'good'), '--out', join(root, 'moving'));
 	expect(made.status).toBe(0);
 	expect(readFileSync(join(moving, 'alpha.txt'), 'utf8')).toBe('rewritten during pg_dump\n');
