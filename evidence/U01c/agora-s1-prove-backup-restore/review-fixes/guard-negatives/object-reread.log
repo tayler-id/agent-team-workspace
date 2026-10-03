@@ -1,0 +1,42 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.no-mistakes/worktrees/50d2db971a33/01M41VBGXG69TYMV6VSF8EHPWY
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (13 tests | 1 failed) 5923ms
+   × an object rewritten while pg_dump runs is sealed and restored as the bytes create inventoried 857ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 12 passed (13)
+   Start at  18:07:08
+   Duration  6.27s (tests 95%, import 4%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"b24ee364-ea54-4af3-92ff-37bd741fef88","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b24ee364-ea54-4af3-92ff-37bd741fef88"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"b24ee364-ea54-4af3-92ff-37bd741fef88","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b24ee364-ea54-4af3-92ff-37bd741fef88","pid":31140}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"b24ee364-ea54-4af3-92ff-37bd741fef88","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b24ee364-ea54-4af3-92ff-37bd741fef88","socket_dir":"/private/tmp/agora-p0c-b24ee364-ea54-4af3-92ff-37bd741fef88","pid":31140,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > an object rewritten while pg_dump runs is sealed and restored as the bytes create inventoried
+AssertionError: expected { status: 1, receipt: { …(4) } } to deeply equal { status: +0, …(1) }
+
+- Expected
++ Received
+
+  {
+    "receipt": {
+-     "inventory_digest": "sha256:25dd6fd4885da7fb671ab18746cd8f1cf976074850757bc4ef329d2e62a3cd20",
+-     "outcome": "restored",
++     "outcome": "denied",
++     "reason_code": "integrity_mismatch",
++     "schema_version": "agora.restore-receipt/v1",
++     "subject": "object:alpha.txt",
+    },
+-   "status": 0,
++   "status": 1,
+  }
+
+ ❯ packages/storage/test/backup.pg.test.ts:223:173
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b24ee364-ea54-4af3-92ff-37bd741fef88"}

@@ -13,6 +13,7 @@
   "snapshot_race": { "parent": "07d19c1e2d84d4d9ef81233644d0eee0973c8036", "red_reason": "integrity_mismatch", "fixed": true },
   "guard_negatives": { "mutations": 9, "red_as_expected": 9, "restored_byte_identical": 9 },
   "recipe_drive": "pass",
+  "review_fixes": { "parent": "8bf2661acecf637580b16e62df431e9ead8500f9", "head": "19ebf4cf93ccbe40c9eb79efb73bcd0db2b3120c", "red_exit": 1, "green_exit": 0, "tests": 13, "red_failed": 2, "guard_negatives": { "mutations": 3, "red_as_expected": 3, "restored_byte_identical": 3 }, "recipe_drive_rerun": false },
   "independent_security_review": "not_performed",
-  "open": ["wal_archive", "separate_host_restore", "off_host_key_recovery", "epoch_rotation_and_fencing", "rpo_rto_measurement", "dedicated_backup_role", "external_storage", "key_rotation", "normalized_schema_comparison"]
+  "open": ["wal_archive", "separate_host_restore", "off_host_key_recovery", "epoch_rotation_and_fencing", "rpo_rto_measurement", "dedicated_backup_role", "external_storage", "key_rotation", "normalized_schema_comparison", "cross_version_restore"]
 }

@@ -66,10 +66,48 @@ Drive and Cleanup blocks, run literally at this head. `drive/recipe-transcript.t
 `outcome: pass`, Cleanup printed `removed` and `no key file in evidence`, and
 `drive/wrapper.ndjson` records `allocated`, `started` and `cleaned` for one cluster.
 
+## Review fixes
+
+The review round (`19ebf4c`) changed three things. `create` reads each object once and
+seals the bytes it inventoried. `restore` creates the `--objects` directory before
+`pg_restore` and removes it if `pg_restore` fails. The unused `database_version` manifest
+field and its `pg_restore --list` pass are gone. The round added three tests, so the file
+now has thirteen. The receipts above stay as recorded for `4385f34`.
+
+`review-fixes/` holds the pair from
+`node scripts/record-red-green.mjs --parent 8bf2661 --head 19ebf4c` with the same
+command. Red fails two tests and passes eleven:
+
+- `an objects path whose parent is missing fails before any row is restored` finds 8
+  tables in the target where it expects 0. The parent ran `pg_restore` before it created
+  the directory.
+- `an object rewritten while pg_dump runs ...` fails at `create` with exit 70, not with an
+  inventory mismatch. The parent's `create` also ran `pg_restore --list`, and the test's
+  substituted `AGORA_PG_BIN` directory holds only `pg_dump`. The `object-reread` guard
+  negative below isolates the mechanism the test is for.
+
+The third new test, `a failed pg_restore removes the objects directory it claimed`, passes
+at the parent because the parent never created the directory before `pg_restore`. Only
+its guard negative shows it can fail. Green passes all thirteen.
+`node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore/review-fixes --base 8bf2661acecf637580b16e62df431e9ead8500f9 --head 19ebf4cf93ccbe40c9eb79efb73bcd0db2b3120c`
+passes with this checkout's producer key.
+
+`review-fixes/guard-negatives/summary.json` records three mutations of `scripts/backup.ts`
+at `19ebf4c`, applied and restored the same way as the nine above:
+
+| Mutation | Disabled guard | Red test | Observed |
+| --- | --- | --- | --- |
+| `object-reread` | seal re-reads the file after `pg_dump` | object rewritten while `pg_dump` runs | `integrity_mismatch` on `object:alpha.txt` |
+| `objects-claim-after-restore` | `pg_restore` runs before the directory is created | objects path whose parent is missing | 8 tables left in the target |
+| `rmdir-off` | no `rmdirSync` after a failed `pg_restore` | failed `pg_restore` removes the directory | directory left behind |
+
+Each went red on its named test alone, and the file was restored byte for byte after each
+one. The recipe drive under `drive/` was not re-run at `19ebf4c`.
+
 ## Not proved
 
 WAL archiving, separate-host restore, off-host key recovery, epoch rotation and fencing,
-RPO and RTO, a dedicated backup role, external storage, key rotation and a normalized
-schema comparison. No independent security review has happened, and the implementer's own
+RPO and RTO, a dedicated backup role, external storage, key rotation, a normalized
+schema comparison and restore across PostgreSQL versions. No independent security review has happened, and the implementer's own
 checks are not one. D111 records AES-256-GCM as an implementation decision under R17 and
 D32; it claims no captain or operator acceptance.
