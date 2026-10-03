@@ -1,0 +1,44 @@
+diff --git a/packages/verification/test/ci-workflow.test.ts b/packages/verification/test/ci-workflow.test.ts
+index a5ccad2..d9f0186 100644
+--- a/packages/verification/test/ci-workflow.test.ts
++++ b/packages/verification/test/ci-workflow.test.ts
+@@ -60,7 +60,7 @@ test('every pnpm script and file the workflow names exists', () => {
+ 
+ const sandboxes: string[] = [];
+ afterAll(() => { for (const dir of sandboxes) rmSync(dir, { recursive: true, force: true }); });
+-const redGreen = (changed: string) => {
++const redGreen = (...changed: string[]) => {
+ 	const dir = mkdtempSync(path.join(os.tmpdir(), 'agora-red-green-'));
+ 	sandboxes.push(dir);
+ 	const git = (...argv: string[]) => spawnSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...argv], { cwd: dir, encoding: 'utf8' });
+@@ -68,8 +68,10 @@ const redGreen = (changed: string) => {
+ 	writeFileSync(path.join(dir, 'README.md'), 'base\n');
+ 	git('add', '.'); git('commit', '-qm', 'base');
+ 	const base = git('rev-parse', 'HEAD').stdout.trim();
+-	mkdirSync(path.dirname(path.join(dir, changed)), { recursive: true });
+-	writeFileSync(path.join(dir, changed), 'changed\n');
++	for (const file of changed) {
++		mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
++		writeFileSync(path.join(dir, file), 'changed\n');
++	}
+ 	git('add', '.'); git('commit', '-qm', 'change');
+ 	const head = git('rev-parse', 'HEAD').stdout.trim();
+ 	return spawnSync('bash', [path.join(root, 'scripts/ci-red-green.sh'), base, head], { cwd: dir, encoding: 'utf8' });
+@@ -86,3 +88,17 @@ test('red-green job rejects a source change that has no changed test', () => {
+ 	expect(result.status).toBe(1);
+ 	expect(result.stderr).toContain('red_green_missing: source changed without a changed test');
+ });
++
++test('red-green job skips red for a commit that changes only tests, docs or evidence', () => {
++	const result = redGreen('packages/storage/test/thing.test.ts');
++	expect(result.status).toBe(0);
++	expect(result.stdout).toContain('changes only tests, docs or evidence, so it has no behavior to turn red');
++});
++
++test('red-green job still demands a red for a commit that changes source with its test', () => {
++	for (const source of ['packages/storage/src/thing.ts', 'scripts/tool.mjs', 'apps/web/vitest.config.ts']) {
++		const result = redGreen('packages/storage/test/thing.test.ts', source);
++		expect(result.stdout, source).not.toContain('no behavior to turn red');
++		expect(result.status, source).not.toBe(0);
++	}
++});
