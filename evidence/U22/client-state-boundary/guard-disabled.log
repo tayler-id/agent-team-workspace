@@ -1,0 +1,92 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-439a06/6/agent-team-workspace
+
+ ❯ |unit| packages/client-core/test/client-state-owner.test.ts (6 tests | 4 failed) 2813ms
+   × a component holding durable Client state in React state is rejected and names the Client hooks 2428ms
+   × a re-exported alias of a durable type is still caught, and the diagnostic names the sanctioned writer 46ms
+   × a component importing the Client core runtime or constructing a Client bypasses the named hooks 24ms
+   × a component calling the transport directly is rejected, while reading its identity is accepted 31ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/client-state-owner.test.ts > a component holding durable Client state in React state is rejected and names the Client hooks
+AssertionError: apps/web/src/components/App.tsx: import { useState } from 'react';
+import { useClientSelector } from '@agora/web-framework';
+export function C(): null { const room = useClientSelector((s) => s.rooms[0]); const [copy] = useState(room); void room; return null; }
+: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/client-state-owner.test.ts:30:115
+     28|  ];
+     29|  for (const code of copies) {
+     30|   for (const file of [component, feature]) expect(await hit(code, file…
+       |                                                                                                                   ^
+     31|  }
+     32| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  |unit| packages/client-core/test/client-state-owner.test.ts > a re-exported alias of a durable type is still caught, and the diagnostic names the sanctioned writer
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ packages/client-core/test/client-state-owner.test.ts:37:19
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  |unit| packages/client-core/test/client-state-owner.test.ts > a component importing the Client core runtime or constructing a Client bypasses the named hooks
+AssertionError: apps/web/src/components/App.tsx: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/client-state-owner.test.ts:62:137
+     60| test('a component importing the Client core runtime or constructing a …
+     61|  for (const file of [component, feature]) {
+     62|   expect(await hit("import { synchronize } from '@agora/client-core'; …
+       |                                                                                                                                         ^
+     63|   expect(await hit("import { initialState as init } from '@agora/clien…
+     64|   expect(await hit("export { initialState } from '@agora/client-core';…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  |unit| packages/client-core/test/client-state-owner.test.ts > a component calling the transport directly is rejected, while reading its identity is accepted
+AssertionError: transport.submit('c', 'd', 'hi'): expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/client-core/test/client-state-owner.test.ts:73:69
+     71|  const call = (body: string): string => `import { useEnvironment } fro…
+     72|  for (const body of ["transport.submit('c', 'd', 'hi')", 'transport.ma…
+     73|   expect(await hit(call(body), component, 'useRoomCommands'), body).to…
+       |                                                                     ^
+     74|  }
+     75|  expect(await owner(call('void transport.streamId'), component)).toEqu…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 2 passed (6)
+   Start at  17:30:50
+   Duration  3.00s (tests 96%, import 4%, transform 1%)
+
+exit=1

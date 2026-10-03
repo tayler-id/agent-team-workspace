@@ -84,6 +84,11 @@
           "kind": "feature"
         },
         {
+          "id": "client-state-boundary",
+          "title": "Client state boundary",
+          "kind": "feature"
+        },
+        {
           "id": "agora-application-architecture",
           "title": "Agora application architecture",
           "kind": "feature"
@@ -404,6 +409,10 @@
     {
       "path": "scripts/renderer-policy.ts",
       "page": "app-architecture.md"
+    },
+    {
+      "path": "scripts/client-owner-policy.ts",
+      "page": "client-state-boundary.md"
     },
     {
       "path": "scripts/architecture-exceptions.ts",
