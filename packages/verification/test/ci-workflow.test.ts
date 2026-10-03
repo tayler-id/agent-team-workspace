@@ -4,13 +4,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterAll, expect, test } from 'vitest';
 
-type Step = { uses?: string; with?: Record<string, unknown>; run?: string };
-type Job = { 'runs-on': string; steps: Step[]; [key: string]: unknown };
-type Workflow = { on: Record<string, { branches: string[] }>; permissions: Record<string, string>; jobs: Record<string, Job>; [key: string]: unknown };
+interface Step { uses?: string; with?: Record<string, unknown>; run?: string }
+interface Job { 'runs-on': string; steps: Step[]; [key: string]: unknown }
+interface Workflow { on: Record<string, { branches: string[] }>; permissions: Record<string, string>; jobs: Record<string, Job>; [key: string]: unknown }
 
 const root = path.resolve(import.meta.dirname, '../../..');
 // The workflow is committed as JSON, which is valid YAML, so JSON.parse reads exactly what GitHub reads.
-const workflow = (): Workflow => JSON.parse(readFileSync(path.join(root, '.github/workflows/agora-ci.yml'), 'utf8'));
+const workflow = (): Workflow => JSON.parse(readFileSync(path.join(root, '.github/workflows/agora-ci.yml'), 'utf8')) as Workflow;
 const commands = (job: Job) => job.steps.flatMap(step => (step.run ? [step.run] : []));
 
 test('candidate CI runs only on pull requests to main with read-only contents and no credentials', () => {
@@ -18,11 +18,11 @@ test('candidate CI runs only on pull requests to main with read-only contents an
 	expect(flow.on).toEqual({ pull_request: { branches: ['main'] } });
 	expect(flow.permissions).toEqual({ contents: 'read' });
 	const everyString: string[] = [];
-	JSON.stringify(flow, (_key, value) => { if (typeof value === 'string') everyString.push(value); return value; });
+	JSON.stringify(flow, (_key: string, value: unknown): unknown => { if (typeof value === 'string') everyString.push(value); return value; });
 	expect(everyString.filter(text => /secrets\.|GITHUB_TOKEN|agora-report|agora\/evidence|agora\/policy/.test(text))).toEqual([]);
 	for (const job of Object.values(flow.jobs)) {
 		expect(Object.keys(job).sort()).toEqual(['runs-on', 'steps', 'timeout-minutes']);
-		const [checkout, node] = job.steps;
+		const checkout: Step = job.steps[0] ?? {}, node: Step = job.steps[1] ?? {};
 		expect(checkout.uses).toMatch(/^actions\/checkout@[0-9a-f]{40}$/);
 		expect(checkout.with).toEqual({ 'fetch-depth': 0, 'persist-credentials': false });
 		expect(node.uses).toMatch(/^actions\/setup-node@[0-9a-f]{40}$/);
@@ -47,13 +47,13 @@ test('seven verification areas run their real driver commands', () => {
 });
 
 test('every pnpm script and file the workflow names exists', () => {
-	const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts as Record<string, string>;
+	const scripts = (JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')) as { scripts: Record<string, string> }).scripts;
 	for (const job of Object.values(workflow().jobs)) {
 		for (const command of commands(job)) {
 			const pnpm = /^pnpm (?:-s )?([\w:]+)/.exec(command);
 			if (pnpm) expect(Object.keys(scripts), command).toContain(pnpm[1]);
 			const file = /(?:bash|node) (scripts\/[\w.-]+)/.exec(command);
-			if (file) expect(existsSync(path.join(root, file[1])), command).toBe(true);
+			if (file) expect(existsSync(path.join(root, file[1] ?? '')), command).toBe(true);
 		}
 	}
 });
