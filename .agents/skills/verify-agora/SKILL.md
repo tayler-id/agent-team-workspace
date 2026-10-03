@@ -356,14 +356,16 @@ The selected red must be `expected 'unavailable' to be 'pass'` after doctor pass
 
 ### Encrypted backup and restore evidence (U01c.B01 slice 1)
 
-The test drives the CLI as a child process and imports only symbols present at its parent, so at a parent without `scripts/backup.ts` it fails on exit-code and outcome assertions, not at module link. Use the full committed parent and head SHAs of the slice:
+The test drives the CLI as a child process and imports only symbols present at its parent. A parent with no `scripts/backup.ts` is not valid R22 red, because the driver has no baseline operation there. Record red against the test-only parent revision `fm/agora-backup-integrity-slice-baseline` (`1eea48b`, the slice's real parent `a62662e` plus a three-line `scripts/backup.ts` that only prints the usage route). There the first test, the driver reaching the usage route, passes and every backup assertion fails on the absent behavior. The one-snapshot fix gets its own pair, whose parent is the commit that added the race test:
 
 ```sh
-node scripts/record-red-green.mjs --parent PARENT --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
-node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore --head HEAD --base PARENT
+node scripts/record-red-green.mjs --parent fm/agora-backup-integrity-slice-baseline --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+node scripts/record-red-green.mjs --parent RACE_TEST_COMMIT --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore/snapshot-race -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore
+node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore/snapshot-race
 ```
 
-Red must show the backup tests failing on values such as the CLI exit status or `outcome`, never a missing runner, a syntax error or an unresolved import. Green must show every test passing with exit 0. The validator must report pass with the local owner-attested key. Keep the Drive outputs in `evidence/U01c/agora-s1-prove-backup-restore/drive/`; they hold `key_id` values and receipts, never key files. These receipts prove the slice only, not the U01c milestone or FG07.
+Red must show the usage-route test passing and the backup tests failing on values such as the CLI exit status or `outcome`, never a missing runner, a syntax error or an unresolved import. The snapshot-race red must show only the concurrent-writer test failing, with `reason_code: integrity_mismatch`. Green must show every test passing with exit 0. The validator must report pass with the local owner-attested key. Keep the Drive outputs in `evidence/U01c/agora-s1-prove-backup-restore/drive/`; they hold `key_id` values and receipts, never key files. These receipts prove the slice only, not the U01c milestone or FG07.
 
 ### Project verification controls cleanup handles (U01b.B01)
 
