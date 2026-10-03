@@ -356,12 +356,12 @@ The selected red must be `expected 'unavailable' to be 'pass'` after doctor pass
 
 ### Encrypted backup and restore evidence (U01c.B01 slice 1)
 
-The test drives the CLI as a child process and imports only symbols present at its parent. A parent with no `scripts/backup.ts` is not valid R22 red, because the driver has no baseline operation there. Record red against the test-only parent revision `fm/agora-backup-integrity-slice-baseline` (`1eea48b`, the slice's real parent `a62662e` plus a three-line `scripts/backup.ts` that only prints the usage route). There the first test, the driver reaching the usage route, passes and every backup assertion fails on the absent behavior. The one-snapshot fix gets its own pair, whose parent is the commit that added the race test:
+The test drives the CLI as a child process and imports only symbols present at its parent. A parent with no `scripts/backup.ts` is not valid R22 red, because the driver has no baseline operation there. Record red against the test-only parent revision `1eea48b` (`a62662e` on `main` plus a three-line `scripts/backup.ts` that only prints the usage route). There the first test, the driver reaching the usage route, passes and every backup assertion fails on the absent behavior. The one-snapshot fix gets its own pair, whose parent is the commit that added the race test:
 
 ```sh
-node scripts/record-red-green.mjs --parent fm/agora-backup-integrity-slice-baseline --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+node scripts/record-red-green.mjs --parent 1eea48b --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
 node scripts/record-red-green.mjs --parent RACE_TEST_COMMIT --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore/snapshot-race -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
-node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore --base "$(git rev-parse fm/agora-backup-integrity-slice-baseline)" --head "$(git rev-parse HEAD)"
+node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore --base "$(git rev-parse 1eea48b)" --head "$(git rev-parse HEAD)"
 node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore/snapshot-race --base "$(git rev-parse RACE_TEST_COMMIT)" --head "$(git rev-parse HEAD)"
 ```
 
