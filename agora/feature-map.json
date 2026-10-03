@@ -259,6 +259,16 @@
 			"owner": "agora-web-shell-integrate"
 		},
 		{
+			"id": "web-production-build-csp",
+			"documentation": "docs/site/local-room-web-shell.md",
+			"owner": "agora-production-browser-slice",
+			"paths": ["contracts/tools/browser-validator.ts", "contracts/src/wire-validator.ts", "contracts/src/index.ts", "contracts/package.json", "apps/web/vite.config.ts", "scripts/local-room-service.ts", "scripts/boundary-policy.ts", "apps/web/test/built-room.test.ts"],
+			"public": ["@agora/contracts/browser-validator browserValidatorPlugin", "pnpm web:build", "pnpm web:test"],
+			"scenarios": ["apps/web/test/built-room.test.ts", "browser: built room under its unchanged CSP at 1440x900 and 390x844 mobile", "browser: served local room via scripts/local-room.ts start"],
+			"fixtures": ["agora.web-fixture.room/v1 bundled fixture, plus a copy of the built bundle with the stream id made schema-invalid"],
+			"platforms": ["node24", "browser"]
+		},
+		{
 			"id": "local-room-time-display",
 			"documentation": "docs/site/local-room-time-display.md",
 			"owner": "agora-live-room-time-display",

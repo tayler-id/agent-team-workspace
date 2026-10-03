@@ -55,7 +55,7 @@ const contractsTooling = ['node:child_process', 'node:fs', 'node:path', 'node:ur
  * a non-test file placed under apps/web/test/ (a relocation bypass attempt) still gets the strict renderer
  * checks, exactly like a file placed anywhere else outside its owner.
  */
-const webTestConfigAllowed = ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime', 'vitest', 'vitest/config', '@testing-library/react', '@testing-library/dom', '@vitejs/plugin-react', 'vite', 'node:fs', 'node:path'] as const;
+const webTestConfigAllowed = ['@agora/contracts', '@agora/contracts/browser-validator', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime', 'vitest', 'vitest/config', '@testing-library/react', '@testing-library/dom', '@vitejs/plugin-react', 'vite', 'node:child_process', 'node:fs', 'node:path'] as const;
 export const isWebTestOrConfig = (file: string): boolean => {
 	const rel = relPosix(file);
 	return (rel.startsWith('apps/web/test/') && /\.test\.tsx?$/.test(rel)) || /^apps\/web\/[^/]+\.config\.ts$/.test(rel) || rel === TEST_GEOMETRY_DOUBLE;
