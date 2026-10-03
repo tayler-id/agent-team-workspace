@@ -84,7 +84,18 @@ try {
 		head_sha: run.head_sha, base_sha: opened?.base?.sha, pull_request: current ? { head_sha: current.head.sha, base_sha: current.base.sha } : null,
 		jobs: (jobs.jobs ?? []).map(job => ({ name: job.name, status: job.status, conclusion: job.conclusion, head_sha: job.head_sha })),
 	});
-	const policyDecision = decide(project, 'workflows', { files: Object.fromEntries(Object.entries(trusted).map(([filePath, body]) => [filePath, Buffer.from(body.content, body.encoding).toString('utf8')])) });
+	// The pull request's changed paths, renames on both sides, as GitHub lists them; the candidate's files are never fetched.
+	let changed;
+	if (opened) {
+		changed = [];
+		for (let page = 1; ; page++) {
+			const rows = await github(`${repo}/pulls/${String(opened.number)}/files?per_page=100&page=${String(page)}`, read);
+			changed.push(...rows.flatMap(row => [row.filename, row.previous_filename].filter(Boolean)));
+			if (rows.length < 100) break;
+			if (page === 30) throw stop('changed_paths_unbounded', 'infrastructure_failure');
+		}
+	}
+	const policyDecision = decide(project, 'workflows', { changed_paths: changed, files: Object.fromEntries(Object.entries(trusted).map(([filePath, body]) => [filePath, Buffer.from(body.content, body.encoding).toString('utf8')])) });
 	const receipt = runDecision.receipt;
 	const signed = JSON.stringify({ receipt, signature: sign(null, Buffer.from(canonical(receipt)), createPrivateKey(signingPem)).toString('base64') });
 	const publish = await installationToken(project, createPrivateKey(appPem));

@@ -105,8 +105,9 @@ function evaluateProtection(project, input) {
 	return { denials };
 }
 
-// Static policy over the driver and reporter workflow texts (agora/policy). Workflows are authored in the JSON
-// subset of YAML and must equal their canonical serialization, so this parses exactly what GitHub parses.
+// agora/policy: static rules over the default-branch driver and reporter workflow texts plus the pull request's changed
+// paths. Workflows are authored in the JSON subset of YAML and must equal their canonical serialization, so this parses
+// exactly what GitHub parses.
 function evaluateWorkflows(project, input) {
 	const denials = [];
 	const parsed = {};
@@ -136,19 +137,13 @@ function evaluateWorkflows(project, input) {
 		}
 		for (const name of project.driver.jobs) if (!driver.jobs?.[name]) denials.push(`driver_job_missing:${name}`);
 	}
+	// The reporter runs with both keys, so it must equal the policy's allowlist exactly, not merely avoid known patterns.
 	const reporter = parsed[project.reporter.workflow];
-	if (reporter) {
-		const text = input.files[project.reporter.workflow];
-		const jobs = Object.values(reporter.jobs ?? {});
-		const steps = jobs.flatMap(job => job.steps ?? []);
-		if (canonical(reporter.on) !== canonical({ workflow_run: { workflows: [project.driver.name], types: ['completed'] } })) denials.push('reporter_trigger');
-		if (canonical(reporter.permissions) !== canonical({ actions: 'read', contents: 'read', 'pull-requests': 'read' }) || jobs.some(job => job.permissions !== undefined)) denials.push('reporter_permissions');
-		if (jobs.length !== 1 || jobs[0].environment !== project.reporter.environment) denials.push('reporter_environment');
-		const candidateCheckout = steps.some(step => step.uses?.startsWith('actions/checkout@') && step.with?.ref !== '${{ github.event.repository.default_branch }}');
-		if (candidateCheckout || /workflow_run\.(head_|pull_requests)|head_repository|pull_request\.head|github\.head_ref/.test(text)) denials.push('reporter_candidate_reference');
-		if (/download-artifact|\/artifacts\b/.test(text)) denials.push('reporter_reads_candidate_artifact');
-		if ([...text.matchAll(/secrets\.(\w+)/g)].some(([, name]) => !project.reporter.secrets.includes(name))) denials.push('reporter_unexpected_secret');
-	}
+	if (reporter && canonical(reporter) !== canonical(project.reporter.allowlist)) denials.push('reporter_workflow_not_allowlisted');
+	// Candidate edits to the reporter, policy, decision tools or workflows are read as paths, never executed. Any change
+	// fails agora/policy, because after merge the default-branch reporter would run that code with both keys.
+	if (!Array.isArray(input.changed_paths)) denials.push('changed_paths_missing');
+	else for (const file of input.changed_paths) if (project.sensitive_paths.some(entry => entry.endsWith('/') ? file.startsWith(entry) : file === entry)) denials.push(`sensitive_path_changed:${file}`);
 	return { denials };
 }
 

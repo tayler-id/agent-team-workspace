@@ -21,6 +21,7 @@
 	},
 	"jobs": {
 		"report": {
+			"if": "${{ vars.AGORA_REPORTER_ENABLED == 'true' }}",
 			"runs-on": "ubuntu-24.04",
 			"timeout-minutes": 10,
 			"environment": "agora-reporter",

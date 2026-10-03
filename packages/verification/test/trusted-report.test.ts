@@ -32,11 +32,13 @@ interface Published { name: string; head_sha: string; conclusion: string; output
 let seen: Seen[] = [];
 let jobs: Record<string, unknown>[] = [];
 let runPath = DRIVER;
+let files: Record<string, unknown>[] = [];
 const content = (file: string) => ({ sha: 'f'.repeat(40), encoding: 'base64', content: fs.readFileSync(file).toString('base64') });
 const routes: Record<string, () => unknown> = {
 	'GET /repos/agora-test/trusted-fixture/actions/runs/77': () => ({ id: 77, run_attempt: 1, event: 'pull_request', path: runPath, head_sha: HEAD, repository: { id: REPO }, head_repository: { id: REPO }, pull_requests: [{ number: 5, base: { sha: BASE } }] }),
 	'GET /repos/agora-test/trusted-fixture/actions/runs/77/attempts/1/jobs?per_page=100': () => ({ jobs }),
 	'GET /repos/agora-test/trusted-fixture/pulls/5': () => ({ head: { sha: HEAD }, base: { sha: BASE } }),
+	'GET /repos/agora-test/trusted-fixture/pulls/5/files?per_page=100&page=1': () => files,
 	[`GET /repos/agora-test/trusted-fixture/contents/${DRIVER}?ref=${HEAD}`]: () => content(DRIVER),
 	[`GET /repos/agora-test/trusted-fixture/contents/${DRIVER}?ref=main`]: () => content(DRIVER),
 	[`GET /repos/agora-test/trusted-fixture/contents/${REPORTER}?ref=main`]: () => content(REPORTER),
@@ -129,6 +131,18 @@ test('reporter publishes failing checks for a failed dependency or a candidate w
 	expect(foreign.report).toMatchObject({ outcome: 'fail', denials: ['wrong_workflow'] });
 	expect(exposed(failed.output + foreign.output)).toBe(false);
 	runPath = DRIVER;
+}, 60_000);
+
+test('a pull request that edits the reporter gets a failing agora/policy without its copy being fetched', async () => {
+	jobs = success(); runPath = DRIVER;
+	files = [{ filename: 'packages/domain/src/index.ts' }, { filename: REPORTER }, { filename: 'scripts/renamed.mjs', previous_filename: 'scripts/trusted-report.mjs' }];
+	const result = await reporter(credentials);
+	expect(result.report).toMatchObject({ outcome: 'fail', denials: [`sensitive_path_changed:${REPORTER}`, 'sensitive_path_changed:scripts/trusted-report.mjs'] });
+	expect(published().map(run => [run.name, run.conclusion])).toEqual([['agora/evidence', 'success'], ['agora/policy', 'failure']]);
+	expect(mergeSide(published()).denials).toEqual(['check_not_success:agora/policy:failure']);
+	// Only default-branch copies of the workflows are read; no head copy of any file is requested.
+	expect(seen.filter(row => row.url.includes('/contents/') && !row.url.endsWith('?ref=main')).map(row => row.url)).toEqual([`/repos/agora-test/trusted-fixture/contents/${DRIVER}?ref=${HEAD}`]);
+	files = [];
 }, 60_000);
 
 test('reporter without its credentials or enrollment blocks and publishes nothing', async () => {
