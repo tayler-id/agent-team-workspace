@@ -192,6 +192,23 @@ Pass predicates:
 
 For U01b.B01's project verification controls: every required command must exit zero, all native lane assertions must pass without skips, and conformance must name both consumers as passing. Whole-unit lanes remain blocked without U01b.B02/B03; the explicit task selector does not qualify that milestone. U01a's historical task-admission driver remains documented in [task proof](../../../docs/site/test-first.md), not a substitute for this task's controls.
 
+## Candidate CI
+
+The ordinary pull request workflow is `.github/workflows/agora-ci.yml`. It runs the same commands as this skill and is not trusted evidence. Reproduce each of its seven jobs from the repository root with the prerequisites above:
+
+```sh
+node scripts/ci-doctor.mjs --json
+pnpm lint && pnpm typecheck
+pnpm contracts:check && pnpm boundaries
+pnpm docs:check
+pnpm test
+bash scripts/ci-red-green.sh "$(git merge-base origin/main HEAD)" "$(git rev-parse HEAD)"
+pnpm -s agora project lanes --unit U01b --task agora-s1-validate-project-evidence --artifacts .scratch/ci-lanes --json
+pnpm exec vitest run --project unit packages/verification/test/ci-workflow.test.ts
+```
+
+Read the live checks with `gh-axi pr view PR` and `gh-axi run list`. A pull request opened before the workflow reached `main` has none until it is pushed again or reopened.
+
 ## Evidence
 
 The callable test-only baseline below has a passing doctor. Its scenario inventory is unavailable, so the new inventory assertion is red on a value, not a missing executable. The recorder applies the current test patch at that baseline. Retain both exits and causes; an infrastructure or syntax failure is not red proof.
