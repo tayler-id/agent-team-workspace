@@ -1,0 +1,41 @@
+
+ RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (7 tests | 1 failed) 2943ms
+   × the backup directory holds neither the key hex nor the raw key bytes 3ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  17:12:35
+   Duration  3.22s (tests 93%, import 6%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"ee19430b-e166-4713-8084-6fb488e8f230","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-ee19430b-e166-4713-8084-6fb488e8f230"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"ee19430b-e166-4713-8084-6fb488e8f230","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-ee19430b-e166-4713-8084-6fb488e8f230","pid":91787}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"ee19430b-e166-4713-8084-6fb488e8f230","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-ee19430b-e166-4713-8084-6fb488e8f230","socket_dir":"/private/tmp/agora-p0c-ee19430b-e166-4713-8084-6fb488e8f230","pid":91787,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > the backup directory holds neither the key hex nor the raw key bytes
+AssertionError: expected [ …(3) ] to deeply equal [ …(3) ]
+
+- Expected
++ Received
+
+  [
+    "<tmp>",
+-   false,
++   true,
+    false,
+  ]
+
+ ❯ packages/storage/test/backup.pg.test.ts:111:132
+    109|  const stored = walk(backup);
+    110|  expect(stored.map((file) => file.slice(backup.length + 1)).sort()).to…
+    111|  for (const file of stored) expect([file, readFileSync(file).includes(…
+       |                                                                                                                                    ^
+    112| });
+    113|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-ee19430b-e166-4713-8084-6fb488e8f230"}

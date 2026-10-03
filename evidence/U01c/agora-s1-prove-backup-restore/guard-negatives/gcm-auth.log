@@ -1,0 +1,47 @@
+
+ RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (7 tests | 1 failed) 3012ms
+   × one flipped byte in the sealed dump is denied as corrupt before the target is touched 295ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  17:12:14
+   Duration  3.34s (tests 92%, import 6%, transform 2%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"b028607f-4f5a-443e-8237-0322eb2eb9f6","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b028607f-4f5a-443e-8237-0322eb2eb9f6"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"b028607f-4f5a-443e-8237-0322eb2eb9f6","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b028607f-4f5a-443e-8237-0322eb2eb9f6","pid":82946}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"b028607f-4f5a-443e-8237-0322eb2eb9f6","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b028607f-4f5a-443e-8237-0322eb2eb9f6","socket_dir":"/private/tmp/agora-p0c-b028607f-4f5a-443e-8237-0322eb2eb9f6","pid":82946,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > one flipped byte in the sealed dump is denied as corrupt before the target is touched
+AssertionError: expected { status: +0, receipt: { …(7) } } to deeply equal { status: 1, receipt: { …(4) } }
+
+- Expected
++ Received
+
+  {
+    "receipt": {
+-     "outcome": "denied",
+-     "reason_code": "corrupt",
++     "backup_id": "9848eaed-2e0a-4f5e-b6b5-7772c4485a4e",
++     "inventory_digest": "sha256:ac039e96fcc39a2f74b7f04a6511fad197e0dac547f7e38781380a634230aa91",
++     "key_id": "sha256:eb4ce5f22ad0e67129a8996ceb04137351c3383594374728c770fb76a1142d49",
++     "objects": 3,
++     "outcome": "restored",
+      "schema_version": "agora.restore-receipt/v1",
+-     "subject": "database.agb",
++     "tables": 8,
+    },
+-   "status": 1,
++   "status": 0,
+  }
+
+ ❯ deniedRestore packages/storage/test/backup.pg.test.ts:64:135
+
+ ❯ packages/storage/test/backup.pg.test.ts:122:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b028607f-4f5a-443e-8237-0322eb2eb9f6"}

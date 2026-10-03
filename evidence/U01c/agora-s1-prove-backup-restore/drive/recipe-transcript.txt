@@ -1,0 +1,49 @@
+++ mktemp -d <tmp>
++ W=<tmp>
++ OUT=evidence/U01c/agora-s1-prove-backup-restore/drive
++ mkdir -p evidence/U01c/agora-s1-prove-backup-restore/drive
++ cat
++ node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"4b4d5ebb-b70c-4052-bcd3-a82bf2e70c89","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-4b4d5ebb-b70c-4052-bcd3-a82bf2e70c89"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"4b4d5ebb-b70c-4052-bcd3-a82bf2e70c89","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-4b4d5ebb-b70c-4052-bcd3-a82bf2e70c89","pid":12861}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"4b4d5ebb-b70c-4052-bcd3-a82bf2e70c89","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-4b4d5ebb-b70c-4052-bcd3-a82bf2e70c89","socket_dir":"/private/tmp/agora-p0c-4b4d5ebb-b70c-4052-bcd3-a82bf2e70c89","pid":12861,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+ RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
+
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  17:13:36
+   Duration  4.13s (tests 94%, import 5%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-4b4d5ebb-b70c-4052-bcd3-a82bf2e70c89"}
++ node scripts/with-test-postgres.mjs bash <tmp> <tmp> evidence/U01c/agora-s1-prove-backup-restore/drive
+CREATE DATABASE
++ node --input-type=module -e '
+import fs from "node:fs"; import path from "node:path"; import assert from "node:assert/strict";
+const [w, out] = process.argv.slice(1); const j = (n) => JSON.parse(fs.readFileSync(`${out}/${n}.json`, "utf8")); const x = (n) => fs.readFileSync(`${out}/${n}.exit`, "utf8").trim();
+const create = j("create"), good = j("keygen-good");
+assert.equal(x("keygen-good"), "0"); assert.equal(good.outcome, "created"); assert.match(good.key_id, /^sha256:[0-9a-f]{64}$/);
+assert.equal(x("create"), "0"); assert.equal(create.outcome, "created"); assert.equal(create.key_id, good.key_id); assert.equal(create.objects, 3);
+for (const [n, reason, subject] of [["wrong-key", "wrong_key", "backup.json"], ["corrupt", "corrupt", "database.agb"], ["missing", "missing_artifact", "objects/0002.agb"]]) {
+	assert.equal(x(n), "1", n); assert.deepEqual([j(n).outcome, j(n).reason_code, j(n).subject], ["denied", reason, subject]);
+}
+assert.equal(fs.readFileSync(`${out}/target-tables-after-denials.txt`, "utf8").trim(), "0"); assert.equal(x("restored-absent-after-denials"), "1");
+const r = j("restore"); assert.equal(x("restore"), "0"); assert.equal(r.outcome, "restored");
+assert.deepEqual([r.backup_id, r.inventory_digest, r.tables, r.objects], [create.backup_id, create.inventory_digest, create.tables, 3]);
+assert.equal(x("restore-again"), "1"); assert.equal(j("restore-again").reason_code, "target_not_empty"); assert.equal(x("binary-object-cmp"), "0");
+const key = fs.readFileSync(`${w}/keys/good`, "utf8").slice(0, 64), raw = Buffer.from(key, "hex");
+const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
+for (const f of [...walk(`${w}/backup`), ...walk(out)]) { const b = fs.readFileSync(f); assert.ok(!b.includes(key) && !b.includes(raw), f); }
+console.log(JSON.stringify({ outcome: "pass", backup_id: create.backup_id, inventory_digest: create.inventory_digest, tables: create.tables, objects: create.objects }));
+' <tmp> evidence/U01c/agora-s1-prove-backup-restore/drive
+{"outcome":"pass","backup_id":"1c047990-e1d9-4d17-8276-d7dbafe81c87","inventory_digest":"sha256:29a9fd7557b51eab0a41598355fea9b8425ec5c41061e861e5ac7fa0bc424ac7","tables":8,"objects":3}
++ case "$W" in
++ rm -rf <tmp>
++ test '!' -e <tmp>
++ echo removed
+removed
++ grep -rlE '^[0-9a-f]{64}$' evidence/U01c/agora-s1-prove-backup-restore/drive
++ echo 'no key file in evidence'
+no key file in evidence
++ unset W

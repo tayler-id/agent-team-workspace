@@ -1,0 +1,1 @@
+{"schema_version":"agora.restore-receipt/v1","outcome":"restored","backup_id":"1c047990-e1d9-4d17-8276-d7dbafe81c87","key_id":"sha256:5175e00251826985f34173fd32c2a0ad81a8842e7d712cb9901d184cd645edff","inventory_digest":"sha256:29a9fd7557b51eab0a41598355fea9b8425ec5c41061e861e5ac7fa0bc424ac7","tables":8,"objects":3}

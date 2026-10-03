@@ -1,0 +1,43 @@
+
+ RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (7 tests | 1 failed) 2420ms
+   × restore rebuilds the same rows, objects and schema in a second database 277ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  17:12:31
+   Duration  2.75s (tests 90%, import 8%, transform 2%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"b52628e7-5b71-446d-b955-a890cae2cbe8","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"b52628e7-5b71-446d-b955-a890cae2cbe8","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8","pid":91066}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"b52628e7-5b71-446d-b955-a890cae2cbe8","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8","socket_dir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8","pid":91066,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > restore rebuilds the same rows, objects and schema in a second database
+AssertionError: expected { status: +0, receipt: { …(7) } } to deeply equal { status: +0, receipt: { …(7) } }
+
+- Expected
++ Received
+
+@@ -1,11 +1,11 @@
+  {
+    "receipt": {
+      "backup_id": "97807753-3116-481c-b310-e54e9e42b0bf",
+      "inventory_digest": "sha256:8c61ccb9d251e612145b58d42cc3e592ec4dd7a64f9f81aed293b07de6909974",
+      "key_id": "sha256:14d3f7963e100ee1db7c8809be879e03d6231a7117dbefe2f3bc5a1617fed561",
+-     "objects": 3,
++     "objects": 2,
+      "outcome": "restored",
+      "schema_version": "agora.restore-receipt/v1",
+      "tables": 8,
+    },
+    "status": 0,
+
+ ❯ packages/storage/test/backup.pg.test.ts:136:155
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-b52628e7-5b71-446d-b955-a890cae2cbe8"}

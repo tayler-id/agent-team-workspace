@@ -106,6 +106,10 @@ Startup (initialization, readiness and role setup together) defaults to 30 secon
 
 Application code connects as `agora_app`. That role owns nothing, and the fixture tables force row-level security, so the policies bind every role without `BYPASSRLS`, the owner included. Migrations run as the owner. The test cluster also creates `agora_bypass`, a `BYPASSRLS` member of `agora_app`, used only by the guard-negative test. The pg test project fails with `blocked prerequisite` when the URLs are missing; it never skips.
 
+## Encrypted backup and restore
+
+`node scripts/backup.ts keygen|create|restore` is the U01c.B01 slice-1 operator CLI. `packages/storage/src/backup.ts` holds the AES-256-GCM sealing, the key file format and the row/object integrity inventory; the script spawns `pg_dump --format=custom` and `pg_restore --single-transaction --exit-on-error` (from `AGORA_PG_BIN` when set) and owns the files. Keep the key file outside the backup directory. Run `create` and `restore` with a role that bypasses row-level security, such as the wrapper's `AGORA_TEST_SUPERUSER_DATABASE_URL`, or the inventory sees only one scope's rows. Restore refuses a target database that has any user table and an existing `--objects` path. `node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts` runs the end-to-end test, which restores into a second database in the same throwaway cluster. The cipher is proposed in decision D111, not accepted. See [encrypted backup and restore](../site/backup-restore.md) for the format, exit codes and the U01c work that stays open.
+
 ## Migrations
 
 Reviewed SQL lives in `packages/storage/drizzle/NNNN_name.sql` and is listed in `packages/storage/drizzle/meta/_journal.json`. The Drizzle migrator records applied entries in `drizzle.__drizzle_migrations`, so a second run applies nothing. `pnpm migrate` prints `applied`, `total`, a catalog-based `schema_digest` covering relations, columns, constraints, indexes, row security, policies and grants, and the server version. Exit codes: 0 pass, 2 blocked prerequisite, 64 usage error, 70 infrastructure failure.

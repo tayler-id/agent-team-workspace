@@ -90,6 +90,18 @@ This is a public package test driver, not a product response trigger. It invokes
 
 No flags accept chat command text or arbitrary selected files. See [the local room](local-room.md#selected-messages-to-a-cited-proposal) and [developer boundary reference](repo:docs/runbooks/development.md). The pure core itself has no HTTP or effect handle. The separate L5 adapter now exposes a selected-message CLI/browser trigger; it loads persisted records and commits a quoted response through the room event path.
 
+## Encrypted backup and restore
+
+The project-owned driver is `node scripts/backup.ts COMMAND`. Every run prints exactly one JSON line. Key bytes are never printed. PostgreSQL binaries come from `AGORA_PG_BIN` when set, otherwise PATH.
+
+| Command | Required flags | Success output |
+| --- | --- | --- |
+| `keygen` | `--key FILE` (must not exist; written mode 0600) | `agora.backup-key/v1`, `outcome: created`, `key_id` |
+| `create` | `--database-url URL --objects DIR --key FILE --out DIR` (`--out` must not exist) | `agora.backup-receipt/v1`, `outcome: created`, `backup_id`, `key_id`, `inventory_digest`, `tables`, `objects` |
+| `restore` | `--backup DIR --key FILE --database-url URL --objects DIR` (empty target database, absent `--objects`) | `agora.restore-receipt/v1`, `outcome: restored`, the same fields as the create receipt |
+
+Exit 0 is pass, 1 denied, 64 usage error (`outcome: usage_error`), 70 infrastructure failure (`outcome: infrastructure_failure`). A restore denial is `outcome: denied` with `reason_code` (`wrong_key`, `corrupt`, `missing_artifact`, `target_not_empty` or `integrity_mismatch`) and `subject`. Keep the key file outside the backup directory. Use a role that bypasses row-level security for `create` and `restore`, or the inventory covers only the rows that role can see. [Encrypted backup and restore](backup-restore.md) explains the format, the order of checks and what stays open.
+
 ## Center and database
 
 `node apps/center/src/main.ts` requires `AGORA_DATABASE_URL` and listens on `127.0.0.1`, `PORT` default 3000. Missing database configuration exits 64. It prints an `agora.center-start/v1` startup line. This fixture is not a public production service.
