@@ -117,7 +117,8 @@ test('one flipped byte in the sealed dump is denied as corrupt before the target
 	const copy = join(root, 'corrupt');
 	cpSync(backup, copy, { recursive: true });
 	const sealed = readFileSync(join(copy, 'database.agb'));
-	sealed[Math.floor(sealed.length / 2)] ^= 0xff;
+	const middle = Math.floor(sealed.length / 2);
+	sealed.writeUInt8(sealed.readUInt8(middle) ^ 0xff, middle);
 	writeFileSync(join(copy, 'database.agb'), sealed);
 	await deniedRestore(copy, join(keys, 'good'), 'corrupt', 'database.agb');
 });
