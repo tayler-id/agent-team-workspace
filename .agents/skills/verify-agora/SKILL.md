@@ -210,10 +210,12 @@ For U01b.B01's project verification controls: every required command must exit z
 
 ### Trusted checks drive (U01b.B03)
 
-Lanes 8-10 drive `node scripts/trusted-checks.mjs evaluate` through the public CLI. Pass means all three lanes pass and the project runner reports `outcome: pass` for the task. Lane 8 passes only a protection read-back with strict exact-App checks, review, stale dismissal, code-owner review, enforced admins and no bypass. Lane 9 must name `wrong_producer` for a check from the GitHub Actions App, `receipt_signature_invalid` for a candidate-signed receipt and `workflow_revision_mismatch` for a modified driver, and its isolated copy that trusts any App must lose `wrong_producer`. Lane 10 must fail a failed dependency with its skipped dependent, and its copy that accepts any conclusion must pass a skipped job.
+Lanes 8-10 drive `node scripts/trusted-checks.mjs evaluate` through the public CLI. Pass means all three lanes pass and the project runner reports `outcome: pass` for the task. Lane 8 passes only a protection read-back with strict exact-App checks, review, stale dismissal, code-owner review, enforced admins and no bypass. Lane 9 must name `wrong_producer` for a check from the GitHub Actions App, `receipt_signature_invalid` for a candidate-signed receipt and `workflow_revision_mismatch` for a modified driver. The committed workflows must pass `--kind workflows` against the committed policy, and edited copies must name `driver_secret_reference` and `reporter_candidate_reference`. Lane 9's isolated copy that trusts any App must lose `wrong_producer`. Lane 10 must fail a failed dependency with its skipped dependent and a required job given `needs`, `if` or `continue-on-error`, and its copy that accepts any conclusion must pass a skipped job.
 
 ```sh
 pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts
+node -e 'const f=p=>[p,require("fs").readFileSync(p,"utf8")];require("fs").writeFileSync(".scratch/workflows.json",JSON.stringify({files:Object.fromEntries([f(".github/workflows/agora-ci.yml"),f(".github/workflows/agora-report.yml")])}))'
+node scripts/trusted-checks.mjs evaluate --kind workflows --input .scratch/workflows.json --json
 pnpm -s agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks --artifacts ".scratch/trusted-lanes-$(date +%s)" --json
 ```
 

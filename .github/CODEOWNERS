@@ -1,0 +1,8 @@
+# Sensitive paths for R11: trusted-check policy, workflows and their decision tools need the maintainer.
+/.github/ @tayler-id
+/agora/trusted-checks.json @tayler-id
+/agora/local-checks.json @tayler-id
+/scripts/trusted-checks.mjs @tayler-id
+/scripts/trusted-report.mjs @tayler-id
+/scripts/ci-setup.sh @tayler-id
+/scripts/ci-red-green.sh @tayler-id

@@ -64,6 +64,18 @@ const check = (name: string, change: Record<string, unknown> = {}) => ({ id: 10,
 const checks = (runs: unknown[]) => ({ head_sha: HEAD, check_runs: runs });
 const both = (change: Record<string, unknown> = {}) => ['agora/evidence', 'agora/policy'].map(name => check(name, change));
 
+// The committed workflow files, optionally with one file replaced by an edited copy.
+const DRIVER = '.github/workflows/agora-ci.yml';
+const REPORTER = '.github/workflows/agora-report.yml';
+const workflows = (change: Record<string, string> = {}) => ({ files: { [DRIVER]: fs.readFileSync(DRIVER, 'utf8'), [REPORTER]: fs.readFileSync(REPORTER, 'utf8'), ...change } });
+interface Step { uses?: string; with?: Record<string, unknown>; env?: Record<string, string>; 'continue-on-error'?: boolean }
+interface Job { steps: Step[]; needs?: string[]; if?: string; environment?: string; 'continue-on-error'?: boolean }
+interface Workflow { on: unknown; permissions: unknown; jobs: Record<string, Job> }
+const at = <T>(value: T | undefined): T => { if (value === undefined) throw new Error('workflow fixture shape changed'); return value; };
+const job = (w: Workflow, name: string) => at(w.jobs[name]);
+const step = (w: Workflow, name: string, index: number) => at(job(w, name).steps[index]);
+const edit = (file: string, change: (workflow: Workflow) => void) => { const value = JSON.parse(fs.readFileSync(file, 'utf8')) as Workflow; change(value); return { [file]: JSON.stringify(value, null, '\t') + '\n' }; };
+
 const protection = (change: Record<string, unknown> = {}, reviews: Record<string, unknown> = {}) => ({
 	required_status_checks: { strict: true, checks: [{ context: 'agora/evidence', app_id: APP }, { context: 'agora/policy', app_id: APP }] },
 	enforce_admins: { enabled: true },
@@ -97,6 +109,15 @@ test('project lane 9 denies candidate-authored reports and wrong-workflow receip
 	expect(denials('run', run({ event: 'pull_request_target' }))).toEqual(['wrong_event']);
 	expect(denials('run', run({ head_repository_id: 31337 }))).toEqual(['fork_unsupported']);
 	expect(denials('run', run({ repository_id: 31337 }))).toEqual(['fork_unsupported', 'wrong_repository']);
+	// Credential isolation: the driver never names a secret, and the reporter never touches candidate code or artifacts.
+	expect(evaluate('workflows', workflows(), { policy: 'agora/trusted-checks.json' })).toMatchObject({ outcome: 'pass', denials: [] });
+	expect(denials('workflows', workflows(edit(DRIVER, w => { step(w, 'tests', 3).env = { KEY: '${{ secrets.AGORA_REPORTER_APP_KEY }}' }; })))).toEqual(['driver_secret_reference']);
+	expect(denials('workflows', workflows(edit(DRIVER, w => { w.on = { pull_request_target: {} }; w.permissions = { contents: 'write', checks: 'write' }; })))).toEqual(['driver_permissions', 'driver_trigger']);
+	expect(denials('workflows', workflows(edit(REPORTER, w => { at(step(w, 'report', 0).with)['ref'] = '${{ github.event.workflow_run.head_sha }}'; })))).toEqual(['reporter_candidate_reference']);
+	expect(denials('workflows', workflows(edit(REPORTER, w => { at(step(w, 'report', 0).with)['ref'] = 'refs/pull/1/merge'; })))).toEqual(['reporter_candidate_reference']);
+	expect(denials('workflows', workflows(edit(REPORTER, w => { job(w, 'report').steps.splice(2, 0, { uses: `actions/download-artifact@${BLOB}` }); delete job(w, 'report').environment; at(step(w, 'report', 3).env)['EXTRA'] = '${{ secrets.OTHER }}'; })))).toEqual(['reporter_environment', 'reporter_reads_candidate_artifact', 'reporter_unexpected_secret']);
+	expect(denials('workflows', workflows(edit(DRIVER, w => { job(w, 'docs').steps[0] = { uses: 'actions/checkout@v7' }; })))).toEqual([`checkout_persists_credentials:${DRIVER}`, `unpinned_action:${DRIVER}:actions/checkout@v7`]);
+	expect(denials('workflows', workflows({ [DRIVER]: 'name: agora-ci\non: pull_request\n' }))).toEqual([`workflow_not_canonical_json:${DRIVER}`]);
 	// Guard negative: in an isolated copy that trusts any App, the forged producer is no longer named.
 	const source = fs.readFileSync('scripts/trusted-checks.mjs', 'utf8');
 	const needle = 'row.app_id === project.reporter.app_id';
@@ -124,6 +145,9 @@ test('project lane 10 fails a failed dependency and stale, neutral or skipped ch
 	expect(denials('checks', checks([check('agora/evidence', { head_sha: OLD }), check('agora/policy')]))).toEqual(['check_wrong_head:agora/evidence']);
 	expect(denials('checks', checks([check('agora/evidence')]))).toEqual(['check_missing:agora/policy']);
 	expect(denials('checks', checks(both({ output: { text: text(reporter.privateKey, receipt({ outcome: 'fail' })) } })))).toEqual(['receipt_mismatch:agora/evidence', 'receipt_mismatch:agora/policy']);
+	// Required jobs run independently and cannot be made conditional, dependent or allowed to fail.
+	expect(denials('workflows', workflows(edit(DRIVER, w => { job(w, 'red-green').needs = ['tests']; job(w, 'guards').if = 'success()'; job(w, 'docs')['continue-on-error'] = true; step(w, 'static', 3)['continue-on-error'] = true; })))).toEqual(['driver_continue_on_error:docs', 'driver_continue_on_error:static', 'driver_job_condition:guards', 'driver_job_needs:red-green']);
+	expect(denials('workflows', workflows(edit(DRIVER, w => { w.jobs = Object.fromEntries(Object.entries(w.jobs).filter(([name]) => name !== 'doctor')); })))).toEqual(['driver_job_missing:doctor']);
 	// Guard negative: in an isolated copy that accepts any conclusion, a skipped dependent job passes.
 	const source = fs.readFileSync('scripts/trusted-checks.mjs', 'utf8');
 	const needle = "job.conclusion === 'success'";

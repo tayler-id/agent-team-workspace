@@ -1,7 +1,8 @@
-// U01b.B03 trusted-check decisions (R11): aggregate a driver run, read back published checks, read back
-// branch protection. Pure over GitHub read-back JSON; this file never holds or reads a credential.
+// U01b.B03 trusted-check decisions (R11): aggregate a driver run, read back published checks and branch
+// protection, and check the driver and reporter workflows. Pure over GitHub read-back JSON; this file never
+// holds or reads a credential.
 // Self-contained on purpose: guard-negative tests run weakened copies of it from a scratch directory.
-// Usage: node scripts/trusted-checks.mjs policy|evaluate [--policy FILE] [--project ID] [--kind run|checks|protection] [--input FILE]
+// Usage: node scripts/trusted-checks.mjs policy|evaluate [--policy FILE] [--project ID] [--kind run|checks|protection|workflows] [--input FILE]
 import { createHash, createPublicKey, verify } from 'node:crypto';
 import { Buffer } from 'node:buffer';
 import { readFileSync } from 'node:fs';
@@ -102,6 +103,53 @@ function evaluateProtection(project, input) {
 	return { denials };
 }
 
+// Static policy over the driver and reporter workflow texts (agora/policy). Workflows are authored in the JSON
+// subset of YAML and must equal their canonical serialization, so this parses exactly what GitHub parses.
+function evaluateWorkflows(project, input) {
+	const denials = [];
+	const parsed = {};
+	for (const file of [project.driver.workflow, project.reporter.workflow]) {
+		const text = input.files?.[file];
+		try { parsed[file] = JSON.parse(text); } catch { parsed[file] = undefined; }
+		if (!parsed[file] || JSON.stringify(parsed[file], null, '\t') + '\n' !== text) { denials.push(`workflow_not_canonical_json:${file}`); continue; }
+		for (const job of Object.values(parsed[file].jobs ?? {})) {
+			for (const uses of [job.uses, ...(job.steps ?? []).map(step => step.uses)].filter(Boolean)) {
+				if (!/^[\w.-]+\/[\w./-]+@[0-9a-f]{40}$/.test(uses)) denials.push(`unpinned_action:${file}:${uses}`);
+			}
+			if ((job.steps ?? []).some(step => step.uses?.startsWith('actions/checkout@') && step.with?.['persist-credentials'] !== false)) denials.push(`checkout_persists_credentials:${file}`);
+		}
+	}
+	const driver = parsed[project.driver.workflow];
+	if (driver) {
+		const text = input.files[project.driver.workflow];
+		if (canonical(Object.keys(driver.on ?? {})) !== canonical([project.driver.event])) denials.push('driver_trigger');
+		if (canonical(driver.permissions) !== canonical({ contents: 'read' })) denials.push('driver_permissions');
+		if (/\bsecrets\b|github\.token/.test(text)) denials.push('driver_secret_reference');
+		for (const [name, job] of Object.entries(driver.jobs ?? {})) {
+			if (job.permissions !== undefined) denials.push('driver_permissions');
+			if (!project.driver.jobs.includes(name)) continue;
+			if (job.needs !== undefined) denials.push(`driver_job_needs:${name}`);
+			if (job.if !== undefined) denials.push(`driver_job_condition:${name}`);
+			if (job['continue-on-error'] !== undefined || (job.steps ?? []).some(step => step['continue-on-error'] !== undefined)) denials.push(`driver_continue_on_error:${name}`);
+		}
+		for (const name of project.driver.jobs) if (!driver.jobs?.[name]) denials.push(`driver_job_missing:${name}`);
+	}
+	const reporter = parsed[project.reporter.workflow];
+	if (reporter) {
+		const text = input.files[project.reporter.workflow];
+		const jobs = Object.values(reporter.jobs ?? {});
+		const steps = jobs.flatMap(job => job.steps ?? []);
+		if (canonical(reporter.on) !== canonical({ workflow_run: { workflows: [project.driver.name], types: ['completed'] } })) denials.push('reporter_trigger');
+		if (canonical(reporter.permissions) !== canonical({ actions: 'read', contents: 'read', 'pull-requests': 'read' }) || jobs.some(job => job.permissions !== undefined)) denials.push('reporter_permissions');
+		if (jobs.length !== 1 || jobs[0].environment !== project.reporter.environment) denials.push('reporter_environment');
+		const candidateCheckout = steps.some(step => step.uses?.startsWith('actions/checkout@') && step.with?.ref !== '${{ github.event.repository.default_branch }}');
+		if (candidateCheckout || /workflow_run\.(head_|pull_requests)|head_repository|pull_request\.head|github\.head_ref/.test(text)) denials.push('reporter_candidate_reference');
+		if (/download-artifact|\/artifacts\b/.test(text)) denials.push('reporter_reads_candidate_artifact');
+		if ([...text.matchAll(/secrets\.(\w+)/g)].some(([, name]) => !project.reporter.secrets.includes(name))) denials.push('reporter_unexpected_secret');
+	}
+	return { denials };
+}
+
 function loadProject(file, id) {
 	const policy = JSON.parse(readFileSync(file, 'utf8'));
 	const project = policy.projects?.[id];
@@ -115,7 +163,7 @@ function requireEnrolled(project) {
 	if (!Number.isInteger(project.reporter.app_id) || typeof project.reporter.public_key !== 'string') throw stop('reporting_app_unenrolled', 'blocked');
 }
 
-const evaluators = { run: evaluateRun, checks: evaluateChecks, protection: evaluateProtection };
+const evaluators = { run: evaluateRun, checks: evaluateChecks, protection: evaluateProtection, workflows: evaluateWorkflows };
 const [command, ...rest] = process.argv.slice(2).filter(arg => arg !== '--json');
 const options = {};
 let usage = false;
@@ -129,7 +177,7 @@ try {
 	const project = loadProject(options['--policy'] ?? 'agora/trusted-checks.json', report.project);
 	if (command === 'policy') report.policy = project;
 	else {
-		requireEnrolled(project);
+		if (options['--kind'] !== 'workflows') requireEnrolled(project);
 		report.kind = options['--kind'];
 		const result = evaluators[report.kind](project, JSON.parse(readFileSync(options['--input'], 'utf8')));
 		report.denials = [...new Set(result.denials)].sort();

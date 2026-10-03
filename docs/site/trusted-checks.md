@@ -6,13 +6,14 @@ U01b.B03 is the merge-side half of [R11](repo:docs/technical-spec.md). A pull re
 
 ## What it does
 
-`node scripts/trusted-checks.mjs evaluate --kind run|checks|protection --input FILE --json` reads one GitHub read-back and prints `agora.trusted-checks-report/v1` with an outcome and sorted denial codes. Exit 0 is pass, 1 fail, 2 blocked prerequisite, 64 usage.
+`node scripts/trusted-checks.mjs evaluate --kind run|checks|protection|workflows --input FILE --json` reads one GitHub read-back and prints `agora.trusted-checks-report/v1` with an outcome and sorted denial codes. Exit 0 is pass, 1 fail, 2 blocked prerequisite, 64 usage.
 
 - `run` is the reporter's decision for one completed driver run. Every required job must be `completed` and `success` on the run's head. A failed, skipped, neutral, missing, duplicate or wrong-head job fails the aggregate, and so does a run from a fork, another event, another workflow path, a driver workflow whose bytes differ from the default branch's, or a pull request whose head or base has moved since. The report carries the `ci_verification` receipt the reporter signs.
 - `checks` is the merge-side read-back. For each required check it takes the newest run from the exact App ID. A same-named check from any other App, including the generic GitHub Actions App a candidate workflow can report as, is `wrong_producer`. The run must be successful on the exact head and carry a receipt that verifies against the enrolled Ed25519 public key and names this repository, head, driver workflow, App, policy digest and a pass.
 - `protection` reads `GET /repos/{owner}/{repo}/branches/{branch}/protection` and requires strict up-to-date checks bound to the App ID, one approving review, stale-review dismissal, code-owner review, enforced admins and no review bypass, force push or deletion. GitHub's paid-plan 403 is `plan_upgrade_required`, a blocked prerequisite.
+- `workflows` is the static `agora/policy` rule over the two workflow files, given as `{"files": {path: text}}`. Both are written in the JSON subset of YAML and must equal their canonical serialization, so the check parses exactly what GitHub parses with no YAML dependency. The driver (`.github/workflows/agora-ci.yml`) must trigger only on `pull_request`, hold `contents: read` and nothing else, name no secret or `github.token`, and keep every required job free of `needs`, `if` and `continue-on-error`. The reporter (`.github/workflows/agora-report.yml`) must trigger only on the driver's `workflow_run`, read only actions, contents and pull requests, run one job in the `agora-reporter` environment, check out the default branch only, never download artifacts and name only its two secrets. Every action in both is pinned to a commit SHA, and every checkout drops its credentials.
 
-A project without a repository, App ID or public key blocks every evaluation. The committed policy has neither an App ID nor a key, so today every real evaluation reports `reporting_app_unenrolled`.
+A project without a repository, App ID or public key blocks every evaluation except `workflows`, which needs neither. The committed policy has neither an App ID nor a key, so today every real evaluation reports `reporting_app_unenrolled`.
 
 ## Why it exists
 
@@ -21,14 +22,14 @@ Any workflow in a repository can create a check run named `agora/evidence` with 
 ## How it works
 
 ```flow
-Driver run | The pull_request workflow runs every required job with read-only credentials; required jobs never depend on each other, so one failure cannot skip the rest.
+Driver run | agora-ci runs doctor, static, contracts, docs, tests, red-green and guards on pull_request with read-only credentials and no secrets; no required job depends on another, so one failure cannot skip the rest.
 Reporter read-back | A default-branch workflow_run job reads the run, its jobs, the pull request and both copies of the driver workflow from GitHub, never candidate files.
 Run decision | evaluate --kind run fails closed on any failed, skipped, neutral, stale, missing or foreign result and emits the ci_verification receipt.
 Publish | Only the reporter, holding the App credential and Ed25519 key, posts agora/evidence and agora/policy with the signed receipt.
 Merge read-back | evaluate --kind checks and --kind protection confirm exact App, exact head, valid signature and branch protection before anyone treats the pull request as mergeable.
 ```
 
-The reporter workflow, the App credential and live publication are later slices of this task. Each step either passes or names its denial. Nothing in this flow grants merge authority, which stays with a human in GitHub.
+The reporter script that `agora-report.yml` runs is the next slice of this task. GitHub runs a `workflow_run` workflow only from the default branch, so the reporter cannot run on the pull request that adds it. Each step either passes or names its denial. Nothing in this flow grants merge authority, which stays with a human in GitHub.
 
 ## Implementation status
 
@@ -36,4 +37,4 @@ The reporter workflow, the App credential and live publication are later slices 
 
 ## Verification and proof
 
-[Lanes 8-10](repo:packages/verification/test/trusted-checks.test.ts) drive the public CLI. Lane 8 covers protection read-back, lane 9 forged producers, receipts and workflows, and lane 10 failed dependencies with stale, neutral and skipped results. Lanes 9 and 10 each run an isolated copy with one guard weakened. Trusting any App drops the `wrong_producer` denial, and accepting any job conclusion passes a skipped dependent job. Run `pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts` or `pnpm agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks`. Task receipts are under `evidence/U01b/agora-s1-qualify-trusted-checks/`. This task changes check reporting, so it needs an independent exact-head security review. The implementer's own checks cannot supply that verdict.
+[Lanes 8-10](repo:packages/verification/test/trusted-checks.test.ts) drive the public CLI. Lane 8 covers protection read-back. Lane 9 covers forged producers, receipts and workflows, plus credential isolation in the workflow files. Lane 10 covers failed dependencies with stale, neutral and skipped results, and required jobs made dependent, conditional or allowed to fail. Lanes 9 and 10 each run an isolated copy with one guard weakened. Trusting any App drops the `wrong_producer` denial, and accepting any job conclusion passes a skipped dependent job. Run `pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts` or `pnpm agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks`. Task receipts are under `evidence/U01b/agora-s1-qualify-trusted-checks/`. This task changes check reporting, so it needs an independent exact-head security review. The implementer's own checks cannot supply that verdict.
