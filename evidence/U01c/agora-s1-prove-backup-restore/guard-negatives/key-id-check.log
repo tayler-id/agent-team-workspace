@@ -1,17 +1,17 @@
 
  RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
 
- ❯ |pg| packages/storage/test/backup.pg.test.ts (7 tests | 1 failed) 3257ms
-   × a wrong key is denied before the target is touched 299ms
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (10 tests | 1 failed) 4329ms
+   × a wrong key is denied before the target is touched 326ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 6 passed (7)
-   Start at  17:15:58
-   Duration  3.64s (tests 91%, import 8%, transform 1%)
+      Tests  1 failed | 9 passed (10)
+   Start at  17:32:49
+   Duration  4.74s (tests 93%, import 6%, transform 1%)
 
-{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"d03781b4-f166-4662-9120-3e0268b6381c","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-d03781b4-f166-4662-9120-3e0268b6381c"}
-{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"d03781b4-f166-4662-9120-3e0268b6381c","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-d03781b4-f166-4662-9120-3e0268b6381c","pid":52175}
-{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"d03781b4-f166-4662-9120-3e0268b6381c","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-d03781b4-f166-4662-9120-3e0268b6381c","socket_dir":"/private/tmp/agora-p0c-d03781b4-f166-4662-9120-3e0268b6381c","pid":52175,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","pid":82192}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","socket_dir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","pid":82192,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -33,9 +33,9 @@ AssertionError: expected { status: 1, receipt: { …(4) } } to deeply equal { st
     "status": 1,
   }
 
- ❯ deniedRestore packages/storage/test/backup.pg.test.ts:64:135
+ ❯ deniedRestore packages/storage/test/backup.pg.test.ts:81:141
 
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 
-{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-d03781b4-f166-4662-9120-3e0268b6381c"}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a"}

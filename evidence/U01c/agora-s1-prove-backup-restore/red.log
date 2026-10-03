@@ -1,11 +1,11 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-10-03T21:15:57.805Z
-parent: a62662e8788a072289b14b82f80cc970e1bd6943
-head: 11c4e758ad699ae00b3b006c5f5e3714afd5be4a
-subject_revision: a62662e8788a072289b14b82f80cc970e1bd6943
+recorded_at: 2026-10-03T21:32:03.728Z
+parent: 1eea48bf63c84d51a9e635e8fef0ed71cb083ed0
+head: 4385f3492655f42ce7d6330937aa39131c1dcdd6
+subject_revision: 1eea48bf63c84d51a9e635e8fef0ed71cb083ed0
 test_patch_applied_to_subject: true
 test_patch_files: docs/site/test/corpus.test.ts, packages/storage/test/backup.pg.test.ts
-test_patch_digest: sha256:5a971ff16a87865c2896a05a5a8f8e32bebddfd39a02d6dcf0c9ece7dd7e02cb
+test_patch_digest: sha256:569b10dfbed58755117baa289d3f4fa97980ba7f5c5a1a98cd957213c4e4da23
 fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
 configuration: {"command":"node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
 toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
@@ -13,121 +13,126 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-NMSNi2
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-Uivvcx
 
- ❯ |pg| packages/storage/test/backup.pg.test.ts (7 tests | 7 failed) 478ms
-   × keygen writes two distinct keys and create seals the fixture database and three objects 54ms
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (10 tests | 9 failed) 615ms
+   × keygen writes two distinct keys and create seals the fixture database and three objects 91ms
    × the backup directory holds neither the key hex nor the raw key bytes 1ms
-   × a wrong key is denied before the target is touched 47ms
+   × a wrong key is denied before the target is touched 70ms
    × one flipped byte in the sealed dump is denied as corrupt before the target is touched 1ms
    × a missing sealed object is denied before the target is touched 0ms
-   × restore rebuilds the same rows, objects and schema in a second database 62ms
-   × restoring into a database that already holds tables is denied 34ms
+   × restore rebuilds the same rows, objects and schema in a second database 73ms
+   × restoring into a database that already holds tables is denied 45ms
+   × a restore whose rows differ from the sealed inventory is denied as integrity_mismatch 0ms
+   × a backup taken while rows are being written restores to exactly its sealed inventory 52ms
 
  Test Files  1 failed (1)
-      Tests  7 failed (7)
-   Start at  17:15:46
-   Duration  873ms (tests 60%, import 33%, transform 6%)
+      Tests  9 failed | 1 passed (10)
+   Start at  17:31:49
+   Duration  955ms (tests 69%, import 27%, transform 4%)
 
-{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"5762b7fb-3ce1-43e2-ba6f-5c8f4459f1ca","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-otcKnW","socketDir":"/private/tmp/agora-p0c-5762b7fb-3ce1-43e2-ba6f-5c8f4459f1ca"}
-{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"5762b7fb-3ce1-43e2-ba6f-5c8f4459f1ca","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-otcKnW","socketDir":"/private/tmp/agora-p0c-5762b7fb-3ce1-43e2-ba6f-5c8f4459f1ca","pid":51458}
-{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"5762b7fb-3ce1-43e2-ba6f-5c8f4459f1ca","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-otcKnW","socketDir":"/private/tmp/agora-p0c-5762b7fb-3ce1-43e2-ba6f-5c8f4459f1ca","socket_dir":"/private/tmp/agora-p0c-5762b7fb-3ce1-43e2-ba6f-5c8f4459f1ca","pid":51458,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"65bfb57a-2a17-4297-9aee-8ba92df5861a","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-yDaSWV","socketDir":"/private/tmp/agora-p0c-65bfb57a-2a17-4297-9aee-8ba92df5861a"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"65bfb57a-2a17-4297-9aee-8ba92df5861a","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-yDaSWV","socketDir":"/private/tmp/agora-p0c-65bfb57a-2a17-4297-9aee-8ba92df5861a","pid":58761}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"65bfb57a-2a17-4297-9aee-8ba92df5861a","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-yDaSWV","socketDir":"/private/tmp/agora-p0c-65bfb57a-2a17-4297-9aee-8ba92df5861a","socket_dir":"/private/tmp/agora-p0c-65bfb57a-2a17-4297-9aee-8ba92df5861a","pid":58761,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
 
-⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  |pg| packages/storage/test/backup.pg.test.ts > keygen writes two distinct keys and create seals the fixture database and three objects
-AssertionError: expected { status: 1, receipt: undefined } to deeply equal { status: +0, receipt: { …(3) } }
+AssertionError: expected { status: 64, receipt: { …(2) } } to deeply equal { status: +0, receipt: { …(3) } }
 
 - Expected
 + Received
 
   {
--   "receipt": {
+    "receipt": {
 -     "key_id": StringMatching /^sha256:[0-9a-f]{64}$/,
 -     "outcome": "created",
 -     "schema_version": "agora.backup-key/v1",
--   },
++     "message": "usage: backup keygen|create|restore (see docs/site/cli.md)",
++     "outcome": "usage_error",
+    },
 -   "status": 0,
-+   "receipt": undefined,
-+   "status": 1,
++   "status": 64,
   }
 
- ❯ packages/storage/test/backup.pg.test.ts:96:47
-     94|  const good = cli('keygen', '--key', join(keys, 'good'));
-     95|  const wrong = cli('keygen', '--key', join(keys, 'wrong'));
-     96|  for (const run of [good, wrong]) expect(run).toEqual({ status: 0, rec…
+ ❯ packages/storage/test/backup.pg.test.ts:118:47
+    116|  const good = await cli('keygen', '--key', join(keys, 'good'));
+    117|  const wrong = await cli('keygen', '--key', join(keys, 'wrong'));
+    118|  for (const run of [good, wrong]) expect(run).toEqual({ status: 0, rec…
        |                                               ^
-     97|  expect(wrong.receipt).not.toEqual(good.receipt);
-     98|  const tables = await userTables(source);
+    119|  expect(wrong.receipt).not.toEqual(good.receipt);
+    120|  const tables = await userTables(source);
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
 
  FAIL  |pg| packages/storage/test/backup.pg.test.ts > the backup directory holds neither the key hex nor the raw key bytes
-Error: ENOENT: no such file or directory, open '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-backup-test-uyZdHU/keys/good'
- ❯ packages/storage/test/backup.pg.test.ts:106:14
-    104|
-    105| test('the backup directory holds neither the key hex nor the raw key b…
-    106|  const hex = readFileSync(join(keys, 'good'), 'utf8').trim();
+Error: ENOENT: no such file or directory, open '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-backup-test-xfbm9S/keys/good'
+ ❯ packages/storage/test/backup.pg.test.ts:128:14
+    126|
+    127| test('the backup directory holds neither the key hex nor the raw key b…
+    128|  const hex = readFileSync(join(keys, 'good'), 'utf8').trim();
        |              ^
-    107|  expect(hex).toMatch(/^[0-9a-f]{64}$/);
-    108|  const walk = (dir: string): string[] => readdirSync(dir).flatMap((nam…
+    129|  expect(hex).toMatch(/^[0-9a-f]{64}$/);
+    130|  const walk = (dir: string): string[] => readdirSync(dir).flatMap((nam…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
 
  FAIL  |pg| packages/storage/test/backup.pg.test.ts > a wrong key is denied before the target is touched
-AssertionError: expected { status: 1, receipt: undefined } to deeply equal { status: 1, receipt: { …(4) } }
+AssertionError: expected { status: 64, receipt: { …(2) } } to deeply equal { status: 1, receipt: { …(4) } }
 
 - Expected
 + Received
 
   {
--   "receipt": {
+    "receipt": {
 -     "outcome": "denied",
 -     "reason_code": "wrong_key",
 -     "schema_version": "agora.restore-receipt/v1",
 -     "subject": "backup.json",
--   },
-+   "receipt": undefined,
-    "status": 1,
++     "message": "usage: backup keygen|create|restore (see docs/site/cli.md)",
++     "outcome": "usage_error",
+    },
+-   "status": 1,
++   "status": 64,
   }
 
- ❯ deniedRestore packages/storage/test/backup.pg.test.ts:64:135
+ ❯ deniedRestore packages/storage/test/backup.pg.test.ts:81:141
 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
 
  FAIL  |pg| packages/storage/test/backup.pg.test.ts > one flipped byte in the sealed dump is denied as corrupt before the target is touched
-Error: ENOENT: no such file or directory, lstat '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-backup-test-uyZdHU/backup'
- ❯ packages/storage/test/backup.pg.test.ts:118:2
-    116| test('one flipped byte in the sealed dump is denied as corrupt before …
-    117|  const copy = join(root, 'corrupt');
-    118|  cpSync(backup, copy, { recursive: true });
+Error: ENOENT: no such file or directory, lstat '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-backup-test-xfbm9S/backup'
+ ❯ packages/storage/test/backup.pg.test.ts:140:2
+    138| test('one flipped byte in the sealed dump is denied as corrupt before …
+    139|  const copy = join(root, 'corrupt');
+    140|  cpSync(backup, copy, { recursive: true });
        |  ^
-    119|  const sealed = readFileSync(join(copy, 'database.agb'));
-    120|  const middle = Math.floor(sealed.length / 2);
+    141|  const sealed = readFileSync(join(copy, 'database.agb'));
+    142|  const middle = Math.floor(sealed.length / 2);
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
 
  FAIL  |pg| packages/storage/test/backup.pg.test.ts > a missing sealed object is denied before the target is touched
-Error: ENOENT: no such file or directory, lstat '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-backup-test-uyZdHU/backup'
- ❯ packages/storage/test/backup.pg.test.ts:128:2
-    126| test('a missing sealed object is denied before the target is touched',…
-    127|  const copy = join(root, 'missing');
-    128|  cpSync(backup, copy, { recursive: true });
+Error: ENOENT: no such file or directory, lstat '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-backup-test-xfbm9S/backup'
+ ❯ packages/storage/test/backup.pg.test.ts:150:2
+    148| test('a missing sealed object is denied before the target is touched',…
+    149|  const copy = join(root, 'missing');
+    150|  cpSync(backup, copy, { recursive: true });
        |  ^
-    129|  rmSync(join(copy, 'objects/0002.agb'));
-    130|  await deniedRestore(copy, join(keys, 'good'), 'missing_artifact', 'ob…
+    151|  rmSync(join(copy, 'objects/0002.agb'));
+    152|  await deniedRestore(copy, join(keys, 'good'), 'missing_artifact', 'ob…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
 
  FAIL  |pg| packages/storage/test/backup.pg.test.ts > restore rebuilds the same rows, objects and schema in a second database
-AssertionError: expected { status: 1, receipt: undefined } to deeply equal { status: +0, receipt: { …(7) } }
+AssertionError: expected { status: 64, receipt: { …(2) } } to deeply equal { status: +0, receipt: { …(7) } }
 
 - Expected
 + Received
 
   {
--   "receipt": {
+    "receipt": {
 -     "backup_id": StringMatching /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
 -     "inventory_digest": undefined,
 -     "key_id": undefined,
@@ -135,37 +140,66 @@ AssertionError: expected { status: 1, receipt: undefined } to deeply equal { sta
 -     "outcome": "restored",
 -     "schema_version": "agora.restore-receipt/v1",
 -     "tables": undefined,
--   },
++     "message": "usage: backup keygen|create|restore (see docs/site/cli.md)",
++     "outcome": "usage_error",
+    },
 -   "status": 0,
-+   "receipt": undefined,
-+   "status": 1,
++   "status": 64,
   }
 
- ❯ packages/storage/test/backup.pg.test.ts:137:155
+ ❯ packages/storage/test/backup.pg.test.ts:159:161
 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
 
  FAIL  |pg| packages/storage/test/backup.pg.test.ts > restoring into a database that already holds tables is denied
-AssertionError: expected { status: 1, receipt: undefined } to deeply equal { status: 1, receipt: { …(4) } }
+AssertionError: expected { status: 64, receipt: { …(2) } } to deeply equal { status: 1, receipt: { …(4) } }
 
 - Expected
 + Received
 
   {
--   "receipt": {
+    "receipt": {
 -     "outcome": "denied",
 -     "reason_code": "target_not_empty",
 -     "schema_version": "agora.restore-receipt/v1",
 -     "subject": "database",
--   },
-+   "receipt": undefined,
-    "status": 1,
++     "message": "usage: backup keygen|create|restore (see docs/site/cli.md)",
++     "outcome": "usage_error",
+    },
+-   "status": 1,
++   "status": 64,
   }
 
- ❯ packages/storage/test/backup.pg.test.ts:149:164
+ ❯ packages/storage/test/backup.pg.test.ts:171:170
 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
 
-{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-otcKnW","socketDir":"/private/tmp/agora-p0c-5762b7fb-3ce1-43e2-ba6f-5c8f4459f1ca"}
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > a restore whose rows differ from the sealed inventory is denied as integrity_mismatch
+Error: ENOENT: no such file or directory, lstat '/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-backup-test-xfbm9S/backup'
+ ❯ packages/storage/test/backup.pg.test.ts:177:2
+    175| test('a restore whose rows differ from the sealed inventory is denied …
+    176|  const copy = join(root, 'forged');
+    177|  cpSync(backup, copy, { recursive: true });
+       |  ^
+    178|  const key = Buffer.from(readFileSync(join(keys, 'good'), 'utf8').trim…
+    179|  const label = `${(JSON.parse(readFileSync(join(copy, 'backup.json'), …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > a backup taken while rows are being written restores to exactly its sealed inventory
+AssertionError: expected 64 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 64
+
+ ❯ packages/storage/test/backup.pg.test.ts:199:22
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-yDaSWV","socketDir":"/private/tmp/agora-p0c-65bfb57a-2a17-4297-9aee-8ba92df5861a"}

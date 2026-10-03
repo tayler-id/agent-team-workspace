@@ -11,12 +11,29 @@ venv from `packages/verification/fixture/requirements.txt` first on `PATH`.
 ## Red and green
 
 `red.log`, `green.log`, `test-patch.diff` and `manifest.json` come from
-`node scripts/record-red-green.mjs --parent a62662e --head 11c4e75` with the command
+`node scripts/record-red-green.mjs --parent 1eea48b --head 4385f34` with the command
 `node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts`.
-At the parent all 7 tests fail on CLI exit status and receipt assertions
-(`expected { status: 1, receipt: undefined } ...`), because `scripts/backup.ts` does not
-exist there. No test fails at module link. At the head all 7 pass. The two logs carry
-machine paths because the signed manifest covers their exact bytes.
+
+`1eea48b` is the R22 test-only parent revision: the slice's real parent `a62662e` plus a
+three-line `scripts/backup.ts` that prints only the usage route
+(`outcome: usage_error`, exit 64) for every call. A parent with no CLI at all is not valid
+red, because the driver would prove nothing there. The branch merges `1eea48b` with the
+ours strategy (`4385f34`), so the commit is reachable and the tree is unchanged.
+
+At the baseline, the first test passes: the same `cli()` driver reaches the usage route.
+Nine fail. Five fail on literal values, the CLI answering `{ status: 64, usage_error }`
+where the test expects `created`, `denied` or `restored`. Four fail with ENOENT on the key
+or backup files that the failed keygen and create never wrote. At the head all ten pass.
+The logs carry machine paths because the signed manifest covers their exact bytes.
+`node scripts/validate-evidence.mjs` passes on both bundles when given full SHAs, `--base 1eea48bf63c84d51a9e635e8fef0ed71cb083ed0` or
+`--base 07d19c1e2d84d4d9ef81233644d0eee0973c8036` with `--head 4385f3492655f42ce7d6330937aa39131c1dcdd6`.
+
+`snapshot-race/` is the pair for the one-snapshot fix, parent `07d19c1` (the commit that
+added the concurrent-writer test, before the fix) and head `4385f34`. Its red fails only
+that test, with `reason_code: integrity_mismatch`: `create` counted rows in a later
+snapshot than `pg_dump`, so a backup taken under writes could not restore. The race
+reproduced on every run before the fix (two manual runs plus this red) and passed three
+manual runs after it.
 
 ## Guard negatives
 
@@ -32,14 +49,14 @@ then restored the file from the commit before the next edit.
 | `missing-artifact` | `scripts/backup.ts` | ENOENT to `missing_artifact` | missing sealed object is denied |
 | `target-empty-check` | `scripts/backup.ts` | non-empty target database check | restore into a used database is denied |
 | `object-write-dropped` | `scripts/backup.ts` | writes one object fewer | restore rebuilds rows and objects |
-| `object-write-dropped-and-compare-off` | `scripts/backup.ts` | the same, with the CLI inventory compare off | restore rebuilds rows and objects |
+| `object-write-dropped-and-compare-off` | `scripts/backup.ts` | the same, with the inventory compare off | restore rebuilds rows and objects |
+| `inventory-compare-off` | `scripts/backup.ts` | the restored-inventory compare | forged manifest is denied as `integrity_mismatch` |
+| `snapshot-off` | `scripts/backup.ts` | `pg_dump --snapshot` on the exported snapshot | backup taken under writes restores |
 | `key-leak` | `scripts/backup.ts` | writes the key hex into `backup.json` | backup holds no key |
 
-All seven went red on exactly the named test and every file was restored byte for byte.
-The last two rows show the test's own row and byte checks catch a lost object even with
-the CLI's `integrity_mismatch` compare disabled. Disabling only that compare turns no
-test red, because no test feeds a restore whose output differs from the manifest. That
-denial is untested here.
+All nine went red on the named test and every file was restored byte for byte. The
+forged-manifest test re-seals the manifest with the test's own AES-GCM code, following the
+documented layout, after changing `foundation_fixture.event` from 4 rows to 5.
 
 ## Recipe drive
 
@@ -52,7 +69,7 @@ Drive and Cleanup blocks, run literally at this head. `drive/recipe-transcript.t
 ## Not proved
 
 WAL archiving, separate-host restore, off-host key recovery, epoch rotation and fencing,
-RPO and RTO, a dedicated backup role, external storage, key rotation, a normalized schema
-comparison, one snapshot for dump and inventory, and the CLI-only `integrity_mismatch`
-path. No independent security review has happened; the implementer's own checks are not one.
-The AES-256-GCM mechanism is proposed in D111 and awaits operator acceptance.
+RPO and RTO, a dedicated backup role, external storage, key rotation and a normalized
+schema comparison. No independent security review has happened, and the implementer's own
+checks are not one. D111 records AES-256-GCM as an implementation decision under R17 and
+D32; it claims no captain or operator acceptance.

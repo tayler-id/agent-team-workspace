@@ -1,17 +1,17 @@
 
  RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
 
- ❯ |pg| packages/storage/test/backup.pg.test.ts (7 tests | 1 failed) 2711ms
-   × one flipped byte in the sealed dump is denied as corrupt before the target is touched 373ms
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (10 tests | 1 failed) 4309ms
+   × one flipped byte in the sealed dump is denied as corrupt before the target is touched 346ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 6 passed (7)
-   Start at  17:16:03
-   Duration  3.05s (tests 91%, import 7%, transform 2%)
+      Tests  1 failed | 9 passed (10)
+   Start at  17:32:55
+   Duration  4.77s (tests 93%, import 6%, transform 2%)
 
-{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"4b302667-b1fa-43ea-b01f-6f258367f494","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-4b302667-b1fa-43ea-b01f-6f258367f494"}
-{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"4b302667-b1fa-43ea-b01f-6f258367f494","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-4b302667-b1fa-43ea-b01f-6f258367f494","pid":54384}
-{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"4b302667-b1fa-43ea-b01f-6f258367f494","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-4b302667-b1fa-43ea-b01f-6f258367f494","socket_dir":"/private/tmp/agora-p0c-4b302667-b1fa-43ea-b01f-6f258367f494","pid":54384,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"3bb72839-4e99-4428-868e-e33bf9fb6000","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3bb72839-4e99-4428-868e-e33bf9fb6000"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"3bb72839-4e99-4428-868e-e33bf9fb6000","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3bb72839-4e99-4428-868e-e33bf9fb6000","pid":85256}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"3bb72839-4e99-4428-868e-e33bf9fb6000","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3bb72839-4e99-4428-868e-e33bf9fb6000","socket_dir":"/private/tmp/agora-p0c-3bb72839-4e99-4428-868e-e33bf9fb6000","pid":85256,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -25,9 +25,9 @@ AssertionError: expected { status: +0, receipt: { …(7) } } to deeply equal { s
     "receipt": {
 -     "outcome": "denied",
 -     "reason_code": "corrupt",
-+     "backup_id": "d9701650-f986-41c1-84a5-919d407374f8",
-+     "inventory_digest": "sha256:d9b67514c18165aa822b21812f1dd5294a5256d12592a9844998428ff515d60c",
-+     "key_id": "sha256:e6c3103687a1730bf56583f45f400a0172ddb279edd62cd7563bafc2c8bd9379",
++     "backup_id": "652db837-a3a6-4245-a817-d2b1bf9e1579",
++     "inventory_digest": "sha256:2d8cda27213f6fe1f435b29e89e2e50f0e05b294d8e36b805537c00edc1174e3",
++     "key_id": "sha256:b37d89be638a3cf5e1b63d34f5aaa2320a0aba914e8ba70bd686b4b6d0197b42",
 +     "objects": 3,
 +     "outcome": "restored",
       "schema_version": "agora.restore-receipt/v1",
@@ -38,10 +38,10 @@ AssertionError: expected { status: +0, receipt: { …(7) } } to deeply equal { s
 +   "status": 0,
   }
 
- ❯ deniedRestore packages/storage/test/backup.pg.test.ts:64:135
+ ❯ deniedRestore packages/storage/test/backup.pg.test.ts:81:141
 
- ❯ packages/storage/test/backup.pg.test.ts:123:2
+ ❯ packages/storage/test/backup.pg.test.ts:145:2
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 
-{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-4b302667-b1fa-43ea-b01f-6f258367f494"}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3bb72839-4e99-4428-868e-e33bf9fb6000"}

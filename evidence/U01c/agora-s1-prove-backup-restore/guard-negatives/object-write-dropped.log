@@ -1,19 +1,21 @@
 
  RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
 
- ❯ |pg| packages/storage/test/backup.pg.test.ts (7 tests | 1 failed) 2801ms
-   × restore rebuilds the same rows, objects and schema in a second database 331ms
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (10 tests | 3 failed) 3981ms
+   × restore rebuilds the same rows, objects and schema in a second database 381ms
+   × a restore whose rows differ from the sealed inventory is denied as integrity_mismatch 276ms
+   × a backup taken while rows are being written restores to exactly its sealed inventory 756ms
 
  Test Files  1 failed (1)
-      Tests  1 failed | 6 passed (7)
-   Start at  17:16:16
-   Duration  3.17s (tests 90%, import 8%, transform 1%)
+      Tests  3 failed | 7 passed (10)
+   Start at  17:33:11
+   Duration  4.31s (tests 94%, import 5%, transform 1%)
 
-{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"2b2343ff-04cf-4636-82ad-5509a86e882d","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-2b2343ff-04cf-4636-82ad-5509a86e882d"}
-{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"2b2343ff-04cf-4636-82ad-5509a86e882d","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-2b2343ff-04cf-4636-82ad-5509a86e882d","pid":61912}
-{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"2b2343ff-04cf-4636-82ad-5509a86e882d","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-2b2343ff-04cf-4636-82ad-5509a86e882d","socket_dir":"/private/tmp/agora-p0c-2b2343ff-04cf-4636-82ad-5509a86e882d","pid":61912,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"1de5b383-f4ce-45ed-bebb-486b40cfc88d","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-1de5b383-f4ce-45ed-bebb-486b40cfc88d"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"1de5b383-f4ce-45ed-bebb-486b40cfc88d","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-1de5b383-f4ce-45ed-bebb-486b40cfc88d","pid":98266}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"1de5b383-f4ce-45ed-bebb-486b40cfc88d","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-1de5b383-f4ce-45ed-bebb-486b40cfc88d","socket_dir":"/private/tmp/agora-p0c-1de5b383-f4ce-45ed-bebb-486b40cfc88d","pid":98266,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
 
-⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  |pg| packages/storage/test/backup.pg.test.ts > restore rebuilds the same rows, objects and schema in a second database
 AssertionError: expected { status: 1, receipt: { …(4) } } to deeply equal { status: +0, receipt: { …(7) } }
@@ -24,8 +26,8 @@ AssertionError: expected { status: 1, receipt: { …(4) } } to deeply equal { st
   {
     "receipt": {
 -     "backup_id": StringMatching /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
--     "inventory_digest": "sha256:30a220a37fcef5eae6946b3a41d65d45c7f404dc56a46f9d2763c3a4e426e25d",
--     "key_id": "sha256:0436fac7d13d76a24cc18658de311959a4136ee5b56f1538cf7786a9adf5d78b",
+-     "inventory_digest": "sha256:962bf33cf274c85b5b5e0d900b0574be6b58687ddb32853e402ed8e5d11ab346",
+-     "key_id": "sha256:0dc0fcefdc3a598360a445dc0b7abb9fefde024ac0174dd21f6c977b27b812e2",
 -     "objects": 3,
 -     "outcome": "restored",
 +     "outcome": "denied",
@@ -38,9 +40,55 @@ AssertionError: expected { status: 1, receipt: { …(4) } } to deeply equal { st
 +   "status": 1,
   }
 
- ❯ packages/storage/test/backup.pg.test.ts:137:155
+ ❯ packages/storage/test/backup.pg.test.ts:159:161
 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
 
-{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-2b2343ff-04cf-4636-82ad-5509a86e882d"}
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > a restore whose rows differ from the sealed inventory is denied as integrity_mismatch
+AssertionError: expected { status: 1, receipt: { …(4) } } to deeply equal { status: 1, receipt: { …(4) } }
+
+- Expected
++ Received
+
+  {
+    "receipt": {
+      "outcome": "denied",
+      "reason_code": "integrity_mismatch",
+      "schema_version": "agora.restore-receipt/v1",
+-     "subject": "table:foundation_fixture.event",
++     "subject": "object:alpha.txt",
+    },
+    "status": 1,
+  }
+
+ ❯ packages/storage/test/backup.pg.test.ts:186:175
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > a backup taken while rows are being written restores to exactly its sealed inventory
+AssertionError: expected { status: 1, receipt: { …(4) } } to deeply equal { status: +0, …(1) }
+
+- Expected
++ Received
+
+  {
+    "receipt": {
+-     "inventory_digest": "sha256:a497c40e57003d8bd323417de2c6b5c4ca9b2aede03167e1b2e6550dfac707c6",
+-     "outcome": "restored",
++     "outcome": "denied",
++     "reason_code": "integrity_mismatch",
++     "schema_version": "agora.restore-receipt/v1",
++     "subject": "object:alpha.txt",
+    },
+-   "status": 0,
++   "status": 1,
+  }
+
+ ❯ packages/storage/test/backup.pg.test.ts:201:175
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-1de5b383-f4ce-45ed-bebb-486b40cfc88d"}

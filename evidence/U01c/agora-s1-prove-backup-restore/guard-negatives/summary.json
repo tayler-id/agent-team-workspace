@@ -48,7 +48,9 @@
   "file": "scripts/backup.ts",
   "exit": 1,
   "failed": [
-   "restore rebuilds the same rows, objects and schema in a second database"
+   "restore rebuilds the same rows, objects and schema in a second database",
+   "a restore whose rows differ from the sealed inventory is denied as integrity_mismatch",
+   "a backup taken while rows are being written restores to exactly its sealed inventory"
   ],
   "expected_red": "restore rebuilds the same rows, objects and schema in a second database",
   "red_as_expected": true,
@@ -59,9 +61,32 @@
   "file": "scripts/backup.ts",
   "exit": 1,
   "failed": [
-   "restore rebuilds the same rows, objects and schema in a second database"
+   "restore rebuilds the same rows, objects and schema in a second database",
+   "a restore whose rows differ from the sealed inventory is denied as integrity_mismatch"
   ],
   "expected_red": "restore rebuilds the same rows, objects and schema in a second database",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "inventory-compare-off",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "a restore whose rows differ from the sealed inventory is denied as integrity_mismatch"
+  ],
+  "expected_red": "a restore whose rows differ from the sealed inventory is denied as integrity_mismatch",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "snapshot-off",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "a backup taken while rows are being written restores to exactly its sealed inventory"
+  ],
+  "expected_red": "a backup taken while rows are being written restores to exactly its sealed inventory",
   "red_as_expected": true,
   "restored_byte_identical": true
  },
