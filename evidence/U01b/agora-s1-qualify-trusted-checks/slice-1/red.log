@@ -1,0 +1,98 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-03T00:16:43.222Z
+parent: d9c06b3691dbd31a19922c2f2e7c620e1d4b3a7e
+head: 28593421c658976efae19ebd279f71f42b62246d
+subject_revision: d9c06b3691dbd31a19922c2f2e7c620e1d4b3a7e
+test_patch_applied_to_subject: true
+test_patch_files: packages/verification/test/trusted-checks.test.ts
+test_patch_digest: sha256:2c9a0af762d82abebe1b8bfedcf5401097798f37064750463dee6e144e581f34
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-3FAvzP
+
+ ❯ |unit| packages/verification/test/trusted-checks.test.ts (3 tests | 3 failed) 179ms
+   × project lane 8 reads protection back against exact App IDs, review and no bypass 48ms
+   × project lane 9 denies candidate-authored reports and wrong-workflow receipts 86ms
+   × project lane 10 fails a failed dependency and stale, neutral or skipped checks 44ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  20:16:35
+   Duration  260ms (tests 90%, transform 6%, import 3%, worker 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/trusted-checks.test.ts > project lane 8 reads protection back against exact App IDs, review and no bypass
+AssertionError: expected { …(5) } to match object { outcome: 'pass', denials: [] }
+(3 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "denials": [],
+-   "outcome": "pass",
++   "denials": [
++     "evaluation_unavailable",
++   ],
++   "outcome": "unavailable",
+  }
+
+ ❯ packages/verification/test/trusted-checks.test.ts:76:47
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  |unit| packages/verification/test/trusted-checks.test.ts > project lane 9 denies candidate-authored reports and wrong-workflow receipts
+AssertionError: expected { …(5) } to match object { outcome: 'pass', denials: [] }
+(3 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "denials": [],
+-   "outcome": "pass",
++   "denials": [
++     "evaluation_unavailable",
++   ],
++   "outcome": "unavailable",
+  }
+
+ ❯ packages/verification/test/trusted-checks.test.ts:90:45
+     88| test('project lane 9 denies candidate-authored reports and wrong-workf…
+     89|  baseline();
+     90|  expect(evaluate('checks', checks(both()))).toMatchObject({ outcome: '…
+       |                                             ^
+     91|  expect(denials('checks', checks(both({ app_id: ACTIONS, output: { tex…
+     92|  expect(denials('checks', checks(both({ output: { text: text(candidate…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  |unit| packages/verification/test/trusted-checks.test.ts > project lane 10 fails a failed dependency and stale, neutral or skipped checks
+AssertionError: expected { …(5) } to match object { outcome: 'pass', denials: [] }
+(3 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "denials": [],
+-   "outcome": "pass",
++   "denials": [
++     "evaluation_unavailable",
++   ],
++   "outcome": "unavailable",
+  }
+
+ ❯ packages/verification/test/trusted-checks.test.ts:112:15
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
