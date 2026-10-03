@@ -8,16 +8,32 @@ Toolchain: official Node 24.21.0 `darwin-arm64` from nodejs.org, checked against
 `SHASUMS256.txt` and first on `PATH`; pnpm 10.34.1; Homebrew PostgreSQL 18.4; the Python
 venv from `packages/verification/fixture/requirements.txt` first on `PATH`.
 
-## Rebased receipts
+## Current and historical receipts
 
-The branch was rebased onto `main` at `15619b1` after the receipts in the later sections
-were recorded. Those receipts stay byte for byte as recorded, so they name pre-rebase
-commits that are no longer ancestors of the branch. Each pre-rebase commit differs from its
-rebased twin only in the 22 files `main` changed between `a62662e` and `15619b1`, which
-are the candidate CI workflow and its scripts, test, evidence and docs. None of the backup
-source and test files, the lockfile, `vitest.config.ts` or `tsconfig.base.json` is among
-them. In `.agents/skills/verify-agora/SKILL.md` the only difference is `main`'s candidate
-CI section, so the backup recipe blocks are the same.
+The branch was rebased onto `main` at `15619b1` after the first receipts were recorded, so
+this directory holds two sets.
+
+- Current. `rebased/` holds the three red/green pairs re-recorded at the rebased SHAs, and
+  `drive/` holds the recipe drive at `1ac8af7`. The three `rebased/` pairs validate with the
+  existing producer key for target `local-foundation-fixture`, this checkout's
+  `.scratch/producer.key`.
+- Historical. The bundle root, `snapshot-race/`, `review-fixes/` and both
+  `guard-negatives/` directories were recorded before the rebase. They stay byte for byte as
+  recorded, signatures included, and name pre-rebase commits that are not ancestors of this
+  branch. [Historical receipts](#historical-receipts-before-the-rebase) describes them.
+
+The owner confirmed separately that an archive ref outside this branch retains the
+pre-rebase commits. This branch neither merges that history nor carries the ref. The
+pre-rebase branch head was `6f2304c8998ecfb4268199f5fb888c50932737cf`, and every other
+pre-rebase commit in the table below is its ancestor. In a clone that holds the archive
+ref, `git for-each-ref --contains 6f2304c` lists it.
+
+Each pre-rebase commit differs from its rebased twin only in the 22 files `main` changed
+between `a62662e` and `15619b1`, which are the candidate CI workflow and its scripts, test,
+evidence and docs. None of the backup source and test files, the lockfile,
+`vitest.config.ts` or `tsconfig.base.json` is among them. In
+`.agents/skills/verify-agora/SKILL.md` the only difference is `main`'s candidate CI
+section, so the backup recipe blocks are the same.
 
 | Pre-rebase | Rebased | Commit |
 | --- | --- | --- |
@@ -26,6 +42,7 @@ CI section, so the backup recipe blocks are the same.
 | `8bf2661` | `765911c` | first evidence commit, review-fix parent |
 | `19ebf4c` | `f2cc13f` | review-fix code change |
 | `206e4c2` | `ee70e79` | `AGORA_PG_BIN` test change, review-fix head |
+| `6f2304c` | `1ac8af7` | branch head, recipe drive commit |
 
 `1eea48b` kept its SHA, because the merge brings it in as a second parent.
 
@@ -42,20 +59,38 @@ Each red fails the same tests with the same assertions as its pre-rebase pair. T
 baseline patch also carries `packages/verification/test/ci-workflow.test.ts`, because
 `main` added that test after `1eea48b`. The backup command never runs it. The Python venv
 was not on `PATH` for these runs, and the backup test does not use it.
-`node scripts/validate-evidence.mjs` passes on all three with this checkout's producer key
-when given full SHAs:
+`node scripts/validate-evidence.mjs` passes on all three with the existing
+`local-foundation-fixture` key when given full SHAs:
 
 - `rebased/baseline`: `--base 1eea48bf63c84d51a9e635e8fef0ed71cb083ed0 --head c3cd5f3309ae65c0a002c59b6cb5fe7604a38f45`
 - `rebased/snapshot-race`: `--base 790f154d606c69723c2385c250de20057f19433c --head c3cd5f3309ae65c0a002c59b6cb5fe7604a38f45`
 - `rebased/review-fixes`: `--base 765911c3d89efc22564b6c40370031f2c1a4c013 --head ee70e79391c39e240f983d32d3b533c97672e1d7`
 
-The same key signed `review-fixes/`, which still passes. It rejects the root bundle and
-`snapshot-race/` with `producer_signature_invalid`. Another checkout's key signed those
-two, and that key is not here, so only its holder can re-check them. The twelve guard
-negatives were applied at `4385f34` and `206e4c2` and were not re-run. The files they
-mutate are byte-identical at the rebased twins.
+For the historical receipts, the same key signed `review-fixes/`, which still passes. It
+rejects the root bundle and `snapshot-race/` with `producer_signature_invalid`. Another
+checkout's key signed those two, and that key is not here, so only its holder can re-check
+them. The twelve historical guard negatives were applied at `4385f34` and `206e4c2` and
+were not re-run. The files they mutate are byte-identical at the rebased twins.
 
-## Red and green
+## Recipe drive
+
+`drive/` holds the outputs of the `.agents/skills/verify-agora/SKILL.md` backup Launch,
+Drive and Cleanup blocks, extracted from the recipe and run literally in one `bash -x`
+session at `1ac8af7`, whose code matches the rebased review-fix head `ee70e79`. They
+replace the drives at `206e4c2` and, before that, `4385f34`.
+`drive/recipe-transcript.txt` is that transcript. It and `drive/wrapper.ndjson` have
+temporary paths replaced by `<tmp>` and the home directory by `~`. The pg test step
+passed thirteen of thirteen, the assertion command printed `outcome: pass`, Cleanup
+printed `removed` and
+`no key file in evidence`, and `drive/wrapper.ndjson` records `allocated`, `started` and
+`cleaned` for one cluster.
+
+## Historical receipts before the rebase
+
+Everything in this section was recorded at the pre-rebase commits and is kept as recorded.
+The current proof for the same tests is in `rebased/`.
+
+### Red and green
 
 `red.log`, `green.log`, `test-patch.diff` and `manifest.json` come from
 `node scripts/record-red-green.mjs --parent 1eea48b --head 4385f34` with the command
@@ -75,7 +110,7 @@ or backup files that the failed keygen and create never wrote. At the head all t
 The logs carry machine paths because the signed manifest covers their exact bytes.
 When recorded, `node scripts/validate-evidence.mjs` passed on both bundles with full SHAs, `--base 1eea48bf63c84d51a9e635e8fef0ed71cb083ed0` or
 `--base 07d19c1e2d84d4d9ef81233644d0eee0973c8036` with `--head 4385f3492655f42ce7d6330937aa39131c1dcdd6`.
-This checkout's key rejects both, see [Rebased receipts](#rebased-receipts).
+This checkout's key rejects both, see [Current and historical receipts](#current-and-historical-receipts).
 
 `snapshot-race/` is the pair for the one-snapshot fix, parent `07d19c1` (the commit that
 added the concurrent-writer test, before the fix) and head `4385f34`. Its red fails only
@@ -84,7 +119,7 @@ snapshot than `pg_dump`, so a backup taken under writes could not restore. The r
 reproduced on every run before the fix (two manual runs plus this red) and passed three
 manual runs after it.
 
-## Guard negatives
+### Guard negatives
 
 `guard-negatives/summary.json` lists each mutation, the test it must turn red, the exit
 status, the failing test names and a byte-identical restore check. A Node script applied
@@ -107,20 +142,7 @@ All nine went red on the named test and every file was restored byte for byte. T
 forged-manifest test re-seals the manifest with the test's own AES-GCM code, following the
 documented layout, after changing `foundation_fixture.event` from 4 rows to 5.
 
-## Recipe drive
-
-`drive/` holds the outputs of the `.agents/skills/verify-agora/SKILL.md` backup Launch,
-Drive and Cleanup blocks, extracted from the recipe and run literally in one `bash -x`
-session at `1ac8af7`, whose code matches the rebased review-fix head `ee70e79`. They
-replace the drives at `206e4c2` and, before that, `4385f34`.
-`drive/recipe-transcript.txt` is that transcript. It and `drive/wrapper.ndjson` have
-temporary paths replaced by `<tmp>` and the home directory by `~`. The pg test step
-passed thirteen of thirteen, the assertion command printed `outcome: pass`, Cleanup
-printed `removed` and
-`no key file in evidence`, and `drive/wrapper.ndjson` records `allocated`, `started` and
-`cleaned` for one cluster.
-
-## Review fixes
+### Review fixes
 
 The review round changed three things in `19ebf4c`. `create` reads each object once and
 seals the bytes it inventoried. `restore` creates the `--objects` directory before
