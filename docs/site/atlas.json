@@ -175,7 +175,7 @@
       "id": "feature-discovery",
       "title": "Feature and Entrypoint discovery",
       "status": "In progress",
-      "why": "U21.B01 discovers Features from src/features/<name>/ and generates a drift-checked inventory; live lanes, the perf probe and exact-head qualification are still open.",
+      "why": "U21.B01 discovers Features from each package's conventional src/features directory and generates a drift-checked inventory; live lanes, the perf probe and exact-head qualification are still open.",
       "page": "feature-discovery.md",
       "proof": [
         "repo:scripts/feature-discovery.ts",
