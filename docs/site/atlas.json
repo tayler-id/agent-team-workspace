@@ -180,7 +180,7 @@
       "proof": [
         "repo:scripts/feature-discovery.ts",
         "repo:scripts/feature-inventory.ts",
-        "repo:scripts/test/feature-discovery.test.ts",
+        "repo:packages/verification/test/feature-discovery.test.ts",
         "repo:agora/feature-inventory.json",
         "repo:evidence/U21/agora-feature-discovery-slice/red.log",
         "repo:evidence/U21/agora-feature-discovery-slice/green.log"

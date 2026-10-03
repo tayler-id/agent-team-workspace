@@ -10,6 +10,8 @@ Task `agora-s1-discover-features`, Build box U21.B01. [The task breakdown](repo:
 - [test-patch.diff](repo:evidence/U21/agora-feature-discovery-slice/test-patch.diff) is the test patch the recorder applied to the parent.
 - [manifest.json](repo:evidence/U21/agora-feature-discovery-slice/manifest.json) binds those three files to head `fde2daa` and base `a62662e` with an owner-attested signature. To re-check it, run `node scripts/validate-evidence.mjs --dir evidence/U21/agora-feature-discovery-slice --head fde2daa8c131fc3ef6425c1ebde72f0c66cbeecb --base a62662e8788a072289b14b82f80cc970e1bd6943` from a checkout that holds the producer key. Without the key it reports `stale_producer`.
 
+These receipts were recorded before the test moved to [`packages/verification/test/feature-discovery.test.ts`](repo:packages/verification/test/feature-discovery.test.ts) as a vitest file, so they name its earlier `node --test` path. The candidate CI `red-green` job counts only tests under `apps`, `packages` or `contracts`, and replays the moved test per commit.
+
 ## Owner
 
 `agora-feature-discovery-slice`, from branch `fm/agora-feature-discovery-slice`. The `feature-discovery` row in [the feature map](repo:agora/feature-map.json) names the same owner, and [the feature discovery page](repo:docs/site/feature-discovery.md) documents the behavior.

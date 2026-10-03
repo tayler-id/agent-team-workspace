@@ -19,7 +19,7 @@ On macOS, a signed host launcher can reject the correctly installed Rolldown add
 | `pnpm contracts:generate` | Bundles the schema families with the OpenAPI operations and regenerates the TypeScript and Swift consumers |
 | `pnpm contracts:check` | Regenerates into a clean directory and fails on any byte of drift or any schema keyword outside the tested subset |
 | `pnpm contracts:conform` | Runs the golden vectors through the TypeScript and Swift consumers and prints the joint report |
-| `pnpm features:check` | Fails when `agora/feature-inventory.json` differs from the Feature folders on disk, then runs the discovery tests; `pnpm features:generate` rewrites the inventory. See [Feature discovery](../site/feature-discovery.md) |
+| `pnpm features:check` | Fails when `agora/feature-inventory.json` differs from the Feature folders on disk; `pnpm features:generate` rewrites the inventory, and `pnpm test` runs the discovery tests. See [Feature discovery](../site/feature-discovery.md) |
 | `pnpm client:replay -- --json --swift` | Public lane-7 fixture driver, comparing literal replay snapshots in the core and independent generated-value Swift consumer |
 | `pnpm test` | Unit, `apps/web` browser-room (jsdom) and PostgreSQL tests against a throwaway cluster |
 | `pnpm test:unit` | Unit/contract tests; wrapper lifecycle tests also require PostgreSQL 18 binaries |
