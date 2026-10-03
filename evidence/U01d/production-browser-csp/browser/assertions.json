@@ -1,11 +1,15 @@
 {
-	"head": "a9efaa673278a6cb2dc9c18cd453daf11c337077",
+	"head": "1111c95203e97eb3bda0a04956480b1a1f0a8388",
+	"base": "15619b12595f06fa5a4f966472acb634a07060b7",
+	"built_from": "99dde84c9ba7b59f780811659dc8769ad1e4ada4, identical to 1111c95 under apps, contracts, packages, scripts, package.json and pnpm-lock.yaml",
 	"bundle": "assets/index-DGz5M5Nj.js",
+	"bundle_digest": "sha256:9d67a7e43c9fbf1b3020566d773f697e405b42e67b41d75a2dddda88490d5fa7",
+	"index_html_digest": "sha256:15f2b79804b608de534ce6e212480fbddaa0dcd7a58c10cfebfa0a793c55771c",
 	"csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'",
 	"cases": [
-		{ "case": "valid", "viewport": "1440x900x1", "rootChildren": 2, "header": true, "rejected": null, "afterLoad": "Messages, 8 total", "codeTextLength": 109, "composerAfterEnter": "Sending…", "afterReceipt": "Messages, 9 total; Live Cursor 9 applied; composer Delivered.", "overflowX": 0, "cspIssues": 0, "consoleErrors": ["favicon.ico 404"] },
-		{ "case": "invalid", "viewport": "1440x900x1", "rootChildren": 0, "role": "alert", "rejected": "Fixture rejected: snapshot failed FixtureSyncSnapshot validation", "cspIssues": 0, "consoleErrors": ["favicon.ico 404 (first load of this origin)"] },
-		{ "case": "valid", "viewport": "390x844x3,mobile,touch", "rootChildren": 2, "header": true, "rejected": null, "afterLoad": "Messages, 8 total", "codeTextLength": 109, "composerAfterEnter": "Sending…", "afterReceipt": "Messages, 9 total; Live Cursor 9 applied; composer Delivered.", "overflowX": 0, "cspIssues": 0, "consoleErrors": [] },
-		{ "case": "invalid", "viewport": "390x844x3,mobile,touch", "rootChildren": 0, "role": "alert", "rejected": "Fixture rejected: snapshot failed FixtureSyncSnapshot validation", "cspIssues": 0, "consoleErrors": [] }
+		{ "case": "valid", "viewport": "1440x900x1", "rootChildren": 2, "header": true, "rejected": null, "initialStatus": "No Room Loaded Load the room snapshot to start. Browser network available.", "composerAfterEnter": "Sending…", "afterReceipt": "Messages, 9 total; 9 rendered rows; Live Cursor 9 applied; composer Delivered. (screenshot)", "codeTextLength": 109, "overflowX": 0, "cspIssues": 0, "consoleErrors": ["404 (Not Found), first load of 127.0.0.1:4396"] },
+		{ "case": "invalid", "viewport": "1440x900x1", "rootChildren": 0, "role": "alert", "header": false, "rejected": "Fixture rejected: snapshot failed FixtureSyncSnapshot validation", "cspIssues": 0, "consoleErrors": ["404 (Not Found), first load of 127.0.0.1:4397"] },
+		{ "case": "valid", "viewport": "390x844x3,mobile,touch", "rootChildren": 2, "header": true, "rejected": null, "initialStatus": "No Room Loaded Load the room snapshot to start. Browser network available.", "composerAfterEnter": "Sending…", "afterReceipt": "Messages, 9 total; 9 rendered rows; Live Cursor 9 applied; composer Delivered. (screenshot)", "codeTextLength": 109, "overflowX": 0, "cspIssues": 0, "consoleErrors": [] },
+		{ "case": "invalid", "viewport": "390x844x3,mobile,touch", "rootChildren": 0, "role": "alert", "header": false, "rejected": "Fixture rejected: snapshot failed FixtureSyncSnapshot validation", "cspIssues": 0, "consoleErrors": [] }
 	]
 }

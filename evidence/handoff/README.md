@@ -84,8 +84,11 @@ the verify-agora setup step (`python3 -m venv .scratch/python`, install
    because Ajv compiles schemas with `eval`. Branch `fm/agora-production-browser-slice` builds it
    with the same build-time standalone validators the served room uses and keeps the CSP
    unchanged. `docs/site/local-room-web-shell.md` explains the fix and
-   `evidence/U01d/production-browser-csp/` holds its proof. The fix needs independent review
-   before it lands. Do not loosen the CSP.
+   `evidence/U01d/production-browser-csp/` holds its proof. Its signed red/green receipt still
+   names the pre-rebase head `a9efaa6` and sits under `history/a9efaa6/`. The owner must record
+   it again for `1111c95` on `15619b1` with their producer key, using the command in
+   `history/a9efaa6/README.md`. The fix needs independent review before it lands. Do not loosen
+   the CSP.
 
 ## Not re-verified here
 

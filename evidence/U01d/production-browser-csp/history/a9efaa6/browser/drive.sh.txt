@@ -1,0 +1,28 @@
+set -u
+E=evidence/U01d/production-browser-csp/browser
+export CHROME_DEVTOOLS_AXI_SESSION=prodslice-browser
+PROBE='() => { const r=document.getElementById("root"); const list=document.querySelector("[aria-label^=\"Messages,\"]"); return JSON.stringify({csp: document.querySelector("meta[http-equiv=Content-Security-Policy]")?.content, rootChildren: r.childElementCount, role: r.getAttribute("role"), header: r.innerText.includes("Agora local room fixture"), rejected: r.innerText.match(/Fixture rejected: [^\n]*/)?.[0] ?? null, status: document.querySelector("[role=status]")?.innerText.replace(/\s+/g," ").trim() ?? null, messages: list?.getAttribute("aria-label") ?? null, renderedRows: list ? list.querySelectorAll("li").length : 0, codeText: document.querySelector("pre code")?.textContent.length ?? 0, overflowX: document.documentElement.scrollWidth - document.documentElement.clientWidth}) }'
+chrome-devtools-axi open about:blank >/dev/null
+for vp in "1440x900x1" "390x844x3,mobile,touch"; do
+  w=${vp%%x*}
+  chrome-devtools-axi emulate --viewport "$vp" >/dev/null
+  for case in valid:4396 invalid:4397; do
+    name=${case%%:*}; port=${case#*:}
+    chrome-devtools-axi open "http://127.0.0.1:$port/" >/dev/null; sleep 1
+    echo "### $name $vp initial"; chrome-devtools-axi eval "$PROBE" | sed -n 's/^result: //p'
+    if [ $name = valid ]; then
+      chrome-devtools-axi eval '() => { [...document.querySelectorAll("button")].find(b=>b.textContent==="Load fixture snapshot").click(); return "clicked" }' >/dev/null; sleep 1
+      chrome-devtools-axi eval '() => { document.getElementById("composer-text").focus(); return document.activeElement.id }' >/dev/null
+      chrome-devtools-axi type "built room message at $w" >/dev/null; chrome-devtools-axi press Enter >/dev/null; sleep 1
+      echo "### $name $vp composer after Enter"; chrome-devtools-axi eval '() => document.querySelector("form").innerText.replace(/\s+/g," ")' | sed -n 's/^result: //p'
+      chrome-devtools-axi eval '() => { [...document.querySelectorAll("button")].find(b=>b.textContent==="Deliver fixture receipt").click(); return "delivered" }' >/dev/null; sleep 1
+      chrome-devtools-axi eval '() => { const t=document.querySelector(".timeline"); if (t) t.scrollTop=t.scrollHeight; return "scrolled" }' >/dev/null; sleep 1
+      echo "### $name $vp after load snapshot, send and fixture receipt"; chrome-devtools-axi eval "$PROBE" | sed -n 's/^result: //p'
+      chrome-devtools-axi eval '() => JSON.stringify({composer: document.querySelector("form").innerText.replace(/\s+/g," "), draft: document.getElementById("composer-text").value, messages: document.querySelector("[aria-label^=\\"Messages,\\"]").getAttribute("aria-label")})' | sed -n 's/^result: //p'
+    fi
+    chrome-devtools-axi screenshot "$E/$name-$w.png" >/dev/null
+    echo "### console $name $vp"; chrome-devtools-axi console 2>&1 | grep -E "^msgid=" ; echo "(end console)"
+  done
+done
+chrome-devtools-axi network 2>&1 | grep -E "reqid" | head -20
+chrome-devtools-axi stop >/dev/null
