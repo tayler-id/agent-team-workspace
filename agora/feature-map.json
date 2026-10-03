@@ -340,6 +340,15 @@
 			"fixtures": ["temporary git repositories created per test"],
 			"platforms": ["ubuntu-24.04", "macos-15", "node24.21.0", "pnpm10.34.1"],
 			"invalidation": "Ordinary candidate CI only. It is not a trusted evidence signature, an agora/evidence check, or merge authority; the credential-bearing reporter and U01b qualification stay a separate security task."
+		},
+		{
+			"id": "feature-discovery", "documentation": "docs/site/feature-discovery.md", "owner": "agora-feature-discovery-slice",
+			"paths": ["scripts/feature-discovery.ts", "scripts/feature-inventory.ts", "packages/verification/test/feature-discovery.test.ts", "agora/feature-inventory.json", "docs/site/feature-discovery.md"],
+			"public": ["node scripts/feature-inventory.ts", "node scripts/feature-inventory.ts --check", "pnpm features:generate", "pnpm features:check"],
+			"contracts": [],
+			"scenarios": ["well-formed Feature found", "misplaced path rejected", "missing entrypoint rejected", "duplicate name rejected", "drift on hand-edited inventory rejected", "guard-disabled turns drift assertion red", "idempotent regenerate"],
+			"fixtures": ["disposable temp trees under agora-u21-* built by packages/verification/test/feature-discovery.test.ts"],
+			"platforms": ["node24"]
 		}
 	]
 }

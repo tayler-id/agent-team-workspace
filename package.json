@@ -21,6 +21,8 @@
 		"contracts:generate": "node contracts/tools/generate.mjs",
 		"contracts:check": "node contracts/tools/generate.mjs --check",
 		"contracts:conform": "node contracts/src/conform-cli.ts",
+		"features:generate": "node scripts/feature-inventory.ts",
+		"features:check": "node scripts/feature-inventory.ts --check",
 		"client:replay": "node scripts/drive-client-core.ts",
 		"verify:foundation": "node scripts/foundation.mjs",
 		"test": "node scripts/with-test-postgres.mjs vitest run",
@@ -34,7 +36,7 @@
 		"checks:run": "node scripts/local-checks.mjs run",
 		"checks:verify": "node scripts/local-checks.mjs verify",
 		"checks:install": "node scripts/local-checks.mjs install",
-		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm test"
+		"check": "pnpm lint && pnpm typecheck && pnpm docs:check && pnpm contracts:check && pnpm features:check && pnpm test"
 	},
 	"devDependencies": {
 		"@agora/client-core": "workspace:*",
