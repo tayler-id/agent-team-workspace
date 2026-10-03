@@ -61,39 +61,45 @@ documented layout, after changing `foundation_fixture.event` from 4 rows to 5.
 ## Recipe drive
 
 `drive/` holds the outputs of the `.agents/skills/verify-agora/SKILL.md` backup Launch,
-Drive and Cleanup blocks, run literally at this head. `drive/recipe-transcript.txt` is the
-`bash -x` transcript with machine paths replaced by `<tmp>`. The assertion command printed
-`outcome: pass`, Cleanup printed `removed` and `no key file in evidence`, and
-`drive/wrapper.ndjson` records `allocated`, `started` and `cleaned` for one cluster.
+Drive and Cleanup blocks, extracted from the recipe and run literally in one `bash -x`
+session at `206e4c2`, the review-fix head. They replace the first drive at `4385f34`.
+`drive/recipe-transcript.txt` is that transcript, with temporary paths replaced by `<tmp>`
+and the home directory by `~`. The pg test step passed thirteen of thirteen, the
+assertion command printed `outcome: pass`, Cleanup printed `removed` and
+`no key file in evidence`, and `drive/wrapper.ndjson` records `allocated`, `started` and
+`cleaned` for one cluster.
 
 ## Review fixes
 
-The review round (`19ebf4c`) changed three things. `create` reads each object once and
+The review round changed three things in `19ebf4c`. `create` reads each object once and
 seals the bytes it inventoried. `restore` creates the `--objects` directory before
 `pg_restore` and removes it if `pg_restore` fails. The unused `database_version` manifest
 field and its `pg_restore --list` pass are gone. The round added three tests, so the file
-now has thirteen. The receipts above stay as recorded for `4385f34`.
+now has thirteen. `206e4c2` then changed only the test's substituted `AGORA_PG_BIN`
+directory: it now links `pg_dump`, `pg_restore` and `psql` to the binaries the CLI would
+resolve and replaces just the one tool. Before that, the parent's `create` failed the
+object-rewrite test with exit 70 on a missing `pg_restore`, not on the re-read. The
+receipts above stay as recorded for `4385f34`.
 
 `review-fixes/` holds the pair from
-`node scripts/record-red-green.mjs --parent 8bf2661 --head 19ebf4c` with the same
-command. Red fails two tests and passes eleven:
+`node scripts/record-red-green.mjs --parent 8bf2661 --head 206e4c2` with the same
+command. Red fails two tests on behavior and passes eleven:
 
+- `an object rewritten while pg_dump runs ...` is denied `integrity_mismatch` on
+  `object:alpha.txt` at restore. The parent sealed the file as it read it after
+  `pg_dump`, while its inventory held the bytes from before.
 - `an objects path whose parent is missing fails before any row is restored` finds 8
   tables in the target where it expects 0. The parent ran `pg_restore` before it created
   the directory.
-- `an object rewritten while pg_dump runs ...` fails at `create` with exit 70, not with an
-  inventory mismatch. The parent's `create` also ran `pg_restore --list`, and the test's
-  substituted `AGORA_PG_BIN` directory holds only `pg_dump`. The `object-reread` guard
-  negative below isolates the mechanism the test is for.
 
 The third new test, `a failed pg_restore removes the objects directory it claimed`, passes
 at the parent because the parent never created the directory before `pg_restore`. Only
 its guard negative shows it can fail. Green passes all thirteen.
-`node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore/review-fixes --base 8bf2661acecf637580b16e62df431e9ead8500f9 --head 19ebf4cf93ccbe40c9eb79efb73bcd0db2b3120c`
+`node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore/review-fixes --base 8bf2661acecf637580b16e62df431e9ead8500f9 --head 206e4c22fd55157f744102ff06a6a3a036e58428`
 passes with this checkout's producer key.
 
 `review-fixes/guard-negatives/summary.json` records three mutations of `scripts/backup.ts`
-at `19ebf4c`, applied and restored the same way as the nine above:
+at `206e4c2`, applied and restored the same way as the nine above:
 
 | Mutation | Disabled guard | Red test | Observed |
 | --- | --- | --- | --- |
@@ -102,12 +108,12 @@ at `19ebf4c`, applied and restored the same way as the nine above:
 | `rmdir-off` | no `rmdirSync` after a failed `pg_restore` | failed `pg_restore` removes the directory | directory left behind |
 
 Each went red on its named test alone, and the file was restored byte for byte after each
-one. The recipe drive under `drive/` was not re-run at `19ebf4c`.
+one.
 
 ## Not proved
 
 WAL archiving, separate-host restore, off-host key recovery, epoch rotation and fencing,
 RPO and RTO, a dedicated backup role, external storage, key rotation, a normalized
-schema comparison and restore across PostgreSQL versions. No independent security review has happened, and the implementer's own
-checks are not one. D111 records AES-256-GCM as an implementation decision under R17 and
+schema comparison and restore across PostgreSQL versions. No independent security review
+has happened, and the implementer's own checks are not one. D111 records AES-256-GCM as an implementation decision under R17 and
 D32; it claims no captain or operator acceptance.

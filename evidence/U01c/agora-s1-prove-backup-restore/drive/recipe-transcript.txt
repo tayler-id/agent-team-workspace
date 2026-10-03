@@ -4,19 +4,19 @@
 + mkdir -p evidence/U01c/agora-s1-prove-backup-restore/drive
 + cat
 + node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
-{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"7146480f-1c93-4e67-aace-2f7934ecc13a","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-7146480f-1c93-4e67-aace-2f7934ecc13a"}
-{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"7146480f-1c93-4e67-aace-2f7934ecc13a","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-7146480f-1c93-4e67-aace-2f7934ecc13a","pid":5766}
-{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"7146480f-1c93-4e67-aace-2f7934ecc13a","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-7146480f-1c93-4e67-aace-2f7934ecc13a","socket_dir":"/private/tmp/agora-p0c-7146480f-1c93-4e67-aace-2f7934ecc13a","pid":5766,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"46224fd7-28c8-4268-9dd3-68bfb276d173","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-46224fd7-28c8-4268-9dd3-68bfb276d173"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"46224fd7-28c8-4268-9dd3-68bfb276d173","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-46224fd7-28c8-4268-9dd3-68bfb276d173","pid":85750}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"46224fd7-28c8-4268-9dd3-68bfb276d173","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-46224fd7-28c8-4268-9dd3-68bfb276d173","socket_dir":"/private/tmp/agora-p0c-46224fd7-28c8-4268-9dd3-68bfb276d173","pid":85750,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
 
- RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
+ RUN  v5.0.1 ~/.no-mistakes/worktrees/50d2db971a33/01M41VBGXG69TYMV6VSF8EHPWY
 
 
  Test Files  1 passed (1)
-      Tests  10 passed (10)
-   Start at  17:33:50
-   Duration  4.49s (tests 93%, import 6%, transform 1%)
+      Tests  13 passed (13)
+   Start at  18:15:41
+   Duration  10.48s (tests 95%, import 4%, transform 1%)
 
-{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-7146480f-1c93-4e67-aace-2f7934ecc13a"}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-46224fd7-28c8-4268-9dd3-68bfb276d173"}
 + node scripts/with-test-postgres.mjs bash <tmp> <tmp> evidence/U01c/agora-s1-prove-backup-restore/drive
 CREATE DATABASE
 + node --input-type=module -e '
@@ -37,7 +37,7 @@ const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.
 for (const f of [...walk(`${w}/backup`), ...walk(out)]) { const b = fs.readFileSync(f); assert.ok(!b.includes(key) && !b.includes(raw), f); }
 console.log(JSON.stringify({ outcome: "pass", backup_id: create.backup_id, inventory_digest: create.inventory_digest, tables: create.tables, objects: create.objects }));
 ' <tmp> evidence/U01c/agora-s1-prove-backup-restore/drive
-{"outcome":"pass","backup_id":"1cb95f07-72d2-4d27-abae-a18b3f26bf33","inventory_digest":"sha256:29a9fd7557b51eab0a41598355fea9b8425ec5c41061e861e5ac7fa0bc424ac7","tables":8,"objects":3}
+{"outcome":"pass","backup_id":"0152ea1b-edc1-4c77-8b76-0fc76b83255e","inventory_digest":"sha256:29a9fd7557b51eab0a41598355fea9b8425ec5c41061e861e5ac7fa0bc424ac7","tables":8,"objects":3}
 + case "$W" in
 + rm -rf <tmp>
 + test '!' -e <tmp>

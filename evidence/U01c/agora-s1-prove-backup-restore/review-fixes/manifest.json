@@ -5,26 +5,26 @@
   "artifacts": [
     {
       "file": "red.log",
-      "digest": "sha256:ab24fdb2393afc513443657ff45a50171f832838bb0ed271d99653d1abeb748a",
-      "byte_length": 4099
+      "digest": "sha256:8c81ba087cfcfb57d14d971b919b828171af48c9cbf704ab4a1970364a158eb8",
+      "byte_length": 4110
     },
     {
       "file": "green.log",
-      "digest": "sha256:180640f81d5c9ff1a21176351fb7c5e83a94d558206a87e50cf7099873d32285",
-      "byte_length": 2631
+      "digest": "sha256:f450daf4f5de40f501b0f9064b9531303fb7639fcd8fbc49cac88635e90cf30d",
+      "byte_length": 2618
     },
     {
       "file": "test-patch.diff",
-      "digest": "sha256:0d56dd33a4b4ae57071894f512f3626b520114171602f09b2110c7f691037dd3",
-      "byte_length": 4985
+      "digest": "sha256:e6f061a9cab6bc4a4be5b956fb29604a53c5c2e958672e940b05ba4d058186c2",
+      "byte_length": 6175
     }
   ],
   "producer": {
     "trust_class": "owner_attested",
-    "boot_id": "6d4be870-26ef-48dd-b52e-5047665cd0bb",
-    "head": "19ebf4cf93ccbe40c9eb79efb73bcd0db2b3120c",
+    "boot_id": "22440acb-3beb-470e-96b9-85f4dd7179b6",
+    "head": "206e4c22fd55157f744102ff06a6a3a036e58428",
     "base": "8bf2661acecf637580b16e62df431e9ead8500f9",
     "outcome": "pass",
-    "signature": "514a30e1eb7255a7a37f80d82ede7fccb450ab3fbc526065e7ef81e0004e8d89"
+    "signature": "d3b4b1c884b55ac181fca0f546cbb3383ca304a814221dbb736f166211ecf892"
   }
 }
