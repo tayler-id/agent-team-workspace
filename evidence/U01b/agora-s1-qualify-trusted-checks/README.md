@@ -132,8 +132,12 @@ supply that verdict. Scope: `scripts/trusted-checks.mjs`, `scripts/trusted-repor
 
 - No live App, key, protection or reporter run exists, so lanes 8-10 are proven against
   namespaced fixtures and a loopback fake GitHub API only.
-- The `agora-ci` jobs on GitHub show that the checks run on Ubuntu with PostgreSQL 18. Their
-  conclusions come from the generic Actions App and gate nothing.
+- The `agora-ci` jobs on GitHub run on Ubuntu with PostgreSQL 18, except `tests`, which runs on
+  `macos-15` (arm64), the platform the project qualifies. On Ubuntu, run `37082981929` showed ten
+  failures in suites that predate this task: four Swift conformance tests (the Swift package does
+  not build on Linux), two PostgreSQL wrapper stderr tests (GNU and BSD `getopt` quote differently)
+  and four `apps/web` jsdom tests. Porting them is outside this task. The job conclusions come
+  from the generic Actions App and gate nothing.
 - The plan's perf probe (`agora project verify --scenario perf`) does not exist. I ran no
   performance comparison. The lane and reporter suites take a few seconds locally.
 - The policy has no JSON Schema under `contracts/`. Like `agora/local-checks.json`, its shape is

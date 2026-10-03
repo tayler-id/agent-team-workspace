@@ -7,10 +7,15 @@ pnpm install --frozen-lockfile
 for need in "$@"; do
 	case "$need" in
 		postgres)
-			sudo apt-get install -y postgresql-common
-			sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
-			sudo apt-get install -y postgresql-18
-			echo /usr/lib/postgresql/18/bin >> "$GITHUB_PATH" ;;
+			if [ "$(uname)" = Darwin ]; then
+				brew install postgresql@18
+				echo "$(brew --prefix postgresql@18)/bin" >> "$GITHUB_PATH"
+			else
+				sudo apt-get install -y postgresql-common
+				sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+				sudo apt-get install -y postgresql-18
+				echo /usr/lib/postgresql/18/bin >> "$GITHUB_PATH"
+			fi ;;
 		python)
 			python3 -m venv .scratch/python
 			.scratch/python/bin/pip install -r packages/verification/fixture/requirements.txt
