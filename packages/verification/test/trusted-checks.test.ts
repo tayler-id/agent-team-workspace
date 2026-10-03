@@ -69,7 +69,7 @@ const DRIVER = '.github/workflows/agora-ci.yml';
 const REPORTER = '.github/workflows/agora-report.yml';
 const workflows = (change: Record<string, string> = {}) => ({ files: { [DRIVER]: fs.readFileSync(DRIVER, 'utf8'), [REPORTER]: fs.readFileSync(REPORTER, 'utf8'), ...change } });
 interface Step { uses?: string; with?: Record<string, unknown>; env?: Record<string, string>; 'continue-on-error'?: boolean }
-interface Job { steps: Step[]; needs?: string[]; if?: string; environment?: string; 'continue-on-error'?: boolean }
+interface Job { steps: Step[]; needs?: string[]; if?: string; environment?: string; permissions?: unknown; 'continue-on-error'?: boolean }
 interface Workflow { on: unknown; permissions: unknown; jobs: Record<string, Job> }
 const at = <T>(value: T | undefined): T => { if (value === undefined) throw new Error('workflow fixture shape changed'); return value; };
 const job = (w: Workflow, name: string) => at(w.jobs[name]);
@@ -119,6 +119,10 @@ test('project lane 9 denies candidate-authored reports and wrong-workflow receip
 	expect(denials('workflows', workflows(edit(REPORTER, w => { job(w, 'report').steps.splice(2, 0, { uses: `actions/download-artifact@${BLOB}` }); delete job(w, 'report').environment; at(step(w, 'report', 3).env)['EXTRA'] = '${{ secrets.OTHER }}'; })))).toEqual(['reporter_environment', 'reporter_reads_candidate_artifact', 'reporter_unexpected_secret']);
 	expect(denials('workflows', workflows(edit(DRIVER, w => { job(w, 'docs').steps[0] = { uses: 'actions/checkout@v7' }; })))).toEqual([`checkout_persists_credentials:${DRIVER}`, `unpinned_action:${DRIVER}:actions/checkout@v7`]);
 	expect(denials('workflows', workflows({ [DRIVER]: 'name: agora-ci\non: pull_request\n' }))).toEqual([`workflow_not_canonical_json:${DRIVER}`]);
+	expect(denials('workflows', workflows(edit(DRIVER, w => { job(w, 'tests').permissions = { checks: 'write' }; })))).toEqual(['driver_permissions']);
+	expect(denials('workflows', workflows(edit(REPORTER, w => { w.on = { workflow_run: { workflows: ['agora-ci', 'candidate'], types: ['completed', 'requested'] } }; })))).toEqual(['reporter_trigger']);
+	expect(denials('workflows', workflows(edit(REPORTER, w => { w.permissions = { actions: 'read', contents: 'read', 'pull-requests': 'read', checks: 'write' }; })))).toEqual(['reporter_permissions']);
+	expect(denials('workflows', workflows(edit(REPORTER, w => { job(w, 'report').permissions = { contents: 'write' }; })))).toEqual(['reporter_permissions']);
 	// Guard negative: in an isolated copy that trusts any App, the forged producer is no longer named.
 	const source = fs.readFileSync('scripts/trusted-checks.mjs', 'utf8');
 	const needle = 'row.app_id === project.reporter.app_id';
@@ -141,6 +145,7 @@ test('project lane 10 fails a failed dependency and stale, neutral or skipped ch
 	expect(denials('run', run({ jobs: [...run().jobs, { name: 'tests', status: 'completed', conclusion: 'success', head_sha: HEAD }] }))).toEqual(['job_duplicate:tests']);
 	expect(denials('run', run({ pull_request: { head_sha: 'd'.repeat(40), base_sha: BASE } }))).toEqual(['stale_head']);
 	expect(denials('run', run({ pull_request: { head_sha: HEAD, base_sha: OLD } }))).toEqual(['stale_base']);
+	expect(denials('run', run({ pull_request: null }))).toEqual(['pull_request_missing']);
 	expect(denials('checks', checks([...both(), check('agora/evidence', { id: 11, conclusion: 'failure' })]))).toEqual(['check_not_success:agora/evidence:failure']);
 	expect(denials('checks', checks([check('agora/evidence', { conclusion: 'neutral' }), check('agora/policy', { conclusion: 'skipped' })]))).toEqual(['check_not_success:agora/evidence:neutral', 'check_not_success:agora/policy:skipped']);
 	expect(denials('checks', checks([check('agora/evidence', { head_sha: OLD }), check('agora/policy')]))).toEqual(['check_wrong_head:agora/evidence']);
