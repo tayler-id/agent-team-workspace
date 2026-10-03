@@ -1,0 +1,23 @@
+== undeclared check disabled
+   × an undeclared Feature-to-Feature import names the missing declaration and the sanctioned alternative 5ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 9 passed (10)
+== malformed declaration ignored
+   × malformed dependencies.json (invalid JSON) is rejected 18ms
+   × malformed dependencies.json (an object instead of an array) is rejected 3ms
+   × malformed dependencies.json (a non-string entry) is rejected 3ms
+   × malformed dependencies.json (an entry that is a path) is rejected 8ms
+   × malformed dependencies.json (a duplicate entry) is rejected 4ms
+   × malformed dependencies.json (the Feature naming itself) is rejected 3ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  6 failed | 4 passed (10)
+== framework denial disabled
+   × a framework file importing a Feature is denied even when a Feature declares it, naming Framework as the non-importing owner 23ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 9 passed (10)
+== self-declaration allowed
+   × malformed dependencies.json (the Feature naming itself) is rejected 5ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 9 passed (10)
+== restored
+      Tests  10 passed (10)

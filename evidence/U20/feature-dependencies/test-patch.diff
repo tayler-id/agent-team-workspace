@@ -1,0 +1,69 @@
+diff --git a/packages/client-core/test/feature-dependencies.test.ts b/packages/client-core/test/feature-dependencies.test.ts
+new file mode 100644
+index 0000000..482d568
+--- /dev/null
++++ b/packages/client-core/test/feature-dependencies.test.ts
+@@ -0,0 +1,63 @@
++import { ESLint } from 'eslint';
++import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
++import path from 'node:path';
++import { afterAll, beforeAll, expect, test } from 'vitest';
++
++const root = path.resolve(import.meta.dirname, '../../..');
++// Independently owned fixture Features: unique names so sibling discovery/browser tests never collide, removed in afterAll.
++const stamp = `depfx${process.pid.toString(36)}${Date.now().toString(36)}`;
++const [a, b, c] = ['a', 'b', 'c'].map((n) => `${stamp}-${n}`) as [string, string, string];
++const dir = (name: string): string => path.join(root, 'apps/web/src/features', name);
++const rel = (name: string, file: string): string => path.join(dir(name), file);
++const declare = (name: string, body: string): void => { writeFileSync(rel(name, 'dependencies.json'), body); };
++const engine = new ESLint({ cwd: root, ignore: false });
++// The typed-lint project service only parses files that exist on disk, so each probe is written before it is linted.
++const lint = async (code: string, file: string): Promise<string[]> => {
++	mkdirSync(path.dirname(file), { recursive: true });
++	writeFileSync(file, code);
++	return (await engine.lintText(code, { filePath: file })).flatMap((r) => r.messages).filter((m) => m.ruleId === 'agora/import-boundary').map((m) => m.message);
++};
++const importB = `import { x } from '../${b}/index.ts'; export const y = x;`;
++
++beforeAll(() => {
++	for (const name of [a, b, c]) { mkdirSync(dir(name), { recursive: true }); writeFileSync(rel(name, 'index.ts'), 'export const x = 1;\n'); }
++});
++afterAll(() => { for (const name of [a, b, c]) rmSync(dir(name), { recursive: true, force: true }); rmSync(path.join(root, 'apps/web/src/framework', `${stamp}.ts`), { force: true }); });
++
++test('a declared Feature-to-Feature import through the public entrypoint is allowed', async () => {
++	declare(a, JSON.stringify([b]));
++	expect(await lint(importB, rel(a, 'use.ts'))).toEqual([]);
++});
++
++test('an undeclared Feature-to-Feature import names the missing declaration and the sanctioned alternative', async () => {
++	declare(a, JSON.stringify([c]));
++	expect(await lint(importB, rel(a, 'use.ts'))).toEqual([`Feature ${a} imports Feature ${b} without declaring it; add "${b}" to apps/web/src/features/${a}/dependencies.json and import only through apps/web/src/features/${b}/index.ts`]);
++	rmSync(rel(a, 'dependencies.json'));
++	expect(await lint(importB, rel(a, 'use.ts'))).toHaveLength(1);
++});
++
++test('a declared dependency still cannot reach private files of the other Feature', async () => {
++	declare(a, JSON.stringify([b]));
++	writeFileSync(rel(b, 'private.ts'), 'export const x = 1;\n');
++	expect(await lint(`export { x } from '../${b}/private.ts';`, rel(a, 'use.ts'))).toEqual([`Feature ${a} cannot import private files of Feature ${b}; use apps/web/src/features/${b}/index.ts public entrypoint`]);
++});
++
++test.each([
++	['invalid JSON', '{'],
++	['an object instead of an array', '{"features":["x"]}'],
++	['a non-string entry', '[1]'],
++	['an entry that is a path', '["../b"]'],
++	['a duplicate entry', `["${b}","${b}"]`],
++	['the Feature naming itself', `["${a}"]`],
++])('malformed dependencies.json (%s) is rejected', async (_why, body) => {
++	declare(a, body);
++	const messages = await lint(importB, rel(a, 'use.ts'));
++	expect(messages).toHaveLength(1);
++	expect(messages[0]).toContain(`apps/web/src/features/${a}/dependencies.json is malformed`);
++});
++
++test('a framework file importing a Feature is denied even when a Feature declares it, naming Framework as the non-importing owner', async () => {
++	declare(a, JSON.stringify([b]));
++	const file = path.join(root, 'apps/web/src/framework', `${stamp}.ts`);
++	expect(await lint(`export { x } from '../features/${b}/index.ts';`, file)).toEqual(['framework must not import product Features; Features live under apps/web/src/features/<name> and import framework through its public entrypoint, never the reverse']);
++});
