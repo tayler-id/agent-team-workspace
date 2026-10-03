@@ -136,8 +136,12 @@ supply that verdict. Scope: `scripts/trusted-checks.mjs`, `scripts/trusted-repor
   `macos-15` (arm64), the platform the project qualifies. On Ubuntu, run `37082981929` showed ten
   failures in suites that predate this task: four Swift conformance tests (the Swift package does
   not build on Linux), two PostgreSQL wrapper stderr tests (GNU and BSD `getopt` quote differently)
-  and four `apps/web` jsdom tests. Porting them is outside this task. The job conclusions come
-  from the generic Actions App and gate nothing.
+  and four `apps/web` jsdom tests. Porting the first six is outside this task. On `macos-15`,
+  run `37152910078` passed 295 of 299; the remaining four were the same `apps/web` timeline tests.
+  The reconnect test takes about 3.9 s of vitest's 5 s default locally and timed out on the
+  runner, and its still-running render emptied the DOM for the next three. The web project's
+  `testTimeout` is now 30 s; no test changed. The job conclusions come from the generic Actions
+  App and gate nothing.
 - The plan's perf probe (`agora project verify --scenario perf`) does not exist. I ran no
   performance comparison. The lane and reporter suites take a few seconds locally.
 - The policy has no JSON Schema under `contracts/`. Like `agora/local-checks.json`, its shape is
