@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# usage: capture.sh <scenario> <url> <viewport-spec> <width>
+set -u
+cd /Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace
+export PATH="$PWD/.scratch/node/node-v24.21.0-darwin-arm64/bin:$PATH" CHROME_DEVTOOLS_AXI_SESSION=prodslice-before
+S=$1; URL=$2; VP=$3; W=$4
+OUT=evidence/U01d/production-browser-csp/reproduction
+RAW=.scratch/repro/raw; mkdir -p "$RAW"
+chrome-devtools-axi open about:blank >/dev/null 2>&1
+chrome-devtools-axi emulate --viewport "$VP" >/dev/null
+chrome-devtools-axi open "$URL" >/dev/null
+chrome-devtools-axi wait 2500 >/dev/null
+PROBE='() => { const r = document.getElementById("root"); const m = document.querySelector("meta[http-equiv=Content-Security-Policy]"); return JSON.stringify({ href: location.href, viewport: [innerWidth, innerHeight, devicePixelRatio], rootChildren: r ? r.childElementCount : null, rootText: r ? r.innerText.replace(/\s+/g, " ").trim().slice(0, 120) : null, rootTextLength: r ? r.innerText.length : null, cspMeta: m ? m.getAttribute("content") : null, styleNodes: document.querySelectorAll("style,[style]").length, styleElements: document.querySelectorAll("style").length, styleAttrs: document.querySelectorAll("[style]").length, fontsLoaded: [...document.fonts].filter(f => f.status === "loaded").map(f => f.family + " " + f.weight) }); }'
+node .scratch/repro/axi-raw.mjs evaluate_script "$(node -e 'console.log(JSON.stringify({function: process.argv[1]}))' "$PROBE")" > "$RAW/$S-$W-probe.txt"
+node .scratch/repro/axi-raw.mjs list_console_messages '{}' > "$RAW/$S-$W-console-list.txt"
+node .scratch/repro/axi-raw.mjs list_console_messages '{"types":["error"]}' > "$RAW/$S-$W-console-errors.txt"
+node .scratch/repro/axi-raw.mjs list_console_messages '{"types":["issue"]}' > "$RAW/$S-$W-console-issues.txt"
+node .scratch/repro/axi-raw.mjs list_network_requests '{}' > "$RAW/$S-$W-network.txt"
+{
+  echo "# Console transcript: scenario $S, viewport $VP, url $URL"
+  echo "# Captured $(date -u +%Y-%m-%dT%H:%M:%SZ) with chrome-devtools-axi session prodslice-before"
+  echo "# Lines longer than 400 chars are cut to their first 200 chars and marked; the original length is given."
+  echo
+  echo "## list_console_messages"
+  cat "$RAW/$S-$W-console-list.txt"
+  for id in $(grep -o '^msgid=[0-9]*' "$RAW/$S-$W-console-list.txt" | cut -d= -f2); do
+    echo; echo "## get_console_message $id"
+    node .scratch/repro/axi-raw.mjs get_console_message "{\"msgid\":$id}"
+  done
+  echo; echo "## list_network_requests"
+  cat "$RAW/$S-$W-network.txt"
+  echo; echo "## page probe"
+  cat "$RAW/$S-$W-probe.txt"
+} | awk '{ if (length($0) > 400) print substr($0,1,200) " ...[cut, line was " length($0) " chars]"; else print }' > "$OUT/$S-$W-console.txt"
+chrome-devtools-axi screenshot "$OUT/$S-$W.png" >/dev/null
+ls -la "$OUT/$S-$W.png"
+cat "$RAW/$S-$W-probe.txt"

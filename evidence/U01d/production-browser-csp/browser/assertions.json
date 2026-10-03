@@ -1,0 +1,11 @@
+{
+	"head": "a9efaa673278a6cb2dc9c18cd453daf11c337077",
+	"bundle": "assets/index-DGz5M5Nj.js",
+	"csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'",
+	"cases": [
+		{ "case": "valid", "viewport": "1440x900x1", "rootChildren": 2, "header": true, "rejected": null, "afterLoad": "Messages, 8 total", "codeTextLength": 109, "composerAfterEnter": "Sending…", "afterReceipt": "Messages, 9 total; Live Cursor 9 applied; composer Delivered.", "overflowX": 0, "cspIssues": 0, "consoleErrors": ["favicon.ico 404"] },
+		{ "case": "invalid", "viewport": "1440x900x1", "rootChildren": 0, "role": "alert", "rejected": "Fixture rejected: snapshot failed FixtureSyncSnapshot validation", "cspIssues": 0, "consoleErrors": ["favicon.ico 404 (first load of this origin)"] },
+		{ "case": "valid", "viewport": "390x844x3,mobile,touch", "rootChildren": 2, "header": true, "rejected": null, "afterLoad": "Messages, 8 total", "codeTextLength": 109, "composerAfterEnter": "Sending…", "afterReceipt": "Messages, 9 total; Live Cursor 9 applied; composer Delivered.", "overflowX": 0, "cspIssues": 0, "consoleErrors": [] },
+		{ "case": "invalid", "viewport": "390x844x3,mobile,touch", "rootChildren": 0, "role": "alert", "rejected": "Fixture rejected: snapshot failed FixtureSyncSnapshot validation", "cspIssues": 0, "consoleErrors": [] }
+	]
+}

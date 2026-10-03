@@ -1,0 +1,109 @@
+# Console transcript: scenario dev-parent, viewport 390x844x3,mobile,touch, url http://127.0.0.1:4393/
+# Captured 2026-10-03T21:09:56Z with chrome-devtools-axi session prodslice-before
+# Lines longer than 400 chars are cut to their first 200 chars and marked; the original length is given.
+
+## list_console_messages
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+## Console messages
+Showing 1-3 of 3 (Page 1 of 1).
+msgid=15 [debug] [vite] connecting... (1 args)
+msgid=16 [debug] [vite] connected. (1 args)
+msgid=17 [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold (2 args)
+
+## get_console_message 15
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+ID: 15
+Message: debug> [vite] connecting...
+### Arguments
+Arg #0: [vite] connecting...
+### Stack trace
+at <anonymous> (client:883:9)
+Note: line and column numbers use 1-based indexing
+
+## get_console_message 16
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+ID: 16
+Message: debug> [vite] connected.
+### Arguments
+Arg #0: [vite] connected.
+### Stack trace
+at handleMessage (client:996:12)
+at  (client:612:42)
+at dequeue (client:634:8)
+at  (client:626:9)
+at enqueue (client:620:10)
+at  (client:612:28)
+at onMessage (client:97:6)
+at  (client:215:5)
+Note: line and column numbers use 1-based indexing
+
+## get_console_message 17
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+ID: 17
+Message: info> %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+### Arguments
+Arg #0: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools
+Arg #1: font-weight:bold
+### Stack trace
+Note: line and column numbers use 1-based indexing
+
+## list_network_requests
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+## Network requests
+Showing 1-50 of 50 (Page 1 of 1).
+reqid=90 GET http://127.0.0.1:4393/ [304]
+reqid=91 GET http://127.0.0.1:4393/@vite/client [304]
+reqid=92 GET http://127.0.0.1:4393/src/main.tsx [304]
+reqid=93 GET http://127.0.0.1:4393/@react-refresh [304]
+reqid=94 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/packages/web-framework/src/index.ts [304]
+reqid=95 GET http://127.0.0.1:4393/node_modules/.vite/deps/react-dom_client.js?v=2ec55263 [200]
+reqid=96 GET http://127.0.0.1:4393/src/components/App.tsx [304]
+reqid=97 GET http://127.0.0.1:4393/src/components/FixtureControls.tsx [304]
+reqid=98 GET http://127.0.0.1:4393/src/host/index.ts [304]
+reqid=99 GET http://127.0.0.1:4393/src/fixture/room.json?import [304]
+reqid=100 GET http://127.0.0.1:4393/src/fixture.css [304]
+reqid=101 GET http://127.0.0.1:4393/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=2ed47912 [200]
+reqid=102 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/node_modules/.pnpm/vite@8.3.0_@types+node@24.10.1/node_modules/vite/dist/client/env.mjs [304]
+reqid=103 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/packages/web-framework/src/client.ts [304]
+reqid=104 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/packages/web-framework/src/projection.ts [304]
+reqid=105 GET http://127.0.0.1:4393/src/host/environment.ts [304]
+reqid=106 GET http://127.0.0.1:4393/src/host/fixture.ts [304]
+reqid=107 GET http://127.0.0.1:4393/src/host/live.ts [304]
+reqid=108 GET http://127.0.0.1:4393/src/host/geometry.ts [304]
+reqid=109 GET http://127.0.0.1:4393/src/host/text-sizing.ts [304]
+reqid=110 GET http://127.0.0.1:4393/src/host/pretext.ts [304]
+reqid=111 GET http://127.0.0.1:4393/src/host/message-time.ts [304]
+reqid=112 GET http://127.0.0.1:4393/node_modules/.vite/deps/react.js?v=2ed47912 [200]
+reqid=113 GET http://127.0.0.1:4393/src/framework/index.ts [304]
+reqid=114 GET http://127.0.0.1:4393/src/components/Timeline.tsx [304]
+reqid=115 GET http://127.0.0.1:4393/node_modules/.vite/deps/rolldown-runtime-BPOCksWG.js?v=95876ba2 [200]
+reqid=116 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/packages/client-core/src/index.ts [304]
+reqid=117 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/src/index.ts [304]
+reqid=118 GET http://127.0.0.1:4393/src/fixture/corpus.ts [304]
+reqid=119 GET http://127.0.0.1:4393/node_modules/.vite/deps/@chenglou_pretext.js?v=d666cdca [200]
+reqid=120 GET http://127.0.0.1:4393/src/framework/useTimelineVirtualizer.ts [304]
+reqid=121 GET http://127.0.0.1:4393/src/framework/useHashDeepLink.ts [304]
+reqid=122 GET http://127.0.0.1:4393/src/rows.ts [304]
+reqid=123 GET http://127.0.0.1:4393/node_modules/.vite/deps/ajv_dist_2020__js.js?v=f1b54b8d [200]
+reqid=124 GET http://127.0.0.1:4393/node_modules/.vite/deps/ajv-formats.js?v=4ec90f1f [200]
+reqid=125 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/cli.schema.json?import [304]
+reqid=126 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/errors.schema.json?import [304]
+reqid=127 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/fixture-policy.schema.json?import [304]
+reqid=128 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/fixture-sync.schema.json?import [304]
+reqid=129 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/health.schema.json?import [304]
+reqid=130 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/local-room.schema.json?import [304]
+reqid=131 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/foundation.schema.json?import [304]
+reqid=132 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/primitives.schema.json?import [304]
+reqid=133 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/sync.schema.json?import [304]
+reqid=134 GET http://127.0.0.1:4393/node_modules/.vite/deps/@tanstack_react-virtual.js?v=4dce429a [200]
+reqid=135 GET http://127.0.0.1:4393/node_modules/.vite/deps/discriminator-uteJoiPj.js?v=95876ba2 [200]
+reqid=136 GET http://127.0.0.1:4393/node_modules/.vite/deps/react-dom.js?v=2ed47912 [200]
+reqid=137 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/docs/design-handoff/results/design-system/fonts/CalSansText-SemiBold.woff2 [304]
+reqid=138 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/docs/design-handoff/results/design-system/fonts/CalSansText-Regular.woff2 [304]
+reqid=139 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/docs/design-handoff/results/design-system/fonts/CalSansUI-SemiBold.woff2 [304]
+
+## page probe
+Script ran on page and returned:
+```json
+"{\"href\":\"http://127.0.0.1:4393/\",\"viewport\":[390,844,3],\"rootChildren\":2,\"rootText\":\"Skip to messages ENGINEERING FIXTURE Agora local room fixture / General room Active project agent · not enabled Local ro\",\"rootTextLength\":858,\"cspMeta\":null,\"styleNodes\":1,\"styleElements\":1,\"styleAttrs\":0,\"fontsLoaded\":[\"Cal Sans UI 600\",\"Cal Sans Text 400\",\"Cal Sans Text 600\"]}"
+```

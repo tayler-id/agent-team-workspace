@@ -1,0 +1,25 @@
+# Console transcript: scenario nocsp, viewport 390x844x3,mobile,touch, url http://127.0.0.1:4392/
+# Captured 2026-10-03T21:08:03Z with chrome-devtools-axi session prodslice-before
+# Lines longer than 400 chars are cut to their first 200 chars and marked; the original length is given.
+
+## list_console_messages
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+## Console messages
+<no console messages found>
+
+## list_network_requests
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+## Network requests
+Showing 1-6 of 6 (Page 1 of 1).
+reqid=20 GET http://127.0.0.1:4392/ [304]
+reqid=21 GET http://127.0.0.1:4392/assets/index-C-_zFqor.js [304]
+reqid=22 GET http://127.0.0.1:4392/assets/index-BJkTgY2j.css [304]
+reqid=23 GET http://127.0.0.1:4392/assets/CalSansText-SemiBold-ByDISUFh.woff2 [304]
+reqid=24 GET http://127.0.0.1:4392/assets/CalSansText-Regular-aYFNwudf.woff2 [304]
+reqid=25 GET http://127.0.0.1:4392/assets/CalSansUI-SemiBold-BGjLitd3.woff2 [304]
+
+## page probe
+Script ran on page and returned:
+```json
+"{\"href\":\"http://127.0.0.1:4392/\",\"viewport\":[390,844,3],\"rootChildren\":2,\"rootText\":\"Skip to messages ENGINEERING FIXTURE Agora local room fixture / General room Active project agent · not enabled Local ro\",\"rootTextLength\":858,\"cspMeta\":null,\"styleNodes\":0,\"styleElements\":0,\"styleAttrs\":0,\"fontsLoaded\":[\"Cal Sans UI 600\",\"Cal Sans Text 400\",\"Cal Sans Text 600\"]}"
+```
