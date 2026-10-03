@@ -21,12 +21,12 @@ const isFramework = (file: string): boolean => webLayer(file)?.kind === 'framewo
 // window/document/crypto/DOM-mutation access below; only apps/web/src/host and apps/web/src/framework get that.
 const isPortableFramework = (file: string): boolean => file.includes('/packages/web-framework/src/');
 const isFrameworkLike = (file: string): boolean => isFramework(file) || isPortableFramework(file);
-const isReactSource = (value: string): boolean => reactSources.has(value) || value.startsWith('react/');
+export const isReactSource = (value: string): boolean => reactSources.has(value) || value.startsWith('react/');
 const report = (context: TSESLint.RuleContext<'forbidden', []>, node: TSESTree.Node, symbol: string, reason: string): void => {
 	if (exceptionAllows(context.filename, symbol, 'agora/renderer-footgun')) return;
 	context.report({ node, messageId: 'forbidden', data: { reason } });
 };
-const importedName = (spec: TSESTree.ImportSpecifier): string | undefined => {
+export const importedName = (spec: TSESTree.ImportSpecifier): string | undefined => {
 	const imported = spec.imported;
 	if (imported.type === AST_NODE_TYPES.Identifier) return imported.name;
 	return typeof imported.value === 'string' ? imported.value : undefined;
@@ -167,7 +167,7 @@ function defsAreOnlyAmbient(defs: readonly { type: string; node: TSESTree.Node; 
 	return defs.length === 0 || defs.every((def) => nodeIsDeclare(def.parent) || nodeIsDeclare(def.node));
 }
 
-function importBinding(identifier: TSESTree.Identifier, context: TSESLint.RuleContext<'forbidden', []>): { decl: TSESTree.ImportDeclaration | undefined; spec: TSESTree.ImportSpecifier | undefined; nsOrDefault: boolean } {
+export function importBinding(identifier: TSESTree.Identifier, context: TSESLint.RuleContext<'forbidden', []>): { decl: TSESTree.ImportDeclaration | undefined; spec: TSESTree.ImportSpecifier | undefined; nsOrDefault: boolean } {
 	let current: ReturnType<TSESLint.SourceCode['getScope']> | null = context.sourceCode.getScope(identifier);
 	while (current) {
 		const variable = current.set.get(identifier.name);
