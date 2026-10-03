@@ -114,6 +114,11 @@
           "kind": "feature"
         },
         {
+          "id": "trusted-checks",
+          "title": "Trusted checks",
+          "kind": "feature"
+        },
+        {
           "id": "ci",
           "title": "Toolchain readiness",
           "kind": "feature"
@@ -287,6 +292,14 @@
     {
       "path": "packages/verification/test/evidence-validator.test.ts",
       "page": "evidence-validator.md"
+    },
+    {
+      "path": "scripts/trusted-checks.mjs",
+      "page": "trusted-checks.md"
+    },
+    {
+      "path": "packages/verification/test/trusted-checks.test.ts",
+      "page": "trusted-checks.md"
     },
     {
       "path": "scripts/foundation.mjs",

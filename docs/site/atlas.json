@@ -67,6 +67,14 @@
       "proof": ["repo:packages/verification/test/project.test.ts", "repo:evidence/U01b/agora-s1-isolate-development/assertion-red.log"]
     },
     {
+      "id": "trusted-checks",
+      "title": "Trusted checks",
+      "status": "In progress",
+      "why": "Only the project's own reporting App, on the exact head and with a signed receipt, can satisfy a required check; live protection and App setup are blocked on human prerequisites.",
+      "page": "trusted-checks.md",
+      "proof": ["repo:scripts/trusted-checks.mjs", "repo:packages/verification/test/trusted-checks.test.ts", "repo:agora/trusted-checks.json"]
+    },
+    {
       "id": "task-proof",
       "title": "Task proof admission",
       "status": "Built",

@@ -86,6 +86,17 @@
 			"owner": "U01b.B02"
 		},
 		{
+			"id": "trusted-checks",
+			"documentation": "docs/site/trusted-checks.md",
+			"paths": ["scripts/trusted-checks.mjs", "agora/trusted-checks.json", "packages/verification/test/trusted-checks.test.ts", "scripts/project.mjs", "scripts/project-checks.mjs", "agora/project.json"],
+			"public": ["node scripts/trusted-checks.mjs policy|evaluate --kind run|checks|protection --input FILE [--policy FILE] [--project agora|python-fixture] --json", "pnpm agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks"],
+			"scenarios": ["packages/verification/test/trusted-checks.test.ts", "lane-8", "lane-9", "lane-10"],
+			"fixtures": ["namespaced App 900001 and repository 900002 with freshly generated Ed25519 reporter and candidate keys", "GitHub run, jobs, check-run and branch-protection read-back JSON", "guard-weakening copies of the App-ID and job-conclusion checks"],
+			"platforms": ["node24"],
+			"invalidation": "A change to the policy, the decision tool, the driver or reporter workflow, or the required job list invalidates lanes 8-10 until they pass again.",
+			"owner": "U01b.B03"
+		},
+		{
 			"id": "foundation-admission",
 			"documentation": "docs/site/test-first.md",
 			"paths": ["scripts/foundation-policy.mjs", "scripts/foundation-replay.mjs", "scripts/foundation.mjs", "scripts/record-red-green.mjs", "packages/verification/test", "contracts/schemas/foundation.schema.json"],
