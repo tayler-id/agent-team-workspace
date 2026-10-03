@@ -22,11 +22,13 @@ this directory holds two sets.
   recorded, signatures included, and name pre-rebase commits that are not ancestors of this
   branch. [Historical receipts](#historical-receipts-before-the-rebase) describes them.
 
-The owner confirmed separately that an archive ref outside this branch retains the
-pre-rebase commits. This branch neither merges that history nor carries the ref. The
-pre-rebase branch head was `6f2304c8998ecfb4268199f5fb888c50932737cf`, and every other
-pre-rebase commit in the table below is its ancestor. In a clone that holds the archive
-ref, `git for-each-ref --contains 6f2304c` lists it.
+The owner confirmed separately that the local ref
+`refs/heads/archive/agora-backup-integrity-slice-pre-rebase` in the original owning
+repository retains the pre-rebase commits. It points at
+`6f2304c8998ecfb4268199f5fb888c50932737cf`, the pre-rebase branch head, and every other
+pre-rebase commit in the table below is its ancestor. The ref is local to that repository.
+This branch neither merges that history nor carries the ref, and nothing here promises
+that the pipeline clone or `origin` holds it.
 
 Each pre-rebase commit differs from its rebased twin only in the 22 files `main` changed
 between `a62662e` and `15619b1`, which are the candidate CI workflow and its scripts, test,
