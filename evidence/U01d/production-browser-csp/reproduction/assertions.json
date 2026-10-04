@@ -1,0 +1,212 @@
+{
+  "capturedWith": "chrome-devtools-axi session prodslice-before",
+  "parentCommit": "a62662e",
+  "scenarios": {
+    "built-parent": {
+      "description": "a62662e web:build output (.scratch/parent-dist) under vite preview, CSP meta as built",
+      "url": "http://127.0.0.1:4392/",
+      "viewports": {
+        "390": {
+          "viewport": "390x844x3,mobile,touch",
+          "rootChildren": 0,
+          "textPrefix": "",
+          "consoleErrorCount": 2,
+          "consoleErrors": [
+            "Error compiling schema, function code: const schema1 = scope.schema[1];const schema2 = scope.schema[2];const schema3 = s",
+            "Uncaught EvalError: Evaluating a string as JavaScript violates the following Content Security Policy directive because '"
+          ],
+          "cspEvalIssue": true,
+          "cspMeta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'",
+          "styleElements": 0,
+          "styleAttrs": 0,
+          "fontsLoaded": [
+            "Cal Sans Text 400"
+          ],
+          "non2xxRequests": [],
+          "screenshot": "built-parent-390.png",
+          "consoleTranscript": "built-parent-390-console.txt"
+        },
+        "1440": {
+          "viewport": "1440x900x1",
+          "rootChildren": 0,
+          "textPrefix": "",
+          "consoleErrorCount": 2,
+          "consoleErrors": [
+            "Error compiling schema, function code: const schema1 = scope.schema[1];const schema2 = scope.schema[2];const schema3 = s",
+            "Uncaught EvalError: Evaluating a string as JavaScript violates the following Content Security Policy directive because '"
+          ],
+          "cspEvalIssue": true,
+          "cspMeta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'",
+          "styleElements": 0,
+          "styleAttrs": 0,
+          "fontsLoaded": [
+            "Cal Sans Text 400"
+          ],
+          "non2xxRequests": [],
+          "screenshot": "built-parent-1440.png",
+          "consoleTranscript": "built-parent-1440-console.txt"
+        }
+      }
+    },
+    "dev-parent": {
+      "description": "a62662e source under the vite dev server (no CSP)",
+      "url": "http://127.0.0.1:4393/",
+      "viewports": {
+        "390": {
+          "viewport": "390x844x3,mobile,touch",
+          "rootChildren": 2,
+          "textPrefix": "Skip to messages ENGINEERING FIXTURE Agora local room fixture / General room Active project agent · not enabled Local ro",
+          "consoleErrorCount": 0,
+          "consoleErrors": [],
+          "cspEvalIssue": false,
+          "cspMeta": null,
+          "styleElements": 1,
+          "styleAttrs": 0,
+          "fontsLoaded": [
+            "Cal Sans UI 600",
+            "Cal Sans Text 400",
+            "Cal Sans Text 600"
+          ],
+          "non2xxRequests": [],
+          "screenshot": "dev-parent-390.png",
+          "consoleTranscript": "dev-parent-390-console.txt"
+        },
+        "1440": {
+          "viewport": "1440x900x1",
+          "rootChildren": 2,
+          "textPrefix": "Skip to messages ENGINEERING FIXTURE Agora local room fixture / General room Active project agent · not enabled Local ro",
+          "consoleErrorCount": 1,
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 404 (Not Found) (0 args)"
+          ],
+          "cspEvalIssue": false,
+          "cspMeta": null,
+          "styleElements": 1,
+          "styleAttrs": 0,
+          "fontsLoaded": [
+            "Cal Sans UI 600",
+            "Cal Sans Text 400",
+            "Cal Sans Text 600"
+          ],
+          "non2xxRequests": [
+            "reqid=89 GET http://127.0.0.1:4393/favicon.ico [404]"
+          ],
+          "screenshot": "dev-parent-1440.png",
+          "consoleTranscript": "dev-parent-1440-console.txt"
+        }
+      }
+    },
+    "nocsp": {
+      "description": "counterfactual A: parent-dist with only the CSP meta line removed, identical JS",
+      "url": "http://127.0.0.1:4392/",
+      "viewports": {
+        "390": {
+          "viewport": "390x844x3,mobile,touch",
+          "rootChildren": 2,
+          "textPrefix": "Skip to messages ENGINEERING FIXTURE Agora local room fixture / General room Active project agent · not enabled Local ro",
+          "consoleErrorCount": 0,
+          "consoleErrors": [],
+          "cspEvalIssue": false,
+          "cspMeta": null,
+          "styleElements": 0,
+          "styleAttrs": 0,
+          "fontsLoaded": [
+            "Cal Sans UI 600",
+            "Cal Sans Text 400",
+            "Cal Sans Text 600"
+          ],
+          "non2xxRequests": [],
+          "screenshot": "nocsp-390.png",
+          "consoleTranscript": "nocsp-390-console.txt"
+        },
+        "1440": {
+          "viewport": "1440x900x1",
+          "rootChildren": 2,
+          "textPrefix": "Skip to messages ENGINEERING FIXTURE Agora local room fixture / General room Active project agent · not enabled Local ro",
+          "consoleErrorCount": 0,
+          "consoleErrors": [],
+          "cspEvalIssue": false,
+          "cspMeta": null,
+          "styleElements": 0,
+          "styleAttrs": 0,
+          "fontsLoaded": [
+            "Cal Sans UI 600",
+            "Cal Sans Text 400",
+            "Cal Sans Text 600"
+          ],
+          "non2xxRequests": [],
+          "screenshot": "nocsp-1440.png",
+          "consoleTranscript": "nocsp-1440-console.txt"
+        }
+      }
+    },
+    "eval-allowed": {
+      "description": "disconfirming check: parent-dist with the CSP kept and only 'unsafe-eval' added to script-src",
+      "url": "http://127.0.0.1:4392/",
+      "viewports": {
+        "390": {
+          "viewport": "390x844x3,mobile,touch",
+          "rootChildren": 2,
+          "textPrefix": "Skip to messages ENGINEERING FIXTURE Agora local room fixture / General room Active project agent · not enabled Local ro",
+          "consoleErrorCount": 0,
+          "consoleErrors": [],
+          "cspEvalIssue": false,
+          "cspMeta": "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'",
+          "styleElements": 0,
+          "styleAttrs": 0,
+          "fontsLoaded": [
+            "Cal Sans UI 600",
+            "Cal Sans Text 400",
+            "Cal Sans Text 600"
+          ],
+          "non2xxRequests": [],
+          "screenshot": "eval-allowed-390.png",
+          "consoleTranscript": "eval-allowed-390-console.txt"
+        },
+        "1440": {
+          "viewport": "1440x900x1",
+          "rootChildren": 2,
+          "textPrefix": "Skip to messages ENGINEERING FIXTURE Agora local room fixture / General room Active project agent · not enabled Local ro",
+          "consoleErrorCount": 0,
+          "consoleErrors": [],
+          "cspEvalIssue": false,
+          "cspMeta": "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'",
+          "styleElements": 0,
+          "styleAttrs": 0,
+          "fontsLoaded": [
+            "Cal Sans UI 600",
+            "Cal Sans Text 400",
+            "Cal Sans Text 600"
+          ],
+          "non2xxRequests": [],
+          "screenshot": "eval-allowed-1440.png",
+          "consoleTranscript": "eval-allowed-1440-console.txt"
+        }
+      }
+    },
+    "built-1eee6ae": {
+      "description": "history: web build at 1eee6ae, the first mainline commit carrying the build CSP",
+      "url": "http://127.0.0.1:4392/",
+      "viewports": {
+        "1440": {
+          "viewport": "1440x900x1",
+          "rootChildren": 0,
+          "textPrefix": "",
+          "consoleErrorCount": 2,
+          "consoleErrors": [
+            "Error compiling schema, function code: const schema1 = scope.schema[1];const schema2 = scope.schema[2];const schema3 = s",
+            "Uncaught EvalError: Evaluating a string as JavaScript violates the following Content Security Policy directive because '"
+          ],
+          "cspEvalIssue": true,
+          "cspMeta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'",
+          "styleElements": 0,
+          "styleAttrs": 0,
+          "fontsLoaded": [],
+          "non2xxRequests": [],
+          "screenshot": "built-1eee6ae-1440.png",
+          "consoleTranscript": "built-1eee6ae-1440-console.txt"
+        }
+      }
+    }
+  }
+}

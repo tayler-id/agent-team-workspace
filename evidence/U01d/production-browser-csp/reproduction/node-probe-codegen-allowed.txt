@@ -1,0 +1,17 @@
+# node  .scratch/repro/probe.mjs .scratch/parent-dist
+# cwd: .scratch/repro/parent-src/apps/web (git archive a62662e, jsdom 30.1.0), Node v24.21.0
+# stderr lines are cut to their first 200 chars
+
+## stdout
+{
+  "node": "v24.21.0",
+  "codegenDisallowed": false,
+  "bundle": "index-C-_zFqor.js",
+  "importOutcome": "resolved",
+  "rootChildren": 2,
+  "rootText": "Skip to messagesENGINEERING FIXTUREAgora local room fixture / General roomactiveproject agent · not enabledLocal room ag",
+  "uncaught": []
+}
+exit=0
+
+## stderr

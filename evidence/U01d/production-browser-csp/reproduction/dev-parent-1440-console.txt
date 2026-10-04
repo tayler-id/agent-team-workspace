@@ -1,0 +1,116 @@
+# Console transcript: scenario dev-parent, viewport 1440x900x1, url http://127.0.0.1:4393/
+# Captured 2026-10-03T21:09:51Z with chrome-devtools-axi session prodslice-before
+# Lines longer than 400 chars are cut to their first 200 chars and marked; the original length is given.
+
+## list_console_messages
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+## Console messages
+Showing 1-4 of 4 (Page 1 of 1).
+msgid=11 [debug] [vite] connecting... (1 args)
+msgid=12 [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold (2 args)
+msgid=13 [debug] [vite] connected. (1 args)
+msgid=14 [error] Failed to load resource: the server responded with a status of 404 (Not Found) (0 args)
+
+## get_console_message 11
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+ID: 11
+Message: debug> [vite] connecting...
+### Arguments
+Arg #0: [vite] connecting...
+### Stack trace
+at <anonymous> (client:883:9)
+Note: line and column numbers use 1-based indexing
+
+## get_console_message 12
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+ID: 12
+Message: info> %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+### Arguments
+Arg #0: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools
+Arg #1: font-weight:bold
+### Stack trace
+Note: line and column numbers use 1-based indexing
+
+## get_console_message 13
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+ID: 13
+Message: debug> [vite] connected.
+### Arguments
+Arg #0: [vite] connected.
+### Stack trace
+at handleMessage (client:996:12)
+at  (client:612:42)
+at dequeue (client:634:8)
+at  (client:626:9)
+at enqueue (client:620:10)
+at  (client:612:28)
+at onMessage (client:97:6)
+at  (client:215:5)
+Note: line and column numbers use 1-based indexing
+
+## get_console_message 14
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+ID: 14
+Message: error> Failed to load resource: the server responded with a status of 404 (Not Found)
+
+## list_network_requests
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+## Network requests
+Showing 1-51 of 51 (Page 1 of 1).
+reqid=39 GET http://127.0.0.1:4393/ [200]
+reqid=40 GET http://127.0.0.1:4393/@vite/client [200]
+reqid=41 GET http://127.0.0.1:4393/src/main.tsx [200]
+reqid=42 GET http://127.0.0.1:4393/@react-refresh [200]
+reqid=43 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/packages/web-framework/src/index.ts [200]
+reqid=44 GET http://127.0.0.1:4393/node_modules/.vite/deps/react-dom_client.js?v=2ec55263 [200]
+reqid=45 GET http://127.0.0.1:4393/src/components/App.tsx [200]
+reqid=46 GET http://127.0.0.1:4393/src/components/FixtureControls.tsx [200]
+reqid=47 GET http://127.0.0.1:4393/src/host/index.ts [200]
+reqid=48 GET http://127.0.0.1:4393/src/fixture/room.json?import [200]
+reqid=49 GET http://127.0.0.1:4393/src/fixture.css [200]
+reqid=50 GET http://127.0.0.1:4393/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=2ed47912 [200]
+reqid=51 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/packages/web-framework/src/client.ts [200]
+reqid=52 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/packages/web-framework/src/projection.ts [200]
+reqid=53 GET http://127.0.0.1:4393/src/host/environment.ts [200]
+reqid=54 GET http://127.0.0.1:4393/src/host/fixture.ts [200]
+reqid=55 GET http://127.0.0.1:4393/src/host/live.ts [200]
+reqid=56 GET http://127.0.0.1:4393/src/host/geometry.ts [200]
+reqid=57 GET http://127.0.0.1:4393/src/host/text-sizing.ts [200]
+reqid=58 GET http://127.0.0.1:4393/src/host/pretext.ts [200]
+reqid=59 GET http://127.0.0.1:4393/src/host/message-time.ts [200]
+reqid=60 GET http://127.0.0.1:4393/node_modules/.vite/deps/rolldown-runtime-BPOCksWG.js?v=95876ba2 [200]
+reqid=61 GET http://127.0.0.1:4393/node_modules/.vite/deps/react.js?v=2ed47912 [200]
+reqid=62 GET http://127.0.0.1:4393/src/framework/index.ts [200]
+reqid=63 GET http://127.0.0.1:4393/src/components/Timeline.tsx [200]
+reqid=64 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/packages/client-core/src/index.ts [200]
+reqid=65 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/src/index.ts [200]
+reqid=66 GET http://127.0.0.1:4393/src/fixture/corpus.ts [200]
+reqid=67 GET http://127.0.0.1:4393/node_modules/.vite/deps/@chenglou_pretext.js?v=d666cdca [200]
+reqid=68 GET http://127.0.0.1:4393/src/framework/useTimelineVirtualizer.ts [200]
+reqid=69 GET http://127.0.0.1:4393/src/framework/useHashDeepLink.ts [200]
+reqid=70 GET http://127.0.0.1:4393/src/rows.ts [200]
+reqid=71 GET http://127.0.0.1:4393/node_modules/.vite/deps/ajv_dist_2020__js.js?v=f1b54b8d [200]
+reqid=72 GET http://127.0.0.1:4393/node_modules/.vite/deps/ajv-formats.js?v=4ec90f1f [200]
+reqid=73 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/cli.schema.json?import [200]
+reqid=74 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/errors.schema.json?import [200]
+reqid=75 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/fixture-policy.schema.json?import [200]
+reqid=76 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/fixture-sync.schema.json?import [200]
+reqid=77 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/health.schema.json?import [200]
+reqid=78 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/local-room.schema.json?import [200]
+reqid=79 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/foundation.schema.json?import [200]
+reqid=80 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/primitives.schema.json?import [200]
+reqid=81 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/contracts/schemas/sync.schema.json?import [200]
+reqid=82 GET http://127.0.0.1:4393/node_modules/.vite/deps/@tanstack_react-virtual.js?v=4dce429a [200]
+reqid=83 GET http://127.0.0.1:4393/node_modules/.vite/deps/react-dom.js?v=2ed47912 [200]
+reqid=84 GET http://127.0.0.1:4393/node_modules/.vite/deps/discriminator-uteJoiPj.js?v=95876ba2 [200]
+reqid=85 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/node_modules/.pnpm/vite@8.3.0_@types+node@24.10.1/node_modules/vite/dist/client/env.mjs [200]
+reqid=86 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/docs/design-handoff/results/design-system/fonts/CalSansText-SemiBold.woff2 [200]
+reqid=87 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/docs/design-handoff/results/design-system/fonts/CalSansText-Regular.woff2 [200]
+reqid=88 GET http://127.0.0.1:4393/@fs/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/parent-src/docs/design-handoff/results/design-system/fonts/CalSansUI-SemiBold.woff2 [200]
+reqid=89 GET http://127.0.0.1:4393/favicon.ico [404]
+
+## page probe
+Script ran on page and returned:
+```json
+"{\"href\":\"http://127.0.0.1:4393/\",\"viewport\":[1440,900,1],\"rootChildren\":2,\"rootText\":\"Skip to messages ENGINEERING FIXTURE Agora local room fixture / General room Active project agent · not enabled Local ro\",\"rootTextLength\":858,\"cspMeta\":null,\"styleNodes\":1,\"styleElements\":1,\"styleAttrs\":0,\"fontsLoaded\":[\"Cal Sans UI 600\",\"Cal Sans Text 400\",\"Cal Sans Text 600\"]}"
+```

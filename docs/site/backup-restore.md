@@ -40,7 +40,7 @@ Restore and compare | pg_restore in one transaction, objects written with exclus
 
 Binding the slot name (`<backup_id>/database`, `<backup_id>/objects/0002`) as associated data means a sealed blob copied into another slot or another backup fails authentication as `corrupt`. The inventory reads every table in one repeatable-read, read-only transaction. During `create` that transaction first calls `pg_export_snapshot()` and `pg_dump --snapshot` reads the same snapshot, so a concurrent writer cannot make the sealed row counts disagree with the dump. The inventory must run as a role that bypasses row-level security, or it would count only the rows one scope can see, so this slice backs up and inventories as the cluster superuser.
 
-The cipher is an implementation decision under the accepted requirement for encrypted backups ([R17](repo:docs/technical-spec.md), D32). [Decision D111](repo:docs/decisions.tsv) records AES-256-GCM through `node:crypto` with a 32-byte key file and no new dependency, and why. It is not a captain or operator acceptance, and the crypto and key handling still need independent review.
+The cipher is an implementation decision under the accepted requirement for encrypted backups ([R17](repo:docs/technical-spec.md), D32). [Decision D112](repo:docs/decisions.tsv) records AES-256-GCM through `node:crypto` with a 32-byte key file and no new dependency, and why. It is not a captain or operator acceptance, and the crypto and key handling still need independent review.
 
 ## Implementation status
 

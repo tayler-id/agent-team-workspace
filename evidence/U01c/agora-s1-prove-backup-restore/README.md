@@ -190,5 +190,5 @@ one.
 WAL archiving, separate-host restore, off-host key recovery, epoch rotation and fencing,
 RPO and RTO, a dedicated backup role, external storage, key rotation, a normalized
 schema comparison and restore across PostgreSQL versions. No independent security review
-has happened, and the implementer's own checks are not one. D111 records AES-256-GCM as an implementation decision under R17 and
+has happened, and the implementer's own checks are not one. D112 records AES-256-GCM as an implementation decision under R17 and
 D32; it claims no captain or operator acceptance.

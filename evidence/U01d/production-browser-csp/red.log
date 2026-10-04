@@ -1,0 +1,78 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-03T23:24:58.149Z
+parent: 15619b12595f06fa5a4f966472acb634a07060b7
+head: 1111c95203e97eb3bda0a04956480b1a1f0a8388
+subject_revision: 15619b12595f06fa5a4f966472acb634a07060b7
+test_patch_applied_to_subject: true
+test_patch_files: apps/web/test/built-room.test.ts
+test_patch_digest: sha256:26f0da480201d69edeb9134cee5eee91f8def2e0154e8800088a8068b65fe93e
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[{"file":"contracts/package.json","digest":"sha256:2a0d934fdb508fe2f501d4a3dd171ebaf341f5955427f39b3827993c3b6fd0e3"},{"file":"contracts/src/index.ts","digest":"sha256:196fb726900f12fb7037ab57869fdf9e3960d093e24da9438ba75e65ffd247d4"},{"file":"contracts/src/wire-validator.ts","digest":"sha256:10d13576f507297138b8d55a9b223db643c4f951d03b444bbfeabe6f4b1bd225"},{"file":"contracts/tools/browser-validator.ts","digest":"sha256:0f44c0987e12a979127bcf426a0e76ef2162c958bc8120466e4d13f29424e783"}]}
+configuration: {"command":"pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/built-room.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-0B6LJ6/apps/web
+
+ ❯ |web| test/built-room.test.ts (3 tests | 2 failed) 9717ms
+   × the built room validates its fixture and renders without string code generation 4602ms
+   × the built room rejects a schema-invalid fixture without string code generation 4426ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+   Start at  19:24:38
+   Duration  9.79s (tests 100%)
+
+undefined
+/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-0B6LJ6/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/built-room.test.ts
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/built-room.test.ts > the built room validates its fixture and renders without string code generation
+AssertionError: expected 'EvalError: Code generation from strin…' to be null
+
+- Expected:
+null
+
++ Received:
+"EvalError: Code generation from strings disallowed for this context"
+
+ ❯ test/built-room.test.ts:56:21
+     54| test('the built room validates its fixture and renders without string …
+     55|  const room = open(`${out}/dist`);
+     56|  expect(room.error).toBeNull();
+       |                     ^
+     57|  expect(room.role).toBeNull();
+     58|  expect(room.text).toContain('Agora local room fixture');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |web| test/built-room.test.ts > the built room rejects a schema-invalid fixture without string code generation
+AssertionError: expected { …(4) } to deeply equal { error: null, role: 'alert', …(2) }
+
+- Expected
++ Received
+
+  {
+-   "error": null,
+-   "loaded": "Fixture rejected: snapshot failed FixtureSyncSnapshot validation",
+-   "role": "alert",
+-   "text": "Fixture rejected: snapshot failed FixtureSyncSnapshot validation",
++   "error": "EvalError: Code generation from strings disallowed for this context",
++   "loaded": "",
++   "role": null,
++   "text": "",
+  }
+
+ ❯ test/built-room.test.ts:65:33
+     63| test('the built room rejects a schema-invalid fixture without string c…
+     64|  const rejected = 'Fixture rejected: snapshot failed FixtureSyncSnapsh…
+     65|  expect(open(`${out}/invalid`)).toEqual({ error: null, role: 'alert', …
+       |                                 ^
+     66| }, 60_000);
+     67|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

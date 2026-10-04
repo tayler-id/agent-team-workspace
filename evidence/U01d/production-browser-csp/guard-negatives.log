@@ -1,0 +1,37 @@
+# guard negatives at 99dde84c9ba7b59f780811659dc8769ad1e4ada4, 2026-10-03T23:07:52Z
+apps, contracts, packages, scripts, package.json and pnpm-lock.yaml are identical to 1111c95
+## plugin removed from the web build (apps/web/vite.config.ts)
+ apps/web/vite.config.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × the built room validates its fixture and renders without string code generation 4880ms
+   × the built room rejects a schema-invalid fixture without string code generation 4720ms
+AssertionError: expected 'EvalError: Code generation from strin…' to be null
+- Expected:
++ Received:
+"EvalError: Code generation from strings disallowed for this context"
+AssertionError: expected { …(4) } to deeply equal { error: null, role: 'alert', …(2) }
+- Expected
++ Received
++   "error": "EvalError: Code generation from strings disallowed for this context",
+      Tests  2 failed | 1 passed (3)
+restored byte for byte: 137104034bdee9902ce57035cc7a9e1cf2536b65 == 137104034bdee9902ce57035cc7a9e1cf2536b65
+## CSP relaxed with unsafe-eval (apps/web/vite.config.ts)
+ apps/web/vite.config.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × the built room keeps its strict CSP unchanged 4ms
+AssertionError: expected '<!doctype html>\n<html lang="en">\n\t…' to contain '<meta http-equiv="Content-Security-Po…'
+- Expected
++ Received
+      Tests  1 failed | 2 passed (3)
+restored byte for byte: 137104034bdee9902ce57035cc7a9e1cf2536b65 == 137104034bdee9902ce57035cc7a9e1cf2536b65
+## browser validators accept everything (contracts/tools/browser-validator.ts)
+ contracts/tools/browser-validator.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × the built room rejects a schema-invalid fixture without string code generation 445ms
+AssertionError: expected { error: null, role: null, …(2) } to deeply equal { error: null, role: 'alert', …(2) }
+- Expected
++ Received
+      Tests  1 failed | 2 passed (3)
+restored byte for byte: b1518020d20aa36ab764c58b55baf7daf036d9b1 == b1518020d20aa36ab764c58b55baf7daf036d9b1
+## restored head
+      Tests  3 passed (3)
