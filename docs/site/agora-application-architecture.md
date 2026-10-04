@@ -37,7 +37,7 @@ apps/web/src/framework/
   host.ts               the one Host: the typed browser/transport boundary
 ```
 
-The framework layer and the package layer under [portable contracts](contracts.md) never import a Feature. A Feature may import the framework layer, generated contracts, and its own declared dependencies on another Feature, named in a reserved `dependencies.json` file inside that Feature's own directory. [Client synchronization](synchronization.md) already isolates replay and import boundaries at the package level; this architecture extends the same discipline to product features and the renderer, and does not replace that package-level table.
+The framework layer and the package layer under [portable contracts](contracts.md) never import a Feature. A Feature may import the framework layer, generated contracts, and its own declared dependencies on another Feature, named in a reserved `dependencies.json` file inside that Feature's own directory. The file is a JSON array of Feature names, and `pnpm boundaries` rejects an import of a Feature it omits, naming the file to edit. [Client synchronization](synchronization.md) already isolates replay and import boundaries at the package level; this architecture extends the same discipline to product features and the renderer, and does not replace that package-level table.
 
 ## Where existing work lands
 

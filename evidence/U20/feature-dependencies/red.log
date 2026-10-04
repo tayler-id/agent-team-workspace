@@ -1,0 +1,91 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-03T21:03:11.657Z
+parent: a62662e8788a072289b14b82f80cc970e1bd6943
+head: 01064cee6955f360e4c5179f103b56fd0cad004e
+subject_revision: a62662e8788a072289b14b82f80cc970e1bd6943
+test_patch_applied_to_subject: true
+test_patch_files: packages/client-core/test/feature-dependencies.test.ts
+test_patch_digest: sha256:05c10a54dd632e083a32058fdbfbff130639f7739f282a94b809ac2a820b4ec9
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/feature-dependencies.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-LfQNsi
+
+ ❯ |unit| packages/client-core/test/feature-dependencies.test.ts (10 tests | 8 failed) 1867ms
+   × an undeclared Feature-to-Feature import names the missing declaration and the sanctioned alternative 6ms
+   × malformed dependencies.json (invalid JSON) is rejected 17ms
+   × malformed dependencies.json (an object instead of an array) is rejected 5ms
+   × malformed dependencies.json (a non-string entry) is rejected 3ms
+   × malformed dependencies.json (an entry that is a path) is rejected 2ms
+   × malformed dependencies.json (a duplicate entry) is rejected 2ms
+   × malformed dependencies.json (the Feature naming itself) is rejected 2ms
+   × a framework file importing a Feature is denied even when a Feature declares it, naming Framework as the non-importing owner 24ms
+
+ Test Files  1 failed (1)
+      Tests  8 failed | 2 passed (10)
+   Start at  17:02:56
+   Duration  2.15s (tests 92%, import 6%, transform 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/feature-dependencies.test.ts > an undeclared Feature-to-Feature import names the missing declaration and the sanctioned alternative
+AssertionError: expected [] to deeply equal [ Array(1) ]
+
+- Expected
++ Received
+
+- [
+-   "Feature depfx1ysgmusvp74s-a imports Feature depfx1ysgmusvp74s-b without declaring it; add \"depfx1ysgmusvp74s-b\" to apps/web/src/features/depfx1ysgmusvp74s-a/dependencies.json and import only through apps/web/src/features/depfx1ysgmusvp74s-b/index.ts",
+- ]
++ []
+
+ ❯ packages/client-core/test/feature-dependencies.test.ts:34:48
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  |unit| packages/client-core/test/feature-dependencies.test.ts > malformed dependencies.json (invalid JSON) is rejected
+ FAIL  |unit| packages/client-core/test/feature-dependencies.test.ts > malformed dependencies.json (an object instead of an array) is rejected
+ FAIL  |unit| packages/client-core/test/feature-dependencies.test.ts > malformed dependencies.json (a non-string entry) is rejected
+ FAIL  |unit| packages/client-core/test/feature-dependencies.test.ts > malformed dependencies.json (an entry that is a path) is rejected
+ FAIL  |unit| packages/client-core/test/feature-dependencies.test.ts > malformed dependencies.json (a duplicate entry) is rejected
+ FAIL  |unit| packages/client-core/test/feature-dependencies.test.ts > malformed dependencies.json (the Feature naming itself) is rejected
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ packages/client-core/test/feature-dependencies.test.ts:55:19
+     53|  declare(a, body);
+     54|  const messages = await lint(importB, rel(a, 'use.ts'));
+     55|  expect(messages).toHaveLength(1);
+       |                   ^
+     56|  expect(messages[0]).toContain(`apps/web/src/features/${a}/dependencie…
+     57| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  |unit| packages/client-core/test/feature-dependencies.test.ts > a framework file importing a Feature is denied even when a Feature declares it, naming Framework as the non-importing owner
+AssertionError: expected [ Array(1) ] to deeply equal [ Array(1) ]
+
+- Expected
++ Received
+
+  [
+-   "framework must not import product Features; Features live under apps/web/src/features/<name> and import framework through its public entrypoint, never the reverse",
++   "framework must not import product Features; Features live under apps/web/src/features/<name>",
+  ]
+
+ ❯ packages/client-core/test/feature-dependencies.test.ts:62:77
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+

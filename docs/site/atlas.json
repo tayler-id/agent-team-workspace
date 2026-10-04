@@ -1,5 +1,5 @@
 {
-  "revision": "f4992158118d08de51a5019ddc7926fe9edeec88",
+  "revision": "173c75f4f93b97268396c252c55682088d88a513",
   "date": "2026-09-23",
   "features": [
     {
@@ -184,6 +184,10 @@
         "repo:agora/architecture-exceptions.json",
         "repo:scripts/renderer-policy.ts",
         "repo:packages/client-core/test/app-architecture.test.ts",
+        "repo:packages/client-core/test/feature-dependencies.test.ts",
+        "repo:evidence/U20/feature-dependencies/red.log",
+        "repo:evidence/U20/feature-dependencies/green.log",
+        "repo:evidence/U20/feature-dependencies/guard-negatives.log",
         "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json",
         "repo:evidence/U20/agora-s1-lint-application-architecture/whole-feature-red.log",
         "repo:evidence/U20/agora-s1-lint-application-architecture/green.log",
