@@ -1,0 +1,7 @@
+// Raw chrome-devtools-axi bridge call, bypassing the CLI's 2000-char display truncation.
+// usage: node axi-raw.mjs <toolName> '<json args>'
+import { callTool } from '/Users/taylerramsay/.local/share/firstmate-tools/lib/node_modules/chrome-devtools-axi/dist/src/client.js';
+const [name, args = '{}'] = process.argv.slice(2);
+const out = await callTool(name, JSON.parse(args));
+process.stdout.write(typeof out === 'string' ? out : JSON.stringify(out, null, 2));
+process.stdout.write('\n');

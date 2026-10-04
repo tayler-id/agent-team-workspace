@@ -1,5 +1,5 @@
 // Live Host transport: local-room L1-L3 HTTP wire (snapshot/events/messages) behind RoomTransport.
-// Built under the precompiled browser validator so strict CSP (no unsafe-eval) still holds; see scripts/local-room-service.ts.
+// Built under the precompiled browser validator so strict CSP (no unsafe-eval) still holds; see contracts/tools/browser-validator.ts.
 import { createWireValidator, type ComponentName, type Schema } from '@agora/contracts';
 import type { Message, RetryFailure } from '@agora/client-core';
 import type { Author, ConnectionLink, Presentation, RoomClient, RoomTransport, SendPhase, TransportConnection } from '@agora/web-framework';

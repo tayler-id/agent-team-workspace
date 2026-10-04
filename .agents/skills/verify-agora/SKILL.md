@@ -39,6 +39,17 @@ Design-negative P0a pass predicates: `verify-design` exits 0 on the real tree; `
 
 P0b alone launches no service. Drive `node --test scripts/test/ci-doctor.test.ts`: known-good actual native import passes, wrong Node/pnpm and unavailable native binding report blocked. Each omitted probe in a disposable copy makes its own denial assertion fail. Evidence: use the recorder below with `--parent f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec --head <code-head> --out .scratch/P0b/replay -- node --test scripts/test/ci-doctor.test.ts`; retain P0b receipts under `evidence/ci/P0b/`. Cleanup removes only owned `.scratch/doctor-*` copies, never receipts. Full fixture verification still follows below and may be independently blocked.
 
+### Production build (built room)
+
+The built fixture room needs only the Node and pnpm pins above, a Chrome that `chrome-devtools-axi` can start, and loopback port 4394 free. No database or Launch-step runtime is involved. A listener already on 4394 belongs to someone else, so report the step blocked and leave that process alone.
+
+```sh
+command -v chrome-devtools-axi
+lsof -nP -iTCP:4394 -sTCP:LISTEN
+```
+
+`lsof` must print nothing.
+
 ## Launch
 
 `scripts/with-test-postgres.mjs` uses the unchanged owned short-socket allocator and a 30-second startup deadline (`AGORA_PG_STARTUP_TIMEOUT_MS`, 1..300000 ms). It boots a throwaway socket-only PostgreSQL cluster (owner role `agora_owner`, non-owner role `agora_app`, guard-negative role `agora_bypass`, database `agora_test`) for the duration of one command and removes it afterwards. It exports `AGORA_DATABASE_URL` as the service role and `AGORA_MIGRATION_DATABASE_URL` as the owner. To reuse an existing PostgreSQL 18 server, export `AGORA_TEST_DATABASE_URL` (as `agora_app`), `AGORA_TEST_OWNER_DATABASE_URL` (as the schema owner), `AGORA_TEST_BYPASS_DATABASE_URL` (a `BYPASSRLS` member of `agora_app`) and `AGORA_TEST_SUPERUSER_DATABASE_URL` (used only to remove and restore cluster-level prerequisites in one test) and the wrapper passes the command through.
@@ -71,6 +82,24 @@ node scripts/local-room.ts start --instance "$INSTANCE"
 ```
 
 Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/PostgreSQL port and harness `url`. Open that URL with the approved browser driver. It serves the apps/web room shell over the live runtime (L4 first slice), not the finished room UI. No external accounts or production credentials are needed.
+
+### Production build (built room)
+
+Build the fixture room with its real `apps/web/vite.config.ts`, then serve the output on the owned port. `OUT` is `evidence/U01d/production-browser-csp/browser` for the retained run or a scratch path for a rerun. `RUN` is ignored scratch that holds the preview log and both PIDs, so no process handle lands in evidence. `$!` is the pnpm wrapper, and the `lsof` line records the vite listener that Cleanup stops.
+
+```sh
+OUT=evidence/U01d/production-browser-csp/browser
+RUN=.scratch/built-room-preview
+mkdir -p "$OUT" "$RUN"
+pnpm web:build
+grep -o 'http-equiv="Content-Security-Policy" content="[^"]*"' apps/web/dist/index.html > "$OUT/csp.txt"
+pnpm --filter @agora/web exec vite preview --strictPort --port 4394 --host 127.0.0.1 > "$RUN/preview.log" 2>&1 &
+echo $! > "$RUN/preview-wrapper.pid"
+for i in $(seq 50); do curl -sf -o /dev/null http://127.0.0.1:4394/ && break; sleep 0.2; done
+lsof -nP -t -iTCP:4394 -sTCP:LISTEN > "$RUN/preview.pid"
+```
+
+The `content` value in `csp.txt` must equal `default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'`, with each single quote escaped as `&#39;` and no `unsafe-eval` or `unsafe-inline`. `preview.pid` must hold one PID. A build that exits 0 is not the proof; the Drive probe is.
 
 ## Drive
 
@@ -182,7 +211,7 @@ Pass predicates:
 - `pnpm client:replay` reports `outcome: pass` only if all six TypeScript snapshots equal their literal golden states; `--swift` additionally requires the independent Swift projections to equal those same states. The transcript includes each contiguous-prefix acknowledgement and replay/upgrade request. No DOM or browser runs in lane 7.
 - `packages/client-core/test/sync.test.ts` covers snapshot races, large decimal ordering, receipts, retry, unread, drafts and clearing. `guards.test.ts` repeats the public assertions with one guard disabled per disposable copy; every disabled-guard run must exit 1 for its named assertion. Lane 8 runs through `pnpm boundaries`, writing native JSON to `.scratch/boundaries.json`: all import-form, public-type, private-path, export-map, no-platform and application-architecture fixtures must pass, including guarded-extension renderer/server denials (`.ts`/`.tsx`/`.mts`/`.cts`/`.js`/`.jsx`/`.mjs`/`.cjs`, contracts plain JS/CJS), `apps/web` non-src relocation denials, ambient-declare and computed/mixed-union DOM-mutator denials, string-literal React effect import denials, framework/host foot-guns, `noInlineConfig` disable adversarial cases, architecture-exception validation (including load-time denial on invalid rows), guard-weakening copies, JSDoc `import()` comment edges, DOM property-assignment and `setAttribute`-family mutation denials, untyped `.mjs`/`.cjs` ambiguous-mutator name-trust denials, type-cast receiver-evasion denials, and the `react/jsx-runtime` namespace/default allowance. `packages/client-core/test/client-state-owner.test.ts` (also in `pnpm boundaries`) must show `agora/client-owner` rejecting durable Client state copied into `useState`/`useRef`/`useReducer`, runtime `@agora/client-core` and `createRoomClient` imports, and direct transport commands in a component, each naming the Client hook or Host owner, while ephemeral UI state and the Client/Host/framework owners pass; with the rule set to `off` in an isolated config copy, four of its six tests must go red. `pnpm typecheck` must include `apps/web/tsconfig.json` and exclude `apps/web` from the root program. The negative-rule configurations are isolated test instances, never runtime guard switches.
 - `pnpm test` exits 0 with every unit and pg test passing. The pg project refuses to run without a database; the contract tests fail, never skip, without Swift.
-- `pnpm web:test` (`pnpm --filter @agora/web exec vitest run --config vitest.config.ts`) exits 0 for `apps/web`'s own Vitest project, separate from the root `pnpm test`/`pnpm boundaries` static coverage of that package. `pnpm web:build` (`pnpm --filter @agora/web build`) exits 0 and produces `apps/web/dist`. `pnpm web:dev` (`pnpm --filter @agora/web dev`, `vite --strictPort --port 4174`) is a foreground dev server, not a one-shot check: launch it in the background, confirm `http://localhost:4174/` returns 200, then stop the owned process (for example `pkill -f "vite --strictPort --port 4174"`) before continuing. Do not leave it running past the check.
+- `pnpm web:test` (`pnpm --filter @agora/web exec vitest run --config vitest.config.ts`) exits 0 for `apps/web`'s own Vitest project, separate from the root `pnpm test`/`pnpm boundaries` static coverage of that package. `pnpm web:build` (`pnpm --filter @agora/web build`) exits 0 and produces `apps/web/dist`; an exit 0 alone does not prove the bundle runs under its CSP, so drive the built-room recipe below. `pnpm web:dev` (`pnpm --filter @agora/web dev`, `vite --strictPort --port 4174`) is a foreground dev server, not a one-shot check: launch it in the background, confirm `http://localhost:4174/` returns 200, then stop the owned process (for example `pkill -f "vite --strictPort --port 4174"`) before continuing. Do not leave it running past the check.
 - `node scripts/probe-center.mjs --scenarios` prints `agora.probe-scenarios/v1` with exactly sixteen scenario ids and starts no process; it needs no database. Exactly one scenario has `restarts_center: true`.
 - The live probe applies migration 0001 as the owner first, then starts the center as the service role. Its report has `"outcome": "pass"` for `health-liveness` (200), `health-readiness` (200), `policy-allow` (200, `decision: allow`), `policy-deny` (200, `reason_code: scope_mismatch`), `policy-unknown-field` (400, `malformed_command`), `unknown-route` (404, `not_found`), `local-room-snapshot-before` (200), `local-room-send-committed` (201, `replayed: false`, revision one above the snapshot's `committed_seq`, `request_digest` equal to the canonical digest of the command), `local-room-send-replayed` (201, byte-equal to the first receipt except `replayed: true`), `local-room-send-changed-body` (409, `command_conflict`), `local-room-send-other-scope` (404, `scope_mismatch`), `local-room-send-unknown-citation` (404, `not_found`), `local-room-send-empty-body` (400), `local-room-send-unknown-field` (400), `local-room-snapshot-after-restart` (200, same cursor and last message after the process was stopped and started) and `local-room-replay-after-restart` (201, the original `message_id`).
 - `contracts/test/local-room.test.ts` accepts every `local-room-*` vector that the golden file accepts, refuses each unknown field, variant and bound at its path in TypeScript and Swift, and proves the authorship, event-kind and unknown-field guards turn red with the guard removed from an isolated schema copy. `apps/center/test/local-room.test.ts` proves the health baseline on the same app, the 400 paths, and the typed 404 `unavailable_capability` of a process composed without a persistence adapter.
@@ -191,6 +220,34 @@ Pass predicates:
 - The first migration report has `applied: 2`; the second has `applied: 0` and the same `schema_digest`.
 
 For U01b.B01's project verification controls: every required command must exit zero, all native lane assertions must pass without skips, and conformance must name both consumers as passing. Whole-unit lanes remain blocked without U01b.B02/B03; the explicit task selector does not qualify that milestone. U01a's historical task-admission driver remains documented in [task proof](../../../docs/site/test-first.md), not a substitute for this task's controls.
+
+### Production build (built room)
+
+Drive the preview from Launch in its own session, at desktop and phone viewports, reloading after each viewport change so the probe reads a fresh module evaluation:
+
+```sh
+export CHROME_DEVTOOLS_AXI_SESSION=verify-built-room
+URL=http://127.0.0.1:4394/
+PROBE='JSON.stringify({rootChildren:document.getElementById("root").childElementCount,fixture:document.body.textContent.includes("Agora local room fixture"),rejected:document.body.textContent.includes("Fixture rejected"),fits:document.documentElement.scrollWidth===document.documentElement.clientWidth,viewport:[innerWidth,innerHeight,devicePixelRatio]})'
+chrome-devtools-axi open "$URL"
+chrome-devtools-axi emulate --viewport "1440x900x1"; chrome-devtools-axi open "$URL"
+chrome-devtools-axi eval "$PROBE" > "$OUT/1440x900-probe.txt"
+chrome-devtools-axi screenshot "$OUT/1440x900.png"
+chrome-devtools-axi eval '[...document.querySelectorAll("button")].find(b=>b.textContent==="Load fixture snapshot").click()'
+chrome-devtools-axi eval 'document.body.textContent.includes("Kicking off the fixture.")' > "$OUT/1440x900-loaded.txt"
+chrome-devtools-axi screenshot "$OUT/1440x900-loaded.png"
+chrome-devtools-axi console --type error > "$OUT/1440x900-console-errors.txt"
+chrome-devtools-axi console > "$OUT/1440x900-console.txt"
+chrome-devtools-axi emulate --viewport "390x844x3,mobile,touch"; chrome-devtools-axi open "$URL"
+chrome-devtools-axi eval "$PROBE" > "$OUT/390x844-probe.txt"
+chrome-devtools-axi screenshot "$OUT/390x844.png"
+chrome-devtools-axi console --type error > "$OUT/390x844-console-errors.txt"
+chrome-devtools-axi console > "$OUT/390x844-console.txt"
+pnpm web:test
+pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/built-room.test.ts
+```
+
+Built-room predicates: both probes report `rootChildren` above 0, `fixture: true` and `rejected: false`; the 390x844 probe reports `fits: true`. `chrome-devtools-axi console` reports the page loaded by the latest `open`, so each viewport gets its own capture. The only expected console error is a `favicon.ico` 404 on the first load, because the app ships no favicon; any CSP issue fails the run. The rejection path in a real browser (a bundle copy with a non-UUID stream id renders `Fixture rejected: snapshot failed FixtureSyncSnapshot validation`) and the send-plus-receipt drive are in `evidence/U01d/production-browser-csp/browser/drive.sh.txt`. Both `*-console-errors.txt` files read `<no console messages found>`, and neither `*-console.txt` file has an `EvalError`, an `unsafe-eval` mention or a Content Security Policy issue. `1440x900-loaded.txt` reports `true`. The first two screenshots show the room header, the empty timeline with its Load fixture snapshot button and the composer, not a blank page; `1440x900-loaded.png` shows the fixture messages. `pnpm web:test` exits 0, and the focused run reports `Tests 3 passed (3)`. `apps/web/test/built-room.test.ts` builds into its own `.scratch/built-room-<pid>` directory, checks the unchanged policy, renders the bundle under `node --disallow-code-generation-from-strings`, and expects a bundle copy with one corrupted fixture value to render `Fixture rejected: snapshot failed FixtureSyncSnapshot validation`. The before-fix reproduction at the parent shows `rootChildren: 0` and an `EvalError` naming `script-src 'self'`; it lives in `evidence/U01d/production-browser-csp/reproduction/`.
 
 ## Candidate CI
 
@@ -288,6 +345,16 @@ node scripts/record-red-green.mjs --parent 661b4c5e012be8b851d271f063d3d53738c15
 
 The selected red must be `expected 'unavailable' to be 'pass'` after doctor passes, not a missing runner or import. Run the complete runtime suites separately at head, without selection. Record the test-patch digest, stack bindings, source/line categories, native outputs, PostgreSQL/replay evidence, guard negatives and owned inventory before/after cleanup. CI and independent review remain distinct prerequisites; local green does not authorize landing the unlanded L3 stack.
 
+### Production build (built room) evidence
+
+Record red/green with the parent that lacks the plugin and the committed fix head, never a moving branch name:
+
+```sh
+node scripts/record-red-green.mjs --parent PARENT --head HEAD --out evidence/U01d/production-browser-csp -- pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/built-room.test.ts
+```
+
+Red must fail the render and rejection assertions on an `EvalError` from string code generation while the unchanged-policy assertion passes; a build failure, missing runner or import error is not red proof. Green must report `Tests 3 passed (3)`. Retain `csp.txt`, both probe files, `1440x900-loaded.txt`, the three screenshots and the four console captures from Drive under `evidence/U01d/production-browser-csp/browser/`.
+
 ### Project verification controls cleanup handles (U01b.B01)
 
 Stop only owned handles. Stopping A must leave B usable. Evidence remains readable after every stop. Repeated matching stop is idempotent; a foreign handle fails even after removal. On an earlier failed step, use these same recorded handles to clean up and preserve that failure before a fresh attempt.
@@ -346,5 +413,19 @@ The driver must pass its exact-owned PID/path removal assertions. Recorder-creat
 For the local-answer pure-core driver, also confirm `git worktree list | grep -c 'agora-red-\|agora-green-\|agora-clean-'` and `ls "${TMPDIR:-/tmp}" | grep agora-` both find nothing, then run `find .scratch -maxdepth 1 -name 'answer-guard-*' -print`; no matching directory may remain. Remove its disposable reporter cache with `rm -f .vitest/json/output.json; rmdir .vitest/json .vitest` after retaining the report under evidence. In parallel development, a shared temp/worktree match may belong to another lane: report it without deleting or inspecting its contents; prove this task's exact owned paths were removed.
 
 For the project verification controls (U01b.B01), the final cleanup command above must find no owned runtime resource before deleting only this invocation's remaining Swift tool scratch. SwiftPM leaves `.keep-directory` and lock files even after its build exits; the first literal run exposed that distinction. Never sweep the platform temp directory or prune somebody else's worktrees. The ignored `.scratch/project/` ownership journals and evidence directories remain deliberately; no database, object runtime namespace, HTTP listener or owned host process may remain.
+
+### Production build (built room)
+
+Stop only the recorded preview listener and the named browser session, then prove the port is free:
+
+```sh
+kill "$(cat "$RUN/preview.pid")"
+CHROME_DEVTOOLS_AXI_SESSION=verify-built-room chrome-devtools-axi stop
+for i in $(seq 25); do kill -0 "$(cat "$RUN/preview-wrapper.pid")" 2>/dev/null || break; sleep 0.2; done
+lsof -nP -iTCP:4394 -sTCP:LISTEN
+kill -0 "$(cat "$RUN/preview-wrapper.pid")" 2>/dev/null && echo wrapper-still-running
+```
+
+`lsof` and the wrapper check must print nothing. If either does, the recorded process did not exit; report it, keep `$RUN` for diagnosis and do not kill other vite or Chrome processes by name. Otherwise delete `$RUN`, which held only this run's log and PIDs. `apps/web/dist` is ignored build output and may stay; the regression test removes its own `.scratch/built-room-<pid>` directory.
 
 Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.

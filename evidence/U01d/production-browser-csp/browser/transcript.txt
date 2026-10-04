@@ -1,0 +1,30 @@
+### valid 1440x900x1 initial
+"\"{\\\"csp\\\":\\\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'\\\",\\\"rootChildren\\\":2,\\\"role\\\":null,\\\"header\\\":true,\\\"rejected\\\":null,\\\"status\\\":\\\"No Room Loaded Load the room snapshot to start. Browser network available.\\\",\\\"messages\\\":null,\\\"renderedRows\\\":0,\\\"codeText\\\":0,\\\"overflowX\\\":0}\""
+### valid 1440x900x1 composer after Enter
+"\"Composer Message (Enter sends, Shift+Enter adds a line) Send Unsent draft (26 characters). Sending…\""
+### valid 1440x900x1 after load snapshot, send and fixture receipt
+"\"{\\\"csp\\\":\\\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'\\\",\\\"rootChildren\\\":2,\\\"role\\\":null,\\\"header\\\":true,\\\"rejected\\\":null,\\\"status\\\":\\\"Live Cursor 9 applied. Browser network available. Disconnect\\\",\\\"messages\\\":\\\"Messages, 9 total\\\",\\\"renderedRows\\\":9,\\\"codeText\\\":109,\\\"overflowX\\\":0}\""
+### console valid 1440x900x1
+msgid=1 [error] Failed to load resource: the server responded with a status of 404 (Not Found) (0 args)
+(end console)
+### invalid 1440x900x1 initial
+"\"{\\\"csp\\\":\\\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'\\\",\\\"rootChildren\\\":0,\\\"role\\\":\\\"alert\\\",\\\"header\\\":false,\\\"rejected\\\":\\\"Fixture rejected: snapshot failed FixtureSyncSnapshot validation\\\",\\\"status\\\":null,\\\"messages\\\":null,\\\"renderedRows\\\":0,\\\"codeText\\\":0,\\\"overflowX\\\":0}\""
+### console invalid 1440x900x1
+msgid=2 [error] Failed to load resource: the server responded with a status of 404 (Not Found) (0 args)
+(end console)
+### valid 390x844x3,mobile,touch initial
+"\"{\\\"csp\\\":\\\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'\\\",\\\"rootChildren\\\":2,\\\"role\\\":null,\\\"header\\\":true,\\\"rejected\\\":null,\\\"status\\\":\\\"No Room Loaded Load the room snapshot to start. Browser network available.\\\",\\\"messages\\\":null,\\\"renderedRows\\\":0,\\\"codeText\\\":0,\\\"overflowX\\\":0}\""
+### valid 390x844x3,mobile,touch composer after Enter
+"\"Composer Message (Enter sends, Shift+Enter adds a line) Send Unsent draft (25 characters). Sending…\""
+### valid 390x844x3,mobile,touch after load snapshot, send and fixture receipt
+"\"{\\\"csp\\\":\\\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'\\\",\\\"rootChildren\\\":2,\\\"role\\\":null,\\\"header\\\":true,\\\"rejected\\\":null,\\\"status\\\":\\\"Live Cursor 9 applied. Browser network available. Disconnect\\\",\\\"messages\\\":\\\"Messages, 9 total\\\",\\\"renderedRows\\\":9,\\\"codeText\\\":109,\\\"overflowX\\\":0}\""
+### console valid 390x844x3,mobile,touch
+(end console)
+### invalid 390x844x3,mobile,touch initial
+"\"{\\\"csp\\\":\\\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'\\\",\\\"rootChildren\\\":0,\\\"role\\\":\\\"alert\\\",\\\"header\\\":false,\\\"rejected\\\":\\\"Fixture rejected: snapshot failed FixtureSyncSnapshot validation\\\",\\\"status\\\":null,\\\"messages\\\":null,\\\"renderedRows\\\":0,\\\"codeText\\\":0,\\\"overflowX\\\":0}\""
+### console invalid 390x844x3,mobile,touch
+(end console)
+reqid=23 GET http://127.0.0.1:4397/ [304]
+reqid=24 GET http://127.0.0.1:4397/assets/index-DGz5M5Nj.js [304]
+reqid=25 GET http://127.0.0.1:4397/assets/index-BJkTgY2j.css [304]
+reqid=26 GET http://127.0.0.1:4397/assets/CalSansText-Regular-aYFNwudf.woff2 [200]

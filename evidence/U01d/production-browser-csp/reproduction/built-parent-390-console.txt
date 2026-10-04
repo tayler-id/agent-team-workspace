@@ -1,0 +1,150 @@
+# Console transcript: scenario built-parent, viewport 390x844x3,mobile,touch, url http://127.0.0.1:4392/
+# Captured 2026-10-03T21:07:35Z with chrome-devtools-axi session prodslice-before
+# Lines longer than 400 chars are cut to their first 200 chars and marked; the original length is given.
+
+## list_console_messages
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+## Console messages
+Showing 1-3 of 3 (Page 1 of 1).
+msgid=8 [issue] Content Security Policy of your site blocks the use of `eval` in JavaScript (count: 1)
+msgid=9 [error] Error compiling schema, function code: const schema1 = scope.schema[1];const schema2 = scope.schema[2];const schema3 = scope.schema[3];const schema5 = scope.schema[4];const pattern0 =  ...[cut, line was 7036 chars]
+msgid=10 [error] Uncaught EvalError: Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self'".
+ (0 args)
+
+## get_console_message 8
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+ID: 8
+Message: issue> Content Security Policy of your site blocks the use of `eval` in JavaScript
+
+The Content Security Policy (CSP) stops the evaluation of arbitrary strings as JavaScript to make it more difficult for an attacker to inject unauthorized code on your site.
+
+To solve this issue, avoid using `eval()`, `new Function()`, `setTimeout([string], …)` and `setInterval([string], …)` for evaluating strings.
+
+If you absolutely must: you can enable string evaluation by adding `unsafe-eval` as an allowed source in a `script-src` directive.
+
+⚠️ Allowing string evaluation comes at the risk of inline script injection.
+Learn more:
+[Content Security Policy - Eval](https://developers.google.com/web/fundamentals/security/csp#eval_too)
+### Affected resources
+data={"violatedDirective":"script-src","isReportOnly":false,"contentSecurityPolicyViolationType":"kEvalViolation","sourceCodeLocation":{"scriptId":"19","url":"http://127.0.0.1:4392/assets/index-C-_zFqor.js","lineNumber":12,"columnNumber":26067}}
+
+## get_console_message 9
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+ID: 9
+Message: error> Error compiling schema, function code: const schema1 = scope.schema[1];const schema2 = scope.schema[2];const schema3 = scope.schema[3];const schema5 = scope.schema[4];const pattern0 =  ...[cut, line was 7027 chars]
+### Arguments
+Arg #0: Error compiling schema, function code:
+Arg #1: const schema1 = scope.schema[1];const schema2 = scope.schema[2];const schema3 = scope.schema[3];const schema5 = scope.schema[4];const pattern0 = scope.pattern[0];const pattern1 = scope.pattern ...[cut, line was 6980 chars]
+### Stack trace
+at c (index-C-_zFqor.js:13:26685)
+at u (index-C-_zFqor.js:13:27175)
+at l (index-C-_zFqor.js:13:27056)
+at code (index-C-_zFqor.js:13:57783)
+at me (index-C-_zFqor.js:13:22985)
+at  (index-C-_zFqor.js:13:18142)
+at code (index-C-_zFqor.js:10:922)
+at block (index-C-_zFqor.js:10:2814)
+at re (index-C-_zFqor.js:13:18132)
+at T (index-C-_zFqor.js:13:16552)
+at C (index-C-_zFqor.js:13:16363)
+at b (index-C-_zFqor.js:13:16035)
+at subschema (index-C-_zFqor.js:13:22519)
+at  (index-C-_zFqor.js:16:7205)
+at code (index-C-_zFqor.js:16:7142)
+at me (index-C-_zFqor.js:13:22985)
+at  (index-C-_zFqor.js:13:18654)
+at code (index-C-_zFqor.js:10:922)
+at block (index-C-_zFqor.js:10:2814)
+at ie (index-C-_zFqor.js:13:18596)
+at g (index-C-_zFqor.js:13:18440)
+at  (index-C-_zFqor.js:13:18234)
+at code (index-C-_zFqor.js:10:922)
+at block (index-C-_zFqor.js:10:2814)
+at re (index-C-_zFqor.js:13:18202)
+at T (index-C-_zFqor.js:13:16552)
+at  (index-C-_zFqor.js:13:15538)
+at code (index-C-_zFqor.js:10:922)
+at  (index-C-_zFqor.js:13:14405)
+at code (index-C-_zFqor.js:10:922)
+at func (index-C-_zFqor.js:10:3167)
+at m (index-C-_zFqor.js:13:14334)
+at _ (index-C-_zFqor.js:13:15419)
+at p (index-C-_zFqor.js:13:14049)
+at c (index-C-_zFqor.js:13:25899)
+at _compileMetaSchema (index-C-_zFqor.js:13:55110)
+at _compileSchemaEnv (index-C-_zFqor.js:13:54906)
+at getSchema (index-C-_zFqor.js:13:51908)
+at validate (index-C-_zFqor.js:13:49652)
+at validateSchema (index-C-_zFqor.js:13:51520)
+at _addSchema (index-C-_zFqor.js:13:54739)
+at addSchema (index-C-_zFqor.js:13:51128)
+at Ai (index-C-_zFqor.js:16:71477)
+at  (index-C-_zFqor.js:30:917)
+Note: line and column numbers use 1-based indexing
+
+## get_console_message 10
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+ID: 10
+Message: error> Uncaught EvalError: Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self'".
+
+### Stack trace
+at c (index-C-_zFqor.js:13:26067)
+at u (index-C-_zFqor.js:13:27175)
+at l (index-C-_zFqor.js:13:27056)
+at code (index-C-_zFqor.js:13:57783)
+at me (index-C-_zFqor.js:13:22985)
+at  (index-C-_zFqor.js:13:18142)
+at code (index-C-_zFqor.js:10:922)
+at block (index-C-_zFqor.js:10:2814)
+at re (index-C-_zFqor.js:13:18132)
+at T (index-C-_zFqor.js:13:16552)
+at C (index-C-_zFqor.js:13:16363)
+at b (index-C-_zFqor.js:13:16035)
+at subschema (index-C-_zFqor.js:13:22519)
+at  (index-C-_zFqor.js:16:7205)
+at code (index-C-_zFqor.js:16:7142)
+at me (index-C-_zFqor.js:13:22985)
+at  (index-C-_zFqor.js:13:18654)
+at code (index-C-_zFqor.js:10:922)
+at block (index-C-_zFqor.js:10:2814)
+at ie (index-C-_zFqor.js:13:18596)
+at g (index-C-_zFqor.js:13:18440)
+at  (index-C-_zFqor.js:13:18234)
+at code (index-C-_zFqor.js:10:922)
+at block (index-C-_zFqor.js:10:2814)
+at re (index-C-_zFqor.js:13:18202)
+at T (index-C-_zFqor.js:13:16552)
+at  (index-C-_zFqor.js:13:15538)
+at code (index-C-_zFqor.js:10:922)
+at  (index-C-_zFqor.js:13:14405)
+at code (index-C-_zFqor.js:10:922)
+at func (index-C-_zFqor.js:10:3167)
+at m (index-C-_zFqor.js:13:14334)
+at _ (index-C-_zFqor.js:13:15419)
+at p (index-C-_zFqor.js:13:14049)
+at c (index-C-_zFqor.js:13:25899)
+at _compileMetaSchema (index-C-_zFqor.js:13:55110)
+at _compileSchemaEnv (index-C-_zFqor.js:13:54906)
+at getSchema (index-C-_zFqor.js:13:51908)
+at validate (index-C-_zFqor.js:13:49652)
+at validateSchema (index-C-_zFqor.js:13:51520)
+at _addSchema (index-C-_zFqor.js:13:54739)
+at addSchema (index-C-_zFqor.js:13:51128)
+at Ai (index-C-_zFqor.js:16:71477)
+at  (index-C-_zFqor.js:30:917)
+Note: line and column numbers use 1-based indexing
+
+## list_network_requests
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+## Network requests
+Showing 1-4 of 4 (Page 1 of 1).
+reqid=10 GET http://127.0.0.1:4392/ [304]
+reqid=11 GET http://127.0.0.1:4392/assets/index-C-_zFqor.js [304]
+reqid=12 GET http://127.0.0.1:4392/assets/index-BJkTgY2j.css [304]
+reqid=13 GET http://127.0.0.1:4392/assets/CalSansText-Regular-aYFNwudf.woff2 [304]
+
+## page probe
+Script ran on page and returned:
+```json
+"{\"href\":\"http://127.0.0.1:4392/\",\"viewport\":[390,844,3],\"rootChildren\":0,\"rootText\":\"\",\"rootTextLength\":0,\"cspMeta\":\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'\",\"styleNodes\":0,\"styleElements\":0,\"styleAttrs\":0,\"fontsLoaded\":[\"Cal Sans Text 400\"]}"
+```

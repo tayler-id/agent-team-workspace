@@ -1,0 +1,30 @@
+# Drive of the eval-allowed variant (CSP kept, only 'unsafe-eval' added) at 390x844x3,mobile,touch
+# Purpose: surface any non-eval CSP violation once the room is past module load
+
+## after load
+result: "\"{\\\"rootChildren\\\":2,\\\"articles\\\":0,\\\"styleAttrs\\\":0,\\\"styleElements\\\":0,\\\"status\\\":\\\"No room loaded Load the room snapshot to start. Browser network available. \\\"}\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+
+## click Load fixture snapshot
+result: "\"{\\\"rootChildren\\\":2,\\\"articles\\\":8,\\\"styleAttrs\\\":9,\\\"styleElements\\\":0,\\\"status\\\":\\\"Live Cursor 8 applied. Browser network available. Disconnect\\\"}\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+
+## click Load large room (400)
+result: "\"{\\\"rootChildren\\\":2,\\\"articles\\\":15,\\\"styleAttrs\\\":16,\\\"styleElements\\\":0,\\\"status\\\":\\\"Live Cursor 400 applied. Browser network available. Disconnect\\\"}\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+
+## type and send a message
+result: "\"composer-text\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+result: "\"{\\\"rootChildren\\\":2,\\\"articles\\\":15,\\\"styleAttrs\\\":16,\\\"styleElements\\\":0,\\\"status\\\":\\\"Live Cursor 400 applied. Browser network available. 3 new messages, 5 unread.Disconnect\\\"}\""
+help[1]:
+  Run `chrome-devtools-axi snapshot` to see current page state
+
+## console after drive
+Emulating viewport: {"deviceScaleFactor":3,"isMobile":true,"hasTouch":true,"isLandscape":false,"width":390,"height":844}
+## Console messages
+<no console messages found>
