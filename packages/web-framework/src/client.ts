@@ -82,9 +82,11 @@ export function useMediaQuery(query: string): boolean {
 	return useSyncExternalStore(subscribe, get, () => false);
 }
 
+/** Records the unsent draft in the Client and persists it through the Host transport, so a component never reaches the transport itself. */
 export function useSetDraft(): (streamId: string, text: string) => void {
 	const client = useClient();
-	return useCallback((streamId: string, text: string): void => { client.apply({ type: 'draft', streamId, text }); }, [client]);
+	const { transport } = useEnvironment();
+	return useCallback((streamId: string, text: string): void => { client.apply({ type: 'draft', streamId, text }); transport.saveDraft(streamId, text); }, [client, transport]);
 }
 
 /** Dismisses a permanently denied command from the composer's list; client-core ignores discard for any other outcome. */

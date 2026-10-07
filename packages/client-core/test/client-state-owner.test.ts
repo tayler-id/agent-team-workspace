@@ -1,0 +1,77 @@
+import { ESLint } from 'eslint';
+import path from 'node:path';
+import { expect, test } from 'vitest';
+
+// Fixtures lint in-memory text against files that already exist, so nothing is written and parallel files cannot delete each other.
+const root = path.resolve(import.meta.dirname, '../../..');
+const engine = new ESLint({ cwd: root, ignore: false });
+const component = 'apps/web/src/components/App.tsx';
+const feature = 'apps/web/src/features/room/index.tsx';
+const host = 'apps/web/src/host/live.ts';
+const client = 'apps/web/src/client/index.ts';
+const framework = 'apps/web/src/framework/index.ts';
+const entry = 'apps/web/src/main.tsx';
+const owner = async (code: string, file: string) =>
+	(await engine.lintText(code, { filePath: path.join(root, file) })).flatMap((r) => r.messages).filter((m) => m.ruleId === 'agora/client-owner');
+const hit = async (code: string, file: string, needle: string): Promise<boolean> => (await owner(code, file)).some((m) => m.message.includes(needle));
+const pick = "import { useClientSelector } from '@agora/web-framework';\n";
+const durable = (hook: string, init: string, types = ''): string =>
+	`import { ${hook} } from 'react';\n${pick}${types}export function C(): null { const room = useClientSelector((s) => s.rooms[0]); ${init}; void room; return null; }\n`;
+
+test('a component holding durable Client state in React state is rejected and names the Client hooks', async () => {
+	const copies = [
+		durable('useState', 'const [copy] = useState(room)'),
+		durable('useState', "const [copy] = useState<readonly Row[]>([])", "import type { Row } from '@agora/web-framework';\n"),
+		durable('useRef', 'const copy = useRef(room?.messages)'),
+		durable('useReducer', "const [copy] = useReducer((s: ClientState) => s, { rooms: [], commands: [], drafts: [] })", "import type { ClientState } from '@agora/client-core';\n"),
+		durable('useState', 'const [copy] = useState<Alias | undefined>(undefined)', "import type { FrozenMessage } from '@agora/web-framework';\ntype Alias = FrozenMessage;\n"),
+	];
+	for (const code of copies) {
+		for (const file of [component, feature]) expect(await hit(code, file, 'useClientSelector'), `${file}: ${code}`).toBe(true);
+	}
+});
+
+test('a re-exported alias of a durable type is still caught, and the diagnostic names the sanctioned writer', async () => {
+	const code = "import { useState } from 'react';\nimport type { Message as M } from '@agora/client-core';\nexport function C(): null { const [m] = useState<readonly M[]>([]); void m; return null; }\n";
+	const messages = await owner(code, feature);
+	expect(messages).toHaveLength(1);
+	expect(messages[0]?.message).toContain('useRoomCommands');
+	expect(messages[0]?.message).toContain('apps/web/src/client');
+});
+
+test('component-local ephemeral UI state and derived values are accepted', async () => {
+	const ok = [
+		durable('useState', "const [open] = useState(false)"),
+		durable('useState', "const [text] = useState('')"),
+		durable('useRef', 'const node = useRef<HTMLDivElement | null>(null); void node'),
+		durable('useState', 'const [ids] = useState<readonly string[]>([])'),
+		durable('useState', 'const [selected] = useState<number | undefined>(undefined)'),
+	];
+	for (const code of ok) expect(await owner(code, component), code).toEqual([]);
+});
+
+test('owners that implement the Client, Host and framework keep their own state and imports', async () => {
+	const code = durable('useState', 'const [copy] = useState(room)');
+	for (const file of [client, framework]) expect(await owner(code, file), file).toEqual([]);
+	expect(await owner("import { initialState, synchronize } from '@agora/client-core'; export const s = [initialState, synchronize];\n", host)).toEqual([]);
+	expect(await owner("import { createRoomClient, AgoraProvider } from '@agora/web-framework'; export const s = [createRoomClient, AgoraProvider];\n", entry)).toEqual([]);
+});
+
+test('a component importing the Client core runtime or constructing a Client bypasses the named hooks', async () => {
+	for (const file of [component, feature]) {
+		expect(await hit("import { synchronize } from '@agora/client-core'; export const s = synchronize;\n", file, 'useRoomCommands'), file).toBe(true);
+		expect(await hit("import { initialState as init } from '@agora/client-core'; export const s = init;\n", file, 'useClientSelector'), file).toBe(true);
+		expect(await hit("export { initialState } from '@agora/client-core';\n", file, 'useClientSelector'), file).toBe(true);
+		expect(await hit("import { createRoomClient } from '@agora/web-framework'; export const s = createRoomClient;\n", file, 'apps/web/src/host'), file).toBe(true);
+		expect(await owner("import type { Message } from '@agora/client-core'; import { type Transition } from '@agora/client-core'; export type T = [Message, Transition];\n", file), file).toEqual([]);
+	}
+});
+
+test('a component calling the transport directly is rejected, while reading its identity is accepted', async () => {
+	const call = (body: string): string => `import { useEnvironment } from '@agora/web-framework';\nexport function C(): null { const { transport } = useEnvironment(); ${body}; return null; }\n`;
+	for (const body of ["transport.submit('c', 'd', 'hi')", 'transport.markSeen("1")', 'transport.reconnect()', "transport.saveDraft('s', 't')", 'const { submit } = transport; void submit']) {
+		expect(await hit(call(body), component, 'useRoomCommands'), body).toBe(true);
+	}
+	expect(await owner(call('void transport.streamId'), component)).toEqual([]);
+	expect(await owner(call("transport.submit('c', 'd', 'hi')"), host)).toEqual([]);
+});

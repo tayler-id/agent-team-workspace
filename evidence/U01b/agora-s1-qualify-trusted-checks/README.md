@@ -29,7 +29,7 @@ not claim FG06, lanes 8-10 at the milestone level, or the U01b milestone.
 | `d5c32d7`..`13e733c` | CI fixes: per-commit red-green, `tests` on `macos-15`, web jsdom timeout |
 | `db70b1a` | Slice 4, review F2/F3: exact reporter allowlist, sensitive-path policy, dormant reporter, docs correction |
 
-`docs/site/trusted-checks.md` explains the design. Decision D111 records why the workflows are
+`docs/site/trusted-checks.md` explains the design. Decision D113 records why the workflows are
 canonical JSON-subset YAML and why the reporter reads job conclusions from GitHub's jobs API.
 
 ## Independent review and slice 4

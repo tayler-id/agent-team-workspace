@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import { assertArchitectureExceptionsValid } from './scripts/architecture-exceptions.ts';
+import { clientOwnerRule } from './scripts/client-owner-policy.ts';
 import { importBoundaryRule } from './scripts/boundary-policy.ts';
 import { publicTypesRule } from './scripts/public-types.ts';
 import { rendererFootgunRule } from './scripts/renderer-policy.ts';
@@ -12,6 +13,7 @@ const exts = '{ts,tsx,mts,cts,js,jsx,mjs,cjs}';
 const agoraPlugin = {
 	agora: {
 		rules: {
+			'client-owner': clientOwnerRule,
 			'import-boundary': importBoundaryRule,
 			'public-types': publicTypesRule,
 			'renderer-footgun': rendererFootgunRule,
@@ -41,6 +43,7 @@ export default tseslint.config(
 		linterOptions: noInline,
 		plugins: agoraPlugin,
 		rules: {
+			'agora/client-owner': 'error',
 			'agora/import-boundary': 'error',
 			'agora/public-types': 'error',
 			'agora/renderer-footgun': 'error',
@@ -55,7 +58,7 @@ export default tseslint.config(
 	},
 	{
 		files: ['contracts/**/*.js'],
-		rules: { 'agora/public-types': 'off', 'agora/renderer-footgun': 'off' },
+		rules: { 'agora/public-types': 'off', 'agora/renderer-footgun': 'off', 'agora/client-owner': 'off' },
 	},
 	{
 		files: ['contracts/**/*.{mjs,cjs}'],

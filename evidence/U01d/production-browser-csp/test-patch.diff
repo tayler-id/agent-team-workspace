@@ -1,0 +1,72 @@
+diff --git a/apps/web/test/built-room.test.ts b/apps/web/test/built-room.test.ts
+new file mode 100644
+index 0000000..763f632
+--- /dev/null
++++ b/apps/web/test/built-room.test.ts
+@@ -0,0 +1,66 @@
++// @vitest-environment node
++// The production bundle must run without string code generation, which its CSP (no unsafe-eval) forbids.
++// Node's --disallow-code-generation-from-strings blocks eval and Function exactly as that CSP does.
++import { spawnSync } from 'node:child_process';
++import { cpSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
++import { resolve } from 'node:path';
++import { afterAll, beforeAll, expect, test } from 'vitest';
++
++const app = resolve(import.meta.dirname, '..');
++const out = resolve(app, `../../.scratch/built-room-${process.pid}`);
++const runner = `
++import { readFileSync } from 'node:fs';
++const [dist, jsdom] = process.argv.slice(2);
++const { JSDOM } = await import(jsdom);
++const html = readFileSync(dist + '/index.html', 'utf8');
++const dom = new JSDOM(html.replace(/<script\\b[^>]*><\\/script>/g, ''), { url: 'http://127.0.0.1/', pretendToBeVisual: true });
++for (const key of Object.getOwnPropertyNames(dom.window)) if (!(key in globalThis)) try { globalThis[key] = dom.window[key]; } catch {}
++Object.assign(globalThis, { window: dom.window, document: dom.window.document });
++let error = null;
++try { await import(dist + '/' + /src="\\/(assets\\/[^"]+\\.js)"/.exec(html)[1]); } catch (e) { error = String(e); }
++const root = document.getElementById('root');
++const settle = async (done) => { for (let i = 0; i < 40 && !done(); i++) await new Promise((r) => setTimeout(r, 50)); };
++await settle(() => root.textContent);
++const text = root.textContent;
++[...root.querySelectorAll('button')].find((b) => b.textContent === 'Load fixture snapshot')?.click();
++await settle(() => root.textContent !== text);
++process.stdout.write(JSON.stringify({ error, role: root.getAttribute('role'), text, loaded: root.textContent }));
++`;
++
++interface Opened { error: string | null; role: string | null; text: string; loaded: string }
++function open(dist: string): Opened {
++	const run = spawnSync(process.execPath, ['--disallow-code-generation-from-strings', `${out}/run.mjs`, dist, resolve(app, 'node_modules/jsdom/lib/api.js')], { encoding: 'utf8', timeout: 60_000 });
++	expect(run.status, run.stderr.slice(0, 2000)).toBe(0);
++	return JSON.parse(run.stdout) as Opened;
++}
++
++beforeAll(() => {
++	const built = spawnSync(process.execPath, [resolve(app, 'node_modules/vite/bin/vite.js'), 'build', '--outDir', `${out}/dist`, '--emptyOutDir', '--logLevel', 'error'], { cwd: app, encoding: 'utf8', timeout: 120_000, env: { ...process.env, NODE_ENV: 'production' } });
++	expect(built.status, built.stderr.slice(0, 2000)).toBe(0);
++	writeFileSync(`${out}/run.mjs`, runner);
++	// One fixture value made schema-invalid: the stream id stops being a UUID everywhere the room uses it.
++	cpSync(`${out}/dist`, `${out}/invalid`, { recursive: true });
++	for (const file of readdirSync(`${out}/invalid/assets`).filter((name) => name.endsWith('.js'))) {
++		const path = `${out}/invalid/assets/${file}`;
++		writeFileSync(path, readFileSync(path, 'utf8').replaceAll('0f1c1e5e-0000-4000-8000-000000000001', '0f1c1e5e-not-a-uuid'));
++	}
++}, 180_000);
++afterAll(() => { rmSync(out, { recursive: true, force: true }); });
++
++test('the built room keeps its strict CSP unchanged', () => {
++	expect(readFileSync(`${out}/dist/index.html`, 'utf8')).toContain(`<meta http-equiv="Content-Security-Policy" content="default-src &#39;self&#39;; script-src &#39;self&#39;; style-src &#39;self&#39;; img-src &#39;self&#39; data:; object-src &#39;none&#39;; base-uri &#39;none&#39;; form-action &#39;none&#39;">`);
++});
++
++test('the built room validates its fixture and renders without string code generation', () => {
++	const room = open(`${out}/dist`);
++	expect(room.error).toBeNull();
++	expect(room.role).toBeNull();
++	expect(room.text).toContain('Agora local room fixture');
++	expect(room.text).not.toContain('Cursor 8 applied');
++	expect(room.loaded).toContain('Live Cursor 8 applied.');
++}, 60_000);
++
++test('the built room rejects a schema-invalid fixture without string code generation', () => {
++	const rejected = 'Fixture rejected: snapshot failed FixtureSyncSnapshot validation';
++	expect(open(`${out}/invalid`)).toEqual({ error: null, role: 'alert', text: rejected, loaded: rejected });
++}, 60_000);

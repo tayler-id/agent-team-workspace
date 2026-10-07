@@ -1,11 +1,11 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the read-only deterministic local-answer core (L5 pure-core preparation) and the independent Agora/Python project verification controls from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, packages/verification, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, U01b.B01 through U01b.B03, local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the read-only deterministic local-answer core (L5 pure-core preparation) and the independent Agora/Python project verification controls from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, packages/verification, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, U01b.B01 through U01b.B03, U01c.B01 slice 1 (encrypted backup artifact and same-cluster verified restore), local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
 ---
 
 # Verify Agora
 
-Every step is a literal command run from the repository root. Record outputs under `evidence/U01a/<task>/` (local-room slices: `evidence/local-room/<slice>/`; U01b project-controls slices: `evidence/U01b/<task>/`), or under a scratch path when the run must leave no project changes. A command that cannot run is a blocked prerequisite, not a pass. The feature map is `agora/feature-map.json`; a change to any path it lists invalidates that feature's scenarios until the Drive step passes again at the new head. Project-controls commands (`pnpm -s agora project ...`, `python3 packages/verification/fixture/project.py ...`) use ordinary Node 24 without inherited forge credentials and are local foundation-fixture proof, not product authority or U01b qualification beyond B01. Read [project controls](../../../docs/site/project-controls.md) for prerequisites and trust limits.
+Every step is a literal command run from the repository root. Record outputs under `evidence/U01a/<task>/` (local-room slices: `evidence/local-room/<slice>/`; U01b project-controls slices: `evidence/U01b/<task>/`; U01c backup slices: `evidence/U01c/<task>/`), or under a scratch path when the run must leave no project changes. A command that cannot run is a blocked prerequisite, not a pass. The feature map is `agora/feature-map.json`; a change to any path it lists invalidates that feature's scenarios until the Drive step passes again at the new head. Project-controls commands (`pnpm -s agora project ...`, `python3 packages/verification/fixture/project.py ...`) use ordinary Node 24 without inherited forge credentials and are local foundation-fixture proof, not product authority or U01b qualification beyond B01. Read [project controls](../../../docs/site/project-controls.md) for prerequisites and trust limits.
 
 ## Doctor
 
@@ -58,6 +58,17 @@ The `checks` read-back needs that reshape until slice F5 accepts GitHub's raw `a
 
 The protection read-back currently returns HTTP 403 "Upgrade to GitHub Pro or make this repository public to enable this feature." With the committed policy the evaluation exits 2 with `reporting_app_unenrolled` first; against an enrolled policy the same body exits 2 with `plan_upgrade_required`.
 
+### Production build (built room)
+
+The built fixture room needs only the Node and pnpm pins above, a Chrome that `chrome-devtools-axi` can start, and loopback port 4394 free. No database or Launch-step runtime is involved. A listener already on 4394 belongs to someone else, so report the step blocked and leave that process alone.
+
+```sh
+command -v chrome-devtools-axi
+lsof -nP -iTCP:4394 -sTCP:LISTEN
+```
+
+`lsof` must print nothing.
+
 ## Launch
 
 `scripts/with-test-postgres.mjs` uses the unchanged owned short-socket allocator and a 30-second startup deadline (`AGORA_PG_STARTUP_TIMEOUT_MS`, 1..300000 ms). It boots a throwaway socket-only PostgreSQL cluster (owner role `agora_owner`, non-owner role `agora_app`, guard-negative role `agora_bypass`, database `agora_test`) for the duration of one command and removes it afterwards. It exports `AGORA_DATABASE_URL` as the service role and `AGORA_MIGRATION_DATABASE_URL` as the owner. To reuse an existing PostgreSQL 18 server, export `AGORA_TEST_DATABASE_URL` (as `agora_app`), `AGORA_TEST_OWNER_DATABASE_URL` (as the schema owner), `AGORA_TEST_BYPASS_DATABASE_URL` (a `BYPASSRLS` member of `agora_app`) and `AGORA_TEST_SUPERUSER_DATABASE_URL` (used only to remove and restore cluster-level prerequisites in one test) and the wrapper passes the command through.
@@ -95,6 +106,63 @@ Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/Postgre
 
 Nothing starts. The decision tool reads JSON files and the lane suite writes its namespaced fixtures (App 900001, repository 900002, fresh Ed25519 keys) under one `.scratch/trusted-checks-*` directory that it removes itself.
 
+### Encrypted backup and restore launch (U01c.B01 slice 1)
+
+There is no long-lived service. Each drive runs inside one `with-test-postgres.mjs` invocation, which owns the throwaway cluster and removes it on exit. The restore target is a second database in that same cluster, not a separate host. Create a private work directory for keys, objects and backups; it must never sit under `evidence/`, because it holds key files. Keep `W` for Cleanup:
+
+```sh
+W=$(mktemp -d "${TMPDIR:-/tmp}/agora-backup-verify-XXXXXX")
+OUT=evidence/U01c/agora-s1-prove-backup-restore/drive
+mkdir -p "$OUT"
+cat > "$W/drive.sh" <<'EOF'
+set -u
+W=$1; OUT=$2; SU=$AGORA_TEST_SUPERUSER_DATABASE_URL
+PSQL=${AGORA_PG_BIN:+$AGORA_PG_BIN/}psql
+TARGET=$(printf '%s' "$SU" | sed 's#/agora_test?#/agora_restore_verify?#')
+run() { name=$1; shift; node scripts/backup.ts "$@" > "$OUT/$name.json"; echo $? > "$OUT/$name.exit"; }
+user_tables() { "$PSQL" "$TARGET" -Atc "select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace where c.relkind in ('r','p') and n.nspname not in ('pg_catalog','information_schema') and n.nspname not like 'pg_toast%'"; }
+node packages/storage/src/migrate-cli.ts > "$OUT/migrate.json"
+mkdir "$W/keys" "$W/objects"
+printf 'first artifact\n' > "$W/objects/a.txt"
+printf '\377\376\000\001binary' > "$W/objects/b.bin"
+printf 'third artifact\n' > "$W/objects/c.txt"
+run keygen-good keygen --key "$W/keys/good"
+run keygen-wrong keygen --key "$W/keys/wrong"
+run create create --database-url "$SU" --objects "$W/objects" --key "$W/keys/good" --out "$W/backup"
+"$PSQL" "$SU" -v ON_ERROR_STOP=1 -c 'create database agora_restore_verify owner agora_owner'
+run wrong-key restore --backup "$W/backup" --key "$W/keys/wrong" --database-url "$TARGET" --objects "$W/restored"
+cp -R "$W/backup" "$W/corrupt"
+node -e 'const fs=require("fs"),f=process.argv[1],b=fs.readFileSync(f);b[b.length>>1]^=1;fs.writeFileSync(f,b)' "$W/corrupt/database.agb"
+run corrupt restore --backup "$W/corrupt" --key "$W/keys/good" --database-url "$TARGET" --objects "$W/restored"
+cp -R "$W/backup" "$W/missing"
+rm "$W/missing/objects/0002.agb"
+run missing restore --backup "$W/missing" --key "$W/keys/good" --database-url "$TARGET" --objects "$W/restored"
+user_tables > "$OUT/target-tables-after-denials.txt"
+test -e "$W/restored"; echo $? > "$OUT/restored-absent-after-denials.exit"
+run restore restore --backup "$W/backup" --key "$W/keys/good" --database-url "$TARGET" --objects "$W/restored"
+run restore-again restore --backup "$W/backup" --key "$W/keys/good" --database-url "$TARGET" --objects "$W/restored-again"
+cmp "$W/objects/b.bin" "$W/restored/b.bin"; echo $? > "$OUT/binary-object-cmp.exit"
+EOF
+```
+
+### Production build (built room)
+
+Build the fixture room with its real `apps/web/vite.config.ts`, then serve the output on the owned port. `OUT` is `evidence/U01d/production-browser-csp/browser` for the retained run or a scratch path for a rerun. `RUN` is ignored scratch that holds the preview log and both PIDs, so no process handle lands in evidence. `$!` is the pnpm wrapper, and the `lsof` line records the vite listener that Cleanup stops.
+
+```sh
+OUT=evidence/U01d/production-browser-csp/browser
+RUN=.scratch/built-room-preview
+mkdir -p "$OUT" "$RUN"
+pnpm web:build
+grep -o 'http-equiv="Content-Security-Policy" content="[^"]*"' apps/web/dist/index.html > "$OUT/csp.txt"
+pnpm --filter @agora/web exec vite preview --strictPort --port 4394 --host 127.0.0.1 > "$RUN/preview.log" 2>&1 &
+echo $! > "$RUN/preview-wrapper.pid"
+for i in $(seq 50); do curl -sf -o /dev/null http://127.0.0.1:4394/ && break; sleep 0.2; done
+lsof -nP -t -iTCP:4394 -sTCP:LISTEN > "$RUN/preview.pid"
+```
+
+The `content` value in `csp.txt` must equal `default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'`, with each single quote escaped as `&#39;` and no `unsafe-eval` or `unsafe-inline`. `preview.pid` must hold one PID. A build that exits 0 is not the proof; the Drive probe is.
+
 ## Drive
 
 CI P0c A's allocation driver requires Node 24 and Vitest, not PostgreSQL or Swift. B's wrapper driver additionally requires PostgreSQL 18 binaries and proves deep-path non-owner access, success/failure cleanup, SIGINT/SIGTERM (also during startup), forced shutdown, initialization/readiness timeouts and foreign/neighborhood preservation. Retain outputs under `evidence/ci/P0c/C/`. C's drivers replay ten guard negatives in a disposable source copy and twenty-seven lifecycle scenarios against the committed wrapper with real PostgreSQL 18; both must exit 0 and leave `leftovers` empty in `no-leftovers.json`.
@@ -122,6 +190,33 @@ node scripts/probe-center.mjs --scenarios
 node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
 node scripts/with-test-postgres.mjs bash -c 'node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts'
 ```
+
+For the U01c.B01 encrypted backup slice, run the end-to-end test and then the CLI drive written at Launch. Each runs in its own owned cluster:
+
+```sh
+node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+node scripts/with-test-postgres.mjs bash "$W/drive.sh" "$W" "$OUT" 2> "$OUT/wrapper.ndjson"
+node --input-type=module -e '
+import fs from "node:fs"; import path from "node:path"; import assert from "node:assert/strict";
+const [w, out] = process.argv.slice(1); const j = (n) => JSON.parse(fs.readFileSync(`${out}/${n}.json`, "utf8")); const x = (n) => fs.readFileSync(`${out}/${n}.exit`, "utf8").trim();
+const create = j("create"), good = j("keygen-good");
+assert.equal(x("keygen-good"), "0"); assert.equal(good.outcome, "created"); assert.match(good.key_id, /^sha256:[0-9a-f]{64}$/);
+assert.equal(x("create"), "0"); assert.equal(create.outcome, "created"); assert.equal(create.key_id, good.key_id); assert.equal(create.objects, 3);
+for (const [n, reason, subject] of [["wrong-key", "wrong_key", "backup.json"], ["corrupt", "corrupt", "database.agb"], ["missing", "missing_artifact", "objects/0002.agb"]]) {
+	assert.equal(x(n), "1", n); assert.deepEqual([j(n).outcome, j(n).reason_code, j(n).subject], ["denied", reason, subject]);
+}
+assert.equal(fs.readFileSync(`${out}/target-tables-after-denials.txt`, "utf8").trim(), "0"); assert.equal(x("restored-absent-after-denials"), "1");
+const r = j("restore"); assert.equal(x("restore"), "0"); assert.equal(r.outcome, "restored");
+assert.deepEqual([r.backup_id, r.inventory_digest, r.tables, r.objects], [create.backup_id, create.inventory_digest, create.tables, 3]);
+assert.equal(x("restore-again"), "1"); assert.equal(j("restore-again").reason_code, "target_not_empty"); assert.equal(x("binary-object-cmp"), "0");
+const key = fs.readFileSync(`${w}/keys/good`, "utf8").slice(0, 64), raw = Buffer.from(key, "hex");
+const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
+for (const f of [...walk(`${w}/backup`), ...walk(out)]) { const b = fs.readFileSync(f); assert.ok(!b.includes(key) && !b.includes(raw), f); }
+console.log(JSON.stringify({ outcome: "pass", backup_id: create.backup_id, inventory_digest: create.inventory_digest, tables: create.tables, objects: create.objects }));
+' "$W" "$OUT"
+```
+
+Backup predicates: the pg test file exits 0 with every test passing; its key-absence, wrong-key, corruption and missing-file tests run before the successful restore. `wrapper.ndjson` holds a `cleaned` record for the identity it `allocated`. The assertion command prints `outcome: pass`, which requires: both keygens exit 0 with a `sha256:` `key_id`; `create` exits 0 with `outcome: created` and `objects: 3`; `wrong-key`, `corrupt` and `missing` each exit 1 with `outcome: denied` and reason/subject `wrong_key`/`backup.json`, `corrupt`/`database.agb` and `missing_artifact`/`objects/0002.agb`; the target still has 0 user tables and no `restored` directory after those three; `restore` exits 0 with `outcome: restored` and the create receipt's `backup_id`, `inventory_digest`, `tables` and `objects`; `restore-again` exits 1 with `target_not_empty`; the restored non-UTF-8 object is byte-equal; and neither the key hex nor its 32 raw bytes appear in any backup file or retained output. The CLI drive's database is the migrated schema only (its two migration rows and the seeded local room); the app-role seeded events and claims are covered by the pg test. No predicate compares `schemaDigest()`, because `pg_restore` re-deparses the `local_room.message_body_check` constraint text; the pg test checks the migration journal instead (`migrate()` on the target applies 0). This proves one throwaway cluster, not separate-host restore, WAL, key recovery, epoch fencing or RPO/RTO.
 
 For L3, also run these against the launched instance, retaining stdout outside its root:
 
@@ -203,9 +298,9 @@ Pass predicates:
 - `pnpm contracts:conform` prints `"outcome": "pass"` with `"swift": "pass"` and every result `pass`; a `fail` result names the vector and each consumer's disagreement. This includes the `sync-*` fixture snapshot, event and reusable cursor/receipt vectors. Fixture payloads are not production HTTP operations.
 - `contracts/test/sync.test.ts` rejects unsupported event kinds/fields and proves each denial assertion turns red with its guard removed from an isolated schema copy. This is wire rejection, not yet core replay or acknowledgement proof.
 - `pnpm client:replay` reports `outcome: pass` only if all six TypeScript snapshots equal their literal golden states; `--swift` additionally requires the independent Swift projections to equal those same states. The transcript includes each contiguous-prefix acknowledgement and replay/upgrade request. No DOM or browser runs in lane 7.
-- `packages/client-core/test/sync.test.ts` covers snapshot races, large decimal ordering, receipts, retry, unread, drafts and clearing. `guards.test.ts` repeats the public assertions with one guard disabled per disposable copy; every disabled-guard run must exit 1 for its named assertion. Lane 8 runs through `pnpm boundaries`, writing native JSON to `.scratch/boundaries.json`: all import-form, public-type, private-path, export-map, no-platform and application-architecture fixtures must pass, including guarded-extension renderer/server denials (`.ts`/`.tsx`/`.mts`/`.cts`/`.js`/`.jsx`/`.mjs`/`.cjs`, contracts plain JS/CJS), `apps/web` non-src relocation denials, ambient-declare and computed/mixed-union DOM-mutator denials, string-literal React effect import denials, framework/host foot-guns, `noInlineConfig` disable adversarial cases, architecture-exception validation (including load-time denial on invalid rows), guard-weakening copies, JSDoc `import()` comment edges, DOM property-assignment and `setAttribute`-family mutation denials, untyped `.mjs`/`.cjs` ambiguous-mutator name-trust denials, type-cast receiver-evasion denials, and the `react/jsx-runtime` namespace/default allowance. `pnpm typecheck` must include `apps/web/tsconfig.json` and exclude `apps/web` from the root program. The negative-rule configurations are isolated test instances, never runtime guard switches.
+- `packages/client-core/test/sync.test.ts` covers snapshot races, large decimal ordering, receipts, retry, unread, drafts and clearing. `guards.test.ts` repeats the public assertions with one guard disabled per disposable copy; every disabled-guard run must exit 1 for its named assertion. Lane 8 runs through `pnpm boundaries`, writing native JSON to `.scratch/boundaries.json`: all import-form, public-type, private-path, export-map, no-platform and application-architecture fixtures must pass, including guarded-extension renderer/server denials (`.ts`/`.tsx`/`.mts`/`.cts`/`.js`/`.jsx`/`.mjs`/`.cjs`, contracts plain JS/CJS), `apps/web` non-src relocation denials, ambient-declare and computed/mixed-union DOM-mutator denials, string-literal React effect import denials, per-Feature `dependencies.json` denials (declared Feature import allowed; undeclared, malformed and framework-to-Feature rejected, in throwaway Features removed after the run), framework/host foot-guns, `noInlineConfig` disable adversarial cases, architecture-exception validation (including load-time denial on invalid rows), guard-weakening copies, JSDoc `import()` comment edges, DOM property-assignment and `setAttribute`-family mutation denials, untyped `.mjs`/`.cjs` ambiguous-mutator name-trust denials, type-cast receiver-evasion denials, and the `react/jsx-runtime` namespace/default allowance. `packages/client-core/test/client-state-owner.test.ts` (also in `pnpm boundaries`) must show `agora/client-owner` rejecting durable Client state copied into `useState`/`useRef`/`useReducer`, runtime `@agora/client-core` and `createRoomClient` imports, and direct transport commands in a component, each naming the Client hook or Host owner, while ephemeral UI state and the Client/Host/framework owners pass; with the rule set to `off` in an isolated config copy, four of its six tests must go red. `pnpm typecheck` must include `apps/web/tsconfig.json` and exclude `apps/web` from the root program. The negative-rule configurations are isolated test instances, never runtime guard switches.
 - `pnpm test` exits 0 with every unit and pg test passing. The pg project refuses to run without a database; the contract tests fail, never skip, without Swift.
-- `pnpm web:test` (`pnpm --filter @agora/web exec vitest run --config vitest.config.ts`) exits 0 for `apps/web`'s own Vitest project, separate from the root `pnpm test`/`pnpm boundaries` static coverage of that package. `pnpm web:build` (`pnpm --filter @agora/web build`) exits 0 and produces `apps/web/dist`. `pnpm web:dev` (`pnpm --filter @agora/web dev`, `vite --strictPort --port 4174`) is a foreground dev server, not a one-shot check: launch it in the background, confirm `http://localhost:4174/` returns 200, then stop the owned process (for example `pkill -f "vite --strictPort --port 4174"`) before continuing. Do not leave it running past the check.
+- `pnpm web:test` (`pnpm --filter @agora/web exec vitest run --config vitest.config.ts`) exits 0 for `apps/web`'s own Vitest project, separate from the root `pnpm test`/`pnpm boundaries` static coverage of that package. `pnpm web:build` (`pnpm --filter @agora/web build`) exits 0 and produces `apps/web/dist`; an exit 0 alone does not prove the bundle runs under its CSP, so drive the built-room recipe below. `pnpm web:dev` (`pnpm --filter @agora/web dev`, `vite --strictPort --port 4174`) is a foreground dev server, not a one-shot check: launch it in the background, confirm `http://localhost:4174/` returns 200, then stop the owned process (for example `pkill -f "vite --strictPort --port 4174"`) before continuing. Do not leave it running past the check.
 - `node scripts/probe-center.mjs --scenarios` prints `agora.probe-scenarios/v1` with exactly sixteen scenario ids and starts no process; it needs no database. Exactly one scenario has `restarts_center: true`.
 - The live probe applies migration 0001 as the owner first, then starts the center as the service role. Its report has `"outcome": "pass"` for `health-liveness` (200), `health-readiness` (200), `policy-allow` (200, `decision: allow`), `policy-deny` (200, `reason_code: scope_mismatch`), `policy-unknown-field` (400, `malformed_command`), `unknown-route` (404, `not_found`), `local-room-snapshot-before` (200), `local-room-send-committed` (201, `replayed: false`, revision one above the snapshot's `committed_seq`, `request_digest` equal to the canonical digest of the command), `local-room-send-replayed` (201, byte-equal to the first receipt except `replayed: true`), `local-room-send-changed-body` (409, `command_conflict`), `local-room-send-other-scope` (404, `scope_mismatch`), `local-room-send-unknown-citation` (404, `not_found`), `local-room-send-empty-body` (400), `local-room-send-unknown-field` (400), `local-room-snapshot-after-restart` (200, same cursor and last message after the process was stopped and started) and `local-room-replay-after-restart` (201, the original `message_id`).
 - `contracts/test/local-room.test.ts` accepts every `local-room-*` vector that the golden file accepts, refuses each unknown field, variant and bound at its path in TypeScript and Swift, and proves the authorship, event-kind and unknown-field guards turn red with the guard removed from an isolated schema copy. `apps/center/test/local-room.test.ts` proves the health baseline on the same app, the 400 paths, and the typed 404 `unavailable_capability` of a process composed without a persistence adapter.
@@ -225,6 +320,51 @@ node -e 'const f=p=>[p,require("fs").readFileSync(p,"utf8")];require("fs").write
 node scripts/trusted-checks.mjs evaluate --kind workflows --input .scratch/workflows.json --json
 pnpm -s agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks --artifacts ".scratch/trusted-lanes-$(date +%s)" --json
 ```
+
+### Production build (built room)
+
+Drive the preview from Launch in its own session, at desktop and phone viewports, reloading after each viewport change so the probe reads a fresh module evaluation:
+
+```sh
+export CHROME_DEVTOOLS_AXI_SESSION=verify-built-room
+URL=http://127.0.0.1:4394/
+PROBE='JSON.stringify({rootChildren:document.getElementById("root").childElementCount,fixture:document.body.textContent.includes("Agora local room fixture"),rejected:document.body.textContent.includes("Fixture rejected"),fits:document.documentElement.scrollWidth===document.documentElement.clientWidth,viewport:[innerWidth,innerHeight,devicePixelRatio]})'
+chrome-devtools-axi open "$URL"
+chrome-devtools-axi emulate --viewport "1440x900x1"; chrome-devtools-axi open "$URL"
+chrome-devtools-axi eval "$PROBE" > "$OUT/1440x900-probe.txt"
+chrome-devtools-axi screenshot "$OUT/1440x900.png"
+chrome-devtools-axi eval '[...document.querySelectorAll("button")].find(b=>b.textContent==="Load fixture snapshot").click()'
+chrome-devtools-axi eval 'document.body.textContent.includes("Kicking off the fixture.")' > "$OUT/1440x900-loaded.txt"
+chrome-devtools-axi screenshot "$OUT/1440x900-loaded.png"
+chrome-devtools-axi console --type error > "$OUT/1440x900-console-errors.txt"
+chrome-devtools-axi console > "$OUT/1440x900-console.txt"
+chrome-devtools-axi emulate --viewport "390x844x3,mobile,touch"; chrome-devtools-axi open "$URL"
+chrome-devtools-axi eval "$PROBE" > "$OUT/390x844-probe.txt"
+chrome-devtools-axi screenshot "$OUT/390x844.png"
+chrome-devtools-axi console --type error > "$OUT/390x844-console-errors.txt"
+chrome-devtools-axi console > "$OUT/390x844-console.txt"
+pnpm web:test
+pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/built-room.test.ts
+```
+
+Built-room predicates: both probes report `rootChildren` above 0, `fixture: true` and `rejected: false`; the 390x844 probe reports `fits: true`. `chrome-devtools-axi console` reports the page loaded by the latest `open`, so each viewport gets its own capture. The only expected console error is a `favicon.ico` 404 on the first load, because the app ships no favicon; any CSP issue fails the run. The rejection path in a real browser (a bundle copy with a non-UUID stream id renders `Fixture rejected: snapshot failed FixtureSyncSnapshot validation`) and the send-plus-receipt drive are in `evidence/U01d/production-browser-csp/browser/drive.sh.txt`. Both `*-console-errors.txt` files read `<no console messages found>`, and neither `*-console.txt` file has an `EvalError`, an `unsafe-eval` mention or a Content Security Policy issue. `1440x900-loaded.txt` reports `true`. The first two screenshots show the room header, the empty timeline with its Load fixture snapshot button and the composer, not a blank page; `1440x900-loaded.png` shows the fixture messages. `pnpm web:test` exits 0, and the focused run reports `Tests 3 passed (3)`. `apps/web/test/built-room.test.ts` builds into its own `.scratch/built-room-<pid>` directory, checks the unchanged policy, renders the bundle under `node --disallow-code-generation-from-strings`, and expects a bundle copy with one corrupted fixture value to render `Fixture rejected: snapshot failed FixtureSyncSnapshot validation`. The before-fix reproduction at the parent shows `rootChildren: 0` and an `EvalError` naming `script-src 'self'`; it lives in `evidence/U01d/production-browser-csp/reproduction/`.
+
+## Candidate CI
+
+The ordinary pull request workflow is `.github/workflows/agora-ci.yml`. It runs the same commands as this skill and is not trusted evidence. Reproduce each of its seven jobs from the repository root with the prerequisites above:
+
+```sh
+node scripts/ci-doctor.mjs --json
+pnpm lint && pnpm typecheck
+pnpm contracts:check && pnpm boundaries
+pnpm docs:check
+pnpm test
+bash scripts/ci-red-green.sh "$(git merge-base origin/main HEAD)" "$(git rev-parse HEAD)"
+pnpm -s agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks --artifacts .scratch/ci-lanes --json
+pnpm exec vitest run --project unit packages/verification/test/ci-workflow.test.ts
+```
+
+Read the live checks with `gh-axi pr view PR` and `gh-axi run list`. A pull request opened before the workflow reached `main` has none until it is pushed again or reopened.
 
 ## Evidence
 
@@ -305,6 +445,29 @@ node scripts/record-red-green.mjs --parent 661b4c5e012be8b851d271f063d3d53738c15
 
 The selected red must be `expected 'unavailable' to be 'pass'` after doctor passes, not a missing runner or import. Run the complete runtime suites separately at head, without selection. Record the test-patch digest, stack bindings, source/line categories, native outputs, PostgreSQL/replay evidence, guard negatives and owned inventory before/after cleanup. CI and independent review remain distinct prerequisites; local green does not authorize landing the unlanded L3 stack.
 
+### Encrypted backup and restore evidence (U01c.B01 slice 1)
+
+The test drives the CLI as a child process and imports only symbols present at its parent. A parent with no `scripts/backup.ts` is not valid R22 red, because the driver has no baseline operation there. Record red against the test-only parent revision `1eea48b` (`a62662e` on `main` plus a three-line `scripts/backup.ts` that only prints the usage route). There the first test, the driver reaching the usage route, passes and every backup assertion fails on the absent behavior. The one-snapshot fix gets its own pair, whose parent is the commit that added the race test:
+
+```sh
+node scripts/record-red-green.mjs --parent 1eea48b --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+node scripts/record-red-green.mjs --parent RACE_TEST_COMMIT --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore/snapshot-race -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore --base "$(git rev-parse 1eea48b)" --head "$(git rev-parse HEAD)"
+node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore/snapshot-race --base "$(git rev-parse RACE_TEST_COMMIT)" --head "$(git rev-parse HEAD)"
+```
+
+Red must show the usage-route test passing and the backup tests failing on values such as the CLI exit status or `outcome`, never a missing runner, a syntax error or an unresolved import. The snapshot-race red must show only the concurrent-writer test failing, with `reason_code: integrity_mismatch`. Green must show every test passing with exit 0. The validator must report pass with the local owner-attested key. Pass full SHAs, because its default base is the merge-base with `main`, not the test-only baseline, and its default head is the checkout's `HEAD`; once the receipts are committed, use the recorded head instead. Keep the Drive outputs in `evidence/U01c/agora-s1-prove-backup-restore/drive/`; they hold `key_id` values and receipts, never key files. These receipts prove the slice only, not the U01c milestone or FG07.
+
+### Production build (built room) evidence
+
+Record red/green with the parent that lacks the plugin and the committed fix head, never a moving branch name:
+
+```sh
+node scripts/record-red-green.mjs --parent PARENT --head HEAD --out evidence/U01d/production-browser-csp -- pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/built-room.test.ts
+```
+
+Red must fail the render and rejection assertions on an `EvalError` from string code generation while the unchanged-policy assertion passes; a build failure, missing runner or import error is not red proof. Green must report `Tests 3 passed (3)`. Retain `csp.txt`, both probe files, `1440x900-loaded.txt`, the three screenshots and the four console captures from Drive under `evidence/U01d/production-browser-csp/browser/`.
+
 ### Project verification controls cleanup handles (U01b.B01)
 
 Stop only owned handles. Stopping A must leave B usable. Evidence remains readable after every stop. Repeated matching stop is idempotent; a foreign handle fails even after removal. On an earlier failed step, use these same recorded handles to clean up and preserve that failure before a fresh attempt.
@@ -371,6 +534,31 @@ The driver must pass its exact-owned PID/path removal assertions. Recorder-creat
 For the local-answer pure-core driver, also confirm `git worktree list | grep -c 'agora-red-\|agora-green-\|agora-clean-'` and `ls "${TMPDIR:-/tmp}" | grep agora-` both find nothing, then run `find .scratch -maxdepth 1 -name 'answer-guard-*' -print`; no matching directory may remain. Remove its disposable reporter cache with `rm -f .vitest/json/output.json; rmdir .vitest/json .vitest` after retaining the report under evidence. In parallel development, a shared temp/worktree match may belong to another lane: report it without deleting or inspecting its contents; prove this task's exact owned paths were removed.
 
 For the project verification controls (U01b.B01), the final cleanup command above must find no owned runtime resource before deleting only this invocation's remaining Swift tool scratch. SwiftPM leaves `.keep-directory` and lock files even after its build exits; the first literal run exposed that distinction. Never sweep the platform temp directory or prune somebody else's worktrees. The ignored `.scratch/project/` ownership journals and evidence directories remain deliberately; no database, object runtime namespace, HTTP listener or owned host process may remain.
+
+For the encrypted backup slice (U01c.B01), `with-test-postgres.mjs` already stopped and deleted the cluster, with both target databases inside it; `wrapper.ndjson` records that. The pg test drops its own `agora_restore_*` databases and removes its own `agora-backup-test-*` directories in `afterAll`. Remove only the work directory this recipe created, after checking it is the one Launch made:
+
+```sh
+case "$W" in "${TMPDIR:-/tmp}"/agora-backup-verify-*) rm -rf "$W" ;; *) echo "refusing to remove $W" >&2 ;; esac
+test ! -e "$W" && echo removed
+grep -rlE '^[0-9a-f]{64}$' "$OUT" || echo 'no key file in evidence'
+unset W
+```
+
+Pass means `removed` and `no key file in evidence`. Do not sweep other `agora-backup-*` directories; a parallel run may own them.
+
+### Production build (built room)
+
+Stop only the recorded preview listener and the named browser session, then prove the port is free:
+
+```sh
+kill "$(cat "$RUN/preview.pid")"
+CHROME_DEVTOOLS_AXI_SESSION=verify-built-room chrome-devtools-axi stop
+for i in $(seq 25); do kill -0 "$(cat "$RUN/preview-wrapper.pid")" 2>/dev/null || break; sleep 0.2; done
+lsof -nP -iTCP:4394 -sTCP:LISTEN
+kill -0 "$(cat "$RUN/preview-wrapper.pid")" 2>/dev/null && echo wrapper-still-running
+```
+
+`lsof` and the wrapper check must print nothing. If either does, the recorded process did not exit; report it, keep `$RUN` for diagnosis and do not kill other vite or Chrome processes by name. Otherwise delete `$RUN`, which held only this run's log and PIDs. `apps/web/dist` is ignored build output and may stay; the regression test removes its own `.scratch/built-room-<pid>` directory.
 
 Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.
 

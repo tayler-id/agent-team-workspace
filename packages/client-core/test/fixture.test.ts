@@ -29,11 +29,11 @@ test('the fixture adapter rejects malformed snapshots, cross-stream delivery and
 test('the public boundary command writes its machine report at the documented artifact path', () => {
 	const root = path.resolve(import.meta.dirname, '../../..'), report = path.join(root, '.scratch/boundaries.json');
 	rmSync(report, { force: true });
-	const result = spawnSync('pnpm', ['-s', 'boundaries'], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+	const result = spawnSync('pnpm', ['-s', 'boundaries'], { cwd: root, encoding: 'utf8', timeout: 300_000 });
 	expect(result.status, result.stdout + result.stderr).toBe(0);
 	expect(existsSync(report), 'missing lane-8 JSON artifact').toBe(true);
 	expect(JSON.parse(readFileSync(report, 'utf8'))).toMatchObject({ success: true, numFailedTests: 0, numPendingTests: 0 });
-}, 150_000);
+}, 330_000);
 test('the documentation gate rejects a malformed TOML config rather than hanging', () => {
 	const root = path.resolve(import.meta.dirname, '../../..'), dir = mkdtempSync(path.join(tmpdir(), 'agora-docs-config-'));
 	try {

@@ -1,0 +1,27 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-10-03T21:32:26.605Z
+parent: 07d19c1e2d84d4d9ef81233644d0eee0973c8036
+head: 4385f3492655f42ce7d6330937aa39131c1dcdd6
+subject_revision: 4385f3492655f42ce7d6330937aa39131c1dcdd6
+test_patch_applied_to_subject: false
+test_patch_files: 
+test_patch_digest: sha256:170a51c3b48ba18a6cdf16cd5b11bf5d69e4cdbc80de70f17307480d9294a2da
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-0ihv1h
+
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  17:32:20
+   Duration  4.47s (tests 94%, import 5%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"e84ba386-d201-4c3d-a5fd-89da5a364e4b","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NKjDQ9","socketDir":"/private/tmp/agora-p0c-e84ba386-d201-4c3d-a5fd-89da5a364e4b"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"e84ba386-d201-4c3d-a5fd-89da5a364e4b","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NKjDQ9","socketDir":"/private/tmp/agora-p0c-e84ba386-d201-4c3d-a5fd-89da5a364e4b","pid":69323}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"e84ba386-d201-4c3d-a5fd-89da5a364e4b","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NKjDQ9","socketDir":"/private/tmp/agora-p0c-e84ba386-d201-4c3d-a5fd-89da5a364e4b","socket_dir":"/private/tmp/agora-p0c-e84ba386-d201-4c3d-a5fd-89da5a364e4b","pid":69323,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-NKjDQ9","socketDir":"/private/tmp/agora-p0c-e84ba386-d201-4c3d-a5fd-89da5a364e4b"}

@@ -1,0 +1,46 @@
+
+ RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (10 tests | 1 failed) 3911ms
+   × a restore whose rows differ from the sealed inventory is denied as integrity_mismatch 318ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  17:33:22
+   Duration  4.24s (tests 94%, import 5%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"5c99857b-6887-4e82-a41c-4406c0e962a5","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-5c99857b-6887-4e82-a41c-4406c0e962a5"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"5c99857b-6887-4e82-a41c-4406c0e962a5","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-5c99857b-6887-4e82-a41c-4406c0e962a5","pid":922}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"5c99857b-6887-4e82-a41c-4406c0e962a5","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-5c99857b-6887-4e82-a41c-4406c0e962a5","socket_dir":"/private/tmp/agora-p0c-5c99857b-6887-4e82-a41c-4406c0e962a5","pid":922,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > a restore whose rows differ from the sealed inventory is denied as integrity_mismatch
+AssertionError: expected { status: +0, receipt: { …(7) } } to deeply equal { status: 1, receipt: { …(4) } }
+
+- Expected
++ Received
+
+  {
+    "receipt": {
+-     "outcome": "denied",
+-     "reason_code": "integrity_mismatch",
++     "backup_id": "84f3ff7d-20a1-453e-8b9c-8b760bbee1b5",
++     "inventory_digest": "sha256:a5d4c1dde17fe59c9d3c16c3363b5932f4519f9fe1d98e6cb5d1413a27247563",
++     "key_id": "sha256:2755c0c9ed12695c4bd6fbad79bf1510bdb102b398dd415d5a3a29e20a655b9d",
++     "objects": 3,
++     "outcome": "restored",
+      "schema_version": "agora.restore-receipt/v1",
+-     "subject": "table:foundation_fixture.event",
++     "tables": 8,
+    },
+-   "status": 1,
++   "status": 0,
+  }
+
+ ❯ packages/storage/test/backup.pg.test.ts:186:175
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-5c99857b-6887-4e82-a41c-4406c0e962a5"}

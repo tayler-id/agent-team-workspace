@@ -84,6 +84,11 @@
           "kind": "feature"
         },
         {
+          "id": "client-state-boundary",
+          "title": "Client state boundary",
+          "kind": "feature"
+        },
+        {
           "id": "agora-application-architecture",
           "title": "Agora application architecture",
           "kind": "feature"
@@ -116,6 +121,11 @@
         {
           "id": "trusted-checks",
           "title": "Trusted checks",
+          "kind": "feature"
+        },
+        {
+          "id": "backup-restore",
+          "title": "Encrypted backup and restore",
           "kind": "feature"
         },
         {
@@ -274,6 +284,18 @@
       "page": "ci.md"
     },
     {
+      "path": "scripts/ci-setup.sh",
+      "page": "ci.md"
+    },
+    {
+      "path": "scripts/ci-red-green.sh",
+      "page": "ci.md"
+    },
+    {
+      "path": "packages/verification/test/ci-workflow.test.ts",
+      "page": "ci.md"
+    },
+    {
       "path": "scripts/local-checks.mjs",
       "page": "local-checks.md"
     },
@@ -288,6 +310,10 @@
     {
       "path": "scripts/project-evidence.mjs",
       "page": "evidence-validator.md"
+    },
+    {
+      "path": "scripts/backup.ts",
+      "page": "backup-restore.md"
     },
     {
       "path": "packages/verification/test/evidence-validator.test.ts",
@@ -404,6 +430,10 @@
     {
       "path": "scripts/renderer-policy.ts",
       "page": "app-architecture.md"
+    },
+    {
+      "path": "scripts/client-owner-policy.ts",
+      "page": "client-state-boundary.md"
     },
     {
       "path": "scripts/architecture-exceptions.ts",

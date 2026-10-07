@@ -166,10 +166,10 @@ test('framework client and host never import features; features use public entry
 	for (const file of [framework, client, host]) {
 		expect(await has("import { x } from '../features/room/private'; export const y = x;", file, 'agora/import-boundary', 'must not import product Features')).toBe(true);
 	}
-	expect(await has("import { x } from '../notes/secret'; export const y = x;", feature, 'agora/import-boundary', 'private files')).toBe(true);
+	expect(await has("import { x } from '../notes/secret'; export const y = x;", feature, 'agora/import-boundary', 'without declaring it')).toBe(true);
 	expect(await has("import { x } from '../../framework/internal'; export const y = x;", feature, 'agora/import-boundary', 'public entrypoint')).toBe(true);
 	expect(await has("import { x } from '../../framework/index.ts'; export const y = x;", feature, 'agora/import-boundary')).toBe(false);
-	expect(await has("import { x } from '../room/index.tsx'; export const y = x;", notes, 'agora/import-boundary')).toBe(false);
+	expect(await has("import { x } from '../room/index.tsx'; export const y = x;", notes, 'agora/import-boundary', 'without declaring it')).toBe(true);
 	// Two-hop relay through un-owned apps/web/src folders must fail at the intermediate file (public CLI).
 	const stamp = `relay${Date.now().toString(36)}`;
 	writeProbe(`apps/web/src/features/room/${stamp}-private.ts`, 'export const secret = 1;\n');
