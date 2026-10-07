@@ -26,7 +26,7 @@ Discovery rejects five kinds of input, and each message names the supported owne
 - A `dependencies.json` that is not a JSON array of distinct names matching `^[a-z][a-z0-9-]*$`.
 - An inventory that differs from what the tree produces, including a hand edit.
 
-R25 says the build-time scan that reads Entrypoints also reads `dependencies.json`, so discovery parses it and writes the sorted names to the row's `dependencies` field. The parser accepts R25's stated format, one entry per declared Feature name, and nothing looser. Decision D102 gives the declaration format and import enforcement to the declarations slice (U20.B02, `agora-s1-declare-feature-dependencies`), which has not landed on this branch. If that slice changes the format, this parser changes with it. On this branch discovery is the only code that parses the file. Having U20.B02 read the inventory's `dependencies` field instead of parsing the file a second time is a proposal. No such wiring exists, and the U20.B02 plan text does not record it yet. Discovery does not check that names resolve to a Feature and does not restrict imports between Features.
+R25 says the build-time scan that reads Entrypoints also reads `dependencies.json`, so discovery parses it and writes the sorted names to the row's `dependencies` field. The parser accepts R25's stated format, one entry per declared Feature name, and nothing looser. Decision D102 gives the declaration format and import enforcement to the declarations slice (U20.B02, `agora-s1-declare-feature-dependencies`). That slice is now on main with its own parser, `readFeatureDependencies` in [boundary policy](repo:scripts/boundary-policy.ts), which the `agora/import-boundary` lint rule uses. So two parsers read the file, and their rules differ. Discovery requires lowercase kebab-case names. The lint parser also accepts uppercase letters, `.` and `_`, and rejects a Feature that names itself. Having one parser feed the other instead of both parsing the file is a proposal. No such wiring exists, and the U20.B02 plan text does not record it yet. Discovery does not check that names resolve to a Feature and does not restrict imports between Features.
 
 ## Why it exists
 
@@ -46,7 +46,7 @@ The inventory is output only. Editing it by hand turns `--check` red, and the fi
 
 ## Implementation status
 
-**Built for U21.B01 only.** `apps/web/src/features/room` and `apps/web/src/features/notes` were empty placeholder folders and each now holds a stub `entrypoint.ts` so the inventory has real rows. No product code moved into them. This slice does not migrate real product Features, does not resolve declared dependencies or enforce Feature-to-Feature imports (both belong to U20.B02, which has not landed), and does not qualify U21 or U20. Live lanes, the performance probe and exact-head receipts remain open.
+**Built for U21.B01 only.** `apps/web/src/features/room` and `apps/web/src/features/notes` were empty placeholder folders and each now holds a stub `entrypoint.ts` so the inventory has real rows. No product code moved into them. This slice does not migrate real product Features, does not resolve declared dependencies or enforce Feature-to-Feature imports (U20.B02 owns both), and does not qualify U21 or U20. Live lanes, the performance probe and exact-head receipts remain open.
 
 ## Verification and proof
 
