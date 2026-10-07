@@ -1,0 +1,104 @@
+[
+ {
+  "id": "key-id-check",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "a wrong key is denied before the target is touched"
+  ],
+  "expected_red": "a wrong key is denied before the target is touched",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "gcm-auth",
+  "file": "packages/storage/src/backup.ts",
+  "exit": 1,
+  "failed": [
+   "one flipped byte in the sealed dump is denied as corrupt before the target is touched"
+  ],
+  "expected_red": "one flipped byte in the sealed dump is denied as corrupt before the target is touched",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "missing-artifact",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "a missing sealed object is denied before the target is touched"
+  ],
+  "expected_red": "a missing sealed object is denied before the target is touched",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "target-empty-check",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "restoring into a database that already holds tables is denied"
+  ],
+  "expected_red": "restoring into a database that already holds tables is denied",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "object-write-dropped",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "restore rebuilds the same rows, objects and schema in a second database",
+   "a restore whose rows differ from the sealed inventory is denied as integrity_mismatch",
+   "a backup taken while rows are being written restores to exactly its sealed inventory"
+  ],
+  "expected_red": "restore rebuilds the same rows, objects and schema in a second database",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "object-write-dropped-and-compare-off",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "restore rebuilds the same rows, objects and schema in a second database",
+   "a restore whose rows differ from the sealed inventory is denied as integrity_mismatch"
+  ],
+  "expected_red": "restore rebuilds the same rows, objects and schema in a second database",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "inventory-compare-off",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "a restore whose rows differ from the sealed inventory is denied as integrity_mismatch"
+  ],
+  "expected_red": "a restore whose rows differ from the sealed inventory is denied as integrity_mismatch",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "snapshot-off",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "a backup taken while rows are being written restores to exactly its sealed inventory"
+  ],
+  "expected_red": "a backup taken while rows are being written restores to exactly its sealed inventory",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "key-leak",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "the backup directory holds neither the key hex nor the raw key bytes"
+  ],
+  "expected_red": "the backup directory holds neither the key hex nor the raw key bytes",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ }
+]

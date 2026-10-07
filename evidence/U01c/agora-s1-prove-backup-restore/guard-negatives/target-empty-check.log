@@ -1,0 +1,43 @@
+
+ RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (10 tests | 1 failed) 3890ms
+   × restoring into a database that already holds tables is denied 278ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  17:33:06
+   Duration  4.23s (tests 94%, import 5%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"3d02774c-a798-40ef-977d-f7cda9acd341","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3d02774c-a798-40ef-977d-f7cda9acd341"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"3d02774c-a798-40ef-977d-f7cda9acd341","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3d02774c-a798-40ef-977d-f7cda9acd341","pid":94140}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"3d02774c-a798-40ef-977d-f7cda9acd341","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3d02774c-a798-40ef-977d-f7cda9acd341","socket_dir":"/private/tmp/agora-p0c-3d02774c-a798-40ef-977d-f7cda9acd341","pid":94140,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > restoring into a database that already holds tables is denied
+AssertionError: expected { status: 70, receipt: { …(3) } } to deeply equal { status: 1, receipt: { …(4) } }
+
+- Expected
++ Received
+
+  {
+    "receipt": {
+-     "outcome": "denied",
+-     "reason_code": "target_not_empty",
++     "message": "pg_restore failed (1): pg_restore: error: could not execute query: ERROR:  schema \"drizzle\" already exists
++ Command was: CREATE SCHEMA drizzle;",
++     "outcome": "infrastructure_failure",
+      "schema_version": "agora.restore-receipt/v1",
+-     "subject": "database",
+    },
+-   "status": 1,
++   "status": 70,
+  }
+
+ ❯ packages/storage/test/backup.pg.test.ts:171:170
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3d02774c-a798-40ef-977d-f7cda9acd341"}

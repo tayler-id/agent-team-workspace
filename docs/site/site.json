@@ -119,6 +119,11 @@
           "kind": "feature"
         },
         {
+          "id": "backup-restore",
+          "title": "Encrypted backup and restore",
+          "kind": "feature"
+        },
+        {
           "id": "ci",
           "title": "Toolchain readiness",
           "kind": "feature"
@@ -300,6 +305,10 @@
     {
       "path": "scripts/project-evidence.mjs",
       "page": "evidence-validator.md"
+    },
+    {
+      "path": "scripts/backup.ts",
+      "page": "backup-restore.md"
     },
     {
       "path": "packages/verification/test/evidence-validator.test.ts",

@@ -1,11 +1,11 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the read-only deterministic local-answer core (L5 pure-core preparation) and the independent Agora/Python project verification controls from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, packages/verification, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, U01b.B01, local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the read-only deterministic local-answer core (L5 pure-core preparation) and the independent Agora/Python project verification controls from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, packages/verification, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, U01b.B01, U01c.B01 slice 1 (encrypted backup artifact and same-cluster verified restore), local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
 ---
 
 # Verify Agora
 
-Every step is a literal command run from the repository root. Record outputs under `evidence/U01a/<task>/` (local-room slices: `evidence/local-room/<slice>/`; U01b project-controls slices: `evidence/U01b/<task>/`), or under a scratch path when the run must leave no project changes. A command that cannot run is a blocked prerequisite, not a pass. The feature map is `agora/feature-map.json`; a change to any path it lists invalidates that feature's scenarios until the Drive step passes again at the new head. Project-controls commands (`pnpm -s agora project ...`, `python3 packages/verification/fixture/project.py ...`) use ordinary Node 24 without inherited forge credentials and are local foundation-fixture proof, not product authority or U01b qualification beyond B01. Read [project controls](../../../docs/site/project-controls.md) for prerequisites and trust limits.
+Every step is a literal command run from the repository root. Record outputs under `evidence/U01a/<task>/` (local-room slices: `evidence/local-room/<slice>/`; U01b project-controls slices: `evidence/U01b/<task>/`; U01c backup slices: `evidence/U01c/<task>/`), or under a scratch path when the run must leave no project changes. A command that cannot run is a blocked prerequisite, not a pass. The feature map is `agora/feature-map.json`; a change to any path it lists invalidates that feature's scenarios until the Drive step passes again at the new head. Project-controls commands (`pnpm -s agora project ...`, `python3 packages/verification/fixture/project.py ...`) use ordinary Node 24 without inherited forge credentials and are local foundation-fixture proof, not product authority or U01b qualification beyond B01. Read [project controls](../../../docs/site/project-controls.md) for prerequisites and trust limits.
 
 ## Doctor
 
@@ -83,6 +83,45 @@ node scripts/local-room.ts start --instance "$INSTANCE"
 
 Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/PostgreSQL port and harness `url`. Open that URL with the approved browser driver. It serves the apps/web room shell over the live runtime (L4 first slice), not the finished room UI. No external accounts or production credentials are needed.
 
+### Encrypted backup and restore launch (U01c.B01 slice 1)
+
+There is no long-lived service. Each drive runs inside one `with-test-postgres.mjs` invocation, which owns the throwaway cluster and removes it on exit. The restore target is a second database in that same cluster, not a separate host. Create a private work directory for keys, objects and backups; it must never sit under `evidence/`, because it holds key files. Keep `W` for Cleanup:
+
+```sh
+W=$(mktemp -d "${TMPDIR:-/tmp}/agora-backup-verify-XXXXXX")
+OUT=evidence/U01c/agora-s1-prove-backup-restore/drive
+mkdir -p "$OUT"
+cat > "$W/drive.sh" <<'EOF'
+set -u
+W=$1; OUT=$2; SU=$AGORA_TEST_SUPERUSER_DATABASE_URL
+PSQL=${AGORA_PG_BIN:+$AGORA_PG_BIN/}psql
+TARGET=$(printf '%s' "$SU" | sed 's#/agora_test?#/agora_restore_verify?#')
+run() { name=$1; shift; node scripts/backup.ts "$@" > "$OUT/$name.json"; echo $? > "$OUT/$name.exit"; }
+user_tables() { "$PSQL" "$TARGET" -Atc "select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace where c.relkind in ('r','p') and n.nspname not in ('pg_catalog','information_schema') and n.nspname not like 'pg_toast%'"; }
+node packages/storage/src/migrate-cli.ts > "$OUT/migrate.json"
+mkdir "$W/keys" "$W/objects"
+printf 'first artifact\n' > "$W/objects/a.txt"
+printf '\377\376\000\001binary' > "$W/objects/b.bin"
+printf 'third artifact\n' > "$W/objects/c.txt"
+run keygen-good keygen --key "$W/keys/good"
+run keygen-wrong keygen --key "$W/keys/wrong"
+run create create --database-url "$SU" --objects "$W/objects" --key "$W/keys/good" --out "$W/backup"
+"$PSQL" "$SU" -v ON_ERROR_STOP=1 -c 'create database agora_restore_verify owner agora_owner'
+run wrong-key restore --backup "$W/backup" --key "$W/keys/wrong" --database-url "$TARGET" --objects "$W/restored"
+cp -R "$W/backup" "$W/corrupt"
+node -e 'const fs=require("fs"),f=process.argv[1],b=fs.readFileSync(f);b[b.length>>1]^=1;fs.writeFileSync(f,b)' "$W/corrupt/database.agb"
+run corrupt restore --backup "$W/corrupt" --key "$W/keys/good" --database-url "$TARGET" --objects "$W/restored"
+cp -R "$W/backup" "$W/missing"
+rm "$W/missing/objects/0002.agb"
+run missing restore --backup "$W/missing" --key "$W/keys/good" --database-url "$TARGET" --objects "$W/restored"
+user_tables > "$OUT/target-tables-after-denials.txt"
+test -e "$W/restored"; echo $? > "$OUT/restored-absent-after-denials.exit"
+run restore restore --backup "$W/backup" --key "$W/keys/good" --database-url "$TARGET" --objects "$W/restored"
+run restore-again restore --backup "$W/backup" --key "$W/keys/good" --database-url "$TARGET" --objects "$W/restored-again"
+cmp "$W/objects/b.bin" "$W/restored/b.bin"; echo $? > "$OUT/binary-object-cmp.exit"
+EOF
+```
+
 ### Production build (built room)
 
 Build the fixture room with its real `apps/web/vite.config.ts`, then serve the output on the owned port. `OUT` is `evidence/U01d/production-browser-csp/browser` for the retained run or a scratch path for a rerun. `RUN` is ignored scratch that holds the preview log and both PIDs, so no process handle lands in evidence. `$!` is the pnpm wrapper, and the `lsof` line records the vite listener that Cleanup stops.
@@ -128,6 +167,33 @@ node scripts/probe-center.mjs --scenarios
 node scripts/with-test-postgres.mjs node scripts/probe-center.mjs
 node scripts/with-test-postgres.mjs bash -c 'node packages/storage/src/migrate-cli.ts; node packages/storage/src/migrate-cli.ts'
 ```
+
+For the U01c.B01 encrypted backup slice, run the end-to-end test and then the CLI drive written at Launch. Each runs in its own owned cluster:
+
+```sh
+node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+node scripts/with-test-postgres.mjs bash "$W/drive.sh" "$W" "$OUT" 2> "$OUT/wrapper.ndjson"
+node --input-type=module -e '
+import fs from "node:fs"; import path from "node:path"; import assert from "node:assert/strict";
+const [w, out] = process.argv.slice(1); const j = (n) => JSON.parse(fs.readFileSync(`${out}/${n}.json`, "utf8")); const x = (n) => fs.readFileSync(`${out}/${n}.exit`, "utf8").trim();
+const create = j("create"), good = j("keygen-good");
+assert.equal(x("keygen-good"), "0"); assert.equal(good.outcome, "created"); assert.match(good.key_id, /^sha256:[0-9a-f]{64}$/);
+assert.equal(x("create"), "0"); assert.equal(create.outcome, "created"); assert.equal(create.key_id, good.key_id); assert.equal(create.objects, 3);
+for (const [n, reason, subject] of [["wrong-key", "wrong_key", "backup.json"], ["corrupt", "corrupt", "database.agb"], ["missing", "missing_artifact", "objects/0002.agb"]]) {
+	assert.equal(x(n), "1", n); assert.deepEqual([j(n).outcome, j(n).reason_code, j(n).subject], ["denied", reason, subject]);
+}
+assert.equal(fs.readFileSync(`${out}/target-tables-after-denials.txt`, "utf8").trim(), "0"); assert.equal(x("restored-absent-after-denials"), "1");
+const r = j("restore"); assert.equal(x("restore"), "0"); assert.equal(r.outcome, "restored");
+assert.deepEqual([r.backup_id, r.inventory_digest, r.tables, r.objects], [create.backup_id, create.inventory_digest, create.tables, 3]);
+assert.equal(x("restore-again"), "1"); assert.equal(j("restore-again").reason_code, "target_not_empty"); assert.equal(x("binary-object-cmp"), "0");
+const key = fs.readFileSync(`${w}/keys/good`, "utf8").slice(0, 64), raw = Buffer.from(key, "hex");
+const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
+for (const f of [...walk(`${w}/backup`), ...walk(out)]) { const b = fs.readFileSync(f); assert.ok(!b.includes(key) && !b.includes(raw), f); }
+console.log(JSON.stringify({ outcome: "pass", backup_id: create.backup_id, inventory_digest: create.inventory_digest, tables: create.tables, objects: create.objects }));
+' "$W" "$OUT"
+```
+
+Backup predicates: the pg test file exits 0 with every test passing; its key-absence, wrong-key, corruption and missing-file tests run before the successful restore. `wrapper.ndjson` holds a `cleaned` record for the identity it `allocated`. The assertion command prints `outcome: pass`, which requires: both keygens exit 0 with a `sha256:` `key_id`; `create` exits 0 with `outcome: created` and `objects: 3`; `wrong-key`, `corrupt` and `missing` each exit 1 with `outcome: denied` and reason/subject `wrong_key`/`backup.json`, `corrupt`/`database.agb` and `missing_artifact`/`objects/0002.agb`; the target still has 0 user tables and no `restored` directory after those three; `restore` exits 0 with `outcome: restored` and the create receipt's `backup_id`, `inventory_digest`, `tables` and `objects`; `restore-again` exits 1 with `target_not_empty`; the restored non-UTF-8 object is byte-equal; and neither the key hex nor its 32 raw bytes appear in any backup file or retained output. The CLI drive's database is the migrated schema only (its two migration rows and the seeded local room); the app-role seeded events and claims are covered by the pg test. No predicate compares `schemaDigest()`, because `pg_restore` re-deparses the `local_room.message_body_check` constraint text; the pg test checks the migration journal instead (`migrate()` on the target applies 0). This proves one throwaway cluster, not separate-host restore, WAL, key recovery, epoch fencing or RPO/RTO.
 
 For L3, also run these against the launched instance, retaining stdout outside its root:
 
@@ -345,6 +411,19 @@ node scripts/record-red-green.mjs --parent 661b4c5e012be8b851d271f063d3d53738c15
 
 The selected red must be `expected 'unavailable' to be 'pass'` after doctor passes, not a missing runner or import. Run the complete runtime suites separately at head, without selection. Record the test-patch digest, stack bindings, source/line categories, native outputs, PostgreSQL/replay evidence, guard negatives and owned inventory before/after cleanup. CI and independent review remain distinct prerequisites; local green does not authorize landing the unlanded L3 stack.
 
+### Encrypted backup and restore evidence (U01c.B01 slice 1)
+
+The test drives the CLI as a child process and imports only symbols present at its parent. A parent with no `scripts/backup.ts` is not valid R22 red, because the driver has no baseline operation there. Record red against the test-only parent revision `1eea48b` (`a62662e` on `main` plus a three-line `scripts/backup.ts` that only prints the usage route). There the first test, the driver reaching the usage route, passes and every backup assertion fails on the absent behavior. The one-snapshot fix gets its own pair, whose parent is the commit that added the race test:
+
+```sh
+node scripts/record-red-green.mjs --parent 1eea48b --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+node scripts/record-red-green.mjs --parent RACE_TEST_COMMIT --head HEAD --out evidence/U01c/agora-s1-prove-backup-restore/snapshot-race -- node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts
+node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore --base "$(git rev-parse 1eea48b)" --head "$(git rev-parse HEAD)"
+node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-restore/snapshot-race --base "$(git rev-parse RACE_TEST_COMMIT)" --head "$(git rev-parse HEAD)"
+```
+
+Red must show the usage-route test passing and the backup tests failing on values such as the CLI exit status or `outcome`, never a missing runner, a syntax error or an unresolved import. The snapshot-race red must show only the concurrent-writer test failing, with `reason_code: integrity_mismatch`. Green must show every test passing with exit 0. The validator must report pass with the local owner-attested key. Pass full SHAs, because its default base is the merge-base with `main`, not the test-only baseline, and its default head is the checkout's `HEAD`; once the receipts are committed, use the recorded head instead. Keep the Drive outputs in `evidence/U01c/agora-s1-prove-backup-restore/drive/`; they hold `key_id` values and receipts, never key files. These receipts prove the slice only, not the U01c milestone or FG07.
+
 ### Production build (built room) evidence
 
 Record red/green with the parent that lacks the plugin and the committed fix head, never a moving branch name:
@@ -413,6 +492,17 @@ The driver must pass its exact-owned PID/path removal assertions. Recorder-creat
 For the local-answer pure-core driver, also confirm `git worktree list | grep -c 'agora-red-\|agora-green-\|agora-clean-'` and `ls "${TMPDIR:-/tmp}" | grep agora-` both find nothing, then run `find .scratch -maxdepth 1 -name 'answer-guard-*' -print`; no matching directory may remain. Remove its disposable reporter cache with `rm -f .vitest/json/output.json; rmdir .vitest/json .vitest` after retaining the report under evidence. In parallel development, a shared temp/worktree match may belong to another lane: report it without deleting or inspecting its contents; prove this task's exact owned paths were removed.
 
 For the project verification controls (U01b.B01), the final cleanup command above must find no owned runtime resource before deleting only this invocation's remaining Swift tool scratch. SwiftPM leaves `.keep-directory` and lock files even after its build exits; the first literal run exposed that distinction. Never sweep the platform temp directory or prune somebody else's worktrees. The ignored `.scratch/project/` ownership journals and evidence directories remain deliberately; no database, object runtime namespace, HTTP listener or owned host process may remain.
+
+For the encrypted backup slice (U01c.B01), `with-test-postgres.mjs` already stopped and deleted the cluster, with both target databases inside it; `wrapper.ndjson` records that. The pg test drops its own `agora_restore_*` databases and removes its own `agora-backup-test-*` directories in `afterAll`. Remove only the work directory this recipe created, after checking it is the one Launch made:
+
+```sh
+case "$W" in "${TMPDIR:-/tmp}"/agora-backup-verify-*) rm -rf "$W" ;; *) echo "refusing to remove $W" >&2 ;; esac
+test ! -e "$W" && echo removed
+grep -rlE '^[0-9a-f]{64}$' "$OUT" || echo 'no key file in evidence'
+unset W
+```
+
+Pass means `removed` and `no key file in evidence`. Do not sweep other `agora-backup-*` directories; a parallel run may own them.
 
 ### Production build (built room)
 

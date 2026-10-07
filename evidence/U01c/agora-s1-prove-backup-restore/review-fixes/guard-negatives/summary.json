@@ -1,0 +1,35 @@
+[
+ {
+  "id": "object-reread",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "an object rewritten while pg_dump runs is sealed and restored as the bytes create inventoried"
+  ],
+  "expected_red": "an object rewritten while pg_dump runs is sealed and restored as the bytes create inventoried",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "objects-claim-after-restore",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "an objects path whose parent is missing fails before any row is restored"
+  ],
+  "expected_red": "an objects path whose parent is missing fails before any row is restored",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ },
+ {
+  "id": "rmdir-off",
+  "file": "scripts/backup.ts",
+  "exit": 1,
+  "failed": [
+   "a failed pg_restore removes the objects directory it claimed"
+  ],
+  "expected_red": "a failed pg_restore removes the objects directory it claimed",
+  "red_as_expected": true,
+  "restored_byte_identical": true
+ }
+]

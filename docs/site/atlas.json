@@ -256,6 +256,17 @@
         "repo:docs/technical-spec.md",
         "repo:docs/research-basis.md"
       ]
+    },
+    {
+      "id": "backup-restore",
+      "title": "Encrypted backup and restore",
+      "status": "In progress",
+      "why": "The first U01c.B01 slice seals a disposable fixture database and its objects with AES-256-GCM, denies a wrong key, corruption, a missing file or a used target before writing, and restores into a second database whose row and object inventory must match. WAL, separate-host restore, off-host key recovery, epoch fencing and RPO/RTO remain open.",
+      "page": "backup-restore.md",
+      "proof": [
+        "repo:docs/technical-spec.md",
+        "repo:docs/implementation-plan.md"
+      ]
     }
   ],
   "nodes": [

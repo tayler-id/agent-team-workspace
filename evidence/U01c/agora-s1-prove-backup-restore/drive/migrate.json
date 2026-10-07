@@ -1,0 +1,1 @@
+{"schema_version":"agora.migration-report/v1","applied":2,"total":2,"schema_digest":"sha256:adec65e7575062e8afb43ad293bca76e426fd9516ff36315ed825802b5063638","database_version":"PostgreSQL 18.4 (Homebrew)","outcome":"pass"}

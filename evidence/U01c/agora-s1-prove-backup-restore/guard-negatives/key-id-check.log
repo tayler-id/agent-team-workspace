@@ -1,0 +1,41 @@
+
+ RUN  v5.0.1 ~/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (10 tests | 1 failed) 4329ms
+   × a wrong key is denied before the target is touched 326ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  17:32:49
+   Duration  4.74s (tests 93%, import 6%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","pid":82192}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","socket_dir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a","pid":82192,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > a wrong key is denied before the target is touched
+AssertionError: expected { status: 1, receipt: { …(4) } } to deeply equal { status: 1, receipt: { …(4) } }
+
+- Expected
++ Received
+
+  {
+    "receipt": {
+      "outcome": "denied",
+-     "reason_code": "wrong_key",
++     "reason_code": "corrupt",
+      "schema_version": "agora.restore-receipt/v1",
+-     "subject": "backup.json",
++     "subject": "manifest.agb",
+    },
+    "status": 1,
+  }
+
+ ❯ deniedRestore packages/storage/test/backup.pg.test.ts:81:141
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-0f9127dd-9bf2-4ef3-b5f2-d08388148a0a"}

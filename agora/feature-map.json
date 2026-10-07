@@ -350,6 +350,14 @@
 			"fixtures": ["temporary git repositories created per test"],
 			"platforms": ["ubuntu-24.04", "macos-15", "node24.21.0", "pnpm10.34.1"],
 			"invalidation": "Ordinary candidate CI only. It is not a trusted evidence signature, an agora/evidence check, or merge authority; the credential-bearing reporter and U01b qualification stay a separate security task."
+		},
+		{
+			"id": "backup-restore-integrity", "documentation": "docs/site/backup-restore.md", "owner": "U01c.B01",
+			"paths": ["packages/storage/src/backup.ts", "packages/storage/src/index.ts", "scripts/backup.ts"],
+			"public": ["node scripts/backup.ts keygen|create|restore", "pnpm test:pg"],
+			"contracts": [], "scenarios": ["packages/storage/test/backup.pg.test.ts"],
+			"fixtures": ["migrated foundation_fixture database seeded through agora_app (scope A stream with 3 events and a claim, scope B stream with 1 event)", "flat objects directory with three files including one non-UTF-8 binary", "two generated keys (good, wrong) in a key directory separate from the backup", "second database agora_restore_<uuid> owned by agora_owner in the same throwaway cluster", "copied backups with one flipped byte in database.agb and with objects/0002.agb deleted", "temporary AGORA_PG_BIN directories whose pg_dump rewrites an object before running the real pg_dump, or whose pg_restore exits 1"],
+			"platforms": ["node24", "postgresql18"]
 		}
 	]
 }
