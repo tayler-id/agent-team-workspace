@@ -182,6 +182,30 @@ supply that verdict. Scope: `scripts/trusted-checks.mjs`, `scripts/trusted-repor
   driver differs from the default branch, but any secret available to pull-request workflows is
   exposed regardless. That is why prerequisite 1 matters.
 
+## Integration with main at 4912e73 (2026-10-07)
+
+`1b87b14` merges `origin/main` `4912e73` into the reviewed head `1f7192b`, without a rebase or
+force push. `6951d0b` follows the steer to keep main's CI contract. Compared with `1f7192b`, the
+security files changed as follows:
+
+- `.github/workflows/agora-ci.yml`, `packages/verification/test/ci-workflow.test.ts`: equal to
+  `main` byte for byte. This pull request no longer changes the driver. The `guards` job keeps
+  main's `--task agora-s1-validate-project-evidence`. The lanes command runs every lane in
+  `agora/project.json` (now 1-10) and requires each to pass; `--task` only gates the unlock.
+  Both task values produced the same 11 passing assertions. Negative: with the
+  `wrong_producer` denial removed from `scripts/trusted-checks.mjs`, main's command exited 1
+  `lane_failed` with lanes 9 and 10 red. The file was restored by SHA-256 and the command passed again (`integration/guards-*.json`).
+- `scripts/ci-red-green.sh`: equal to `main`, which replaced the `Applicability: coverage`
+  trailer with its own reviewed classifier (`8c52841`). A commit that changes only tests, docs
+  Markdown or evidence skips red. The trailer rule this README describes above is gone.
+- `scripts/trusted-checks.mjs`, `scripts/trusted-report.mjs`, `agora/trusted-checks.json`,
+  `agora/project.json`, `.github/workflows/agora-report.yml`, `.github/CODEOWNERS`,
+  `scripts/ci-setup.sh` and both trusted test files: unchanged from `1f7192b`.
+
+The branch's decisions D111 and D112 collided with decisions `main` added under the same IDs and
+are now D113 and D114, unchanged in text. The reporter stays skipped until
+`AGORA_REPORTER_ENABLED` is set, and the policy still holds no App ID or key.
+
 ## Coverage limits
 
 - No live App, key, protection or reporter run exists, so lanes 8-10 are proven against

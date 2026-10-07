@@ -1,0 +1,38 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "lanes",
+  "versions": {
+    "code": "6951d0ba5ee170ef73d1d5ca3027dd5c843e0622",
+    "config": "sha256:bafee64123529a8e6b7bf068457058e18892f0e28c36b7c8dfd91366c2db48c6",
+    "fixture": "sha256:ba79eaa99ee677b51c3a66af9e00fc4fc6720c009a69e1b4ea031842f302a76c"
+  },
+  "outcome": "fail",
+  "diagnostics": [
+    {
+      "reason_code": "blocked_prerequisite",
+      "message": "lane_failed"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".scratch/neg-guards-1791336393/lanes.json",
+      "digest": "sha256:33b1432c617741be60c3e9d1c8871c52a01df86195f23ccd6df53c234797016e",
+      "byte_length": 8733,
+      "media_type": "application/json"
+    },
+    {
+      "path": ".scratch/neg-guards-1791336393/command.json",
+      "digest": "sha256:59662fe6fc630e976e9fe4ccbdd95d5facdaf6c30c7535345952de319470c495",
+      "byte_length": 458,
+      "media_type": "application/json"
+    },
+    {
+      "path": ".scratch/neg-guards-1791336393/guards.json",
+      "digest": "sha256:e26ba7e8d5efd66b2bf6ee051a5ce84db4ea53bd73199fd6c199622096a775d7",
+      "byte_length": 1042,
+      "media_type": "application/json"
+    }
+  ],
+  "started_at": "2026-10-07T01:26:33.789Z",
+  "finished_at": "2026-10-07T01:27:00.072Z"
+}
