@@ -46,7 +46,9 @@ Seven jobs, one per verification area, each run in its own fresh checkout:
 | `docs` | ubuntu-24.04 | `pnpm docs:check` |
 | `tests` | macos-15 | `pnpm test` |
 | `red-green` | ubuntu-24.04 | `bash scripts/ci-red-green.sh BASE HEAD` |
-| `guards` | ubuntu-24.04 | `pnpm -s agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks` (lanes 1-10) |
+| `guards` | ubuntu-24.04 | `pnpm -s agora project lanes --unit U01b --task agora-s1-validate-project-evidence` |
+
+The `guards` command runs every lane in `agora/project.json`, now lanes 1-10, and fails if any lane fails. `--task` only decides which task the passing result unlocks, so [trusted checks](trusted-checks.md) lanes 8-10 run here without a workflow change.
 
 ```flow
 Pull request | A push to a branch with an open pull request to main starts the workflow from the merge ref.

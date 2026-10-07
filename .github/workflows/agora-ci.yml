@@ -192,7 +192,7 @@
 					"run": "bash scripts/ci-setup.sh postgres python"
 				},
 				{
-					"run": "pnpm -s agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks --artifacts .scratch/ci-lanes --json"
+					"run": "pnpm -s agora project lanes --unit U01b --task agora-s1-validate-project-evidence --artifacts .scratch/ci-lanes --json"
 				}
 			]
 		}

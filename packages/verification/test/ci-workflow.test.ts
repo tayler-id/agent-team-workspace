@@ -42,7 +42,7 @@ test('seven verification areas run their real driver commands', () => {
 		docs: ['ubuntu-24.04', 'bash scripts/ci-setup.sh', 'pnpm docs:check'],
 		tests: ['macos-15', 'bash scripts/ci-setup.sh postgres python swift', 'pnpm test'],
 		'red-green': ['ubuntu-24.04', 'bash scripts/ci-setup.sh postgres python swift', `bash scripts/ci-red-green.sh ${sha}`],
-		guards: ['ubuntu-24.04', 'bash scripts/ci-setup.sh postgres python', 'pnpm -s agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks --artifacts .scratch/ci-lanes --json'],
+		guards: ['ubuntu-24.04', 'bash scripts/ci-setup.sh postgres python', 'pnpm -s agora project lanes --unit U01b --task agora-s1-validate-project-evidence --artifacts .scratch/ci-lanes --json'],
 	});
 });
 

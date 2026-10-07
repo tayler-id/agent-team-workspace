@@ -360,7 +360,7 @@ pnpm contracts:check && pnpm boundaries
 pnpm docs:check
 pnpm test
 bash scripts/ci-red-green.sh "$(git merge-base origin/main HEAD)" "$(git rev-parse HEAD)"
-pnpm -s agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks --artifacts .scratch/ci-lanes --json
+pnpm -s agora project lanes --unit U01b --task agora-s1-validate-project-evidence --artifacts .scratch/ci-lanes --json
 pnpm exec vitest run --project unit packages/verification/test/ci-workflow.test.ts
 ```
 
