@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+cd /Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace
+export PATH="$PWD/.scratch/node/node-v24.21.0-darwin-arm64/bin:$PATH"
+echo "# History probes against a62662e (commands run from the worktree root)"; echo
+echo '$ git log --oneline -S contentSecurityPolicy -- apps/web/vite.config.ts   (default history simplification)'; git log --oneline -S contentSecurityPolicy a62662e -- apps/web/vite.config.ts; echo
+echo '$ git log --full-history --format="%h %ad %s" --date=short -S contentSecurityPolicy a62662e -- apps/web/vite.config.ts'; git log --full-history --format='%h %ad %s' --date=short -S contentSecurityPolicy a62662e -- apps/web/vite.config.ts; echo
+echo '$ git log --first-parent --format="%h %ad %s" --date=short a62662e -- apps/web/vite.config.ts'; git log --first-parent --format='%h %ad %s' --date=short a62662e -- apps/web/vite.config.ts; echo
+echo '$ contentSecurityPolicy matches in apps/web/vite.config.ts per commit'
+for c in fc04d27 e34df8f 5f2e852^ 5f2e852 1eee6ae a62662e; do printf "%s %s: " "$c" "$(git log -1 --format=%s $c)"; git show "$c:apps/web/vite.config.ts" | grep -c contentSecurityPolicy; done; echo
+echo '$ git log -1 --format=%P 1eee6ae   (parents of the mainline merge that brought the CSP in)'; git log -1 --format=%P 1eee6ae; echo
+echo '$ git log --oneline -- contracts/tools/browser-validator.ts'; git log --oneline a62662e -- contracts/tools/browser-validator.ts; echo
+echo '$ grep D92 docs/decisions.tsv (at a62662e)'; git show a62662e:docs/decisions.tsv | grep 'D92 Compile'; echo
+echo '$ git log --full-history --format="%h %ad %s" --date=short -S createWireValidator a62662e -- apps/web'; git log --full-history --format='%h %ad %s' --date=short -S createWireValidator a62662e -- apps/web; echo
+echo '$ createWireValidator call sites in apps/web/src per commit'
+for c in 4a77a8f 5f2e852 1eee6ae eb7e818 8b41c78 a62662e; do echo "== $c $(git log -1 --format='%ad %s' --date=short $c)"; git grep -n "createWireValidator()" $c -- apps/web/src; done; echo
+echo '$ prior built-room references in evidence/ and docs (at a62662e)'; git grep -n -i "renders blank under the strict CSP\|Verified present in .apps/web/dist/index.html\|pnpm web:build && pnpm web:preview" a62662e -- evidence docs | cut -c1-260; echo
+echo '$ git log --format="%h %ad %s" --date=short -S "renders blank under the strict CSP" -- evidence/handoff/README.md'; git log --format='%h %ad %s' --date=short -S 'renders blank under the strict CSP' a62662e -- evidence/handoff/README.md; echo
+echo '# Build at 1eee6ae (git archive 1eee6ae into .scratch/repro/csp-intro-src, pnpm install --frozen-lockfile --offline, pnpm --filter @agora/web build), then the codegen-disallowed Node probe:'
+cd .scratch/repro/parent-src/apps/web && node --disallow-code-generation-from-strings ../../../probe.mjs ../../../csp-intro-src/apps/web/dist 2>/dev/null

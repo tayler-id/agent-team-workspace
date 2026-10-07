@@ -1,0 +1,247 @@
+import { spawn } from 'node:child_process';
+import { createCipheriv, createDecipheriv, randomBytes, randomUUID } from 'node:crypto';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { delimiter, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { afterAll, beforeAll, expect, test } from 'vitest';
+import { Pool } from 'pg';
+import { asScopeId } from '@agora/domain';
+import { openDatabase, type Database } from '@agora/storage';
+
+const ownerUrl = process.env['AGORA_TEST_OWNER_DATABASE_URL'] ?? '';
+const appUrl = process.env['AGORA_TEST_DATABASE_URL'] ?? '';
+const superuserUrl = process.env['AGORA_TEST_SUPERUSER_DATABASE_URL'] ?? '';
+const repoRoot = fileURLToPath(new URL('../../..', import.meta.url));
+// Replaces only the database segment of a connection string that may have no host and an unencoded socket dir in its query.
+const withDatabase = (url: string, name: string) => url.replace(/^([a-z]+:\/\/[^/?]*)\/[^?]*(\?.*)?$/, (_match, prefix: string, query: string | undefined) => `${prefix}/${name}${query ?? ''}`);
+const dbName = (kind: string) => `agora_${kind}_${randomUUID().replaceAll('-', '')}`;
+const [sha256, uuid] = [/^sha256:[0-9a-f]{64}$/, /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/];
+
+const superuser = new Pool({ connectionString: superuserUrl });
+const source = dbName('backup_source');
+const targets: string[] = [];
+const opened: Database[] = [];
+const root = mkdtempSync(join(tmpdir(), 'agora-backup-test-'));
+const [keys, objects, backup] = ['keys', 'objects', 'backup'].map((name) => join(root, name)) as [string, string, string];
+const [scopeA, scopeB] = [asScopeId(randomUUID()), asScopeId(randomUUID())];
+const [streamA, streamB, subject] = [randomUUID(), randomUUID(), randomUUID()];
+const files: Record<string, Buffer> = { 'alpha.txt': Buffer.from('alpha\n'), 'beta.json': Buffer.from('{"beta":2}'), 'gamma.bin': Buffer.from([0xff, 0xfe, 0x00, 0x80, 0xc3]) };
+const created: { key_id?: string; inventory_digest?: string; tables?: number } = {};
+
+// Every run must print exactly one JSON line; anything else yields undefined so the literal assertions fail.
+// Asynchronous, so a concurrent writer in this process keeps running while create works.
+const cli = (...args: string[]) => cliWith(process.env, ...args);
+function cliWith(env: NodeJS.ProcessEnv, ...args: string[]): Promise<{ status: number | null; receipt: unknown }> {
+	const child = spawn(process.execPath, ['scripts/backup.ts', ...args], { cwd: repoRoot, env, stdio: ['ignore', 'pipe', 'ignore'] });
+	let stdout = '';
+	child.stdout.on('data', (chunk: Buffer) => { stdout += chunk.toString('utf8'); });
+	return new Promise((resolve) => child.on('close', (status) => {
+		const lines = stdout.split('\n').filter(Boolean);
+		resolve({ status, receipt: lines.length === 1 ? parse(lines[0] ?? '') : undefined });
+	}));
+}
+const parse = (line: string): unknown => { try { return JSON.parse(line); } catch { return undefined; } };
+
+// An independent reading of the documented sealed layout: 'AGB1' | 12-byte nonce | 16-byte tag | ciphertext, label as AAD.
+function unseal(key: Buffer, blob: Buffer, label: string): Buffer {
+	const decipher = createDecipheriv('aes-256-gcm', key, blob.subarray(4, 16)).setAAD(Buffer.from(label)).setAuthTag(blob.subarray(16, 32));
+	return Buffer.concat([decipher.update(blob.subarray(32)), decipher.final()]);
+}
+function seal(key: Buffer, plaintext: Buffer, label: string): Buffer {
+	const nonce = randomBytes(12);
+	const cipher = createCipheriv('aes-256-gcm', key, nonce).setAAD(Buffer.from(label));
+	const ciphertext = Buffer.concat([cipher.update(plaintext), cipher.final()]);
+	return Buffer.concat([Buffer.from('AGB1'), nonce, cipher.getAuthTag(), ciphertext]);
+}
+
+// The binary the CLI itself would run: from AGORA_PG_BIN when set, otherwise the first match on PATH.
+function realPgBin(tool: string): string {
+	const dirs = process.env['AGORA_PG_BIN'] ? [process.env['AGORA_PG_BIN']] : (process.env['PATH'] ?? '').split(delimiter);
+	const found = dirs.map((dir) => join(dir, tool)).find((file) => existsSync(file));
+	if (!found) throw new Error(`${tool} not found`);
+	return found;
+}
+
+// A PostgreSQL binary directory with one tool replaced by a script and the others linked to the real binaries, selected through the CLI's documented AGORA_PG_BIN.
+function fakeBin(name: string, tool: string, script: string): NodeJS.ProcessEnv {
+	const dir = join(root, name);
+	mkdirSync(dir);
+	for (const other of ['pg_dump', 'pg_restore', 'psql']) if (other !== tool) symlinkSync(realPgBin(other), join(dir, other));
+	writeFileSync(join(dir, tool), `#!/bin/sh\n${script}\n`, { mode: 0o755 });
+	return { ...process.env, AGORA_PG_BIN: dir };
+}
+
+const open = (url: string, name: string): Database => { const db = openDatabase(withDatabase(url, name)); opened.push(db); return db; };
+
+async function newTarget(): Promise<string> {
+	const name = dbName('restore');
+	await superuser.query(`create database ${name} owner agora_owner`);
+	targets.push(name);
+	return name;
+}
+
+async function userTables(name: string): Promise<number> {
+	const pool = new Pool({ connectionString: withDatabase(superuserUrl, name) });
+	const result = await pool.query<{ n: number }>("select count(*)::int as n from pg_class c join pg_namespace s on s.oid = c.relnamespace where c.relkind in ('r', 'p') and s.nspname not in ('pg_catalog', 'information_schema') and s.nspname not like 'pg_toast%'").finally(() => pool.end());
+	return result.rows[0]?.n ?? -1;
+}
+
+const readFixture = (db: Database) => Promise.all([
+	db.withScope(scopeA, async (tx) => ({ events: await tx.readEvents(streamA), claim: await tx.readClaim(subject) })),
+	db.withScope(scopeB, async (tx) => ({ events: await tx.readEvents(streamB), claim: await tx.readClaim(subject) })),
+]);
+
+// Denials must leave the target exactly as created: no table and no objects directory.
+async function deniedRestore(dir: string, key: string, reason_code: string, denied: string): Promise<void> {
+	const target = await newTarget();
+	const objectsOut = join(root, `objects-${target}`);
+	expect(await cli('restore', '--backup', dir, '--key', key, '--database-url', withDatabase(superuserUrl, target), '--objects', objectsOut)).toEqual({ status: 1, receipt: { schema_version: 'agora.restore-receipt/v1', outcome: 'denied', reason_code, subject: denied } });
+	expect(await userTables(target)).toBe(0);
+	expect(existsSync(objectsOut)).toBe(false);
+}
+
+beforeAll(async () => {
+	await superuser.query(`create database ${source} owner agora_owner`);
+	await open(ownerUrl, source).migrate();
+	const app = open(appUrl, source);
+	await app.withScope(scopeA, async (tx) => {
+		await tx.ensureStream(streamA);
+		for (const n of [1, 2, 3]) await tx.appendEvent(streamA, 'status', { n });
+		await tx.claimSubject(subject, 'worker-a', '4');
+	});
+	await app.withScope(scopeB, async (tx) => {
+		await tx.ensureStream(streamB);
+		await tx.appendEvent(streamB, 'note', { text: 'scope b' });
+	});
+	for (const dir of [keys, objects]) mkdirSync(dir);
+	for (const [name, bytes] of Object.entries(files)) writeFileSync(join(objects, name), bytes);
+});
+
+afterAll(async () => {
+	await Promise.allSettled(opened.map((db) => db.close()));
+	for (const name of [source, ...targets]) await superuser.query(`drop database if exists ${name} with (force)`).catch(() => undefined);
+	await superuser.end();
+	rmSync(root, { recursive: true, force: true });
+});
+
+// R22 baseline: the same driver reaches the entry point and its usage route before any backup assertion.
+test('the driver reaches the backup entry point and its usage contract', async () => {
+	expect(await cli()).toEqual({ status: 64, receipt: { outcome: 'usage_error', message: 'usage: backup keygen|create|restore (see docs/site/cli.md)' } });
+});
+
+test('keygen writes two distinct keys and create seals the fixture database and three objects', async () => {
+	const good = await cli('keygen', '--key', join(keys, 'good'));
+	const wrong = await cli('keygen', '--key', join(keys, 'wrong'));
+	for (const run of [good, wrong]) expect(run).toEqual({ status: 0, receipt: { schema_version: 'agora.backup-key/v1', outcome: 'created', key_id: expect.stringMatching(sha256) as string } });
+	expect(wrong.receipt).not.toEqual(good.receipt);
+	const tables = await userTables(source);
+	expect(tables).toBeGreaterThan(0);
+	const run = await cli('create', '--database-url', withDatabase(superuserUrl, source), '--objects', objects, '--key', join(keys, 'good'), '--out', backup);
+	expect(run).toEqual({ status: 0, receipt: { schema_version: 'agora.backup-receipt/v1', outcome: 'created', backup_id: expect.stringMatching(uuid) as string, key_id: (good.receipt as { key_id: string }).key_id, inventory_digest: expect.stringMatching(sha256) as string, tables, objects: 3 } });
+	Object.assign(created, run.receipt);
+});
+
+test('the backup directory holds neither the key hex nor the raw key bytes', () => {
+	const hex = readFileSync(join(keys, 'good'), 'utf8').trim();
+	expect(hex).toMatch(/^[0-9a-f]{64}$/);
+	const walk = (dir: string): string[] => readdirSync(dir).flatMap((name) => statSync(join(dir, name)).isDirectory() ? walk(join(dir, name)) : [join(dir, name)]);
+	const stored = walk(backup);
+	expect(stored.map((file) => file.slice(backup.length + 1)).sort()).toEqual(['backup.json', 'database.agb', 'manifest.agb', 'objects/0001.agb', 'objects/0002.agb', 'objects/0003.agb']);
+	for (const file of stored) expect([file, readFileSync(file).includes(hex), readFileSync(file).includes(Buffer.from(hex, 'hex'))]).toEqual([file, false, false]);
+});
+
+test('a wrong key is denied before the target is touched', () => deniedRestore(backup, join(keys, 'wrong'), 'wrong_key', 'backup.json'));
+
+test('one flipped byte in the sealed dump is denied as corrupt before the target is touched', async () => {
+	const copy = join(root, 'corrupt');
+	cpSync(backup, copy, { recursive: true });
+	const sealed = readFileSync(join(copy, 'database.agb'));
+	const middle = Math.floor(sealed.length / 2);
+	sealed.writeUInt8(sealed.readUInt8(middle) ^ 0xff, middle);
+	writeFileSync(join(copy, 'database.agb'), sealed);
+	await deniedRestore(copy, join(keys, 'good'), 'corrupt', 'database.agb');
+});
+
+test('a missing sealed object is denied before the target is touched', async () => {
+	const copy = join(root, 'missing');
+	cpSync(backup, copy, { recursive: true });
+	rmSync(join(copy, 'objects/0002.agb'));
+	await deniedRestore(copy, join(keys, 'good'), 'missing_artifact', 'objects/0002.agb');
+});
+
+let restored = '';
+test('restore rebuilds the same rows, objects and schema in a second database', async () => {
+	restored = await newTarget();
+	const objectsOut = join(root, 'restored-objects');
+	expect(await cli('restore', '--backup', backup, '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, restored), '--objects', objectsOut)).toEqual({ status: 0, receipt: { schema_version: 'agora.restore-receipt/v1', outcome: 'restored', backup_id: expect.stringMatching(uuid) as string, key_id: created.key_id, inventory_digest: created.inventory_digest, tables: created.tables, objects: 3 } });
+	expect(await readFixture(open(appUrl, restored))).toEqual([
+		{ events: [1, 2, 3].map((n) => ({ stream_id: streamA, seq: String(n), kind: 'status', payload: { n } })), claim: { claimed_by: 'worker-a', fence: '4' } },
+		{ events: [{ stream_id: streamB, seq: '1', kind: 'note', payload: { text: 'scope b' } }], claim: undefined },
+	]);
+	expect(readdirSync(objectsOut).sort()).toEqual(['alpha.txt', 'beta.json', 'gamma.bin']);
+	for (const [name, bytes] of Object.entries(files)) expect(readFileSync(join(objectsOut, name)).equals(bytes)).toBe(true);
+	// pg_dump re-deparses nested AND in CHECK constraints, so schemaDigest text differs; the restored journal must still read fully applied.
+	expect(await open(ownerUrl, restored).migrate()).toMatchObject({ applied: 0, total: (await open(ownerUrl, source).migrate()).total });
+});
+
+test('restoring into a database that already holds tables is denied', async () => {
+	expect(await cli('restore', '--backup', backup, '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, restored), '--objects', join(root, 'again'))).toEqual({ status: 1, receipt: { schema_version: 'agora.restore-receipt/v1', outcome: 'denied', reason_code: 'target_not_empty', subject: 'database' } });
+	expect(existsSync(join(root, 'again'))).toBe(false);
+});
+
+test('a restore whose rows differ from the sealed inventory is denied as integrity_mismatch', async () => {
+	const copy = join(root, 'forged');
+	cpSync(backup, copy, { recursive: true });
+	const key = Buffer.from(readFileSync(join(keys, 'good'), 'utf8').trim(), 'hex');
+	const label = `${(JSON.parse(readFileSync(join(copy, 'backup.json'), 'utf8')) as { backup_id: string }).backup_id}/manifest`;
+	const manifest = JSON.parse(unseal(key, readFileSync(join(copy, 'manifest.agb')), label).toString('utf8')) as { inventory: { tables: { table: string; rows: string }[] } };
+	const events = manifest.inventory.tables.find((t) => t.table === 'foundation_fixture.event');
+	expect(events?.rows).toBe('4');
+	if (events) events.rows = '5';
+	writeFileSync(join(copy, 'manifest.agb'), seal(key, Buffer.from(JSON.stringify(manifest)), label));
+	const target = await newTarget();
+	expect(await cli('restore', '--backup', copy, '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, target), '--objects', join(root, 'forged-objects'))).toEqual({ status: 1, receipt: { schema_version: 'agora.restore-receipt/v1', outcome: 'denied', reason_code: 'integrity_mismatch', subject: 'table:foundation_fixture.event' } });
+});
+
+test('a backup taken while rows are being written restores to exactly its sealed inventory', async () => {
+	const app = open(appUrl, source);
+	const streamC = randomUUID();
+	await app.withScope(scopeA, (tx) => tx.ensureStream(streamC));
+	const stop = new AbortController();
+	const writer = (async () => { let n = 0; while (!stop.signal.aborted) await app.withScope(scopeA, (tx) => tx.appendEvent(streamC, 'status', { n: n++ })); return n; })();
+	const raced = join(root, 'raced');
+	const made = await cli('create', '--database-url', withDatabase(superuserUrl, source), '--objects', objects, '--key', join(keys, 'good'), '--out', raced);
+	stop.abort();
+	expect(await writer).toBeGreaterThan(0);
+	expect(made.status).toBe(0);
+	const target = await newTarget();
+	expect(await cli('restore', '--backup', raced, '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, target), '--objects', join(root, 'raced-objects'))).toEqual({ status: 0, receipt: expect.objectContaining({ outcome: 'restored', inventory_digest: (made.receipt as { inventory_digest: string }).inventory_digest }) as unknown });
+});
+
+test('an object rewritten while pg_dump runs is sealed and restored as the bytes create inventoried', async () => {
+	const moving = join(root, 'moving-objects');
+	cpSync(objects, moving, { recursive: true });
+	const env = fakeBin('bin-rewrite', 'pg_dump', `printf 'rewritten during pg_dump\\n' > '${join(moving, 'alpha.txt')}'\nexec '${realPgBin('pg_dump')}' "$@"`);
+	const made = await cliWith(env, 'create', '--database-url', withDatabase(superuserUrl, source), '--objects', moving, '--key', join(keys, 'good'), '--out', join(root, 'moving'));
+	expect(made.status).toBe(0);
+	expect(readFileSync(join(moving, 'alpha.txt'), 'utf8')).toBe('rewritten during pg_dump\n');
+	const target = await newTarget();
+	const objectsOut = join(root, 'moving-restored');
+	expect(await cli('restore', '--backup', join(root, 'moving'), '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, target), '--objects', objectsOut)).toEqual({ status: 0, receipt: expect.objectContaining({ outcome: 'restored', inventory_digest: (made.receipt as { inventory_digest: string }).inventory_digest }) as unknown });
+	expect(readFileSync(join(objectsOut, 'alpha.txt')).equals(files['alpha.txt'] ?? Buffer.alloc(0))).toBe(true);
+});
+
+test('an objects path whose parent is missing fails before any row is restored', async () => {
+	const target = await newTarget();
+	expect(await cli('restore', '--backup', backup, '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, target), '--objects', join(root, 'absent-parent', 'objects'))).toEqual({ status: 70, receipt: { schema_version: 'agora.restore-receipt/v1', outcome: 'infrastructure_failure', message: expect.stringContaining('ENOENT') as string } });
+	expect(await userTables(target)).toBe(0);
+});
+
+test('a failed pg_restore removes the objects directory it claimed', async () => {
+	const target = await newTarget();
+	const objectsOut = join(root, 'failed-restore-objects');
+	expect(await cliWith(fakeBin('bin-fail', 'pg_restore', 'cat > /dev/null; exit 1'), 'restore', '--backup', backup, '--key', join(keys, 'good'), '--database-url', withDatabase(superuserUrl, target), '--objects', objectsOut)).toEqual({ status: 70, receipt: { schema_version: 'agora.restore-receipt/v1', outcome: 'infrastructure_failure', message: 'pg_restore failed (1): ' } });
+	expect(existsSync(objectsOut)).toBe(false);
+	expect(await userTables(target)).toBe(0);
+});

@@ -33,6 +33,26 @@ export function webLayer(file: string): WebLayer | undefined {
 	const name = /^apps\/web\/src\/features\/([^/]+)\//.exec(rel)?.[1];
 	return name ? { kind: 'feature', name } : { kind: 'other' };
 }
+/** Reserved per-Feature declaration: a JSON array of Feature names this Feature may import, one entry per name. */
+export const FEATURE_DEPENDENCIES_FILE = 'dependencies.json';
+/** Returns the declared Feature names, or a reason string when the file is absent-as-empty or malformed. */
+export function readFeatureDependencies(feature: string): readonly string[] | string {
+	const file = path.join(projectRoot, WEB_OWNERS.features, feature, FEATURE_DEPENDENCIES_FILE);
+	const label = `${WEB_OWNERS.features}/${feature}/${FEATURE_DEPENDENCIES_FILE}`;
+	if (!existsSync(file)) return [];
+	let parsed: unknown;
+	try { parsed = JSON.parse(readFileSync(file, 'utf8')); } catch { return `${label} is malformed (not valid JSON); declare a JSON array of Feature names, e.g. ["notes"]`; }
+	const bad = (why: string): string => `${label} is malformed (${why}); declare a JSON array of unique Feature names other than ${feature}, e.g. ["notes"]`;
+	if (!Array.isArray(parsed)) return bad('not an array');
+	const seen = new Set<string>();
+	for (const entry of parsed) {
+		if (typeof entry !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(entry)) return bad(`entry ${JSON.stringify(entry)} is not a Feature name`);
+		if (entry === feature) return bad('a Feature cannot declare itself');
+		if (seen.has(entry)) return bad(`duplicate entry ${JSON.stringify(entry)}`);
+		seen.add(entry);
+	}
+	return parsed as string[];
+}
 const isPublicEntrypoint = (target: string, ownerRoot: string): boolean => {
 	const rel = path.relative(path.join(projectRoot, ownerRoot), target).replaceAll('\\', '/');
 	return rel === 'index.ts' || rel === 'index.tsx';
@@ -55,7 +75,7 @@ const contractsTooling = ['node:child_process', 'node:fs', 'node:path', 'node:ur
  * a non-test file placed under apps/web/test/ (a relocation bypass attempt) still gets the strict renderer
  * checks, exactly like a file placed anywhere else outside its owner.
  */
-const webTestConfigAllowed = ['@agora/contracts', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime', 'vitest', 'vitest/config', '@testing-library/react', '@testing-library/dom', '@vitejs/plugin-react', 'vite', 'node:fs', 'node:path'] as const;
+const webTestConfigAllowed = ['@agora/contracts', '@agora/contracts/browser-validator', '@agora/client-core', '@agora/web-framework', 'react', 'react-dom', 'react/jsx-runtime', 'vitest', 'vitest/config', '@testing-library/react', '@testing-library/dom', '@vitejs/plugin-react', 'vite', 'node:child_process', 'node:fs', 'node:path'] as const;
 export const isWebTestOrConfig = (file: string): boolean => {
 	const rel = relPosix(file);
 	return (rel.startsWith('apps/web/test/') && /\.test\.tsx?$/.test(rel)) || /^apps\/web\/[^/]+\.config\.ts$/.test(rel) || rel === TEST_GEOMETRY_DOUBLE;
@@ -96,10 +116,13 @@ function violation(file: string, specifier: string | undefined, typesOnly: boole
 			const targetLayer = webLayer(target);
 			// Non-feature importers (framework/client/host/other) cannot reach Features, closing un-owned src relays.
 			if (layer.kind !== 'feature' && targetLayer?.kind === 'feature') {
-				return `${layer.kind} must not import product Features; Features live under ${WEB_OWNERS.features}/<name>`;
+				return `${layer.kind} must not import product Features; Features live under ${WEB_OWNERS.features}/<name> and import ${layer.kind} through its public entrypoint, never the reverse`;
 			}
 			if (layer.kind === 'feature' && targetLayer?.kind === 'feature' && targetLayer.name !== layer.name) {
 				const featureRoot = `${WEB_OWNERS.features}/${targetLayer.name}`;
+				const declared = readFeatureDependencies(layer.name);
+				if (typeof declared === 'string') return declared;
+				if (!declared.includes(targetLayer.name)) return `Feature ${layer.name} imports Feature ${targetLayer.name} without declaring it; add "${targetLayer.name}" to ${WEB_OWNERS.features}/${layer.name}/${FEATURE_DEPENDENCIES_FILE} and import only through ${featureRoot}/index.ts`;
 				if (!isPublicEntrypoint(target, featureRoot)) return `Feature ${layer.name} cannot import private files of Feature ${targetLayer.name}; use ${featureRoot}/index.ts public entrypoint`;
 			}
 			// Features and un-owned src files must use public framework/client/host entrypoints only.

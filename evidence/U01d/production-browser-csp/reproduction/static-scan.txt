@@ -1,0 +1,72 @@
+# Static scan of .scratch/parent-dist (a62662e web:build output)
+
+## inline <style> or style= in index.html
+none
+
+## inline <script> without src in index.html
+none
+
+## data: URLs in built CSS (count, then first 120 chars of each)
+0
+
+## url() references in built CSS
+   1 url(/assets/CalSansText-Medium-C5AEdSfJ.woff2)
+   1 url(/assets/CalSansText-Regular-aYFNwudf.woff2)
+   1 url(/assets/CalSansText-SemiBold-ByDISUFh.woff2)
+   1 url(/assets/CalSansUI-Medium-BNj2q7xs.woff2)
+   1 url(/assets/CalSansUI-Regular-DAxC_Cb6.woff2)
+   1 url(/assets/CalSansUI-SemiBold-BGjLitd3.woff2)
+
+## @import or external origins in built CSS
+
+## string-eval call sites in built JS
+Function(: 1
+new Function: 0
+eval(: 0
+setTimeout(": 0
+setTimeout(': 0
+setInterval(": 0
+
+## style injection in built JS (createElement style, insertRule, adoptedStyleSheets, setAttribute style)
+createElement("style"): 0
+createElement('style'): 0
+insertRule: 0
+adoptedStyleSheets: 0
+setAttribute("style": 0
+cssText: 0
+
+## external origins in built JS (http/https URL literals, unique)
+http://127
+http://json-schema.org/draft-07/schema
+http://json-schema.org/schema
+http://www.w3.org/1998/Math/MathML
+http://www.w3.org/1999/xlink
+http://www.w3.org/2000/svg
+http://www.w3.org/XML/1998/namespace
+https://agora.invalid/schemas/cli.schema.json
+https://agora.invalid/schemas/errors.schema.json
+https://agora.invalid/schemas/fixture-policy.schema.json
+https://agora.invalid/schemas/fixture-sync.schema.json
+https://agora.invalid/schemas/foundation.schema.json
+https://agora.invalid/schemas/health.schema.json
+https://agora.invalid/schemas/local-room.schema.json
+https://agora.invalid/schemas/primitives.schema.json
+https://agora.invalid/schemas/sync.schema.json
+https://example.test
+https://json-schema.org/draft/2020-12/meta/applicator
+https://json-schema.org/draft/2020-12/meta/content
+https://json-schema.org/draft/2020-12/meta/core
+https://json-schema.org/draft/2020-12/meta/format-annotation
+https://json-schema.org/draft/2020-12/meta/meta-data
+https://json-schema.org/draft/2020-12/meta/unevaluated
+https://json-schema.org/draft/2020-12/meta/validation
+https://json-schema.org/draft/2020-12/schema
+https://json-schema.org/draft/2020-12/vocab/applicator
+https://json-schema.org/draft/2020-12/vocab/content
+https://json-schema.org/draft/2020-12/vocab/core
+https://json-schema.org/draft/2020-12/vocab/format-annotation
+https://json-schema.org/draft/2020-12/vocab/meta-data
+https://json-schema.org/draft/2020-12/vocab/unevaluated
+https://json-schema.org/draft/2020-12/vocab/validation
+https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json
+https://react.dev/errors/

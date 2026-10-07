@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Guard negatives for apps/web/test/built-room.test.ts, run from the worktree root: one mutation at a time,
+# watched red, restored byte for byte from a copy, then the restored head watched green.
+set -u
+export FORCE_COLOR=0 NO_COLOR=1
+run() { pnpm --filter @agora/web exec vitest run --config vitest.config.ts test/built-room.test.ts 2>&1; }
+negative() {
+	local label=$1 file=$2 expr=$3 before after
+	before=$(git hash-object "$file")
+	cp "$file" .scratch/guard-original
+	perl -0pi -e "$expr" "$file"
+	echo "## $label ($file)"
+	if git diff --quiet -- "$file"; then echo "mutation did not apply"; cp .scratch/guard-original "$file"; exit 1; fi
+	git diff --stat -- "$file"
+	run | grep -E '^ +× |AssertionError|^[-+] (Expected|Received)|^[+"].*EvalError|^ +Tests '
+	cp .scratch/guard-original "$file"
+	after=$(git hash-object "$file")
+	echo "restored byte for byte: $before == $after"
+	[ "$before" = "$after" ] || exit 1
+}
+echo "# guard negatives at $(git rev-parse HEAD), $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+git diff --quiet 1111c95203e97eb3bda0a04956480b1a1f0a8388 HEAD -- apps contracts packages scripts package.json pnpm-lock.yaml && echo "apps, contracts, packages, scripts, package.json and pnpm-lock.yaml are identical to 1111c95"
+negative 'plugin removed from the web build' apps/web/vite.config.ts 's/\{ \.\.\.browserValidatorPlugin\(\), apply: .build. \}, //'
+negative 'CSP relaxed with unsafe-eval' apps/web/vite.config.ts "s/script-src 'self';/script-src 'self' 'unsafe-eval';/"
+negative 'browser validators accept everything' contracts/tools/browser-validator.ts 's/wireValidatorOf\(validators\)/wireValidatorOf(Object.fromEntries(Object.keys(validators).map((k) => [k, () => true])))/'
+echo "## restored head"
+run | grep -E '^ +Tests '

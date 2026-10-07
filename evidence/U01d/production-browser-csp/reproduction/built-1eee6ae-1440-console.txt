@@ -1,0 +1,149 @@
+# Console transcript: scenario built-1eee6ae, viewport 1440x900x1, url http://127.0.0.1:4392/
+# Captured 2026-10-03T21:12:14Z with chrome-devtools-axi session prodslice-before
+# Lines longer than 400 chars are cut to their first 200 chars and marked; the original length is given.
+
+## list_console_messages
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+## Console messages
+Showing 1-3 of 3 (Page 1 of 1).
+msgid=19 [issue] Content Security Policy of your site blocks the use of `eval` in JavaScript (count: 1)
+msgid=20 [error] Error compiling schema, function code: const schema1 = scope.schema[1];const schema2 = scope.schema[2];const schema3 = scope.schema[3];const schema5 = scope.schema[4];const pattern0 = ...[cut, line was 7037 chars]
+msgid=21 [error] Uncaught EvalError: Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self'".
+ (0 args)
+
+## get_console_message 19
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+ID: 19
+Message: issue> Content Security Policy of your site blocks the use of `eval` in JavaScript
+
+The Content Security Policy (CSP) stops the evaluation of arbitrary strings as JavaScript to make it more difficult for an attacker to inject unauthorized code on your site.
+
+To solve this issue, avoid using `eval()`, `new Function()`, `setTimeout([string], …)` and `setInterval([string], …)` for evaluating strings.
+
+If you absolutely must: you can enable string evaluation by adding `unsafe-eval` as an allowed source in a `script-src` directive.
+
+⚠️ Allowing string evaluation comes at the risk of inline script injection.
+Learn more:
+[Content Security Policy - Eval](https://developers.google.com/web/fundamentals/security/csp#eval_too)
+### Affected resources
+data={"violatedDirective":"script-src","isReportOnly":false,"contentSecurityPolicyViolationType":"kEvalViolation","sourceCodeLocation":{"scriptId":"19","url":"http://127.0.0.1:4392/assets/index-DMXoyzyH.js","lineNumber":12,"columnNumber":26068}}
+
+## get_console_message 20
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+ID: 20
+Message: error> Error compiling schema, function code: const schema1 = scope.schema[1];const schema2 = scope.schema[2];const schema3 = scope.schema[3];const schema5 = scope.schema[4];const pattern0 =  ...[cut, line was 7027 chars]
+### Arguments
+Arg #0: Error compiling schema, function code:
+Arg #1: const schema1 = scope.schema[1];const schema2 = scope.schema[2];const schema3 = scope.schema[3];const schema5 = scope.schema[4];const pattern0 = scope.pattern[0];const pattern1 = scope.pattern ...[cut, line was 6980 chars]
+### Stack trace
+at c (index-DMXoyzyH.js:13:26686)
+at u (index-DMXoyzyH.js:13:27176)
+at l (index-DMXoyzyH.js:13:27057)
+at code (index-DMXoyzyH.js:13:57785)
+at me (index-DMXoyzyH.js:13:22986)
+at  (index-DMXoyzyH.js:13:18143)
+at code (index-DMXoyzyH.js:10:922)
+at block (index-DMXoyzyH.js:10:2812)
+at re (index-DMXoyzyH.js:13:18133)
+at T (index-DMXoyzyH.js:13:16553)
+at C (index-DMXoyzyH.js:13:16365)
+at b (index-DMXoyzyH.js:13:16036)
+at subschema (index-DMXoyzyH.js:13:22520)
+at  (index-DMXoyzyH.js:16:7205)
+at code (index-DMXoyzyH.js:16:7142)
+at me (index-DMXoyzyH.js:13:22986)
+at  (index-DMXoyzyH.js:13:18655)
+at code (index-DMXoyzyH.js:10:922)
+at block (index-DMXoyzyH.js:10:2812)
+at ie (index-DMXoyzyH.js:13:18597)
+at g (index-DMXoyzyH.js:13:18441)
+at  (index-DMXoyzyH.js:13:18235)
+at code (index-DMXoyzyH.js:10:922)
+at block (index-DMXoyzyH.js:10:2812)
+at re (index-DMXoyzyH.js:13:18203)
+at T (index-DMXoyzyH.js:13:16553)
+at  (index-DMXoyzyH.js:13:15539)
+at code (index-DMXoyzyH.js:10:922)
+at  (index-DMXoyzyH.js:13:14405)
+at code (index-DMXoyzyH.js:10:922)
+at func (index-DMXoyzyH.js:10:3165)
+at m (index-DMXoyzyH.js:13:14334)
+at _ (index-DMXoyzyH.js:13:15419)
+at p (index-DMXoyzyH.js:13:14049)
+at c (index-DMXoyzyH.js:13:25900)
+at _compileMetaSchema (index-DMXoyzyH.js:13:55111)
+at _compileSchemaEnv (index-DMXoyzyH.js:13:54907)
+at getSchema (index-DMXoyzyH.js:13:51909)
+at validate (index-DMXoyzyH.js:13:49653)
+at validateSchema (index-DMXoyzyH.js:13:51521)
+at _addSchema (index-DMXoyzyH.js:13:54740)
+at addSchema (index-DMXoyzyH.js:13:51129)
+at Ei (index-DMXoyzyH.js:16:68776)
+at  (index-DMXoyzyH.js:30:917)
+Note: line and column numbers use 1-based indexing
+
+## get_console_message 21
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+ID: 21
+Message: error> Uncaught EvalError: Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self'".
+
+### Stack trace
+at c (index-DMXoyzyH.js:13:26068)
+at u (index-DMXoyzyH.js:13:27176)
+at l (index-DMXoyzyH.js:13:27057)
+at code (index-DMXoyzyH.js:13:57785)
+at me (index-DMXoyzyH.js:13:22986)
+at  (index-DMXoyzyH.js:13:18143)
+at code (index-DMXoyzyH.js:10:922)
+at block (index-DMXoyzyH.js:10:2812)
+at re (index-DMXoyzyH.js:13:18133)
+at T (index-DMXoyzyH.js:13:16553)
+at C (index-DMXoyzyH.js:13:16365)
+at b (index-DMXoyzyH.js:13:16036)
+at subschema (index-DMXoyzyH.js:13:22520)
+at  (index-DMXoyzyH.js:16:7205)
+at code (index-DMXoyzyH.js:16:7142)
+at me (index-DMXoyzyH.js:13:22986)
+at  (index-DMXoyzyH.js:13:18655)
+at code (index-DMXoyzyH.js:10:922)
+at block (index-DMXoyzyH.js:10:2812)
+at ie (index-DMXoyzyH.js:13:18597)
+at g (index-DMXoyzyH.js:13:18441)
+at  (index-DMXoyzyH.js:13:18235)
+at code (index-DMXoyzyH.js:10:922)
+at block (index-DMXoyzyH.js:10:2812)
+at re (index-DMXoyzyH.js:13:18203)
+at T (index-DMXoyzyH.js:13:16553)
+at  (index-DMXoyzyH.js:13:15539)
+at code (index-DMXoyzyH.js:10:922)
+at  (index-DMXoyzyH.js:13:14405)
+at code (index-DMXoyzyH.js:10:922)
+at func (index-DMXoyzyH.js:10:3165)
+at m (index-DMXoyzyH.js:13:14334)
+at _ (index-DMXoyzyH.js:13:15419)
+at p (index-DMXoyzyH.js:13:14049)
+at c (index-DMXoyzyH.js:13:25900)
+at _compileMetaSchema (index-DMXoyzyH.js:13:55111)
+at _compileSchemaEnv (index-DMXoyzyH.js:13:54907)
+at getSchema (index-DMXoyzyH.js:13:51909)
+at validate (index-DMXoyzyH.js:13:49653)
+at validateSchema (index-DMXoyzyH.js:13:51521)
+at _addSchema (index-DMXoyzyH.js:13:54740)
+at addSchema (index-DMXoyzyH.js:13:51129)
+at Ei (index-DMXoyzyH.js:16:68776)
+at  (index-DMXoyzyH.js:30:917)
+Note: line and column numbers use 1-based indexing
+
+## list_network_requests
+Emulating viewport: {"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"isLandscape":false,"width":1440,"height":900}
+## Network requests
+Showing 1-3 of 3 (Page 1 of 1).
+reqid=141 GET http://127.0.0.1:4392/ [200]
+reqid=142 GET http://127.0.0.1:4392/assets/index-DMXoyzyH.js [200]
+reqid=143 GET http://127.0.0.1:4392/assets/index-CMsH2ZCU.css [200]
+
+## page probe
+Script ran on page and returned:
+```json
+"{\"href\":\"http://127.0.0.1:4392/\",\"viewport\":[1440,900,1],\"rootChildren\":0,\"rootText\":\"\",\"rootTextLength\":0,\"cspMeta\":\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'\",\"styleNodes\":0,\"styleElements\":0,\"styleAttrs\":0,\"fontsLoaded\":[]}"
+```

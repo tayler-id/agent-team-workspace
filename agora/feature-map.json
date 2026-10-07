@@ -127,10 +127,10 @@
 		{
 			"id": "application-architecture-boundaries",
 			"documentation": "docs/site/app-architecture.md",
-			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/renderer-policy.ts", "scripts/architecture-exceptions.ts", "agora/architecture-exceptions.json", "apps/web", "apps/web/tsconfig.json", "packages/client-core/test/app-architecture.test.ts", "package.json", "tsconfig.json"],
+			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/renderer-policy.ts", "scripts/architecture-exceptions.ts", "agora/architecture-exceptions.json", "apps/web", "apps/web/tsconfig.json", "packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/feature-dependencies.test.ts", "package.json", "tsconfig.json"],
 			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
-			"scenarios": ["packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/boundaries.test.ts"],
-			"fixtures": ["runtime owner paths; extension matrix ts/tsx/mts/cts/js/jsx/mjs/cjs; contracts js/cjs; apps/web non-src relocation; un-owned src two-hop relay; exact-row exceptions; string-literal effect import; declare/computed/mixed-union DOM; load-time fail-closed; guard-weakening; JSDoc import() comment edges; innerHTML/outerHTML/textContent/style property and setAttribute-family method mutation; untyped mjs/cjs ambiguous-mutator name trust; type-cast receiver evasion; react/jsx-runtime namespace allowance"],
+			"scenarios": ["packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/feature-dependencies.test.ts", "packages/client-core/test/boundaries.test.ts"],
+			"fixtures": ["per-Feature dependencies.json declared/undeclared/malformed/framework-denial probes in uniquely named throwaway Features; runtime owner paths; extension matrix ts/tsx/mts/cts/js/jsx/mjs/cjs; contracts js/cjs; apps/web non-src relocation; un-owned src two-hop relay; exact-row exceptions; string-literal effect import; declare/computed/mixed-union DOM; load-time fail-closed; guard-weakening; JSDoc import() comment edges; innerHTML/outerHTML/textContent/style property and setAttribute-family method mutation; untyped mjs/cjs ambiguous-mutator name trust; type-cast receiver evasion; react/jsx-runtime namespace allowance"],
 			"platforms": ["node24"],
 			"owner": "U20.B01"
 		},
@@ -268,6 +268,16 @@
 			"owner": "agora-web-shell-integrate"
 		},
 		{
+			"id": "web-production-build-csp",
+			"documentation": "docs/site/local-room-web-shell.md",
+			"owner": "agora-production-browser-slice",
+			"paths": ["contracts/tools/browser-validator.ts", "contracts/src/wire-validator.ts", "contracts/src/index.ts", "contracts/package.json", "apps/web/vite.config.ts", "scripts/local-room-service.ts", "scripts/boundary-policy.ts", "apps/web/test/built-room.test.ts"],
+			"public": ["@agora/contracts/browser-validator browserValidatorPlugin", "pnpm web:build", "pnpm web:test"],
+			"scenarios": ["apps/web/test/built-room.test.ts", "browser: built room under its unchanged CSP at 1440x900 and 390x844 mobile", "browser: served local room via scripts/local-room.ts start"],
+			"fixtures": ["agora.web-fixture.room/v1 bundled fixture, plus a copy of the built bundle with the stream id made schema-invalid"],
+			"platforms": ["node24", "browser"]
+		},
+		{
 			"id": "local-room-time-display",
 			"documentation": "docs/site/local-room-time-display.md",
 			"owner": "agora-live-room-time-display",
@@ -340,6 +350,14 @@
 			"fixtures": ["temporary git repositories created per test"],
 			"platforms": ["ubuntu-24.04", "macos-15", "node24.21.0", "pnpm10.34.1"],
 			"invalidation": "Ordinary candidate CI only. It is not a trusted evidence signature, an agora/evidence check, or merge authority; the credential-bearing reporter and U01b qualification stay a separate security task."
+		},
+		{
+			"id": "backup-restore-integrity", "documentation": "docs/site/backup-restore.md", "owner": "U01c.B01",
+			"paths": ["packages/storage/src/backup.ts", "packages/storage/src/index.ts", "scripts/backup.ts"],
+			"public": ["node scripts/backup.ts keygen|create|restore", "pnpm test:pg"],
+			"contracts": [], "scenarios": ["packages/storage/test/backup.pg.test.ts"],
+			"fixtures": ["migrated foundation_fixture database seeded through agora_app (scope A stream with 3 events and a claim, scope B stream with 1 event)", "flat objects directory with three files including one non-UTF-8 binary", "two generated keys (good, wrong) in a key directory separate from the backup", "second database agora_restore_<uuid> owned by agora_owner in the same throwaway cluster", "copied backups with one flipped byte in database.agb and with objects/0002.agb deleted", "temporary AGORA_PG_BIN directories whose pg_dump rewrites an object before running the real pg_dump, or whose pg_restore exits 1"],
+			"platforms": ["node24", "postgresql18"]
 		},
 		{
 			"id": "feature-discovery", "documentation": "docs/site/feature-discovery.md", "owner": "agora-feature-discovery-slice",

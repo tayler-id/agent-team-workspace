@@ -1,0 +1,56 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-03T21:32:26.603Z
+parent: 07d19c1e2d84d4d9ef81233644d0eee0973c8036
+head: 4385f3492655f42ce7d6330937aa39131c1dcdd6
+subject_revision: 07d19c1e2d84d4d9ef81233644d0eee0973c8036
+test_patch_applied_to_subject: true
+test_patch_files: 
+test_patch_digest: sha256:170a51c3b48ba18a6cdf16cd5b11bf5d69e4cdbc80de70f17307480d9294a2da
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg packages/storage/test/backup.pg.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-qAWN0R
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (10 tests | 1 failed) 4221ms
+   × a backup taken while rows are being written restores to exactly its sealed inventory 613ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  17:32:08
+   Duration  4.62s (tests 93%, import 6%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"e8f22296-8e3b-4604-89fc-adfd63a4b46d","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-jasuX6","socketDir":"/private/tmp/agora-p0c-e8f22296-8e3b-4604-89fc-adfd63a4b46d"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"e8f22296-8e3b-4604-89fc-adfd63a4b46d","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-jasuX6","socketDir":"/private/tmp/agora-p0c-e8f22296-8e3b-4604-89fc-adfd63a4b46d","pid":67089}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"e8f22296-8e3b-4604-89fc-adfd63a4b46d","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-jasuX6","socketDir":"/private/tmp/agora-p0c-e8f22296-8e3b-4604-89fc-adfd63a4b46d","socket_dir":"/private/tmp/agora-p0c-e8f22296-8e3b-4604-89fc-adfd63a4b46d","pid":67089,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > a backup taken while rows are being written restores to exactly its sealed inventory
+AssertionError: expected { status: 1, receipt: { …(4) } } to deeply equal { status: +0, …(1) }
+
+- Expected
++ Received
+
+  {
+    "receipt": {
+-     "inventory_digest": "sha256:6b081d4e323e90476f18e1979c36cee473d5b5b8821a20b086f366c68162f10d",
+-     "outcome": "restored",
++     "outcome": "denied",
++     "reason_code": "integrity_mismatch",
++     "schema_version": "agora.restore-receipt/v1",
++     "subject": "table:foundation_fixture.event",
+    },
+-   "status": 0,
++   "status": 1,
+  }
+
+ ❯ packages/storage/test/backup.pg.test.ts:201:175
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-jasuX6","socketDir":"/private/tmp/agora-p0c-e8f22296-8e3b-4604-89fc-adfd63a4b46d"}

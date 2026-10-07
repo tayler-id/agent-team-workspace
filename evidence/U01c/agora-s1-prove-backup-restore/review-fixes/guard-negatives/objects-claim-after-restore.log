@@ -1,0 +1,32 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.no-mistakes/worktrees/50d2db971a33/01M41VBGXG69TYMV6VSF8EHPWY
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (13 tests | 1 failed) 8069ms
+   × an objects path whose parent is missing fails before any row is restored 365ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 12 passed (13)
+   Start at  18:15:07
+   Duration  8.56s (tests 96%, import 4%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"1ef8b36e-5cc3-49c2-9a98-edfe6a844a7c","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-1ef8b36e-5cc3-49c2-9a98-edfe6a844a7c"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"1ef8b36e-5cc3-49c2-9a98-edfe6a844a7c","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-1ef8b36e-5cc3-49c2-9a98-edfe6a844a7c","pid":77098}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"1ef8b36e-5cc3-49c2-9a98-edfe6a844a7c","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-1ef8b36e-5cc3-49c2-9a98-edfe6a844a7c","socket_dir":"/private/tmp/agora-p0c-1ef8b36e-5cc3-49c2-9a98-edfe6a844a7c","pid":77098,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > an objects path whose parent is missing fails before any row is restored
+AssertionError: expected 8 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 8
+
+ ❯ packages/storage/test/backup.pg.test.ts:238:35
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-1ef8b36e-5cc3-49c2-9a98-edfe6a844a7c"}

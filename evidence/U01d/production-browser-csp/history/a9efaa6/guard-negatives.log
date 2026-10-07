@@ -1,0 +1,27 @@
+# guard negatives at a9efaa673278a6cb2dc9c18cd453daf11c337077, 2026-10-03T21:12:24Z
+## plugin removed from the web build (apps/web/vite.config.ts)
+ apps/web/vite.config.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × the built room validates its fixture and renders without string code generation
+   × the built room rejects a schema-invalid fixture without string code generation
+AssertionError: expected 'EvalError: Code generation from strin…' to be null
+- Expected:
++ Received:
+"EvalError: Code generation from strings disallowed for this context"
++   "error": "EvalError: Code generation from strings disallowed for this context",
+      Tests  2 failed | 1 passed (3)
+restored byte for byte: 137104034bdee9902ce57035cc7a9e1cf2536b65 == 137104034bdee9902ce57035cc7a9e1cf2536b65
+## CSP relaxed with unsafe-eval (apps/web/vite.config.ts)
+ apps/web/vite.config.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × the built room keeps its strict CSP unchanged
+      Tests  1 failed | 2 passed (3)
+restored byte for byte: 137104034bdee9902ce57035cc7a9e1cf2536b65 == 137104034bdee9902ce57035cc7a9e1cf2536b65
+## browser validators accept everything (contracts/tools/browser-validator.ts)
+ contracts/tools/browser-validator.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × the built room rejects a schema-invalid fixture without string code generation
+      Tests  1 failed | 2 passed (3)
+restored byte for byte: b1518020d20aa36ab764c58b55baf7daf036d9b1 == b1518020d20aa36ab764c58b55baf7daf036d9b1
+## restored head
+      Tests  3 passed (3)

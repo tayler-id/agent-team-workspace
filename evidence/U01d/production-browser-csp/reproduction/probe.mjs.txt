@@ -1,0 +1,43 @@
+// Loads a built apps/web bundle into jsdom globals and reports what #root holds.
+// usage (cwd must resolve jsdom): node [--disallow-code-generation-from-strings] probe.mjs <dist-dir>
+import { createRequire } from 'node:module';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+
+const require = createRequire(join(process.cwd(), 'package.json'));
+const { JSDOM } = require('jsdom');
+const dist = resolve(process.argv[2]);
+const html = readFileSync(join(dist, 'index.html'), 'utf8');
+const bundle = readdirSync(join(dist, 'assets')).find((f) => f.endsWith('.js'));
+const cut = (s) => (s.length > 200 ? `${s.slice(0, 200)} ...[cut, ${s.length} chars]` : s);
+
+const dom = new JSDOM(html, { url: 'http://127.0.0.1:4392/', pretendToBeVisual: true });
+const w = dom.window;
+for (const key of ['window', 'document', 'navigator', 'HTMLElement', 'Element', 'Node', 'Text', 'Event', 'KeyboardEvent', 'MouseEvent', 'MutationObserver', 'getComputedStyle', 'requestAnimationFrame', 'cancelAnimationFrame', 'sessionStorage', 'localStorage', 'location', 'matchMedia', 'ResizeObserver', 'FontFace']) {
+	if (key in w && !(key in globalThis && key === 'navigator')) {
+		try { globalThis[key] = typeof w[key] === 'function' && /^[a-z]/.test(key) ? w[key].bind(w) : w[key]; } catch {}
+	}
+}
+globalThis.matchMedia ??= () => ({ matches: false, addEventListener() {}, removeEventListener() {} });
+w.matchMedia ??= globalThis.matchMedia;
+globalThis.ResizeObserver ??= class { observe() {} unobserve() {} disconnect() {} };
+w.ResizeObserver ??= globalThis.ResizeObserver;
+
+const errors = [];
+process.on('uncaughtException', (e) => errors.push(e));
+const report = { node: process.version, codegenDisallowed: process.execArgv.includes('--disallow-code-generation-from-strings'), bundle };
+try {
+	await import(pathToFileURL(join(dist, 'assets', bundle)).href);
+	report.importOutcome = 'resolved';
+} catch (e) {
+	report.importOutcome = 'threw';
+	report.error = { name: e?.name, message: cut(String(e?.message)), stackTop: String(e?.stack).split('\n').slice(1, 4).map((l) => l.trim()) };
+}
+await new Promise((r) => setTimeout(r, 500));
+const root = w.document.getElementById('root');
+report.rootChildren = root.childElementCount;
+report.rootText = root.textContent.replace(/\s+/g, ' ').trim().slice(0, 120);
+report.uncaught = errors.map((e) => ({ name: e?.name, message: cut(String(e?.message)) }));
+console.log(JSON.stringify(report, null, 2));
+process.exit(0);

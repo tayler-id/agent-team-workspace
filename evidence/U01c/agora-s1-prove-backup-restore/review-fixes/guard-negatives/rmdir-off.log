@@ -1,0 +1,32 @@
+
+ RUN  v5.0.1 /Users/taylerramsay/.no-mistakes/worktrees/50d2db971a33/01M41VBGXG69TYMV6VSF8EHPWY
+
+ ❯ |pg| packages/storage/test/backup.pg.test.ts (13 tests | 1 failed) 7353ms
+   × a failed pg_restore removes the objects directory it claimed 559ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 12 passed (13)
+   Start at  18:15:16
+   Duration  7.79s (tests 95%, import 4%, transform 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"3fd89b22-47e0-4cdc-93ac-b3953606fb97","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3fd89b22-47e0-4cdc-93ac-b3953606fb97"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"3fd89b22-47e0-4cdc-93ac-b3953606fb97","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3fd89b22-47e0-4cdc-93ac-b3953606fb97","pid":77526}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"3fd89b22-47e0-4cdc-93ac-b3953606fb97","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3fd89b22-47e0-4cdc-93ac-b3953606fb97","socket_dir":"/private/tmp/agora-p0c-3fd89b22-47e0-4cdc-93ac-b3953606fb97","pid":77526,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |pg| packages/storage/test/backup.pg.test.ts > a failed pg_restore removes the objects directory it claimed
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ packages/storage/test/backup.pg.test.ts:245:33
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"<tmp>","socketDir":"/private/tmp/agora-p0c-3fd89b22-47e0-4cdc-93ac-b3953606fb97"}

@@ -1,0 +1,81 @@
+# History probes against a62662e (commands run from the worktree root)
+
+$ git log --oneline -S contentSecurityPolicy -- apps/web/vite.config.ts   (default history simplification)
+5f2e852 archive: preserve slot12's uncommitted browser virtualization snapshot
+
+$ git log --full-history --format="%h %ad %s" --date=short -S contentSecurityPolicy a62662e -- apps/web/vite.config.ts
+a6a4c03 2026-09-22 checkpoint: preserve slot12 browser virtualization dirty snapshot
+5f2e852 2026-09-22 archive: preserve slot12's uncommitted browser virtualization snapshot
+
+$ git log --first-parent --format="%h %ad %s" --date=short a62662e -- apps/web/vite.config.ts
+1eee6ae 2026-09-22 merge: reconcile browser virtualization salvage with preserved source provenance
+fc04d27 2026-09-22 feat: wire the room shell (App, FixtureControls, main.tsx) onto the framework
+
+$ contentSecurityPolicy matches in apps/web/vite.config.ts per commit
+fc04d27 feat: wire the room shell (App, FixtureControls, main.tsx) onto the framework: 0
+e34df8f feat: salvage slice 4 - full timeline behavior matrix, boundary rewrite, flushSync fix: 0
+5f2e852^ test: drive a 50,000-message timeline through the public shell while it still pages: 0
+5f2e852 archive: preserve slot12's uncommitted browser virtualization snapshot: 2
+1eee6ae merge: reconcile browser virtualization salvage with preserved source provenance: 2
+a62662e docs(U01b.B02): forgery reproduction, truthful validator limits, handoff re-review: 2
+
+$ git log -1 --format=%P 1eee6ae   (parents of the mainline merge that brought the CSP in)
+e34df8fe48b90dda96bf11eb38db12f5a70d5122 5f2e8521e4576312aee01f34b5f7550e30cb568f
+
+$ git log --oneline -- contracts/tools/browser-validator.ts
+9882342 feat: own the local room lifecycle and resume committed events (L3)
+
+$ grep D92 docs/decisions.tsv (at a62662e)
+2026-09-21T03:32:00Z	security	D92 Compile browser validators from the authored schemas before launch instead of allowing runtime evaluation	A real browser reproduced CSP blocking Ajv runtime compilation; standalone generated validators bundled by the existing locked Vite preserve one wire authority and strict CSP	contracts/tools/browser-validator.ts; evidence/local-room/runtime/browser-csp.red.log	no unsafe-eval; no dependency or lockfile change; minimal harness only
+
+$ git log --full-history --format="%h %ad %s" --date=short -S createWireValidator a62662e -- apps/web
+8b41c78 2026-09-22 feat(local-room): L4 first vertical slice — live room UI over L1-L3 runtime
+eb7e818 2026-09-22 feat: wire apps/web onto @agora/web-framework with a Host adapter layer
+333e939 2026-09-20 test: cover the local room web shell with the isolation guard still red
+b7a709f 2026-09-21 feat: add web-framework one-writer Client and browser Host shell
+bb62afa 2026-09-20 test: cover the local room web shell with the isolation guard still red
+4a77a8f 2026-09-20 chore: preserve inherited React engineering work before local-room integration
+
+$ createWireValidator call sites in apps/web/src per commit
+== 4a77a8f 2026-09-20 chore: preserve inherited React engineering work before local-room integration
+4a77a8f:apps/web/src/fixture/adapter.ts:29:const validator = createWireValidator();
+== 5f2e852 2026-09-22 archive: preserve slot12's uncommitted browser virtualization snapshot
+5f2e852:apps/web/src/fixture/adapter.ts:21:const validator = createWireValidator();
+== 1eee6ae 2026-09-22 merge: reconcile browser virtualization salvage with preserved source provenance
+1eee6ae:apps/web/src/host/fixture.ts:17:const validator = createWireValidator();
+== eb7e818 2026-09-22 feat: wire apps/web onto @agora/web-framework with a Host adapter layer
+eb7e818:apps/web/src/host/fixture.ts:16:const validator = createWireValidator();
+== 8b41c78 2026-09-22 feat(local-room): L4 first vertical slice — live room UI over L1-L3 runtime
+8b41c78:apps/web/src/host/fixture.ts:17:const validator = createWireValidator();
+8b41c78:apps/web/src/host/live.ts:10:const wire = createWireValidator();
+== a62662e 2026-10-02 docs(U01b.B02): forgery reproduction, truthful validator limits, handoff re-review
+a62662e:apps/web/src/host/fixture.ts:17:const validator = createWireValidator();
+a62662e:apps/web/src/host/live.ts:10:const wire = createWireValidator();
+
+$ prior built-room references in evidence/ and docs (at a62662e)
+a62662e:evidence/handoff/README.md:83:4. **Production preview.** The `pnpm web:build` output renders blank under the strict CSP
+a62662e:evidence/local-room/virtualization/planning-checkpoint.md:89:Driver: `chrome-devtools-axi`, present at `/Users/taylerramsay/.local/bin/chrome-devtools-axi` (`open`, `eval`, `resize`, `emulate`, `press`, `scroll`, `screenshot`, `perf-start`, `perf-stop`
+a62662e:evidence/local-room/virtualization/salvage-inventory.md:268:  missing). Verified present in `apps/web/dist/index.html` after a real `pnpm --filter @agora/web build`.
+
+$ git log --format="%h %ad %s" --date=short -S "renders blank under the strict CSP" -- evidence/handoff/README.md
+42bd807 2026-10-02 docs(handoff): consolidation handoff, integrated drafts drive and validator negatives
+
+# Build at 1eee6ae (git archive 1eee6ae into .scratch/repro/csp-intro-src, pnpm install --frozen-lockfile --offline, pnpm --filter @agora/web build), then the codegen-disallowed Node probe:
+{
+  "node": "v24.21.0",
+  "codegenDisallowed": true,
+  "bundle": "index-DMXoyzyH.js",
+  "importOutcome": "threw",
+  "error": {
+    "name": "EvalError",
+    "message": "Code generation from strings disallowed for this context",
+    "stackTop": [
+      "at Function (<anonymous>)",
+      "at s.c (file:///Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/csp-intro-src/apps/web/dist/assets/index-DMXoyzyH.js:13:26068)",
+      "at s.u (file:///Users/taylerramsay/.treehouse/agent-team-workspace-439a06/2/agent-team-workspace/.scratch/repro/csp-intro-src/apps/web/dist/assets/index-DMXoyzyH.js:13:27176)"
+    ]
+  },
+  "rootChildren": 0,
+  "rootText": "",
+  "uncaught": []
+}

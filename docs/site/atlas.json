@@ -1,5 +1,5 @@
 {
-  "revision": "f4992158118d08de51a5019ddc7926fe9edeec88",
+  "revision": "173c75f4f93b97268396c252c55682088d88a513",
   "date": "2026-09-23",
   "features": [
     {
@@ -199,6 +199,10 @@
         "repo:agora/architecture-exceptions.json",
         "repo:scripts/renderer-policy.ts",
         "repo:packages/client-core/test/app-architecture.test.ts",
+        "repo:packages/client-core/test/feature-dependencies.test.ts",
+        "repo:evidence/U20/feature-dependencies/red.log",
+        "repo:evidence/U20/feature-dependencies/green.log",
+        "repo:evidence/U20/feature-dependencies/guard-negatives.log",
         "repo:evidence/U20/agora-s1-lint-application-architecture/outcome.json",
         "repo:evidence/U20/agora-s1-lint-application-architecture/whole-feature-red.log",
         "repo:evidence/U20/agora-s1-lint-application-architecture/green.log",
@@ -266,6 +270,17 @@
       "proof": [
         "repo:docs/technical-spec.md",
         "repo:docs/research-basis.md"
+      ]
+    },
+    {
+      "id": "backup-restore",
+      "title": "Encrypted backup and restore",
+      "status": "In progress",
+      "why": "The first U01c.B01 slice seals a disposable fixture database and its objects with AES-256-GCM, denies a wrong key, corruption, a missing file or a used target before writing, and restores into a second database whose row and object inventory must match. WAL, separate-host restore, off-host key recovery, epoch fencing and RPO/RTO remain open.",
+      "page": "backup-restore.md",
+      "proof": [
+        "repo:docs/technical-spec.md",
+        "repo:docs/implementation-plan.md"
       ]
     }
   ],

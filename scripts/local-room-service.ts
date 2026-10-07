@@ -1,8 +1,7 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { dirname, resolve } from 'node:path';
-import { browserValidatorSource, browserValidatorWrapper } from '../contracts/tools/browser-validator.ts';
+import { browserValidatorPlugin } from '../contracts/tools/browser-validator.ts';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
 import { randomUUID } from 'node:crypto';
@@ -65,10 +64,7 @@ try {
 	const app = createApp({ probeDatabase: () => appDatabase.reachable(), localRoom: createPostgresLocalRoom(appDatabase, LOCAL_ROOM) });
 	// Reuse Vite from the existing locked Vitest toolchain, without changing dependencies.
 	const vite = await import(createRequire(import.meta.resolve('vitest/config')).resolve('vite')) as { build(options: unknown): Promise<unknown> };
-	const contractRequire = createRequire(import.meta.resolve('@agora/contracts'));
-	writeFileSync(`${owner.root}/validator.cjs`, browserValidatorSource());
-	writeFileSync(`${owner.root}/validator.mjs`, browserValidatorWrapper(`${owner.root}/validator.cjs`, resolve('contracts/src/canonical.ts')));
-	await vite.build({ configFile: false, logLevel: 'silent', define: { 'process.env.NODE_ENV': JSON.stringify('production') }, resolve: { alias: { '@agora/contracts/canonical': `${owner.root}/validator.mjs`, '@agora/contracts': `${owner.root}/validator.mjs`, ajv: dirname(contractRequire.resolve('ajv/package.json')), 'ajv-formats': dirname(contractRequire.resolve('ajv-formats/package.json')) } }, build: { commonjsOptions: { include: [/node_modules/, /validator.cjs/] }, outDir: `${owner.root}/harness`, emptyOutDir: true, lib: { entry: 'apps/web/src/main-live.tsx', formats: ['es'], fileName: 'harness' } } });
+	await vite.build({ configFile: false, logLevel: 'silent', plugins: [browserValidatorPlugin()], define: { 'process.env.NODE_ENV': JSON.stringify('production') }, build: { outDir: `${owner.root}/harness`, emptyOutDir: true, lib: { entry: 'apps/web/src/main-live.tsx', formats: ['es'], fileName: 'harness' } } });
 	let tokens = 60, last = Date.now();
 	server.on('request', (request, response) => {
 		const answer = (status: number, text: string, type = 'text/plain'): void => {
