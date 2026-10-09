@@ -78,12 +78,13 @@
 		{
 			"id": "evidence-validator",
 			"documentation": "docs/site/evidence-validator.md",
-			"paths": ["scripts/validate-evidence.mjs", "scripts/project-evidence.mjs", "scripts/record-red-green.mjs", "scripts/project.mjs", "scripts/project-checks.mjs", "agora/project.json"],
+			"paths": ["scripts/validate-evidence.mjs", "scripts/project-evidence.mjs", "scripts/record-red-green.mjs", "scripts/record-source-bytes.ts", "scripts/project.mjs", "scripts/project-checks.mjs", "agora/project.json"],
 			"public": ["node scripts/validate-evidence.mjs --dir DIR [--head SHA] [--base SHA] [--target NAME] [--key FILE]", "pnpm agora project lanes --unit U01b --task agora-s1-validate-project-evidence"],
-			"scenarios": ["packages/verification/test/project.test.ts", "packages/verification/test/evidence-validator.test.ts"],
+			"scenarios": ["packages/verification/test/project.test.ts", "packages/verification/test/evidence-validator.test.ts", "packages/verification/test/record-source-bytes.test.ts"],
 			"fixtures": ["synthetic red.log/green.log/manifest.json bundles at fixed head/base", "tampered/missing/mutated artifact, producer key and target negatives", "guard-weakening copy of the signature check"],
 			"platforms": ["node24"],
-			"owner": "U01b.B02"
+			"owner": "U01b.B02",
+			"invalidation": "Replay must hash tracked symlink contents as Git link bytes and regular files unchanged, never read arbitrary link targets. Canonical tracked skill files are hashed separately. This does not alter signing policy or qualify trusted reporting."
 		},
 		{
 			"id": "foundation-admission",
@@ -93,7 +94,8 @@
 			"scenarios": ["packages/verification/test/admission.test.ts", "packages/verification/test/protocol.test.ts", "lane-9", "lane-10"],
 			"fixtures": ["foundation-only task proof, no product authority"],
 			"platforms": ["node24", "postgresql18", "swift6-macos"],
-			"owner": "U01a.B04"
+			"owner": "U01a.B04",
+			"invalidation": "Native foundation copies share scripts/record-source-bytes.ts with red/green recording: physical compatibility symlinks must not cause a directory read or bypass source preservation. Existing protocol and admission denials remain required; a task pass is not full foundation qualification."
 		},
 		{
 			"id": "documentation-config-rejection",
