@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
+import { sourceBytes } from './record-source-bytes.ts';
 
 export const task = 'agora-s1-enforce-test-first';
 export const testFile = 'packages/verification/test/admission.test.ts';
@@ -26,7 +27,7 @@ export function withCopy(head, action) {
 		git('worktree', 'add', '--detach', copy, head);
 		if (run(['pnpm', 'install', '--frozen-lockfile', '--prefer-offline'], copy).exit !== 0) throw new Error('install_blocked');
 		const files = git('ls-tree', '-r', '--name-only', head).split('\n');
-		const digest = () => hash(files.map(file => `${file}:${hash(readFileSync(path.join(copy, file)))}`).join('\n'));
+		const digest = () => hash(files.map(file => `${file}:${hash(sourceBytes(path.join(copy, file)))}`).join('\n'));
 		const before = digest();
 		const result = action(copy);
 		if (before !== digest()) throw new Error('source_mutation');

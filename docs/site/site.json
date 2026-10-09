@@ -309,6 +309,10 @@
       "page": "verification.md"
     },
     {
+      "path": "scripts/record-source-bytes.ts",
+      "page": "cli.md"
+    },
+    {
       "path": "scripts/validate-evidence.mjs",
       "page": "evidence-validator.md"
     },
