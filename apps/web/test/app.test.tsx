@@ -1,4 +1,5 @@
-import { AgoraProvider, createRoomClient, type RoomClient } from '@agora/web-framework';
+import { createWireValidator } from '@agora/contracts';
+import { AgoraProvider, createRoomClient, useRoomCommands, useTransportState, type RoomClient, type RoomTransport, type TransportConnection } from '@agora/web-framework';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -22,7 +23,7 @@ beforeEach(() => {
 	window.matchMedia = (query: string): MediaQueryList => ({ matches: phone && query.includes('700px'), media: query, onchange: null, addEventListener: (_: string, l: unknown) => { listeners.add(l as () => void); }, removeEventListener: (_: string, l: unknown) => { listeners.delete(l as () => void); }, addListener: () => undefined, removeListener: () => undefined, dispatchEvent: () => true } as MediaQueryList);
 });
 const setPhone = (value: boolean): void => { phone = value; act(() => { for (const l of listeners) l(); }); };
-afterEach(() => { cleanup(); phone = false; vi.useRealTimers(); });
+afterEach(() => { cleanup(); phone = false; vi.useRealTimers(); vi.unstubAllGlobals(); });
 declare module 'vitest' { interface Assertion { toHaveTextContent: (expected: string) => void } }
 expect.extend({ toHaveTextContent(received: unknown, expected: string) { const text = received instanceof Element ? received.textContent : ''; return { pass: text.includes(expected), message: () => `expected ${JSON.stringify(text)} to include ${JSON.stringify(expected)}` }; } });
 
@@ -264,4 +265,75 @@ test('live room: your own send is never unread or announced; arrivals from elsew
 	server.add('burst two');
 	await wait(2100);
 	expect(status()).toHaveTextContent('2 new messages, 2 unread.');
+});
+
+// U22.B01 lanes 5 and 8 over the already-built hooks: a command through useRoomCommands and its receipt, and no transport
+// subscription outliving the component that opened it. Lane 7 (compile negatives) is in packages/web-framework/test/boundaries.test.ts.
+const laneRoomId = 'aaaaaaaa-0000-4000-8000-000000000001';
+const laneSnapshot = { schema_version: 'agora.local-room.snapshot/v1', scope: { project_id: 'bbbbbbbb-0000-4000-8000-000000000001', room_id: laneRoomId }, cursor: { stream_id: laneRoomId, committed_seq: '0' }, messages: [] };
+const laneJson = (body: unknown, status = 200): Response => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', 'x-agora-instance': 'launch-a' } });
+const receiptBody = (commandId: string): Record<string, unknown> => ({ schema_version: 'agora.local-room.receipt/v1', identity: { command_id: commandId, request_digest: `sha256:${'e'.repeat(64)}` }, receipt: { command_id: commandId, aggregate_id: laneRoomId, revision: '1', event_cursors: [{ stream_id: laneRoomId, committed_seq: '1' }], receipt_id: 'cccccccc-0000-4000-8000-000000000503' }, message_id: 'cccccccc-0000-4000-8000-000000000004', replayed: false });
+const flush = async (times = 8): Promise<void> => { for (let i = 0; i < times; i++) await act(() => new Promise<void>((resolve) => { setTimeout(resolve, 0); })); };
+
+async function sendThroughHook(respond: (commandId: string) => unknown): Promise<{ sent: string[]; received: unknown[]; client: RoomClient }> {
+	const sent: string[] = [], received: unknown[] = [], store = new Map<string, string>();
+	vi.stubGlobal('sessionStorage', { getItem: (k: string) => store.get(k) ?? null, setItem: (k: string, v: string) => { store.set(k, v); }, removeItem: (k: string) => { store.delete(k); } });
+	vi.stubGlobal('fetch', vi.fn((url: string, init?: { readonly body?: string }): Promise<Response> => {
+		if (url.endsWith('/snapshot')) return Promise.resolve(laneJson(laneSnapshot));
+		if (url.includes('/events?after=')) return Promise.resolve(laneJson([]));
+		const command = JSON.parse(init?.body ?? '{}') as { command_id: string };
+		sent.push(command.command_id);
+		const body = respond(command.command_id);
+		received.push(body);
+		return Promise.resolve(laneJson(body, 201));
+	}));
+	const client = createRoomClient();
+	const transport = createLiveTransport(client, { baseUrl: 'http://local-room.invalid', pollDelayMs: 0, retryDelayMs: 0 });
+	const environment = createBrowserEnvironment(transport, { digestText: () => Promise.resolve(`sha256:${'e'.repeat(64)}`) });
+	let commands: ReturnType<typeof useRoomCommands> | undefined;
+	const Consumer = (): ReactElement => { commands = useRoomCommands(); return <span />; };
+	render(<AgoraProvider client={client} environment={{ ...environment, createId: () => 'dddddddd-0000-4000-8000-000000000001' }}><Consumer /></AgoraProvider>);
+	act(() => { commands?.loadSnapshot(); });
+	await flush();
+	await act(async () => { await commands?.submit('hello'); });
+	await flush();
+	transport.disconnect();
+	return { sent, received, client };
+}
+
+test('lane 5: a command sent through useRoomCommands settles on a receipt the generated validator accepts', async () => {
+	const { sent, received, client } = await sendThroughHook(receiptBody);
+	expect(sent).toEqual(['dddddddd-0000-4000-8000-000000000001']);
+	const verdict = createWireValidator().validate('RoomCommandReceipt', received[0]);
+	expect(verdict.ok ? 'ok' : verdict.details).toBe('ok');
+	const command = client.getState().commands[0];
+	expect(command?.tag).toBe('received');
+	// Local shape only: this proves the published schema and the client's acceptance, not production R07 atomic commit.
+	expect(command?.tag === 'received' && command.receipt.event_cursors).toEqual([{ stream_id: laneRoomId, committed_seq: '1' }]);
+});
+
+test('lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client', async () => {
+	const broken = (commandId: string): unknown => Object.fromEntries(Object.entries(receiptBody(commandId)).filter(([key]) => key !== 'receipt'));
+	const { received, client } = await sendThroughHook(broken);
+	const verdict = createWireValidator().validate('RoomCommandReceipt', received[0]);
+	expect(verdict.ok).toBe(false);
+	expect(client.getState().commands[0]?.tag).toBe('denied');
+});
+
+function countingTransport(): { transport: RoomTransport; open: () => number } {
+	const subscribers = new Set<() => void>();
+	const state: TransportConnection = { online: true, phase: 'idle', error: undefined, decision: undefined, link: 'online', sendPhase: {} };
+	const noop = (): void => undefined;
+	return { open: () => subscribers.size, transport: { streamId: 's', getState: () => state, subscribe: (l) => { subscribers.add(l); return () => { subscribers.delete(l); }; }, loadSnapshot: noop, submit: noop, markSeen: noop, disconnect: noop, reconnect: noop, saveDraft: noop } };
+}
+
+test('lane 8: 200 mounts and unmounts of a transport-subscribed hook consumer leave zero transport subscriptions', () => {
+	const { transport, open } = countingTransport();
+	const Consumer = (): ReactElement => { useTransportState(); return <span />; };
+	const client = createRoomClient(), environment = createBrowserEnvironment(transport);
+	const held = render(<AgoraProvider client={client} environment={environment}><Consumer /></AgoraProvider>);
+	expect(open()).toBe(1);
+	held.unmount();
+	for (let i = 0; i < 200; i++) render(<AgoraProvider client={client} environment={environment}><Consumer /></AgoraProvider>).unmount();
+	expect(open()).toBe(0);
 });
