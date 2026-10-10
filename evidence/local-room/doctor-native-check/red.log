@@ -1,0 +1,110 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-10T18:57:35.377Z
+parent: f69619f752e3c2104fc6947cfb1967f07f9168e8
+head: 5c52345a784da42e35ac2749aae2f7303589428c
+subject_revision: f69619f752e3c2104fc6947cfb1967f07f9168e8
+test_patch_applied_to_subject: true
+test_patch_files: apps/center/test/local-room-doctor.test.ts, scripts/test/ci-doctor.test.ts
+test_patch_digest: sha256:79f1313fbd87eaa3bb129f0032af5565bac59b8f25110d60a81b575e17c0c988
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"npx vitest run --project unit apps/center/test/local-room-doctor.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-ljzUoQ
+
+ ❯ |unit| apps/center/test/local-room-doctor.test.ts (4 tests | 4 failed) 1909ms
+   ❯ local room doctor and start native readiness (4)
+     × doctor passes and says the addon loads when Rolldown loads 216ms
+     × doctor is blocked with the supported runtime remedy when the addon cannot load 193ms
+     × start reports the selected native cause, not an instruction to read the log 1255ms
+     × guard negative: with the probe removed the same readiness assertion goes red 1ms
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  14:57:22
+   Duration  2.00s (tests 99%, transform 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| apps/center/test/local-room-doctor.test.ts > local room doctor and start native readiness > doctor passes and says the addon loads when Rolldown loads
+AssertionError: expected 'v24.21.0; pg_ctl (PostgreSQL) 18.4 (H…' to match /Rolldown native addon loads/
+
+- Expected:
+/Rolldown native addon loads/
+
++ Received:
+"v24.21.0; pg_ctl (PostgreSQL) 18.4 (Homebrew); private loopback cluster, agora_app product role"
+
+ ❯ apps/center/test/local-room-doctor.test.ts:38:27
+     36|   const r = cli('scripts/local-room.ts', ['doctor'], process.env);
+     37|   expect(r.report.outcome).toBe('pass');
+     38|   expect(r.report.detail).toMatch(/Rolldown native addon loads/);
+       |                           ^
+     39|  });
+     40|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  |unit| apps/center/test/local-room-doctor.test.ts > local room doctor and start native readiness > doctor is blocked with the supported runtime remedy when the addon cannot load
+AssertionError: expected +0 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 0
+
+ ❯ assertBlockedWithRemedy apps/center/test/local-room-doctor.test.ts:23:17
+     21| const supported = /official nodejs\.org Node 24\.21\.0/;
+     22| const assertBlockedWithRemedy = (r: { exit: number | null; report: Rep…
+     23|  expect(r.exit).toBe(2);
+       |                 ^
+     24|  expect(r.report.outcome).toBe('blocked');
+     25|  expect(r.report.detail).toMatch(/Rolldown native addon.*different Tea…
+ ❯ apps/center/test/local-room-doctor.test.ts:42:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  |unit| apps/center/test/local-room-doctor.test.ts > local room doctor and start native readiness > start reports the selected native cause, not an instruction to read the log
+AssertionError: expected 'Error: startup failed; inspect retain…' to match /Rolldown native addon.*different Team…/
+
+- Expected:
+/Rolldown native addon.*different Team ID/
+
++ Received:
+"Error: startup failed; inspect retained runtime.log"
+
+ ❯ assertBlockedWithRemedy apps/center/test/local-room-doctor.test.ts:25:26
+     23|  expect(r.exit).toBe(2);
+     24|  expect(r.report.outcome).toBe('blocked');
+     25|  expect(r.report.detail).toMatch(/Rolldown native addon.*different Tea…
+       |                          ^
+     26|  expect(r.report.detail).toMatch(supported);
+     27| };
+ ❯ apps/center/test/local-room-doctor.test.ts:47:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  |unit| apps/center/test/local-room-doctor.test.ts > local room doctor and start native readiness > guard negative: with the probe removed the same readiness assertion goes red
+AssertionError: exactly one doctor probe call: expected 1 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 1
+
+ ❯ apps/center/test/local-room-doctor.test.ts:55:70
+     53|   const source = readFileSync(path.join(root, 'scripts/local-room.ts')…
+     54|   const call = "try { nativeProbe(); } catch (e) { throw new Error(`${…
+     55|   expect(source.split(call).length, 'exactly one doctor probe call').t…
+       |                                                                      ^
+     56|   const copy = path.join(work, 'scripts');
+     57|   mkdirSync(copy);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
