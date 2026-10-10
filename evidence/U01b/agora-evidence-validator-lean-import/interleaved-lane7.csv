@@ -1,0 +1,13 @@
+pair,tree,lane7_ms,timed_out_errors,tests_result,load_at_start
+1,parent,11888,4,"2 failed | 1 passed (3)","load averages: 12.36 7.36 7.53"
+1,head,3190,0,"3 passed (3)","load averages: 13.88 8.13 7.80"
+2,parent,10220,4,"2 failed | 1 passed (3)","load averages: 14.05 8.26 7.85"
+2,head,3112,0,"3 passed (3)","load averages: 15.65 9.10 8.16"
+3,parent,10968,4,"2 failed | 1 passed (3)","load averages: 15.60 9.20 8.20"
+3,head,2492,0,"3 passed (3)","load averages: 16.46 9.90 8.48"
+4,parent,11290,4,"2 failed | 1 passed (3)","load averages: 16.34 9.98 8.52"
+4,head,2225,0,"3 passed (3)","load averages: 16.44 10.42 8.71"
+5,parent,11211,4,"2 failed | 1 passed (3)","load averages: 16.59 10.65 8.81"
+5,head,2895,0,"3 passed (3)","load averages: 17.09 11.14 9.03"
+6,parent,11936,4,"2 failed | 1 passed (3)","load averages: 16.94 11.30 9.11"
+6,head,3216,0,"3 passed (3)","load averages: 16.78 11.70 9.31"

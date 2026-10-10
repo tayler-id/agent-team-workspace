@@ -1,0 +1,12 @@
+head: bbaff9bdf90a16c1b75ad01bba3941856a6aae3d
+parent: 0f0a11fde45b6c4ff14d5c8365788f22743a60f4
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-439a06/5/agent-team-workspace
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  17:48:03
+   Duration  97ms (tests 65%, transform 18%, import 13%, worker 3%)
+
+observed_exit: 0
