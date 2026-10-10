@@ -117,8 +117,12 @@ describe('perf scenario in a sandbox clone', () => {
 		expect(perf()).toMatchObject({ outcome: 'fail', diagnostics: [{ message: 'probe_output_invalid' }] });
 		withProbe(dir, ['node', '-e', "console.log(JSON.stringify({metrics:{other_ms:1}}))"]);
 		expect(perf()).toMatchObject({ outcome: 'fail', diagnostics: [{ message: 'probe_output_invalid' }] });
-		withProbe(dir, ['node', '-e', 'process.exit(3)']);
+		withProbe(dir, ['node', '-e', "if(require('fs').existsSync('boom.flag'))process.exit(3);console.log(JSON.stringify({metrics:{generation_ms:1}}))"]);
+		writeFileSync(path.join(dir, 'boom.flag'), '');
 		expect(perf()).toMatchObject({ outcome: 'fail', diagnostics: [{ message: 'probe_failed head' }] });
+		withProbe(dir, ['node', '-e', "if(!require('fs').existsSync('present.flag'))process.exit(5);console.log(JSON.stringify({metrics:{generation_ms:1}}))"]);
+		writeFileSync(path.join(dir, 'present.flag'), '');
+		expect(perf()).toMatchObject({ outcome: 'fail', diagnostics: [{ message: 'probe_failed parent' }] });
 		withProbe(dir, undefined);
 		expect(perf().outcome).toBe('unavailable');
 		const file = path.join(dir, 'agora/project.json'), saved = readFileSync(file, 'utf8'), manifest = manifestOf(saved);

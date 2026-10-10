@@ -5,26 +5,24 @@
 import { Buffer } from 'node:buffer';
 import { spawnSync } from 'node:child_process';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import { appendFileSync, mkdirSync, existsSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { pathToFileURL } from 'node:url';
 import { command, requireThat } from './project-checks.mjs';
 
-const BATCHES = 5, REGRESSION = 1.1;
+// A probe exits 4 when the behavior it measures does not exist in that tree. Any other failure is a failure.
+const BATCHES = 5, REGRESSION = 1.1, ABSENT = 4;
 const p95 = values => [...values].sort((a, b) => a - b)[Math.ceil(values.length * 0.95) - 1];
 
 function parentTree(sha, dir) {
-	for (const argv of [['git', 'clone', '--quiet', '--local', '--no-checkout', process.cwd(), dir], ['git', 'checkout', '--quiet', '--detach', sha]]) requireThat(command(argv, argv[1] === 'checkout' ? dir : process.cwd()).status === 0, 'parent_checkout_failed', 'infrastructure_failure');
-	appendFileSync(path.join(dir, '.git/info/exclude'), 'node_modules\n'); // the links are untracked files, not directories, to git
-	for (const modules of ['.', 'contracts', ...['apps', 'packages'].flatMap(top => existsSync(top) ? readdirSync(top).map(name => `${top}/${name}`) : [])]) {
-		if (existsSync(path.join(modules, 'node_modules'))) symlinkSync(path.resolve(modules, 'node_modules'), path.join(dir, modules, 'node_modules'));
-	}
+	// Its own install, so workspace links resolve inside the parent and not into the head checkout being compared.
+	for (const argv of [['git', 'clone', '--quiet', '--local', '--no-checkout', process.cwd(), dir], ['git', 'checkout', '--quiet', '--detach', sha], ['pnpm', 'install', '--frozen-lockfile', '--offline']]) requireThat(command(argv, argv[0] === 'git' && argv[1] === 'clone' ? process.cwd() : dir).status === 0, `parent_${argv[0] === 'pnpm' ? 'install' : 'checkout'}_failed`, 'infrastructure_failure');
 }
 
 function sample(argv, cwd, wanted, side) {
 	const run = command(argv.map(arg => arg.replace('{head}', process.cwd())), cwd);
-	if (run.status !== 0) return { failed: `probe_failed ${side}`, detail: (run.stderr || run.stdout).slice(-400) };
+	if (run.status !== 0) return { failed: `probe_failed ${side}`, absent: run.status === ABSENT, detail: (run.stderr || run.stdout).slice(-400) };
 	let metrics;
 	try { metrics = JSON.parse(run.stdout).metrics; } catch { /* handled below */ }
 	requireThat(wanted.every(name => Number.isFinite(metrics?.[name]) && metrics[name] > 0), 'probe_output_invalid');
@@ -45,7 +43,7 @@ export function runPerf(entry, rev, out) {
 			for (const side of batch % 2 ? ['head', 'parent'] : ['parent', 'head']) {
 				if (side === 'parent' && receipt.parent_behavior === 'absent') continue;
 				const row = sample(probe, side === 'head' ? process.cwd() : dir, wanted, side);
-				if (row.failed && side === 'parent' && batch === 0) { receipt.parent_behavior = 'absent'; receipt.parent_failure = row.detail; }
+				if (row.absent && side === 'parent' && batch === 0) { receipt.parent_behavior = 'absent'; receipt.parent_failure = row.detail; }
 				else if (row.failed) { failures.push(row.failed); break; }
 				else receipt.samples.push({ batch, side, metrics: row.metrics });
 			}
@@ -82,6 +80,7 @@ const cli = (...args) => {
 const sha256 = (bytes) => `sha256:${createHash('sha256').update(bytes).digest('hex')}`;
 const median = (values) => values.sort((a, b) => a - b)[values.length >> 1];
 
+const needs = { u21: 'scripts/feature-inventory.ts', u20: 'scripts/boundary-policy.ts', u01b: 'scripts/validate-evidence.mjs' };
 const probes = {
 	u21: () => ({ generation_ms: median(Array.from({ length: 7 }, () => timed(['node', 'scripts/feature-inventory.ts', '--check']).ms)) }),
 	u20: () => ({
@@ -119,5 +118,6 @@ function bundle(work) {
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
 	const probe = probes[process.argv[2] ?? ''];
 	if (!probe) { console.error('usage: node scripts/project-perf.mjs u01b|u20|u21'); process.exit(64); }
+	if (!existsSync(needs[process.argv[2]])) process.exit(ABSENT);
 	console.log(JSON.stringify({ metrics: await probe() }));
 }
