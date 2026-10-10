@@ -76,7 +76,7 @@
 			"id": "project-controls",
 			"documentation": "docs/site/project-controls.md",
 			"last_verified_subject": {"receipt": ".scratch/project/{fixture}/{instance}/evidence.json", "fields": ["versions.code", "versions.config", "versions.fixture"], "requires_live_pass": true},
-			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "scripts/project-perf.mjs", "scripts/project-perf-probe.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
+			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "scripts/project-perf.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
 			"public": ["pnpm -s agora project --help", "pnpm agora project doctor|scenarios|start|verify|evidence|stop|lanes", "python3 packages/verification/fixture/project.py"],
 			"contracts": ["contracts/schemas/cli.schema.json"],
 			"scenarios": ["policy", "controls", "guards", "packages/verification/test/project.test.ts", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts"],
