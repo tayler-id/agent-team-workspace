@@ -1,6 +1,6 @@
 # Evidence validator lean import
 
-Follow-up to the CI timeout of https://github.com/tayler-id/agent-team-workspace/pull/12. The evidence-validator
+Follow-up to the CI timeout of <https://github.com/tayler-id/agent-team-workspace/pull/12>. The evidence-validator
 lane 7 test starts `scripts/validate-evidence.mjs` twelve times, and each start compiled the wire validator through
 `project-checks.mjs` even though the validator never reads it. `exits`, `hash` and `requireThat` now live in
 `scripts/project-primitives.mjs`, which imports only `node:crypto`. `project-checks.mjs` re-exports them.
