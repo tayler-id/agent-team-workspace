@@ -1,0 +1,40 @@
+code head 0feb7925d17bb4a94480fab181606a7fb8bbd727, BUDGET_BYTES forced to 100 KiB (below measured gzip and brotli)
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-439a06/8/agent-team-workspace/apps/web
+
+ ❯ |web| test/initial-js-budget.test.ts (3 tests | 1 failed) 766ms
+   × initial JavaScript stays within 350 KiB under both gzip and brotli 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/initial-js-budget.test.ts > initial JavaScript stays within 350 KiB under both gzip and brotli
+AssertionError: expected [ 'gzip 124940 > 102400', …(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "gzip 124940 > 102400",
++   "brotli 102647 > 102400",
++ ]
+
+ ❯ test/initial-js-budget.test.ts:54:45
+     52|
+     53| test('initial JavaScript stays within 350 KiB under both gzip and brot…
+     54|  expect(overBudget(measured, BUDGET_BYTES)).toEqual([]);
+       |                                             ^
+     55| });
+     56|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  15:46:00
+   Duration  849ms (tests 97%, transform 1%, import 1%)
+
+undefined
+/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/8/agent-team-workspace/apps/web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/initial-js-budget.test.ts
