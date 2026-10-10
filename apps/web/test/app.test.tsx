@@ -1,5 +1,5 @@
 import { createWireValidator } from '@agora/contracts';
-import { AgoraProvider, createRoomClient, useRoomCommands, useTransportState, type RoomClient, type RoomTransport, type TransportConnection } from '@agora/web-framework';
+import { AgoraProvider, createRoomClient, useMediaQuery, useRoomCommands, useTransportState, type RoomClient, type RoomTransport, type TransportConnection } from '@agora/web-framework';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -327,13 +327,14 @@ function countingTransport(): { transport: RoomTransport; open: () => number } {
 	return { open: () => subscribers.size, transport: { streamId: 's', getState: () => state, subscribe: (l) => { subscribers.add(l); return () => { subscribers.delete(l); }; }, loadSnapshot: noop, submit: noop, markSeen: noop, disconnect: noop, reconnect: noop, saveDraft: noop } };
 }
 
-test('lane 8: 200 mounts and unmounts of a transport-subscribed hook consumer leave zero transport subscriptions', () => {
+test('lane 8: 200 mounts and unmounts of a hook consumer leave zero transport subscriptions and zero Host media-query listeners', () => {
 	const { transport, open } = countingTransport();
-	const Consumer = (): ReactElement => { useTransportState(); return <span />; };
+	const Consumer = (): ReactElement => { useTransportState(); useMediaQuery('(max-width: 700px)'); return <span />; };
 	const client = createRoomClient(), environment = createBrowserEnvironment(transport);
+	const before = listeners.size, media = (): number => listeners.size - before;
 	const held = render(<AgoraProvider client={client} environment={environment}><Consumer /></AgoraProvider>);
-	expect(open()).toBe(1);
+	expect([open(), media()]).toEqual([1, 1]);
 	held.unmount();
 	for (let i = 0; i < 200; i++) render(<AgoraProvider client={client} environment={environment}><Consumer /></AgoraProvider>).unmount();
-	expect(open()).toBe(0);
+	expect([open(), media()]).toEqual([0, 0]);
 });
