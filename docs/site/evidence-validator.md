@@ -24,6 +24,18 @@ Verify the producer signature | Recompute the HMAC over every manifest field exc
 
 `node scripts/validate-evidence.mjs --dir evidence/U01b/agora-s1-validate-project-evidence-forgery-fix [--head SHA] [--base SHA] [--target NAME] [--key FILE]` runs this against any recorded bundle; the head/base default to the current repository's `HEAD` and its merge base with `main`, so pass the bundle's own recorded revisions. [Owned project controls](project-controls.md)' `pnpm agora project lanes --unit U01b --task agora-s1-validate-project-evidence` instead drives it through [the task lane suite](repo:packages/verification/test/evidence-validator.test.ts), lanes 5 through 7, together with lanes 1-4. Lanes 8-10 belong to [trusted checks](trusted-checks.md) (`--task agora-s1-qualify-trusted-checks`); an unrecognized `--task` blocks rather than silently unlocking them.
 
+## Startup cost
+
+The validator starts as a child process once per check, and the task lanes start it twelve times in one test. It therefore imports only what it uses. [`scripts/project-primitives.mjs`](repo:scripts/project-primitives.mjs) holds `exits`, `hash` and `requireThat` and imports nothing but `node:crypto`; [the project checks](repo:scripts/project-checks.mjs) re-export the same three names for their other consumers. Before this split the validator imported them from the project checks, which compiled the full wire validator at load for a result the validator never reads, about three quarters of every start.
+
+```flow
+validate-evidence.mjs | Imports project-evidence.mjs for the signed format and project-primitives.mjs for exits, hash and requireThat.
+project-primitives.mjs | Three definitions, one built-in import. The only owner of each, so the exit codes cannot drift between callers.
+project-checks.mjs | Re-exports the three names and still compiles the wire validator, because the project fixture checks use it. The validator no longer loads this file.
+```
+
+[The startup test](repo:packages/verification/test/validator-startup.test.ts) runs the real CLI under a resolve hook that logs every module Node loads, then asserts the run still refuses an absent bundle with `missing_proof` and that nothing under `contracts/`, Ajv or the project checks was loaded. The correction changes no result, signature, key rule, exit code or time budget.
+
 ## Implementation status
 
 **In progress, re-review pending.** An independent exact-head review of `a226663` found that the validator accepted forged bundles. The manifest named its own key file, the signature left the artifact digests out, and a signal-killed red counted as a red. The fix at `549a219` is retained with its forgery reproductions in [`evidence/U01b/agora-s1-validate-project-evidence-forgery-fix/README.md`](repo:evidence/U01b/agora-s1-validate-project-evidence-forgery-fix/README.md). It needs a new independent review of its exact head.

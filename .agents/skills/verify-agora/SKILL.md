@@ -483,6 +483,16 @@ node scripts/validate-evidence.mjs --dir evidence/U01c/agora-s1-prove-backup-res
 
 Red must show the usage-route test passing and the backup tests failing on values such as the CLI exit status or `outcome`, never a missing runner, a syntax error or an unresolved import. The snapshot-race red must show only the concurrent-writer test failing, with `reason_code: integrity_mismatch`. Green must show every test passing with exit 0. The validator must report pass with the local owner-attested key. Pass full SHAs, because its default base is the merge-base with `main`, not the test-only baseline, and its default head is the checkout's `HEAD`; once the receipts are committed, use the recorded head instead. Keep the Drive outputs in `evidence/U01c/agora-s1-prove-backup-restore/drive/`; they hold `key_id` values and receipts, never key files. These receipts prove the slice only, not the U01c milestone or FG07.
 
+### Evidence validator startup (U01b.B02 follow-up)
+
+The validator must not load the wire validator. Drive the real CLI and read what Node resolved, not the source:
+
+```sh
+pnpm exec vitest run --project unit packages/verification/test/validator-startup.test.ts
+```
+
+Pass means the run refuses an absent bundle with `missing_proof` and loads nothing under `contracts/`, Ajv or `scripts/project-checks.mjs`. To watch it fail, point `scripts/validate-evidence.mjs` back at `./project-checks.mjs`, expect the loaded-module list to fail the assertion, and restore the file byte for byte. The lane 5 to 7 suite in `evidence-validator.test.ts` stays unchanged.
+
 ### Production build (built room) evidence
 
 Record red/green with the parent that lacks the plugin and the committed fix head, never a moving branch name:

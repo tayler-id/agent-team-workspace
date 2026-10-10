@@ -334,7 +334,15 @@
       "page": "backup-restore.md"
     },
     {
+      "path": "scripts/project-primitives.mjs",
+      "page": "evidence-validator.md"
+    },
+    {
       "path": "packages/verification/test/evidence-validator.test.ts",
+      "page": "evidence-validator.md"
+    },
+    {
+      "path": "packages/verification/test/validator-startup.test.ts",
       "page": "evidence-validator.md"
     },
     {
