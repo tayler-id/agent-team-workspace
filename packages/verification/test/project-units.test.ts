@@ -34,11 +34,11 @@ function sandbox(): string {
 	return dir;
 }
 
-function withProbe(dir: string, probe: string[] | undefined, unit = 'U21'): void {
+function withProbe(dir: string, probe: string[] | undefined, limits: object[] = [{ metric: 'generation_ms', max: 5000 }]): void {
 	const file = path.join(dir, 'agora/project.json');
 	const manifest = JSON.parse(readFileSync(file, 'utf8'));
 	expect(manifest.units, 'agora/project.json declares per-unit lanes and perf').toBeDefined();
-	manifest.units.find((row: { id: string }) => row.id === unit).perf = { metric: 'generation', rule: 'test', compare: ['generation_ms'], limits: [{ metric: 'generation_ms', max: 5000 }], ...(probe ? { probe } : { unavailable: 'The probe was removed for this test.' }) };
+	manifest.units.find((row: { id: string }) => row.id === 'U21').perf = { metric: 'generation', rule: 'test', compare: ['generation_ms'], limits, ...(probe ? { probe } : { unavailable: 'The probe was removed for this test.' }) };
 	writeFileSync(file, JSON.stringify(manifest));
 }
 const flagged = ['node', '-e', "const fs=require('fs');const f='slow.flag';console.log(JSON.stringify({metrics:{generation_ms:fs.existsSync(f)?Number(fs.readFileSync(f,'utf8')):100}}))"];
@@ -93,6 +93,16 @@ describe('perf scenario in a sandbox clone', () => {
 		expect(regressed.diagnostics[0]?.message).toBe('perf_regression generation_ms: head p95 111 exceeds parent p95 100 by more than 10%');
 		writeFileSync(path.join(dir, 'slow.flag'), '5001');
 		expect(perf().diagnostics.map((row) => row.message)).toContain('perf_budget generation_ms: head p95 5001 exceeds 5000');
+	}, 300_000);
+
+	test('a limit set as a multiple of another metric fails only past that multiple', () => {
+		const dir = sandbox();
+		withProbe(dir, ['node', '-e', "const fs=require('fs');console.log(JSON.stringify({metrics:{generation_ms:100,base_ms:fs.existsSync('base.flag')?Number(fs.readFileSync('base.flag','utf8')):100}}))"], [{ metric: 'generation_ms', ratio: 2, of: 'base_ms' }]);
+		const perf = () => run(dir, ['verify', '--scenario', 'perf', '--unit', 'U21', '--parent', 'HEAD']);
+		writeFileSync(path.join(dir, 'base.flag'), '50');
+		expect(perf().outcome).toBe('pass');
+		writeFileSync(path.join(dir, 'base.flag'), '49');
+		expect(perf().diagnostics.map((row) => row.message)).toEqual(['perf_budget generation_ms: head p95 100 exceeds 2x base_ms 49']);
 	}, 300_000);
 
 	test('output that is not a metric report or a failing head probe is never a pass', () => {
