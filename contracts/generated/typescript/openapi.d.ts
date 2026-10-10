@@ -314,25 +314,6 @@ export interface components {
             occurred_at: components["schemas"]["Timestamp"];
             payload: components["schemas"]["FixtureSyncTombstone"];
         };
-        /** @description Per-unit lane and perf manifest. A unit without lanes_unavailable uses the top-level lanes and driver. A perf entry without probe is unavailable for the stated reason; limits are absolute budgets in milliseconds, optionally a multiple of another metric. */
-        FixtureUnit: {
-            id: string;
-            lanes?: components["schemas"]["FixtureLane"][];
-            lanes_unavailable?: string;
-            perf: {
-                metric: string;
-                rule: string;
-                probe?: string[];
-                unavailable?: string;
-                compare?: string[];
-                limits?: {
-                    metric: string;
-                    max?: number;
-                    ratio?: number;
-                    of?: string;
-                }[];
-            };
-        };
         FoundationProof: {
             id: string;
             subject: string;
@@ -418,7 +399,24 @@ export interface components {
             scenarios: string[];
             lanes: components["schemas"]["FixtureLane"][];
             driver: string[];
-            units?: components["schemas"]["FixtureUnit"][];
+            units?: {
+                id: string;
+                lanes?: components["schemas"]["FixtureLane"][];
+                lanes_unavailable?: string;
+                perf: {
+                    metric: string;
+                    rule: string;
+                    probe?: string[];
+                    unavailable?: string;
+                    compare?: string[];
+                    limits?: {
+                        metric: string;
+                        max?: number;
+                        ratio?: number;
+                        of?: string;
+                    }[];
+                };
+            }[];
             timeout_ms: number;
             /** @enum {string} */
             target: "local-foundation-fixture";
