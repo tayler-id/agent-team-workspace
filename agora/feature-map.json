@@ -301,6 +301,16 @@
 			"platforms": ["node24", "browser"]
 		},
 		{
+			"id": "web-initial-js-budget",
+			"documentation": "docs/site/local-room-web-shell.md",
+			"owner": "agora-react-initial-js-budget",
+			"paths": ["apps/web/test/initial-js-budget.test.ts", "evidence/local-room/initial-js-budget/measurement.json"],
+			"public": ["pnpm web:test"],
+			"scenarios": ["apps/web/test/initial-js-budget.test.ts", "negative: BUDGET_BYTES forced to 100 KiB, below the measured gzip and brotli bytes, fails the budget test"],
+			"fixtures": ["apps/web production build, JavaScript referenced by dist/index.html"],
+			"platforms": ["node24"]
+		},
+		{
 			"id": "local-room-time-display",
 			"documentation": "docs/site/local-room-time-display.md",
 			"owner": "agora-live-room-time-display",

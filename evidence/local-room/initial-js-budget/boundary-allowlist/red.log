@@ -1,0 +1,62 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-10T19:45:59.833Z
+parent: f69619f752e3c2104fc6947cfb1967f07f9168e8
+head: 57fc1c7a00ec22b824a52271b0d36462471a6ef3
+subject_revision: f69619f752e3c2104fc6947cfb1967f07f9168e8
+test_patch_applied_to_subject: true
+test_patch_files: packages/client-core/test/boundaries.test.ts
+test_patch_digest: sha256:23c46136f7ed2a0ca9f7b7359e3852772fc66367ddb308f84663a9f30dc3d997
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node scripts/with-test-postgres.mjs pnpm exec vitest run packages/client-core/test/boundaries.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-fsgBcT
+
+ ❯ |unit| packages/client-core/test/boundaries.test.ts (8 tests | 1 failed) 15880ms
+   × apps/web tests may import node:zlib for byte measurement while other Node modules stay refused 270ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  15:45:18
+   Duration  16.21s (tests 98%, import 1%)
+
+{"schema_version":"agora.test-postgres/v1","outcome":"allocated","runId":"b8aab5db-e641-40e5-bff5-3fc1fd3c442a","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-7h3rAB","socketDir":"/private/tmp/agora-p0c-b8aab5db-e641-40e5-bff5-3fc1fd3c442a"}
+{"schema_version":"agora.test-postgres/v1","outcome":"starting","runId":"b8aab5db-e641-40e5-bff5-3fc1fd3c442a","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-7h3rAB","socketDir":"/private/tmp/agora-p0c-b8aab5db-e641-40e5-bff5-3fc1fd3c442a","pid":13279}
+{"schema_version":"agora.test-postgres/v1","outcome":"started","runId":"b8aab5db-e641-40e5-bff5-3fc1fd3c442a","artifactDir":"/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-7h3rAB","socketDir":"/private/tmp/agora-p0c-b8aab5db-e641-40e5-bff5-3fc1fd3c442a","socket_dir":"/private/tmp/agora-p0c-b8aab5db-e641-40e5-bff5-3fc1fd3c442a","pid":13279,"database":"agora_test","owner_role":"agora_owner","app_role":"agora_app","bypass_role":"agora_bypass"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/boundaries.test.ts > apps/web tests may import node:zlib for byte measurement while other Node modules stay refused
+AssertionError: expected [ { …(8) } ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "column": 1,
++     "endColumn": 38,
++     "endLine": 1,
++     "line": 1,
++     "message": "apps/web test/config owner cannot import node:zlib; only dev-tooling and the app's own public surface are allowed here",
++     "messageId": "forbidden",
++     "ruleId": "agora/import-boundary",
++     "severity": 2,
++   },
++ ]
+
+ ❯ packages/client-core/test/boundaries.test.ts:102:114
+    100| test('apps/web tests may import node:zlib for byte measurement while o…
+    101|  const file = 'apps/web/test/built-room.test.ts';
+    102|  expect(await boundary("import { gzipSync } from 'node:zlib'; export c…
+       |                                                                                                                  ^
+    103|  expect((await boundary("import { createHash } from 'node:crypto'; exp…
+    104|  expect(await boundary(readFileSync(path.join(root, file), 'utf8'), fi…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+{"schema_version":"agora.test-postgres/v1","outcome":"cleaned","artifactDir":"/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-pg-7h3rAB","socketDir":"/private/tmp/agora-p0c-b8aab5db-e641-40e5-bff5-3fc1fd3c442a"}

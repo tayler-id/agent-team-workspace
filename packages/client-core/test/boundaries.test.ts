@@ -96,3 +96,10 @@ test('export maps reject existing private files and the portable compile lane ha
 	expect(() => { expect(widened.some((d) => d.code === 2307)).toBe(true); }).toThrow('expected false to be true');
 	for (const name of ['Document', 'Window', 'HTMLCanvasElement', 'Request', 'WebSocket', 'Buffer']) expect(compile(`export type Leak = ${name};`, 'packages/client-core/negative.ts').some((d) => d.code === 2304 || d.code === 2591), name).toBe(true);
 });
+
+test('apps/web tests may import node:zlib for byte measurement while other Node modules stay refused', async () => {
+	const file = 'apps/web/test/built-room.test.ts';
+	expect(await boundary("import { gzipSync } from 'node:zlib'; export const size = gzipSync('a').length;", file)).toEqual([]);
+	expect((await boundary("import { createHash } from 'node:crypto'; export const leak: unknown = createHash;", file)).some((m) => m.ruleId === 'agora/import-boundary')).toBe(true);
+	expect(await boundary(readFileSync(path.join(root, file), 'utf8'), file)).toEqual([]);
+}, 60_000);
