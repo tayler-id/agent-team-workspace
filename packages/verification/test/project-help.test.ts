@@ -17,7 +17,9 @@ test('project help lists implemented fixture routes without launching', () => {
 		expect(result.stdout).toContain('Usage: pnpm -s agora project');
 		for (const command of ['doctor', 'scenarios', 'start', 'verify', 'evidence', 'stop', 'lanes']) expect(result.stdout).toContain(command);
 		expect(result.stdout).toContain('policy, controls, guards');
-		expect(result.stdout).toContain('lanes 8-10 unavailable');
+		expect(result.stdout).toContain('Whole-unit lanes 8-10 unavailable');
+		expect(result.stdout).toContain('--scenario perf --unit UNIT');
+		for (const unit of ['U01b', 'U20', 'U21', 'U22', 'U23', 'U01c', 'U01d']) expect(result.stdout).toContain(unit);
 		expect(result.stdout).toContain('not production authority');
 	}
 	expect(registry()).toEqual(before);

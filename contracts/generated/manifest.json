@@ -7,7 +7,7 @@
 		},
 		{
 			"file": "contracts/schemas/cli.schema.json",
-			"digest": "sha256:9b422c85e6bd8103fff40ef73cda75de6b39c2df03a1586108856ef36b6a9271"
+			"digest": "sha256:305829f2eb6fba2a8926e27f7dbaff86e1f73665886d789ac43113f32980756a"
 		},
 		{
 			"file": "contracts/schemas/errors.schema.json",
@@ -69,6 +69,7 @@
 		"FixtureSyncState",
 		"FixtureSyncTombstone",
 		"FixtureSyncTombstoneEvent",
+		"FixtureUnit",
 		"FoundationProof",
 		"FoundationReport",
 		"GitSha",
@@ -101,11 +102,11 @@
 	"outputs": [
 		{
 			"file": "contracts/generated/openapi.bundled.json",
-			"digest": "sha256:686823dec2d7acfd3b9f85f9d600dfb0873714697cd9025503f2e0f481daeae5"
+			"digest": "sha256:a8470df2b4042097d37af2cc4392154649dc0b1277c9e73115e047b7592c565a"
 		},
 		{
 			"file": "contracts/generated/typescript/openapi.d.ts",
-			"digest": "sha256:dd7d7226ae999b27d2909e0049ab6d1b0536802a53b1cc21ba5f4fa61d73cce2"
+			"digest": "sha256:3468d93a07f389247f49abd5930606398d34bd2b72db1a25db7c3e9b84f708a0"
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Client.swift",
@@ -129,7 +130,7 @@
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift",
-			"digest": "sha256:668ea91d34d8d37bc40897650875c961d40705003e69a0bd416a18f8407997a4"
+			"digest": "sha256:d0b4c76a0e171638a3cdff0a4cc465a447a245600c1b2dac0c6dd3c72a1be904"
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components.swift",
