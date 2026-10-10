@@ -2,7 +2,7 @@
 
 Partial construction slice of U23.B01. It moves the existing adapter selection from `apps/center/src/main.ts` into `apps/center/src/features/local-room/entrypoint.ts`. U23 is not qualified and the web renderer has not moved.
 
-`red.log` runs `packages/verification/test/feature-discovery.test.ts` against the parent. The new assertion fails because the committed inventory holds no `apps/center` Feature (`expected [] to deeply equal [ ... ]`), not because of a missing import. `green.log` passes at the head.
+`red.log` runs `packages/verification/test/feature-discovery.test.ts` against the parent. The new assertion fails because the committed inventory holds no `apps/center` Feature (`expected [] to deeply equal [ ... ]`). `green.log` passes at the head.
 
 Live proof on instance `fb1`: two CLI sends and one browser send before a reload, one CLI send after. `live-browser-order.txt` (the reloaded browser) and `live-history.json` (CLI history) show the same order. The instance was stopped with `local-room.ts stop`, data retained.
 

@@ -1,11 +1,11 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-10-10T18:59:43.359Z
+recorded_at: 2026-10-10T19:23:39.640Z
 parent: f69619f752e3c2104fc6947cfb1967f07f9168e8
-head: 1bbb3c488db09ae2b374734b17485e58d33e11be
+head: 078dbe80cbc0f90b39c19ee539e951507f274eb2
 subject_revision: f69619f752e3c2104fc6947cfb1967f07f9168e8
 test_patch_applied_to_subject: true
 test_patch_files: packages/verification/test/feature-discovery.test.ts
-test_patch_digest: sha256:4ae0e7b3b229f51a990f62a7397bde6faf3a48a39e768a8ad752672cb8ef5617
+test_patch_digest: sha256:51a5df58211693f1f342fc429d51f95fbd2585118b1dfc2777d40668a6261dfe
 fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
 configuration: {"command":"pnpm -s exec vitest run --project unit packages/verification/test/feature-discovery.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
 toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
@@ -13,15 +13,15 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-BO1Ncy
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-UE5E9p
 
- ❯ |unit| packages/verification/test/feature-discovery.test.ts (9 tests | 1 failed) 666ms
-   × the center local-room composition is a discovered Feature owned by apps/center 4ms
+ ❯ |unit| packages/verification/test/feature-discovery.test.ts (9 tests | 1 failed) 517ms
+   × the center local-room composition is a discovered Feature owned by apps/center 3ms
 
  Test Files  1 failed (1)
       Tests  1 failed | 8 passed (9)
-   Start at  14:59:26
-   Duration  772ms (tests 96%, transform 2%, import 1%)
+   Start at  15:23:31
+   Duration  592ms (tests 97%, transform 2%, import 1%)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
