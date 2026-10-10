@@ -33,8 +33,20 @@ export function runReplay(core: Core, corpus: ReplayCorpus = buildCorpus(), budg
 	const unique = new Set(ids).size;
 	const increasing = acks.every((seq, i) => i === 0 || BigInt(seq) > BigInt(acks[i - 1] ?? '0'));
 	const sameOrder = ids.length === corpus.expectedIds.length && ids.every((id, i) => id === corpus.expectedIds[i]);
+	const sameBodies = room?.messages.every((m, i) => m.content.tag === 'visible' && m.content.body === corpus.expectedBodies[i]) ?? false;
 	const failures: string[] = [];
+	if (!room) failures.push('no room projected');
+	else {
+		if (room.mode !== 'live') failures.push(`mode ${room.mode}`);
+		if (room.pending.length) failures.push(`${room.pending.length} entries left pending`);
+		if (room.cursor !== corpus.finalSeq) failures.push(`cursor ${room.cursor} != ${corpus.finalSeq}`);
+	}
 	if (ids.length !== unique) failures.push(`${ids.length - unique} duplicate messages`);
+	if (!sameOrder) failures.push('message order or membership diverged');
+	if (!sameBodies) failures.push('message bodies diverged');
+	if (!increasing) failures.push('acknowledgements repeat or regress');
+	if (acks.at(-1) !== corpus.finalSeq) failures.push(`last acknowledgement ${acks.at(-1)} != ${corpus.finalSeq}`);
+	if (requests.some((type) => type === 'snapshot' || type === 'upgrade')) failures.push('core demanded a new snapshot or upgrade');
 	if (elapsedMs > budgetMs) failures.push(`${elapsedMs.toFixed(1)} ms exceeds the ${budgetMs} ms budget`);
 	return {
 		version: corpus.version, seed: corpus.seed, outcome: failures.length ? 'fail' : 'pass', failures,
