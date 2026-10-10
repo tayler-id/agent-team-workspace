@@ -127,3 +127,11 @@ test('the committed inventory matches the live repository', () => {
 	const result = spawnSync(process.execPath, [path.join(repo, 'scripts/feature-inventory.ts'), '--check'], { encoding: 'utf8' });
 	expect(result.status, result.stderr).toBe(0);
 });
+
+test('the center local-room composition is a discovered Feature owned by apps/center', () => {
+	const inventory = JSON.parse(readFileSync(path.join(repo, 'agora/feature-inventory.json'), 'utf8')) as { features: { package: string; name: string; entrypoint: string }[] };
+	expect(inventory.features.filter((f) => f.package === 'apps/center').map(({ package: p, name, entrypoint }) => ({ package: p, name, entrypoint }))).toEqual([
+		{ package: 'apps/center', name: 'local-room', entrypoint: 'apps/center/src/features/local-room/entrypoint.ts' },
+	]);
+	expect(readFileSync(path.join(repo, 'apps/center/src/main.ts'), 'utf8')).toMatch(/from '\.\/features\/local-room\/entrypoint\.ts'/);
+});

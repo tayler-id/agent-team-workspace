@@ -372,10 +372,10 @@
 		},
 		{
 			"id": "feature-discovery", "documentation": "docs/site/feature-discovery.md", "owner": "agora-feature-discovery-slice",
-			"paths": ["scripts/feature-discovery.ts", "scripts/feature-inventory.ts", "packages/verification/test/feature-discovery.test.ts", "agora/feature-inventory.json", "docs/site/feature-discovery.md"],
+			"paths": ["scripts/feature-discovery.ts", "scripts/feature-inventory.ts", "packages/verification/test/feature-discovery.test.ts", "agora/feature-inventory.json", "docs/site/feature-discovery.md", "apps/center/src/features/local-room/entrypoint.ts", "apps/center/src/main.ts"],
 			"public": ["node scripts/feature-inventory.ts", "node scripts/feature-inventory.ts --check", "pnpm features:generate", "pnpm features:check"],
 			"contracts": [],
-			"scenarios": ["well-formed Feature found", "misplaced path rejected", "missing entrypoint rejected", "duplicate name rejected", "drift on hand-edited inventory rejected", "guard-disabled turns drift assertion red", "idempotent regenerate"],
+			"scenarios": ["well-formed Feature found", "misplaced path rejected", "missing entrypoint rejected", "duplicate name rejected", "drift on hand-edited inventory rejected", "guard-disabled turns drift assertion red", "idempotent regenerate", "apps/center local-room Entrypoint discovered and wired from main.ts (U23.B01 construction slice)"],
 			"fixtures": ["disposable temp trees under agora-u21-* built by packages/verification/test/feature-discovery.test.ts"],
 			"platforms": ["node24"]
 		}

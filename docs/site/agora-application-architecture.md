@@ -46,7 +46,7 @@ Moving a capability into a Feature folder relocates its consumer wiring, not its
 ```text
 contracts/schemas/local-room.schema.json   stays in Contracts; a Feature imports only its generated types
 packages/domain/src/local-room/port.ts     stays in Domain; the browser Feature never imports it directly
-apps/center/src/features/local-room/       new: the server Entrypoint that replaces one hand-wired route line
+apps/center/src/features/local-room/       built (U23.B01 construction): the server Entrypoint that owns the adapter selection main.ts used to inline
 apps/web/src/features/local-room/          new: the renderer, rewritten onto the Client and Host, not just moved
 ```
 
@@ -54,7 +54,7 @@ apps/web/src/features/local-room/          new: the renderer, rewritten onto the
 
 ## Implementation status
 
-**U20 boundary lint is built, and the U21.B01 build-time discovery slice is built; the rest of U21, the Client/Host boundary, and migration are not.** `.ts` and `.tsx` import boundaries, the framework/package-never-imports-application rule, and renderer foot-guns are enforced today across `apps/web` under U20 (B1 import ownership, B2a the exception registry, B2b renderer foot-guns); see [Application architecture boundaries](app-architecture.md) for that mechanism. Build-time Feature discovery (U21.B01, see [Feature discovery](feature-discovery.md)) generates `agora/feature-inventory.json`, but U21 is not qualified and no real product Feature has moved into the layout. The Client's one-writer boundary and the typed Host interface (U22), and moving existing local-room work into the new layout (U23) do not exist yet. [The implementation plan](repo:docs/implementation-plan.md) sequences these four migration units, each independently reviewable.
+**U20 boundary lint is built, and the U21.B01 build-time discovery slice is built; the rest of U21, the Client/Host boundary, and migration are not.** `.ts` and `.tsx` import boundaries, the framework/package-never-imports-application rule, and renderer foot-guns are enforced today across `apps/web` under U20 (B1 import ownership, B2a the exception registry, B2b renderer foot-guns); see [Application architecture boundaries](app-architecture.md) for that mechanism. Build-time Feature discovery (U21.B01, see [Feature discovery](feature-discovery.md)) generates `agora/feature-inventory.json`, but U21 is not qualified. One construction slice of U23.B01 has moved the center's local-room adapter selection into `apps/center/src/features/local-room/entrypoint.ts`; U23 is not qualified and the web renderer has not moved. The Client's one-writer boundary and the typed Host interface (U22), and the rest of U23, do not exist yet. [The implementation plan](repo:docs/implementation-plan.md) sequences these four migration units, each independently reviewable.
 
 This architecture also governs where a future [created agent](authorization.md#created-agents) and the built-in [Bug Agent](authorization.md#created-agents) would render their own room-facing surfaces, once R26's own milestone lands; neither exists yet, and neither depends on R25 to be specified.
 
