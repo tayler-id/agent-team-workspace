@@ -1,0 +1,252 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-10T20:59:46.231Z
+parent: ee62c3ac65f4e77adef1baae35012bdcfd822438
+head: e01a0170226efa9e62dfb117e47ea025455b18ee
+subject_revision: ee62c3ac65f4e77adef1baae35012bdcfd822438
+test_patch_applied_to_subject: true
+test_patch_files: packages/verification/test/project-help.test.ts, packages/verification/test/project-units.test.ts
+test_patch_digest: sha256:79d7063b9a86a7c2decf87f4f9f700d255fbeae7e27ce15958b8a0d2a5268602
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[{"file":"contracts/schemas/cli.schema.json","digest":"sha256:2538598d2b0cac1515dd9222a56cf2559704df247b7b2e78c79ce3728f0111b4"}]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/verification/test/project-units.test.ts packages/verification/test/project-help.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-mX5g5j
+
+ ❯ |unit| packages/verification/test/project-units.test.ts (18 tests | 18 failed) 20846ms
+   ❯ per-unit lanes through the public CLI (7)
+     × U20 lanes are unavailable with a reason, never a pass 172ms
+     × U21 lanes are unavailable with a reason, never a pass 152ms
+     × U22 lanes are unavailable with a reason, never a pass 149ms
+     × U23 lanes are unavailable with a reason, never a pass 157ms
+     × U01c lanes are unavailable with a reason, never a pass 153ms
+     × U01d lanes are unavailable with a reason, never a pass 152ms
+     × an unknown unit is unavailable by name 155ms
+   ❯ perf scenario without an executable probe (5)
+     × U22 reports the missing probe and no artifacts 146ms
+     × U23 reports the missing probe and no artifacts 150ms
+     × U01c reports the missing probe and no artifacts 145ms
+     × U01d reports the missing probe and no artifacts 147ms
+     × perf needs a unit, and an unknown unit is unavailable 282ms
+   ❯ perf scenario in a sandbox clone (6)
+     × five interleaved parent and head batches pass on equal metrics and fail only past 10% or a budget 2467ms
+     × a limit set as a multiple of another metric fails only past that multiple 2519ms
+     × output that is not a metric report or a failing head probe is never a pass 2490ms
+     × behavior absent at the parent is reported and only absolute budgets apply 2562ms
+     × the real U21 generation probe records ten genuine timings 2499ms
+     × the real U01b probe times startup, scenario, evidence and 10-MiB validation 2879ms
+ ❯ |unit| packages/verification/test/project-help.test.ts (3 tests | 1 failed) 709ms
+   × project help lists implemented fixture routes without launching 41ms
+
+ Test Files  2 failed (2)
+      Tests  19 failed | 2 passed (21)
+   Start at  16:57:13
+   Duration  21.70s (tests 100%)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 19 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/project-help.test.ts > project help lists implemented fixture routes without launching
+AssertionError: expected 'Usage: pnpm -s agora project COMMAND …' to contain '--scenario perf --unit UNIT'
+
+- Expected
++ Received
+
+- --scenario perf --unit UNIT
++ Usage: pnpm -s agora project COMMAND [OPTIONS] --json
++
++ Implemented local fixture controls, not production authority.
++ Run operational commands from the repository root after installing locked prerequisites.
++ Help is plain text, needs no install or database, and starts nothing.
++
++   doctor     Read-only Node 24/PostgreSQL 18 prerequisites (--fixture python for Python).
++   scenarios  Inventory: policy, controls, guards.
++   start      --profile verify --instance UUID; returns URL and cleanup handle.
++   verify     --scenario policy --instance UUID --artifacts DIRECTORY; HTTP allow/deny effects.
++   verify     --scenario controls|guards --artifacts DIRECTORY; native tests and guard negatives.
++   evidence   --instance UUID; same-instance, fresh bytes and artifact digests required.
++   stop       --instance UUID --handle CLEANUP_HANDLE; owned, idempotent cleanup only.
++   lanes      --unit U01b --task TASK --artifacts DIRECTORY; task-specific qualification.
++
++ TASK: agora-s1-isolate-development (lanes 1-4), agora-s1-validate-project-evidence (1-7).
++ Whole-unit lanes 8-10 unavailable; a task pass never qualifies the whole unit.
++ Options: --fixture agora|python, --instance, --profile, --scenario, --artifacts,
++          --handle, --unit, --task. Artifact directories must be under .scratch/ or evidence/.
++ Operational reports: agora.cli-report/v1 JSON; exits 0 pass, 1 fail, 2 blocked,
++ 3 unavailable, 64 usage error, 70 infrastructure failure.
++ Recipe: .agents/skills/verify-agora/SKILL.md. Coverage: agora/feature-map.json.
++
+
+ ❯ packages/verification/test/project-help.test.ts:21:25
+     19|   expect(result.stdout).toContain('policy, controls, guards');
+     20|   expect(result.stdout).toContain('Whole-unit lanes 8-10 unavailable');
+     21|   expect(result.stdout).toContain('--scenario perf --unit UNIT');
+       |                         ^
+     22|   for (const unit of ['U01b', 'U20', 'U21', 'U22', 'U23', 'U01c', 'U01…
+     23|   expect(result.stdout).toContain('not production authority');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U20 lanes are unavailable with a reason, never a pass
+ FAIL  |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U21 lanes are unavailable with a reason, never a pass
+ FAIL  |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U22 lanes are unavailable with a reason, never a pass
+ FAIL  |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U23 lanes are unavailable with a reason, never a pass
+ FAIL  |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U01c lanes are unavailable with a reason, never a pass
+ FAIL  |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U01d lanes are unavailable with a reason, never a pass
+AssertionError: expected 'blocked_prerequisite' to be 'unavailable_capability' // Object.is equality
+
+Expected: "unavailable_capability"
+Received: "blocked_prerequisite"
+
+ ❯ packages/verification/test/project-units.test.ts:58:46
+     56|   expect(report.outcome).toBe('unavailable');
+     57|   expect(report.artifacts).toEqual([]);
+     58|   expect(report.diagnostics[0]?.reason_code).toBe('unavailable_capabil…
+       |                                              ^
+     59|   expect(report.diagnostics[0]?.message).toMatch(new RegExp(`^${unit} …
+     60|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > an unknown unit is unavailable by name
+AssertionError: expected { …(8) } to match object { outcome: 'unavailable', …(1) }
+(9 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "diagnostics": [
+      {
+-       "message": "unknown unit U99",
+-       "reason_code": "unavailable_capability",
++       "message": "unit_unavailable",
++       "reason_code": "blocked_prerequisite",
+      },
+    ],
+    "outcome": "unavailable",
+  }
+
+ ❯ packages/verification/test/project-units.test.ts:64:18
+     62|  test('an unknown unit is unavailable by name', () => {
+     63|   const report = run(root, ['lanes', '--unit', 'U99', '--task', 'agora…
+     64|   expect(report).toMatchObject({ outcome: 'unavailable', diagnostics: …
+       |                  ^
+     65|  });
+     66| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U22 reports the missing probe and no artifacts
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U23 reports the missing probe and no artifacts
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U01c reports the missing probe and no artifacts
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U01d reports the missing probe and no artifacts
+AssertionError: expected 'usage_error' to be 'unavailable' // Object.is equality
+
+Expected: "unavailable"
+Received: "usage_error"
+
+ ❯ packages/verification/test/project-units.test.ts:71:26
+     69|  test.each(['U22', 'U23', 'U01c', 'U01d'])('%s reports the missing pro…
+     70|   const report = run(root, ['verify', '--scenario', 'perf', '--unit', …
+     71|   expect(report.outcome).toBe('unavailable');
+       |                          ^
+     72|   expect(report.artifacts).toEqual([]);
+     73|   expect(report.diagnostics[0]?.message).toMatch(new RegExp(`^${unit} …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > perf needs a unit, and an unknown unit is unavailable
+AssertionError: expected 'unknown_scenario' to be 'unknown unit U99' // Object.is equality
+
+Expected: "unknown unit U99"
+Received: "unknown_scenario"
+
+ ❯ packages/verification/test/project-units.test.ts:78:96
+     76|  test('perf needs a unit, and an unknown unit is unavailable', () => {
+     77|   expect(run(root, ['verify', '--scenario', 'perf']).outcome).toBe('us…
+     78|   expect(run(root, ['verify', '--scenario', 'perf', '--unit', 'U99']).…
+       |                                                                                                ^
+     79|  });
+     80| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > five interleaved parent and head batches pass on equal metrics and fail only past 10% or a budget
+AssertionError: agora/project.json declares per-unit lanes and perf: expected undefined to be defined
+ ❯ withProbe packages/verification/test/project-units.test.ts:44:80
+     42|  const file = path.join(dir, 'agora/project.json');
+     43|  const manifest = manifestOf(readFileSync(file, 'utf8'));
+     44|  expect(manifest.units, 'agora/project.json declares per-unit lanes an…
+       |                                                                                ^
+     45|  const unit = manifest.units.find((row) => row.id === 'U21');
+     46|  if (unit) unit.perf = { metric: 'generation', rule: 'test', compare: …
+ ❯ packages/verification/test/project-units.test.ts:85:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > a limit set as a multiple of another metric fails only past that multiple
+AssertionError: agora/project.json declares per-unit lanes and perf: expected undefined to be defined
+ ❯ withProbe packages/verification/test/project-units.test.ts:44:80
+     42|  const file = path.join(dir, 'agora/project.json');
+     43|  const manifest = manifestOf(readFileSync(file, 'utf8'));
+     44|  expect(manifest.units, 'agora/project.json declares per-unit lanes an…
+       |                                                                                ^
+     45|  const unit = manifest.units.find((row) => row.id === 'U21');
+     46|  if (unit) unit.perf = { metric: 'generation', rule: 'test', compare: …
+ ❯ packages/verification/test/project-units.test.ts:105:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > output that is not a metric report or a failing head probe is never a pass
+AssertionError: agora/project.json declares per-unit lanes and perf: expected undefined to be defined
+ ❯ withProbe packages/verification/test/project-units.test.ts:44:80
+     42|  const file = path.join(dir, 'agora/project.json');
+     43|  const manifest = manifestOf(readFileSync(file, 'utf8'));
+     44|  expect(manifest.units, 'agora/project.json declares per-unit lanes an…
+       |                                                                                ^
+     45|  const unit = manifest.units.find((row) => row.id === 'U21');
+     46|  if (unit) unit.perf = { metric: 'generation', rule: 'test', compare: …
+ ❯ packages/verification/test/project-units.test.ts:116:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > behavior absent at the parent is reported and only absolute budgets apply
+AssertionError: agora/project.json declares per-unit lanes and perf: expected undefined to be defined
+ ❯ withProbe packages/verification/test/project-units.test.ts:44:80
+     42|  const file = path.join(dir, 'agora/project.json');
+     43|  const manifest = manifestOf(readFileSync(file, 'utf8'));
+     44|  expect(manifest.units, 'agora/project.json declares per-unit lanes an…
+       |                                                                                ^
+     45|  const unit = manifest.units.find((row) => row.id === 'U21');
+     46|  if (unit) unit.perf = { metric: 'generation', rule: 'test', compare: …
+ ❯ packages/verification/test/project-units.test.ts:139:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > the real U21 generation probe records ten genuine timings
+AssertionError: expected [ 'pass', 'fail' ] to include 'usage_error'
+ ❯ packages/verification/test/project-units.test.ts:155:28
+    153|   const dir = sandbox();
+    154|   const report = run(dir, ['verify', '--scenario', 'perf', '--unit', '…
+    155|   expect(['pass', 'fail']).toContain(report.outcome);
+       |                            ^
+    156|   const receipt = receiptOf(dir, report);
+    157|   expect(receipt.samples).toHaveLength(10);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/19]⎯
+
+ FAIL  |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > the real U01b probe times startup, scenario, evidence and 10-MiB validation
+AssertionError: expected [ 'pass', 'fail' ] to include 'usage_error'
+ ❯ packages/verification/test/project-units.test.ts:165:28
+    163|   const dir = sandbox();
+    164|   const report = run(dir, ['verify', '--scenario', 'perf', '--unit', '…
+    165|   expect(['pass', 'fail']).toContain(report.outcome);
+       |                            ^
+    166|   const receipt = receiptOf(dir, report);
+    167|   expect(receipt.samples).toHaveLength(10);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/19]⎯
+
