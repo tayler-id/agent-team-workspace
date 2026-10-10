@@ -37,4 +37,16 @@ Diagnostic | The message names the hook or Host owner to use instead. No excepti
 
 Inspect [the rule](repo:scripts/client-owner-policy.ts) and [its fixtures](repo:packages/client-core/test/client-state-owner.test.ts). The fixtures lint in-memory text against existing owner files, so nothing is written and parallel runs cannot delete each other. Run `pnpm boundaries` or `pnpm exec vitest run --project unit packages/client-core/test/client-state-owner.test.ts`. The retained red and green receipts, and the guard-disabled run, are under `evidence/U22/client-state-boundary/`.
 
+## Client and Host qualification lanes 5, 7 and 8
+
+Three U22.B01 lanes run against the hooks and Host interfaces that already exist. They add tests only and change no product code. U22 stays open.
+
+```flow
+Lane 5, command and receipt | A component calls useRoomCommands().submit. The live Host transport posts the command, and the stubbed room answers with a receipt. The generated RoomCommandReceipt validator accepts it and client-core records the command as received. A receipt missing its R07 receipt object fails the validator and the command is denied.
+Lane 7, compile negative | Seven malformed RoomTransport and EnvironmentPort calls, such as a numeric command id or a missing argument, fail the TypeScript compiler. A copy of environment.ts with submit widened to any stops rejecting the numeric id.
+Lane 8, subscription lifetime | A consumer of useTransportState mounts and unmounts 200 times. The transport's open subscription count is 1 while mounted and 0 at the end. A consumer that drops its unsubscribe ends with 200 open.
+```
+
+The receipt check proves the published local shape and the client's acceptance of it. It does not prove production R07 atomic commit, because the room here is a stub. Run `pnpm web:test` for lanes 5 and 8, and `pnpm exec vitest run --project unit packages/web-framework/test/host-calls.test.ts` for lane 7. Each guard was broken in the real source and restored. Dropping the unsubscribe in `useTransportState`, widening `RoomTransport.submit`, and letting `validate` in the live Host accept any body each turned its test red, and the restored source passed. The receipts are in `evidence/U22/client-host-qualification/`.
+
 Next: [application architecture](app-architecture.md), [client synchronization](synchronization.md) and the [R25 contract](agora-application-architecture.md).

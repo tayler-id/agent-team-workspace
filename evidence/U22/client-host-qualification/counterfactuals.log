@@ -1,0 +1,25 @@
+== A: drop unsubscribe in useTransportState
+   × lane 8: 200 mounts and unmounts of a transport-subscribed hook consumer leave zero transport subscriptions 42ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |web| test/client-host-qualification.test.tsx > lane 8: 200 mounts and unmounts of a transport-subscribed hook consumer leave zero transport subscriptions
+      Tests  1 failed | 3 passed (4)
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/client-host-qualification.test.tsx
+Updated 1 path from the index
+== B: widen RoomTransport.submit
+   × lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not 499ms
+   × lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting 151ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |unit| packages/web-framework/test/host-calls.test.ts > lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not
+ FAIL  |unit| packages/web-framework/test/host-calls.test.ts > lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting
+      Tests  2 failed (2)
+Updated 1 path from the index
+== C: validator accepts anything
+   × lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client 48ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |web| test/client-host-qualification.test.tsx > lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client
+      Tests  1 failed | 3 passed (4)
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/client-host-qualification.test.tsx
+Updated 1 path from the index
+== restored
+      Tests  4 passed (4)
+      Tests  2 passed (2)

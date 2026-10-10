@@ -285,7 +285,7 @@
 			"documentation": "docs/site/local-room-web-shell.md",
 			"paths": ["packages/web-framework/src", "packages/web-framework/package.json", "packages/web-framework/tsconfig.json", "apps/web/src", "apps/web/package.json", "apps/web/vite.config.ts", "apps/web/vitest.config.ts", "apps/web/tsconfig.json", "apps/web/index.html", "scripts/boundary-policy.ts", "vitest.config.ts"],
 			"public": ["@agora/web-framework createRoomClient", "@agora/web-framework AgoraProvider", "@agora/web-framework EnvironmentPort", "@agora/web-framework named hooks", "pnpm web:dev", "pnpm web:build", "pnpm web:test", "pnpm test"],
-			"scenarios": ["packages/web-framework/test/client.test.ts", "packages/web-framework/test/boundaries.test.ts", "apps/web/test/fixture.test.ts", "apps/web/test/app.test.tsx", "apps/web/test/live.test.ts"],
+			"scenarios": ["packages/web-framework/test/client.test.ts", "packages/web-framework/test/boundaries.test.ts", "packages/web-framework/test/host-calls.test.ts", "apps/web/test/fixture.test.ts", "apps/web/test/app.test.tsx", "apps/web/test/live.test.ts", "apps/web/test/client-host-qualification.test.tsx"],
 			"fixtures": ["agora.web-fixture.room/v1 development-only room fixture, no production conversation schema"],
 			"platforms": ["node24", "browser"],
 			"owner": "agora-web-shell-integrate"
