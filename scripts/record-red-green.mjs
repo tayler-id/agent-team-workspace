@@ -7,6 +7,7 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, 
 import os from 'node:os';
 import path from 'node:path';
 import { defaultKeyFile, manifestSchema, sign } from './project-evidence.mjs';
+import { sourceBytes } from './record-source-bytes.ts';
 
 const args = process.argv.slice(2);
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
@@ -68,7 +69,7 @@ function runAt(sha, label, applyPatch) {
 		const install = spawnSync('pnpm', ['install', '--frozen-lockfile', '--prefer-offline'], { cwd: dir, encoding: 'utf8' });
 		if (install.status !== 0) throw new Error(`install failed at ${sha}: ${install.stderr}`);
 		const files = [...new Set([...git('ls-tree', '-r', '--name-only', sha).trim().split('\n'), ...testFiles])].sort();
-		const integrity = () => sha256(files.map(file => `${file}:${sha256(readFileSync(path.join(dir, file)))}`).join('\n'));
+		const integrity = () => sha256(files.map(file => `${file}:${sha256(sourceBytes(path.join(dir, file)))}`).join('\n'));
 		const before = integrity();
 		const run = spawnSync(command[0], command.slice(1), { cwd: dir, encoding: 'utf8', timeout: 600_000, maxBuffer: 32 * 1024 * 1024, env: { ...process.env, FORCE_COLOR: '0', NO_COLOR: '1' } });
 		if (before !== integrity()) throw new Error(`source mutation at ${sha}`);
