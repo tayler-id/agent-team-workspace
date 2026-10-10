@@ -1,25 +1,132 @@
-== A: drop unsubscribe in useTransportState
-   × lane 8: 200 mounts and unmounts of a transport-subscribed hook consumer leave zero transport subscriptions 42ms
+04bd6a0a8a45304fc460447ef05e527946ef2c5d
+v24.16.0
+== a-drop-unsubscribe
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-63klxG/apps/web
+
+ ❯ |web| test/app.test.tsx (11 tests | 1 failed) 1661ms
+   × lane 8: 200 mounts and unmounts of a transport-subscribed hook consumer leave zero transport subscriptions 37ms
+
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
- FAIL  |web| test/client-host-qualification.test.tsx > lane 8: 200 mounts and unmounts of a transport-subscribed hook consumer leave zero transport subscriptions
-      Tests  1 failed | 3 passed (4)
- ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/client-host-qualification.test.tsx
-Updated 1 path from the index
-== B: widen RoomTransport.submit
-   × lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not 499ms
-   × lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting 151ms
+
+ FAIL  |web| test/app.test.tsx > lane 8: 200 mounts and unmounts of a transport-subscribed hook consumer leave zero transport subscriptions
+AssertionError: expected 201 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 201
+
+ ❯ test/app.test.tsx:338:17
+    336|  held.unmount();
+    337|  for (let i = 0; i < 200; i++) render(<AgoraProvider client={client} e…
+    338|  expect(open()).toBe(0);
+       |                 ^
+    339| });
+    340|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  16:05:22
+   Duration  3.12s (tests 55%, environment 28%, import 11%, transform 6%)
+
+== b-widen-submit
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-63klxG
+
+ ❯ |unit| packages/web-framework/test/boundaries.test.ts (5 tests | 2 failed) 4076ms
+   × lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not 469ms
+   × lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting 206ms
+
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
- FAIL  |unit| packages/web-framework/test/host-calls.test.ts > lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not
- FAIL  |unit| packages/web-framework/test/host-calls.test.ts > lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting
-      Tests  2 failed (2)
-Updated 1 path from the index
-== C: validator accepts anything
-   × lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client 48ms
+
+ FAIL  |unit| packages/web-framework/test/boundaries.test.ts > lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not
+AssertionError: t.submit(1, "d", "x");: expected [] to not deeply equal []
+
+Compared values have no visual difference.
+
+ ❯ packages/web-framework/test/boundaries.test.ts:59:86
+     57| test('lane 7: malformed RoomTransport and EnvironmentPort calls fail t…
+     58|  expect(diagnose(call('t.submit("c", "d", "x"); t.markSeen("1"); t.sav…
+     59|  for (const statement of malformed) expect(diagnose(call(statement)), …
+       |                                                                                      ^
+     60| }, 60_000);
+     61|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |unit| packages/web-framework/test/boundaries.test.ts > lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting
+AssertionError: expected [] to not deeply equal []
+
+Compared values have no visual difference.
+
+ ❯ packages/web-framework/test/boundaries.test.ts:63:55
+     61|
+     62| test('lane 7 counterfactual: widening submit to accept anything makes …
+     63|  expect(diagnose(call('t.submit(1, "d", "x");'))).not.toEqual([]);
+       |                                                       ^
+     64|  const source = readFileSync(path.join(root, 'packages/web-framework/s…
+     65|  const text = source.replace(/readonly submit: \([^)]*\) => void;/, 'r…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed (5)
+   Start at  16:05:25
+   Duration  4.80s (tests 87%, import 12%, transform 1%)
+
+== c-validate-anything
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-63klxG/apps/web
+
+ ❯ |web| test/app.test.tsx (11 tests | 1 failed) 3383ms
+   × lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client 133ms
+
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
- FAIL  |web| test/client-host-qualification.test.tsx > lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client
-      Tests  1 failed | 3 passed (4)
- ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run --config vitest.config.ts test/client-host-qualification.test.tsx
-Updated 1 path from the index
+
+ FAIL  |web| test/app.test.tsx > lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client
+AssertionError: expected 'pending' to be 'denied' // Object.is equality
+
+Expected: "denied"
+Received: "pending"
+
+ ❯ test/app.test.tsx:320:45
+    318|  const verdict = createWireValidator().validate('RoomCommandReceipt', …
+    319|  expect(verdict.ok).toBe(false);
+    320|  expect(client.getState().commands[0]?.tag).toBe('denied');
+       |                                             ^
+    321| });
+    322|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  16:05:32
+   Duration  4.29s (tests 80%, environment 12%, import 5%, transform 3%)
+
 == restored
-      Tests  4 passed (4)
-      Tests  2 passed (2)
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-63klxG/apps/web
+
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  16:05:36
+   Duration  3.02s (tests 76%, environment 11%, import 7%, transform 6%)
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-63klxG
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  16:05:40
+   Duration  9.98s (tests 94%, import 4%, transform 2%)
+

@@ -1,0 +1,13 @@
+diff --git a/packages/web-framework/src/client.ts b/packages/web-framework/src/client.ts
+index 1455b16..d7b2fff 100644
+--- a/packages/web-framework/src/client.ts
++++ b/packages/web-framework/src/client.ts
+@@ -72,7 +72,7 @@ export function useTranscript(): readonly TransitionRecord[] {
+ 
+ export function useTransportState(): TransportConnection {
+ 	const { transport } = useEnvironment();
+-	return useSyncExternalStore(transport.subscribe, transport.getState, transport.getState);
++	return useSyncExternalStore((listener) => { transport.subscribe(listener); return () => undefined; }, transport.getState, transport.getState);
+ }
+ 
+ export function useMediaQuery(query: string): boolean {
