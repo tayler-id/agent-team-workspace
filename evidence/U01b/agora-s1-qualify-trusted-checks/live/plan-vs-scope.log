@@ -1,0 +1,17 @@
+# Plan versus token-scope check, read-only, 2026-10-03T21:45:12Z
+$ gh api repos/tayler-id/agent-team-workspace --jq {private,visibility,permissions}
+{"permissions":{"admin":true,"maintain":true,"pull":true,"push":true,"triage":true},"private":true,"visibility":"private"}
+$ gh api -i repos/tayler-id/agent-team-workspace/branches/main/protection   (status line, scope headers, body)
+HTTP/2.0 403 Forbidden
+X-Accepted-Oauth-Scopes: 
+X-Oauth-Scopes: gist, read:org, repo, workflow
+{"message":"Upgrade to GitHub Pro or make this repository public to enable this feature.","documentation_url":"https://docs.github.com/rest/branches/branch-protection#get-branch-protection","status":"403"}
+$ gh api repos/tayler-id/agent-platform --jq {private,visibility,permissions}
+{"permissions":{"admin":true,"maintain":true,"pull":true,"push":true,"triage":true},"private":false,"visibility":"public"}
+$ gh api -i repos/tayler-id/agent-platform/branches/main/protection   (status line, scope headers, body)
+HTTP/2.0 404 Not Found
+X-Accepted-Oauth-Scopes: 
+X-Oauth-Scopes: gist, read:org, repo, workflow
+{"message":"Branch not protected","documentation_url":"https://docs.github.com/rest/branches/branch-protection#get-branch-protection","status":"404"}
+$ gh api user --jq {login,type,has_plan}
+{"has_plan":false,"login":"tayler-id","type":"User"}

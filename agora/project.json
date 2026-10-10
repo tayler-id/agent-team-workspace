@@ -18,9 +18,12 @@
     {"id": 4, "predicate": "changed skill and deleted feature-map coverage refuse"},
     {"id": 5, "predicate": "wrong head, wrong base and mismatched configuration refuse"},
     {"id": 6, "predicate": "missing proof, mutated artifact bytes and an unsupported target refuse"},
-    {"id": 7, "predicate": "exit/outcome mismatch and a stale or forged producer signature refuse; weakening the signature check turns its own assertion red"}
+    {"id": 7, "predicate": "exit/outcome mismatch and a stale or forged producer signature refuse; weakening the signature check turns its own assertion red"},
+    {"id": 8, "predicate": "branch-protection read-back passes only with strict exact-App required checks, code-owner review, stale dismissal and no bypass; Pro-plan 403 and an unenrolled App block"},
+    {"id": 9, "predicate": "check runs from another App, unsigned or candidate-signed receipts, wrong-workflow receipts, forks, a modified driver workflow, a driver naming a secret, a reporter that differs from the policy allowlist in any way and a pull request touching a sensitive path refuse; trusting any App turns its own assertion red"},
+    {"id": 10, "predicate": "a failed dependency, skipped, neutral, incomplete, missing, duplicate or wrong-head jobs and superseded or stale checks fail the aggregate, as do required jobs made dependent, conditional or allowed to fail; all-success exact-head passes; accepting any conclusion passes a skipped job"}
   ],
-  "driver": ["pnpm", "exec", "vitest", "run", "--project", "unit", "packages/verification/test/project.test.ts", "packages/verification/test/evidence-validator.test.ts"],
+  "driver": ["pnpm", "exec", "vitest", "run", "--project", "unit", "packages/verification/test/project.test.ts", "packages/verification/test/evidence-validator.test.ts", "packages/verification/test/trusted-checks.test.ts"],
   "timeout_ms": 300000,
   "target": "local-foundation-fixture",
   "cleanup": "stop by instance and live cleanup handle; preserve evidence"

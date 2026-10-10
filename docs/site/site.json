@@ -129,6 +129,11 @@
           "kind": "feature"
         },
         {
+          "id": "trusted-checks",
+          "title": "Trusted checks",
+          "kind": "feature"
+        },
+        {
           "id": "backup-restore",
           "title": "Encrypted backup and restore",
           "kind": "feature"
@@ -327,6 +332,22 @@
     {
       "path": "packages/verification/test/evidence-validator.test.ts",
       "page": "evidence-validator.md"
+    },
+    {
+      "path": "scripts/trusted-checks.mjs",
+      "page": "trusted-checks.md"
+    },
+    {
+      "path": "packages/verification/test/trusted-checks.test.ts",
+      "page": "trusted-checks.md"
+    },
+    {
+      "path": "scripts/trusted-report.mjs",
+      "page": "trusted-checks.md"
+    },
+    {
+      "path": "packages/verification/test/trusted-report.test.ts",
+      "page": "trusted-checks.md"
     },
     {
       "path": "scripts/foundation.mjs",

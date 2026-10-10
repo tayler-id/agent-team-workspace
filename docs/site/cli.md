@@ -16,8 +16,13 @@ This is the complete current contributor command surface, plus a separate invent
 | `evidence` | `--instance UUID`; requires fresh same-instance proof and matching artifact bytes, including after stop |
 | `stop` | `--instance UUID --handle CLEANUP_HANDLE`; authenticated owned cleanup, idempotent only for that handle |
 | `lanes` | `--unit U01b --task agora-s1-isolate-development --artifacts DIRECTORY`; task lanes 1-4 plus guard mutation |
+| `lanes` | `--task agora-s1-validate-project-evidence` unlocks lanes 1-7; `--task agora-s1-qualify-trusted-checks` unlocks lanes 1-10, see [trusted checks](trusted-checks.md) |
 
 `--fixture python` selects the Python fixture through the Node launcher; prefer its independent Python entry when checking cross-language reports. Unknown options reject. The `agora-s1-validate-project-evidence` task selects lanes 1-7. Direct whole-unit `lanes --unit U01b` still executes available proof but exits blocked because lanes 8-10 remain unavailable. Neither task selector qualifies the complete milestone. Exit codes are exactly 0 pass, 1 observed failure, 2 blocked, 3 unavailable, 64 usage error, 70 infrastructure failure. An unavailable check is never successful evidence. Runtime state is private to `.scratch/project/`; evidence paths must stay below repository `evidence/` or `.scratch/` without symlink escape.
+
+## Trusted checks
+
+`node scripts/trusted-checks.mjs evaluate --kind run|checks|protection|workflows --input FILE [--policy FILE] [--project agora|python-fixture] --json` decides one GitHub read-back against [agora/trusted-checks.json](repo:agora/trusted-checks.json) and prints `agora.trusted-checks-report/v1` with sorted denial codes. `policy` prints the selected project's policy. `node scripts/trusted-report.mjs --run-id ID --json` is the default-branch reporter that `agora-report.yml` runs; it needs `GITHUB_TOKEN`, `AGORA_REPORTER_APP_KEY` and `AGORA_REPORTING_SIGNING_KEY` and an enrolled policy. Exit 0 pass, 1 fail, 2 blocked prerequisite (unenrolled App or key, missing repository, paid-plan 403), 64 usage. See [trusted checks](trusted-checks.md).
 
 ## Documentation commands
 

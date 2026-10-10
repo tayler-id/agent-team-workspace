@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the read-only deterministic local-answer core (L5 pure-core preparation) and the independent Agora/Python project verification controls from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, packages/verification, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, U01b.B01, U01c.B01 slice 1 (encrypted backup artifact and same-cluster verified restore), U21.B01 (build-time Feature discovery), local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the read-only deterministic local-answer core (L5 pure-core preparation) and the independent Agora/Python project verification controls from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, packages/verification, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, U01b.B01 through U01b.B03, U01c.B01 slice 1 (encrypted backup artifact and same-cluster verified restore), U21.B01 (build-time Feature discovery), local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
 ---
 
 # Verify Agora
@@ -62,6 +62,25 @@ Design-negative P0a pass predicates: `verify-design` exits 0 on the real tree; `
 
 P0b alone launches no service. Drive `node --test scripts/test/ci-doctor.test.ts`: known-good actual native import passes, wrong Node/pnpm and unavailable native binding report blocked. Each omitted probe in a disposable copy makes its own denial assertion fail. Evidence: use the recorder below with `--parent f98a7b6b51465f6a6a47cb01c6163dac2d6c8eec --head <code-head> --out .scratch/P0b/replay -- node --test scripts/test/ci-doctor.test.ts`; retain P0b receipts under `evidence/ci/P0b/`. Cleanup removes only owned `.scratch/doctor-*` copies, never receipts. Full fixture verification still follows below and may be independently blocked.
 
+### Trusted checks doctor (U01b.B03)
+
+Read-only. `policy` must exit 0 and print the Agora project. Run the live read-back with an ordinary read-only `gh` login; it never writes to GitHub. Until a human enrolls the reporting App and key, every `evaluate` against the committed policy exits 2 with `reporting_app_unenrolled`, and the Python fixture exits 2 with `repository_unprovisioned`. That is a blocked prerequisite, not a pass.
+
+```sh
+node scripts/trusted-checks.mjs policy --json
+gh api repos/tayler-id/agent-team-workspace --jq '{id,private,visibility,default_branch}'
+gh api repos/tayler-id/agent-team-workspace/branches/main/protection > .scratch/protection.json
+node scripts/trusted-checks.mjs evaluate --kind protection --input .scratch/protection.json --json
+H=$(git rev-parse HEAD)
+gh api repos/tayler-id/agent-team-workspace/commits/$H/check-runs --jq "{head_sha:\"$H\",check_runs:[.check_runs[]|{id,name,app_id:.app.id,head_sha,status,conclusion,output:{text:.output.text}}]}" > .scratch/check-runs.json
+node scripts/trusted-checks.mjs evaluate --kind checks --input .scratch/check-runs.json --json
+gh api repos/tayler-id/agent-team-workspace/actions/variables/AGORA_REPORTER_ENABLED
+```
+
+The `checks` read-back needs that reshape until slice F5 accepts GitHub's raw `app.id` rows and takes the head from the request. The variable read must return 404 until enrollment, so the reporter job stays skipped.
+
+The protection read-back currently returns HTTP 403 "Upgrade to GitHub Pro or make this repository public to enable this feature." With the committed policy the evaluation exits 2 with `reporting_app_unenrolled` first; against an enrolled policy the same body exits 2 with `plan_upgrade_required`.
+
 ### Production build (built room)
 
 The built fixture room needs only the Node and pnpm pins above, a Chrome that `chrome-devtools-axi` can start, and loopback port 4394 free. No database or Launch-step runtime is involved. A listener already on 4394 belongs to someone else, so report the step blocked and leave that process alone.
@@ -105,6 +124,10 @@ node scripts/local-room.ts start --instance "$INSTANCE"
 ```
 
 Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/PostgreSQL port and harness `url`. Open that URL with the approved browser driver. It serves the apps/web room shell over the live runtime (L4 first slice), not the finished room UI. No external accounts or production credentials are needed.
+
+### Trusted checks launch (U01b.B03)
+
+Nothing starts. The decision tool reads JSON files and the lane suite writes its namespaced fixtures (App 900001, repository 900002, fresh Ed25519 keys) under one `.scratch/trusted-checks-*` directory that it removes itself.
 
 ### Encrypted backup and restore launch (U01c.B01 slice 1)
 
@@ -310,6 +333,17 @@ Pass predicates:
 
 For U01b.B01's project verification controls: every required command must exit zero, all native lane assertions must pass without skips, and conformance must name both consumers as passing. Whole-unit lanes remain blocked without U01b.B02/B03; the explicit task selector does not qualify that milestone. U01a's historical task-admission driver remains documented in [task proof](../../../docs/site/test-first.md), not a substitute for this task's controls.
 
+### Trusted checks drive (U01b.B03)
+
+Lanes 8-10 drive `node scripts/trusted-checks.mjs evaluate` through the public CLI. Pass means all three lanes pass and the project runner reports `outcome: pass` for the task. Lane 8 passes only a protection read-back with strict exact-App checks, review, stale dismissal, code-owner review, enforced admins and no bypass. Lane 9 must name `wrong_producer` for a check from the GitHub Actions App, `receipt_signature_invalid` for a candidate-signed receipt and `workflow_revision_mismatch` for a modified driver. The committed workflows must pass `--kind workflows` against the committed policy, and edited copies must name `driver_secret_reference`, and each of the fourteen reporter edits (a `display_title` or `toJSON(secrets)` step, a fork checkout, a job-level secret, a dropped `if` and others) must name only `reporter_workflow_not_allowlisted`. A changed `.github/` file, policy or trusted script must name `sensitive_path_changed:PATH`, and ordinary paths must pass. Lane 9's isolated copy that trusts any App must lose `wrong_producer`. Lane 10 must fail a failed dependency with its skipped dependent and a required job given `needs`, `if` or `continue-on-error`, and its copy that accepts any conclusion must pass a skipped job. The reporter tests must report 5 passed against their loopback fake API, including the credential canary reading `true` once for the real reporter and three times for the weakened copy, and a pull request that edits the reporter publishing `agora/policy` as `failure` with no head copy fetched.
+
+```sh
+pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts packages/verification/test/trusted-report.test.ts
+node -e 'const f=p=>[p,require("fs").readFileSync(p,"utf8")];require("fs").writeFileSync(".scratch/workflows.json",JSON.stringify({changed_paths:[],files:Object.fromEntries([f(".github/workflows/agora-ci.yml"),f(".github/workflows/agora-report.yml")])}))'
+node scripts/trusted-checks.mjs evaluate --kind workflows --input .scratch/workflows.json --json
+pnpm -s agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks --artifacts ".scratch/trusted-lanes-$(date +%s)" --json
+```
+
 ### Production build (built room)
 
 Drive the preview from Launch in its own session, at desktop and phone viewports, reloading after each viewport change so the probe reads a fresh module evaluation:
@@ -476,6 +510,14 @@ node --input-type=module -e 'import fs from "node:fs"; import assert from "node:
 unset TMPDIR
 ```
 
+### Trusted checks evidence (U01b.B03)
+
+The behavioral parent is the committed harness `d9c06b3`, where `policy` works and `evaluate` returns `unavailable`. Red must show the lane assertions failing on `unavailable`, never a missing module. Retain receipts under `evidence/U01b/agora-s1-qualify-trusted-checks/`, with one directory per slice.
+
+```sh
+node scripts/record-red-green.mjs --parent d9c06b3 --head HEAD --out evidence/U01b/agora-s1-qualify-trusted-checks/slice-1 -- pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts
+```
+
 ## Feature discovery (U21.B01)
 
 Build-time discovery of Features under `src/features/<name>/` (or `features/<name>/` for a package without `src/`). It generates `agora/feature-inventory.json`. It does not migrate product Features, enforce Feature-to-Feature imports or qualify U21.
@@ -578,3 +620,7 @@ kill -0 "$(cat "$RUN/preview-wrapper.pid")" 2>/dev/null && echo wrapper-still-ru
 `lsof` and the wrapper check must print nothing. If either does, the recorded process did not exit; report it, keep `$RUN` for diagnosis and do not kill other vite or Chrome processes by name. Otherwise delete `$RUN`, which held only this run's log and PIDs. `apps/web/dist` is ignored build output and may stay; the regression test removes its own `.scratch/built-room-<pid>` directory.
 
 Evidence files under `evidence/` must survive cleanup; the cluster and worktrees must not.
+
+### Trusted checks cleanup (U01b.B03)
+
+The lane suite and the reporter tests delete their own `.scratch/trusted-checks-*` and `.scratch/trusted-report-*` directories in `afterAll`, and the reporter removes its `agora-report-*` temporary input. Confirm none remain with `find .scratch -maxdepth 1 \( -name 'trusted-checks-*' -o -name 'trusted-report-*' \)` and `ls "${TMPDIR:-/tmp}" | grep agora-report-`. Lane runner output under `.scratch/trusted-lanes-*` and receipts under `evidence/` stay.

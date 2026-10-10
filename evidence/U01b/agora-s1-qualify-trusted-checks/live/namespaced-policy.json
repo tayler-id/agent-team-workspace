@@ -1,0 +1,49 @@
+{
+  "schema_version": "agora.trusted-checks/v1",
+  "projects": {
+    "agora": {
+      "repository": {
+        "owner": "tayler-id",
+        "name": "agent-team-workspace",
+        "id": 1402470808,
+        "default_branch": "main"
+      },
+      "driver": {
+        "name": "agora-ci",
+        "workflow": ".github/workflows/agora-ci.yml",
+        "event": "pull_request",
+        "jobs": [
+          "doctor",
+          "static",
+          "contracts",
+          "docs",
+          "tests",
+          "red-green",
+          "guards"
+        ]
+      },
+      "reporter": {
+        "workflow": ".github/workflows/agora-report.yml",
+        "environment": "agora-reporter",
+        "secrets": [
+          "AGORA_REPORTER_APP_KEY",
+          "AGORA_REPORTING_SIGNING_KEY"
+        ],
+        "checks": [
+          "agora/evidence",
+          "agora/policy"
+        ],
+        "app_id": 900001,
+        "public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAgeyoEmV61OqOCidsfWwkbAgD1tCFOnbxfKviednsFyo=\n-----END PUBLIC KEY-----\n"
+      },
+      "protection": {
+        "branch": "main",
+        "required_approving_review_count": 1,
+        "dismiss_stale_reviews": true,
+        "require_code_owner_reviews": true,
+        "strict": true,
+        "enforce_admins": true
+      }
+    }
+  }
+}

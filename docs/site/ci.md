@@ -22,7 +22,7 @@ Ready for tests | Run behavioral checks separately; prerequisite success proves 
 
 ## Implementation status
 
-**Implemented P0b, review pending:** exact toolchain/native diagnosis is checked; the wider CI program remains unqualified. Mandatory CI, PostgreSQL socket hardening, React guardrails and hosted enforcement do not yet exist. This visual explains execution order, not an approved product design system.
+**Implemented P0b, review pending:** exact toolchain/native diagnosis is checked; the wider CI program remains unqualified. Hosted CI now runs as `agora-ci` on every pull request, but its results do not gate merges yet: the reporting App, its key and branch protection are blocked human prerequisites, see [trusted checks](trusted-checks.md). PostgreSQL socket hardening and React guardrails do not yet exist. This visual explains execution order, not an approved product design system.
 
 ## Verification and proof
 
@@ -47,6 +47,8 @@ Seven jobs, one per verification area, each run in its own fresh checkout:
 | `tests` | macos-15 | `pnpm test` |
 | `red-green` | ubuntu-24.04 | `bash scripts/ci-red-green.sh BASE HEAD` |
 | `guards` | ubuntu-24.04 | `pnpm -s agora project lanes --unit U01b --task agora-s1-validate-project-evidence` |
+
+The `guards` command runs every lane in `agora/project.json`, now lanes 1-10, and fails if any lane fails. `--task` only decides which task the passing result unlocks, so [trusted checks](trusted-checks.md) lanes 8-10 run here without a workflow change.
 
 ```flow
 Pull request | A push to a branch with an open pull request to main starts the workflow from the merge ref.
