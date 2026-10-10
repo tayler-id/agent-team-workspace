@@ -358,12 +358,12 @@ git archive HEAD | tar -x -C "$COPY"
 web() { (cd "$COPY/apps/web" && pnpm exec vitest run --config vitest.config.ts test/app.test.tsx); }
 lane7() { (cd "$COPY" && pnpm exec vitest run --project unit packages/web-framework/test/boundaries.test.ts); }
 cf() { echo "== $1"; git -C "$COPY" apply "$EV/$1.diff"; "$2" && echo "unexpected pass: $1"; git -C "$COPY" apply -R "$EV/$1.diff"; }
-cf a-drop-unsubscribe web; cf b-widen-submit lane7; cf c-validate-anything web
+cf a-drop-unsubscribe web; cf b-widen-submit lane7; cf c-validate-anything web; cf d-noop-media-cleanup web
 echo "== restored"; web && lane7
 rm -rf "$COPY"
 ```
 
-Pass predicates: no `unexpected pass` line. `a-drop-unsubscribe` fails only `lane 8`, with 201 open subscriptions where 0 is expected. `b-widen-submit` fails both `lane 7` tests. `c-validate-anything` fails only `lane 5 negative`, with the command `pending` where `denied` is expected. Both runs after `== restored` pass. A patch that no longer applies prints `patch does not apply` and then `unexpected pass`; regenerate it against the current source before trusting the run. The final `rm -rf "$COPY"` is the whole cleanup.
+Pass predicates: no `unexpected pass` line. `a-drop-unsubscribe` fails only `lane 8`, with `[201, 0]` (transport subscriptions, Host media-query listeners) where `[0, 0]` is expected. `d-noop-media-cleanup` fails only `lane 8`, with `[0, 201]`. `b-widen-submit` fails both `lane 7` tests. `c-validate-anything` fails only `lane 5 negative`, with the command `pending` where `denied` is expected. Both runs after `== restored` pass. A patch that no longer applies prints `patch does not apply` and then `unexpected pass`; regenerate it against the current source before trusting the run. The final `rm -rf "$COPY"` is the whole cleanup.
 
 ### Production build (built room)
 

@@ -1,4 +1,4 @@
-04bd6a0a8a45304fc460447ef05e527946ef2c5d
+2b68a1bd5554ff25fcb0130cd73a01315e9151d9
 v24.16.0
 
  RUN  v5.0.1 /Users/taylerramsay/.no-mistakes/worktrees/50d2db971a33/01M4KNE0RKN2R0ZKT1M7REPKPB/apps/web
@@ -6,8 +6,8 @@ v24.16.0
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  16:06:09
-   Duration  3.70s (tests 41%, environment 36%, import 13%, transform 9%)
+   Start at  16:23:33
+   Duration  2.61s (tests 50%, environment 29%, import 14%, transform 6%)
 
 
  RUN  v5.0.1 /Users/taylerramsay/.no-mistakes/worktrees/50d2db971a33/01M4KNE0RKN2R0ZKT1M7REPKPB
@@ -15,6 +15,6 @@ v24.16.0
 
  Test Files  1 passed (1)
       Tests  5 passed (5)
-   Start at  16:06:13
-   Duration  11.86s (tests 95%, import 4%, transform 1%)
+   Start at  16:23:36
+   Duration  4.88s (tests 94%, import 4%, transform 1%)
 
