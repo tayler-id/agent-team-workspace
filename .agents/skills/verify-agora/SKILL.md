@@ -508,14 +508,15 @@ node scripts/feature-inventory.ts
 node scripts/feature-inventory.ts --check
 ```
 
-Disposable negative. Copy the tree into a namespaced temp directory, break it there, and expect `--check` to exit 1 with a message naming the owner and conventional path.
+Disposable negative. Copy every package that has a row in the inventory into a namespaced temp directory. The unbroken copy must pass `--check` with exit 0; a missing package fails it as drift and makes the negative prove nothing. Then break the copy and expect `--check` to exit 1 with a message naming the owner and conventional path.
 
 ```sh
 D="$(mktemp -d "${TMPDIR:-/tmp}/agora-u21-XXXXXX")"
 mkdir -p "$D/scripts" "$D/agora" "$D/apps"
 cp scripts/feature-discovery.ts scripts/feature-inventory.ts "$D/scripts/"
 cp agora/feature-inventory.json "$D/agora/"
-cp -R apps/web "$D/apps/web"
+cp -R apps/web apps/center "$D/apps/"
+(cd "$D" && node scripts/feature-inventory.ts --check; echo "baseline exit $?")
 rm "$D/apps/web/src/features/room/entrypoint.ts"
 (cd "$D" && node scripts/feature-inventory.ts --check; echo "exit $?")
 ```
