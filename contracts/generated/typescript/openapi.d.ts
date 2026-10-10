@@ -399,6 +399,24 @@ export interface components {
             scenarios: string[];
             lanes: components["schemas"]["FixtureLane"][];
             driver: string[];
+            units?: {
+                id: string;
+                lanes?: components["schemas"]["FixtureLane"][];
+                lanes_unavailable?: string;
+                perf: {
+                    metric: string;
+                    rule: string;
+                    probe?: string[];
+                    unavailable?: string;
+                    compare?: string[];
+                    limits?: {
+                        metric: string;
+                        max?: number;
+                        ratio?: number;
+                        of?: string;
+                    }[];
+                };
+            }[];
             timeout_ms: number;
             /** @enum {string} */
             target: "local-foundation-fixture";

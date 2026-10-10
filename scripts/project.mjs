@@ -25,21 +25,26 @@ Help is plain text, needs no install or database, and starts nothing.
   verify     --scenario controls|guards --artifacts DIRECTORY; native tests and guard negatives.
   evidence   --instance UUID; same-instance, fresh bytes and artifact digests required.
   stop       --instance UUID --handle CLEANUP_HANDLE; owned, idempotent cleanup only.
-  lanes      --unit U01b --task TASK --artifacts DIRECTORY; task-specific qualification.
+  verify     --scenario perf --unit UNIT [--parent REV] --artifacts DIRECTORY; five interleaved
+             parent/head batches of the unit's probe. U01b, U20 and U21 run; U22, U23, U01c and U01d
+             report unavailable with the reason. REV defaults to HEAD^.
+  lanes      --unit UNIT --task TASK --artifacts DIRECTORY; task-specific qualification.
 
-TASK: agora-s1-isolate-development (lanes 1-4), agora-s1-validate-project-evidence (1-7).
+UNIT: U01b runs lanes. U20, U21, U22, U23, U01c and U01d list their ten lanes as unavailable
+with a reason until a driver exists; an unknown unit is unavailable.
+TASK (U01b): agora-s1-isolate-development (lanes 1-4), agora-s1-validate-project-evidence (1-7).
 Whole-unit lanes 8-10 unavailable; a task pass never qualifies the whole unit.
 Options: --fixture agora|python, --instance, --profile, --scenario, --artifacts,
-         --handle, --unit, --task. Artifact directories must be under .scratch/ or evidence/.
+         --handle, --unit, --task, --parent. Artifact directories must be under .scratch/ or evidence/.
 Operational reports: agora.cli-report/v1 JSON; exits 0 pass, 1 fail, 2 blocked,
 3 unavailable, 64 usage error, 70 infrastructure failure.
 Recipe: .agents/skills/verify-agora/SKILL.md. Coverage: agora/feature-map.json.`);
 	process.exit(0);
 }
-const { artifact, checkEvidence, command, environment, exits, json, mapped, requireThat, safe, validateReport, versions, wire, writeState } = await import('./project-checks.mjs');
+const { artifact, checkEvidence, command, environment, exits, json, mapped, requireThat, safe, unitOf, validateReport, versions, wire, writeState } = await import('./project-checks.mjs');
 const options = {}; let invalid = false;
 for (let i = 0; i < args.length; i += 2) {
-	if (!['--instance', '--scenario', '--profile', '--artifacts', '--fixture', '--handle', '--unit', '--task'].includes(args[i]) || !args[i + 1] || options[args[i]]) invalid = true;
+	if (!['--instance', '--scenario', '--profile', '--artifacts', '--fixture', '--handle', '--unit', '--task', '--parent'].includes(args[i]) || !args[i + 1] || options[args[i]]) invalid = true;
 	options[args[i]] = args[i + 1];
 }
 const report = { schema_version: 'agora.cli-report/v1', command: commands.includes(action) ? action : 'doctor', versions: versions(), outcome: 'pass', diagnostics: [], artifacts: [], started_at: new Date().toISOString(), finished_at: new Date().toISOString() };
@@ -65,8 +70,15 @@ try {
 	if (options['--scenario']) report.scenario_id = options['--scenario'];
 	if (action === 'doctor') doctor();
 	else if (action === 'scenarios') report.scenarios = mapped().scenarios;
-	else if (action === 'lanes' || (action === 'verify' && ['controls', 'guards'].includes(options['--scenario']))) {
-		const manifest = mapped(); requireThat(!options['--unit'] || options['--unit'] === 'U01b', 'unit_unavailable', 'unavailable');
+	else if (action === 'verify' && options['--scenario'] === 'perf') {
+		requireThat(options['--unit'], 'unit_required', 'usage_error');
+		const entry = unitOf(mapped(), options['--unit']); requireThat(entry.perf.probe, `${entry.id} perf unavailable: ${entry.perf.unavailable}`, 'unavailable');
+		const { runPerf } = await import('./project-perf.mjs'), { file, failures } = runPerf(entry, options['--parent'] ?? 'HEAD^', safe(options['--artifacts'] ?? `.scratch/project-perf/${randomUUID()}`));
+		report.artifacts = [artifact(file)];
+		if (failures.length) { report.outcome = 'fail'; report.diagnostics = failures.map(message => ({ reason_code: 'blocked_prerequisite', message })); }
+	} else if (action === 'lanes' || (action === 'verify' && ['controls', 'guards'].includes(options['--scenario']))) {
+		const manifest = mapped(), unit = options['--unit'] && unitOf(manifest, options['--unit']);
+		requireThat(!unit?.lanes_unavailable, `${unit?.id} lanes 1-10 unavailable: ${unit?.lanes_unavailable}`, 'unavailable');
 		const out = safe(options['--artifacts'] ?? `.scratch/project-lanes/${randomUUID()}`); mkdirSync(out, { recursive: true });
 		const file = path.join(out, 'lanes.json'); requireThat(!existsSync(file), 'evidence_exists');
 		const run = command([...manifest.driver, '--reporter=json', '--outputFile=' + file]);
@@ -137,7 +149,7 @@ try {
 	}
 } catch (error) {
 	report.outcome = error.outcome ?? (error.code === 'ENOENT' ? 'blocked' : 'fail');
-	report.diagnostics.push({ reason_code: report.outcome === 'usage_error' ? 'usage_error' : 'blocked_prerequisite', message: error.message.slice(0, 4096) });
+	report.diagnostics.push({ reason_code: { usage_error: 'usage_error', unavailable: 'unavailable_capability' }[report.outcome] ?? 'blocked_prerequisite', message: error.message.slice(0, 4096) });
 }
 report.finished_at = new Date().toISOString();
 if (!wire.validate('CliReport', report).ok) { report.outcome = 'infrastructure_failure'; delete report.scenario_id; report.diagnostics = [{ reason_code: 'infrastructure_failure', message: 'report_invalid' }]; }

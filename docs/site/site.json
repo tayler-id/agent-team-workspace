@@ -370,6 +370,10 @@
       "page": "project-controls.md"
     },
     {
+      "path": "scripts/project-perf.mjs",
+      "page": "project-controls.md"
+    },
+    {
       "path": "apps/center/src/verification.mjs",
       "page": "project-controls.md"
     },
