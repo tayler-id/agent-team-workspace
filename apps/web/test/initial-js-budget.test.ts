@@ -16,7 +16,7 @@ interface Measurement { files: string[]; raw: number; gzip: number; brotli: numb
 // Scripts and modulepreload links in the built index are the JavaScript the browser fetches before first render.
 function measure(dist: string): Measurement {
 	const html = readFileSync(`${dist}/index.html`, 'utf8');
-	const refs = [...html.matchAll(/<(?:script\b[^>]*\bsrc|link\b[^>]*\bhref)="\/(assets\/[^"]+\.js)"/g)].map((match) => match[1] as string);
+	const refs = [...html.matchAll(/<(?:script\b[^>]*\bsrc|link\b[^>]*\bhref)="\/(assets\/[^"]+\.js)"/g)].flatMap((match) => (match[1] ? [match[1]] : []));
 	const files = [...new Set(refs)];
 	const bytes = files.map((file) => readFileSync(`${dist}/${file}`));
 	const sum = (sizes: number[]): number => sizes.reduce((total, size) => total + size, 0);
@@ -39,7 +39,8 @@ beforeAll(() => {
 	const built = spawnSync(process.execPath, [resolve(app, 'node_modules/vite/bin/vite.js'), 'build', '--outDir', `${out}/dist`, '--emptyOutDir', '--logLevel', 'error'], { cwd: app, encoding: 'utf8', timeout: 120_000, env: { ...process.env, NODE_ENV: 'production' } });
 	expect(built.status, built.stderr.slice(0, 2000)).toBe(0);
 	measured = measure(`${out}/dist`);
-	if (process.env.AGORA_JS_BUDGET_RECORD) writeFileSync(process.env.AGORA_JS_BUDGET_RECORD, `${JSON.stringify({ budgetBytes: BUDGET_BYTES, ...measured }, null, '\t')}\n`);
+	const record = process.env['AGORA_JS_BUDGET_RECORD'];
+	if (record) writeFileSync(record, `${JSON.stringify({ budgetBytes: BUDGET_BYTES, ...measured }, null, '\t')}\n`);
 }, 180_000);
 afterAll(() => { rmSync(out, { recursive: true, force: true }); });
 
