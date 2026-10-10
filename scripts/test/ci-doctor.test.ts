@@ -31,6 +31,7 @@ for (const id of ['node', 'pnpm', 'rolldown']) await test(`G01 ${id} denial and 
 		mkdirSync(path.dirname(file));
 		for (const name of ['.node-version', 'package.json']) copyFileSync(name, path.join(dir, name));
 		writeFileSync(file, source);
+		copyFileSync('scripts/native-probe.ts', path.join(dir, 'scripts/native-probe.ts'));
 		symlinkSync(path.join(root, 'node_modules'), path.join(dir, 'node_modules'), 'dir');
 		const fixture = id === 'node' ? '0.0.0\n' : id === 'pnpm' ? '#!/bin/sh\necho 0.0.0\n' : "process.dlopen = () => { throw new Error('fixture native binding unavailable'); };\n";
 		if (id === 'node') writeFileSync(path.join(dir, '.node-version'), fixture);

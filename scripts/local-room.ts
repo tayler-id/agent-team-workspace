@@ -1,14 +1,21 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { randomBytes, randomUUID } from 'node:crypto';
-import { closeSync, existsSync, mkdirSync, openSync, rmSync } from 'node:fs';
+import { closeSync, existsSync, mkdirSync, openSync, readFileSync, rmSync } from 'node:fs';
 import { createWireValidator, type Schema } from '@agora/contracts';
 import { RoomClient } from './local-room-client.ts';
+import { nativeCause, nativeProbe, supportedRuntimeRemedy } from './native-probe.ts';
 import { authenticate, available, fileId, loadOwner, pause, rootFor, safeTree, saveOwner, stopped, type Owner } from './local-room-owner.ts';
 
 const args = process.argv.slice(2), command = args[0] as Schema<'LocalRuntimeReport'>['command'];
 if (args[0] === '--help' || args[0] === '--version') {
 	process.stdout.write(args[0] === '--version' ? 'agora.local-runtime/v1\n' : 'local-room doctor|start|status|send|answer|history|replay|evidence|stop|reset [--instance NAME] [--port PORT] [--body TEXT] [--selected-id UUID] [--command-id UUID] [--after CURSOR] [--confirm-disposable]\n'); process.exit(0);
 }
+// The loader's cause chain never reaches runtime.log, so the shared probe supplies it; otherwise the last logged error line.
+const startupCause = (root: string): string => {
+	try { nativeProbe(); } catch (e) { return `${nativeCause(e)}. ${supportedRuntimeRemedy}`; }
+	const line = readFileSync(`${root}/runtime.log`, 'utf8').slice(-8192).split('\n').reverse().find((l) => /^(\w*Error|Error)\b/.test(l));
+	return `${(line ?? 'no error line in runtime.log').replaceAll(root, '<instance>').slice(0, 300)}.`;
+};
 const option = (name: string): string | undefined => { const i = args.indexOf(name); return i < 0 ? undefined : args[i + 1]; };
 const report: Schema<'LocalRuntimeReport'> = { schema_version: 'agora.local-runtime/v1', command, outcome: 'pass', detail: '' };
 const wire = createWireValidator();
@@ -23,7 +30,8 @@ try {
 	if (command === 'doctor') {
 		const version = spawnSync(process.env['AGORA_PG_BIN'] ? `${process.env['AGORA_PG_BIN']}/pg_ctl` : 'pg_ctl', ['--version'], { encoding: 'utf8', timeout: 2000 });
 		if (!process.version.startsWith("v24.") || version.status !== 0 || !version.stdout.includes('18.')) throw new Error('Node 24 and PostgreSQL 18 required');
-		report.detail = `${process.version}; ${version.stdout.trim()}; private loopback cluster, agora_app product role`;
+		try { nativeProbe(); } catch (e) { throw new Error(`${nativeCause(e)}. ${supportedRuntimeRemedy}`, { cause: e }); }
+		report.detail = `${process.version}; ${version.stdout.trim()}; Rolldown native addon loads; private loopback cluster, agora_app product role`;
 	} else {
 		const root = rootFor(option('--instance') ?? 'development');
 		if (['start', 'stop', 'reset'].includes(command)) { mkdirSync(`${root}.lock`, { mode: 0o700 }); lock = `${root}.lock`; }
@@ -44,8 +52,9 @@ try {
 			await new Promise<void>((yes, no) => {
 				const timeout = setTimeout(() => { child.kill('SIGTERM'); no(new Error('startup timeout; inspect retained ownership and log')); }, 35_000);
 				child.once('error', (e) => { clearTimeout(timeout); no(e); });
-				child.once('exit', () => { clearTimeout(timeout); no(new Error('startup failed; inspect retained runtime.log')); });
-				child.once('message', (m: unknown) => { clearTimeout(timeout); if (m === 'ready') yes(); else no(new Error('startup failed; inspect retained runtime.log')); });
+				const failed = (): Error => new Error(`startup failed. ${startupCause(root)} Full log retained at ${root}/runtime.log`);
+				child.once('exit', () => { clearTimeout(timeout); no(failed()); });
+				child.once('message', (m: unknown) => { clearTimeout(timeout); if (m === 'ready') yes(); else no(failed()); });
 			}).finally(() => { process.off('SIGINT', cancel); process.off('SIGTERM', cancel); if (child.connected) child.disconnect(); child.unref(); });
 		}
 		const owner = loadOwner(root);

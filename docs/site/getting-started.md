@@ -4,7 +4,7 @@ Today you install a contributor checkout with a local development room, not a pr
 
 ## Prerequisites
 
-Use Node 24 (at least 24.16.0), pnpm 10.34.1, PostgreSQL 18 server binaries on PATH, and Swift 6. The existing receipts exercised Node 24.16.0, PostgreSQL 18.4 and Apple Swift 6.3.3. Later target minors in the spec are not automatically tested versions.
+Use the official Node 24.21.0 pinned in `.node-version`, pnpm 10.34.1, PostgreSQL 18 server binaries on PATH, and Swift 6. The existing receipts exercised Node 24.16.0, PostgreSQL 18.4 and Apple Swift 6.3.3. Later target minors in the spec are not automatically tested versions. `node scripts/local-room.ts doctor` loads the Rolldown native addon; a signed host launcher that macOS rejects reports `blocked` with the Node 24.21.0 remedy.
 
 No external account is needed for the docs or fixture. The first dependency install and Swift build need registry access; subsequent locked builds can use local caches. Do not supply production credentials to these tests.
 

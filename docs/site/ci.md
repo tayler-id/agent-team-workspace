@@ -26,7 +26,7 @@ Ready for tests | Run behavioral checks separately; prerequisite success proves 
 
 ## Verification and proof
 
-The [public doctor](repo:scripts/ci-doctor.mjs), [tests](repo:scripts/test/ci-doctor.test.ts) and [feature map](repo:agora/feature-map.json) own this bounded surface. Run `node scripts/ci-doctor.mjs --json` and `node --test scripts/test/ci-doctor.test.ts`. No pnpm aliases or aggregate wiring are added in P0b. The [P0b record](repo:evidence/ci/P0b/README.md) separates prerequisite failure from assertion red and proves each omitted probe loses its denial. Use the [development runbook](repo:docs/runbooks/development.md) and [verifier](repo:.agents/skills/verify-agora/SKILL.md) for the remaining checks.
+The [public doctor](repo:scripts/ci-doctor.mjs), [shared native probe](repo:scripts/native-probe.ts) (also run by `local-room.ts doctor`), [tests](repo:scripts/test/ci-doctor.test.ts) and [feature map](repo:agora/feature-map.json) own this bounded surface. Run `node scripts/ci-doctor.mjs --json` and `node --test scripts/test/ci-doctor.test.ts`. No pnpm aliases or aggregate wiring are added in P0b. The [P0b record](repo:evidence/ci/P0b/README.md) separates prerequisite failure from assertion red and proves each omitted probe loses its denial. Use the [development runbook](repo:docs/runbooks/development.md) and [verifier](repo:.agents/skills/verify-agora/SKILL.md) for the remaining checks.
 
 ## Design-negative sandbox closure (P0a)
 
