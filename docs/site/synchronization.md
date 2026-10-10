@@ -18,6 +18,7 @@ Replacing a renderer must not replace synchronization rules. A Query cache must 
 Snapshot | Read authorized state and its committed cursor together.
 Replay | Request events strictly after that cursor; deduplicate by stream and sequence.
 Gap | Buffer rather than invent missing events; fetch replay or a fresh snapshot.
+Resume | Replay pages of 50 converge with no duplicate; the probe checks 1,000 missed events plus 100 arrivals under 2 seconds.
 Projection | Apply only newer aggregate revisions and publish immutable state.
 Renderer | Display the projection without authorizing work or owning another timeline.
 ```
@@ -34,6 +35,6 @@ A command receipt settles a known command without advancing the timeline. Retry 
 
 Inspect the [implementation](repo:packages/client-core/src/index.ts), [public synchronization assertions](repo:packages/client-core/test/sync.test.ts), [literal cross-language vectors](repo:contracts/fixtures/replay.json), [precise guard negatives](repo:packages/client-core/test/guards.test.ts), and [boundary tests](repo:packages/client-core/test/boundaries.test.ts). The source-owned [feature explanation](repo:docs/features/client-synchronization.md) and [retained core/boundary review](repo:evidence/U01a/agora-s1-isolate-client-core/3-boundaries/review.md) delimit the newer claim. [R07 and R21](repo:docs/technical-spec.md) still own semantics.
 
-Run `pnpm client:replay -- --json --swift`, `pnpm boundaries` and `pnpm check`. The replay driver compares six literal TypeScript and independent Swift outcomes. Boundary fixtures reject forbidden static, type-only, dynamic and re-export edges and transitive public-type leaks. Missing Swift is unavailable, not a passing test.
+Run `node packages/client-core/test/replay-probe.ts` to replay a seeded corpus (`agora.replay-corpus/v1`: a 200-message snapshot, 1,000 missed events and 100 arrivals with shuffled and re-sent copies and code and Markdown bodies up to 4,096 scalars) through the real core. It reports order, duplicates, acknowledgements and elapsed time against the 2,000 ms budget, and exits 1 on any failure. `replay.test.ts` runs the same predicate against a copy of the core with duplicate suppression removed and requires it to fail. Threads, edits, tombstones and run cards are reported unavailable because no published wire shape carries them; this is a foundation probe, not U01d qualification, and its [receipts](repo:evidence/U01d/replay-corpus-probe/README.md) record timing on one host. Also run `pnpm client:replay -- --json --swift`, `pnpm boundaries` and `pnpm check`. The replay driver compares six literal TypeScript and independent Swift outcomes. Boundary fixtures reject forbidden static, type-only, dynamic and re-export edges and transitive public-type leaks. Missing Swift is unavailable, not a passing test.
 
 Next: [portable contracts](contracts.md), [repository ownership](repository.md), and [verification gates](verification.md).
