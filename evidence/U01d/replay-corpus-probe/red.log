@@ -1,0 +1,39 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-10T18:55:33.907Z
+parent: f69619f752e3c2104fc6947cfb1967f07f9168e8
+head: ba8f48bd7c477a8ae3739222425d535cee0e771c
+subject_revision: f69619f752e3c2104fc6947cfb1967f07f9168e8
+test_patch_applied_to_subject: true
+test_patch_files: packages/client-core/test/replay.test.ts
+test_patch_digest: sha256:06e240486237ea8d0d165fbcee530e7508d28a38ec053739785ca152e4a5a082
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/replay.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-oO0lGN
+
+ ❯ |unit| packages/client-core/test/replay.test.ts (0 test)
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  14:55:25
+   Duration  101ms (worker 97%, environment 3%)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/replay.test.ts [ packages/client-core/test/replay.test.ts ]
+Error: Cannot find module './replay-corpus.ts' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-oO0lGN/packages/client-core/test/replay.test.ts
+ ❯ packages/client-core/test/replay.test.ts:8:1
+      6| import * as core from '@agora/client-core';
+      7| import { expect, test } from 'vitest';
+      8| import { ARRIVING, BODY_LIMIT, buildCorpus, CORPUS_VERSION, DEFAULT_SE…
+       | ^
+      9| import { BUDGET_MS, runReplay, type ReplayReport } from './replay-prob…
+     10|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

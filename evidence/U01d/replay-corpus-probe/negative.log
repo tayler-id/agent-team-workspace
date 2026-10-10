@@ -1,0 +1,9 @@
+sha256 pristine: 44c187b4fb489eb776d7b5f0f13636371ff8780b8f506bccb75e5c4e4a761fb6  -
+sha256 source:   44c187b4fb489eb776d7b5f0f13636371ff8780b8f506bccb75e5c4e4a761fb6  -
+--- 1 pristine copy (expect pass)
+{"version":"agora.replay-corpus/v1","seed":6221057,"outcome":"pass","duplicates":0,"messages":1300,"order":"converged","elapsedMs":34.5,"failures":[]}
+--- 2 dedupe removed (expect fail)
+{"version":"agora.replay-corpus/v1","seed":6221057,"outcome":"fail","duplicates":0,"messages":254,"order":"diverged","elapsedMs":66,"failures":["mode resync","cursor 254 != 1300","message order or membership diverged","last acknowledgement 254 != 1300","core demanded a new snapshot or upgrade"]}
+--- 3 restored from the source file (expect pass)
+restored copy is byte-identical to pristine
+{"version":"agora.replay-corpus/v1","seed":6221057,"outcome":"pass","duplicates":0,"messages":1300,"order":"converged","elapsedMs":35.5,"failures":[]}

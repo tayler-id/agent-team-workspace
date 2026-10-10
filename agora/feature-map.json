@@ -383,7 +383,7 @@
 			"id": "client-replay-corpus",
 			"documentation": "docs/site/synchronization.md",
 			"owner": "agora-replay-corpus-probe",
-			"paths": ["packages/client-core/test/replay-corpus.ts", "packages/client-core/test/replay-probe.ts", "packages/client-core/test/replay.test.ts"],
+			"paths": ["packages/client-core/test/replay-corpus.ts", "packages/client-core/test/replay-probe.ts", "packages/client-core/test/replay.test.ts", "evidence/U01d/replay-corpus-probe/README.md"],
 			"public": ["node packages/client-core/test/replay-probe.ts [SEED]", "pnpm exec vitest run --project unit packages/client-core/test/replay.test.ts"],
 			"contracts": [],
 			"scenarios": ["packages/client-core/test/replay.test.ts", "corpus determinism per seed", "1000 missed events, 100 arrivals and long code and Markdown bodies converge with zero duplicates inside 2000 ms", "budget breach fails", "isolated dedupe removal turns the predicate red while the pristine copy passes", "thread, edit, tombstone and run-card shapes reported unavailable"],

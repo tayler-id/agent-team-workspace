@@ -1,0 +1,48 @@
+{
+	"version": "agora.replay-corpus/v1",
+	"seed": 6221057,
+	"outcome": "pass",
+	"failures": [],
+	"counts": {
+		"history": 200,
+		"delivered": 1219,
+		"messages": 1300,
+		"unique": 1300,
+		"duplicates": 0
+	},
+	"order": "converged",
+	"acknowledgements": {
+		"count": 84,
+		"strictlyIncreasing": true,
+		"last": "1300"
+	},
+	"elapsedMs": 41.6,
+	"budgetMs": 2000,
+	"coverage": {
+		"exercised": [
+			"snapshot",
+			"visible message events at revision 1",
+			"gap buffering",
+			"duplicate and re-sent copies",
+			"out-of-order replay pages"
+		],
+		"unavailable": [
+			{
+				"shape": "thread",
+				"reason": "no published thread wire shape"
+			},
+			{
+				"shape": "edit",
+				"reason": "the local room publishes revision 1 only"
+			},
+			{
+				"shape": "tombstone",
+				"reason": "the local room has no delete wire shape"
+			},
+			{
+				"shape": "run-card",
+				"reason": "no published run-card event reaches the local room"
+			}
+		]
+	}
+}
