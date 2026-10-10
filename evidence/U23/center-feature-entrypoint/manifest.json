@@ -5,12 +5,12 @@
   "artifacts": [
     {
       "file": "red.log",
-      "digest": "sha256:50b774edae993d0a46bfa351704f5c5660f4dc1b8336f141a52e3e70a583b740",
+      "digest": "sha256:ce5f62479e6b9da240045567af70dacaaa76c856088a60fa6d154f6dfdfb3153",
       "byte_length": 2733
     },
     {
       "file": "green.log",
-      "digest": "sha256:6b8a3a0764f033477ae84ab45080acc6fc0a1ddc1b3f380eebd6777f6129b425",
+      "digest": "sha256:1b41cfd644d9fe954f21503560dedc8143475d6304f578eb21f1cff84a83e7dd",
       "byte_length": 1378
     },
     {
@@ -21,10 +21,10 @@
   ],
   "producer": {
     "trust_class": "owner_attested",
-    "boot_id": "320436a5-fbb8-4d65-9e7c-7a9cf32b608d",
-    "head": "078dbe80cbc0f90b39c19ee539e951507f274eb2",
+    "boot_id": "0c2cb200-2279-4ba5-a086-1e8e936da96b",
+    "head": "2e153d4433db34c3273378f21d068f96afcc98af",
     "base": "f69619f752e3c2104fc6947cfb1967f07f9168e8",
     "outcome": "pass",
-    "signature": "20ee379df581747436b7b2c607ab49774d7a0423a01196974e74617847baf490"
+    "signature": "ef35ab7b7da6a25bac40293b67533afd605b084297085e9b35f2c23cd00a0cf0"
   }
 }

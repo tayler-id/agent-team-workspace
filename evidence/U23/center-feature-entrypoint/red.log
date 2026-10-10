@@ -1,7 +1,7 @@
 # red.log (agora.red-green/v1)
-recorded_at: 2026-10-10T19:23:39.640Z
+recorded_at: 2026-10-10T19:36:39.250Z
 parent: f69619f752e3c2104fc6947cfb1967f07f9168e8
-head: 078dbe80cbc0f90b39c19ee539e951507f274eb2
+head: 2e153d4433db34c3273378f21d068f96afcc98af
 subject_revision: f69619f752e3c2104fc6947cfb1967f07f9168e8
 test_patch_applied_to_subject: true
 test_patch_files: packages/verification/test/feature-discovery.test.ts
@@ -13,15 +13,15 @@ expected: the head's behavioral assertions fail against the parent behavior (non
 observed_exit: 1
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-UE5E9p
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-TB2Xgb
 
- ❯ |unit| packages/verification/test/feature-discovery.test.ts (9 tests | 1 failed) 517ms
-   × the center local-room composition is a discovered Feature owned by apps/center 3ms
+ ❯ |unit| packages/verification/test/feature-discovery.test.ts (9 tests | 1 failed) 621ms
+   × the center local-room composition is a discovered Feature owned by apps/center 4ms
 
  Test Files  1 failed (1)
       Tests  1 failed | 8 passed (9)
-   Start at  15:23:31
-   Duration  592ms (tests 97%, transform 2%, import 1%)
+   Start at  15:36:27
+   Duration  704ms (tests 97%, transform 2%, import 1%)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
