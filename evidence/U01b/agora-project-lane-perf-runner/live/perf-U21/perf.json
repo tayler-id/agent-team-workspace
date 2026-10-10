@@ -1,0 +1,88 @@
+{
+  "schema_version": "agora.project-perf/v1",
+  "unit": "U21",
+  "parent": "ee62c3ac65f4e77adef1baae35012bdcfd822438",
+  "head": "f3212773e47ce7291e81ae045f8fff343e0eee3e",
+  "parent_behavior": "present",
+  "rule": "Equivalent behavior fails above 10% p95 regression. Fail generation above five seconds for the fixture Feature set.",
+  "samples": [
+    {
+      "batch": 0,
+      "side": "parent",
+      "metrics": {
+        "generation_ms": 51
+      }
+    },
+    {
+      "batch": 0,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 52
+      }
+    },
+    {
+      "batch": 1,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 53
+      }
+    },
+    {
+      "batch": 1,
+      "side": "parent",
+      "metrics": {
+        "generation_ms": 55
+      }
+    },
+    {
+      "batch": 2,
+      "side": "parent",
+      "metrics": {
+        "generation_ms": 53
+      }
+    },
+    {
+      "batch": 2,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 52
+      }
+    },
+    {
+      "batch": 3,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 51
+      }
+    },
+    {
+      "batch": 3,
+      "side": "parent",
+      "metrics": {
+        "generation_ms": 55
+      }
+    },
+    {
+      "batch": 4,
+      "side": "parent",
+      "metrics": {
+        "generation_ms": 56
+      }
+    },
+    {
+      "batch": 4,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 57
+      }
+    }
+  ],
+  "p95": {
+    "parent": {
+      "generation_ms": 56
+    },
+    "head": {
+      "generation_ms": 57
+    }
+  }
+}

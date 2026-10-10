@@ -1,0 +1,22 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "verify",
+  "versions": {
+    "code": "f3212773e47ce7291e81ae045f8fff343e0eee3e",
+    "config": "sha256:494545ffaff7c78e331e3d928e555a8bebc3f577a7a391d94656e404707dabba",
+    "fixture": "sha256:3ac28797ccfb50a914bc1190ac087953d721d29a576d5ea690d03eceb9464ade"
+  },
+  "outcome": "pass",
+  "diagnostics": [],
+  "artifacts": [
+    {
+      "path": "evidence/U01b/agora-project-lane-perf-runner/live/perf-U01b/perf.json",
+      "digest": "sha256:77252cc32bd8bb7c5daedfea8b8ee8a8dd164afc9442a2890d793e91d28f4a9a",
+      "byte_length": 2639,
+      "media_type": "application/json"
+    }
+  ],
+  "started_at": "2026-10-10T21:01:36.702Z",
+  "finished_at": "2026-10-10T21:02:03.769Z",
+  "scenario_id": "perf"
+}

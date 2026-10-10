@@ -1,0 +1,100 @@
+{
+  "schema_version": "agora.project-perf/v1",
+  "unit": "U20",
+  "parent": "ee62c3ac65f4e77adef1baae35012bdcfd822438",
+  "head": "f3212773e47ce7291e81ae045f8fff343e0eee3e",
+  "parent_behavior": "present",
+  "rule": "Equivalent behavior fails above 10% p95 regression. Fail lint wall time above twice the existing .ts-only baseline.",
+  "samples": [
+    {
+      "batch": 0,
+      "side": "parent",
+      "metrics": {
+        "lint_ms": 5025,
+        "lint_ts_only_ms": 3891
+      }
+    },
+    {
+      "batch": 0,
+      "side": "head",
+      "metrics": {
+        "lint_ms": 4909,
+        "lint_ts_only_ms": 4528
+      }
+    },
+    {
+      "batch": 1,
+      "side": "head",
+      "metrics": {
+        "lint_ms": 4313,
+        "lint_ts_only_ms": 4526
+      }
+    },
+    {
+      "batch": 1,
+      "side": "parent",
+      "metrics": {
+        "lint_ms": 5296,
+        "lint_ts_only_ms": 3981
+      }
+    },
+    {
+      "batch": 2,
+      "side": "parent",
+      "metrics": {
+        "lint_ms": 4850,
+        "lint_ts_only_ms": 4864
+      }
+    },
+    {
+      "batch": 2,
+      "side": "head",
+      "metrics": {
+        "lint_ms": 5281,
+        "lint_ts_only_ms": 3800
+      }
+    },
+    {
+      "batch": 3,
+      "side": "head",
+      "metrics": {
+        "lint_ms": 3989,
+        "lint_ts_only_ms": 3687
+      }
+    },
+    {
+      "batch": 3,
+      "side": "parent",
+      "metrics": {
+        "lint_ms": 4523,
+        "lint_ts_only_ms": 4014
+      }
+    },
+    {
+      "batch": 4,
+      "side": "parent",
+      "metrics": {
+        "lint_ms": 4451,
+        "lint_ts_only_ms": 4102
+      }
+    },
+    {
+      "batch": 4,
+      "side": "head",
+      "metrics": {
+        "lint_ms": 4112,
+        "lint_ts_only_ms": 3818
+      }
+    }
+  ],
+  "p95": {
+    "parent": {
+      "lint_ms": 5296,
+      "lint_ts_only_ms": 4864
+    },
+    "head": {
+      "lint_ms": 5281,
+      "lint_ts_only_ms": 4528
+    }
+  }
+}

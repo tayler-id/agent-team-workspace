@@ -1,0 +1,19 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "lanes",
+  "versions": {
+    "code": "f3212773e47ce7291e81ae045f8fff343e0eee3e",
+    "config": "sha256:494545ffaff7c78e331e3d928e555a8bebc3f577a7a391d94656e404707dabba",
+    "fixture": "sha256:3ac28797ccfb50a914bc1190ac087953d721d29a576d5ea690d03eceb9464ade"
+  },
+  "outcome": "unavailable",
+  "diagnostics": [
+    {
+      "reason_code": "unavailable_capability",
+      "message": "U21 lanes 1-10 unavailable: Feature discovery tests run under pnpm features:check, but no lane-mapped driver exists and U21 is not qualified."
+    }
+  ],
+  "artifacts": [],
+  "started_at": "2026-10-10T21:02:04.775Z",
+  "finished_at": "2026-10-10T21:02:04.787Z"
+}

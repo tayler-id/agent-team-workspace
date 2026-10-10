@@ -1,0 +1,20 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "verify",
+  "versions": {
+    "code": "f3212773e47ce7291e81ae045f8fff343e0eee3e",
+    "config": "sha256:494545ffaff7c78e331e3d928e555a8bebc3f577a7a391d94656e404707dabba",
+    "fixture": "sha256:3ac28797ccfb50a914bc1190ac087953d721d29a576d5ea690d03eceb9464ade"
+  },
+  "outcome": "unavailable",
+  "diagnostics": [
+    {
+      "reason_code": "unavailable_capability",
+      "message": "U22 perf unavailable: No Client hook or Host call probe exists; the U22 Client and Host boundary is specified, not implemented."
+    }
+  ],
+  "artifacts": [],
+  "started_at": "2026-10-10T21:02:03.951Z",
+  "finished_at": "2026-10-10T21:02:03.964Z",
+  "scenario_id": "perf"
+}
