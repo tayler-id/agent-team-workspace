@@ -1,9 +1,11 @@
 // R1 perf probes, run with the checkout under test as the working directory (parent clone or head).
 // Prints {"metrics":{...}} in whole milliseconds. Usage: node scripts/project-perf-probe.mjs u01b|u20|u21
+import { Buffer } from 'node:buffer';
 import { spawnSync } from 'node:child_process';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { performance } from 'node:perf_hooks';
 import { pathToFileURL } from 'node:url';
 
 const run = (argv, input) => spawnSync(argv[0], argv.slice(1), { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, ...input });

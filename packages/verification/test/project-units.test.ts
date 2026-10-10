@@ -3,10 +3,14 @@ import { appendFileSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readF
 import path from 'node:path';
 import { afterAll, describe, expect, test } from 'vitest';
 
-type Report = { outcome: string; diagnostics: { reason_code: string; message: string }[]; artifacts: { path: string }[] };
+interface Report { outcome: string; diagnostics: { reason_code: string; message: string }[]; artifacts: { path: string }[] }
+interface Receipt { parent_behavior: string; samples: { side: string; metrics: Record<string, number> }[]; p95: Record<string, Record<string, number>> }
+interface Manifest { units: { id: string; perf?: unknown; lanes_unavailable?: string }[] }
 const exits: Record<string, number> = { pass: 0, fail: 1, blocked: 2, unavailable: 3, usage_error: 64, infrastructure_failure: 70 };
 const root = process.cwd();
 const sandboxes: string[] = [];
+const receiptOf = (dir: string, report: Report): Receipt => JSON.parse(readFileSync(path.join(dir, report.artifacts[0]?.path ?? ''), 'utf8')) as Receipt;
+const manifestOf = (text: string): Manifest => JSON.parse(text) as Manifest;
 
 function run(cwd: string, args: string[]): Report {
 	const result = spawnSync(process.execPath, ['scripts/project.mjs', 'project', ...args, '--json'], { cwd, encoding: 'utf8', timeout: 900_000, maxBuffer: 16 * 1024 * 1024 });
@@ -36,9 +40,10 @@ function sandbox(): string {
 
 function withProbe(dir: string, probe: string[] | undefined, limits: object[] = [{ metric: 'generation_ms', max: 5000 }]): void {
 	const file = path.join(dir, 'agora/project.json');
-	const manifest = JSON.parse(readFileSync(file, 'utf8'));
+	const manifest = manifestOf(readFileSync(file, 'utf8'));
 	expect(manifest.units, 'agora/project.json declares per-unit lanes and perf').toBeDefined();
-	manifest.units.find((row: { id: string }) => row.id === 'U21').perf = { metric: 'generation', rule: 'test', compare: ['generation_ms'], limits, ...(probe ? { probe } : { unavailable: 'The probe was removed for this test.' }) };
+	const unit = manifest.units.find((row) => row.id === 'U21');
+	if (unit) unit.perf = { metric: 'generation', rule: 'test', compare: ['generation_ms'], limits, ...(probe ? { probe } : { unavailable: 'The probe was removed for this test.' }) };
 	writeFileSync(file, JSON.stringify(manifest));
 }
 const flagged = ['node', '-e', "const fs=require('fs');const f='slow.flag';console.log(JSON.stringify({metrics:{generation_ms:fs.existsSync(f)?Number(fs.readFileSync(f,'utf8')):100}}))"];
@@ -81,9 +86,9 @@ describe('perf scenario in a sandbox clone', () => {
 		const perf = (...extra: string[]) => run(dir, ['verify', '--scenario', 'perf', '--unit', 'U21', '--parent', 'HEAD', ...extra]);
 		const equal = perf();
 		expect(equal.outcome, JSON.stringify(equal)).toBe('pass');
-		const receipt = JSON.parse(readFileSync(path.join(dir, equal.artifacts[0]!.path), 'utf8'));
-		expect(receipt.samples.map((row: { side: string }) => row.side)).toEqual(['parent', 'head', 'head', 'parent', 'parent', 'head', 'head', 'parent', 'parent', 'head']);
-		expect(receipt.samples.map((row: { metrics: Record<string, number> }) => row.metrics.generation_ms)).toEqual(Array(10).fill(100));
+		const receipt = receiptOf(dir, equal);
+		expect(receipt.samples.map((row) => row.side)).toEqual(['parent', 'head', 'head', 'parent', 'parent', 'head', 'head', 'parent', 'parent', 'head']);
+		expect(receipt.samples.map((row) => row.metrics['generation_ms'])).toEqual(Array(10).fill(100));
 		expect(receipt.p95).toEqual({ parent: { generation_ms: 100 }, head: { generation_ms: 100 } });
 		writeFileSync(path.join(dir, 'slow.flag'), '110');
 		expect(perf().outcome).toBe('pass');
@@ -116,8 +121,8 @@ describe('perf scenario in a sandbox clone', () => {
 		expect(perf()).toMatchObject({ outcome: 'fail', diagnostics: [{ message: 'probe_failed head' }] });
 		withProbe(dir, undefined);
 		expect(perf().outcome).toBe('unavailable');
-		const file = path.join(dir, 'agora/project.json'), saved = readFileSync(file, 'utf8'), manifest = JSON.parse(saved);
-		delete manifest.units.find((row: { id: string }) => row.id === 'U22').lanes_unavailable;
+		const file = path.join(dir, 'agora/project.json'), saved = readFileSync(file, 'utf8'), manifest = manifestOf(saved);
+		delete manifest.units.find((row) => row.id === 'U22')?.lanes_unavailable;
 		writeFileSync(file, JSON.stringify(manifest));
 		expect(run(dir, ['lanes', '--unit', 'U22', '--task', 'agora-s1-qualify-trusted-checks']).outcome).toBe('fail');
 		writeFileSync(file, saved);
@@ -132,9 +137,9 @@ describe('perf scenario in a sandbox clone', () => {
 		const perf = () => run(dir, ['verify', '--scenario', 'perf', '--unit', 'U21', '--parent', 'HEAD']);
 		const absent = perf();
 		expect(absent.outcome, JSON.stringify(absent)).toBe('pass');
-		const receipt = JSON.parse(readFileSync(path.join(dir, absent.artifacts[0]!.path), 'utf8'));
+		const receipt = receiptOf(dir, absent);
 		expect(receipt.parent_behavior).toBe('absent');
-		expect(receipt.samples.filter((row: { side: string }) => row.side === 'head')).toHaveLength(5);
+		expect(receipt.samples.filter((row) => row.side === 'head')).toHaveLength(5);
 		expect(receipt.p95).toEqual({ head: { generation_ms: 90 } });
 		writeFileSync(path.join(dir, 'present.flag'), '5001');
 		expect(perf().outcome).toBe('fail');
@@ -144,9 +149,9 @@ describe('perf scenario in a sandbox clone', () => {
 		const dir = sandbox();
 		const report = run(dir, ['verify', '--scenario', 'perf', '--unit', 'U21', '--parent', 'HEAD']);
 		expect(['pass', 'fail']).toContain(report.outcome);
-		const receipt = JSON.parse(readFileSync(path.join(dir, report.artifacts[0]!.path), 'utf8'));
+		const receipt = receiptOf(dir, report);
 		expect(receipt.samples).toHaveLength(10);
-		for (const row of receipt.samples) expect(row.metrics.generation_ms).toBeGreaterThan(0);
+		for (const row of receipt.samples) expect(row.metrics['generation_ms']).toBeGreaterThan(0);
 		if (report.outcome === 'fail') expect(report.diagnostics[0]?.message).toMatch(/^perf_regression generation_ms/);
 	}, 300_000);
 
@@ -154,7 +159,7 @@ describe('perf scenario in a sandbox clone', () => {
 		const dir = sandbox();
 		const report = run(dir, ['verify', '--scenario', 'perf', '--unit', 'U01b', '--parent', 'HEAD']);
 		expect(['pass', 'fail']).toContain(report.outcome);
-		const receipt = JSON.parse(readFileSync(path.join(dir, report.artifacts[0]!.path), 'utf8'));
+		const receipt = receiptOf(dir, report);
 		expect(receipt.samples).toHaveLength(10);
 		for (const row of receipt.samples) for (const metric of ['startup_ms', 'scenario_ms', 'evidence_ms', 'finalize_10mib_ms']) expect(row.metrics[metric]).toBeGreaterThan(0);
 	}, 900_000);
