@@ -7,15 +7,41 @@ import { request } from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { artifact, checkEvidence, command, environment, exits, json, mapped, requireThat, safe, validateReport, versions, wire, writeState } from './project-checks.mjs';
+const commands = ['doctor', 'scenarios', 'start', 'verify', 'evidence', 'stop', 'lanes'];
 const args = process.argv.slice(2).filter(arg => arg !== '--' && arg !== '--json');
 if (args[0] === 'project') args.shift();
-const action = args.shift(); const options = {}; let invalid = false;
+const action = args.shift();
+if ((['--help', '-h'].includes(action) && args.length === 0) || (commands.includes(action) && args.length === 1 && ['--help', '-h'].includes(args[0]))) {
+	console.log(`Usage: pnpm -s agora project COMMAND [OPTIONS] --json
+
+Implemented local fixture controls, not production authority.
+Run operational commands from the repository root after installing locked prerequisites.
+Help is plain text, needs no install or database, and starts nothing.
+
+  doctor     Read-only Node 24/PostgreSQL 18 prerequisites (--fixture python for Python).
+  scenarios  Inventory: policy, controls, guards.
+  start      --profile verify --instance UUID; returns URL and cleanup handle.
+  verify     --scenario policy --instance UUID --artifacts DIRECTORY; HTTP allow/deny effects.
+  verify     --scenario controls|guards --artifacts DIRECTORY; native tests and guard negatives.
+  evidence   --instance UUID; same-instance, fresh bytes and artifact digests required.
+  stop       --instance UUID --handle CLEANUP_HANDLE; owned, idempotent cleanup only.
+  lanes      --unit U01b --task TASK --artifacts DIRECTORY; task-specific qualification.
+
+TASK: agora-s1-isolate-development (lanes 1-4), agora-s1-validate-project-evidence (1-7).
+Whole-unit lanes 8-10 unavailable; a task pass never qualifies the whole unit.
+Options: --fixture agora|python, --instance, --profile, --scenario, --artifacts,
+         --handle, --unit, --task. Artifact directories must be under .scratch/ or evidence/.
+Operational reports: agora.cli-report/v1 JSON; exits 0 pass, 1 fail, 2 blocked,
+3 unavailable, 64 usage error, 70 infrastructure failure.
+Recipe: .agents/skills/verify-agora/SKILL.md. Coverage: agora/feature-map.json.`);
+	process.exit(0);
+}
+const { artifact, checkEvidence, command, environment, exits, json, mapped, requireThat, safe, validateReport, versions, wire, writeState } = await import('./project-checks.mjs');
+const options = {}; let invalid = false;
 for (let i = 0; i < args.length; i += 2) {
 	if (!['--instance', '--scenario', '--profile', '--artifacts', '--fixture', '--handle', '--unit', '--task'].includes(args[i]) || !args[i + 1] || options[args[i]]) invalid = true;
 	options[args[i]] = args[i + 1];
 }
-const commands = ['doctor', 'scenarios', 'start', 'verify', 'evidence', 'stop', 'lanes'];
 const report = { schema_version: 'agora.cli-report/v1', command: commands.includes(action) ? action : 'doctor', versions: versions(), outcome: 'pass', diagnostics: [], artifacts: [], started_at: new Date().toISOString(), finished_at: new Date().toISOString() };
 const fixture = options['--fixture'] ?? 'agora', id = options['--instance'];
 const save = (file, value) => writeFileSync(file, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });

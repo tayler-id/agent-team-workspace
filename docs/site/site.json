@@ -119,6 +119,11 @@
           "kind": "feature"
         },
         {
+          "id": "skill-ownership",
+          "title": "One maintained skill source",
+          "kind": "feature"
+        },
+        {
           "id": "evidence-validator",
           "title": "General evidence validator",
           "kind": "feature"
@@ -302,6 +307,10 @@
     {
       "path": "scripts/record-red-green.mjs",
       "page": "verification.md"
+    },
+    {
+      "path": "scripts/record-source-bytes.ts",
+      "page": "cli.md"
     },
     {
       "path": "scripts/validate-evidence.mjs",

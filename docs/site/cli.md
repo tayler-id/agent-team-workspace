@@ -4,7 +4,7 @@ This is the complete current contributor command surface, plus a separate invent
 
 ## Owned project controls
 
-`pnpm -s agora project COMMAND --json` forwards directly to `node scripts/project.mjs project COMMAND --json`. The independent Python application uses `python3 packages/verification/fixture/project.py COMMAND --json`. All output is `agora.cli-report/v1`. See [checking a project](checking-a-project.md) for the user boundary and [operator details](project-controls.md) for setup and proof.
+`pnpm -s agora project COMMAND --json` forwards directly to `node scripts/project.mjs project COMMAND --json`. The independent Python application uses `python3 packages/verification/fixture/project.py COMMAND --json`. Operational output is `agora.cli-report/v1`. `pnpm -s agora project --help` (also `-h` or `COMMAND --help`) prints the implemented fixture routes without loading dependencies, reading Git history or starting a service. Help is plain text; `--json` does not turn it into an operational pass report. See [checking a project](checking-a-project.md) for the user boundary and [operator details](project-controls.md) for setup and proof.
 
 | Command | Required input and result |
 | --- | --- |
@@ -17,7 +17,7 @@ This is the complete current contributor command surface, plus a separate invent
 | `stop` | `--instance UUID --handle CLEANUP_HANDLE`; authenticated owned cleanup, idempotent only for that handle |
 | `lanes` | `--unit U01b --task agora-s1-isolate-development --artifacts DIRECTORY`; task lanes 1-4 plus guard mutation |
 
-`--fixture python` selects the Python fixture through the Node launcher; prefer its independent Python entry when checking cross-language reports. Unknown options reject. Direct whole-unit `lanes --unit U01b` still executes available proof but exits blocked because lanes 5-10 belong to later tasks. Exit codes are exactly 0 pass, 1 observed failure, 2 blocked, 3 unavailable, 64 usage error, 70 infrastructure failure. An unavailable check is never successful evidence. Runtime state is private to `.scratch/project/`; evidence paths must stay below repository `evidence/` or `.scratch/` without symlink escape.
+`--fixture python` selects the Python fixture through the Node launcher; prefer its independent Python entry when checking cross-language reports. Unknown options reject. The `agora-s1-validate-project-evidence` task selects lanes 1-7. Direct whole-unit `lanes --unit U01b` still executes available proof but exits blocked because lanes 8-10 remain unavailable. Neither task selector qualifies the complete milestone. Exit codes are exactly 0 pass, 1 observed failure, 2 blocked, 3 unavailable, 64 usage error, 70 infrastructure failure. An unavailable check is never successful evidence. Runtime state is private to `.scratch/project/`; evidence paths must stay below repository `evidence/` or `.scratch/` without symlink escape.
 
 ## Documentation commands
 
@@ -136,7 +136,7 @@ See [the runnable recipe](cookbook.md) and [configuration](configuration.md). Do
 
 ## Evidence and design tools
 
-`node scripts/record-red-green.mjs --parent SHA --head SHA --out DIR -- COMMAND ARGS...` creates disposable worktrees, carries head test files onto the parent, installs locked dependencies and records both results and digests. Nonzero red alone is not adequate: inspect that it is the intended assertion, not a missing tool. It removes its worktrees and preserves receipts.
+`node scripts/record-red-green.mjs --parent SHA --head SHA --out DIR -- COMMAND ARGS...` creates disposable worktrees, carries head test files onto the parent, installs locked dependencies and records both results and digests. Nonzero red alone is not adequate: inspect that it is the intended assertion, not a missing tool. It removes its worktrees and preserves receipts. Its [tracked-source reader](repo:scripts/record-source-bytes.ts) hashes a symbolic link's stored Git link bytes rather than following it into a directory or outside the repository; canonical tracked files are independently hashed as before. [The regression driver](repo:packages/verification/test/record-source-bytes.test.ts) requires both that link behavior and unchanged regular-file bytes. The foundation replay uses that same reader for its guard and source-preservation copies. Signing fields and policy are unchanged.
 
 `node scripts/verify-design.mjs` checks semantic design consistency. `node scripts/test-design-checks.mjs` runs its negative cases. `node scripts/verify-design-handoff.mjs` checks the portable design packet; `node scripts/test-design-handoff-checks.mjs` proves its rejection fixtures. `scripts/require-test-postgres.ts` is the Vitest prerequisite hook, not a standalone service. The unchanged pstack plan checker is informational; [verification](verification.md) provides its command.
 
