@@ -1,0 +1,4 @@
+        uid=g33:12_28 StaticText "fb1 CLI first"
+        uid=g33:12_34 StaticText "fb1 CLI third"
+        uid=g33:12_40 StaticText "fb1 CLI fourth"
+        uid=g33:12_46 StaticText "fb1 browser second"
