@@ -378,6 +378,17 @@
 			"scenarios": ["well-formed Feature found", "misplaced path rejected", "missing entrypoint rejected", "duplicate name rejected", "drift on hand-edited inventory rejected", "guard-disabled turns drift assertion red", "idempotent regenerate"],
 			"fixtures": ["disposable temp trees under agora-u21-* built by packages/verification/test/feature-discovery.test.ts"],
 			"platforms": ["node24"]
+		},
+		{
+			"id": "client-replay-corpus",
+			"documentation": "docs/site/synchronization.md",
+			"owner": "agora-replay-corpus-probe",
+			"paths": ["packages/client-core/test/replay-corpus.ts", "packages/client-core/test/replay-probe.ts", "packages/client-core/test/replay.test.ts"],
+			"public": ["node packages/client-core/test/replay-probe.ts [SEED]", "pnpm exec vitest run --project unit packages/client-core/test/replay.test.ts"],
+			"contracts": [],
+			"scenarios": ["packages/client-core/test/replay.test.ts", "corpus determinism per seed", "1000 missed events, 100 arrivals and long code and Markdown bodies converge with zero duplicates inside 2000 ms", "budget breach fails", "isolated dedupe removal turns the predicate red while the pristine copy passes", "thread, edit, tombstone and run-card shapes reported unavailable"],
+			"fixtures": ["agora.replay-corpus/v1 seed 6221057 built in memory by packages/client-core/test/replay-corpus.ts; published local-room message shape only"],
+			"platforms": ["node24"]
 		}
 	]
 }
