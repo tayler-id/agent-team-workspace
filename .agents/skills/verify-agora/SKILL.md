@@ -100,7 +100,7 @@ node scripts/local-room.ts doctor
 node scripts/local-room.ts start --instance "$INSTANCE"
 ```
 
-Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/PostgreSQL port and harness `url`. Open that URL with the approved browser driver. It serves the apps/web room shell over the live runtime (L4 first slice), not the finished room UI. No external accounts or production credentials are needed.
+Under a launcher whose Rolldown addon cannot load, `doctor` and `start` report `outcome: blocked` with the Team ID cause and the Node 24.21.0 remedy; `pnpm exec vitest run --project unit apps/center/test/local-room-doctor.test.ts` proves it and that removing the probe turns it red. Expected: JSON `outcome: pass`, fresh launch UUID, exact owned root/PIDs/PostgreSQL port and harness `url`. Open that URL with the approved browser driver. It serves the apps/web room shell over the live runtime (L4 first slice), not the finished room UI. No external accounts or production credentials are needed.
 
 ### Trusted checks launch (U01b.B03)
 

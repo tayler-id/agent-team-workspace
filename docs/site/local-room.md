@@ -61,7 +61,7 @@ L3 reads those committed event rows, never in-memory notifications. The snapshot
 ## How it works
 
 ```flow
-Doctor and allocate | Check Node/PostgreSQL; exclusively claim the instance path. Refuse existing foreign or ambiguous paths and occupied listeners.
+Doctor and allocate | Check Node, PostgreSQL and that the Rolldown native addon loads (the shared probe from `scripts/native-probe.ts`, reported as blocked with the supported-runtime remedy if it does not); exclusively claim the instance path. Refuse existing foreign or ambiguous paths and occupied listeners.
 Launch and prove ownership | Start a private SCRAM-protected PostgreSQL child and center. A fresh 256-bit launch key authenticates a nonce bound to the launch, paths, listener and process inventory.
 Snapshot at cursor C | Read state and counter together; show only the immutable client-core projection. Concurrent later commits are not lost.
 Replay strictly after C | HTTP reads at most 50 committed events in numeric sequence order. Apply contiguous events, deduplicate copies, buffer gaps and repeat after the applied cursor.

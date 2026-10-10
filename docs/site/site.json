@@ -289,6 +289,10 @@
       "page": "ci.md"
     },
     {
+      "path": "scripts/native-probe.ts",
+      "page": "ci.md"
+    },
+    {
       "path": "scripts/ci-setup.sh",
       "page": "ci.md"
     },
