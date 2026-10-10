@@ -1,0 +1,20 @@
+2026-10-03T00:04:53Z
+origin=https://github.com/tayler-id/agent-team-workspace.git
+default_branch: main
+full_name: tayler-id/agent-team-workspace
+id: 1402470808
+permissions:
+  admin: true
+  maintain: true
+  pull: true
+  push: true
+  triage: true
+private: true
+visibility: private
+api_response:
+  body: refs/heads/main a62662e8788a072289b14b82f80cc970e1bd6943
+  truncated: false
+{"message":"Upgrade to GitHub Pro or make this repository public to enable this feature.","documentation_url":"https://docs.github.com/rest/branches/branch-protection#get-branch-protection","status":"403"}gh: Upgrade to GitHub Pro or make this repository public to enable this feature. (HTTP 403)
+
+{"message":"Upgrade to GitHub Pro or make this repository public to enable this feature.","documentation_url":"https://docs.github.com/rest/repos/rules#get-all-repository-rulesets","status":"403"}gh: Upgrade to GitHub Pro or make this repository public to enable this feature. (HTTP 403)
+

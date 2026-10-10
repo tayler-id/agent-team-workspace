@@ -1,0 +1,88 @@
+# Live read-back transcript, 2026-10-03T00:36:30Z, head 561b0d8d13194bf2ab952de1540a2febd0959cd3
+$ git remote -v
+origin	https://github.com/tayler-id/agent-team-workspace.git (fetch)
+origin	https://github.com/tayler-id/agent-team-workspace.git (push)
+$ gh api repos/tayler-id/agent-team-workspace --jq '{id,full_name,private,visibility,default_branch,permissions}'
+{"default_branch":"main","full_name":"tayler-id/agent-team-workspace","id":1402470808,"permissions":{"admin":true,"maintain":true,"pull":true,"push":true,"triage":true},"private":true,"visibility":"private"}
+$ gh api repos/tayler-id/agent-team-workspace/git/matching-refs/heads --jq '.[] | .ref + " " + .object.sha'
+refs/heads/fm/agora-s1-qualify-trusted-checks 561b0d8d13194bf2ab952de1540a2febd0959cd3
+refs/heads/main a62662e8788a072289b14b82f80cc970e1bd6943
+$ gh api repos/tayler-id/agent-team-workspace/branches/main/protection > evidence/U01b/agora-s1-qualify-trusted-checks/live/protection.json
+exit 1
+{"message":"Upgrade to GitHub Pro or make this repository public to enable this feature.","documentation_url":"https://docs.github.com/rest/branches/branch-protection#get-branch-protection","status":"403"}
+$ gh api repos/tayler-id/agent-team-workspace/rulesets
+{"message":"Upgrade to GitHub Pro or make this repository public to enable this feature.","documentation_url":"https://docs.github.com/rest/repos/rules#get-all-repository-rulesets","status":"403"} exit 1
+$ gh api repos/tayler-id/agent-team-workspace/environments
+{"total_count":0,"environments":[]} exit 0
+$ node scripts/trusted-checks.mjs evaluate --kind protection --input evidence/U01b/agora-s1-qualify-trusted-checks/live/protection.json --json
+{
+  "schema_version": "agora.trusted-checks-report/v1",
+  "command": "evaluate",
+  "project": "agora",
+  "outcome": "blocked",
+  "denials": [
+    "reporting_app_unenrolled"
+  ]
+}
+exit 2
+$ node scripts/trusted-checks.mjs evaluate --project python-fixture --kind protection --input evidence/U01b/agora-s1-qualify-trusted-checks/live/protection.json --json
+{
+  "schema_version": "agora.trusted-checks-report/v1",
+  "command": "evaluate",
+  "project": "python-fixture",
+  "outcome": "blocked",
+  "denials": [
+    "repository_unprovisioned"
+  ]
+}
+exit 2
+$ gh api repos/tayler-id/agent-team-workspace/commits/561b0d8d13194bf2ab952de1540a2febd0959cd3/check-runs --jq '{check_runs:[.check_runs[]|{id,name,app_id:.app.id,app:.app.slug,head_sha,status,conclusion}]}' > evidence/U01b/agora-s1-qualify-trusted-checks/live/check-runs.json
+{"check_runs":[{"app":"github-actions","app_id":15368,"conclusion":null,"head_sha":"561b0d8d13194bf2ab952de1540a2febd0959cd3","id":111086697782,"name":"contracts","status":"queued"},{"app":"github-actions","app_id":15368,"conclusion":null,"head_sha":"561b0d8d13194bf2ab952de1540a2febd0959cd3","id":111086697767,"name":"guards","status":"queued"},{"app":"github-actions","app_id":15368,"conclusion":null,"head_sha":"561b0d8d13194bf2ab952de1540a2febd0959cd3","id":111086697729,"name":"tests","status":"queued"},{"app":"github-actions","app_id":15368,"conclusion":null,"head_sha":"561b0d8d13194bf2ab952de1540a2febd0959cd3","id":111086697721,"name":"static","status":"queued"},{"app":"github-actions","app_id":15368,"conclusion":null,"head_sha":"561b0d8d13194bf2ab952de1540a2febd0959cd3","id":111086697655,"name":"red-green","status":"queued"},{"app":"github-actions","app_id":15368,"conclusion":null,"head_sha":"561b0d8d13194bf2ab952de1540a2febd0959cd3","id":111086697651,"name":"docs","status":"queued"},{"app":"github-actions","app_id":15368,"conclusion":null,"head_sha":"561b0d8d13194bf2ab952de1540a2febd0959cd3","id":111086697495,"name":"doctor","status":"queued"}],"head_sha":"561b0d8d13194bf2ab952de1540a2febd0959cd3"}
+
+$ node scripts/trusted-checks.mjs evaluate --kind checks --input evidence/U01b/agora-s1-qualify-trusted-checks/live/check-runs.json --json
+{
+  "schema_version": "agora.trusted-checks-report/v1",
+  "command": "evaluate",
+  "project": "agora",
+  "outcome": "blocked",
+  "denials": [
+    "reporting_app_unenrolled"
+  ]
+}
+exit 2
+$ node -e '...files...' > evidence/U01b/agora-s1-qualify-trusted-checks/live/workflows.json && node scripts/trusted-checks.mjs evaluate --kind workflows --input evidence/U01b/agora-s1-qualify-trusted-checks/live/workflows.json --json
+{
+  "schema_version": "agora.trusted-checks-report/v1",
+  "command": "evaluate",
+  "project": "agora",
+  "outcome": "pass",
+  "denials": [],
+  "kind": "workflows"
+}
+exit 0
+$ # namespaced-policy.json: the committed Agora project with fixture App 900001 and a throwaway Ed25519 public key; no private key is kept
+$ node scripts/trusted-checks.mjs evaluate --policy evidence/U01b/agora-s1-qualify-trusted-checks/live/namespaced-policy.json --kind protection --input evidence/U01b/agora-s1-qualify-trusted-checks/live/protection.json --json
+{
+  "schema_version": "agora.trusted-checks-report/v1",
+  "command": "evaluate",
+  "project": "agora",
+  "outcome": "blocked",
+  "denials": [
+    "plan_upgrade_required"
+  ],
+  "kind": "protection"
+}
+exit 2
+$ node scripts/trusted-checks.mjs evaluate --policy evidence/U01b/agora-s1-qualify-trusted-checks/live/namespaced-policy.json --kind checks --input evidence/U01b/agora-s1-qualify-trusted-checks/live/check-runs.json --json
+{
+  "schema_version": "agora.trusted-checks-report/v1",
+  "command": "evaluate",
+  "project": "agora",
+  "outcome": "fail",
+  "denials": [
+    "check_missing:agora/evidence",
+    "check_missing:agora/policy"
+  ],
+  "kind": "checks"
+}
+exit 1

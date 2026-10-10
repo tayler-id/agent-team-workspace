@@ -1,0 +1,140 @@
+{
+	"schema_version": "agora.trusted-checks/v1",
+	"projects": {
+		"agora": {
+			"repository": {
+				"owner": "tayler-id",
+				"name": "agent-team-workspace",
+				"id": 1402470808,
+				"default_branch": "main"
+			},
+			"driver": {
+				"workflow": ".github/workflows/agora-ci.yml",
+				"event": "pull_request",
+				"jobs": [
+					"doctor",
+					"static",
+					"contracts",
+					"docs",
+					"tests",
+					"red-green",
+					"guards"
+				]
+			},
+			"reporter": {
+				"workflow": ".github/workflows/agora-report.yml",
+				"checks": [
+					"agora/evidence",
+					"agora/policy"
+				],
+				"app_id": null,
+				"public_key": null,
+				"allowlist": {
+					"name": "agora-report",
+					"on": {
+						"workflow_run": {
+							"workflows": [
+								"agora-ci"
+							],
+							"types": [
+								"completed"
+							]
+						}
+					},
+					"permissions": {
+						"actions": "read",
+						"contents": "read",
+						"pull-requests": "read"
+					},
+					"concurrency": {
+						"group": "agora-report-${{ github.event.workflow_run.id }}",
+						"cancel-in-progress": false
+					},
+					"jobs": {
+						"report": {
+							"if": "${{ vars.AGORA_REPORTER_ENABLED == 'true' }}",
+							"runs-on": "ubuntu-24.04",
+							"timeout-minutes": 10,
+							"environment": "agora-reporter",
+							"steps": [
+								{
+									"uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+									"with": {
+										"ref": "${{ github.event.repository.default_branch }}",
+										"persist-credentials": false
+									}
+								},
+								{
+									"uses": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+									"with": {
+										"node-version-file": ".node-version"
+									}
+								},
+								{
+									"run": "node scripts/trusted-report.mjs --run-id \"${{ github.event.workflow_run.id }}\" --json",
+									"env": {
+										"GITHUB_TOKEN": "${{ github.token }}",
+										"AGORA_REPORTER_APP_KEY": "${{ secrets.AGORA_REPORTER_APP_KEY }}",
+										"AGORA_REPORTING_SIGNING_KEY": "${{ secrets.AGORA_REPORTING_SIGNING_KEY }}"
+									}
+								}
+							]
+						}
+					}
+				}
+			},
+			"protection": {
+				"branch": "main",
+				"required_approving_review_count": 1,
+				"dismiss_stale_reviews": true,
+				"require_code_owner_reviews": true,
+				"strict": true,
+				"enforce_admins": true
+			},
+			"sensitive_paths": [
+				".github/",
+				"agora/trusted-checks.json",
+				"scripts/trusted-checks.mjs",
+				"scripts/trusted-report.mjs",
+				"scripts/ci-setup.sh",
+				"scripts/ci-red-green.sh"
+			]
+		},
+		"python-fixture": {
+			"repository": null,
+			"driver": {
+				"workflow": ".github/workflows/agora-ci.yml",
+				"event": "pull_request",
+				"jobs": [
+					"fixture"
+				]
+			},
+			"reporter": {
+				"workflow": ".github/workflows/agora-report.yml",
+				"checks": [
+					"agora/evidence",
+					"agora/policy"
+				],
+				"app_id": null,
+				"public_key": null,
+				"allowlist": null
+			},
+			"protection": {
+				"branch": "main",
+				"required_approving_review_count": 1,
+				"dismiss_stale_reviews": true,
+				"require_code_owner_reviews": true,
+				"strict": true,
+				"enforce_admins": true
+			},
+			"sensitive_paths": [
+				".github/",
+				"agora/trusted-checks.json",
+				"scripts/trusted-checks.mjs",
+				"scripts/trusted-report.mjs",
+				"scripts/ci-setup.sh",
+				"scripts/ci-red-green.sh"
+			]
+		}
+	}
+}

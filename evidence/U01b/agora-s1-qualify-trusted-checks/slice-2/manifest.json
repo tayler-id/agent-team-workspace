@@ -1,0 +1,30 @@
+{
+  "schema_version": "agora.evidence-manifest/v2",
+  "target": "local-foundation-fixture",
+  "outcome": "pass",
+  "artifacts": [
+    {
+      "file": "red.log",
+      "digest": "sha256:9240b6cfd9fb070ce3cd9b486822fba66e272872468d254f2a46f7f27c677531",
+      "byte_length": 3086
+    },
+    {
+      "file": "green.log",
+      "digest": "sha256:ddbf558dea766b2671c26a9641c636f525a7c8bca79ed514ec35518905c3030e",
+      "byte_length": 1358
+    },
+    {
+      "file": "test-patch.diff",
+      "digest": "sha256:1832612eb170b2a1f43cbc584ae3b3ca07c615a3ec53859dc381986bd9f712ce",
+      "byte_length": 5867
+    }
+  ],
+  "producer": {
+    "trust_class": "owner_attested",
+    "boot_id": "23421c8c-f6cc-4d91-bda9-702ee43908d2",
+    "head": "1ef6b03c98832ea8b204e0d3eaa1ca304d88f1e7",
+    "base": "e93285eae5f4e787c49baeb5af0e555a6d3f0a0e",
+    "outcome": "pass",
+    "signature": "466ffb1e40a4c71239f3ba27bac19509375aacb4412fec746c7f018f3f3bee01"
+  }
+}
