@@ -1,0 +1,13 @@
+diff --git a/packages/web-framework/src/environment.ts b/packages/web-framework/src/environment.ts
+index 2a1df77..a39a326 100644
+--- a/packages/web-framework/src/environment.ts
++++ b/packages/web-framework/src/environment.ts
+@@ -23,7 +23,7 @@ export interface RoomTransport {
+ 	readonly getState: () => TransportConnection;
+ 	readonly subscribe: (listener: () => void) => () => void;
+ 	readonly loadSnapshot: () => void;
+-	readonly submit: (commandId: string, requestDigest: string, text: string) => void;
++	readonly submit: (commandId: any, requestDigest: any, text?: any) => void;
+ 	readonly markSeen: (seq: string) => void;
+ 	/** Cancels in-flight polling and command retries and stops reconnecting until `reconnect` is called. */
+ 	readonly disconnect: () => void;

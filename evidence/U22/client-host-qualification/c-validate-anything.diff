@@ -1,0 +1,14 @@
+diff --git a/apps/web/src/host/live.ts b/apps/web/src/host/live.ts
+index ed4052e..3e08ddd 100644
+--- a/apps/web/src/host/live.ts
++++ b/apps/web/src/host/live.ts
+@@ -10,8 +10,7 @@ export interface LiveOptions { readonly baseUrl?: string; readonly pollDelayMs?:
+ const wire = createWireValidator();
+ const validate = <N extends ComponentName>(name: N, value: unknown): Schema<N> => {
+ 	const result = wire.validate(name, value);
+-	if (!result.ok) throw new Error(`invalid ${name}: ${result.details.join(';')}`);
+-	return result.value;
++	return result.ok ? result.value : value as Schema<N>;
+ };
+ const emptyPresentation: Presentation = { authors: {}, times: {}, citations: {} };
+ const toMessage = (m: Schema<'RoomMessage'>): Message => ({ id: m.message_id, createdSeq: m.room_seq, revision: '1', content: { tag: 'visible', body: m.body } });

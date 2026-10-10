@@ -1,0 +1,172 @@
+6d8bb8b7612a448a3763b298748e6842524fe100
+v24.16.0
+== a-drop-unsubscribe
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce/apps/web
+
+ ❯ |web| test/app.test.tsx (11 tests | 1 failed) 1158ms
+   × lane 8: 200 mounts and unmounts of a hook consumer leave zero transport subscriptions and zero Host media-query listeners 42ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/app.test.tsx > lane 8: 200 mounts and unmounts of a hook consumer leave zero transport subscriptions and zero Host media-query listeners
+AssertionError: expected [ 201, +0 ] to deeply equal [ +0, +0 ]
+
+- Expected
++ Received
+
+  [
+-   0,
++   201,
+    0,
+  ]
+
+ ❯ test/app.test.tsx:339:28
+    337|  held.unmount();
+    338|  for (let i = 0; i < 200; i++) render(<AgoraProvider client={client} e…
+    339|  expect([open(), media()]).toEqual([0, 0]);
+       |                            ^
+    340| });
+    341|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  16:46:51
+   Duration  2.17s (tests 56%, environment 26%, import 12%, transform 6%)
+
+== b-widen-submit
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce
+
+ ❯ |unit| packages/web-framework/test/boundaries.test.ts (5 tests | 2 failed) 2120ms
+   × lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not 360ms
+   × lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting 145ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/web-framework/test/boundaries.test.ts > lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not
+AssertionError: t.submit(1, "d", "x");: expected [] to not deeply equal []
+
+Compared values have no visual difference.
+
+ ❯ packages/web-framework/test/boundaries.test.ts:59:86
+     57| test('lane 7: malformed RoomTransport and EnvironmentPort calls fail t…
+     58|  expect(diagnose(call('t.submit("c", "d", "x"); t.markSeen("1"); t.sav…
+     59|  for (const statement of malformed) expect(diagnose(call(statement)), …
+       |                                                                                      ^
+     60| }, 60_000);
+     61|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |unit| packages/web-framework/test/boundaries.test.ts > lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting
+AssertionError: expected [] to not deeply equal []
+
+Compared values have no visual difference.
+
+ ❯ packages/web-framework/test/boundaries.test.ts:63:55
+     61|
+     62| test('lane 7 counterfactual: widening submit to accept anything makes …
+     63|  expect(diagnose(call('t.submit(1, "d", "x");'))).not.toEqual([]);
+       |                                                       ^
+     64|  const source = readFileSync(path.join(root, 'packages/web-framework/s…
+     65|  const text = source.replace(/readonly submit: \([^)]*\) => void;/, 'r…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed (5)
+   Start at  16:46:54
+   Duration  2.45s (tests 89%, import 9%, transform 2%)
+
+== c-validate-anything
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce/apps/web
+
+ ❯ |web| test/app.test.tsx (11 tests | 1 failed) 909ms
+   × lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client 47ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/app.test.tsx > lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client
+AssertionError: expected 'pending' to be 'denied' // Object.is equality
+
+Expected: "denied"
+Received: "pending"
+
+ ❯ test/app.test.tsx:320:45
+    318|  const verdict = createWireValidator().validate('RoomCommandReceipt', …
+    319|  expect(verdict.ok).toBe(false);
+    320|  expect(client.getState().commands[0]?.tag).toBe('denied');
+       |                                             ^
+    321| });
+    322|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  16:46:57
+   Duration  1.50s (tests 63%, environment 20%, import 11%, transform 6%)
+
+== d-noop-media-cleanup
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce/apps/web
+
+ ❯ |web| test/app.test.tsx (11 tests | 1 failed) 1057ms
+   × lane 8: 200 mounts and unmounts of a hook consumer leave zero transport subscriptions and zero Host media-query listeners 66ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| test/app.test.tsx > lane 8: 200 mounts and unmounts of a hook consumer leave zero transport subscriptions and zero Host media-query listeners
+AssertionError: expected [ +0, 201 ] to deeply equal [ +0, +0 ]
+
+- Expected
++ Received
+
+  [
+    0,
+-   0,
++   201,
+  ]
+
+ ❯ test/app.test.tsx:339:28
+    337|  held.unmount();
+    338|  for (let i = 0; i < 200; i++) render(<AgoraProvider client={client} e…
+    339|  expect([open(), media()]).toEqual([0, 0]);
+       |                            ^
+    340| });
+    341|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  16:46:59
+   Duration  1.67s (tests 66%, environment 17%, import 10%, transform 7%)
+
+== restored
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce/apps/web
+
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  16:47:01
+   Duration  1.91s (tests 64%, environment 16%, import 13%, transform 7%)
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  16:47:03
+   Duration  5.04s (tests 95%, import 4%, transform 1%)
+

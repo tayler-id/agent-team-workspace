@@ -1,0 +1,13 @@
+diff --git a/apps/web/src/host/environment.ts b/apps/web/src/host/environment.ts
+index 348200e..1ffe810 100644
+--- a/apps/web/src/host/environment.ts
++++ b/apps/web/src/host/environment.ts
+@@ -31,7 +31,7 @@ export function createBrowserEnvironment(transport: RoomTransport, options: { re
+ 			const list = window.matchMedia(query);
+ 			const listener = (): void => { onChange(list.matches); };
+ 			list.addEventListener('change', listener);
+-			return () => { list.removeEventListener('change', listener); };
++			return () => undefined;
+ 		},
+ 		matchesMediaQuery: (query) => typeof window.matchMedia === 'function' ? window.matchMedia(query).matches : false,
+ 		now: () => Date.now(),

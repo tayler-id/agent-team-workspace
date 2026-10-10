@@ -1,0 +1,20 @@
+6d8bb8b7612a448a3763b298748e6842524fe100
+v24.16.0
+
+ RUN  v5.0.1 /Users/taylerramsay/.no-mistakes/worktrees/50d2db971a33/01M4KNE0RKN2R0ZKT1M7REPKPB/apps/web
+
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  16:47:15
+   Duration  1.74s (tests 50%, environment 28%, import 14%, transform 8%)
+
+
+ RUN  v5.0.1 /Users/taylerramsay/.no-mistakes/worktrees/50d2db971a33/01M4KNE0RKN2R0ZKT1M7REPKPB
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  16:47:17
+   Duration  4.68s (tests 94%, import 5%, transform 1%)
+
