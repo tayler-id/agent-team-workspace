@@ -29,6 +29,9 @@ test('the fixture adapter rejects malformed snapshots, cross-stream delivery and
 test('the public boundary command writes its machine report at the documented artifact path', () => {
 	const root = path.resolve(import.meta.dirname, '../../..'), report = path.join(root, '.scratch/boundaries.json');
 	rmSync(report, { force: true });
+	// Passing CI runs of this nested lane took 70 to 112 s, and two runs hit the old 120 s cap. On timeout spawnSync returns
+	// within 100 ms, but an orphaned vitest worker may still finish its in-flight test. The vitest timeout cannot fire during
+	// spawnSync, so it sits 30 s later and the status assertion reports the kill with the lane's output.
 	const result = spawnSync('pnpm', ['-s', 'boundaries'], { cwd: root, encoding: 'utf8', timeout: 300_000 });
 	expect(result.status, result.stdout + result.stderr).toBe(0);
 	expect(existsSync(report), 'missing lane-8 JSON artifact').toBe(true);

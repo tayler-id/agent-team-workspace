@@ -1,6 +1,6 @@
 ---
 name: verify-agora
-description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the read-only deterministic local-answer core (L5 pure-core preparation) and the independent Agora/Python project verification controls from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, packages/verification, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, U01b.B01, U01c.B01 slice 1 (encrypted backup artifact and same-cluster verified restore), local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
+description: Project-owned instructions that prove the Agora foundation fixture, its portable contracts, the persisted local-development room (local-room L1 through L3), the read-only deterministic local-answer core (L5 pure-core preparation) and the independent Agora/Python project verification controls from the public surface. Use before closing any task that touches apps/center, packages/domain, packages/storage, packages/client-core, packages/verification, contracts or agora/feature-map.json. Scope U01a.B01 through U01a.B04, U01b.B01, U01c.B01 slice 1 (encrypted backup artifact and same-cluster verified restore), U21.B01 (build-time Feature discovery), local-room L1 through L3, L5 pure-core preparation (no response posting or browser qualification), CI P0a design-negative sandbox closure, CI P0b toolchain/native doctor, and CI P0c A/B/C allocation, wrapper lifecycle and qualification.
 ---
 
 # Verify Agora
@@ -451,6 +451,42 @@ pnpm -s agora project evidence --instance "$B" --json
 python3 packages/verification/fixture/project.py evidence --instance "$P" --json
 node --input-type=module -e 'import fs from "node:fs"; import assert from "node:assert/strict"; const root=process.env.TMPDIR; assert.ok(root.startsWith("/tmp/agora-u01b-")); const entries=fs.readdirSync(root); assert.ok(!entries.some(name=>/^agora-(b01|pg|red|green|clean)-/.test(name)), "owned runtime leak"); console.log(JSON.stringify({owned_root:root,remaining_tool_scratch:entries})); fs.rmSync(root,{recursive:true});'
 unset TMPDIR
+```
+
+## Feature discovery (U21.B01)
+
+Build-time discovery of Features under `src/features/<name>/` (or `features/<name>/` for a package without `src/`). It generates `agora/feature-inventory.json`. It does not migrate product Features, enforce Feature-to-Feature imports or qualify U21.
+
+Setup and drive run from the repository root. The second `generate` must leave the file and its digest unchanged.
+
+```sh
+node scripts/feature-inventory.ts
+git diff --stat -- agora/feature-inventory.json
+node scripts/feature-inventory.ts
+node scripts/feature-inventory.ts --check
+```
+
+Disposable negative. Copy the tree into a namespaced temp directory, break it there, and expect `--check` to exit 1 with a message naming the owner and conventional path.
+
+```sh
+D="$(mktemp -d "${TMPDIR:-/tmp}/agora-u21-XXXXXX")"
+mkdir -p "$D/scripts" "$D/agora" "$D/apps"
+cp scripts/feature-discovery.ts scripts/feature-inventory.ts "$D/scripts/"
+cp agora/feature-inventory.json "$D/agora/"
+cp -R apps/web "$D/apps/web"
+rm "$D/apps/web/src/features/room/entrypoint.ts"
+(cd "$D" && node scripts/feature-inventory.ts --check; echo "exit $?")
+```
+
+Other negatives to repeat the same way are a `timeline-card.tsx` outside a Feature path, an uppercase folder name (`mv room Room`), and a hand edit to the copied inventory. Each must exit 1 on any filesystem.
+
+The case-colliding negative puts a populated `Room/` next to `room/` (`mkdir Room && cp room/entrypoint.ts Room/`), and it needs a case-sensitive filesystem such as Linux CI or a case-sensitive APFS volume. There it must exit 1 with `duplicate Feature name`. An empty `Room/` holds no file, so discovery never sees it and `--check` exits 0. On the default case-insensitive macOS volume, `mkdir Room` fails with `File exists` and `--check` exits 0, because only one folder exists on disk. Record that run as untested on this host, not as a guard failure. The unit test `rejects invalid and colliding names` covers the collision on every platform.
+
+Cleanup removes only the directory this run created.
+
+```sh
+rm -rf "$D"
+git status --short agora/feature-inventory.json
 ```
 
 ## Cleanup (local-room L3 instance)

@@ -89,6 +89,11 @@
           "kind": "feature"
         },
         {
+          "id": "feature-discovery",
+          "title": "Feature discovery",
+          "kind": "feature"
+        },
+        {
           "id": "agora-application-architecture",
           "title": "Agora application architecture",
           "kind": "feature"
@@ -421,6 +426,14 @@
     {
       "path": "agora/architecture-exceptions.json",
       "page": "app-architecture.md"
+    },
+    {
+      "path": "scripts/feature-discovery.ts",
+      "page": "feature-discovery.md"
+    },
+    {
+      "path": "scripts/feature-inventory.ts",
+      "page": "feature-discovery.md"
     }
   ]
 }

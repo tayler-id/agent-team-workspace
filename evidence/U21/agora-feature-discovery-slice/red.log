@@ -1,0 +1,49 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-03T21:05:01.187Z
+parent: a62662e8788a072289b14b82f80cc970e1bd6943
+head: fde2daa8c131fc3ef6425c1ebde72f0c66cbeecb
+subject_revision: a62662e8788a072289b14b82f80cc970e1bd6943
+test_patch_applied_to_subject: true
+test_patch_files: docs/site/test/corpus.test.ts, scripts/test/feature-discovery.test.ts
+test_patch_digest: sha256:3b185a127ade80b178ec23c76be7b9af5f95337a9867aa67d3710218ec60337e
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"node --test scripts/test/feature-discovery.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.16.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-3fX8Uf/scripts/feature-discovery.ts' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-3fX8Uf/scripts/test/feature-discovery.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:691:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:708:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:740:52)
+    at #resolve (node:internal/modules/esm/loader:673:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:593:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-3fX8Uf/scripts/feature-discovery.ts'
+}
+
+Node.js v24.16.0
+✖ scripts/test/feature-discovery.test.ts (48.124875ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 51.24725
+
+✖ failing tests:
+
+test at scripts/test/feature-discovery.test.ts:1:1
+✖ scripts/test/feature-discovery.test.ts (48.124875ms)
+  'test failed'
