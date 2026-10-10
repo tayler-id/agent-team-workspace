@@ -13,8 +13,9 @@ lane 7 test starts `scripts/validate-evidence.mjs` twelve times, and each start 
 - `green.log` is the same test at the head. Exit 0.
 - `interleaved-lane7.csv` holds six parent/head pairs of the unchanged `evidence-validator.test.ts`, alternating
   parent then head, under background QoS (`taskpolicy -b`) with twelve background `yes` burners kept up for the whole
-  run. The parent timed out on lane 7 in 6 of 6 pairs (10220 to 11936 ms, `Test timed out in 5000ms`). The head passed
-  in 6 of 6 (2225 to 3360 ms). Every other test in that file passed on both trees.
+  run. On the parent, lane 7 timed out in 6 of 6 pairs (10220 to 11936 ms) and lane 6 also timed out
+  in each (`Test timed out in 5000ms`); lane 5 passed. The head passed all three lanes in 6 of 6 pairs, with lane 7 at
+  2225 to 3360 ms.
 - The existing lane 5 to 7 assertions are unchanged. `project.test.ts`, `evidence-validator.test.ts` and the new test
   pass together (9 tests).
 
