@@ -1,0 +1,10 @@
+head 040efd6b19725d44226f5c61fbe26aae802b6d1a, real 350 KiB limit
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-439a06/8/agent-team-workspace/apps/web
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  14:53:59
+   Duration  784ms (tests 98%, transform 2%, import 1%)
+
