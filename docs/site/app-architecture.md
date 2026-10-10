@@ -25,7 +25,7 @@ Proof | packages/client-core/test/app-architecture.test.ts keeps positive, negat
 Hardening | B3 reproduces each reported bypass through the public CLI first, then closes it: JSDoc import() comments, DOM property/setAttribute mutation, untyped .mjs/.cjs mutators and cast evasion, while allowing the react/jsx-runtime namespace.
 ```
 
-These slices do not implement Client/Host runtime, Feature discovery, product UI, Pretext or browser-shell migration. Owner paths are reserved in policy constants; extension and adversarial fixtures are generated at test runtime. The committed exception file is empty; the live-rule fixture writes rows into it and restores it byte for byte.
+These slices do not implement Client/Host runtime, product UI, Pretext or browser-shell migration. Build-time Feature discovery is a separate slice, documented in [Feature discovery](feature-discovery.md). Owner paths are reserved in policy constants; extension and adversarial fixtures are generated at test runtime. The committed exception file is empty; the live-rule fixture writes rows into it and restores it byte for byte.
 
 ## Implementation status
 

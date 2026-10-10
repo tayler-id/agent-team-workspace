@@ -1,0 +1,22 @@
+{
+	"schema_version": "agora.feature-inventory/v1",
+	"digest": "sha256:a1e450fd9750df0ba40ca7cf48452356e9a8558d0c4c1fc6016539e9fcf5e0ad",
+	"features": [
+		{
+			"package": "apps/web",
+			"name": "notes",
+			"root": "apps/web/src/features/notes",
+			"entrypoint": "apps/web/src/features/notes/entrypoint.ts",
+			"timelineCard": null,
+			"dependencies": []
+		},
+		{
+			"package": "apps/web",
+			"name": "room",
+			"root": "apps/web/src/features/room",
+			"entrypoint": "apps/web/src/features/room/entrypoint.ts",
+			"timelineCard": null,
+			"dependencies": []
+		}
+	]
+}

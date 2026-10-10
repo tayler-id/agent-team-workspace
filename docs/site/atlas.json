@@ -180,6 +180,21 @@
       ]
     },
     {
+      "id": "feature-discovery",
+      "title": "Feature and Entrypoint discovery",
+      "status": "In progress",
+      "why": "U21.B01 discovers Features from each package's conventional src/features directory and generates a drift-checked inventory; live lanes, the perf probe and exact-head qualification are still open.",
+      "page": "feature-discovery.md",
+      "proof": [
+        "repo:scripts/feature-discovery.ts",
+        "repo:scripts/feature-inventory.ts",
+        "repo:packages/verification/test/feature-discovery.test.ts",
+        "repo:agora/feature-inventory.json",
+        "repo:evidence/U21/agora-feature-discovery-slice/red.log",
+        "repo:evidence/U21/agora-feature-discovery-slice/green.log"
+      ]
+    },
+    {
       "id": "app-architecture",
       "title": "Application architecture boundaries",
       "status": "Built",

@@ -369,6 +369,15 @@
 			"contracts": [], "scenarios": ["packages/storage/test/backup.pg.test.ts"],
 			"fixtures": ["migrated foundation_fixture database seeded through agora_app (scope A stream with 3 events and a claim, scope B stream with 1 event)", "flat objects directory with three files including one non-UTF-8 binary", "two generated keys (good, wrong) in a key directory separate from the backup", "second database agora_restore_<uuid> owned by agora_owner in the same throwaway cluster", "copied backups with one flipped byte in database.agb and with objects/0002.agb deleted", "temporary AGORA_PG_BIN directories whose pg_dump rewrites an object before running the real pg_dump, or whose pg_restore exits 1"],
 			"platforms": ["node24", "postgresql18"]
+		},
+		{
+			"id": "feature-discovery", "documentation": "docs/site/feature-discovery.md", "owner": "agora-feature-discovery-slice",
+			"paths": ["scripts/feature-discovery.ts", "scripts/feature-inventory.ts", "packages/verification/test/feature-discovery.test.ts", "agora/feature-inventory.json", "docs/site/feature-discovery.md"],
+			"public": ["node scripts/feature-inventory.ts", "node scripts/feature-inventory.ts --check", "pnpm features:generate", "pnpm features:check"],
+			"contracts": [],
+			"scenarios": ["well-formed Feature found", "misplaced path rejected", "missing entrypoint rejected", "duplicate name rejected", "drift on hand-edited inventory rejected", "guard-disabled turns drift assertion red", "idempotent regenerate"],
+			"fixtures": ["disposable temp trees under agora-u21-* built by packages/verification/test/feature-discovery.test.ts"],
+			"platforms": ["node24"]
 		}
 	]
 }
