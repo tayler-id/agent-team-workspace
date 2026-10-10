@@ -1,11 +1,11 @@
-2b68a1bd5554ff25fcb0130cd73a01315e9151d9
+6d8bb8b7612a448a3763b298748e6842524fe100
 v24.16.0
 == a-drop-unsubscribe
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-RwBqdY/apps/web
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce/apps/web
 
- ❯ |web| test/app.test.tsx (11 tests | 1 failed) 4845ms
-   × lane 8: 200 mounts and unmounts of a hook consumer leave zero transport subscriptions and zero Host media-query listeners 36ms
+ ❯ |web| test/app.test.tsx (11 tests | 1 failed) 1158ms
+   × lane 8: 200 mounts and unmounts of a hook consumer leave zero transport subscriptions and zero Host media-query listeners 42ms
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -34,16 +34,16 @@ AssertionError: expected [ 201, +0 ] to deeply equal [ +0, +0 ]
 
  Test Files  1 failed (1)
       Tests  1 failed | 10 passed (11)
-   Start at  16:22:22
-   Duration  6.25s (tests 79%, environment 12%, import 5%, transform 4%)
+   Start at  16:46:51
+   Duration  2.17s (tests 56%, environment 26%, import 12%, transform 6%)
 
 == b-widen-submit
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-RwBqdY
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce
 
- ❯ |unit| packages/web-framework/test/boundaries.test.ts (5 tests | 2 failed) 5428ms
-   × lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not 816ms
-   × lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting 431ms
+ ❯ |unit| packages/web-framework/test/boundaries.test.ts (5 tests | 2 failed) 2120ms
+   × lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile while the well-formed calls do not 360ms
+   × lane 7 counterfactual: widening submit to accept anything makes its compile negative stop rejecting 145ms
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -80,15 +80,15 @@ Compared values have no visual difference.
 
  Test Files  1 failed (1)
       Tests  2 failed | 3 passed (5)
-   Start at  16:22:29
-   Duration  6.24s (tests 88%, import 10%, transform 1%)
+   Start at  16:46:54
+   Duration  2.45s (tests 89%, import 9%, transform 2%)
 
 == c-validate-anything
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-RwBqdY/apps/web
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce/apps/web
 
- ❯ |web| test/app.test.tsx (11 tests | 1 failed) 8349ms
-   × lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client 319ms
+ ❯ |web| test/app.test.tsx (11 tests | 1 failed) 909ms
+   × lane 5 negative: a receipt missing required R07 fields is denied by the validator and by the client 47ms
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -111,15 +111,15 @@ Received: "pending"
 
  Test Files  1 failed (1)
       Tests  1 failed | 10 passed (11)
-   Start at  16:22:36
-   Duration  14.90s (tests 57%, environment 23%, import 11%, transform 9%)
+   Start at  16:46:57
+   Duration  1.50s (tests 63%, environment 20%, import 11%, transform 6%)
 
 == d-noop-media-cleanup
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-RwBqdY/apps/web
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce/apps/web
 
- ❯ |web| test/app.test.tsx (11 tests | 1 failed) 1649ms
-   × lane 8: 200 mounts and unmounts of a hook consumer leave zero transport subscriptions and zero Host media-query listeners 70ms
+ ❯ |web| test/app.test.tsx (11 tests | 1 failed) 1057ms
+   × lane 8: 200 mounts and unmounts of a hook consumer leave zero transport subscriptions and zero Host media-query listeners 66ms
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -148,25 +148,25 @@ AssertionError: expected [ +0, 201 ] to deeply equal [ +0, +0 ]
 
  Test Files  1 failed (1)
       Tests  1 failed | 10 passed (11)
-   Start at  16:22:56
-   Duration  16.96s (environment 86%, tests 11%, import 2%, transform 1%)
+   Start at  16:46:59
+   Duration  1.67s (tests 66%, environment 17%, import 10%, transform 7%)
 
 == restored
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-RwBqdY/apps/web
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce/apps/web
 
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  16:23:13
-   Duration  3.43s (tests 61%, environment 19%, import 11%, transform 10%)
+   Start at  16:47:01
+   Duration  1.91s (tests 64%, environment 16%, import 13%, transform 7%)
 
 
- RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-RwBqdY
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-u22-m1HZce
 
 
  Test Files  1 passed (1)
       Tests  5 passed (5)
-   Start at  16:23:17
-   Duration  6.06s (tests 93%, import 5%, transform 2%)
+   Start at  16:47:03
+   Duration  5.04s (tests 95%, import 4%, transform 1%)
 
