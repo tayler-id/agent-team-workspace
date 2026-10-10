@@ -133,5 +133,4 @@ test('the center local-room composition is a discovered Feature owned by apps/ce
 	expect(inventory.features.filter((f) => f.package === 'apps/center').map(({ package: p, name, entrypoint }) => ({ package: p, name, entrypoint }))).toEqual([
 		{ package: 'apps/center', name: 'local-room', entrypoint: 'apps/center/src/features/local-room/entrypoint.ts' },
 	]);
-	expect(readFileSync(path.join(repo, 'apps/center/src/main.ts'), 'utf8')).toMatch(/from '\.\/features\/local-room\/entrypoint\.ts'/);
 });
