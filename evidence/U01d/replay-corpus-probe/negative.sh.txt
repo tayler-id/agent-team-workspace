@@ -1,0 +1,17 @@
+#!/bin/bash
+# Run from the repository root with the .node-version Node on PATH. Works on a copy in a temp dir; the repo is never touched.
+set -u
+DIR=$(mktemp -d "${TMPDIR:-/tmp}/agora-replay-negative-XXXXXX")
+GUARD='compare(input.seq, room.cursor) <= 0 || room.pending.some((e) => e.seq === input.seq)'
+drive() { # $1 = absolute path of a core copy; prints the probe's verdict
+	node --input-type=module -e "import*as core from '$1';import{buildCorpus}from '$PWD/packages/client-core/test/replay-corpus.ts';import{runReplay}from '$PWD/packages/client-core/test/replay-probe.ts';const r=runReplay(core,buildCorpus());console.log(JSON.stringify({version:r.version,seed:r.seed,outcome:r.outcome,duplicates:r.counts.duplicates,messages:r.counts.messages,order:r.order,elapsedMs:r.elapsedMs,failures:r.failures}))"
+}
+cp packages/client-core/src/index.ts "$DIR/pristine.mts"
+echo "sha256 pristine: $(shasum -a 256 < "$DIR/pristine.mts")"
+echo "sha256 source:   $(shasum -a 256 < packages/client-core/src/index.ts)"
+echo "--- 1 pristine copy (expect pass)"; drive "$DIR/pristine.mts"
+node -e "const fs=require('fs');const s=fs.readFileSync('$DIR/pristine.mts','utf8');if(s.split(process.argv[1]).length!==2)process.exit(2);fs.writeFileSync('$DIR/broken.mts',s.replace(process.argv[1],'false'))" "$GUARD" || { echo 'guard text not unique'; exit 2; }
+echo "--- 2 dedupe removed (expect fail)"; drive "$DIR/broken.mts"
+echo "--- 3 restored from the source file (expect pass)"; cp packages/client-core/src/index.ts "$DIR/restored.mts"
+cmp "$DIR/pristine.mts" "$DIR/restored.mts" && echo "restored copy is byte-identical to pristine"; drive "$DIR/restored.mts"
+rm -rf "$DIR"
