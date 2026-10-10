@@ -2,78 +2,81 @@ import { spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
-import * as core from '@agora/client-core';
 import { expect, test } from 'vitest';
-import { ARRIVING, BODY_LIMIT, buildCorpus, CORPUS_VERSION, DEFAULT_SEED, HISTORY, MISSED, UNAVAILABLE } from './replay-corpus.ts';
-import { BUDGET_MS, runReplay, type ReplayReport } from './replay-probe.ts';
+import type { ReplayCorpus } from './replay-corpus.ts';
+import type { ReplayReport } from './replay-probe.ts';
+
+// The probe is driven through its CLI with literal expectations, so this suite loads and fails on assertions even where the probe does not exist.
+const probe = path.join(import.meta.dirname, 'replay-probe.ts');
+const drive = (...args: string[]) => {
+	const child = spawnSync(process.execPath, [probe, ...args], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+	let json: unknown;
+	try { json = JSON.parse(child.stdout); } catch { json = undefined; }
+	return { status: child.status, json, stderr: child.stderr };
+};
+const run = (...args: string[]) => { const r = drive(...args); return { ...r, json: r.json as ReplayReport | undefined }; };
+// A missing probe gives json undefined; the optional chains below turn that into an assertion failure, not a crash.
+const corpus = (seed?: string) => { const r = drive(...(seed ? [seed] : []), '--corpus'); return { ...r, json: r.json as ReplayCorpus | undefined }; };
 
 test('the corpus is versioned, seeded and byte-identical per seed', () => {
-	const corpus = buildCorpus();
-	expect([corpus.version, corpus.seed]).toEqual([CORPUS_VERSION, DEFAULT_SEED]);
-	expect(CORPUS_VERSION).toBe('agora.replay-corpus/v1');
-	expect(JSON.stringify(buildCorpus())).toBe(JSON.stringify(corpus));
-	expect(JSON.stringify(buildCorpus(DEFAULT_SEED + 1))).not.toBe(JSON.stringify(corpus));
+	const first = corpus();
+	expect(first.status, first.stderr).toBe(0);
+	expect([first.json?.version, first.json?.seed]).toEqual(['agora.replay-corpus/v1', 6221057]);
+	expect(JSON.stringify(corpus().json)).toBe(JSON.stringify(first.json));
+	expect(JSON.stringify(corpus('6221058').json)).not.toBe(JSON.stringify(first.json));
 });
 
 test('it holds 1000 missed events, 100 arrivals and long code and Markdown bodies within the 4096 wire limit', () => {
-	const corpus = buildCorpus();
-	expect(corpus.snapshot.messages).toHaveLength(HISTORY);
-	expect(corpus.expectedIds).toHaveLength(HISTORY + MISSED + ARRIVING);
-	expect(new Set(corpus.expectedIds).size).toBe(corpus.expectedIds.length);
-	const sizes = corpus.expectedBodies.map((b) => Array.from(b).length);
-	expect(Math.max(...sizes)).toBeLessThanOrEqual(BODY_LIMIT);
-	expect(sizes.filter((n) => n >= 2000).length).toBeGreaterThan(corpus.expectedBodies.length / 4);
-	expect(corpus.expectedBodies.filter((b) => b.includes('```')).length).toBeGreaterThan(corpus.expectedBodies.length / 2);
-	expect(corpus.expectedBodies.some((b) => b.includes('| seq | state |'))).toBe(true);
+	const { json } = corpus();
+	expect(json?.snapshot.messages).toHaveLength(200);
+	expect(json?.expectedIds).toHaveLength(1300);
+	expect(new Set(json?.expectedIds).size).toBe(1300);
+	const bodies = json?.expectedBodies ?? [];
+	const sizes = bodies.map((b) => Array.from(b).length);
+	expect(Math.max(...sizes)).toBeLessThanOrEqual(4096);
+	expect(sizes.filter((n) => n >= 2000).length).toBeGreaterThan(325);
+	expect(bodies.filter((b) => b.includes('```')).length).toBeGreaterThan(650);
+	expect(bodies.some((b) => b.includes('| seq | state |'))).toBe(true);
 });
 
 test('it invents no unpublished shape: only revision-1 visible messages, no run cards', () => {
-	const corpus = buildCorpus();
-	for (const event of corpus.inputs) {
-		expect(event.change.type).toBe('message');
-		if (event.change.type === 'message') expect([event.change.message.revision, event.change.message.content.tag]).toEqual(['1', 'visible']);
-	}
-	expect(corpus.snapshot.runs).toEqual([]);
-	expect(UNAVAILABLE.map((u) => u.shape)).toEqual(['thread', 'edit', 'tombstone', 'run-card']);
+	const { json } = corpus();
+	expect(json?.inputs.length).toBeGreaterThan(1100);
+	for (const event of json?.inputs ?? []) expect([event.change.type, event.change.type === 'message' && event.change.message.revision, event.change.type === 'message' && event.change.message.content.tag]).toEqual(['message', '1', 'visible']);
+	expect(json?.snapshot.runs).toEqual([]);
 });
 
 test('the real client core converges in order with zero duplicates inside two seconds', () => {
-	const report = runReplay(core);
-	expect(report.failures).toEqual([]);
-	expect(report).toMatchObject({ outcome: 'pass', order: 'converged', budgetMs: 2000, counts: { history: 200, messages: 1300, unique: 1300, duplicates: 0 }, acknowledgements: { strictlyIncreasing: true, last: '1300' } });
-	expect(BUDGET_MS).toBe(2000);
-	expect(report.elapsedMs).toBeLessThan(BUDGET_MS);
-	expect(report.counts.delivered).toBeGreaterThan(MISSED + ARRIVING);
-	expect(report.coverage.unavailable).toBe(UNAVAILABLE);
+	const { status, json, stderr } = run();
+	expect(stderr).toBe('');
+	expect(json?.failures).toEqual([]);
+	expect(status).toBe(0);
+	expect(json).toMatchObject({ outcome: 'pass', order: 'converged', budgetMs: 2000, counts: { history: 200, messages: 1300, unique: 1300, duplicates: 0 }, acknowledgements: { strictlyIncreasing: true, last: '1300' } });
+	expect(json?.elapsedMs).toBeLessThan(2000);
+	expect(json?.counts.delivered).toBeGreaterThan(1100);
+	expect(json?.coverage.unavailable.map((u) => u.shape)).toEqual(['thread', 'edit', 'tombstone', 'run-card']);
 });
 
 test('the predicate fails a core that exceeds the budget, whatever else it does right', () => {
-	const slow = runReplay(core, buildCorpus(), -1);
-	expect(slow.outcome).toBe('fail');
-	expect(slow.failures.join()).toContain('exceeds the -1 ms budget');
+	const slow = run('--budget', '-1');
+	expect(slow.status).toBe(1);
+	expect(slow.json?.outcome).toBe('fail');
+	expect(slow.json?.failures.join()).toContain('exceeds the -1 ms budget');
 });
 
-// Isolated negative: the same predicate, run in a child process against a copy of the real core whose duplicate
-// suppression is removed. The unmutated copy must pass first, so the red comes from the dedupe and not the harness.
+// Isolated negative: the same predicate against a copy of the real core whose duplicate suppression is removed.
+// The unmutated copy must pass first, so the red comes from the dedupe and not the harness.
 test('removing duplicate suppression from an isolated core copy turns the predicate red, and the pristine copy stays green', () => {
 	const source = readFileSync(new URL('../src/index.ts', import.meta.url), 'utf8');
 	const guard = 'compare(input.seq, room.cursor) <= 0 || room.pending.some((e) => e.seq === input.seq)';
 	expect(source.split(guard).length, 'the dedupe guard is unique').toBe(2);
 	const dir = mkdtempSync(path.join(tmpdir(), 'agora-replay-dedupe-'));
 	try {
-		const run = (text: string): ReplayReport => {
-			const file = path.join(dir, 'core.mts');
-			writeFileSync(file, text);
-			const url = (name: string): string => JSON.stringify(pathToFileURL(path.join(import.meta.dirname, name)).href);
-			const script = `import*as core from ${JSON.stringify(pathToFileURL(file).href)};import{buildCorpus}from ${url('replay-corpus.ts')};import{runReplay}from ${url('replay-probe.ts')};process.stdout.write(JSON.stringify(runReplay(core,buildCorpus())))`;
-			const child = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8' });
-			expect(child.status, child.stderr).toBe(0);
-			return JSON.parse(child.stdout) as ReplayReport;
-		};
-		expect(run(source).outcome).toBe('pass');
-		const broken = run(source.replace(guard, 'false'));
-		expect(broken.outcome).toBe('fail');
-		expect(broken.failures).toEqual(expect.arrayContaining(['mode resync', 'message order or membership diverged', 'core demanded a new snapshot or upgrade']));
+		const withCore = (name: string, text: string) => { const file = path.join(dir, name); writeFileSync(file, text); return run('--core', file); };
+		const pristine = withCore('pristine.mts', source);
+		expect(pristine.json?.outcome, pristine.stderr).toBe('pass');
+		const broken = withCore('broken.mts', source.replace(guard, 'false'));
+		expect(broken.status).toBe(1);
+		expect(broken.json?.failures).toEqual(expect.arrayContaining(['mode resync', 'message order or membership diverged', 'core demanded a new snapshot or upgrade']));
 	} finally { rmSync(dir, { recursive: true, force: true }); }
 });

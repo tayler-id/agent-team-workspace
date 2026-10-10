@@ -57,10 +57,17 @@ export function runReplay(core: Core, corpus: ReplayCorpus = buildCorpus(), budg
 	};
 }
 
+// CLI: replay-probe.ts [SEED] [--core FILE] [--budget MS] [--corpus]. --corpus prints the corpus instead of judging it.
+// It sets exitCode rather than calling process.exit, which would truncate a large write to a pipe.
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-	const seed = process.argv[2] ? Number(process.argv[2]) : DEFAULT_SEED;
-	const core: Core = await import('@agora/client-core');
-	const report = runReplay(core, buildCorpus(seed));
-	process.stdout.write(`${JSON.stringify(report, null, '\t')}\n`);
-	process.exit(report.outcome === 'pass' ? 0 : 1);
+	const args = process.argv.slice(2);
+	const flag = (name: string): string | undefined => args[args.indexOf(name) + 1];
+	const corpus = buildCorpus(args[0] && !args[0].startsWith('--') ? Number(args[0]) : DEFAULT_SEED);
+	if (args.includes('--corpus')) process.stdout.write(`${JSON.stringify(corpus)}\n`);
+	else {
+		const core = (await import(args.includes('--core') ? pathToFileURL(flag('--core') ?? '').href : '@agora/client-core')) as Core;
+		const report = runReplay(core, corpus, args.includes('--budget') ? Number(flag('--budget')) : BUDGET_MS);
+		process.stdout.write(`${JSON.stringify(report, null, '\t')}\n`);
+		process.exitCode = report.outcome === 'pass' ? 0 : 1;
+	}
 }
