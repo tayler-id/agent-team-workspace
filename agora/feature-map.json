@@ -76,14 +76,14 @@
 			"id": "project-controls",
 			"documentation": "docs/site/project-controls.md",
 			"last_verified_subject": {"receipt": ".scratch/project/{fixture}/{instance}/evidence.json", "fields": ["versions.code", "versions.config", "versions.fixture"], "requires_live_pass": true},
-			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "scripts/project-perf.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
+			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "scripts/project-perf.mjs", "scripts/project-lanes.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "packages/verification/test/u22-lanes.test.ts", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
 			"public": ["pnpm -s agora project --help", "pnpm agora project doctor|scenarios|start|verify|evidence|stop|lanes", "python3 packages/verification/fixture/project.py"],
 			"contracts": ["contracts/schemas/cli.schema.json"],
-			"scenarios": ["policy", "controls", "guards", "packages/verification/test/project.test.ts", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts"],
+			"scenarios": ["policy", "controls", "guards", "packages/verification/test/project.test.ts", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "packages/verification/test/u22-lanes.test.ts"],
 			"fixtures": ["non-production PostgreSQL policy journal", "independent Python SQLite policy journal"],
 			"platforms": ["node24", "postgresql18", "python3"],
 			"owner": "U01b.B01",
-			"invalidation": "Implemented local fixture controls only: policy HTTP/effects, controls and guards tests, help with no launch or prerequisites, and task lanes 1-7. Whole-unit lanes 8-10 remain unavailable. Per-unit lanes for U20, U21, U22, U23, U01c and U01d are unavailable with reasons, and per-unit perf runs only for U01b, U20 and U21; it qualifies no unit. Help and passing fixture checks establish no production identity, provider, worker or publication authority."
+			"invalidation": "Implemented local fixture controls only: policy HTTP/effects, controls and guards tests, help with no launch or prerequisites, and task lanes 1-7. Whole-unit lanes 8-10 remain unavailable. Per-unit lanes for U20, U21, U23, U01c and U01d are unavailable with reasons, and U22 runs ten lanes from named native tests with lane 9 and every scenario.png unavailable, and per-unit perf runs only for U01b, U20 and U21; it qualifies no unit. Help and passing fixture checks establish no production identity, provider, worker or publication authority."
 		},
 		{
 			"id": "evidence-validator",
