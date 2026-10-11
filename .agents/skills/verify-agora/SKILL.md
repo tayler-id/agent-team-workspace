@@ -200,12 +200,15 @@ For U01b.B01's project verification controls, pass means literal public allow/de
 
 For the per-unit runner, `verify --scenario perf --unit U01b|U20|U21` writes `perf.json` under the artifacts directory (ten samples in run order, `parent_behavior`, the p95 of each metric) and exits 0 only when every declared rule holds. Timing noise can fail an identical parent and head, so read the samples before blaming the change. `--unit U22|U23|U01c|U01d` for either `lanes` or perf must exit 3 with the unit's reason; that is the expected answer until the unit has a driver, not a failure to fix. The perf receipt is not a unit qualification and opens no foundation gate.
 
+`lanes --unit U20 --task agora-u20-lane-evidence` runs the ten boundary-lint lanes through `packages/verification/test/u20-lanes.test.ts` Pass means exit 0, `outcome.json` with `qualification: not_claimed`, and `lane-N/assertions.json` for every lane. Lane 1 clones `--parent` (default `HEAD^`) and `9bb7462^` with their own offline installs, so it needs the pnpm store to hold both lockfiles. Lane 8 needs commit `99aa4f7` in the local object database and only reads it. The driver leaves probe files only inside its own `u20lane*` Feature folders and removes them in `afterAll`; `git status` must show nothing new afterwards. For `scenario.png`, render each lane with `chrome-devtools-axi open file://$PWD/evidence/U20/lane-N/scenario.html` then `chrome-devtools-axi screenshot`, and close that browser session when done. If the tool is missing, keep the transcript and record that the image is unavailable. Lanes land in `evidence/U20/lane-N/` when run with `--artifacts evidence/U20`; other receipts are in `evidence/U20/lane-evidence/`.
+
 ```sh
 pnpm -s agora project verify --scenario policy --instance "$A" --artifacts "$OUT/a" --json
 pnpm -s agora project verify --scenario policy --instance "$B" --artifacts "$OUT/b" --json
 python3 packages/verification/fixture/project.py verify --scenario policy --instance "$P" --artifacts "$OUT/python" --json
 pnpm -s agora project lanes --unit U01b --task agora-s1-isolate-development --artifacts "$OUT/lanes" --json
 pnpm -s agora project verify --scenario perf --unit U21 --parent HEAD^ --artifacts "$OUT/perf" --json
+pnpm -s agora project lanes --unit U20 --task agora-u20-lane-evidence --parent HEAD^ --artifacts "$OUT/u20-lanes" --json
 pnpm -s agora project lanes --unit U21 --task agora-u21-lane-evidence --artifacts "$OUT/u21-lanes" --json
 pnpm -s agora project lanes --unit U22 --task agora-s1-qualify-trusted-checks --json
 pnpm contracts:check
