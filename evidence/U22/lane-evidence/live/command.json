@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "pnpm",
+    "exec",
+    "vitest",
+    "run",
+    "--project",
+    "unit",
+    "--project",
+    "web",
+    "packages/client-core/test/client-state-owner.test.ts",
+    "packages/client-core/test/replay.test.ts",
+    "packages/web-framework/test",
+    "packages/verification/test/u22-lanes.test.ts",
+    "apps/web/test/app.test.tsx",
+    "--reporter=json",
+    "--outputFile=/Users/taylerramsay/.treehouse/agent-team-workspace-439a06/9/agent-team-workspace/evidence/U22/lane-evidence/live/vitest.json"
+  ],
+  "exit": 0,
+  "stderr": ""
+}
