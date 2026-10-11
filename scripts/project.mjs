@@ -30,8 +30,9 @@ Help is plain text, needs no install or database, and starts nothing.
              report unavailable with the reason. REV defaults to HEAD^.
   lanes      --unit UNIT --task TASK --artifacts DIRECTORY; task-specific qualification.
 
-UNIT: U01b runs lanes. U20, U21, U22, U23, U01c and U01d list their ten lanes as unavailable
+UNIT: U01b and U21 run lanes. U20, U22, U23, U01c and U01d list their ten lanes as unavailable
 with a reason until a driver exists; an unknown unit is unavailable.
+TASK (U21): agora-u21-lane-evidence runs all ten lanes.
 TASK (U01b): agora-s1-isolate-development (lanes 1-4), agora-s1-validate-project-evidence (1-7).
 Whole-unit lanes 8-10 unavailable; a task pass never qualifies the whole unit.
 Options: --fixture agora|python, --instance, --profile, --scenario, --artifacts,
