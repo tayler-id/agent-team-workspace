@@ -1,0 +1,16 @@
+{
+  "head": "5fc63fbd715d118cf797bd0f4662f81c971ea45e",
+  "mutation": "bytes.length === artifact.byte_length && hash(bytes) === artifact.digest",
+  "normal_and_disabled": [
+    {
+      "weakened": false,
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "weakened": true,
+      "exit": 1,
+      "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected exception.\n    at file:///Users/taylerramsay/.treehouse/agent-team-workspace-439a06/8/agent-team-workspace/[eval1]:1:149\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:223:26\n    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:220:20)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: /artifact_mismatch/,\n  operator: 'throws',\n  diff: 'simple'\n}\n\nNode.js v24.21.0\n"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "lane": 1,
+  "test": "project lane 1 head generates the committed inventory and trunk before discovery had no generator",
+  "status": "passed",
+  "duration_ms": 134
+}

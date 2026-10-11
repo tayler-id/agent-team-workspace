@@ -1,0 +1,6 @@
+{
+  "lane": 8,
+  "test": "project lane 8 two Features with the same declared name are rejected",
+  "status": "passed",
+  "duration_ms": 4
+}
