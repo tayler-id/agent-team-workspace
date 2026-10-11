@@ -44,7 +44,7 @@ function scenario(files: string[]) {
 		mkdirSync(path.dirname(path.join(dir, rel)), { recursive: true });
 		writeFileSync(path.join(dir, rel), body);
 	};
-	files.forEach((f) => put(f));
+	for (const f of files) put(f);
 	const run = (...args: string[]): Step => {
 		const r = spawnSync(process.execPath, ['scripts/feature-inventory.ts', ...args], { cwd: dir, encoding: 'utf8' });
 		const step = { command: `node scripts/feature-inventory.ts ${args.join(' ')}`.trim(), exit: r.status, stdout: r.stdout, stderr: r.stderr };
@@ -148,13 +148,12 @@ lane(8, 'two Features with the same declared name are rejected', [], async (s) =
 	// A case-insensitive filesystem cannot hold Room and room side by side. This host feeds the generator's own file-list entry the same two paths.
 	s.steps.push({ command: 'case-insensitive filesystem: real directories cannot collide here', exit: 0, stdout: readdirSync(features).join(','), stderr: '' });
 	const { DiscoveryError, discoverFeatures } = await import('../../../scripts/feature-discovery.ts');
-	const thrown = (() => {
-		try {
-			discoverFeatures(['apps/web/src/features/Room/entrypoint.ts', 'apps/web/src/features/room/entrypoint.ts'], () => '[]');
-		} catch (error) {
-			return error;
-		}
-	})();
+	let thrown: unknown;
+	try {
+		discoverFeatures(['apps/web/src/features/Room/entrypoint.ts', 'apps/web/src/features/room/entrypoint.ts'], () => '[]');
+	} catch (error) {
+		thrown = error;
+	}
 	expect(thrown).toBeInstanceOf(DiscoveryError);
 	expect((thrown as Error).message).toMatch(/duplicate Feature name, also declared by apps\/web\/src\/features\/Room/);
 });
