@@ -1,0 +1,132 @@
+{
+  "schema_version": "agora.foundation/v1",
+  "authority": "foundation_fixture",
+  "mode": "live",
+  "task": "agora-foundation-ready-aggregate",
+  "scope": "foundation-ready",
+  "head": "0b61e7f183bcdab891b3dac0e533d1356839494f",
+  "outcome": "fail",
+  "task_outcome": "fail",
+  "unit_outcome": "blocked",
+  "foundation_outcome": "fail",
+  "proofs": [
+    {
+      "id": "FG01",
+      "subject": "FG01:agora-s1-enforce-test-first@e0c480ccf6af",
+      "revision": "0b61e7f183bcdab891b3dac0e533d1356839494f",
+      "outcome": "fail",
+      "denials": [
+        "FG01_subject_drift",
+        "green_unverified",
+        "red_unverified"
+      ]
+    },
+    {
+      "id": "FG02",
+      "subject": "FG02:agora-s1-enforce-test-first@e0c480ccf6af",
+      "revision": "0b61e7f183bcdab891b3dac0e533d1356839494f",
+      "outcome": "fail",
+      "denials": [
+        "FG02_subject_drift"
+      ]
+    },
+    {
+      "id": "FG03",
+      "subject": "FG03:agora-s1-enforce-test-first@e0c480ccf6af",
+      "revision": "0b61e7f183bcdab891b3dac0e533d1356839494f",
+      "outcome": "fail",
+      "denials": [
+        "FG03_subject_drift"
+      ]
+    },
+    {
+      "id": "FG04",
+      "subject": "FG04:project-lanes-1-4",
+      "revision": "0b61e7f183bcdab891b3dac0e533d1356839494f",
+      "outcome": "pass",
+      "denials": []
+    },
+    {
+      "id": "FG05",
+      "subject": "FG05:project-lanes-5-7",
+      "revision": "0b61e7f183bcdab891b3dac0e533d1356839494f",
+      "outcome": "pass",
+      "denials": []
+    },
+    {
+      "id": "FG06",
+      "subject": "FG06:trusted-reporting",
+      "revision": "0b61e7f183bcdab891b3dac0e533d1356839494f",
+      "outcome": "unavailable",
+      "denials": [
+        "FG06_reporting_unenrolled"
+      ]
+    },
+    {
+      "id": "FG07",
+      "subject": "FG07:separate-host-recovery",
+      "revision": "0b61e7f183bcdab891b3dac0e533d1356839494f",
+      "outcome": "unavailable",
+      "denials": [
+        "FG07_recovery_host_unapproved"
+      ]
+    },
+    {
+      "id": "FG08",
+      "subject": "FG08:browser-and-human-proof",
+      "revision": "0b61e7f183bcdab891b3dac0e533d1356839494f",
+      "outcome": "unavailable",
+      "denials": [
+        "FG08_browser_human_proof_absent"
+      ]
+    }
+  ],
+  "denials": [
+    "FG01_subject_drift",
+    "FG02_subject_drift",
+    "FG03_subject_drift",
+    "FG06_reporting_unenrolled",
+    "FG07_recovery_host_unapproved",
+    "FG08_browser_human_proof_absent",
+    "green_unverified",
+    "red_unverified"
+  ],
+  "artifacts": [
+    {
+      "path": ".scratch/foundation-ready/live3/lanes/lanes.json",
+      "digest": "sha256:b176b155880275cb0947674b29d330e30530a5d56b968728126abf6c574b72f9",
+      "byte_length": 4611,
+      "media_type": "application/json"
+    },
+    {
+      "path": ".scratch/foundation-ready/live3/lanes/command.json",
+      "digest": "sha256:f1b408fb6ad7b3feb77e23fbd0fc4177791bbc06c32f10671cb063c1de83eec8",
+      "byte_length": 465,
+      "media_type": "application/json"
+    },
+    {
+      "path": ".scratch/foundation-ready/live3/lanes/guards.json",
+      "digest": "sha256:a7e292ad62b139ffe0d0441f8638c0ae917f49c204da1a848486ed2b09ff70b7",
+      "byte_length": 1042,
+      "media_type": "application/json"
+    },
+    {
+      "path": ".scratch/foundation-ready/live3/lanes/lanes.json",
+      "digest": "sha256:b176b155880275cb0947674b29d330e30530a5d56b968728126abf6c574b72f9",
+      "byte_length": 4611,
+      "media_type": "application/json"
+    },
+    {
+      "path": ".scratch/foundation-ready/live3/lanes/command.json",
+      "digest": "sha256:f1b408fb6ad7b3feb77e23fbd0fc4177791bbc06c32f10671cb063c1de83eec8",
+      "byte_length": 465,
+      "media_type": "application/json"
+    },
+    {
+      "path": ".scratch/foundation-ready/live3/lanes/guards.json",
+      "digest": "sha256:a7e292ad62b139ffe0d0441f8638c0ae917f49c204da1a848486ed2b09ff70b7",
+      "byte_length": 1042,
+      "media_type": "application/json"
+    }
+  ]
+}

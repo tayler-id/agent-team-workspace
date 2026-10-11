@@ -17,3 +17,7 @@ FG01 to FG03 fail. The U01a driver ran in an owned copy at e0c480c with the reta
 ## Toolchain
 
 Official Node 24.21.0 darwin-arm64, SHA-256 `bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057` checked against nodejs.org SHASUMS256.txt. Python venv from the locked `requirements.txt`. The injected `GIT_CONFIG_*` hooksPath variables were unset for the child command only.
+
+## Live result at the merged head 0b61e7f
+
+After origin/main (PR 20, U21 lane evidence) was merged in, the same recipe ran again at `0b61e7f` (`live-merged-head/`, exit 1). The outcomes match the efe15f2 run: FG04 and FG05 pass, FG01 to FG03 fail with `_subject_drift` and the Node 24.16.0 replay mismatch, and FG06 to FG08 stay unavailable with their reasons. The `live/` receipt above is historical and binds efe15f2. This one is the current candidate-bound report.
