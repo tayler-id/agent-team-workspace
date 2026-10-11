@@ -198,7 +198,9 @@ node evidence/ci/P0c/C/driver/scenarios.mjs --out .scratch/p0c-c
 
 For U01b.B01's project verification controls, pass means literal public allow/deny results, exactly two additional persisted journal entries and matching object bytes. The task lane runner additionally proves two simultaneous instances of each application, foreign cleanup refusal, missing/altered/stale evidence rejection, missing runners, report/exit disagreement, instruction drift and deleted required coverage. Its isolated guard mutation must fail the original denial assertion. This is CLI/HTTP proof, not a screenshot or a browser application claim.
 
-For the per-unit runner, `verify --scenario perf --unit U01b|U20|U21` writes `perf.json` under the artifacts directory (ten samples in run order, `parent_behavior`, the p95 of each metric) and exits 0 only when every declared rule holds. Timing noise can fail an identical parent and head, so read the samples before blaming the change. `--unit U22|U23|U01c|U01d` for either `lanes` or perf must exit 3 with the unit's reason; that is the expected answer until the unit has a driver, not a failure to fix. The perf receipt is not a unit qualification and opens no foundation gate.
+For the per-unit runner, `verify --scenario perf --unit U01b|U20|U21` writes `perf.json` under the artifacts directory (ten samples in run order, `parent_behavior`, the p95 of each metric) and exits 0 only when every declared rule holds. Timing noise can fail an identical parent and head, so read the samples before blaming the change. `--unit U21|U22|U23|U01c|U01d` for `lanes`, and `U22|U23|U01c|U01d` for perf, must exit 3 with the unit's reason; that is the expected answer until the unit has a driver, not a failure to fix. The perf receipt is not a unit qualification and opens no foundation gate.
+
+`lanes --unit U20` runs the ten boundary-lint lanes through `packages/verification/test/u20-lanes.test.ts` and needs no `--task`. Pass means exit 0, `outcome.json` with `qualification: not_claimed`, and a `lane-N/assertions.json` for every lane. Lane 1 clones `--parent` (default `HEAD^`) and `9bb7462^` with their own offline installs, so it needs the pnpm store to hold both lockfiles. Lane 8 needs commit `99aa4f7` in the local object database and only reads it. The driver leaves probe files only inside its own `u20lane*` Feature folders and removes them in `afterAll`; `git status` must show nothing new afterwards. For `scenario.png`, render each lane with `chrome-devtools-axi open file://$PWD/evidence/U20/lane-evidence/lane-N/scenario.html` then `chrome-devtools-axi screenshot`, and close that browser session when done. If the tool is missing, keep the transcript and record that the image is unavailable. Receipts: `evidence/U20/lane-evidence/`.
 
 ```sh
 pnpm -s agora project verify --scenario policy --instance "$A" --artifacts "$OUT/a" --json
@@ -206,6 +208,7 @@ pnpm -s agora project verify --scenario policy --instance "$B" --artifacts "$OUT
 python3 packages/verification/fixture/project.py verify --scenario policy --instance "$P" --artifacts "$OUT/python" --json
 pnpm -s agora project lanes --unit U01b --task agora-s1-isolate-development --artifacts "$OUT/lanes" --json
 pnpm -s agora project verify --scenario perf --unit U21 --parent HEAD^ --artifacts "$OUT/perf" --json
+pnpm -s agora project lanes --unit U20 --parent HEAD^ --artifacts "$OUT/u20" --json
 pnpm -s agora project lanes --unit U22 --task agora-s1-qualify-trusted-checks --json
 pnpm contracts:check
 pnpm contracts:conform -- --json
