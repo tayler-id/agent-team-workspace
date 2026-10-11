@@ -1,0 +1,44 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-11T17:56:18.068Z
+parent: aa86dfd8347c457a055d62c3a76fe5b75c853fa1
+head: 6f1d9158aae4603a1c82e91c36b317c2b6f7b19a
+subject_revision: aa86dfd8347c457a055d62c3a76fe5b75c853fa1
+test_patch_applied_to_subject: true
+test_patch_files: packages/client-core/test/app-architecture.test.ts
+test_patch_digest: sha256:54eec87814bcf599e5660879d6867dd1a6ca4855ebd238673382ad49aea5d4bc
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/client-core/test/app-architecture.test.ts -t renderer bypass diagnostics","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-82xNDJ
+
+ ❯ |unit| packages/client-core/test/app-architecture.test.ts (27 tests | 1 failed | 26 skipped) 1036ms
+   × renderer bypass diagnostics name the existing Host method that replaces the browser global 1035ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 26 skipped (27)
+   Start at  13:56:10
+   Duration  1.18s (tests 92%, import 6%, transform 2%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/client-core/test/app-architecture.test.ts > renderer bypass diagnostics name the existing Host method that replaces the browser global
+AssertionError: expected 'direct window is allowed only in Host…' to contain 'EnvironmentPort.matchesMediaQuery or …'
+
+Expected: "EnvironmentPort.matchesMediaQuery or EnvironmentPort.subscribeMediaQuery"
+Received: "direct window is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/framework); Features and Client use Host ports"
+
+ ❯ packages/client-core/test/app-architecture.test.ts:267:93
+    265| test('renderer bypass diagnostics name the existing Host method that r…
+    266|  const message = async (code: string): Promise<string> => (await agora…
+    267|  expect(await message('export const m = (): boolean => window.matchMed…
+       |                                                                                             ^
+    268|  expect(await message('export const f = (): void => { document.getElem…
+    269|  expect(await message('export const t = (f: () => void): unknown => se…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
