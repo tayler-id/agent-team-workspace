@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "pnpm",
+    "exec",
+    "vitest",
+    "run",
+    "--project",
+    "unit",
+    "packages/verification/test/project.test.ts",
+    "packages/verification/test/evidence-validator.test.ts",
+    "packages/verification/test/trusted-checks.test.ts"
+  ],
+  "exit": 0,
+  "stdout": "JSON report written to /Users/taylerramsay/.treehouse/agent-team-workspace-439a06/1/agent-team-workspace/.scratch/foundation-ready/live2/lanes/lanes.json\n",
+  "stderr": ""
+}
