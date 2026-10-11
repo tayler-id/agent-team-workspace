@@ -1,0 +1,2 @@
+# U20 lane 4 (agora.lane/v1), recorded 2026-10-11T07:06:11.473Z
+{"subject":"raw useEffect","feature":["useEffect is allowed only in framework owner apps/web/src/framework; expose a named framework hook instead of importing raw effects in feature code","useEffect is allowed only in framework owner apps/web/src/framework; expose a named framework hook instead of raw effects in feature code"],"framework_hook":[],"feature_using_hook":[]}

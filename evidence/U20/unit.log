@@ -1,0 +1,43 @@
+head: 97dac0c784056b07da0ff1bfa7485f328df75832
+node: v24.21.0  pnpm: 10.34.1  host: Darwin 25.5.0 arm64
+command: AGORA_LANE_OUT=.scratch/unitlog pnpm exec vitest run --project unit packages/verification/test/u20-lanes.test.ts packages/verification/test/project-units.test.ts packages/verification/test/project-help.test.ts -t 'project lane|U20 runs|lanes are unavailable|help' --reporter=verbose
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-439a06/5/agent-team-workspace
+
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U22 lanes are unavailable with a reason, never a pass 161ms
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U23 lanes are unavailable with a reason, never a pass 151ms
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U01c lanes are unavailable with a reason, never a pass 159ms
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U01d lanes are unavailable with a reason, never a pass 149ms
+ ↓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U21 runs its own ten-lane driver, and a missing driver target is never a pass
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U20 runs its own ten-lane driver and leaves one assertions file per lane, and a missing driver target is never a pass 126409ms
+ ↓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > an unknown unit is unavailable by name
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U22 reports the missing probe and no artifacts
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U23 reports the missing probe and no artifacts
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U01c reports the missing probe and no artifacts
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U01d reports the missing probe and no artifacts
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > perf needs a unit, and an unknown unit is unavailable
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > five interleaved parent and head batches pass on equal metrics and fail only past 10% or a budget
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > a limit set as a multiple of another metric fails only past that multiple
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > output that is not a metric report or a failing head probe is never a pass
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > behavior absent at the parent is reported and only absolute budgets apply
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > the real U21 generation probe records ten genuine timings
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > the real U01b probe times startup, scenario, evidence and 10-MiB validation
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 1 regression against trunk keeps every .ts rejection and records .tsx coverage as observed 11160ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 2 a .tsx storage import is rejected with the rule id .ts files use 806ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 3 a .tsx browser global is rejected outside the framework folder and accepted inside it 49ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 4 an unmediated effect is rejected outside the framework folder and a framework-owned hook is accepted 52ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 5 the lane-2 assertion turns red when the .tsx glob is removed in an isolated config copy 76ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 6 an eslint-disable comment naming a new rule is itself rejected and suppresses nothing 17ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 7 each rejection names its supported owner and the sanctioned alternative path 74ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 8 the widened lint reproduces the known drift of the preserved renderer fixture 701ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 9 an undeclared Feature import and a framework import of a Feature are rejected with their owners 15ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 10 the existing .ts boundary suite and the .tsx suite pass together 45169ms
+ ✓ |unit| packages/verification/test/project-help.test.ts > project help lists implemented fixture routes without launching 132ms
+ ✓ |unit| packages/verification/test/project-help.test.ts > project help needs no dependency install, Git history or database 33ms
+ ✓ |unit| packages/verification/test/project-help.test.ts > project help does not hide unknown routes or malformed options 609ms
+
+ Test Files  3 passed (3)
+      Tests  18 passed | 13 skipped (31)
+   Start at  03:09:52
+   Duration  189.39s (tests 100%)
+

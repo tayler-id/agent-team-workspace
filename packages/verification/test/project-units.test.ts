@@ -52,7 +52,7 @@ const flagged = ['node', '-e', "const fs=require('fs');const f='slow.flag';conso
 afterAll(() => { for (const dir of sandboxes) rmSync(dir, { recursive: true, force: true }); });
 
 describe('per-unit lanes through the public CLI', () => {
-	test.each(['U20', 'U23', 'U01c', 'U01d'])('%s lanes are unavailable with a reason, never a pass', (unit) => {
+	test.each(['U23', 'U01c', 'U01d'])('%s lanes are unavailable with a reason, never a pass', (unit) => {
 		const report = run(root, ['lanes', '--unit', unit, '--task', 'agora-s1-qualify-trusted-checks']);
 		expect(report.outcome).toBe('unavailable');
 		expect(report.artifacts).toEqual([]);
@@ -78,6 +78,28 @@ describe('per-unit lanes through the public CLI', () => {
 		writeFileSync(file, JSON.stringify(manifest));
 		expect(run(dir, ['lanes', '--unit', 'U21', '--task', 'agora-u21-lane-evidence']).outcome).not.toBe('pass');
 	}, 300_000);
+
+	test('U20 runs its own ten-lane driver and leaves one assertions file per lane, and a missing driver target is never a pass', () => {
+		const out = `.scratch/u20-lanes-${randomUUID()}`;
+		const report = run(root, ['lanes', '--unit', 'U20', '--task', 'agora-u20-lane-evidence', '--artifacts', out]);
+		expect(report.outcome, JSON.stringify(report)).toBe('pass');
+		const native = JSON.parse(readFileSync(path.join(out, 'lanes.json'), 'utf8')) as { testResults: { assertionResults: { fullName: string; status: string }[] }[] };
+		const rows = native.testResults.flatMap((suite) => suite.assertionResults);
+		expect(rows.map((row) => row.status)).toEqual(Array(10).fill('passed'));
+		const outcome = JSON.parse(readFileSync(path.join(out, 'outcome.json'), 'utf8')) as { qualification: string; lanes: { id: number; assertions: string }[] };
+		expect(outcome.qualification).toBe('not_claimed');
+		expect(outcome.lanes.map((row) => row.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+		for (const row of outcome.lanes) expect(existsSync(path.join(out, row.assertions)), row.assertions).toBe(true);
+		rmSync(out, { recursive: true, force: true });
+		expect(run(root, ['lanes', '--unit', 'U20', '--task', 'no-such-task', '--artifacts', out]).outcome).toBe('blocked');
+		rmSync(out, { recursive: true, force: true });
+		const dir = sandbox(), file = path.join(dir, 'agora/project.json'), manifest = JSON.parse(readFileSync(file, 'utf8')) as { units: { id: string; driver?: string[] }[] };
+		const unit = manifest.units.find((row) => row.id === 'U20');
+		expect(unit?.driver, 'U20 declares its own driver').toBeDefined();
+		if (unit) unit.driver = ['/definitely/missing/u20-runner'];
+		writeFileSync(file, JSON.stringify(manifest));
+		expect(run(dir, ['lanes', '--unit', 'U20', '--task', 'agora-u20-lane-evidence']).outcome).not.toBe('pass');
+	}, 600_000);
 
 	test('an unknown unit is unavailable by name', () => {
 		const report = run(root, ['lanes', '--unit', 'U99', '--task', 'agora-s1-qualify-trusted-checks']);
