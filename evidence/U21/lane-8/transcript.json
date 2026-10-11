@@ -1,0 +1,11 @@
+{
+  "lane": 8,
+  "steps": [
+    {
+      "command": "case-insensitive filesystem: real directories cannot collide here",
+      "exit": 0,
+      "stdout": "Room",
+      "stderr": ""
+    }
+  ]
+}

@@ -206,6 +206,7 @@ pnpm -s agora project verify --scenario policy --instance "$B" --artifacts "$OUT
 python3 packages/verification/fixture/project.py verify --scenario policy --instance "$P" --artifacts "$OUT/python" --json
 pnpm -s agora project lanes --unit U01b --task agora-s1-isolate-development --artifacts "$OUT/lanes" --json
 pnpm -s agora project verify --scenario perf --unit U21 --parent HEAD^ --artifacts "$OUT/perf" --json
+pnpm -s agora project lanes --unit U21 --task agora-u21-lane-evidence --artifacts "$OUT/u21-lanes" --json
 pnpm -s agora project lanes --unit U22 --task agora-s1-qualify-trusted-checks --artifacts "$OUT/u22" --json
 pnpm contracts:check
 pnpm contracts:conform -- --json
@@ -586,6 +587,14 @@ rm "$D/apps/web/src/features/room/entrypoint.ts"
 Other negatives to repeat the same way are a `timeline-card.tsx` outside a Feature path, an uppercase folder name (`mv room Room`), and a hand edit to the copied inventory. Each must exit 1 on any filesystem.
 
 The case-colliding negative puts a populated `Room/` next to `room/` (`mkdir Room && cp room/entrypoint.ts Room/`), and it needs a case-sensitive filesystem such as Linux CI or a case-sensitive APFS volume. There it must exit 1 with `duplicate Feature name`. An empty `Room/` holds no file, so discovery never sees it and `--check` exits 0. On the default case-insensitive macOS volume, `mkdir Room` fails with `File exists` and `--check` exits 0, because only one folder exists on disk. Record that run as untested on this host, not as a guard failure. The unit test `rejects invalid and colliding names` covers the collision on every platform.
+
+U21 lanes 1 to 10. `pnpm -s agora project lanes --unit U21 --task agora-u21-lane-evidence --artifacts "$OUT/u21-lanes" --json` must exit 0 with ten passing `project lane N` assertions in `lanes.json`; a nine-lane or failing run exits 1. Each lane also writes its commands, exit codes and outputs to `.scratch/u21-lanes/lane-N.json`. Pass and deny predicates are the manifest's, restated here.
+
+- Lane 1 passes when `--check` exits 0 on the live tree, the committed rows equal discovery over `git ls-files`, and the parent of commit 650b850 has no `scripts/feature-discovery.ts`.
+- Lane 2 passes when a Feature with both reserved files shows up after `generate` with no other edit. Lanes 3, 4 and 8 pass when generate exits 1 and writes nothing. Lane 9 passes when each message names the supported owner and the conventional path.
+- Lane 5 passes when `--check` exits 1 on an edited row. Lane 6 passes when the same edit exits 0 after the drift comparison is replaced with `if (false)` in a copy.
+- Lane 7 passes when a removed Feature leaves the inventory only after regenerate. Lane 10 passes when the second generate prints `unchanged`, leaves the mtime alone and keeps the digest.
+- Lane 8 drives real `Room` and `room` directories only on a case-sensitive volume. On the default macOS volume the second directory lands in the first, so the test feeds the generator's file-list entry the same two paths and records that substitution in its transcript.
 
 Cleanup removes only the directory this run created.
 

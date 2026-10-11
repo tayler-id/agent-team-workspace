@@ -1,0 +1,11 @@
+{
+  "lane": 9,
+  "steps": [
+    {
+      "command": "node scripts/feature-inventory.ts",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "apps/web/src/room/timeline-card.tsx: Feature file outside the conventional path; supported owner is apps/web, conventional path is apps/web/src/features/<name>/\napps/web/src/features/notes: missing reserved entrypoint.ts; supported owner is apps/web/src/features/<name>/\n"
+    }
+  ]
+}

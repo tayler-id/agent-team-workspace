@@ -42,7 +42,7 @@ export function mapped() {
 	requireThat(['scripts/project.mjs', 'scripts/project-host.mjs', 'scripts/project-checks.mjs', 'apps/center/src/verification.mjs', 'packages/verification/fixture', 'agora/project.json', '.agents/skills/verify-agora/SKILL.md'].every(file => entry.paths.includes(file)), 'feature_map_drift');
 	requireThat(manifest.scenarios.join(',') === 'policy,controls,guards' && manifest.lanes.map(row => row.id).join(',') === '1,2,3,4,5,6,7,8,9,10', 'scenario_drift');
 	const ten = '1,2,3,4,5,6,7,8,9,10', units = manifest.units ?? [];
-	requireThat(units.map(unit => unit.id).join(',') === 'U01b,U20,U21,U22,U23,U01c,U01d' && units.every(unit => (unit.id === 'U01b' ? !unit.lanes && !unit.lanes_unavailable : unit.lanes?.map(row => row.id).join(',') === ten && unit.lanes_unavailable) && Boolean(unit.perf.probe) !== Boolean(unit.perf.unavailable)), 'scenario_drift');
+	requireThat(units.map(unit => unit.id).join(',') === 'U01b,U20,U21,U22,U23,U01c,U01d' && units.every(unit => (unit.id === 'U01b' ? !unit.lanes && !unit.lanes_unavailable : unit.lanes?.map(row => row.id).join(',') === ten && Boolean(unit.lanes_unavailable) !== Boolean(unit.driver)) && Boolean(unit.perf.probe) !== Boolean(unit.perf.unavailable)), 'scenario_drift');
 	return manifest;
 }
 export function unitOf(manifest, id) {

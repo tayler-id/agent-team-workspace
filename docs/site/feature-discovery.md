@@ -44,6 +44,20 @@ Write or check | Default mode writes agora/feature-inventory.json. --check recom
 
 The inventory is output only. Editing it by hand turns `--check` red, and the fix is to rerun the generator. The check and the generator share one discovery module, so they cannot disagree about what counts as a Feature.
 
+## Lane evidence
+
+U21 lists ten live lanes in [the project manifest](repo:agora/project.json). `pnpm -s agora project lanes --unit U21 --task agora-u21-lane-evidence` runs them through [the lane test file](repo:packages/verification/test/feature-discovery-lanes.test.ts). Each lane builds a throwaway tree, copies the committed generator into it, runs `node scripts/feature-inventory.ts` over real files, and asserts on the exit code, the message and the inventory bytes. It exists so a reviewer can see each discovery rule fail and pass through the same command a developer runs, not through the module's function.
+
+```flow
+Fixture | Create a temp directory under agora-u21-lane-* holding the committed generator and a few Feature files.
+Drive | Run node scripts/feature-inventory.ts with or without --check, once per step of the lane.
+Assert | Compare exit code, stderr text, written bytes and the digest with the lane's predicate.
+Record | Leave commands and outputs in .scratch/u21-lanes/lane-N.json, then delete the temp tree.
+Gate | The runner passes only when ten assertions named project lane N all pass, with no pending test.
+```
+
+Two limits are recorded rather than hidden. Lane 8 needs `Room` and `room` as real sibling directories, which a case-insensitive macOS volume cannot hold, so there the test passes the same two paths to the generator's file-list entry and says so in its transcript. A case-sensitive volume runs the real-directory branch. Names are also checked per package, so `apps/web` and `apps/center` may each own a Feature called `room`. Lane 1 shows the trunk side by asking git whether the parent of the discovery commit had a generator.
+
 ## Implementation status
 
 **Built for U21.B01 only.** `apps/web/src/features/room` and `apps/web/src/features/notes` were empty placeholder folders and each now holds a stub `entrypoint.ts` so the inventory has real rows. No product code moved into them. This slice does not migrate real product Features, does not resolve declared dependencies or enforce Feature-to-Feature imports (U20.B02 owns both), and does not qualify U21 or U20. Live lanes, the performance probe and exact-head receipts remain open.

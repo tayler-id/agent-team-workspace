@@ -17,6 +17,7 @@ This is the complete current contributor command surface, plus a separate invent
 | `stop` | `--instance UUID --handle CLEANUP_HANDLE`; authenticated owned cleanup, idempotent only for that handle |
 | `lanes` | `--unit U01b --task agora-s1-isolate-development --artifacts DIRECTORY`; task lanes 1-4 plus guard mutation |
 | `lanes` | `--task agora-s1-validate-project-evidence` unlocks lanes 1-7; `--task agora-s1-qualify-trusted-checks` unlocks lanes 1-10, see [trusted checks](trusted-checks.md) |
+| `lanes` | `--unit U21 --task agora-u21-lane-evidence --artifacts DIRECTORY`; runs U21's ten Feature discovery lanes through the unit's own driver, exit 0 only when all ten pass |
 | `lanes` | `--unit U22`; runs ten lanes from named native tests, exit 3 while any lane is unavailable and 1 if one fails ([lane evidence](client-host-evidence.md)). `--unit U20`, `U21`, `U23`, `U01c` or `U01d`; lists the unit's ten lanes as unavailable with the reason, exit 3. An unknown unit is also unavailable |
 | `verify` | `--scenario perf --unit UNIT [--parent REV] --artifacts DIRECTORY`; five interleaved parent/head batches of the unit's probe, exit 0 inside its rules. `U01b`, `U20` and `U21` run; `U22`, `U23`, `U01c` and `U01d` exit 3 with the reason their probe is absent |
 

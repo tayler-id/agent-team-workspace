@@ -83,7 +83,7 @@
 			"fixtures": ["non-production PostgreSQL policy journal", "independent Python SQLite policy journal"],
 			"platforms": ["node24", "postgresql18", "python3"],
 			"owner": "U01b.B01",
-			"invalidation": "Implemented local fixture controls only: policy HTTP/effects, controls and guards tests, help with no launch or prerequisites, and task lanes 1-7. Whole-unit lanes 8-10 remain unavailable. Per-unit lanes for U20, U21, U23, U01c and U01d are unavailable with reasons, and U22 runs ten lanes from named native tests with lane 9 and every scenario.png unavailable, and per-unit perf runs only for U01b, U20 and U21; it qualifies no unit. Help and passing fixture checks establish no production identity, provider, worker or publication authority."
+			"invalidation": "Implemented local fixture controls only: policy HTTP/effects, controls and guards tests, help with no launch or prerequisites, and task lanes 1-7. Whole-unit lanes 8-10 remain unavailable. U21 runs its ten Feature discovery lanes through its own driver, and U22 runs ten lanes from named native tests with lane 9 and every scenario.png unavailable, per-unit lanes for U20, U23, U01c and U01d are unavailable with reasons, and per-unit perf runs only for U01b, U20 and U21; it qualifies no unit. Help and passing fixture checks establish no production identity, provider, worker or publication authority."
 		},
 		{
 			"id": "evidence-validator",
@@ -394,11 +394,11 @@
 		},
 		{
 			"id": "feature-discovery", "documentation": "docs/site/feature-discovery.md", "owner": "agora-feature-discovery-slice",
-			"paths": ["scripts/feature-discovery.ts", "scripts/feature-inventory.ts", "packages/verification/test/feature-discovery.test.ts", "agora/feature-inventory.json", "docs/site/feature-discovery.md"],
+			"paths": ["scripts/feature-discovery.ts", "scripts/feature-inventory.ts", "packages/verification/test/feature-discovery.test.ts", "packages/verification/test/feature-discovery-lanes.test.ts", "agora/feature-inventory.json", "docs/site/feature-discovery.md"],
 			"public": ["node scripts/feature-inventory.ts", "node scripts/feature-inventory.ts --check", "pnpm features:generate", "pnpm features:check"],
 			"contracts": [],
-			"scenarios": ["well-formed Feature found", "misplaced path rejected", "missing entrypoint rejected", "duplicate name rejected", "drift on hand-edited inventory rejected", "guard-disabled turns drift assertion red", "idempotent regenerate"],
-			"fixtures": ["disposable temp trees under agora-u21-* built by packages/verification/test/feature-discovery.test.ts"],
+			"scenarios": ["well-formed Feature found", "misplaced path rejected", "missing entrypoint rejected", "duplicate name rejected", "drift on hand-edited inventory rejected", "guard-disabled turns drift assertion red", "idempotent regenerate", "U21 lanes 1-10: project lane N assertions in feature-discovery-lanes.test.ts"],
+			"fixtures": ["disposable temp trees under agora-u21-* built by packages/verification/test/feature-discovery.test.ts and feature-discovery-lanes.test.ts"],
 			"platforms": ["node24"]
 		},
 		{

@@ -1,0 +1,6 @@
+{
+  "lane": 5,
+  "test": "project lane 5 a hand-edited inventory row is rejected as drift",
+  "status": "passed",
+  "duration_ms": 120
+}

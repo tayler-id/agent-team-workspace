@@ -1,0 +1,29 @@
+{
+  "lane": 7,
+  "steps": [
+    {
+      "command": "node scripts/feature-inventory.ts",
+      "exit": 0,
+      "stdout": "feature inventory written\n",
+      "stderr": ""
+    },
+    {
+      "command": "node scripts/feature-inventory.ts --check",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "agora/feature-inventory.json differs from the Feature directories on disk; run `pnpm features:generate`, never edit it by hand\n"
+    },
+    {
+      "command": "node scripts/feature-inventory.ts",
+      "exit": 0,
+      "stdout": "feature inventory written\n",
+      "stderr": ""
+    },
+    {
+      "command": "node scripts/feature-inventory.ts --check",
+      "exit": 0,
+      "stdout": "feature inventory matches\n",
+      "stderr": ""
+    }
+  ]
+}
