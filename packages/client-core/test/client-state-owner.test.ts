@@ -1,6 +1,6 @@
 import { ESLint } from 'eslint';
 import path from 'node:path';
-import { expect, test } from 'vitest';
+import { beforeAll, expect, test } from 'vitest';
 
 // Fixtures lint in-memory text against files that already exist, so nothing is written and parallel files cannot delete each other.
 const root = path.resolve(import.meta.dirname, '../../..');
@@ -13,6 +13,8 @@ const framework = 'apps/web/src/framework/index.ts';
 const entry = 'apps/web/src/main.tsx';
 const owner = async (code: string, file: string) =>
 	(await engine.lintText(code, { filePath: path.join(root, file) })).flatMap((r) => r.messages).filter((m) => m.ruleId === 'agora/client-owner');
+// The first typed lint builds the apps/web TypeScript project (~0.8s idle, 4 to 5.4s on a loaded CI runner). Pay it once here so the 5000ms test limit measures the rule, not project startup.
+beforeAll(async () => { await engine.lintText('export {};\n', { filePath: path.join(root, component) }); });
 const hit = async (code: string, file: string, needle: string): Promise<boolean> => (await owner(code, file)).some((m) => m.message.includes(needle));
 const pick = "import { useClientSelector } from '@agora/web-framework';\n";
 const durable = (hook: string, init: string, types = ''): string =>
