@@ -1,0 +1,38 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "lanes",
+  "versions": {
+    "code": "2823507c399d7607d98908d36acd04f440c0637c",
+    "config": "sha256:902f0f031ecc9dbcd4fe9d745f3963bafec9f4bbc9575ee1674cd15883ea4def",
+    "fixture": "sha256:1f7e7ea4627949e3d21508981e06604492e80458718a9dee3350ac02fbc75b09"
+  },
+  "outcome": "unavailable",
+  "diagnostics": [
+    {
+      "reason_code": "unavailable_capability",
+      "message": "U22 lane 9 unavailable: the Client hook is named, but the diagnostic for fetch, WebSocket, document, window names the Host owner path and not a specific Host method"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "evidence/U22/lane-evidence/live/vitest.json",
+      "digest": "sha256:4f11d6413d54607cb5b6f6ae8740f0054b8003ceddcece2a35f05d4c94ef17ad",
+      "byte_length": 14082,
+      "media_type": "application/json"
+    },
+    {
+      "path": "evidence/U22/lane-evidence/live/lanes.json",
+      "digest": "sha256:4edd4c0176594df928a90ab09989156ba0a38502fa98f757f021dc1b1c7ce792",
+      "byte_length": 3189,
+      "media_type": "application/json"
+    },
+    {
+      "path": "evidence/U22/lane-evidence/live/command.json",
+      "digest": "sha256:185b9f19a6f6ffe7e108915da4b0fadad3764f4819180bf6cb567a83648a87af",
+      "byte_length": 551,
+      "media_type": "application/json"
+    }
+  ],
+  "started_at": "2026-10-11T06:29:41.041Z",
+  "finished_at": "2026-10-11T06:29:50.151Z"
+}

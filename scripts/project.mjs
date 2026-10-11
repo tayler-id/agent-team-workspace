@@ -34,8 +34,9 @@ Help is plain text, needs no install or database, and starts nothing.
              human proof exist. Exits 0 only when all eight pass; pnpm verify:foundation -- --json is the alias.
   lanes      --unit UNIT --task TASK --artifacts DIRECTORY; task-specific qualification.
 
-UNIT: U01b and U21 run lanes. U20, U22, U23, U01c and U01d list their ten lanes as unavailable
-with a reason until a driver exists; an unknown unit is unavailable.
+UNIT: U01b, U21 and U22 run lanes (U22 from named native tests; a lane that cannot pass reports why, exit 3
+unless one fails). U20, U23, U01c and U01d list their ten lanes as unavailable with a reason until
+a driver exists; an unknown unit is unavailable.
 TASK (U21): agora-u21-lane-evidence runs all ten lanes.
 TASK (U01b): agora-s1-isolate-development (lanes 1-4), agora-s1-validate-project-evidence (1-7).
 Whole-unit lanes 8-10 unavailable; a task pass never qualifies the whole unit.
@@ -46,6 +47,7 @@ Operational reports: agora.cli-report/v1 JSON; exits 0 pass, 1 fail, 2 blocked,
 Recipe: .agents/skills/verify-agora/SKILL.md. Coverage: agora/feature-map.json.`);
 	process.exit(0);
 }
+const { drivers, runUnitLanes } = await import('./project-lanes.mjs');
 const { artifact, checkEvidence, command, environment, exits, json, mapped, requireThat, safe, unitOf, validateReport, versions, wire, writeState } = await import('./project-checks.mjs');
 const options = {}; let invalid = false;
 for (let i = 0; i < args.length; i += 2) {
@@ -82,6 +84,11 @@ try {
 		const { runPerf } = await import('./project-perf.mjs'), { file, failures } = runPerf(entry, options['--parent'] ?? 'HEAD^', safe(options['--artifacts'] ?? `.scratch/project-perf/${randomUUID()}`));
 		report.artifacts = [artifact(file)];
 		if (failures.length) { report.outcome = 'fail'; report.diagnostics = failures.map(message => ({ reason_code: 'blocked_prerequisite', message })); }
+	} else if (action === 'lanes' && drivers[options['--unit']]) {
+		const unit = unitOf(mapped(), options['--unit']), out = safe(options['--artifacts'] ?? `.scratch/project-lanes/${randomUUID()}`); mkdirSync(out, { recursive: true });
+		const { files, lanes } = runUnitLanes(unit, out); report.artifacts = files.map(artifact);
+		const open = lanes.filter(lane => lane.outcome !== 'pass');
+		if (open.length) { report.outcome = open.some(lane => lane.outcome === 'fail') ? 'fail' : 'unavailable'; report.diagnostics = open.map(lane => ({ reason_code: lane.outcome === 'fail' ? 'blocked_prerequisite' : 'unavailable_capability', message: `${unit.id} lane ${lane.id} ${lane.outcome}: ${lane.detail}`.slice(0, 4096) })); }
 	} else if (action === 'lanes' || (action === 'verify' && ['controls', 'guards'].includes(options['--scenario']))) {
 		const manifest = mapped(), unit = options['--unit'] && unitOf(manifest, options['--unit']);
 		requireThat(!unit?.lanes_unavailable, `${unit?.id} lanes 1-10 unavailable: ${unit?.lanes_unavailable}`, 'unavailable');
