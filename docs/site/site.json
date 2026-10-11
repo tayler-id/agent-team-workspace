@@ -119,6 +119,11 @@
           "kind": "feature"
         },
         {
+          "id": "foundation-ready",
+          "title": "Foundation-ready aggregate",
+          "kind": "feature"
+        },
+        {
           "id": "skill-ownership",
           "title": "One maintained skill source",
           "kind": "feature"
@@ -384,6 +389,10 @@
     {
       "path": "apps/center/src/verification.mjs",
       "page": "project-controls.md"
+    },
+    {
+      "path": "scripts/foundation-ready.mjs",
+      "page": "foundation-ready.md"
     },
     {
       "path": "scripts/foundation-policy.mjs",

@@ -28,6 +28,10 @@ Help is plain text, needs no install or database, and starts nothing.
   verify     --scenario perf --unit UNIT [--parent REV] --artifacts DIRECTORY; five interleaved
              parent/head batches of the unit's probe. U01b, U20 and U21 run; U22, U23, U01c and U01d
              report unavailable with the reason. REV defaults to HEAD^.
+  verify     --scenario foundation-ready [--artifacts DIRECTORY]; agora.foundation/v1 for FG01-FG08.
+             Fresh probes only: FG01-FG03 replay the retained U01a proof, FG04-FG05 run U01b lanes 1-7.
+             FG06-FG08 report unavailable until enrollment, separate-host recovery and browser and
+             human proof exist. Exits 0 only when all eight pass; pnpm verify:foundation -- --json is the alias.
   lanes      --unit UNIT --task TASK --artifacts DIRECTORY; task-specific qualification.
 
 UNIT: U01b and U21 run lanes. U20, U22, U23, U01c and U01d list their ten lanes as unavailable
@@ -48,6 +52,7 @@ for (let i = 0; i < args.length; i += 2) {
 	if (!['--instance', '--scenario', '--profile', '--artifacts', '--fixture', '--handle', '--unit', '--task', '--parent'].includes(args[i]) || !args[i + 1] || options[args[i]]) invalid = true;
 	options[args[i]] = args[i + 1];
 }
+if (action === 'verify' && !invalid && options['--scenario'] === 'foundation-ready' && Object.keys(options).every(key => ['--scenario', '--artifacts'].includes(key))) process.exit(await (await import('./foundation-ready.mjs')).main(options['--artifacts']));
 const report = { schema_version: 'agora.cli-report/v1', command: commands.includes(action) ? action : 'doctor', versions: versions(), outcome: 'pass', diagnostics: [], artifacts: [], started_at: new Date().toISOString(), finished_at: new Date().toISOString() };
 const fixture = options['--fixture'] ?? 'agora', id = options['--instance'];
 const save = (file, value) => writeFileSync(file, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });

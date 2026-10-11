@@ -142,6 +142,10 @@ See [the runnable recipe](cookbook.md) and [configuration](configuration.md). Do
 
 `pnpm verify:foundation -- --parent PARENT --head HEAD --evidence DIR --json` runs the bounded U01a.B04 driver and emits `agora.foundation/v1`. Foundation admission remains blocked. Use the explicit `--scope task` for task-local readiness, `record` for receipt capture, and `lane-9` or `lane-10` for guard and admission negatives. The [task proof reference](test-first.md#public-command-reference) lists all flags, pass predicates, exit semantics and trust limits.
 
+## Foundation-ready aggregate
+
+`node scripts/project.mjs project verify --scenario foundation-ready [--artifacts DIR] --json`, or `pnpm verify:foundation -- --json`, prints an `agora.foundation/v1` report for FG01 to FG08 and exits 0 only when all eight pass. FG06 to FG08 report unavailable until enrollment, separate-host recovery and browser and human proof exist, so a live run exits nonzero. See [the aggregate page](foundation-ready.md).
+
 ## Evidence and design tools
 
 `node scripts/record-red-green.mjs --parent SHA --head SHA --out DIR -- COMMAND ARGS...` creates disposable worktrees, carries head test files onto the parent, installs locked dependencies and records both results and digests. Nonzero red alone is not adequate: inspect that it is the intended assertion, not a missing tool. It removes its worktrees and preserves receipts. Its [tracked-source reader](repo:scripts/record-source-bytes.ts) hashes a symbolic link's stored Git link bytes rather than following it into a directory or outside the repository; canonical tracked files are independently hashed as before. [The regression driver](repo:packages/verification/test/record-source-bytes.test.ts) requires both that link behavior and unchanged regular-file bytes. The foundation replay uses that same reader for its guard and source-preservation copies. Signing fields and policy are unchanged.

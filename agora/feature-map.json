@@ -411,6 +411,18 @@
 			"scenarios": ["packages/client-core/test/replay.test.ts", "corpus determinism per seed", "1000 missed events, 100 arrivals and long code and Markdown bodies converge with zero duplicates inside 2000 ms", "budget breach fails", "isolated dedupe removal turns the predicate red while the pristine copy passes", "thread, edit, tombstone and run-card shapes reported unavailable"],
 			"fixtures": ["agora.replay-corpus/v1 seed 6221057 built in memory by packages/client-core/test/replay-corpus.ts; published local-room message shape only"],
 			"platforms": ["node24"]
+		},
+		{
+			"id": "foundation-ready",
+			"documentation": "docs/site/foundation-ready.md",
+			"paths": ["scripts/foundation-ready.mjs", "scripts/project.mjs", "scripts/foundation.mjs", "contracts/schemas/foundation.schema.json", "packages/verification/test/foundation-ready.test.ts", ".agents/skills/verify-agora/SKILL.md"],
+			"public": ["node scripts/project.mjs project verify --scenario foundation-ready --json", "pnpm verify:foundation -- --json"],
+			"contracts": ["contracts/schemas/foundation.schema.json"],
+			"scenarios": ["packages/verification/test/foundation-ready.test.ts"],
+			"fixtures": ["labeled foundation-ready fixture, never a live readiness result"],
+			"platforms": ["node24", "postgresql18", "swift6-macos"],
+			"owner": "U01b.R2",
+			"invalidation": "Internal verification aggregate only. FG06 reporting stays dormant and unenrolled, FG07 has no approved separate-host recovery and FG08 lacks qualified browser and two-human evidence, so every live run exits nonzero. It qualifies no unit, milestone or foundation and grants no enrollment, approval or product-write authority."
 		}
 	]
 }

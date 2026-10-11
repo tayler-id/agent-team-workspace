@@ -21,14 +21,15 @@
 			"properties": {
 				"schema_version": {"type": "string", "enum": ["agora.foundation/v1"]},
 				"authority": {"type": "string", "enum": ["foundation_fixture"]},
-				"task": {"type": "string", "enum": ["agora-s1-enforce-test-first"]},
-				"scope": {"type": "string", "enum": ["record", "task", "foundation", "feature", "lane-9", "lane-10", "invalid"]},
+				"task": {"type": "string", "enum": ["agora-s1-enforce-test-first", "agora-foundation-ready-aggregate"]},
+				"scope": {"type": "string", "enum": ["record", "task", "foundation", "foundation-ready", "feature", "lane-9", "lane-10", "invalid"]},
+				"mode": {"type": "string", "enum": ["live", "fixture"]},
 				"parent": {"$ref": "primitives.schema.json#/$defs/GitSha"},
 				"head": {"$ref": "primitives.schema.json#/$defs/GitSha"},
 				"outcome": {"$ref": "cli.schema.json#/$defs/CliOutcome"},
 				"task_outcome": {"type": "string", "enum": ["pass", "fail", "blocked"]},
 				"unit_outcome": {"type": "string", "enum": ["blocked"]},
-				"foundation_outcome": {"type": "string", "enum": ["blocked"]},
+				"foundation_outcome": {"type": "string", "enum": ["pass", "fail", "blocked", "unavailable"]},
 				"proofs": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/FoundationProof"}},
 				"denials": {"type": "array", "maxItems": 128, "items": {"type": "string", "maxLength": 128}},
 				"artifacts": {"type": "array", "maxItems": 128, "items": {"$ref": "cli.schema.json#/$defs/ArtifactReference"}}

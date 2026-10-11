@@ -1,0 +1,372 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-11T05:36:40.393Z
+parent: e74ba9a43b4b607ce8d7b4cdabd52638fb46c8a7
+head: 554712637667378adb02b950be148d733dcc6ebe
+subject_revision: e74ba9a43b4b607ce8d7b4cdabd52638fb46c8a7
+test_patch_applied_to_subject: true
+test_patch_files: packages/verification/test/foundation-ready.test.ts
+test_patch_digest: sha256:963e4eb88250880cfdfc5a53abd75081b2683c853d38293b3c5c8b1e7d1af198
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[{"file":"contracts/schemas/foundation.schema.json","digest":"sha256:672d07ac7efe683d65207ebd41e1ec500f353c3f21cc476815c48f720a8ac31b"}]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/verification/test/foundation-ready.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 1
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU
+
+ ❯ |unit| packages/verification/test/foundation-ready.test.ts (12 tests | 11 failed) 573ms
+   × a labeled fixture with all eight proofs passes with exit 0 and a schema-valid report 36ms
+   × one unavailable mandatory proof is never a pass and exits 3 36ms
+   × one blocked mandatory proof is never a pass and exits 2 32ms
+   × one fail mandatory proof is never a pass and exits 1 28ms
+   × FG06 through FG08 unavailable keep their reasons and roll up as unavailable 26ms
+   × absent, duplicate and unknown proofs deny 26ms
+   × a proof bound to another revision, a drifted subject or a mutated tree fails 27ms
+   × a pass without artifacts or with altered artifact bytes fails 25ms
+   × a subject naming another proof and an invalid outcome fail 26ms
+   × project help documents the foundation-ready scenario and its honest limits 41ms
+   × the pnpm alias keeps the legacy U01a driver reachable 24ms
+
+ Test Files  1 failed (1)
+      Tests  11 failed | 1 passed (12)
+   Start at  01:36:24
+   Duration  674ms (tests 95%, transform 3%, import 1%)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > a labeled fixture with all eight proofs passes with exit 0 and a schema-valid report
+AssertionError: node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/[eval1]
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:381:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs'
+}
+
+Node.js v24.21.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ aggregate packages/verification/test/foundation-ready.test.ts:23:39
+
+ ❯ packages/verification/test/foundation-ready.test.ts:29:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > one unavailable mandatory proof is never a pass and exits 3
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > one blocked mandatory proof is never a pass and exits 2
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > one fail mandatory proof is never a pass and exits 1
+AssertionError: node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/[eval1]
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:381:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs'
+}
+
+Node.js v24.21.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ aggregate packages/verification/test/foundation-ready.test.ts:23:39
+
+ ❯ packages/verification/test/foundation-ready.test.ts:38:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > FG06 through FG08 unavailable keep their reasons and roll up as unavailable
+AssertionError: node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/[eval1]
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:381:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs'
+}
+
+Node.js v24.21.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ aggregate packages/verification/test/foundation-ready.test.ts:23:39
+
+ ❯ packages/verification/test/foundation-ready.test.ts:45:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > absent, duplicate and unknown proofs deny
+AssertionError: node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/[eval1]
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:381:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs'
+}
+
+Node.js v24.21.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ aggregate packages/verification/test/foundation-ready.test.ts:23:39
+
+ ❯ proof packages/verification/test/foundation-ready.test.ts:26:76
+ ❯ packages/verification/test/foundation-ready.test.ts:52:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > a proof bound to another revision, a drifted subject or a mutated tree fails
+AssertionError: node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/[eval1]
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:381:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs'
+}
+
+Node.js v24.21.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ aggregate packages/verification/test/foundation-ready.test.ts:23:39
+
+ ❯ proof packages/verification/test/foundation-ready.test.ts:26:76
+ ❯ packages/verification/test/foundation-ready.test.ts:58:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > a pass without artifacts or with altered artifact bytes fails
+AssertionError: node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/[eval1]
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:381:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs'
+}
+
+Node.js v24.21.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ aggregate packages/verification/test/foundation-ready.test.ts:23:39
+
+ ❯ proof packages/verification/test/foundation-ready.test.ts:26:76
+ ❯ packages/verification/test/foundation-ready.test.ts:66:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > a subject naming another proof and an invalid outcome fail
+AssertionError: node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs' imported from /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/[eval1]
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:381:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs'
+}
+
+Node.js v24.21.0
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ aggregate packages/verification/test/foundation-ready.test.ts:23:39
+
+ ❯ proof packages/verification/test/foundation-ready.test.ts:26:76
+ ❯ packages/verification/test/foundation-ready.test.ts:74:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > project help documents the foundation-ready scenario and its honest limits
+AssertionError: expected 'Usage: pnpm -s agora project COMMAND …' to contain '--scenario foundation-ready'
+
+- Expected
++ Received
+
+- --scenario foundation-ready
++ Usage: pnpm -s agora project COMMAND [OPTIONS] --json
++
++ Implemented local fixture controls, not production authority.
++ Run operational commands from the repository root after installing locked prerequisites.
++ Help is plain text, needs no install or database, and starts nothing.
++
++   doctor     Read-only Node 24/PostgreSQL 18 prerequisites (--fixture python for Python).
++   scenarios  Inventory: policy, controls, guards.
++   start      --profile verify --instance UUID; returns URL and cleanup handle.
++   verify     --scenario policy --instance UUID --artifacts DIRECTORY; HTTP allow/deny effects.
++   verify     --scenario controls|guards --artifacts DIRECTORY; native tests and guard negatives.
++   evidence   --instance UUID; same-instance, fresh bytes and artifact digests required.
++   stop       --instance UUID --handle CLEANUP_HANDLE; owned, idempotent cleanup only.
++   verify     --scenario perf --unit UNIT [--parent REV] --artifacts DIRECTORY; five interleaved
++              parent/head batches of the unit's probe. U01b, U20 and U21 run; U22, U23, U01c and U01d
++              report unavailable with the reason. REV defaults to HEAD^.
++   lanes      --unit UNIT --task TASK --artifacts DIRECTORY; task-specific qualification.
++
++ UNIT: U01b runs lanes. U20, U21, U22, U23, U01c and U01d list their ten lanes as unavailable
++ with a reason until a driver exists; an unknown unit is unavailable.
++ TASK (U01b): agora-s1-isolate-development (lanes 1-4), agora-s1-validate-project-evidence (1-7).
++ Whole-unit lanes 8-10 unavailable; a task pass never qualifies the whole unit.
++ Options: --fixture agora|python, --instance, --profile, --scenario, --artifacts,
++          --handle, --unit, --task, --parent. Artifact directories must be under .scratch/ or evidence/.
++ Operational reports: agora.cli-report/v1 JSON; exits 0 pass, 1 fail, 2 blocked,
++ 3 unavailable, 64 usage error, 70 infrastructure failure.
++ Recipe: .agents/skills/verify-agora/SKILL.md. Coverage: agora/feature-map.json.
++
+
+ ❯ packages/verification/test/foundation-ready.test.ts:84:17
+     82|  const { stdout, status } = project(['--help']);
+     83|  expect(status).toBe(0);
+     84|  expect(stdout).toContain('--scenario foundation-ready');
+       |                 ^
+     85|  expect(stdout).toContain('FG06-FG08 report unavailable');
+     86|  expect(stdout).toContain('Exits 0 only when all eight pass');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+ FAIL  |unit| packages/verification/test/foundation-ready.test.ts > the pnpm alias keeps the legacy U01a driver reachable
+AssertionError: node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module '/private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-psymDU/scripts/foundation-ready.mjs'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v24.21.0
+: expected 1 to be 64 // Object.is equality
+
+- Expected
++ Received
+
+- 64
++ 1
+
+ ❯ packages/verification/test/foundation-ready.test.ts:97:55
+     95| test('the pnpm alias keeps the legacy U01a driver reachable', () => {
+     96|  const result = spawnSync(process.execPath, ['scripts/foundation-ready…
+     97|  expect(result.status, result.stdout + result.stderr).toBe(64);
+       |                                                       ^
+     98|  expect(JSON.parse(result.stdout)).toMatchObject({ schema_version: 'ag…
+     99| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+
