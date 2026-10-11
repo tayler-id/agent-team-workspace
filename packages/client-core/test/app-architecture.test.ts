@@ -262,6 +262,17 @@ test('browser globals require unresolved references; Host ports and ordinary nam
 	expect(await has('export const openSocket = (): WebSocket => new WebSocket("wss://x");', feature, 'agora/renderer-footgun', 'WebSocket')).toBe(true);
 }, 120_000);
 
+test('renderer bypass diagnostics name the existing Host method that replaces the browser global', async () => {
+	const message = async (code: string): Promise<string> => (await agora(code, feature)).find((m) => m.ruleId === 'agora/renderer-footgun')?.message ?? '';
+	expect(await message('export const m = (): boolean => window.matchMedia("(x)").matches;')).toContain('EnvironmentPort.matchesMediaQuery or EnvironmentPort.subscribeMediaQuery');
+	expect(await message('export const f = (): void => { document.getElementById("a")?.focus(); };')).toContain('EnvironmentPort.scheduleFocus');
+	expect(await message('export const t = (f: () => void): unknown => setTimeout(f, 5);')).toContain('EnvironmentPort.defer');
+	expect(await message('export const id = (): string => crypto.randomUUID();')).toContain('EnvironmentPort.createId or EnvironmentPort.digestText');
+	// No equal-purpose Host method exists for these, so the diagnostic names none rather than invent one.
+	expect(await message('export const read = (): string => window.name;')).not.toContain('EnvironmentPort');
+	expect(await message('export const load = (u: string): Promise<Response> => fetch(u);')).not.toContain('EnvironmentPort');
+}, 120_000);
+
 test('ambient declare shadows cannot hide browser globals', async () => {
 	const code = ['declare const window: Window;', 'declare const document: Document;', 'declare function fetch(u: string): Promise<Response>;', 'export const t = (): string => document.title;', 'export const n = (): string => window.name;', 'export const f = (u: string): Promise<Response> => fetch(u);'].join('\n');
 	expect(await has(code, feature, 'agora/renderer-footgun', 'window')).toBe(true);
