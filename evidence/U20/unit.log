@@ -1,0 +1,43 @@
+head: 1e518967af7a37181049a8f0906e70530b10e7a4
+node: v24.21.0  pnpm: 10.34.1  host: Darwin 25.5.0 arm64
+command: AGORA_LANE_OUT=.scratch/unitlog pnpm exec vitest run --project unit packages/verification/test/u20-lanes.test.ts packages/verification/test/project-units.test.ts packages/verification/test/project-help.test.ts -t 'U20 lane|own lane driver|lanes are unavailable|help' --reporter=verbose
+
+ RUN  v5.0.1 /Users/taylerramsay/.treehouse/agent-team-workspace-439a06/5/agent-team-workspace
+
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 1 regression against trunk keeps every .ts rejection and records .tsx coverage as observed 12680ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 2 a .tsx storage import is rejected with the rule id .ts files use 933ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 3 a .tsx browser global is rejected outside the framework folder and accepted inside it 54ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 4 an unmediated effect is rejected outside the framework folder and a framework-owned hook is accepted 57ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 5 the lane-2 assertion turns red when the .tsx glob is removed in an isolated config copy 85ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 6 an eslint-disable comment naming a new rule is itself rejected and suppresses nothing 18ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 7 each rejection names its supported owner and the sanctioned alternative path 80ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 8 the widened lint reproduces the known drift of the preserved renderer fixture 792ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 9 an undeclared Feature import and a framework import of a Feature are rejected with their owners 16ms
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > U20 lane 10 the existing .ts boundary suite and the .tsx suite pass together 51465ms
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U21 lanes are unavailable with a reason, never a pass 182ms
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U22 lanes are unavailable with a reason, never a pass 161ms
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U23 lanes are unavailable with a reason, never a pass 157ms
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U01c lanes are unavailable with a reason, never a pass 159ms
+ ✓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > U01d lanes are unavailable with a reason, never a pass 157ms
+ ↓ |unit| packages/verification/test/project-units.test.ts > per-unit lanes through the public CLI > an unknown unit is unavailable by name
+ ✓ |unit| packages/verification/test/project-units.test.ts > a unit that names its own lane driver > passes only when all ten lanes passed and each left its assertions, and records the compared parent 3243ms
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U22 reports the missing probe and no artifacts
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U23 reports the missing probe and no artifacts
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U01c reports the missing probe and no artifacts
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > U01d reports the missing probe and no artifacts
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario without an executable probe > perf needs a unit, and an unknown unit is unavailable
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > five interleaved parent and head batches pass on equal metrics and fail only past 10% or a budget
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > a limit set as a multiple of another metric fails only past that multiple
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > output that is not a metric report or a failing head probe is never a pass
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > behavior absent at the parent is reported and only absolute budgets apply
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > the real U21 generation probe records ten genuine timings
+ ↓ |unit| packages/verification/test/project-units.test.ts > perf scenario in a sandbox clone > the real U01b probe times startup, scenario, evidence and 10-MiB validation
+ ✓ |unit| packages/verification/test/project-help.test.ts > project help lists implemented fixture routes without launching 168ms
+ ✓ |unit| packages/verification/test/project-help.test.ts > project help needs no dependency install, Git history or database 33ms
+ ✓ |unit| packages/verification/test/project-help.test.ts > project help does not hide unknown routes or malformed options 605ms
+
+ Test Files  3 passed (3)
+      Tests  19 passed | 12 skipped (31)
+   Start at  01:52:23
+   Duration  74.54s (tests 100%)
+

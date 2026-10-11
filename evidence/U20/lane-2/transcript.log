@@ -1,0 +1,2 @@
+# U20 lane 2 (agora.lane/v1), recorded 2026-10-11T05:50:00.662Z
+{"subject":"tsx and ts storage type import","rule_ids":["agora/import-boundary"],"messages":["renderer code cannot import @agora/storage; use apps/web/src/client / apps/web/src/host adapters instead of storage, domain implementation, or server packages"]}

@@ -1,0 +1,15 @@
+{
+  "unit": "U20",
+  "lane": 9,
+  "subjects": [
+    {
+      "subject": "undeclared and framework imports",
+      "undeclared": [
+        "Feature u20lane4bbmv3eka8g-a imports Feature u20lane4bbmv3eka8g-b without declaring it; add \"u20lane4bbmv3eka8g-b\" to apps/web/src/features/u20lane4bbmv3eka8g-a/dependencies.json and import only through apps/web/src/features/u20lane4bbmv3eka8g-b/index.ts"
+      ],
+      "framework": [
+        "framework must not import product Features; Features live under apps/web/src/features/<name> and import framework through its public entrypoint, never the reverse"
+      ]
+    }
+  ]
+}

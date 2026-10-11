@@ -1,0 +1,59 @@
+{
+  "schema_version": "agora.lane-outcome/v1",
+  "unit": "U20",
+  "head": "1e518967af7a37181049a8f0906e70530b10e7a4",
+  "parent": "e74ba9a",
+  "qualification": "not_claimed",
+  "lanes": [
+    {
+      "id": 1,
+      "status": "passed",
+      "assertions": "lane-1/assertions.json"
+    },
+    {
+      "id": 2,
+      "status": "passed",
+      "assertions": "lane-2/assertions.json"
+    },
+    {
+      "id": 3,
+      "status": "passed",
+      "assertions": "lane-3/assertions.json"
+    },
+    {
+      "id": 4,
+      "status": "passed",
+      "assertions": "lane-4/assertions.json"
+    },
+    {
+      "id": 5,
+      "status": "passed",
+      "assertions": "lane-5/assertions.json"
+    },
+    {
+      "id": 6,
+      "status": "passed",
+      "assertions": "lane-6/assertions.json"
+    },
+    {
+      "id": 7,
+      "status": "passed",
+      "assertions": "lane-7/assertions.json"
+    },
+    {
+      "id": 8,
+      "status": "passed",
+      "assertions": "lane-8/assertions.json"
+    },
+    {
+      "id": 9,
+      "status": "passed",
+      "assertions": "lane-9/assertions.json"
+    },
+    {
+      "id": 10,
+      "status": "passed",
+      "assertions": "lane-10/assertions.json"
+    }
+  ]
+}

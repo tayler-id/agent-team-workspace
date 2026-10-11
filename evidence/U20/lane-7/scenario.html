@@ -1,0 +1,22 @@
+<!doctype html><meta charset="utf-8"><title>U20 lane 7 retained driver output</title><style>body{background:#f8faf7;color:#152f27;font:16px/1.5 system-ui;margin:32px}pre{font:13px/1.4 ui-monospace,monospace;white-space:pre-wrap;background:#eaf1e8;padding:20px;border:1px solid #cdd8ca;border-radius:8px}</style><h1>U20 lane 7</h1><p>Rendering of this lane's retained assertions. Not a product UI and not an independent check.</p><pre>[
+  {
+    "subject": "import-boundary",
+    "message": "renderer code cannot import @agora/storage; use apps/web/src/client / apps/web/src/host adapters instead of storage, domain implementation, or server packages"
+  },
+  {
+    "subject": "renderer-footgun browser global",
+    "message": "direct window is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/framework); Features and Client use Host ports"
+  },
+  {
+    "subject": "renderer-footgun effect",
+    "message": "useEffect is allowed only in framework owner apps/web/src/framework; expose a named framework hook instead of importing raw effects in feature code"
+  },
+  {
+    "subject": "undeclared Feature",
+    "message": "Feature u20lane4bbmv3eka8g-a imports Feature u20lane4bbmv3eka8g-b without declaring it; add \"u20lane4bbmv3eka8g-b\" to apps/web/src/features/u20lane4bbmv3eka8g-a/dependencies.json and import only through apps/web/src/features/u20lane4bbmv3eka8g-b/index.ts"
+  },
+  {
+    "subject": "framework imports Feature",
+    "message": "framework must not import product Features; Features live under apps/web/src/features/&lt;name> and import framework through its public entrypoint, never the reverse"
+  }
+]</pre>

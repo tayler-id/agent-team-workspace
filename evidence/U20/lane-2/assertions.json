@@ -1,0 +1,15 @@
+{
+  "unit": "U20",
+  "lane": 2,
+  "subjects": [
+    {
+      "subject": "tsx and ts storage type import",
+      "rule_ids": [
+        "agora/import-boundary"
+      ],
+      "messages": [
+        "renderer code cannot import @agora/storage; use apps/web/src/client / apps/web/src/host adapters instead of storage, domain implementation, or server packages"
+      ]
+    }
+  ]
+}

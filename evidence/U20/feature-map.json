@@ -1,0 +1,416 @@
+{
+	"schema_version": "agora.feature-map/v1",
+	"unit": "U01a",
+	"task": "agora-s1-enforce-test-first",
+	"features": [
+		{
+			"id": "postgres-wrapper-lifecycle", "documentation": "docs/site/foundation.md",
+			"paths": ["scripts/with-test-postgres.mjs", "scripts/postgres-socket.ts", "packages/storage/test/postgres-wrapper.test.ts"],
+			"public": ["node scripts/with-test-postgres.mjs COMMAND ARGS...", "pnpm test:pg"],
+			"scenarios": ["packages/storage/test/postgres-wrapper.test.ts", "deep-success", "SIGINT", "SIGTERM", "forced-cancel", "startup-failure", "startup-timeout", "foreign-preservation", "abort-stop-throw", "initdb-stderr", "psql-stderr", "missing-pg-isready"],
+			"fixtures": ["P0c A/B/C private PostgreSQL 18 lifecycle, qualified by evidence/ci/P0c/C"], "platforms": ["node24", "posix"], "owner": "CI P0c C"
+		},
+		{
+			"id": "postgres-socket-ownership", "documentation": "docs/site/foundation.md",
+			"paths": ["scripts/postgres-socket.ts", "packages/storage/test/postgres-socket.test.ts"],
+			"public": ["pnpm exec vitest run --project unit packages/storage/test/postgres-socket.test.ts"],
+			"scenarios": ["allocation baseline", "short socket denial", "collision", "foreign ownership", "unsafe permissions", "cleanup", "guard-disabled denial"],
+			"fixtures": ["P0c A allocation ownership semantics; B and C leave them unchanged"], "platforms": ["node24", "posix"], "owner": "CI P0c A"
+		},
+		{
+			"id": "design-negative-source-closure", "documentation": "docs/site/ci.md", "owner": "CI P0a",
+			"paths": ["scripts/test-design-checks.mjs"],
+			"public": ["node scripts/test-design-checks.mjs"],
+			"scenarios": ["baseline accepts", "omitted-application-source rejects apps/center/src/app.ts with the exact missing-link reason", "23 prior named mutation cases"],
+			"fixtures": ["disposable design-check sandbox copying docs, scripts, evidence, packages, contracts, apps, agora and root files AGENTS.md/CLAUDE.md/skills-lock.json/eslint.config.js"],
+			"platforms": ["node24"],
+			"invalidation": "A future decision row citing a path outside this copied set fails the same way; widen the sandbox's copied-trees/root-files lists to match."
+		},
+		{
+			"id": "ci-toolchain-native", "documentation": "docs/site/ci.md", "owner": "CI P0b",
+			"paths": ["scripts/ci-doctor.mjs", "scripts/native-probe.ts", "scripts/test/ci-doctor.test.ts", ".node-version", "package.json", ".npmrc", "pnpm-workspace.yaml", "pnpm-lock.yaml", "vitest.config.ts"],
+			"public": ["node scripts/ci-doctor.mjs --json"],
+			"scenarios": ["node --test scripts/test/ci-doctor.test.ts"],
+			"fixtures": ["disposable doctor copies; actual locked native import; wrong runtime; unavailable binding; omitted probes"],
+			"platforms": ["node24.21.0", "pnpm10.34.1", "darwin-arm64"],
+			"invalidation": "Any mapped input or runtime/native installation change requires a fresh doctor and test pass."
+		},
+		{
+			"id": "local-checks-gate", "documentation": "docs/site/local-checks.md", "owner": "local checks",
+			"paths": ["scripts/local-checks.mjs", ".githooks/reference-transaction", "agora/local-checks.json", "scripts/test/local-checks.test.ts"],
+			"public": ["node scripts/local-checks.mjs run", "node scripts/local-checks.mjs verify <rev>", "node scripts/local-checks.mjs install", "node scripts/local-checks.mjs status"],
+			"scenarios": ["node --test scripts/test/local-checks.test.ts", "no receipt", "green receipt lands", "red receipt", "amended or rebased candidate", "dirty tree", "dropped check", "deleted guard files", "forged receipt", "direct commit on main", "update-ref"],
+			"fixtures": ["throwaway git repositories with the real tool and hook and a two-check policy"],
+			"platforms": ["node24", "git2.28+"],
+			"invalidation": "Any mapped path change requires the test file to pass again, and a changed tool or hook must be reinstalled with node scripts/local-checks.mjs install."
+		},
+		{
+			"id": "local-room-agent-core",
+			"documentation": "docs/site/local-room.md",
+			"paths": ["packages/domain/src/local-answer", "packages/domain/package.json", "packages/domain/test/local-answer.test.ts", "packages/domain/test/local-answer-guards.test.ts"],
+			"public": ["@agora/domain/local-answer", "pnpm exec vitest run --project unit packages/domain/test/local-answer.test.ts packages/domain/test/local-answer-guards.test.ts --reporter=json"],
+			"contracts": ["contracts/schemas/local-room.schema.json"],
+			"fixtures": ["explicit validated persisted-message values; deterministic local fixture, not AI inference"],
+			"scenarios": ["packages/domain/test/local-answer.test.ts", "packages/domain/test/local-answer-guards.test.ts"],
+			"platforms": ["node24"],
+			"owner": "local-room L5 pure core only"
+		},
+		{
+			"id": "local-room-agent-response", "documentation": "docs/site/local-room.md", "owner": "local-room L5 first posted slice",
+			"paths": ["contracts/schemas/local-room.schema.json", "contracts/openapi.json", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift", "apps/center/src/app.ts", "packages/storage/src/local-room.ts", "packages/domain/src/index.ts", "packages/domain/src/local-room/port.ts", "apps/web/src/host/live.ts", "apps/web/src/components/App.tsx", "apps/web/src/components/Timeline.tsx", "apps/web/src/main-live.tsx", "scripts/local-room.ts", "apps/center/test/local-answer.pg.test.ts", "apps/web/test/live.test.ts", "evidence/local-room/agent-response-followup"],
+			"public": ["POST /api/v1/local-room/answer", "node scripts/local-room.ts answer --selected-id UUID", "Quote locally in the live room"],
+			"contracts": ["contracts/schemas/local-room.schema.json"],
+			"scenarios": ["apps/center/test/local-answer.pg.test.ts", "apps/web/test/live.test.ts", "browser answer action retries retain localStorage command identity after lost response", "later explicit quote gets a new identity", "persisted citation resolves to exact source ID/sequence/body", "two-tab live room quote and reload (prior slice only)"],
+			"fixtures": ["one fixed local room; selected persisted message IDs only; no model provider"], "platforms": ["node24", "postgresql18"]
+		},
+		{
+			"id": "skill-source-ownership", "documentation": "docs/site/skill-ownership.md", "owner": "Agora operator verification",
+			"paths": [".agents/skills/verify-agora/SKILL.md", ".claude/skills", "skills-lock.json", "packages/verification/test/skills-layout.test.ts"],
+			"public": [".agents/skills/verify-agora/SKILL.md", "pnpm exec vitest run --project unit packages/verification/test/skills-layout.test.ts"],
+			"scenarios": ["packages/verification/test/skills-layout.test.ts"],
+			"fixtures": ["canonical upstream skill bytes; relative Claude compatibility pointers; retired duplicate roots absent"],
+			"platforms": ["node24", "claude-code", "pi"],
+			"invalidation": "This checks physical ownership, not fresh-runtime discovery or product qualification. Runtime loader changes require an observed discovery pass. Upstream Cursor-path examples are not Agora's operative recipe."
+		},
+		{
+			"id": "project-controls",
+			"documentation": "docs/site/project-controls.md",
+			"last_verified_subject": {"receipt": ".scratch/project/{fixture}/{instance}/evidence.json", "fields": ["versions.code", "versions.config", "versions.fixture"], "requires_live_pass": true},
+			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "scripts/project-perf.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "packages/verification/test/u20-lanes.test.ts", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
+			"public": ["pnpm -s agora project --help", "pnpm agora project doctor|scenarios|start|verify|evidence|stop|lanes", "python3 packages/verification/fixture/project.py"],
+			"contracts": ["contracts/schemas/cli.schema.json"],
+			"scenarios": ["policy", "controls", "guards", "packages/verification/test/project.test.ts", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "packages/verification/test/u20-lanes.test.ts"],
+			"fixtures": ["non-production PostgreSQL policy journal", "independent Python SQLite policy journal"],
+			"platforms": ["node24", "postgresql18", "python3"],
+			"owner": "U01b.B01",
+			"invalidation": "Implemented local fixture controls only: policy HTTP/effects, controls and guards tests, help with no launch or prerequisites, and task lanes 1-7. Whole-unit lanes 8-10 remain unavailable. U20 runs its ten boundary-lint lanes through its own driver and a pass claims no qualification. Per-unit lanes for U21, U22, U23, U01c and U01d are unavailable with reasons, and per-unit perf runs only for U01b, U20 and U21; it qualifies no unit. Help and passing fixture checks establish no production identity, provider, worker or publication authority."
+		},
+		{
+			"id": "evidence-validator",
+			"documentation": "docs/site/evidence-validator.md",
+			"paths": ["scripts/validate-evidence.mjs", "scripts/project-evidence.mjs", "scripts/project-primitives.mjs", "scripts/record-red-green.mjs", "scripts/record-source-bytes.ts", "scripts/project.mjs", "scripts/project-checks.mjs", "agora/project.json"],
+			"public": ["node scripts/validate-evidence.mjs --dir DIR [--head SHA] [--base SHA] [--target NAME] [--key FILE]", "pnpm agora project lanes --unit U01b --task agora-s1-validate-project-evidence"],
+			"scenarios": ["packages/verification/test/project.test.ts", "packages/verification/test/evidence-validator.test.ts", "packages/verification/test/validator-startup.test.ts", "packages/verification/test/record-source-bytes.test.ts"],
+			"fixtures": ["synthetic red.log/green.log/manifest.json bundles at fixed head/base", "tampered/missing/mutated artifact, producer key and target negatives", "guard-weakening copy of the signature check", "real CLI start with a module-resolution recorder"],
+			"platforms": ["node24"],
+			"owner": "U01b.B02",
+			"invalidation": "Replay must hash tracked symlink contents as Git link bytes and regular files unchanged, never read arbitrary link targets. Canonical tracked skill files are hashed separately. This does not alter signing policy or qualify trusted reporting."
+		},
+		{
+			"id": "trusted-checks",
+			"documentation": "docs/site/trusted-checks.md",
+			"paths": ["scripts/trusted-checks.mjs", "scripts/trusted-report.mjs", "agora/trusted-checks.json", "packages/verification/test/trusted-checks.test.ts", "packages/verification/test/trusted-report.test.ts", ".github/workflows/agora-ci.yml", ".github/workflows/agora-report.yml", ".github/CODEOWNERS", "scripts/ci-setup.sh", "scripts/ci-red-green.sh", "scripts/project.mjs", "scripts/project-checks.mjs", "agora/project.json"],
+			"public": ["node scripts/trusted-checks.mjs policy|evaluate --kind run|checks|protection|workflows --input FILE [--policy FILE] [--project agora|python-fixture] --json", "node scripts/trusted-report.mjs --run-id ID [--policy FILE] [--project ID] [--api URL] --json", "pnpm agora project lanes --unit U01b --task agora-s1-qualify-trusted-checks"],
+			"scenarios": ["packages/verification/test/trusted-checks.test.ts", "packages/verification/test/trusted-report.test.ts", "lane-8", "lane-9", "lane-10"],
+			"fixtures": ["namespaced App 900001 and repository 900002 with freshly generated Ed25519 reporter and candidate keys", "GitHub run, jobs, check-run and branch-protection read-back JSON", "the committed workflow files and edited copies of them, including fourteen reporter bypass forms from the independent review", "pull request changed-path lists with sensitive and ordinary paths", "guard-weakening copies of the App-ID and job-conclusion checks and of the reporter decision-process environment", "loopback fake GitHub API with a generated App RSA key, installation 4242 and a NODE_OPTIONS credential canary"],
+			"platforms": ["node24"],
+			"invalidation": "A change to the policy, the decision tool, the driver or reporter workflow, or the required job list invalidates lanes 8-10 until they pass again.",
+			"owner": "U01b.B03"
+		},
+		{
+			"id": "foundation-admission",
+			"documentation": "docs/site/test-first.md",
+			"paths": ["scripts/foundation-policy.mjs", "scripts/foundation-replay.mjs", "scripts/foundation.mjs", "scripts/record-red-green.mjs", "packages/verification/test", "contracts/schemas/foundation.schema.json"],
+			"public": ["pnpm verify:foundation", "node scripts/foundation.mjs"],
+			"scenarios": ["packages/verification/test/admission.test.ts", "packages/verification/test/protocol.test.ts", "lane-9", "lane-10"],
+			"fixtures": ["foundation-only task proof, no product authority"],
+			"platforms": ["node24", "postgresql18", "swift6-macos"],
+			"owner": "U01a.B04",
+			"invalidation": "Native foundation copies share scripts/record-source-bytes.ts with red/green recording: physical compatibility symlinks must not cause a directory read or bypass source preservation. Existing protocol and admission denials remain required; a task pass is not full foundation qualification."
+		},
+		{
+			"id": "documentation-config-rejection",
+			"documentation": "docs/site/authoring.md",
+			"paths": ["pnpm-workspace.yaml", "pnpm-lock.yaml"],
+			"public": ["pnpm docs:check", "markdownlint-cli2 --config"],
+			"scenarios": ["packages/client-core/test/fixture.test.ts"],
+			"fixtures": ["bounded malformed TOML configuration"],
+			"platforms": ["node24"],
+			"owner": "U01a.B03 verification repair"
+		},
+		{
+			"id": "mechanical-boundaries",
+			"documentation": "docs/site/synchronization.md",
+			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/public-types.ts", "packages/client-core/tsconfig.json", "packages/domain/src/index.ts", "packages/domain/src/policy/fixture-scope.ts", "contracts/package.json", "apps/center/package.json", "package.json"],
+			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
+			"scenarios": ["packages/client-core/test/boundaries.test.ts", "packages/client-core/test/export-maps.test.ts", "packages/client-core/test/fixture.test.ts"],
+			"fixtures": ["ESLint typed stdin fixtures", "virtual TypeScript private-import and no-DOM fixtures", "isolated disabled-rule configurations"],
+			"platforms": ["node24"],
+			"owner": "U01a.B03"
+		},
+		{
+			"id": "client-state-owner-boundary", "documentation": "docs/site/client-state-boundary.md", "owner": "U22.B01 client-state slice",
+			"paths": ["scripts/client-owner-policy.ts", "scripts/renderer-policy.ts", "eslint.config.js", "packages/client-core/test/client-state-owner.test.ts", "packages/web-framework/src/client.ts", "apps/web/src/components/App.tsx"],
+			"public": ["pnpm lint", "pnpm boundaries", "agora/client-owner"],
+			"scenarios": ["packages/client-core/test/client-state-owner.test.ts", "durable state in useState/useRef/useReducer rejected", "alias of a durable type rejected", "ephemeral UI state accepted", "client-core runtime and createRoomClient imports rejected", "direct transport command and destructuring rejected", "guard-disabled negative"],
+			"fixtures": ["in-memory ESLint text linted against existing owner files, nothing written to disk"],
+			"platforms": ["node24"],
+			"invalidation": "Data flow through primitives (useState(room.id)) is not tracked; only the held type is. A new durable Client type must be added to the client-core or projection allow-list in scripts/client-owner-policy.ts."
+		},
+		{
+			"id": "application-architecture-boundaries",
+			"documentation": "docs/site/app-architecture.md",
+			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/renderer-policy.ts", "scripts/architecture-exceptions.ts", "agora/architecture-exceptions.json", "apps/web", "apps/web/tsconfig.json", "packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/feature-dependencies.test.ts", "package.json", "tsconfig.json"],
+			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
+			"scenarios": ["packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/feature-dependencies.test.ts", "packages/client-core/test/boundaries.test.ts", "packages/verification/test/u20-lanes.test.ts"],
+			"fixtures": ["per-Feature dependencies.json declared/undeclared/malformed/framework-denial probes in uniquely named throwaway Features; runtime owner paths; extension matrix ts/tsx/mts/cts/js/jsx/mjs/cjs; contracts js/cjs; apps/web non-src relocation; un-owned src two-hop relay; exact-row exceptions; string-literal effect import; declare/computed/mixed-union DOM; load-time fail-closed; guard-weakening; JSDoc import() comment edges; innerHTML/outerHTML/textContent/style property and setAttribute-family method mutation; untyped mjs/cjs ambiguous-mutator name trust; type-cast receiver evasion; react/jsx-runtime namespace allowance"],
+			"platforms": ["node24"],
+			"owner": "U20.B01"
+		},
+		{
+			"id": "client-synchronization",
+			"documentation": "docs/site/synchronization.md",
+			"paths": ["docs/features/client-synchronization.md", "packages/client-core/src/index.ts", "packages/client-core/src/model.ts", "packages/client-core/package.json", "contracts/package.json", "scripts/client-fixture.ts", "scripts/drive-client-core.ts", "contracts/fixtures/replay.json", "contracts/swift/Sources/AgoraContractsConform/Replay.swift"],
+			"public": ["@agora/client-core initialState", "@agora/client-core synchronize", "pnpm client:replay"],
+			"scenarios": ["packages/client-core/test/harness.test.ts", "packages/client-core/test/sync.test.ts", "packages/client-core/test/fixture.test.ts", "packages/client-core/test/guards.test.ts", "contracts/test/replay.test.ts", "scripts/drive-client-core.ts"],
+			"fixtures": ["agora.foundation-fixture.sync-event/v1", "agora.foundation-fixture.sync-snapshot/v1"],
+			"platforms": ["node24"],
+			"owner": "U01a.B03"
+		},
+		{
+			"id": "fixture-sync-contracts",
+			"documentation": "docs/site/contracts.md",
+			"paths": ["contracts/schemas/sync.schema.json", "contracts/schemas/fixture-sync.schema.json", "contracts/src/index.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift"],
+			"public": ["pnpm contracts:check", "pnpm contracts:conform"],
+			"contracts": ["contracts/schemas/sync.schema.json", "contracts/schemas/fixture-sync.schema.json"],
+			"fixtures": ["agora.foundation-fixture.sync-snapshot/v1", "agora.foundation-fixture.sync-event/v1"],
+			"scenarios": ["contracts/test/sync.test.ts", "contracts/test/conformance.test.ts", "contracts/test/generation.test.ts"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "U01a.B03"
+		},
+		{
+			"id": "center-health",
+			"paths": ["apps/center/src/app.ts", "apps/center/src/main.ts", "packages/storage/src/database.ts"],
+			"public": ["GET /api/v1/health", "GET /api/v1/health/ready"],
+			"scenarios": ["apps/center/test/health.test.ts", "apps/center/test/readiness.pg.test.ts", "scripts/probe-center.mjs"],
+			"platforms": ["node24"],
+			"owner": "U01a.B01",
+			"documentation": "docs/site/foundation.md",
+			"contracts": ["contracts/schemas/health.schema.json"]
+		},
+		{
+			"id": "fixture-policy-decision",
+			"paths": ["apps/center/src/app.ts", "packages/domain/src/policy/fixture-scope.ts", "contracts/schemas/fixture-policy.schema.json", "contracts/src/index.ts"],
+			"public": ["POST /api/v1/fixture/policy/decisions"],
+			"contracts": ["contracts/schemas/fixture-policy.schema.json", "contracts/schemas/errors.schema.json"],
+			"scenarios": ["packages/domain/test/fixture-scope.test.ts", "apps/center/test/policy.test.ts", "scripts/probe-center.mjs"],
+			"platforms": ["node24"],
+			"owner": "U01a.B01",
+			"documentation": "docs/site/foundation.md"
+		},
+		{
+			"id": "storage-foundation-fixture",
+			"paths": ["packages/storage/src/fixture.ts", "packages/storage/src/migrate.ts", "packages/storage/drizzle/0000_foundation_fixture.sql", "packages/storage/drizzle/meta/_journal.json"],
+			"public": ["pnpm migrate", "pnpm test:pg"],
+			"fixtures": ["foundation_fixture schema", "agora_app non-owner role"],
+			"scenarios": ["packages/storage/test/migrate.pg.test.ts", "packages/storage/test/fixture.pg.test.ts"],
+			"platforms": ["node24", "postgresql18"],
+			"owner": "U01a.B01",
+			"documentation": "docs/site/foundation.md"
+		},
+		{
+			"id": "wire-contracts",
+			"paths": ["contracts/openapi.json", "contracts/schemas/primitives.schema.json", "contracts/schemas/health.schema.json", "contracts/schemas/fixture-policy.schema.json", "contracts/schemas/errors.schema.json", "contracts/schemas/cli.schema.json", "contracts/tools/generate.mjs", "contracts/generated/openapi.bundled.json", "contracts/generated/typescript/openapi.d.ts", "contracts/generated/manifest.json", "contracts/swift/Package.swift", "contracts/swift/openapi-generator-config.yaml", "contracts/swift/Sources/AgoraContracts/Generated"],
+			"public": ["pnpm contracts:generate", "pnpm contracts:check"],
+			"contracts": ["contracts/generated/openapi.bundled.json"],
+			"scenarios": ["contracts/test/generation.test.ts"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "U01a.B02",
+			"documentation": "docs/site/contracts.md"
+		},
+		{
+			"id": "contract-conformance",
+			"paths": ["contracts/src/index.ts", "contracts/src/conformance.ts", "contracts/src/conform-cli.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform"],
+			"public": ["pnpm contracts:conform"],
+			"contracts": ["contracts/fixtures/vectors.json"],
+			"fixtures": ["fixture-only Ed25519 signing key derived from a public seed"],
+			"scenarios": ["contracts/test/conformance.test.ts", "contracts/src/conform-cli.ts"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "U01a.B02",
+			"documentation": "docs/site/contracts.md"
+		},
+		{
+			"id": "canonical-json",
+			"paths": ["contracts/src/canonical.ts"],
+			"public": ["canonicalJson", "digestCanonical"],
+			"scenarios": ["contracts/test/canonical.test.ts", "contracts/test/conformance.test.ts"],
+			"platforms": ["node24"],
+			"owner": "U01a.B02",
+			"documentation": "docs/site/contracts.md"
+		},
+		{
+			"id": "living-documentation",
+			"paths": ["docs/site", "package.json", "scripts/test-design-checks.mjs"],
+			"public": ["pnpm docs:dev", "pnpm docs:build", "pnpm docs:validate", "pnpm docs:atlas"],
+			"scenarios": ["docs/site/test/guards.test.ts", "docs/site/test/guard-weakening.test.ts", "docs/site/test/output.test.ts", "docs/site/test/corpus.test.ts", "browser: docs at 390x844 and 1440x900", "node scripts/test-design-checks.mjs"],
+			"platforms": ["node24", "static-html"],
+			"owner": "agora-visual-progress",
+			"documentation": "docs/site/authoring.md"
+		},
+		{
+			"id": "local-room-contracts",
+			"documentation": "docs/site/local-room.md",
+			"paths": ["contracts/schemas/local-room.schema.json", "contracts/openapi.json", "contracts/src/index.ts", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift", "packages/domain/src/local-room/port.ts", "packages/domain/src/index.ts", "apps/center/src/app.ts", "scripts/probe-center.mjs"],
+			"public": ["POST /api/v1/local-room/messages", "node scripts/probe-center.mjs --scenarios", "pnpm contracts:conform"],
+			"contracts": ["contracts/schemas/local-room.schema.json", "contracts/schemas/sync.schema.json", "contracts/schemas/errors.schema.json"],
+			"fixtures": ["agora.local-room/v1 golden vectors (local-room-*)", "unsupported local-room adapter: validated, dispatched, typed 404"],
+			"scenarios": ["contracts/test/local-room.test.ts", "apps/center/test/local-room.test.ts", "scripts/probe-center.mjs"],
+			"platforms": ["node24", "swift6-macos"],
+			"owner": "local-room L1"
+		},
+		{
+			"id": "local-room-runtime",
+			"documentation": "docs/site/local-room.md",
+			"paths": ["scripts/local-room.ts", "scripts/local-room-owner.ts", "scripts/local-room-service.ts", "scripts/local-room-client.ts", "scripts/native-probe.ts", "scripts/local-room-harness.html", "apps/web/src/host/live.ts", "apps/web/src/main-live.tsx", "contracts/tools/browser-validator.ts", "apps/center/src/app.ts", "apps/center/src/local-room-wire.ts", "packages/domain/src/local-room/port.ts", "packages/storage/src/local-room.ts", "contracts/schemas/local-room.schema.json", "contracts/openapi.json"],
+			"public": ["node scripts/local-room.ts doctor|start|status|send|history|replay|evidence|stop|reset", "GET /api/v1/local-room/events?after=CURSOR", "GET / (live room shell: apps/web App/Timeline/Composer over createLiveTransport)"],
+			"contracts": ["contracts/schemas/local-room.schema.json"],
+			"fixtures": ["worktree-owned disposable PostgreSQL 18, product role agora_app", "private launch challenge and exact path identity"],
+			"scenarios": ["apps/center/test/runtime.pg.test.ts", "apps/center/test/runtime.test.ts", "apps/center/test/local-room-doctor.test.ts", "apps/web/test/live.test.ts"],
+			"platforms": ["node24", "postgresql18", "browser"],
+			"owner": "local-room L3/L4"
+		},
+		{
+			"id": "local-room-persistence",
+			"documentation": "docs/site/local-room.md",
+			"paths": ["contracts/schemas/errors.schema.json", "contracts/openapi.json", "contracts/fixtures/vectors.json", "packages/domain/src/local-room/port.ts", "packages/domain/src/local-room/events.ts", "packages/domain/src/index.ts", "packages/storage/drizzle/0001_local_room.sql", "packages/storage/drizzle/meta/_journal.json", "packages/storage/src/local-room.ts", "packages/storage/src/database.ts", "packages/storage/src/index.ts", "apps/center/src/app.ts", "apps/center/src/main.ts", "scripts/probe-center.mjs"],
+			"public": ["POST /api/v1/local-room/messages", "GET /api/v1/local-room/snapshot", "pnpm migrate", "pnpm test:pg", "node scripts/probe-center.mjs"],
+			"contracts": ["contracts/schemas/local-room.schema.json", "contracts/schemas/sync.schema.json", "contracts/schemas/errors.schema.json"],
+			"fixtures": ["local_room schema with one seeded fixed room (LOCAL_ROOM)", "agora_app non-owner role under forced row-level security", "error-command-conflict vector"],
+			"scenarios": ["packages/storage/test/local-room.pg.test.ts", "apps/center/test/local-room.pg.test.ts", "apps/center/test/local-room.test.ts", "contracts/test/local-room.test.ts", "scripts/probe-center.mjs"],
+			"platforms": ["node24", "postgresql18", "swift6-macos"],
+			"owner": "local-room L2"
+		},
+		{
+			"id": "web-framework-client-host",
+			"documentation": "docs/site/local-room-web-shell.md",
+			"paths": ["packages/web-framework/src", "packages/web-framework/package.json", "packages/web-framework/tsconfig.json", "apps/web/src", "apps/web/package.json", "apps/web/vite.config.ts", "apps/web/vitest.config.ts", "apps/web/tsconfig.json", "apps/web/index.html", "scripts/boundary-policy.ts", "vitest.config.ts"],
+			"public": ["@agora/web-framework createRoomClient", "@agora/web-framework AgoraProvider", "@agora/web-framework EnvironmentPort", "@agora/web-framework named hooks", "pnpm web:dev", "pnpm web:build", "pnpm web:test", "pnpm test"],
+			"scenarios": ["packages/web-framework/test/client.test.ts", "packages/web-framework/test/boundaries.test.ts", "apps/web/test/fixture.test.ts", "apps/web/test/app.test.tsx", "apps/web/test/live.test.ts"],
+			"fixtures": ["agora.web-fixture.room/v1 development-only room fixture, no production conversation schema"],
+			"platforms": ["node24", "browser"],
+			"owner": "agora-web-shell-integrate"
+		},
+		{
+			"id": "web-production-build-csp",
+			"documentation": "docs/site/local-room-web-shell.md",
+			"owner": "agora-production-browser-slice",
+			"paths": ["contracts/tools/browser-validator.ts", "contracts/src/wire-validator.ts", "contracts/src/index.ts", "contracts/package.json", "apps/web/vite.config.ts", "scripts/local-room-service.ts", "scripts/boundary-policy.ts", "apps/web/test/built-room.test.ts"],
+			"public": ["@agora/contracts/browser-validator browserValidatorPlugin", "pnpm web:build", "pnpm web:test"],
+			"scenarios": ["apps/web/test/built-room.test.ts", "browser: built room under its unchanged CSP at 1440x900 and 390x844 mobile", "browser: served local room via scripts/local-room.ts start"],
+			"fixtures": ["agora.web-fixture.room/v1 bundled fixture, plus a copy of the built bundle with the stream id made schema-invalid"],
+			"platforms": ["node24", "browser"]
+		},
+		{
+			"id": "web-initial-js-budget",
+			"documentation": "docs/site/local-room-web-shell.md",
+			"owner": "agora-react-initial-js-budget",
+			"paths": ["apps/web/test/initial-js-budget.test.ts", "evidence/local-room/initial-js-budget/measurement.json"],
+			"public": ["pnpm web:test"],
+			"scenarios": ["apps/web/test/initial-js-budget.test.ts", "negative: BUDGET_BYTES forced to 100 KiB, below the measured gzip and brotli bytes, fails the budget test"],
+			"fixtures": ["apps/web production build, JavaScript referenced by dist/index.html"],
+			"platforms": ["node24"]
+		},
+		{
+			"id": "local-room-time-display",
+			"documentation": "docs/site/local-room-time-display.md",
+			"owner": "agora-live-room-time-display",
+			"paths": ["apps/web/src/host/message-time.ts", "apps/web/src/host/index.ts", "apps/web/src/components/Timeline.tsx", "apps/web/src/fixture.css", "apps/web/test/message-time.test.ts"],
+			"public": ["apps/web/src/host/message-time.ts formatMessageTime", "apps/web/src/host/message-time.ts displayMessageTime"],
+			"scenarios": ["apps/web/test/message-time.test.ts", "browser: fixture shell at 390x844 CSS px and 1440x900"],
+			"fixtures": ["agora.web-fixture.room/v1 presentation times remain wire timestamps; display does not rewrite created_at"],
+			"platforms": ["node24", "browser"]
+		},
+		{
+			"id": "local-room-timeline-virtualization",
+			"documentation": "docs/site/local-room-timeline-virtualization.md",
+			"paths": ["apps/web/src/framework", "apps/web/src/components/Timeline.tsx", "apps/web/src/rows.ts", "apps/web/src/host/text-sizing.ts", "apps/web/src/host/pretext.ts", "apps/web/src/host/geometry.ts", "apps/web/package.json", "scripts/boundary-policy.ts", "packages/client-core/test/pretext-boundary.test.ts"],
+			"public": ["apps/web/src/framework/index.ts useTimelineVirtualizer", "apps/web/src/framework/index.ts useHashDeepLink", "pnpm web:dev Load large room (400) / Append 100 messages"],
+			"scenarios": ["apps/web/test/app.test.tsx", "apps/web/test/sizing.test.ts", "apps/web/test/fixture.test.ts", "apps/web/test/timeline.test.tsx", "packages/client-core/test/pretext-boundary.test.ts"],
+			"fixtures": ["agora.web-fixture.room/v1 largeSnapshot corpus generator, no production conversation schema"],
+			"platforms": ["node24", "browser"],
+			"owner": "agora-browser-pretext-virtualization-salvage"
+		},
+		{
+			"id": "local-room-live-attention", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-usability-fixes",
+			"paths": ["packages/client-core/src/index.ts", "packages/web-framework/src/client.ts", "apps/web/src/components/App.tsx", "apps/web/src/fixture.css"],
+			"public": ["@agora/client-core synchronize: an own receipted message advances lastSeen", "@agora/web-framework useDelayedAnnouncement", "live room header unread count, status announcement and Mark room as read", "44x44 CSS px buttons in the phone shell or under a coarse pointer"],
+			"contracts": [], "scenarios": ["packages/client-core/test/sync.test.ts", "apps/web/test/app.test.tsx", "live room browser drive: own send, two arrivals, mark read, keyboard roving, 390x844 and 1440x900"],
+			"fixtures": ["one fixed local room; fake local-room fetch server in apps/web/test/app.test.tsx"], "platforms": ["node24", "browser"]
+		},
+		{
+			"id": "local-room-connection-controls", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-connection-controls",
+			"paths": ["apps/web/src/host/live.ts", "apps/web/src/host/fixture.ts", "apps/web/src/components/App.tsx", "packages/web-framework/src/environment.ts", "packages/web-framework/src/projection.ts", "packages/web-framework/src/client.ts"],
+			"public": ["live room header Disconnect/Reconnect control", "TransportConnection.link: connecting | online | retrying | offline | disconnected", "browser online/offline events drive offline vs retrying, never a synthetic heartbeat"],
+			"contracts": [], "scenarios": ["apps/web/test/live.test.ts", "apps/web/test/app.test.tsx"],
+			"fixtures": ["fake local-room fetch server with abortable snapshot/events/messages endpoints in apps/web/test/live.test.ts"], "platforms": ["node24", "browser"]
+		},
+		{
+			"id": "local-room-delivery-feedback", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-delivery-feedback",
+			"paths": ["packages/client-core/src/model.ts", "packages/client-core/src/index.ts", "packages/web-framework/src/environment.ts", "packages/web-framework/src/projection.ts", "packages/web-framework/src/client.ts", "apps/web/src/host/live.ts", "apps/web/src/host/fixture.ts", "apps/web/src/components/App.tsx"],
+			"public": ["@agora/client-core Command tag 'denied' with its reason, and the 'discard' input that removes only a denied command", "@agora/web-framework useDiscardCommand, SendPhase ('sending' | 'retrying' | 'waiting_connection'), ComposerStatus.commands", "composer per-command Sending/Retrying/Waiting for a connection/Delivered/Failed rows with a Discard, edit and send again affordance on a failed one"],
+			"contracts": [], "scenarios": ["packages/client-core/test/sync.test.ts", "apps/web/test/live.test.ts", "apps/web/test/app.test.tsx", "evidence/local-room/delivery-feedback/receipt-failure-browser/README.md"],
+			"fixtures": ["fake local-room fetch server returning a real 400 malformed_command in apps/web/test/live.test.ts; FixtureControls 'Fail send: denied' in apps/web/test/app.test.tsx; real served-room browser drive for a lost receipt, a transient failure, a real 429 under genuine concurrent load, and a permanent rejection in evidence/local-room/delivery-feedback/receipt-failure-browser/"], "platforms": ["node24", "browser"]
+		},
+		{
+			"id": "local-room-header-alignment", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-header-alignment",
+			"paths": ["apps/web/src/components/App.tsx", "apps/web/src/fixture.css"],
+			"public": ["RoomHeader two-tone project/room crumb (.crumb-project grey, .crumb-room ink)", "explicit project-agent not_enabled status chip (data-agent-state=\"not_enabled\") separate from the lifecycle chip"],
+			"contracts": [], "scenarios": ["apps/web/test/app.test.tsx"],
+			"fixtures": ["real served local room driven with Playwright at asserted 1440x900 and 390x844 CSS-pixel viewports in evidence/local-room/header-alignment/README.md"], "platforms": ["node24", "browser"]
+		},
+		{
+			"id": "local-room-unread-boundary", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-unread-boundary",
+			"paths": ["apps/web/src/components/Timeline.tsx", "apps/web/src/fixture.css"],
+			"public": ["Timeline first-unread marker as a live chip (\"N new\" with a pulsing dot) and a faint hairline rule, matching Screen-Room/TimelineMessage", "marker accessible name aria-label=\"Unread messages start here, N new\" naming the real unread count"],
+			"contracts": [], "scenarios": ["apps/web/test/app.test.tsx", "evidence/local-room/unread-boundary/README.md"],
+			"fixtures": ["real served local room driven with Playwright through an actual unread transition (a separate client posts via `local-room.ts send` as the room's one local principal, not a second authenticated principal, and not just an empty room) at asserted 1440x900 and 390x844 CSS-pixel viewports in evidence/local-room/unread-boundary/README.md"], "platforms": ["node24", "browser"]
+		},
+		{
+			"id": "local-room-session-drafts", "documentation": "docs/site/local-room.md", "owner": "agora-live-room-session-drafts",
+			"paths": ["packages/web-framework/src/environment.ts", "apps/web/src/host/live.ts", "apps/web/src/host/fixture.ts", "apps/web/src/components/App.tsx"],
+			"public": ["RoomTransport.saveDraft", "sessionStorage-scoped unsent draft under agora.local-room.draft:PROJECT:ROOM and pending-send identity under agora.local-room.pending:PROJECT:ROOM, both stamped with the process identity read off the snapshot response's own x-agora-instance header (scripts/local-room-service.ts), restored once per page load"],
+			"contracts": [], "scenarios": ["apps/web/test/live.test.ts: reload restores an unsent draft, a failed send keeps it, a successful send clears it, a deliberate clear drops it, a reset to a lower cursor discards a stale one, a reset still at cursor 0 is told apart from an ordinary reload by process identity, an ordinary same-instance reload at cursor 0 still restores the draft, a send still unsettled at reload reuses its command id instead of duplicating, a send held on wait_connection and posted by Reconnect reuses its command id after a reload, a missing or blank identity header fails closed on both draft and pending reads, identity is read off the snapshot response itself rather than a second request a reset could race between"],
+			"fixtures": ["one fixed local room; fake fetch server and an in-memory sessionStorage double in apps/web/test/live.test.ts"], "platforms": ["node24", "browser"]
+		},
+		{
+			"id": "ci-candidate-workflow",
+			"documentation": "docs/site/ci.md",
+			"owner": "agora-ci-bootstrap-slice",
+			"paths": [".github/workflows/agora-ci.yml", "scripts/ci-setup.sh", "scripts/ci-red-green.sh", "packages/verification/test/ci-workflow.test.ts", "apps/web/vitest.config.ts"],
+			"public": ["pull_request checks named doctor, static, contracts, docs, tests, red-green and guards from .github/workflows/agora-ci.yml", "bash scripts/ci-setup.sh [postgres] [python] [swift]", "bash scripts/ci-red-green.sh BASE_SHA HEAD_SHA"],
+			"contracts": [],
+			"scenarios": ["packages/verification/test/ci-workflow.test.ts: parsed workflow has only the main pull_request trigger, contents read, pinned actions, non-persisted checkout credentials, no secret or reporter reference, exactly the seven jobs with their driver commands, every named pnpm script and file exists; the red-green script accepts a documentation-only change, skips red for a commit that changes only tests, docs or evidence, still demands red for a commit that changes source, scripts or configuration with its test, and rejects a source change with no changed test", "deliberate failing-test negative: an isolated copy with one failing test makes pnpm test exit non-zero"],
+			"fixtures": ["temporary git repositories created per test"],
+			"platforms": ["ubuntu-24.04", "macos-15", "node24.21.0", "pnpm10.34.1"],
+			"invalidation": "Ordinary candidate CI only. It is not a trusted evidence signature, an agora/evidence check, or merge authority; the credential-bearing reporter and U01b qualification stay a separate security task."
+		},
+		{
+			"id": "backup-restore-integrity", "documentation": "docs/site/backup-restore.md", "owner": "U01c.B01",
+			"paths": ["packages/storage/src/backup.ts", "packages/storage/src/index.ts", "scripts/backup.ts"],
+			"public": ["node scripts/backup.ts keygen|create|restore", "pnpm test:pg"],
+			"contracts": [], "scenarios": ["packages/storage/test/backup.pg.test.ts"],
+			"fixtures": ["migrated foundation_fixture database seeded through agora_app (scope A stream with 3 events and a claim, scope B stream with 1 event)", "flat objects directory with three files including one non-UTF-8 binary", "two generated keys (good, wrong) in a key directory separate from the backup", "second database agora_restore_<uuid> owned by agora_owner in the same throwaway cluster", "copied backups with one flipped byte in database.agb and with objects/0002.agb deleted", "temporary AGORA_PG_BIN directories whose pg_dump rewrites an object before running the real pg_dump, or whose pg_restore exits 1"],
+			"platforms": ["node24", "postgresql18"]
+		},
+		{
+			"id": "feature-discovery", "documentation": "docs/site/feature-discovery.md", "owner": "agora-feature-discovery-slice",
+			"paths": ["scripts/feature-discovery.ts", "scripts/feature-inventory.ts", "packages/verification/test/feature-discovery.test.ts", "agora/feature-inventory.json", "docs/site/feature-discovery.md"],
+			"public": ["node scripts/feature-inventory.ts", "node scripts/feature-inventory.ts --check", "pnpm features:generate", "pnpm features:check"],
+			"contracts": [],
+			"scenarios": ["well-formed Feature found", "misplaced path rejected", "missing entrypoint rejected", "duplicate name rejected", "drift on hand-edited inventory rejected", "guard-disabled turns drift assertion red", "idempotent regenerate"],
+			"fixtures": ["disposable temp trees under agora-u21-* built by packages/verification/test/feature-discovery.test.ts"],
+			"platforms": ["node24"]
+		},
+		{
+			"id": "client-replay-corpus",
+			"documentation": "docs/site/synchronization.md",
+			"owner": "agora-replay-corpus-probe",
+			"paths": ["packages/client-core/test/replay-corpus.ts", "packages/client-core/test/replay-probe.ts", "packages/client-core/test/replay.test.ts", "evidence/U01d/replay-corpus-probe/README.md"],
+			"public": ["node packages/client-core/test/replay-probe.ts [SEED]", "pnpm exec vitest run --project unit packages/client-core/test/replay.test.ts"],
+			"contracts": [],
+			"scenarios": ["packages/client-core/test/replay.test.ts", "corpus determinism per seed", "1000 missed events, 100 arrivals and long code and Markdown bodies converge with zero duplicates inside 2000 ms", "budget breach fails", "isolated dedupe removal turns the predicate red while the pristine copy passes", "thread, edit, tombstone and run-card shapes reported unavailable"],
+			"fixtures": ["agora.replay-corpus/v1 seed 6221057 built in memory by packages/client-core/test/replay-corpus.ts; published local-room message shape only"],
+			"platforms": ["node24"]
+		}
+	]
+}

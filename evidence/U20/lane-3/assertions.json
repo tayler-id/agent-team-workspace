@@ -1,0 +1,13 @@
+{
+  "unit": "U20",
+  "lane": 3,
+  "subjects": [
+    {
+      "subject": "window.name",
+      "feature": [
+        "direct window is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/framework); Features and Client use Host ports"
+      ],
+      "framework": []
+    }
+  ]
+}
