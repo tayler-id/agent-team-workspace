@@ -7,7 +7,7 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { defaultKeyFile, manifestSchema, observedExit, sign } from './project-evidence.mjs';
-import { exits, hash, requireThat } from './project-checks.mjs';
+import { exits, hash, requireThat } from './project-primitives.mjs';
 
 const args = process.argv.slice(2);
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);

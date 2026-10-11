@@ -1,0 +1,36 @@
+head: bbaff9bdf90a16c1b75ad01bba3941856a6aae3d
+parent: 0f0a11fde45b6c4ff14d5c8365788f22743a60f4
+
+ RUN  v5.0.1 /Users/taylerramsay/.local/share/firstmate/data/agora-ci-fixture-flake-diagnosis/impl-measure/parent
+
+ ❯ |unit| packages/verification/test/validator-startup.test.ts (1 test | 1 failed) 120ms
+   × the evidence validator starts without compiling the wire validator 120ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| packages/verification/test/validator-startup.test.ts > the evidence validator starts without compiling the wire validator
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/verification/test/validator-startup.test.ts:26:81
+     24|   expect(report).toMatchObject({ outcome: 'fail', reason_code: 'missin…
+     25|   const loaded = fs.readFileSync(log, 'utf8').split('\n').filter(Boole…
+     26|   expect(loaded.some((url) => url.endsWith('/scripts/project-primitive…
+       |                                                                                 ^
+     27|   expect(loaded.filter((url) => /\/contracts\/|\/node_modules\/ajv|\/p…
+     28|  } finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  17:48:02
+   Duration  189ms (tests 89%, transform 6%, import 4%, worker 1%)
+
+observed_exit: 1
