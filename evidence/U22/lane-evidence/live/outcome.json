@@ -2,9 +2,9 @@
   "schema_version": "agora.cli-report/v1",
   "command": "lanes",
   "versions": {
-    "code": "64cd0b7f8f19c74be03a0e3cae166bd8edd888a1",
-    "config": "sha256:43a640be56a852069ead22a931c9ed7e1dcd7b38700155ee05af6b8024e48cc2",
-    "fixture": "sha256:a009ac819f9ac22c8d370df7a442b0f39d0a646e48ac666aa68f6bc0581182c1"
+    "code": "2823507c399d7607d98908d36acd04f440c0637c",
+    "config": "sha256:902f0f031ecc9dbcd4fe9d745f3963bafec9f4bbc9575ee1674cd15883ea4def",
+    "fixture": "sha256:1f7e7ea4627949e3d21508981e06604492e80458718a9dee3350ac02fbc75b09"
   },
   "outcome": "unavailable",
   "diagnostics": [
@@ -16,7 +16,7 @@
   "artifacts": [
     {
       "path": "evidence/U22/lane-evidence/live/vitest.json",
-      "digest": "sha256:14eae785200a8e875bd88ab1e72c2670f21ac3f4fc0a58263f771dfe3f2e6da0",
+      "digest": "sha256:4f11d6413d54607cb5b6f6ae8740f0054b8003ceddcece2a35f05d4c94ef17ad",
       "byte_length": 14082,
       "media_type": "application/json"
     },
@@ -33,6 +33,6 @@
       "media_type": "application/json"
     }
   ],
-  "started_at": "2026-10-11T05:45:38.940Z",
-  "finished_at": "2026-10-11T05:45:49.369Z"
+  "started_at": "2026-10-11T06:29:41.041Z",
+  "finished_at": "2026-10-11T06:29:50.151Z"
 }

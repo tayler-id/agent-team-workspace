@@ -27,4 +27,4 @@ That is a bounded defect in `scripts/renderer-policy.ts` (the message at the `Id
 
 ## Live run
 
-`live/outcome.json` is the CLI report of `pnpm -s agora project lanes --unit U22 --task agora-s1-qualify-trusted-checks` at code head `64cd0b7`, exit 3. `live/lanes.json` lists lanes 1 to 8 and 10 as `pass` and lane 9 as `unavailable`. `live/vitest.json` and `live/command.json` are the native run behind it. `node scripts/local-checks.mjs run` passed at `64cd0b7` (full `pnpm check`, web build, gate tests). `verify --scenario perf --unit U22` exits 3 with the missing-probe reason.
+`live/outcome.json` is the CLI report of `pnpm -s agora project lanes --unit U22 --task agora-s1-qualify-trusted-checks` at code head `2823507` (the merge of origin/main, so the U21 driver and the shared CLI are in the tree), exit 3. `live/lanes.json` lists lanes 1 to 8 and 10 as `pass` and lane 9 as `unavailable`. `live/vitest.json` and `live/command.json` are the native run behind it. `node scripts/local-checks.mjs run` passed at the final head (full `pnpm check`, web build, gate tests). `verify --scenario perf --unit U22` exits 3 with the missing-probe reason.
