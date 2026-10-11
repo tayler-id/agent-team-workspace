@@ -1,0 +1,11 @@
+{
+  "lane": 3,
+  "steps": [
+    {
+      "command": "node scripts/feature-inventory.ts",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "apps/web/src/features/notes: missing reserved entrypoint.ts; supported owner is apps/web/src/features/<name>/\n"
+    }
+  ]
+}

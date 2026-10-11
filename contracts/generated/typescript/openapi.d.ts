@@ -405,6 +405,7 @@ export interface components {
                 id: string;
                 lanes?: components["schemas"]["FixtureLane"][];
                 lanes_unavailable?: string;
+                driver?: string[];
                 perf: {
                     metric: string;
                     rule: string;

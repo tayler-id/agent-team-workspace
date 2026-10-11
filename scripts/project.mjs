@@ -34,8 +34,9 @@ Help is plain text, needs no install or database, and starts nothing.
              human proof exist. Exits 0 only when all eight pass; pnpm verify:foundation -- --json is the alias.
   lanes      --unit UNIT --task TASK --artifacts DIRECTORY; task-specific qualification.
 
-UNIT: U01b runs lanes. U20, U21, U22, U23, U01c and U01d list their ten lanes as unavailable
+UNIT: U01b and U21 run lanes. U20, U22, U23, U01c and U01d list their ten lanes as unavailable
 with a reason until a driver exists; an unknown unit is unavailable.
+TASK (U21): agora-u21-lane-evidence runs all ten lanes.
 TASK (U01b): agora-s1-isolate-development (lanes 1-4), agora-s1-validate-project-evidence (1-7).
 Whole-unit lanes 8-10 unavailable; a task pass never qualifies the whole unit.
 Options: --fixture agora|python, --instance, --profile, --scenario, --artifacts,
@@ -84,15 +85,16 @@ try {
 	} else if (action === 'lanes' || (action === 'verify' && ['controls', 'guards'].includes(options['--scenario']))) {
 		const manifest = mapped(), unit = options['--unit'] && unitOf(manifest, options['--unit']);
 		requireThat(!unit?.lanes_unavailable, `${unit?.id} lanes 1-10 unavailable: ${unit?.lanes_unavailable}`, 'unavailable');
+		const lanes = unit?.lanes ?? manifest.lanes, driver = unit?.driver ?? manifest.driver;
 		const out = safe(options['--artifacts'] ?? `.scratch/project-lanes/${randomUUID()}`); mkdirSync(out, { recursive: true });
 		const file = path.join(out, 'lanes.json'); requireThat(!existsSync(file), 'evidence_exists');
-		const run = command([...manifest.driver, '--reporter=json', '--outputFile=' + file]);
-		save(path.join(out, 'command.json'), { argv: manifest.driver, exit: run.status, stdout: run.stdout, stderr: run.stderr });
+		const run = command([...driver, '--reporter=json', '--outputFile=' + file]);
+		save(path.join(out, 'command.json'), { argv: driver, exit: run.status, stdout: run.stdout, stderr: run.stderr });
 		const native = json(file); report.artifacts = [artifact(file), artifact(path.join(out, 'command.json'))];
 		if (existsSync('.scratch/project-guards.json')) { save(path.join(out, 'guards.json'), json('.scratch/project-guards.json')); report.artifacts.push(artifact(path.join(out, 'guards.json'))); }
 		const assertions = native.testResults.flatMap(suite => suite.assertionResults);
-		requireThat(run.status === 0 && native.numFailedTests === 0 && native.numPendingTests === 0 && assertions.length === manifest.lanes.length + 1 && assertions.every(row => row.status === 'passed') && manifest.lanes.every(lane => assertions.some(row => row.fullName.startsWith(`project lane ${lane.id} `))), 'lane_failed');
-		const unlockedThroughLane = { 'agora-s1-isolate-development': 4, 'agora-s1-validate-project-evidence': 7, 'agora-s1-qualify-trusted-checks': 10 };
+		requireThat(run.status === 0 && native.numFailedTests === 0 && native.numPendingTests === 0 && assertions.length === lanes.length + (unit?.driver ? 0 : 1) && assertions.every(row => row.status === 'passed') && lanes.every(lane => assertions.some(row => row.fullName.startsWith(`project lane ${lane.id} `))), 'lane_failed');
+		const unlockedThroughLane = { 'agora-s1-isolate-development': 4, 'agora-s1-validate-project-evidence': 7, 'agora-s1-qualify-trusted-checks': 10, 'agora-u21-lane-evidence': 10 };
 		if (action === 'lanes') requireThat(unlockedThroughLane[options['--task']], 'unknown task; known tasks unlock lanes 1-4, 1-7 or 1-10', 'blocked');
 	} else {
 		requireThat(action !== 'verify' || options['--scenario'] === 'policy', 'unknown_scenario', 'usage_error');

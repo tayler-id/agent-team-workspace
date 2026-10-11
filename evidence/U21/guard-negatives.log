@@ -1,0 +1,31 @@
+## runner expects the extra guard assertion for a unit driver (U21 has 10 assertions)
+fail lane_failed
+restored:
+fail evidence_exists
+## duplicate-name rejection disabled (lane 8)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |unit| packages/verification/test/feature-discovery-lanes.test.ts > project lane 8 two Features with the same declared name are rejected
+      Tests  1 failed | 9 passed (10)
+restored:
+      Tests  10 passed (10)
+## missing-entrypoint rejection disabled (lane 3 and 9)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |unit| packages/verification/test/feature-discovery-lanes.test.ts > project lane 3 a Feature missing its entrypoint fails naming the missing reserved file
+ FAIL  |unit| packages/verification/test/feature-discovery-lanes.test.ts > project lane 9 rejection messages for a misplaced or missing reserved file name the supported owner and path
+      Tests  2 failed | 8 passed (10)
+restored:
+      Tests  10 passed (10)
+## regenerate always rewrites (lane 10)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |unit| packages/verification/test/feature-discovery-lanes.test.ts > project lane 10 regenerating twice with no source change is a no-op with an identical digest
+      Tests  1 failed | 9 passed (10)
+restored:
+      Tests  10 passed (10)
+## rerun: runner extra-assertion negative with unique artifact dirs
+fail lane_failed
+restored
+pass 
+## manifest declares both a driver and lanes_unavailable for U21
+fail scenario_drift
+restored
+pass

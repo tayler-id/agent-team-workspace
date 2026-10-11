@@ -1,0 +1,11 @@
+{
+  "lane": 8,
+  "steps": [
+    {
+      "command": "node scripts/feature-inventory.ts",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "apps/web/src/features/Room: Feature name must be lowercase kebab-case; supported owner is apps/web/src/features/<name>/\napps/web/src/features/room: duplicate Feature name, also declared by apps/web/src/features/Room\n"
+    }
+  ]
+}

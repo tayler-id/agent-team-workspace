@@ -1,0 +1,6 @@
+{
+  "lane": 3,
+  "test": "project lane 3 a Feature missing its entrypoint fails naming the missing reserved file",
+  "status": "passed",
+  "duration_ms": 65
+}

@@ -1,0 +1,6 @@
+{
+  "lane": 4,
+  "test": "project lane 4 Feature files outside src/features/<name>/ are rejected",
+  "status": "passed",
+  "duration_ms": 65
+}

@@ -1,0 +1,6 @@
+{
+  "lane": 2,
+  "test": "project lane 2 a new Feature with both reserved files appears with no registration",
+  "status": "passed",
+  "duration_ms": 257
+}

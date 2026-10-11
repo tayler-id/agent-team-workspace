@@ -1,0 +1,6 @@
+{
+  "lane": 10,
+  "test": "project lane 10 regenerating twice with no source change is a no-op with an identical digest",
+  "status": "passed",
+  "duration_ms": 127
+}
