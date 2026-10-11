@@ -1,0 +1,67 @@
+{
+  "schema_version": "agora.project-lanes/v1",
+  "unit": "U22",
+  "lanes": [
+    {
+      "id": 1,
+      "outcome": "pass",
+      "detail": "1219 deliveries, 0 duplicates, last acknowledgement 1300, identical to the core",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    },
+    {
+      "id": 2,
+      "outcome": "pass",
+      "detail": "1 named test passed",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    },
+    {
+      "id": 3,
+      "outcome": "pass",
+      "detail": "fetch, WebSocket rejected at the component path, accepted at apps/web/src/host/live.ts",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    },
+    {
+      "id": 4,
+      "outcome": "pass",
+      "detail": "document, window rejected at the component path, accepted at apps/web/src/host/live.ts",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    },
+    {
+      "id": 5,
+      "outcome": "pass",
+      "detail": "2 named tests passed",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    },
+    {
+      "id": 6,
+      "outcome": "pass",
+      "detail": "the same duplicate holder is rejected with agora/client-owner on and passes with it off",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    },
+    {
+      "id": 7,
+      "outcome": "pass",
+      "detail": "2 named tests passed",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    },
+    {
+      "id": 8,
+      "outcome": "pass",
+      "detail": "1 named test passed",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    },
+    {
+      "id": 9,
+      "outcome": "unavailable",
+      "detail": "the Client hook is named, but the diagnostic for fetch, WebSocket, document, window names the Host owner path and not a specific Host method",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    },
+    {
+      "id": 10,
+      "outcome": "pass",
+      "detail": "4 named tests passed",
+      "scenario_png": "unavailable: no scenario.png: the runner has no screenshot route, and these lanes are lint, compile, receipt and listener proofs with no rendered pixels"
+    }
+  ],
+  "failed_tests": []
+}

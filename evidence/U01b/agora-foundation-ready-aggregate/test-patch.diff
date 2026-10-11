@@ -1,0 +1,105 @@
+diff --git a/packages/verification/test/foundation-ready.test.ts b/packages/verification/test/foundation-ready.test.ts
+new file mode 100644
+index 0000000..007660c
+--- /dev/null
++++ b/packages/verification/test/foundation-ready.test.ts
+@@ -0,0 +1,99 @@
++import { spawnSync } from 'node:child_process';
++import { createHash } from 'node:crypto';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { expect, test } from 'vitest';
++
++type Row = Record<string, unknown>;
++const head = 'b'.repeat(40);
++const dir = '.scratch/foundation-ready-test';
++const ids = ['FG01', 'FG02', 'FG03', 'FG04', 'FG05', 'FG06', 'FG07', 'FG08'];
++const reference = (id: string) => {
++	mkdirSync(dir, { recursive: true });
++	const bytes = Buffer.from(`proof ${id}\n`), file = `${dir}/${id}.json`;
++	writeFileSync(file, bytes);
++	return { path: file, digest: `sha256:${createHash('sha256').update(bytes).digest('hex')}`, byte_length: bytes.length, media_type: 'application/json' };
++};
++const row = (id: string, outcome = 'pass'): Row => ({ id, subject: `${id}:fixture`, revision: head, config: 'c1', outcome, denials: outcome === 'pass' ? [] : [`${id}_reason`], artifacts: outcome === 'pass' ? [reference(id)] : [], changed: [] });
++const rows = (fix: (rows: Row[]) => Row[] = all => all, outcomes: Record<string, string> = {}) => fix(ids.map(id => row(id, outcomes[id])));
++// A controlled fixture drives the pure aggregate; its `mode` is `fixture`, never a live foundation-ready result.
++const aggregate = (observations: Row[], config = 'c1', mode = 'fixture') => {
++	const script = `import {aggregate} from './scripts/foundation-ready.mjs'; import {exits} from './scripts/project-primitives.mjs'; import {createWireValidator} from './contracts/src/index.ts';
++		const report = aggregate(${JSON.stringify({ head, config, mode, observations })}); console.log(JSON.stringify({ report, exit: exits[report.outcome], valid: createWireValidator().validate('FoundationReport', report).ok }))`;
++	const result = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
++	expect(result.status, result.stderr).toBe(0);
++	return JSON.parse(result.stdout) as { report: { outcome: string; mode: string; scope: string; foundation_outcome: string; denials: string[]; proofs: { id: string; outcome: string; revision: string; denials: string[] }[]; artifacts: unknown[] }; exit: number; valid: boolean };
++};
++const proof = (observations: Row[], config?: string) => Object.fromEntries(aggregate(observations, config).report.proofs.map(p => [p.id, p]));
++
++test('a labeled fixture with all eight proofs passes with exit 0 and a schema-valid report', () => {
++	const result = aggregate(rows());
++	expect(result.valid).toBe(true);
++	expect(result.exit).toBe(0);
++	expect(result.report).toMatchObject({ outcome: 'pass', foundation_outcome: 'pass', mode: 'fixture', scope: 'foundation-ready', denials: [] });
++	expect(result.report.proofs.map(p => [p.id, p.outcome, p.revision])).toEqual(ids.map(id => [id, 'pass', head]));
++	expect(result.report.artifacts).toHaveLength(8);
++});
++
++test.each([['unavailable', 3], ['blocked', 2], ['fail', 1]])('one %s mandatory proof is never a pass and exits %i', (outcome, exit) => {
++	const result = aggregate(rows(all => all, { FG07: outcome }));
++	expect(result.valid).toBe(true);
++	expect([result.report.outcome, result.exit, result.report.foundation_outcome]).toEqual([outcome, exit, outcome]);
++	expect(proof(rows(all => all, { FG07: outcome }))['FG07']?.denials).toEqual(['FG07_reason']);
++});
++
++test('FG06 through FG08 unavailable keep their reasons and roll up as unavailable', () => {
++	const result = aggregate(rows(all => all, { FG06: 'unavailable', FG07: 'unavailable', FG08: 'unavailable' }));
++	expect(result.report.outcome).toBe('unavailable');
++	expect(result.report.denials).toEqual(['FG06_reason', 'FG07_reason', 'FG08_reason']);
++	expect(result.report.proofs.filter(p => p.outcome === 'pass').map(p => p.id)).toEqual(['FG01', 'FG02', 'FG03', 'FG04', 'FG05']);
++});
++
++test('absent, duplicate and unknown proofs deny', () => {
++	expect(proof(rows(all => all.filter(r => r['id'] !== 'FG03')))['FG03']).toMatchObject({ outcome: 'blocked', denials: ['FG03_missing'] });
++	expect(aggregate(rows(all => [...all, row('FG04')])).report.proofs.find(p => p.id === 'FG04')).toMatchObject({ outcome: 'fail', denials: ['FG04_duplicate'] });
++	expect(aggregate(rows(all => [...all, row('FG09')])).report).toMatchObject({ outcome: 'pass', denials: ['proof_unknown'] });
++});
++
++test('a proof bound to another revision, a drifted subject or a mutated tree fails', () => {
++	expect(proof(rows(all => all.map(r => r['id'] === 'FG02' ? { ...r, revision: 'a'.repeat(40) } : r)))['FG02']).toMatchObject({ outcome: 'fail', denials: ['FG02_revision'] });
++	expect(proof(rows(all => all.map(r => r['id'] === 'FG03' ? { ...r, changed: ['packages/client-core/src/sync.ts'] } : r)))['FG03']).toMatchObject({ outcome: 'fail', denials: ['FG03_subject_drift'] });
++	expect(proof(rows(all => all.map(r => r['id'] === 'FG01' ? { ...row('FG01', 'fail'), changed: ['scripts/x.mjs'] } : r)))['FG01']?.denials).toEqual(['FG01_reason', 'FG01_subject_drift']);
++	const mutated = proof(rows(), 'c2');
++	expect(ids.map(id => mutated[id]?.denials)).toEqual(ids.map(id => [`${id}_source_mutation`]));
++});
++
++test('a pass without artifacts or with altered artifact bytes fails', () => {
++	expect(proof(rows(all => all.map(r => r['id'] === 'FG04' ? { ...r, artifacts: [] } : r)))['FG04']).toMatchObject({ outcome: 'fail', denials: ['FG04_artifact_missing'] });
++	const forged = rows(all => all.map(r => r['id'] === 'FG05' ? { ...r, artifacts: [{ ...reference('FG05'), digest: `sha256:${'0'.repeat(64)}` }] } : r));
++	expect(proof(forged)['FG05']).toMatchObject({ outcome: 'fail', denials: ['FG05_artifact_mismatch'] });
++	const missing = rows(all => all.map(r => r['id'] === 'FG01' ? { ...r, artifacts: [{ ...reference('FG01'), path: `${dir}/gone.json` }] } : r));
++	expect(proof(missing)['FG01']).toMatchObject({ outcome: 'fail', denials: ['FG01_artifact_missing'] });
++});
++
++test('a subject naming another proof and an invalid outcome fail', () => {
++	const result = proof(rows(all => all.map(r => r['id'] === 'FG01' ? { ...r, subject: 'FG02:fixture' } : r['id'] === 'FG02' ? { ...r, outcome: 'ok' } : r)));
++	expect(result['FG01']?.denials).toEqual(['FG01_subject']);
++	expect(result['FG02']).toMatchObject({ outcome: 'fail', denials: ['FG02_outcome'] });
++});
++
++const project = (args: string[]) => spawnSync(process.execPath, ['scripts/project.mjs', ...args], { encoding: 'utf8', timeout: 20_000 });
++
++test('project help documents the foundation-ready scenario and its honest limits', () => {
++	const { stdout, status } = project(['--help']);
++	expect(status).toBe(0);
++	expect(stdout).toContain('--scenario foundation-ready');
++	expect(stdout).toContain('FG06-FG08 report unavailable');
++	expect(stdout).toContain('Exits 0 only when all eight pass');
++});
++
++test('foundation-ready refuses options it does not take', () => {
++	const result = project(['project', 'verify', '--scenario', 'foundation-ready', '--parent', 'HEAD', '--json']);
++	expect(result.status, result.stdout + result.stderr).toBe(64);
++	expect(JSON.parse(result.stdout)).toMatchObject({ schema_version: 'agora.cli-report/v1', outcome: 'usage_error' });
++});
++
++test('the pnpm alias keeps the legacy U01a driver reachable', () => {
++	const result = spawnSync(process.execPath, ['scripts/foundation-ready.mjs', '--scope', 'nonsense', '--json'], { encoding: 'utf8', timeout: 20_000 });
++	expect(result.status, result.stdout + result.stderr).toBe(64);
++	expect(JSON.parse(result.stdout)).toMatchObject({ schema_version: 'agora.foundation/v1', scope: 'invalid', outcome: 'usage_error' });
++});
