@@ -2315,7 +2315,7 @@ extension Components {
             public var lanes: [Components.Schemas.FixtureLane]
             /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/driver`.
             public var driver: [Swift.String]
-            /// Per-unit lane and perf manifest. A unit without lanes_unavailable uses the top-level lanes and driver. A perf entry without probe is unavailable for the stated reason; limits are absolute budgets in milliseconds, optionally a multiple of another metric.
+            /// Per-unit lane and perf manifest. A unit without lanes_unavailable runs its own driver when it names one, else the top-level lanes and driver. A perf entry without probe is unavailable for the stated reason; limits are absolute budgets in milliseconds, optionally a multiple of another metric.
             ///
             /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload`.
             public struct unitsPayloadPayload: Codable, Hashable, Sendable {
@@ -2325,6 +2325,8 @@ extension Components {
                 public var lanes: [Components.Schemas.FixtureLane]?
                 /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/lanes_unavailable`.
                 public var lanes_unavailable: Swift.String?
+                /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/driver`.
+                public var driver: [Swift.String]?
                 /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf`.
                 public struct perfPayload: Codable, Hashable, Sendable {
                     /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/metric`.
@@ -2477,22 +2479,26 @@ extension Components {
                 ///   - id:
                 ///   - lanes:
                 ///   - lanes_unavailable:
+                ///   - driver:
                 ///   - perf:
                 public init(
                     id: Swift.String,
                     lanes: [Components.Schemas.FixtureLane]? = nil,
                     lanes_unavailable: Swift.String? = nil,
+                    driver: [Swift.String]? = nil,
                     perf: Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload.perfPayload
                 ) {
                     self.id = id
                     self.lanes = lanes
                     self.lanes_unavailable = lanes_unavailable
+                    self.driver = driver
                     self.perf = perf
                 }
                 public enum CodingKeys: String, CodingKey {
                     case id
                     case lanes
                     case lanes_unavailable
+                    case driver
                     case perf
                 }
                 public init(from decoder: any Swift.Decoder) throws {
@@ -2509,6 +2515,10 @@ extension Components {
                         Swift.String.self,
                         forKey: .lanes_unavailable
                     )
+                    self.driver = try container.decodeIfPresent(
+                        [Swift.String].self,
+                        forKey: .driver
+                    )
                     self.perf = try container.decode(
                         Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload.perfPayload.self,
                         forKey: .perf
@@ -2517,6 +2527,7 @@ extension Components {
                         "id",
                         "lanes",
                         "lanes_unavailable",
+                        "driver",
                         "perf"
                     ])
                 }

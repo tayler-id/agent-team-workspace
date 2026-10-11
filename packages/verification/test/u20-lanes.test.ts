@@ -1,0 +1,202 @@
+// U20 lane driver: `agora project lanes --unit U20` runs this file and reads `lane-N/{assertions.json,transcript.log,scenario.html}`.
+// Lanes 2-9 drive the real ESLint config in-process on probe files under unique names; lanes 1 and 10 need the runner (AGORA_LANE_OUT).
+import { ESLint } from 'eslint';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { afterAll, expect, test } from 'vitest';
+
+interface Message { ruleId: string | null; message: string; fatal?: boolean | undefined }
+const root = path.resolve(import.meta.dirname, '../../..');
+const out = process.env['AGORA_LANE_OUT'];
+const parentRev = process.env['AGORA_LANE_PARENT'] ?? 'HEAD^';
+// The last commit before `.tsx` joined the guarded file set (9bb7462, architecture B1).
+const BASELINE = '9bb7462^';
+const BRANCH = '99aa4f7';
+const stamp = `u20lane${process.pid.toString(36)}${Date.now().toString(36)}`;
+const web = 'apps/web/src';
+const [a, b, c, room] = ['a', 'b', 'c', 'room'].map((name) => `${web}/features/${stamp}-${name}`) as [string, string, string, string];
+const frameworkFile = `${web}/framework/${stamp}.ts`;
+const storage = "import type { Database } from '@agora/storage';\nexport type Leak = keyof Database;\n";
+const browser = 'export const read = (): string => window.name;\n';
+const rawEffect = "import { useEffect } from 'react';\nexport function Card(): null { useEffect(() => undefined, []); return null; }\n";
+const engine = new ESLint({ cwd: root, ignore: false });
+const written: string[] = [];
+const scratch: string[] = [];
+const lanes = new Map<number, { subjects: Record<string, unknown>[] }>();
+
+const record = (lane: number, subject: string, observed: Record<string, unknown>): void => {
+	const entry = lanes.get(lane) ?? { subjects: [] };
+	entry.subjects.push({ subject, ...observed }); lanes.set(lane, entry);
+};
+const put = (rel: string, code: string): string => {
+	const file = path.join(root, rel);
+	mkdirSync(path.dirname(file), { recursive: true }); writeFileSync(file, code); written.push(file); return file;
+};
+// A fatal parse error has no rule id; accepting it as "no agora message" would pass every accepted-side assertion vacuously.
+const agora = (all: Message[]): Message[] => {
+	expect(all.filter((m) => m.fatal === true).map((m) => m.message)).toEqual([]);
+	return all.filter((m) => m.ruleId?.startsWith('agora/'));
+};
+let probes = 0;
+const lint = async (rel: string, code: string, lintEngine = engine): Promise<Message[]> => {
+	const file = put(rel, code);
+	return agora((await lintEngine.lintText(code, { filePath: file })).flatMap((r) => r.messages));
+};
+const declare = (feature: string, names: string[]): void => { put(`${feature}/dependencies.json`, JSON.stringify(names)); };
+const ids = (messages: Message[]): string[] => [...new Set(messages.map((m) => m.ruleId ?? 'parse-error'))];
+
+// The lane-2 assertion, reused on a guard-disabled copy by lane 5.
+const laneTwo = async (lintEngine: ESLint): Promise<string[]> => {
+	const n = probes++; // a reused basename across .ts and .tsx confuses the typed-lint project service
+	const tsx = await lint(`${a}/leak${n}.tsx`, storage, lintEngine), ts = await lint(`${a}/leak${n}.ts`, storage, lintEngine);
+	expect(ids(tsx)).toEqual(['agora/import-boundary']);
+	expect(ids(tsx)).toEqual(ids(ts));
+	return tsx.map((m) => m.message);
+};
+const feature = (name: string): void => { put(`${name}/index.ts`, 'export const x = 1;\n'); };
+feature(a); feature(b); feature(c);
+const frameworkIndex = path.join(root, web, 'framework/index.ts');
+if (!existsSync(frameworkIndex)) put(`${web}/framework/index.ts`, 'export {};\n');
+
+// Lint through the public CLI in any checkout, so parent trees use their own config and install.
+const cliLint = (dir: string, fixtures: Record<string, string>): Record<string, string[]> => {
+	for (const [rel, code] of Object.entries(fixtures)) { mkdirSync(path.dirname(path.join(dir, rel)), { recursive: true }); writeFileSync(path.join(dir, rel), code); }
+	const run = spawnSync('pnpm', ['exec', 'eslint', '-f', 'json', ...Object.keys(fixtures)], { cwd: dir, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+	const reports = JSON.parse(run.stdout) as { filePath: string; messages: Message[] }[];
+	return Object.fromEntries(reports.map((r) => [path.relative(dir, r.filePath), ids(r.messages)]));
+};
+const checkout = (rev: string): string => {
+	mkdirSync(path.join(root, '.scratch'), { recursive: true });
+	const dir = path.join(mkdtempSync(path.join(root, '.scratch/u20-lane-')), 'tree');
+	scratch.push(path.dirname(dir));
+	for (const argv of [['git', 'clone', '--quiet', '--local', '--no-checkout', root, dir], ['git', '-C', dir, 'checkout', '--quiet', '--detach', rev], ['pnpm', '--dir', dir, 'install', '--frozen-lockfile', '--offline']]) {
+		expect(spawnSync(argv[0] ?? '', argv.slice(1), { encoding: 'utf8' }).status, argv.join(' ')).toBe(0);
+	}
+	return dir;
+};
+
+afterAll(() => {
+	for (const file of written) rmSync(file, { force: true });
+	for (const dir of [a, b, c, room]) rmSync(path.join(root, dir), { recursive: true, force: true });
+	for (const dir of scratch) rmSync(dir, { recursive: true, force: true });
+	if (!out) return;
+	for (const [lane, entry] of lanes) {
+		const dir = path.join(root, out, `lane-${lane}`); mkdirSync(dir, { recursive: true });
+		const lines = entry.subjects.map((s) => JSON.stringify(s));
+		writeFileSync(path.join(dir, 'assertions.json'), JSON.stringify({ unit: 'U20', lane, subjects: entry.subjects }, null, 2) + '\n');
+		writeFileSync(path.join(dir, 'transcript.log'), [`# U20 lane ${lane} (agora.lane/v1), recorded ${new Date().toISOString()}`, ...lines, ''].join('\n'));
+		const esc = (text: string): string => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;');
+		writeFileSync(path.join(dir, 'scenario.html'), `<!doctype html><meta charset="utf-8"><title>U20 lane ${lane} retained driver output</title><style>body{background:#f8faf7;color:#152f27;font:16px/1.5 system-ui;margin:32px}pre{font:13px/1.4 ui-monospace,monospace;white-space:pre-wrap;background:#eaf1e8;padding:20px;border:1px solid #cdd8ca;border-radius:8px}</style><h1>U20 lane ${lane}</h1><p>Rendering of this lane's retained assertions. Not a product UI and not an independent check.</p><pre>${esc(JSON.stringify(entry.subjects, null, 2))}</pre>`);
+	}
+});
+
+test.skipIf(!out)('U20 lane 1 regression against trunk keeps every .ts rejection and records .tsx coverage as observed', () => {
+	// Distinct basenames per extension: a .ts and .tsx sharing one makes the project service report a parse error.
+	const fixtures = (ext: string): Record<string, string> => ({ [`${web}/features/${stamp}-a/storage-${ext}.${ext}`]: storage, [`${web}/features/${stamp}-a/browser-${ext}.${ext}`]: browser, [`${web}/features/${stamp}-a/effect-${ext}.${ext}`]: rawEffect });
+	const head = cliLint(root, { ...fixtures('ts'), ...fixtures('tsx') });
+	for (const rev of [parentRev, BASELINE]) {
+		const seen = cliLint(checkout(rev), { ...fixtures('ts'), ...fixtures('tsx') });
+		for (const [file, rules] of Object.entries(seen)) if (file.endsWith('.ts')) for (const rule of rules.filter((r) => r.startsWith('agora/'))) expect(head[file], `${rev} ${file}`).toContain(rule);
+		const tsx = Object.entries(seen).filter(([file]) => file.endsWith('.tsx'));
+		record(1, `lint at ${rev}`, { rev, sha: spawnSync('git', ['rev-parse', rev], { cwd: root, encoding: 'utf8' }).stdout.trim(), ts: Object.fromEntries(Object.entries(seen).filter(([f]) => f.endsWith('.ts'))), tsx_rules: Object.fromEntries(tsx), tsx_guarded: tsx.every(([, rules]) => rules.some((r) => r.startsWith('agora/'))) });
+	}
+	for (const [file, rules] of Object.entries(head)) { expect(rules, file).not.toContain('parse-error'); expect(rules.filter((r) => r.startsWith('agora/')), file).not.toEqual([]); }
+	record(1, 'lint at head', { ts: Object.fromEntries(Object.entries(head).filter(([f]) => f.endsWith('.ts'))), tsx_rules: Object.fromEntries(Object.entries(head).filter(([f]) => f.endsWith('.tsx'))) });
+}, 600_000);
+
+test('U20 lane 2 a .tsx storage import is rejected with the rule id .ts files use', async () => {
+	record(2, 'tsx and ts storage type import', { rule_ids: ['agora/import-boundary'], messages: await laneTwo(engine) });
+}, 120_000);
+
+test('U20 lane 3 a .tsx browser global is rejected outside the framework folder and accepted inside it', async () => {
+	const rejected = await lint(`${a}/read.tsx`, browser), accepted = await lint(frameworkFile, browser);
+	expect(ids(rejected)).toEqual(['agora/renderer-footgun']);
+	expect(accepted).toEqual([]);
+	record(3, 'window.name', { feature: rejected.map((m) => m.message), framework: accepted });
+}, 120_000);
+
+test('U20 lane 4 an unmediated effect is rejected outside the framework folder and a framework-owned hook is accepted', async () => {
+	const rejected = await lint(`${a}/card.tsx`, rawEffect);
+	const owned = await lint(frameworkFile, "import { useEffect } from 'react';\nexport function useStamp(run: () => void): void { useEffect(run, []); }\n");
+	const consumer = await lint(`${a}/hooked.tsx`, "import { useStamp } from '../../framework/index.ts';\nexport function Card(): null { useStamp(() => undefined); return null; }\n");
+	expect(ids(rejected)).toEqual(['agora/renderer-footgun']);
+	expect(owned).toEqual([]);
+	record(4, 'raw useEffect', { feature: [...new Set(rejected.map((m) => m.message))], framework_hook: owned, feature_using_hook: consumer.map((m) => m.message) });
+}, 120_000);
+
+test('U20 lane 5 the lane-2 assertion turns red when the .tsx glob is removed in an isolated config copy', async () => {
+	const exts = "const exts = '{ts,tsx,mts,cts,js,jsx,mjs,cjs}';";
+	const config = readFileSync(path.join(root, 'eslint.config.js'), 'utf8');
+	expect(config).toContain(exts);
+	expect(config).toContain('import.meta.dirname');
+	const dir = mkdtempSync(path.join(root, '.scratch/u20-lane-')); scratch.push(dir);
+	const copy = path.join(dir, 'eslint.config.js');
+	writeFileSync(copy, config.replace(exts, "const exts = '{ts,mts,cts,js,jsx,mjs,cjs}';").replaceAll("'./scripts/", `'${root}/scripts/`).replace('import.meta.dirname', JSON.stringify(root)));
+	const weakened = new ESLint({ cwd: root, ignore: false, overrideConfigFile: copy });
+	await laneTwo(engine);
+	await expect(laneTwo(weakened)).rejects.toThrow();
+	record(5, 'config copy without tsx', { head_assertion: 'green', weakened_assertion: 'red', weakened_rule_ids: ids(await lint(`${a}/leak-weakened.tsx`, storage, weakened)) });
+}, 120_000);
+
+test('U20 lane 6 an eslint-disable comment naming a new rule is itself rejected and suppresses nothing', async () => {
+	const messages = await lint(`${a}/disabled.tsx`, `// eslint-disable-next-line agora/renderer-footgun\n${browser}`);
+	expect(messages.map((m) => m.message)).toEqual([
+		'inline ESLint disables cannot suppress Agora architecture rules; linterOptions.noInlineConfig owns this and reviewed exceptions live in agora/architecture-exceptions.json',
+		'direct window is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/framework); Features and Client use Host ports',
+	]);
+	record(6, 'eslint-disable-next-line agora/renderer-footgun', { messages: messages.map((m) => m.message) });
+}, 120_000);
+
+test('U20 lane 7 each rejection names its supported owner and the sanctioned alternative path', async () => {
+	declare(a, [`${stamp}-c`]);
+	const cases: [string, string, string, RegExp][] = [
+		['import-boundary', `${a}/owner-import.tsx`, storage, /^renderer code cannot import @agora\/storage; use apps\/web\/src\/client \/ apps\/web\/src\/host adapters instead of /],
+		['renderer-footgun browser global', `${a}/owner-window.tsx`, browser, /^direct window is allowed only in Host\/framework adapters \(apps\/web\/src\/host, apps\/web\/src\/framework\); Features and Client use Host ports$/],
+		['renderer-footgun effect', `${a}/owner-effect.tsx`, rawEffect, /^useEffect is allowed only in framework owner apps\/web\/src\/framework; expose a named framework hook instead of /],
+		['undeclared Feature', `${a}/owner-feature.tsx`, `import { x } from '../${stamp}-b/index.ts'; export const y = x;`, new RegExp(`^Feature ${stamp}-a imports Feature ${stamp}-b without declaring it; add "${stamp}-b" to apps/web/src/features/${stamp}-a/dependencies.json and import only through apps/web/src/features/${stamp}-b/index.ts$`)],
+		['framework imports Feature', frameworkFile, `import { x } from '../features/${stamp}-b/index.ts'; export const y = x;`, /^framework must not import product Features; Features live under apps\/web\/src\/features\/<name> and import framework through its public entrypoint, never the reverse$/],
+	];
+	for (const [rule, rel, code, expected] of cases) {
+		const [first] = await lint(rel, code);
+		expect(first?.message, rule).toMatch(expected);
+		record(7, rule, { message: first?.message });
+	}
+}, 120_000);
+
+test('U20 lane 8 the widened lint reproduces the known drift of the preserved renderer fixture', async () => {
+	expect(spawnSync('git', ['cat-file', '-t', BRANCH], { cwd: root, encoding: 'utf8' }).stdout.trim()).toBe('commit');
+	const listed = spawnSync('git', ['ls-tree', '-r', '--name-only', BRANCH, `${web}/`], { cwd: root, encoding: 'utf8' }).stdout.split('\n').filter((f) => /\.tsx?$/.test(f));
+	expect(listed.length).toBeGreaterThan(5);
+	const byFile: Record<string, string[]> = {};
+	for (const original of listed) {
+		const code = spawnSync('git', ['show', `${BRANCH}:${original}`], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).stdout;
+		byFile[original] = (await lint(`${room}/${original.slice(web.length + 1)}`, code)).map((m) => `${m.ruleId}: ${m.message.slice(0, 90)}`);
+	}
+	const all = Object.values(byFile).flat();
+	for (const needle of ['agora/renderer-footgun: useEffect is allowed only in framework', 'agora/renderer-footgun: direct document', 'agora/client-owner:']) expect(all.some((line) => line.startsWith(needle)), needle).toBe(true);
+	record(8, `files of ${BRANCH}`, { files: listed.length, rejections: all.length, by_file: byFile, clean_files: Object.entries(byFile).filter(([, lines]) => lines.length === 0).map(([file]) => file) });
+}, 300_000);
+
+test('U20 lane 9 an undeclared Feature import and a framework import of a Feature are rejected with their owners', async () => {
+	declare(a, [`${stamp}-c`]);
+	const undeclared = await lint(`${a}/use.ts`, `import { x } from '../${stamp}-b/index.ts'; export const y = x;`);
+	const framework = await lint(frameworkFile, `import { x } from '../features/${stamp}-b/index.ts'; export const y = x;`);
+	expect(undeclared.map((m) => m.message)).toEqual([`Feature ${stamp}-a imports Feature ${stamp}-b without declaring it; add "${stamp}-b" to apps/web/src/features/${stamp}-a/dependencies.json and import only through apps/web/src/features/${stamp}-b/index.ts`]);
+	expect(framework.map((m) => m.message)).toEqual(['framework must not import product Features; Features live under apps/web/src/features/<name> and import framework through its public entrypoint, never the reverse']);
+	record(9, 'undeclared and framework imports', { undeclared: undeclared.map((m) => m.message), framework: framework.map((m) => m.message) });
+}, 120_000);
+
+test.skipIf(!out)('U20 lane 10 the existing .ts boundary suite and the .tsx suite pass together', () => {
+	const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')) as { scripts: Record<string, string> };
+	const files = (pkg.scripts['boundaries'] ?? '').split(/\s+/).filter((arg) => arg.endsWith('.test.ts'));
+	expect(files).toContain('packages/client-core/test/app-architecture.test.ts');
+	const report = path.join(root, out ?? '', 'lane-10/boundaries.json'); mkdirSync(path.dirname(report), { recursive: true });
+	const run = spawnSync('pnpm', ['exec', 'vitest', 'run', '--project', 'unit', ...files, '--reporter=json', `--outputFile=${report}`], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+	const native = JSON.parse(readFileSync(report, 'utf8')) as { numFailedTests: number; numPassedTests: number; numPendingTests: number; testResults: { name: string; assertionResults: { title: string; status: string }[] }[] };
+	expect(run.status, run.stderr).toBe(0);
+	expect(native.numFailedTests + native.numPendingTests).toBe(0);
+	const tsx = native.testResults.flatMap((r) => r.assertionResults).filter((t) => t.title.includes('tsx'));
+	expect(tsx.length).toBeGreaterThan(0);
+	record(10, 'pnpm boundaries file set', { files, passed: native.numPassedTests, tsx_assertions: tsx.map((t) => `${t.status}: ${t.title}`) });
+}, 900_000);

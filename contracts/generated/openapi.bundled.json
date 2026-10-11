@@ -1416,7 +1416,7 @@
 						"type": "array",
 						"maxItems": 16,
 						"items": {
-							"description": "Per-unit lane and perf manifest. A unit without lanes_unavailable uses the top-level lanes and driver. A perf entry without probe is unavailable for the stated reason; limits are absolute budgets in milliseconds, optionally a multiple of another metric.",
+							"description": "Per-unit lane and perf manifest. A unit without lanes_unavailable runs its own driver when it names one, else the top-level lanes and driver. A perf entry without probe is unavailable for the stated reason; limits are absolute budgets in milliseconds, optionally a multiple of another metric.",
 							"type": "object",
 							"additionalProperties": false,
 							"required": [
@@ -1439,6 +1439,14 @@
 									"type": "string",
 									"minLength": 20,
 									"maxLength": 1024
+								},
+								"driver": {
+									"type": "array",
+									"maxItems": 32,
+									"items": {
+										"type": "string",
+										"minLength": 1
+									}
 								},
 								"perf": {
 									"type": "object",

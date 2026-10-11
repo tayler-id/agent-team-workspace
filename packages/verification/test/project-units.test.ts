@@ -5,7 +5,7 @@ import { afterAll, describe, expect, test } from 'vitest';
 
 interface Report { outcome: string; diagnostics: { reason_code: string; message: string }[]; artifacts: { path: string }[] }
 interface Receipt { parent_behavior: string; samples: { side: string; metrics: Record<string, number> }[]; p95: Record<string, Record<string, number>> }
-interface Manifest { units: { id: string; perf?: unknown; lanes_unavailable?: string }[] }
+interface Manifest { units: { id: string; perf?: unknown; lanes_unavailable?: string; driver?: string[] }[] }
 const exits: Record<string, number> = { pass: 0, fail: 1, blocked: 2, unavailable: 3, usage_error: 64, infrastructure_failure: 70 };
 const root = process.cwd();
 const sandboxes: string[] = [];
@@ -51,7 +51,7 @@ const flagged = ['node', '-e', "const fs=require('fs');const f='slow.flag';conso
 afterAll(() => { for (const dir of sandboxes) rmSync(dir, { recursive: true, force: true }); });
 
 describe('per-unit lanes through the public CLI', () => {
-	test.each(['U20', 'U21', 'U22', 'U23', 'U01c', 'U01d'])('%s lanes are unavailable with a reason, never a pass', (unit) => {
+	test.each(['U21', 'U22', 'U23', 'U01c', 'U01d'])('%s lanes are unavailable with a reason, never a pass', (unit) => {
 		const report = run(root, ['lanes', '--unit', unit, '--task', 'agora-s1-qualify-trusted-checks']);
 		expect(report.outcome).toBe('unavailable');
 		expect(report.artifacts).toEqual([]);
@@ -63,6 +63,39 @@ describe('per-unit lanes through the public CLI', () => {
 		const report = run(root, ['lanes', '--unit', 'U99', '--task', 'agora-s1-qualify-trusted-checks']);
 		expect(report).toMatchObject({ outcome: 'unavailable', diagnostics: [{ reason_code: 'unavailable_capability', message: 'unknown unit U99' }] });
 	});
+});
+
+// Stands in for the vitest driver: writes the JSON reporter file and one assertions.json per lane, minus whatever a flag file removes.
+const fakeDriver = `const fs = require('fs'), path = require('path');
+const file = process.argv.find((a) => a.startsWith('--outputFile=')).slice(13), out = process.env.AGORA_LANE_OUT, flag = (n) => fs.existsSync(n + '.flag');
+const lanes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].filter((n) => !flag('drop' + n));
+const rows = lanes.map((n) => ({ fullName: 'U20 lane ' + n + ' fake', status: flag('pend') && n === 3 ? 'pending' : 'passed' }));
+for (const n of lanes) if (!flag('nofile' + n)) { fs.mkdirSync(path.join(out, 'lane-' + n), { recursive: true }); fs.writeFileSync(path.join(out, 'lane-' + n, 'assertions.json'), JSON.stringify({ parent: process.env.AGORA_LANE_PARENT ?? null })); }
+fs.writeFileSync(file, JSON.stringify({ numFailedTests: 0, numPendingTests: rows.filter((r) => r.status === 'pending').length, testResults: [{ assertionResults: rows }] }));`;
+
+describe('a unit that names its own lane driver', () => {
+	test('passes only when all ten lanes passed and each left its assertions, and records the compared parent', () => {
+		const dir = sandbox();
+		const file = path.join(dir, 'agora/project.json'), manifest = manifestOf(readFileSync(file, 'utf8'));
+		const unit = manifest.units.find((row) => row.id === 'U20');
+		expect(unit?.lanes_unavailable).toBeUndefined();
+		if (unit) unit.driver = ['node', 'fake-driver.cjs'];
+		writeFileSync(file, JSON.stringify(manifest)); writeFileSync(path.join(dir, 'fake-driver.cjs'), fakeDriver);
+		const lanes = () => run(dir, ['lanes', '--unit', 'U20', '--parent', 'abc123']);
+		const passed = lanes();
+		expect(passed.outcome, JSON.stringify(passed)).toBe('pass');
+		expect(passed.artifacts).toHaveLength(1 + 10 + 2);
+		const outcome = JSON.parse(readFileSync(path.join(dir, passed.artifacts.find((row) => row.path.endsWith('outcome.json'))?.path ?? ''), 'utf8')) as { qualification: string; parent: string; lanes: { id: number; status: string }[] };
+		expect(outcome).toMatchObject({ qualification: 'not_claimed', parent: 'abc123' });
+		expect(outcome.lanes.map((row) => `${row.id}:${row.status}`)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => `${n}:passed`));
+		for (const [flag, reason] of [['drop7', 'lane_failed'], ['pend', 'lane_failed'], ['nofile4', 'lane_artifact_missing']] as const) {
+			writeFileSync(path.join(dir, `${flag}.flag`), '');
+			const refused = lanes();
+			expect(refused.outcome, flag).toBe('fail');
+			expect(refused.diagnostics[0]?.message, flag).toBe(reason);
+			rmSync(path.join(dir, `${flag}.flag`));
+		}
+	}, 300_000);
 });
 
 describe('perf scenario without an executable probe', () => {

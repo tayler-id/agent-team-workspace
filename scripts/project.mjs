@@ -30,7 +30,8 @@ Help is plain text, needs no install or database, and starts nothing.
              report unavailable with the reason. REV defaults to HEAD^.
   lanes      --unit UNIT --task TASK --artifacts DIRECTORY; task-specific qualification.
 
-UNIT: U01b runs lanes. U20, U21, U22, U23, U01c and U01d list their ten lanes as unavailable
+UNIT: U01b and U20 run lanes. U20 needs no TASK: its ten lanes are one driver and --parent names the
+compared revision (default HEAD^). U21, U22, U23, U01c and U01d list their ten lanes as unavailable
 with a reason until a driver exists; an unknown unit is unavailable.
 TASK (U01b): agora-s1-isolate-development (lanes 1-4), agora-s1-validate-project-evidence (1-7).
 Whole-unit lanes 8-10 unavailable; a task pass never qualifies the whole unit.
@@ -81,14 +82,23 @@ try {
 		requireThat(!unit?.lanes_unavailable, `${unit?.id} lanes 1-10 unavailable: ${unit?.lanes_unavailable}`, 'unavailable');
 		const out = safe(options['--artifacts'] ?? `.scratch/project-lanes/${randomUUID()}`); mkdirSync(out, { recursive: true });
 		const file = path.join(out, 'lanes.json'); requireThat(!existsSync(file), 'evidence_exists');
-		const run = command([...manifest.driver, '--reporter=json', '--outputFile=' + file]);
-		save(path.join(out, 'command.json'), { argv: manifest.driver, exit: run.status, stdout: run.stdout, stderr: run.stderr });
+		// A unit that names its own driver runs it with its lanes; only that driver reads these two variables.
+		const own = unit?.driver, driver = own ?? manifest.driver, lanes = own ? unit.lanes : manifest.lanes;
+		process.env.AGORA_LANE_OUT = path.relative(process.cwd(), out); if (options['--parent']) process.env.AGORA_LANE_PARENT = options['--parent'];
+		const run = command([...driver, '--reporter=json', '--outputFile=' + file]);
+		save(path.join(out, 'command.json'), { argv: driver, exit: run.status, stdout: run.stdout, stderr: run.stderr });
 		const native = json(file); report.artifacts = [artifact(file), artifact(path.join(out, 'command.json'))];
-		if (existsSync('.scratch/project-guards.json')) { save(path.join(out, 'guards.json'), json('.scratch/project-guards.json')); report.artifacts.push(artifact(path.join(out, 'guards.json'))); }
+		if (!own && existsSync('.scratch/project-guards.json')) { save(path.join(out, 'guards.json'), json('.scratch/project-guards.json')); report.artifacts.push(artifact(path.join(out, 'guards.json'))); }
 		const assertions = native.testResults.flatMap(suite => suite.assertionResults);
-		requireThat(run.status === 0 && native.numFailedTests === 0 && native.numPendingTests === 0 && assertions.length === manifest.lanes.length + 1 && assertions.every(row => row.status === 'passed') && manifest.lanes.every(lane => assertions.some(row => row.fullName.startsWith(`project lane ${lane.id} `))), 'lane_failed');
+		requireThat(run.status === 0 && native.numFailedTests === 0 && native.numPendingTests === 0 && assertions.length === lanes.length + (own ? 0 : 1) && assertions.every(row => row.status === 'passed') && lanes.every(lane => assertions.some(row => row.fullName.startsWith(`${own ? unit.id : 'project'} lane ${lane.id} `))), 'lane_failed');
+		if (own) {
+			const rows = lanes.map(lane => ({ id: lane.id, assertions: path.join(out, `lane-${lane.id}`, 'assertions.json') }));
+			requireThat(rows.every(row => existsSync(row.assertions)), 'lane_artifact_missing');
+			save(path.join(out, 'outcome.json'), { schema_version: 'agora.lane-outcome/v1', unit: unit.id, head: report.versions.code, parent: options['--parent'] ?? 'HEAD^', qualification: 'not_claimed', lanes: rows.map(row => ({ id: row.id, status: 'passed', assertions: path.relative(out, row.assertions) })) });
+			report.artifacts.push(artifact(path.join(out, 'outcome.json')), ...rows.map(row => artifact(row.assertions)));
+		}
 		const unlockedThroughLane = { 'agora-s1-isolate-development': 4, 'agora-s1-validate-project-evidence': 7, 'agora-s1-qualify-trusted-checks': 10 };
-		if (action === 'lanes') requireThat(unlockedThroughLane[options['--task']], 'unknown task; known tasks unlock lanes 1-4, 1-7 or 1-10', 'blocked');
+		if (action === 'lanes' && !own) requireThat(unlockedThroughLane[options['--task']], 'unknown task; known tasks unlock lanes 1-4, 1-7 or 1-10', 'blocked');
 	} else {
 		requireThat(action !== 'verify' || options['--scenario'] === 'policy', 'unknown_scenario', 'usage_error');
 		requireThat(id, 'instance_required', 'usage_error');
