@@ -1,0 +1,15 @@
+{
+  "unit": "U20",
+  "lane": 4,
+  "subjects": [
+    {
+      "subject": "raw useEffect",
+      "feature": [
+        "useEffect is allowed only in framework owner apps/web/src/framework; expose a named framework hook instead of importing raw effects in feature code",
+        "useEffect is allowed only in framework owner apps/web/src/framework; expose a named framework hook instead of raw effects in feature code"
+      ],
+      "framework_hook": [],
+      "feature_using_hook": []
+    }
+  ]
+}

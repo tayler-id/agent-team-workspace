@@ -1,0 +1,87 @@
+{
+  "unit": "U20",
+  "lane": 1,
+  "subjects": [
+    {
+      "subject": "lint at aa86dfd",
+      "rev": "aa86dfd",
+      "sha": "aa86dfd8347c457a055d62c3a76fe5b75c853fa1",
+      "ts": {
+        "apps/web/src/features/u20laneyromv3hamee-a/browser-ts.ts": [
+          "agora/renderer-footgun"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/effect-ts.ts": [
+          "agora/renderer-footgun"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/storage-ts.ts": [
+          "agora/import-boundary"
+        ]
+      },
+      "tsx_rules": {
+        "apps/web/src/features/u20laneyromv3hamee-a/browser-tsx.tsx": [
+          "agora/renderer-footgun"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/effect-tsx.tsx": [
+          "agora/renderer-footgun"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/storage-tsx.tsx": [
+          "agora/import-boundary"
+        ]
+      },
+      "tsx_guarded": true
+    },
+    {
+      "subject": "lint at 9bb7462^",
+      "rev": "9bb7462^",
+      "sha": "cacbd069052fc60a591e0895eec3f0c5ac7a25b5",
+      "ts": {
+        "apps/web/src/features/u20laneyromv3hamee-a/browser-ts.ts": [
+          "@typescript-eslint/no-unsafe-return",
+          "@typescript-eslint/no-unsafe-member-access"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/effect-ts.ts": [
+          "@typescript-eslint/no-unsafe-call"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/storage-ts.ts": [
+          "agora/import-boundary"
+        ]
+      },
+      "tsx_rules": {
+        "apps/web/src/features/u20laneyromv3hamee-a/browser-tsx.tsx": [
+          "@typescript-eslint/no-unsafe-return",
+          "@typescript-eslint/no-unsafe-member-access"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/effect-tsx.tsx": [
+          "@typescript-eslint/no-unsafe-call"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/storage-tsx.tsx": []
+      },
+      "tsx_guarded": false
+    },
+    {
+      "subject": "lint at head",
+      "ts": {
+        "apps/web/src/features/u20laneyromv3hamee-a/browser-ts.ts": [
+          "agora/renderer-footgun"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/effect-ts.ts": [
+          "agora/renderer-footgun"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/storage-ts.ts": [
+          "agora/import-boundary"
+        ]
+      },
+      "tsx_rules": {
+        "apps/web/src/features/u20laneyromv3hamee-a/browser-tsx.tsx": [
+          "agora/renderer-footgun"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/effect-tsx.tsx": [
+          "agora/renderer-footgun"
+        ],
+        "apps/web/src/features/u20laneyromv3hamee-a/storage-tsx.tsx": [
+          "agora/import-boundary"
+        ]
+      }
+    }
+  ]
+}

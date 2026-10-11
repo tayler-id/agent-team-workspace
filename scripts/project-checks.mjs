@@ -17,7 +17,7 @@ export function command(argv, cwd = process.cwd()) {
 }
 export function environment() {
 	// Allowlist, not removal of a few known credential names. No inherited DB URLs or Node hooks.
-	return Object.fromEntries(['PATH', 'HOME', 'TMPDIR', 'LANG', 'AGORA_PG_BIN'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
+	return Object.fromEntries(['PATH', 'HOME', 'TMPDIR', 'LANG', 'AGORA_PG_BIN', 'AGORA_LANE_OUT', 'AGORA_LANE_PARENT'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
 }
 export function safe(file) {
 	const target = path.resolve(file);

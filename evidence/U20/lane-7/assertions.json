@@ -1,0 +1,26 @@
+{
+  "unit": "U20",
+  "lane": 7,
+  "subjects": [
+    {
+      "subject": "import-boundary",
+      "message": "renderer code cannot import @agora/storage; use apps/web/src/client / apps/web/src/host adapters instead of storage, domain implementation, or server packages"
+    },
+    {
+      "subject": "renderer-footgun browser global",
+      "message": "direct window is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/framework); Features and Client use Host ports"
+    },
+    {
+      "subject": "renderer-footgun effect",
+      "message": "useEffect is allowed only in framework owner apps/web/src/framework; expose a named framework hook instead of importing raw effects in feature code"
+    },
+    {
+      "subject": "undeclared Feature",
+      "message": "Feature u20laneyromv3hamee-a imports Feature u20laneyromv3hamee-b without declaring it; add \"u20laneyromv3hamee-b\" to apps/web/src/features/u20laneyromv3hamee-a/dependencies.json and import only through apps/web/src/features/u20laneyromv3hamee-b/index.ts"
+    },
+    {
+      "subject": "framework imports Feature",
+      "message": "framework must not import product Features; Features live under apps/web/src/features/<name> and import framework through its public entrypoint, never the reverse"
+    }
+  ]
+}

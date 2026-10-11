@@ -1,0 +1,95 @@
+head: 97dac0c784056b07da0ff1bfa7485f328df75832  node: v24.21.0  host: Darwin 25.5.0 arm64
+== unmutated
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 1 regression against trunk keeps every .
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 2 a .tsx storage import is rejected with
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 3 a .tsx browser global is rejected outs
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 4 an unmediated effect is rejected outsi
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 5 the lane-2 assertion turns red when th
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 6 an eslint-disable comment naming a new
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 7 each rejection names its supported own
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 8 the widened lint reproduces the known 
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 9 an undeclared Feature import and a fra
+ ↓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 10 the existing .ts boundary suite and t
+      Tests  9 passed | 1 skipped (10)
+== mutation: renderer-footgun off in the main block (eslint.config.js)
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 1 regression against trunk keeps every .
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 2 a .tsx storage import is rejected with
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 3 a .tsx browser global is rejected outs
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 4 an unmediated effect is rejected outsi
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 5 the lane-2 assertion turns red when th
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 6 an eslint-disable comment naming a new
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 7 each rejection names its supported own
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 8 the widened lint reproduces the known 
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 9 an undeclared Feature import and a fra
+ ↓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 10 the existing .ts boundary suite and t
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  6 failed | 3 passed | 1 skipped (10)
+restored: byte-identical
+== mutation: import-boundary off in the main block (eslint.config.js)
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 1 regression against trunk keeps every .
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 2 a .tsx storage import is rejected with
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 3 a .tsx browser global is rejected outs
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 4 an unmediated effect is rejected outsi
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 5 the lane-2 assertion turns red when th
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 6 an eslint-disable comment naming a new
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 7 each rejection names its supported own
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 8 the widened lint reproduces the known 
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 9 an undeclared Feature import and a fra
+ ↓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 10 the existing .ts boundary suite and t
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  5 failed | 4 passed | 1 skipped (10)
+restored: byte-identical
+== mutation: tsx removed from the guarded extensions (eslint.config.js)
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 1 regression against trunk keeps every .
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 2 a .tsx storage import is rejected with
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 3 a .tsx browser global is rejected outs
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 4 an unmediated effect is rejected outsi
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 5 the lane-2 assertion turns red when th
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 6 an eslint-disable comment naming a new
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 7 each rejection names its supported own
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 8 the widened lint reproduces the known 
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 9 an undeclared Feature import and a fra
+ ↓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 10 the existing .ts boundary suite and t
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  8 failed | 1 passed | 1 skipped (10)
+restored: byte-identical
+== mutation: undeclared Feature check disabled (scripts/boundary-policy.ts)
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 1 regression against trunk keeps every .
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 2 a .tsx storage import is rejected with
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 3 a .tsx browser global is rejected outs
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 4 an unmediated effect is rejected outsi
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 5 the lane-2 assertion turns red when th
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 6 an eslint-disable comment naming a new
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 7 each rejection names its supported own
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 8 the widened lint reproduces the known 
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 9 an undeclared Feature import and a fra
+ ↓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 10 the existing .ts boundary suite and t
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  2 failed | 7 passed | 1 skipped (10)
+restored: byte-identical
+== mutation: framework-to-Feature check disabled (scripts/boundary-policy.ts)
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 1 regression against trunk keeps every .
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 2 a .tsx storage import is rejected with
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 3 a .tsx browser global is rejected outs
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 4 an unmediated effect is rejected outsi
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 5 the lane-2 assertion turns red when th
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 6 an eslint-disable comment naming a new
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 7 each rejection names its supported own
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 8 the widened lint reproduces the known 
+ × |unit| packages/verification/test/u20-lanes.test.ts > project lane 9 an undeclared Feature import and a fra
+ ↓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 10 the existing .ts boundary suite and t
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  2 failed | 7 passed | 1 skipped (10)
+restored: byte-identical
+== restored
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 1 regression against trunk keeps every .
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 2 a .tsx storage import is rejected with
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 3 a .tsx browser global is rejected outs
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 4 an unmediated effect is rejected outsi
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 5 the lane-2 assertion turns red when th
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 6 an eslint-disable comment naming a new
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 7 each rejection names its supported own
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 8 the widened lint reproduces the known 
+ ✓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 9 an undeclared Feature import and a fra
+ ↓ |unit| packages/verification/test/u20-lanes.test.ts > project lane 10 the existing .ts boundary suite and t
+      Tests  9 passed | 1 skipped (10)

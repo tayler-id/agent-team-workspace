@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1096 520" width="1096" height="520" role="img" aria-labelledby="u20-title u20-desc">
+<title id="u20-title">How the U20 boundary-lint lanes and perf probe produce their evidence</title>
+<desc id="u20-desc">The command agora project lanes --unit U20 runs one vitest driver, packages/verification/test/u20-lanes.test.ts. Lanes 2 to 9 lint probe files with the real ESLint config in the head checkout; lane 1 also lints the same files in clones of the parent revision and of the commit before .tsx joined the guarded set; lane 8 reads the renderer files of commit 99aa4f7 from Git history and lints them at a throwaway Feature path; lane 10 runs the pnpm boundaries test files. Each lane writes assertions.json, transcript.log and scenario.html under lane-N. The runner checks that all ten ran and passed, none skipped, and the driver writes outcome.json with qualification not_claimed. chrome-devtools-axi screenshots each scenario.html into scenario.png when it is installed. A separate command, agora project verify --scenario perf --unit U20, runs five interleaved parent and head batches of the lint probe and compares p95 lint time with the 10 percent rule and the two-times .ts-only limit.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path class="arrowhead" d="M0 0 L8 4 L0 8Z"/></marker></defs>
+<style>
+svg { --ink: #20332f; --muted: #52625d; --paper: #fafbf8; --line: #dce3dc; --surface: #ffffff; --wire: #708c7e; font-family: system-ui, -apple-system, sans-serif; }
+@media (prefers-color-scheme: dark) { svg { --ink: #e6ece8; --muted: #a9b6b0; --paper: #141917; --line: #34403b; --surface: #1c2320; --wire: #7d9087; } }
+.bg { fill: var(--paper); }
+.box { fill: var(--surface); stroke: var(--line); stroke-width: 1; }
+.divider { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; fill: none; }
+.arrow { stroke: var(--wire); stroke-width: 1.5; fill: none; }
+.arrowhead { fill: var(--wire); }
+.kicker { fill: var(--muted); font-size: 11px; letter-spacing: 1px; }
+.title { fill: var(--ink); font-size: 15px; font-weight: 600; }
+.detail { fill: var(--muted); font-size: 12px; }
+.mono { fill: var(--ink); font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; }
+</style>
+<rect class="bg" width="1096" height="520"/>
+<text class="kicker" x="24" y="30">LANES</text>
+<rect class="box" x="24" y="44" width="200" height="86" rx="8"/>
+<text class="title" x="40" y="72">Runner</text>
+<text class="mono" x="40" y="94">project lanes --unit U20</text>
+<text class="detail" x="40" y="114">--parent REV, default HEAD^</text>
+<path class="arrow" d="M224 87 H266" marker-end="url(#arrow)"/>
+<rect class="box" x="268" y="44" width="250" height="86" rx="8"/>
+<text class="title" x="284" y="72">One vitest driver</text>
+<text class="mono" x="284" y="94">u20-lanes.test.ts</text>
+<text class="detail" x="284" y="114">10 named tests, none skipped</text>
+<path class="arrow" d="M518 87 H560" marker-end="url(#arrow)"/>
+<rect class="box" x="562" y="44" width="510" height="86" rx="8"/>
+<text class="title" x="578" y="72">lane-N/ per lane</text>
+<text class="mono" x="578" y="94">assertions.json  transcript.log  scenario.html</text>
+<text class="detail" x="578" y="114">exact rule ids and messages, not exit codes alone</text>
+
+<text class="kicker" x="24" y="172">WHAT EACH LANE LINTS</text>
+<rect class="box" x="24" y="186" width="250" height="132" rx="8"/>
+<text class="title" x="40" y="212">Lanes 2 to 7 and 9</text>
+<text class="detail" x="40" y="236">Probe files in uniquely named</text>
+<text class="detail" x="40" y="254">Features, real ESLint config,</text>
+<text class="detail" x="40" y="272">accepted and rejected pairs;</text>
+<text class="detail" x="40" y="290">lane 5 uses a config copy</text>
+<text class="detail" x="40" y="308">without the .tsx glob</text>
+<rect class="box" x="292" y="186" width="250" height="132" rx="8"/>
+<text class="title" x="308" y="212">Lane 1, trunk</text>
+<text class="detail" x="308" y="236">Same .ts and .tsx fixtures in</text>
+<text class="detail" x="308" y="254">clones of the parent and of</text>
+<text class="detail" x="308" y="272">9bb7462^, each with its own</text>
+<text class="detail" x="308" y="290">offline install; .tsx coverage</text>
+<text class="detail" x="308" y="308">recorded as observed</text>
+<rect class="box" x="560" y="186" width="250" height="132" rx="8"/>
+<text class="title" x="576" y="212">Lane 8, renderer branch</text>
+<text class="detail" x="576" y="236">git show 99aa4f7:apps/web/src</text>
+<text class="detail" x="576" y="254">files, placed at a throwaway</text>
+<text class="detail" x="576" y="272">Feature path; the branch is</text>
+<text class="detail" x="576" y="290">never checked out or changed</text>
+<rect class="box" x="828" y="186" width="244" height="132" rx="8"/>
+<text class="title" x="844" y="212">Lane 10, together</text>
+<text class="detail" x="844" y="236">The pnpm boundaries test</text>
+<text class="detail" x="844" y="254">files, .ts rows and .tsx rows</text>
+<text class="detail" x="844" y="272">in one vitest run, own JSON</text>
+<text class="detail" x="844" y="290">report kept beside the lane</text>
+<line class="divider" x1="24" y1="344" x2="1072" y2="344"/>
+
+<text class="kicker" x="24" y="376">AFTER THE DRIVER</text>
+<rect class="box" x="24" y="390" width="330" height="90" rx="8"/>
+<text class="title" x="40" y="418">Runner checks</text>
+<text class="detail" x="40" y="440">10 of 10 passed, 0 pending. The driver</text>
+<text class="detail" x="40" y="458">also wrote outcome.json with</text>
+<text class="mono" x="40" y="474">qualification: not_claimed</text>
+<path class="arrow" d="M354 435 H392" marker-end="url(#arrow)"/>
+<rect class="box" x="394" y="390" width="330" height="90" rx="8"/>
+<text class="title" x="410" y="418">Scenario capture</text>
+<text class="detail" x="410" y="440">chrome-devtools-axi screenshots</text>
+<text class="detail" x="410" y="458">scenario.html to scenario.png; no tool,</text>
+<text class="detail" x="410" y="474">no image, and the reason is recorded</text>
+<rect class="box" x="742" y="390" width="330" height="90" rx="8"/>
+<text class="title" x="758" y="418">Perf, a separate command</text>
+<text class="mono" x="758" y="440">verify --scenario perf --unit U20</text>
+<text class="detail" x="758" y="458">5 interleaved parent/head batches,</text>
+<text class="detail" x="758" y="474">p95 +10% rule, lint under 2x .ts-only</text>
+</svg>

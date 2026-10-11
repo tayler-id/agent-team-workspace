@@ -1,0 +1,47 @@
+{
+  "schema_version": "agora.lane-outcome/v1",
+  "unit": "U20",
+  "qualification": "not_claimed",
+  "lanes": [
+    {
+      "id": 1,
+      "assertions": "lane-1/assertions.json"
+    },
+    {
+      "id": 2,
+      "assertions": "lane-2/assertions.json"
+    },
+    {
+      "id": 3,
+      "assertions": "lane-3/assertions.json"
+    },
+    {
+      "id": 4,
+      "assertions": "lane-4/assertions.json"
+    },
+    {
+      "id": 5,
+      "assertions": "lane-5/assertions.json"
+    },
+    {
+      "id": 6,
+      "assertions": "lane-6/assertions.json"
+    },
+    {
+      "id": 7,
+      "assertions": "lane-7/assertions.json"
+    },
+    {
+      "id": 8,
+      "assertions": "lane-8/assertions.json"
+    },
+    {
+      "id": 9,
+      "assertions": "lane-9/assertions.json"
+    },
+    {
+      "id": 10,
+      "assertions": "lane-10/assertions.json"
+    }
+  ]
+}
