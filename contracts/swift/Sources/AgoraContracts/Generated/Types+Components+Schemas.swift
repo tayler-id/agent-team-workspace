@@ -1712,6 +1712,7 @@ extension Components {
             /// - Remark: Generated from `#/components/schemas/FoundationReport/task`.
             @frozen public enum taskPayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case agora_hyphen_s1_hyphen_enforce_hyphen_test_hyphen_first = "agora-s1-enforce-test-first"
+                case agora_hyphen_foundation_hyphen_ready_hyphen_aggregate = "agora-foundation-ready-aggregate"
             }
             /// - Remark: Generated from `#/components/schemas/FoundationReport/task`.
             public var task: Components.Schemas.FoundationReport.taskPayload
@@ -1720,6 +1721,7 @@ extension Components {
                 case record = "record"
                 case task = "task"
                 case foundation = "foundation"
+                case foundation_hyphen_ready = "foundation-ready"
                 case feature = "feature"
                 case lane_hyphen_9 = "lane-9"
                 case lane_hyphen_10 = "lane-10"
@@ -1727,6 +1729,13 @@ extension Components {
             }
             /// - Remark: Generated from `#/components/schemas/FoundationReport/scope`.
             public var scope: Components.Schemas.FoundationReport.scopePayload
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/mode`.
+            @frozen public enum modePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case live = "live"
+                case fixture = "fixture"
+            }
+            /// - Remark: Generated from `#/components/schemas/FoundationReport/mode`.
+            public var mode: Components.Schemas.FoundationReport.modePayload?
             /// - Remark: Generated from `#/components/schemas/FoundationReport/parent`.
             public var parent: Components.Schemas.GitSha?
             /// - Remark: Generated from `#/components/schemas/FoundationReport/head`.
@@ -1749,7 +1758,10 @@ extension Components {
             public var unit_outcome: Components.Schemas.FoundationReport.unit_outcomePayload
             /// - Remark: Generated from `#/components/schemas/FoundationReport/foundation_outcome`.
             @frozen public enum foundation_outcomePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case pass = "pass"
+                case fail = "fail"
                 case blocked = "blocked"
+                case unavailable = "unavailable"
             }
             /// - Remark: Generated from `#/components/schemas/FoundationReport/foundation_outcome`.
             public var foundation_outcome: Components.Schemas.FoundationReport.foundation_outcomePayload
@@ -1766,6 +1778,7 @@ extension Components {
             ///   - authority:
             ///   - task:
             ///   - scope:
+            ///   - mode:
             ///   - parent:
             ///   - head:
             ///   - outcome:
@@ -1780,6 +1793,7 @@ extension Components {
                 authority: Components.Schemas.FoundationReport.authorityPayload,
                 task: Components.Schemas.FoundationReport.taskPayload,
                 scope: Components.Schemas.FoundationReport.scopePayload,
+                mode: Components.Schemas.FoundationReport.modePayload? = nil,
                 parent: Components.Schemas.GitSha? = nil,
                 head: Components.Schemas.GitSha? = nil,
                 outcome: Components.Schemas.CliOutcome,
@@ -1794,6 +1808,7 @@ extension Components {
                 self.authority = authority
                 self.task = task
                 self.scope = scope
+                self.mode = mode
                 self.parent = parent
                 self.head = head
                 self.outcome = outcome
@@ -1809,6 +1824,7 @@ extension Components {
                 case authority
                 case task
                 case scope
+                case mode
                 case parent
                 case head
                 case outcome
@@ -1836,6 +1852,10 @@ extension Components {
                 self.scope = try container.decode(
                     Components.Schemas.FoundationReport.scopePayload.self,
                     forKey: .scope
+                )
+                self.mode = try container.decodeIfPresent(
+                    Components.Schemas.FoundationReport.modePayload.self,
+                    forKey: .mode
                 )
                 self.parent = try container.decodeIfPresent(
                     Components.Schemas.GitSha.self,
@@ -1878,6 +1898,7 @@ extension Components {
                     "authority",
                     "task",
                     "scope",
+                    "mode",
                     "parent",
                     "head",
                     "outcome",

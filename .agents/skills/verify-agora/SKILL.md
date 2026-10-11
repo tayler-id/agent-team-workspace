@@ -113,6 +113,17 @@ pnpm -s agora project start --profile verify --instance "$B" --json > "$OUT/b-st
 python3 packages/verification/fixture/project.py start --profile verify --instance "$P" --json > "$OUT/python-start.json"
 ```
 
+### Foundation-ready aggregate (U01b.R2)
+
+Run from a clean committed head with the Doctor toolchain and the locked Python venv on PATH. It starts only the lane suite's owned fixtures. Expect a long run (the U01a replay installs and tests a copy at the proven revision).
+
+```sh
+OUT=".scratch/foundation-ready/$(node -e 'console.log(crypto.randomUUID())')"
+node scripts/project.mjs project verify --scenario foundation-ready --artifacts "$OUT" --json > "$OUT.json"; echo "exit $?"
+```
+
+Observable predicates. The report has `schema_version` `agora.foundation/v1`, `scope` `foundation-ready`, `mode` `live`, the exact `head`, and eight proofs FG01 to FG08, each with a subject starting with its id, `revision` equal to the head and an outcome. Exit 0 requires eight passes. While reporting is unenrolled, recovery unapproved and browser and human proof absent, FG06 to FG08 must read `unavailable` and the exit must be nonzero (3 if nothing failed, 1 if any proof failed). FG01 to FG03 name `_subject_drift` when relevant files changed after the retained U01a pair. A report with `mode` `fixture` comes only from the tests and is never a readiness result. Cleanup: the run removes its owned copy and fixtures; the artifacts under `$OUT` stay as evidence.
+
 ### Owned local runtime launch (L3)
 
 Use an official Node 24 binary; a host-signed launcher can prevent native toolchain bindings from loading. The local runtime ignores developer database URLs and creates its own private cluster. No migration owner serves product queries. Keep `INSTANCE` for Cleanup:
