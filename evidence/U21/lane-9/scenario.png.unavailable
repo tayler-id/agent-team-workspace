@@ -1,0 +1,1 @@
+No scenario.png exists for this lane. REA process capture records a PTY text session, not an image, and no already-installed qualified screenshot route applies to a terminal-only scenario. The text capture of the whole lane run is evidence/U21/lanes/process-capture.json.

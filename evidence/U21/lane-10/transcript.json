@@ -1,0 +1,17 @@
+{
+  "lane": 10,
+  "steps": [
+    {
+      "command": "node scripts/feature-inventory.ts",
+      "exit": 0,
+      "stdout": "feature inventory written\n",
+      "stderr": ""
+    },
+    {
+      "command": "node scripts/feature-inventory.ts",
+      "exit": 0,
+      "stdout": "feature inventory unchanged\n",
+      "stderr": ""
+    }
+  ]
+}

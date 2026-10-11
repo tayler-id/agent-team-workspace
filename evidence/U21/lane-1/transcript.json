@@ -1,0 +1,23 @@
+{
+  "lane": 1,
+  "steps": [
+    {
+      "command": "node scripts/feature-inventory.ts --check",
+      "exit": 0,
+      "stdout": "feature inventory matches\n",
+      "stderr": ""
+    },
+    {
+      "command": "git cat-file -e 650b850^:scripts/feature-discovery.ts",
+      "exit": 128,
+      "stdout": "",
+      "stderr": "fatal: path 'scripts/feature-discovery.ts' exists on disk, but not in '650b850^'\n"
+    },
+    {
+      "command": "git cat-file -e 650b850:scripts/feature-discovery.ts",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

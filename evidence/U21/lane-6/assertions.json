@@ -1,0 +1,6 @@
+{
+  "lane": 6,
+  "test": "project lane 6 with drift detection disabled in an isolated copy the lane 5 assertion turns red",
+  "status": "passed",
+  "duration_ms": 188
+}

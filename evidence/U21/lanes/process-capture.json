@@ -1,0 +1,24 @@
+{
+  "tool": "mcp__rea__capture_process_scenario (REA 6.3.0, provider rea-process 3, node-pty)",
+  "evidence_id": "ev_0420d3be7b5107b91c8facff836f714df3a5dc0401a11e1c201a5ce02347d570",
+  "command": "node scripts/project.mjs project lanes --unit U21 --task agora-u21-lane-evidence --artifacts evidence/U21/lanes --json",
+  "node": "v24.21.0 (official tarball, sha256 bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057 matched SHASUMS256.txt)",
+  "head": "88e62db24322b676c22ae19497c30eae7c1c5a53",
+  "exit": {
+    "code": 0,
+    "reason": "exited"
+  },
+  "report_outcome": "pass",
+  "artifacts": {
+    "lanes.json": "sha256:690b1bc1d688f0dca9093cb274b6557331eeb4c5cbdce376be3405c72672aab2",
+    "command.json": "sha256:ebdb688455e8402f99f0a0b838f96f2b7e7f5138a2d936ca438c738da37922f3",
+    "guards.json": "sha256:7f3164b36dd595684d1b8de222862b5ca1d57626cf9a89bf747d0c624840b60c"
+  },
+  "limitations": [
+    "Process trees are sampled and may omit short-lived descendants.",
+    "Filesystem effects are before/after snapshots, not syscall traces.",
+    "Inherited host environment variables are not recorded.",
+    "Two unrelated processes (42497, 42644) had unverifiable ownership and were left untouched."
+  ],
+  "note": "Fields hand-copied from the tool result; the full rendered terminal frames are the CLI report printed in the tool output."
+}

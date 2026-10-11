@@ -1,0 +1,6 @@
+{
+  "lane": 7,
+  "test": "project lane 7 removing a Feature directory drops it and leaves no stale reference",
+  "status": "passed",
+  "duration_ms": 247
+}

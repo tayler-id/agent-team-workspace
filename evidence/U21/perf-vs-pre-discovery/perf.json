@@ -1,0 +1,51 @@
+{
+  "schema_version": "agora.project-perf/v1",
+  "unit": "U21",
+  "parent": "4912e73e821fe17a0e3e6042363d6234cb0fad22",
+  "head": "88e62db24322b676c22ae19497c30eae7c1c5a53",
+  "parent_behavior": "absent",
+  "rule": "Equivalent behavior fails above 10% p95 regression. Fail generation above five seconds for the fixture Feature set.",
+  "samples": [
+    {
+      "batch": 0,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 51
+      }
+    },
+    {
+      "batch": 1,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 53
+      }
+    },
+    {
+      "batch": 2,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 62
+      }
+    },
+    {
+      "batch": 3,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 55
+      }
+    },
+    {
+      "batch": 4,
+      "side": "head",
+      "metrics": {
+        "generation_ms": 52
+      }
+    }
+  ],
+  "p95": {
+    "head": {
+      "generation_ms": 62
+    }
+  },
+  "parent_failure": ""
+}

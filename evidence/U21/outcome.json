@@ -1,0 +1,14 @@
+{
+	"schema_version": "agora.u21-slice-outcome/v1",
+	"unit": "U21",
+	"slice": "agora-u21-lane-evidence",
+	"code_head": "88e62db24322b676c22ae19497c30eae7c1c5a53",
+	"scope": "internal verification evidence for U21 lanes and generation performance",
+	"lanes": { "1-10": "pass, one project lane N assertion each, evidence/U21/lane-N/", "scenario_png": "unavailable for all ten, see lane-N/scenario.png.unavailable" },
+	"perf": {
+		"vs_main_e74ba9a": "pass, parent behavior present, p95 generation_ms parent 76 head 55",
+		"vs_pre_discovery_650b850_parent": "pass, parent behavior absent, head p95 62 against the 5000 ms limit"
+	},
+	"red_green": "evidence/U21/agora-u21-lane-evidence, parent 7756dc3 red, head 0e52ddf green, validate-evidence pass",
+	"not_claimed": ["U21 qualification", "U20 prerequisite", "foundation completion", "independent exact-head review", "scenario images", "30-60 second video", "operator verdict"]
+}
