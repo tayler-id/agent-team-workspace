@@ -1,0 +1,124 @@
+{
+  "schema_version": "agora.project-perf/v1",
+  "unit": "U01b",
+  "parent": "7881d61a633e72f87eafa6021654325e9ccf63d0",
+  "head": "6b9186f2262df6d4361fc7609a35c110b3aed908",
+  "parent_behavior": "present",
+  "rule": "Equivalent behavior fails above 10% p95 regression. Fail fixture startup above 60 seconds or 10-MiB evidence finalization above five seconds.",
+  "samples": [
+    {
+      "batch": 0,
+      "side": "parent",
+      "metrics": {
+        "startup_ms": 1209,
+        "scenario_ms": 211,
+        "evidence_ms": 186,
+        "finalize_10mib_ms": 106
+      }
+    },
+    {
+      "batch": 0,
+      "side": "head",
+      "metrics": {
+        "startup_ms": 1192,
+        "scenario_ms": 238,
+        "evidence_ms": 203,
+        "finalize_10mib_ms": 115
+      }
+    },
+    {
+      "batch": 1,
+      "side": "head",
+      "metrics": {
+        "startup_ms": 1115,
+        "scenario_ms": 243,
+        "evidence_ms": 206,
+        "finalize_10mib_ms": 134
+      }
+    },
+    {
+      "batch": 1,
+      "side": "parent",
+      "metrics": {
+        "startup_ms": 1210,
+        "scenario_ms": 223,
+        "evidence_ms": 205,
+        "finalize_10mib_ms": 121
+      }
+    },
+    {
+      "batch": 2,
+      "side": "parent",
+      "metrics": {
+        "startup_ms": 1226,
+        "scenario_ms": 234,
+        "evidence_ms": 207,
+        "finalize_10mib_ms": 124
+      }
+    },
+    {
+      "batch": 2,
+      "side": "head",
+      "metrics": {
+        "startup_ms": 1222,
+        "scenario_ms": 234,
+        "evidence_ms": 226,
+        "finalize_10mib_ms": 124
+      }
+    },
+    {
+      "batch": 3,
+      "side": "head",
+      "metrics": {
+        "startup_ms": 1220,
+        "scenario_ms": 228,
+        "evidence_ms": 214,
+        "finalize_10mib_ms": 116
+      }
+    },
+    {
+      "batch": 3,
+      "side": "parent",
+      "metrics": {
+        "startup_ms": 1211,
+        "scenario_ms": 262,
+        "evidence_ms": 217,
+        "finalize_10mib_ms": 119
+      }
+    },
+    {
+      "batch": 4,
+      "side": "parent",
+      "metrics": {
+        "startup_ms": 1209,
+        "scenario_ms": 246,
+        "evidence_ms": 208,
+        "finalize_10mib_ms": 116
+      }
+    },
+    {
+      "batch": 4,
+      "side": "head",
+      "metrics": {
+        "startup_ms": 1252,
+        "scenario_ms": 246,
+        "evidence_ms": 209,
+        "finalize_10mib_ms": 119
+      }
+    }
+  ],
+  "p95": {
+    "parent": {
+      "startup_ms": 1226,
+      "scenario_ms": 262,
+      "evidence_ms": 217,
+      "finalize_10mib_ms": 124
+    },
+    "head": {
+      "startup_ms": 1252,
+      "scenario_ms": 246,
+      "evidence_ms": 226,
+      "finalize_10mib_ms": 134
+    }
+  }
+}

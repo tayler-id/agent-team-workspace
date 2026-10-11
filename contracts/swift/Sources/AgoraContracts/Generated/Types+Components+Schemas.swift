@@ -2315,6 +2315,216 @@ extension Components {
             public var lanes: [Components.Schemas.FixtureLane]
             /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/driver`.
             public var driver: [Swift.String]
+            /// Per-unit lane and perf manifest. A unit without lanes_unavailable uses the top-level lanes and driver. A perf entry without probe is unavailable for the stated reason; limits are absolute budgets in milliseconds, optionally a multiple of another metric.
+            ///
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload`.
+            public struct unitsPayloadPayload: Codable, Hashable, Sendable {
+                /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/id`.
+                public var id: Swift.String
+                /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/lanes`.
+                public var lanes: [Components.Schemas.FixtureLane]?
+                /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/lanes_unavailable`.
+                public var lanes_unavailable: Swift.String?
+                /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf`.
+                public struct perfPayload: Codable, Hashable, Sendable {
+                    /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/metric`.
+                    public var metric: Swift.String
+                    /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/rule`.
+                    public var rule: Swift.String
+                    /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/probe`.
+                    public var probe: [Swift.String]?
+                    /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/unavailable`.
+                    public var unavailable: Swift.String?
+                    /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/compare`.
+                    public var compare: [Swift.String]?
+                    /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/limitsPayload`.
+                    public struct limitsPayloadPayload: Codable, Hashable, Sendable {
+                        /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/limitsPayload/metric`.
+                        public var metric: Swift.String
+                        /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/limitsPayload/max`.
+                        public var max: Swift.Int?
+                        /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/limitsPayload/ratio`.
+                        public var ratio: Swift.Int?
+                        /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/limitsPayload/of`.
+                        public var of: Swift.String?
+                        /// Creates a new `limitsPayloadPayload`.
+                        ///
+                        /// - Parameters:
+                        ///   - metric:
+                        ///   - max:
+                        ///   - ratio:
+                        ///   - of:
+                        public init(
+                            metric: Swift.String,
+                            max: Swift.Int? = nil,
+                            ratio: Swift.Int? = nil,
+                            of: Swift.String? = nil
+                        ) {
+                            self.metric = metric
+                            self.max = max
+                            self.ratio = ratio
+                            self.of = of
+                        }
+                        public enum CodingKeys: String, CodingKey {
+                            case metric
+                            case max
+                            case ratio
+                            case of
+                        }
+                        public init(from decoder: any Swift.Decoder) throws {
+                            let container = try decoder.container(keyedBy: CodingKeys.self)
+                            self.metric = try container.decode(
+                                Swift.String.self,
+                                forKey: .metric
+                            )
+                            self.max = try container.decodeIfPresent(
+                                Swift.Int.self,
+                                forKey: .max
+                            )
+                            self.ratio = try container.decodeIfPresent(
+                                Swift.Int.self,
+                                forKey: .ratio
+                            )
+                            self.of = try container.decodeIfPresent(
+                                Swift.String.self,
+                                forKey: .of
+                            )
+                            try decoder.ensureNoAdditionalProperties(knownKeys: [
+                                "metric",
+                                "max",
+                                "ratio",
+                                "of"
+                            ])
+                        }
+                    }
+                    /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/limits`.
+                    public typealias limitsPayload = [Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload.perfPayload.limitsPayloadPayload]
+                    /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf/limits`.
+                    public var limits: Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload.perfPayload.limitsPayload?
+                    /// Creates a new `perfPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - metric:
+                    ///   - rule:
+                    ///   - probe:
+                    ///   - unavailable:
+                    ///   - compare:
+                    ///   - limits:
+                    public init(
+                        metric: Swift.String,
+                        rule: Swift.String,
+                        probe: [Swift.String]? = nil,
+                        unavailable: Swift.String? = nil,
+                        compare: [Swift.String]? = nil,
+                        limits: Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload.perfPayload.limitsPayload? = nil
+                    ) {
+                        self.metric = metric
+                        self.rule = rule
+                        self.probe = probe
+                        self.unavailable = unavailable
+                        self.compare = compare
+                        self.limits = limits
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case metric
+                        case rule
+                        case probe
+                        case unavailable
+                        case compare
+                        case limits
+                    }
+                    public init(from decoder: any Swift.Decoder) throws {
+                        let container = try decoder.container(keyedBy: CodingKeys.self)
+                        self.metric = try container.decode(
+                            Swift.String.self,
+                            forKey: .metric
+                        )
+                        self.rule = try container.decode(
+                            Swift.String.self,
+                            forKey: .rule
+                        )
+                        self.probe = try container.decodeIfPresent(
+                            [Swift.String].self,
+                            forKey: .probe
+                        )
+                        self.unavailable = try container.decodeIfPresent(
+                            Swift.String.self,
+                            forKey: .unavailable
+                        )
+                        self.compare = try container.decodeIfPresent(
+                            [Swift.String].self,
+                            forKey: .compare
+                        )
+                        self.limits = try container.decodeIfPresent(
+                            Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload.perfPayload.limitsPayload.self,
+                            forKey: .limits
+                        )
+                        try decoder.ensureNoAdditionalProperties(knownKeys: [
+                            "metric",
+                            "rule",
+                            "probe",
+                            "unavailable",
+                            "compare",
+                            "limits"
+                        ])
+                    }
+                }
+                /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/unitsPayload/perf`.
+                public var perf: Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload.perfPayload
+                /// Creates a new `unitsPayloadPayload`.
+                ///
+                /// - Parameters:
+                ///   - id:
+                ///   - lanes:
+                ///   - lanes_unavailable:
+                ///   - perf:
+                public init(
+                    id: Swift.String,
+                    lanes: [Components.Schemas.FixtureLane]? = nil,
+                    lanes_unavailable: Swift.String? = nil,
+                    perf: Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload.perfPayload
+                ) {
+                    self.id = id
+                    self.lanes = lanes
+                    self.lanes_unavailable = lanes_unavailable
+                    self.perf = perf
+                }
+                public enum CodingKeys: String, CodingKey {
+                    case id
+                    case lanes
+                    case lanes_unavailable
+                    case perf
+                }
+                public init(from decoder: any Swift.Decoder) throws {
+                    let container = try decoder.container(keyedBy: CodingKeys.self)
+                    self.id = try container.decode(
+                        Swift.String.self,
+                        forKey: .id
+                    )
+                    self.lanes = try container.decodeIfPresent(
+                        [Components.Schemas.FixtureLane].self,
+                        forKey: .lanes
+                    )
+                    self.lanes_unavailable = try container.decodeIfPresent(
+                        Swift.String.self,
+                        forKey: .lanes_unavailable
+                    )
+                    self.perf = try container.decode(
+                        Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload.perfPayload.self,
+                        forKey: .perf
+                    )
+                    try decoder.ensureNoAdditionalProperties(knownKeys: [
+                        "id",
+                        "lanes",
+                        "lanes_unavailable",
+                        "perf"
+                    ])
+                }
+            }
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/units`.
+            public typealias unitsPayload = [Components.Schemas.ProjectFixtureConfig.unitsPayloadPayload]
+            /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/units`.
+            public var units: Components.Schemas.ProjectFixtureConfig.unitsPayload?
             /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/timeout_ms`.
             public var timeout_ms: Swift.Int
             /// - Remark: Generated from `#/components/schemas/ProjectFixtureConfig/target`.
@@ -2334,6 +2544,7 @@ extension Components {
             ///   - scenarios:
             ///   - lanes:
             ///   - driver:
+            ///   - units:
             ///   - timeout_ms:
             ///   - target:
             ///   - cleanup:
@@ -2344,6 +2555,7 @@ extension Components {
                 scenarios: [Swift.String],
                 lanes: [Components.Schemas.FixtureLane],
                 driver: [Swift.String],
+                units: Components.Schemas.ProjectFixtureConfig.unitsPayload? = nil,
                 timeout_ms: Swift.Int,
                 target: Components.Schemas.ProjectFixtureConfig.targetPayload,
                 cleanup: Swift.String
@@ -2354,6 +2566,7 @@ extension Components {
                 self.scenarios = scenarios
                 self.lanes = lanes
                 self.driver = driver
+                self.units = units
                 self.timeout_ms = timeout_ms
                 self.target = target
                 self.cleanup = cleanup
@@ -2365,6 +2578,7 @@ extension Components {
                 case scenarios
                 case lanes
                 case driver
+                case units
                 case timeout_ms
                 case target
                 case cleanup
@@ -2395,6 +2609,10 @@ extension Components {
                     [Swift.String].self,
                     forKey: .driver
                 )
+                self.units = try container.decodeIfPresent(
+                    Components.Schemas.ProjectFixtureConfig.unitsPayload.self,
+                    forKey: .units
+                )
                 self.timeout_ms = try container.decode(
                     Swift.Int.self,
                     forKey: .timeout_ms
@@ -2414,6 +2632,7 @@ extension Components {
                     "scenarios",
                     "lanes",
                     "driver",
+                    "units",
                     "timeout_ms",
                     "target",
                     "cleanup"

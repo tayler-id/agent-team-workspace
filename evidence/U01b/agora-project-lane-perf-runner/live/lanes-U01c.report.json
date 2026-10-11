@@ -1,0 +1,19 @@
+{
+  "schema_version": "agora.cli-report/v1",
+  "command": "lanes",
+  "versions": {
+    "code": "6b9186f2262df6d4361fc7609a35c110b3aed908",
+    "config": "sha256:66ae462ea773303f0d0b772fcac8c05631a58f05c743e9294fe1840f454b8d5b",
+    "fixture": "sha256:d87fd712175ffbd9306bfbe2acf104bbc3f232c40e1b014cc494b1189deeec37"
+  },
+  "outcome": "unavailable",
+  "diagnostics": [
+    {
+      "reason_code": "unavailable_capability",
+      "message": "U01c lanes 1-10 unavailable: Only slice 1 (same-cluster backup and restore) exists; separate-host restore, key recovery and epoch rotation are not built, so no lane driver exists."
+    }
+  ],
+  "artifacts": [],
+  "started_at": "2026-10-10T21:52:20.551Z",
+  "finished_at": "2026-10-10T21:52:20.565Z"
+}

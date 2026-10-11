@@ -198,11 +198,15 @@ node evidence/ci/P0c/C/driver/scenarios.mjs --out .scratch/p0c-c
 
 For U01b.B01's project verification controls, pass means literal public allow/deny results, exactly two additional persisted journal entries and matching object bytes. The task lane runner additionally proves two simultaneous instances of each application, foreign cleanup refusal, missing/altered/stale evidence rejection, missing runners, report/exit disagreement, instruction drift and deleted required coverage. Its isolated guard mutation must fail the original denial assertion. This is CLI/HTTP proof, not a screenshot or a browser application claim.
 
+For the per-unit runner, `verify --scenario perf --unit U01b|U20|U21` writes `perf.json` under the artifacts directory (ten samples in run order, `parent_behavior`, the p95 of each metric) and exits 0 only when every declared rule holds. Timing noise can fail an identical parent and head, so read the samples before blaming the change. `--unit U22|U23|U01c|U01d` for either `lanes` or perf must exit 3 with the unit's reason; that is the expected answer until the unit has a driver, not a failure to fix. The perf receipt is not a unit qualification and opens no foundation gate.
+
 ```sh
 pnpm -s agora project verify --scenario policy --instance "$A" --artifacts "$OUT/a" --json
 pnpm -s agora project verify --scenario policy --instance "$B" --artifacts "$OUT/b" --json
 python3 packages/verification/fixture/project.py verify --scenario policy --instance "$P" --artifacts "$OUT/python" --json
 pnpm -s agora project lanes --unit U01b --task agora-s1-isolate-development --artifacts "$OUT/lanes" --json
+pnpm -s agora project verify --scenario perf --unit U21 --parent HEAD^ --artifacts "$OUT/perf" --json
+pnpm -s agora project lanes --unit U22 --task agora-s1-qualify-trusted-checks --json
 pnpm contracts:check
 pnpm contracts:conform -- --json
 pnpm client:replay -- --json --swift
