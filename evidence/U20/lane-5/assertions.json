@@ -1,0 +1,12 @@
+{
+  "unit": "U20",
+  "lane": 5,
+  "subjects": [
+    {
+      "subject": "config copy without tsx",
+      "head_assertion": "green",
+      "weakened_assertion": "red",
+      "weakened_rule_ids": []
+    }
+  ]
+}

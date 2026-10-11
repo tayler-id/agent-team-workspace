@@ -1,0 +1,56 @@
+{
+  "unit": "U20",
+  "lane": 8,
+  "subjects": [
+    {
+      "subject": "files of 99aa4f7",
+      "files": 10,
+      "rejections": 21,
+      "by_file": {
+        "apps/web/src/components/App.tsx": [
+          "agora/renderer-footgun: useEffect is allowed only in framework owner apps/web/src/framework; expose a named framew",
+          "agora/renderer-footgun: direct window is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/",
+          "agora/renderer-footgun: direct window is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/",
+          "agora/renderer-footgun: useEffect is allowed only in framework owner apps/web/src/framework; expose a named framew",
+          "agora/renderer-footgun: direct setTimeout is allowed only in Host/framework adapters (apps/web/src/host, apps/web/",
+          "agora/renderer-footgun: direct clearTimeout is allowed only in Host/framework adapters (apps/web/src/host, apps/we",
+          "agora/renderer-footgun: useEffect is allowed only in framework owner apps/web/src/framework; expose a named framew",
+          "agora/renderer-footgun: direct setTimeout is allowed only in Host/framework adapters (apps/web/src/host, apps/web/",
+          "agora/renderer-footgun: direct document is allowed only in Host/framework adapters (apps/web/src/host, apps/web/sr",
+          "agora/renderer-footgun: direct setTimeout is allowed only in Host/framework adapters (apps/web/src/host, apps/web/"
+        ],
+        "apps/web/src/components/Cards.tsx": [],
+        "apps/web/src/components/Composer.tsx": [
+          "agora/renderer-footgun: direct crypto is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/",
+          "agora/renderer-footgun: direct TextEncoder is allowed only in Host/framework adapters (apps/web/src/host, apps/web",
+          "agora/renderer-footgun: direct crypto is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/"
+        ],
+        "apps/web/src/components/FixtureControls.tsx": [],
+        "apps/web/src/components/Timeline.tsx": [
+          "agora/renderer-footgun: useEffect is allowed only in framework owner apps/web/src/framework; expose a named framew",
+          "agora/renderer-footgun: useEffect is allowed only in framework owner apps/web/src/framework; expose a named framew",
+          "agora/renderer-footgun: direct document is allowed only in Host/framework adapters (apps/web/src/host, apps/web/sr",
+          "agora/renderer-footgun: direct document is allowed only in Host/framework adapters (apps/web/src/host, apps/web/sr"
+        ],
+        "apps/web/src/fixture/adapter.ts": [],
+        "apps/web/src/fixture/driver.ts": [],
+        "apps/web/src/main.tsx": [
+          "agora/renderer-footgun: direct document is allowed only in Host/framework adapters (apps/web/src/host, apps/web/sr",
+          "agora/renderer-footgun: DOM mutation via textContent assignment is allowed only in Host/framework adapters (apps/w",
+          "agora/renderer-footgun: DOM mutation via setAttribute is allowed only in Host/framework adapters (apps/web/src/hos"
+        ],
+        "apps/web/src/projection.ts": [],
+        "apps/web/src/store.ts": [
+          "agora/client-owner: Client core runtime (initialState, synchronize) is owned by apps/web/src/client; a compone"
+        ]
+      },
+      "clean_files": [
+        "apps/web/src/components/Cards.tsx",
+        "apps/web/src/components/FixtureControls.tsx",
+        "apps/web/src/fixture/adapter.ts",
+        "apps/web/src/fixture/driver.ts",
+        "apps/web/src/projection.ts"
+      ]
+    }
+  ]
+}

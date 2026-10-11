@@ -1,0 +1,13 @@
+{
+  "unit": "U20",
+  "lane": 6,
+  "subjects": [
+    {
+      "subject": "eslint-disable-next-line agora/renderer-footgun",
+      "messages": [
+        "inline ESLint disables cannot suppress Agora architecture rules; linterOptions.noInlineConfig owns this and reviewed exceptions live in agora/architecture-exceptions.json",
+        "direct window is allowed only in Host/framework adapters (apps/web/src/host, apps/web/src/framework); Features and Client use Host ports"
+      ]
+    }
+  ]
+}

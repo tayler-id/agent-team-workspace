@@ -1,0 +1,2 @@
+# U20 lane 10 (agora.lane/v1), recorded 2026-10-11T07:06:11.474Z
+{"subject":"pnpm boundaries file set","files":["packages/client-core/test/boundaries.test.ts","packages/client-core/test/export-maps.test.ts","packages/client-core/test/app-architecture.test.ts","packages/client-core/test/client-state-owner.test.ts","packages/client-core/test/feature-dependencies.test.ts","packages/web-framework/test/boundaries.test.ts"],"passed":56,"tsx_assertions":["passed: tsx renderer rejects server imports with owner-named diagnostics across import forms"]}
