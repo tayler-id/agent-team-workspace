@@ -19,7 +19,7 @@ This is the complete current contributor command surface, plus a separate invent
 | `lanes` | `--task agora-s1-validate-project-evidence` unlocks lanes 1-7; `--task agora-s1-qualify-trusted-checks` unlocks lanes 1-10, see [trusted checks](trusted-checks.md) |
 | `lanes` | `--unit U21 --task agora-u21-lane-evidence --artifacts DIRECTORY`; runs U21's ten Feature discovery lanes through the unit's own driver, exit 0 only when all ten pass |
 | `lanes` | `--unit U20 --task agora-u20-lane-evidence [--parent REV] --artifacts DIRECTORY`; runs U20's ten boundary-lint lanes through the unit's own driver, exit 0 only when all ten pass |
-| `lanes` | `--unit U22`, `U23`, `U01c` or `U01d`; lists the unit's ten lanes as unavailable with the reason, exit 3. An unknown unit is also unavailable |
+| `lanes` | `--unit U22`; runs ten lanes from named native tests, exit 3 while any lane is unavailable and 1 if one fails ([lane evidence](client-host-evidence.md)). `--unit U21`, `U23`, `U01c` or `U01d`; lists the unit's ten lanes as unavailable with the reason, exit 3. An unknown unit is also unavailable |
 | `verify` | `--scenario perf --unit UNIT [--parent REV] --artifacts DIRECTORY`; five interleaved parent/head batches of the unit's probe, exit 0 inside its rules. `U01b`, `U20` and `U21` run; `U22`, `U23`, `U01c` and `U01d` exit 3 with the reason their probe is absent |
 
 `--fixture python` selects the Python fixture through the Node launcher; prefer its independent Python entry when checking cross-language reports. Unknown options reject. The `agora-s1-validate-project-evidence` task selects lanes 1-7. Direct whole-unit `lanes --unit U01b` still executes available proof but exits blocked because lanes 8-10 remain unavailable. Neither task selector qualifies the complete milestone. Exit codes are exactly 0 pass, 1 observed failure, 2 blocked, 3 unavailable, 64 usage error, 70 infrastructure failure. An unavailable check is never successful evidence. Runtime state is private to `.scratch/project/`; evidence paths must stay below repository `evidence/` or `.scratch/` without symlink escape.
@@ -142,6 +142,10 @@ See [the runnable recipe](cookbook.md) and [configuration](configuration.md). Do
 ## Task proof admission
 
 `pnpm verify:foundation -- --parent PARENT --head HEAD --evidence DIR --json` runs the bounded U01a.B04 driver and emits `agora.foundation/v1`. Foundation admission remains blocked. Use the explicit `--scope task` for task-local readiness, `record` for receipt capture, and `lane-9` or `lane-10` for guard and admission negatives. The [task proof reference](test-first.md#public-command-reference) lists all flags, pass predicates, exit semantics and trust limits.
+
+## Foundation-ready aggregate
+
+`node scripts/project.mjs project verify --scenario foundation-ready [--artifacts DIR] --json`, or `pnpm verify:foundation -- --json`, prints an `agora.foundation/v1` report for FG01 to FG08 and exits 0 only when all eight pass. FG06 to FG08 report unavailable until enrollment, separate-host recovery and browser and human proof exist, so a live run exits nonzero. See [the aggregate page](foundation-ready.md).
 
 ## Evidence and design tools
 

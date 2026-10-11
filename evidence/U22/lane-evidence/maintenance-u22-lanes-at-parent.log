@@ -1,0 +1,23 @@
+# red.log (agora.red-green/v1)
+recorded_at: 2026-10-11T05:35:23.788Z
+parent: e74ba9a43b4b607ce8d7b4cdabd52638fb46c8a7
+head: 073469df09a95e5c5f2824f2a20d9b45b8cba0a0
+subject_revision: e74ba9a43b4b607ce8d7b4cdabd52638fb46c8a7
+test_patch_applied_to_subject: true
+test_patch_files: packages/verification/test/project-units.test.ts, packages/verification/test/u22-lanes.test.ts
+test_patch_digest: sha256:42ab3060777671004ae69793510f34c7732f2d93699930c0b9ffc010337d45eb
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[]}
+configuration: {"command":"pnpm exec vitest run --project unit packages/verification/test/u22-lanes.test.ts","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: the head's behavioral assertions fail against the parent behavior (nonzero exit)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-red-g8K3YO
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  01:35:15
+   Duration  1.60s (tests 93%, import 5%, transform 2%)
+

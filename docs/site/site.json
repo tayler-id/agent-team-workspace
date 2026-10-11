@@ -89,6 +89,11 @@
           "kind": "feature"
         },
         {
+          "id": "client-host-evidence",
+          "title": "Client and Host lane evidence",
+          "kind": "feature"
+        },
+        {
           "id": "feature-discovery",
           "title": "Feature discovery",
           "kind": "feature"
@@ -116,6 +121,11 @@
         {
           "id": "project-controls",
           "title": "Owned project verification",
+          "kind": "feature"
+        },
+        {
+          "id": "foundation-ready",
+          "title": "Foundation-ready aggregate",
           "kind": "feature"
         },
         {
@@ -382,8 +392,16 @@
       "page": "project-controls.md"
     },
     {
+      "path": "scripts/project-lanes.mjs",
+      "page": "client-host-evidence.md"
+    },
+    {
       "path": "apps/center/src/verification.mjs",
       "page": "project-controls.md"
+    },
+    {
+      "path": "scripts/foundation-ready.mjs",
+      "page": "foundation-ready.md"
     },
     {
       "path": "scripts/foundation-policy.mjs",

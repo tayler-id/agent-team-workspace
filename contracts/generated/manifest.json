@@ -23,7 +23,7 @@
 		},
 		{
 			"file": "contracts/schemas/foundation.schema.json",
-			"digest": "sha256:564b0cdf9341ffe356436bbe53a19b4885b89c752e21031582dcc44cbd4153d6"
+			"digest": "sha256:672d07ac7efe683d65207ebd41e1ec500f353c3f21cc476815c48f720a8ac31b"
 		},
 		{
 			"file": "contracts/schemas/health.schema.json",
@@ -101,11 +101,11 @@
 	"outputs": [
 		{
 			"file": "contracts/generated/openapi.bundled.json",
-			"digest": "sha256:f64dd2bdabdba030dcef90e74b96512b5ec9d064c815ca3541fb9c5e1a8cb9ee"
+			"digest": "sha256:e4f835b7150a6799404d2d7baabf1f279328ca0191c9232d93417e031a9f797a"
 		},
 		{
 			"file": "contracts/generated/typescript/openapi.d.ts",
-			"digest": "sha256:6a5fb5280eef2f5b40d77ca624c6c998851dc55cda998c444c94cdbe9208f66a"
+			"digest": "sha256:1b5c7c4f1fc2ddd62761c8bd4af5b7f7098bb9b4748f5abc9f1ef4f1c6335c0a"
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Client.swift",
@@ -129,7 +129,7 @@
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components+Schemas.swift",
-			"digest": "sha256:6757c19008db4c7f6fa5304e81532afa39038ae8196b718728ea815eef0e8768"
+			"digest": "sha256:bccc367b05f8285b4bc8dd8a4f79f7ec8275d3c7ca3d43f513a5f9ebbdf5b0aa"
 		},
 		{
 			"file": "contracts/swift/Sources/AgoraContracts/Generated/Types+Components.swift",

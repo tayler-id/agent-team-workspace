@@ -24,7 +24,7 @@
 		"features:generate": "node scripts/feature-inventory.ts",
 		"features:check": "node scripts/feature-inventory.ts --check",
 		"client:replay": "node scripts/drive-client-core.ts",
-		"verify:foundation": "node scripts/foundation.mjs",
+		"verify:foundation": "node scripts/foundation-ready.mjs",
 		"test": "node scripts/with-test-postgres.mjs vitest run",
 		"test:unit": "vitest run --project unit --project contracts",
 		"test:pg": "node scripts/with-test-postgres.mjs vitest run --project pg",

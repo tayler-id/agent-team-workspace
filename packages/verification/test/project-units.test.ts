@@ -52,7 +52,7 @@ const flagged = ['node', '-e', "const fs=require('fs');const f='slow.flag';conso
 afterAll(() => { for (const dir of sandboxes) rmSync(dir, { recursive: true, force: true }); });
 
 describe('per-unit lanes through the public CLI', () => {
-	test.each(['U22', 'U23', 'U01c', 'U01d'])('%s lanes are unavailable with a reason, never a pass', (unit) => {
+	test.each(['U23', 'U01c', 'U01d'])('%s lanes are unavailable with a reason, never a pass', (unit) => {
 		const report = run(root, ['lanes', '--unit', unit, '--task', 'agora-s1-qualify-trusted-checks']);
 		expect(report.outcome).toBe('unavailable');
 		expect(report.artifacts).toEqual([]);
@@ -105,6 +105,39 @@ describe('per-unit lanes through the public CLI', () => {
 		const report = run(root, ['lanes', '--unit', 'U99', '--task', 'agora-s1-qualify-trusted-checks']);
 		expect(report).toMatchObject({ outcome: 'unavailable', diagnostics: [{ reason_code: 'unavailable_capability', message: 'unknown unit U99' }] });
 	});
+});
+
+describe('U22 lanes through the public CLI', () => {
+	interface Lanes { lanes: { id: number; outcome: string; detail: string; scenario_png: string }[] }
+	const lanesOf = (dir: string, report: Report): Lanes => JSON.parse(readFileSync(path.join(dir, report.artifacts.find((row) => row.path.endsWith('lanes.json'))?.path ?? ''), 'utf8')) as Lanes;
+	const edit = (dir: string, file: string, from: string, to: string): void => {
+		const text = readFileSync(path.join(dir, file), 'utf8');
+		expect(text, `${file} no longer contains ${from}`).toContain(from);
+		writeFileSync(path.join(dir, file), text.replace(from, to));
+	};
+
+	test('runs the ten lanes, passes nine and reports lane 9 unavailable with the Host method it lacks', () => {
+		const report = run(root, ['lanes', '--unit', 'U22', '--task', 'agora-s1-qualify-trusted-checks', '--artifacts', `.scratch/u22-lanes-${process.pid}`]);
+		expect(report.outcome).toBe('unavailable');
+		expect(report.diagnostics).toEqual([{ reason_code: 'unavailable_capability', message: expect.stringMatching(/^U22 lane 9 unavailable: .*names the Host owner path and not a specific Host method$/) as string }]);
+		const lanes = lanesOf(root, report).lanes;
+		expect(lanes.map((lane) => [lane.id, lane.outcome])).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((id) => [id, id === 9 ? 'unavailable' : 'pass']));
+		expect(lanes.every((lane) => lane.scenario_png.startsWith('unavailable: no scenario.png'))).toBe(true);
+		rmSync(`.scratch/u22-lanes-${process.pid}`, { recursive: true, force: true });
+	}, 600_000);
+
+	test('a renamed lane test and a rule that stops rejecting a bypass each fail the run', () => {
+		const dir = sandbox();
+		edit(dir, 'packages/web-framework/test/boundaries.test.ts', "test('lane 7: malformed", "test('malformed");
+		const missing = run(dir, ['lanes', '--unit', 'U22', '--task', 'agora-s1-qualify-trusted-checks']);
+		expect(missing.outcome).toBe('fail');
+		expect(missing.diagnostics.map((row) => row.message).filter((message) => message.startsWith('U22 lane 7 '))).toEqual(['U22 lane 7 fail: missing: lane 7: malformed RoomTransport and EnvironmentPort calls fail to compile']);
+		edit(dir, 'packages/web-framework/test/boundaries.test.ts', "test('malformed", "test('lane 7: malformed");
+		edit(dir, 'scripts/renderer-policy.ts', '`direct ${node.name} is allowed', '`raw ${node.name} is allowed');
+		const loose = run(dir, ['lanes', '--unit', 'U22', '--task', 'agora-s1-qualify-trusted-checks']);
+		expect(loose.outcome).toBe('fail');
+		expect(loose.diagnostics.map((row) => row.message).filter((message) => /lane [34] /.test(message))).toHaveLength(2);
+	}, 900_000);
 });
 
 describe('perf scenario without an executable probe', () => {
@@ -168,9 +201,9 @@ describe('perf scenario in a sandbox clone', () => {
 		withProbe(dir, undefined);
 		expect(perf().outcome).toBe('unavailable');
 		const file = path.join(dir, 'agora/project.json'), saved = readFileSync(file, 'utf8'), manifest = manifestOf(saved);
-		delete manifest.units.find((row) => row.id === 'U22')?.lanes_unavailable;
+		delete manifest.units.find((row) => row.id === 'U23')?.lanes_unavailable;
 		writeFileSync(file, JSON.stringify(manifest));
-		expect(run(dir, ['lanes', '--unit', 'U22', '--task', 'agora-s1-qualify-trusted-checks']).outcome).toBe('fail');
+		expect(run(dir, ['lanes', '--unit', 'U23', '--task', 'agora-s1-qualify-trusted-checks']).outcome).toBe('fail');
 		writeFileSync(file, saved);
 		withProbe(dir, flagged);
 		expect(run(dir, ['verify', '--scenario', 'perf', '--unit', 'U21', '--parent', 'no-such-revision']).outcome).toBe('blocked');

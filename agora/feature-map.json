@@ -76,14 +76,14 @@
 			"id": "project-controls",
 			"documentation": "docs/site/project-controls.md",
 			"last_verified_subject": {"receipt": ".scratch/project/{fixture}/{instance}/evidence.json", "fields": ["versions.code", "versions.config", "versions.fixture"], "requires_live_pass": true},
-			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "scripts/project-perf.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "packages/verification/test/u20-lanes.test.ts", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
+			"paths": ["scripts/project.mjs", "scripts/project-host.mjs", "scripts/project-checks.mjs", "scripts/project-perf.mjs", "scripts/project-lanes.mjs", "apps/center/src/verification.mjs", "packages/verification/fixture", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "packages/verification/test/u22-lanes.test.ts", "packages/verification/test/u20-lanes.test.ts", "agora/project.json", ".agents/skills/verify-agora/SKILL.md"],
 			"public": ["pnpm -s agora project --help", "pnpm agora project doctor|scenarios|start|verify|evidence|stop|lanes", "python3 packages/verification/fixture/project.py"],
 			"contracts": ["contracts/schemas/cli.schema.json"],
-			"scenarios": ["policy", "controls", "guards", "packages/verification/test/project.test.ts", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "packages/verification/test/u20-lanes.test.ts"],
+			"scenarios": ["policy", "controls", "guards", "packages/verification/test/project.test.ts", "packages/verification/test/project-help.test.ts", "packages/verification/test/project-units.test.ts", "packages/verification/test/u22-lanes.test.ts", "packages/verification/test/u20-lanes.test.ts"],
 			"fixtures": ["non-production PostgreSQL policy journal", "independent Python SQLite policy journal"],
 			"platforms": ["node24", "postgresql18", "python3"],
 			"owner": "U01b.B01",
-			"invalidation": "Implemented local fixture controls only: policy HTTP/effects, controls and guards tests, help with no launch or prerequisites, and task lanes 1-7. Whole-unit lanes 8-10 remain unavailable. U21 runs its ten Feature discovery lanes through its own driver, and U20 runs its ten boundary-lint lanes through its own driver and a pass claims no qualification, and per-unit lanes for U22, U23, U01c and U01d are unavailable with reasons, and per-unit perf runs only for U01b, U20 and U21; it qualifies no unit. Help and passing fixture checks establish no production identity, provider, worker or publication authority."
+			"invalidation": "Implemented local fixture controls only: policy HTTP/effects, controls and guards tests, help with no launch or prerequisites, and task lanes 1-7. Whole-unit lanes 8-10 remain unavailable. U21 runs its ten Feature discovery lanes through its own driver, U20 runs its ten boundary-lint lanes through its own driver and a pass claims no qualification, and U22 runs ten lanes from named native tests with lane 9 and every scenario.png unavailable, per-unit lanes for U23, U01c and U01d are unavailable with reasons, and per-unit perf runs only for U01b, U20 and U21; it qualifies no unit. Help and passing fixture checks establish no production identity, provider, worker or publication authority."
 		},
 		{
 			"id": "evidence-validator",
@@ -411,6 +411,18 @@
 			"scenarios": ["packages/client-core/test/replay.test.ts", "corpus determinism per seed", "1000 missed events, 100 arrivals and long code and Markdown bodies converge with zero duplicates inside 2000 ms", "budget breach fails", "isolated dedupe removal turns the predicate red while the pristine copy passes", "thread, edit, tombstone and run-card shapes reported unavailable"],
 			"fixtures": ["agora.replay-corpus/v1 seed 6221057 built in memory by packages/client-core/test/replay-corpus.ts; published local-room message shape only"],
 			"platforms": ["node24"]
+		},
+		{
+			"id": "foundation-ready",
+			"documentation": "docs/site/foundation-ready.md",
+			"paths": ["scripts/foundation-ready.mjs", "scripts/project.mjs", "scripts/foundation.mjs", "contracts/schemas/foundation.schema.json", "packages/verification/test/foundation-ready.test.ts", ".agents/skills/verify-agora/SKILL.md"],
+			"public": ["node scripts/project.mjs project verify --scenario foundation-ready --json", "pnpm verify:foundation -- --json"],
+			"contracts": ["contracts/schemas/foundation.schema.json"],
+			"scenarios": ["packages/verification/test/foundation-ready.test.ts"],
+			"fixtures": ["labeled foundation-ready fixture, never a live readiness result"],
+			"platforms": ["node24", "postgresql18", "swift6-macos"],
+			"owner": "U01b.R2",
+			"invalidation": "Internal verification aggregate only. FG06 reporting stays dormant and unenrolled, FG07 has no approved separate-host recovery and FG08 lacks qualified browser and two-human evidence, so every live run exits nonzero. It qualifies no unit, milestone or foundation and grants no enrollment, approval or product-write authority."
 		}
 	]
 }

@@ -328,9 +328,11 @@ export interface components {
             /** @enum {string} */
             authority: "foundation_fixture";
             /** @enum {string} */
-            task: "agora-s1-enforce-test-first";
+            task: "agora-s1-enforce-test-first" | "agora-foundation-ready-aggregate";
             /** @enum {string} */
-            scope: "record" | "task" | "foundation" | "feature" | "lane-9" | "lane-10" | "invalid";
+            scope: "record" | "task" | "foundation" | "foundation-ready" | "feature" | "lane-9" | "lane-10" | "invalid";
+            /** @enum {string} */
+            mode?: "live" | "fixture";
             parent?: components["schemas"]["GitSha"];
             head?: components["schemas"]["GitSha"];
             outcome: components["schemas"]["CliOutcome"];
@@ -339,7 +341,7 @@ export interface components {
             /** @enum {string} */
             unit_outcome: "blocked";
             /** @enum {string} */
-            foundation_outcome: "blocked";
+            foundation_outcome: "pass" | "fail" | "blocked" | "unavailable";
             proofs: components["schemas"]["FoundationProof"][];
             denials: string[];
             artifacts: components["schemas"]["ArtifactReference"][];

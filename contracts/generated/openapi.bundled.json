@@ -1098,7 +1098,8 @@
 					"task": {
 						"type": "string",
 						"enum": [
-							"agora-s1-enforce-test-first"
+							"agora-s1-enforce-test-first",
+							"agora-foundation-ready-aggregate"
 						]
 					},
 					"scope": {
@@ -1107,10 +1108,18 @@
 							"record",
 							"task",
 							"foundation",
+							"foundation-ready",
 							"feature",
 							"lane-9",
 							"lane-10",
 							"invalid"
+						]
+					},
+					"mode": {
+						"type": "string",
+						"enum": [
+							"live",
+							"fixture"
 						]
 					},
 					"parent": {
@@ -1139,7 +1148,10 @@
 					"foundation_outcome": {
 						"type": "string",
 						"enum": [
-							"blocked"
+							"pass",
+							"fail",
+							"blocked",
+							"unavailable"
 						]
 					},
 					"proofs": {

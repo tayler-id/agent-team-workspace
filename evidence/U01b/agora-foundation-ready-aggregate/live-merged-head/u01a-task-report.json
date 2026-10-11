@@ -1,0 +1,184 @@
+{
+  "schema_version": "agora.foundation/v1",
+  "authority": "foundation_fixture",
+  "task": "agora-s1-enforce-test-first",
+  "scope": "task",
+  "parent": "fb67e9ce2c6658d672ca6446f524714ec55cbac5",
+  "head": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+  "outcome": "fail",
+  "task_outcome": "fail",
+  "unit_outcome": "blocked",
+  "foundation_outcome": "blocked",
+  "proofs": [
+    {
+      "id": "red",
+      "subject": "agora-s1-enforce-test-first:red",
+      "revision": "fb67e9ce2c6658d672ca6446f524714ec55cbac5",
+      "outcome": "fail",
+      "denials": [
+        "red_unverified"
+      ]
+    },
+    {
+      "id": "green",
+      "subject": "agora-s1-enforce-test-first:green",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "fail",
+      "denials": [
+        "green_unverified"
+      ]
+    },
+    {
+      "id": "guard",
+      "subject": "agora-s1-enforce-test-first:guard",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "pass",
+      "denials": []
+    },
+    {
+      "id": "bootstrap",
+      "subject": "agora-s1-enforce-test-first:bootstrap",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "pass",
+      "denials": []
+    },
+    {
+      "id": "contracts",
+      "subject": "agora-s1-enforce-test-first:contracts",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "pass",
+      "denials": []
+    },
+    {
+      "id": "client",
+      "subject": "agora-s1-enforce-test-first:client",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "pass",
+      "denials": []
+    },
+    {
+      "id": "documentation",
+      "subject": "agora-s1-enforce-test-first:documentation",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "pass",
+      "denials": []
+    },
+    {
+      "id": "static",
+      "subject": "agora-s1-enforce-test-first:static",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "pass",
+      "denials": []
+    },
+    {
+      "id": "FG01",
+      "subject": "agora-s1-enforce-test-first:FG01",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "blocked",
+      "denials": [
+        "U01a_integration_unqualified"
+      ]
+    },
+    {
+      "id": "FG02",
+      "subject": "agora-s1-enforce-test-first:FG02",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "blocked",
+      "denials": [
+        "U01a_integration_unqualified"
+      ]
+    },
+    {
+      "id": "FG03",
+      "subject": "agora-s1-enforce-test-first:FG03",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "blocked",
+      "denials": [
+        "U01a_integration_unqualified"
+      ]
+    },
+    {
+      "id": "FG04",
+      "subject": "agora-s1-enforce-test-first:FG04",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "blocked",
+      "denials": [
+        "FG04_missing"
+      ]
+    },
+    {
+      "id": "FG05",
+      "subject": "agora-s1-enforce-test-first:FG05",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "blocked",
+      "denials": [
+        "FG05_missing"
+      ]
+    },
+    {
+      "id": "FG06",
+      "subject": "agora-s1-enforce-test-first:FG06",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "blocked",
+      "denials": [
+        "FG06_missing"
+      ]
+    },
+    {
+      "id": "FG07",
+      "subject": "agora-s1-enforce-test-first:FG07",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "blocked",
+      "denials": [
+        "FG07_missing"
+      ]
+    },
+    {
+      "id": "FG08",
+      "subject": "agora-s1-enforce-test-first:FG08",
+      "revision": "e0c480ccf6af072ad29e2728cd367969ab7aeb8b",
+      "outcome": "blocked",
+      "denials": [
+        "FG08_missing"
+      ]
+    }
+  ],
+  "denials": [
+    "green_replay_mismatch",
+    "green_unverified",
+    "red_replay_mismatch",
+    "red_unverified"
+  ],
+  "artifacts": [
+    {
+      "path": ".scratch/receipts/red.log",
+      "digest": "sha256:3f0038f7cd6e2fa8c062091965f9707c2e8842ac68f6b22147ebd14636ba7724",
+      "media_type": "text/plain",
+      "byte_length": 22962
+    },
+    {
+      "path": ".scratch/receipts/green.log",
+      "digest": "sha256:95c748e75989be56ce9fefeacaaadf7eb66cb862e2c28c37f387e45177e1f6e6",
+      "media_type": "text/plain",
+      "byte_length": 4980
+    },
+    {
+      "path": ".scratch/receipts/test-patch.diff",
+      "digest": "sha256:f95a74b252c2012bbbe2e6e690065dee8503e8fad0bf9bfd9ac8b506d8a64f23",
+      "media_type": "text/plain",
+      "byte_length": 9301
+    },
+    {
+      "path": ".scratch/receipts/guard.json",
+      "digest": "sha256:65e2c0e19d288189edcec853a16d66c0f6bb4dfdee441e550160294b424a418c",
+      "media_type": "application/json",
+      "byte_length": 2880
+    },
+    {
+      "path": ".scratch/receipts/task-checks.json",
+      "digest": "sha256:c28304a05a3927d1fea45df690ab3893fa82654e6cf17f216a6ee3e487b9470e",
+      "media_type": "application/json",
+      "byte_length": 50211
+    }
+  ]
+}
