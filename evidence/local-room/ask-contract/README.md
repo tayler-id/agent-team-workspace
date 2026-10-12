@@ -4,6 +4,8 @@
 
 The implementation subject is `7d8fb9997283b5e5874a787a36b1c587f953f27b` over main `6091fa12063987f0cadc320047804ff4049befba`. It changes four authored wire sources (`contracts/schemas/local-room.schema.json`, `contracts/openapi.json`, `contracts/fixtures/vectors.json`, `contracts/swift/Sources/AgoraContractsConform/main.swift`), the generated TypeScript and Swift consumers, and one test. Every one of the eleven contract files is byte-identical to the reviewed reference commit `0b7f10407507206619c4d5aac7b313d445d0ab44` in the API worker's retained copy, which this task read and never edited.
 
+A review fix after the subject changed two description strings in `local-room.schema.json` from present tense to future or reserved wording. The family description no longer says the service answers the ask, and `RoomAuthor` now says principal `a0000000-0000-4000-8000-000000000005` is reserved and nothing posts as it yet. `pnpm contracts:generate` carried the `RoomAuthor` text into `openapi.bundled.json`, `openapi.d.ts` and `Types+Components+Schemas.swift`, and `manifest.json` records the new digests. At the current head those five files differ from the reference only in that wording and the digests computed from it, and the other six stay byte-identical. No type, enum, bound, required field, principal ID, vector or operation changed. The logs below were recorded at the subject and were not re-recorded for this wording change.
+
 This is contract preparation. It adds no endpoint, provider, answer principal, browser control or database change, and the evidence below is not a completed-chat claim.
 
 ## Red and green

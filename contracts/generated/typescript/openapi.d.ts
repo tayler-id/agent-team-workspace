@@ -490,7 +490,7 @@ export interface components {
         };
         /** @description Nonnegative 64-bit integer as a decimal string without sign, leading zeros or exponent; the pattern is the exact bound 18446744073709551615. */
         Revision: string;
-        /** @description Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent covers two service-owned principals: a0000000-0000-4000-8000-000000000004 is the deterministic local quote (L5), never a model, and a0000000-0000-4000-8000-000000000005 is the Ask Claude answer from the native model login. */
+        /** @description Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent covers two service-owned principals: a0000000-0000-4000-8000-000000000004 is the deterministic local quote (L5), never a model, and a0000000-0000-4000-8000-000000000005 is reserved for a future Ask Claude answer from the native model login, which no service posts yet. */
         RoomAuthor: {
             /** @enum {string} */
             kind: "human" | "local_agent";

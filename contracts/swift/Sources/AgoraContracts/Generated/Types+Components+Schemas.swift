@@ -3024,7 +3024,7 @@ extension Components {
         ///
         /// - Remark: Generated from `#/components/schemas/Revision`.
         public typealias Revision = Swift.String
-        /// Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent covers two service-owned principals: a0000000-0000-4000-8000-000000000004 is the deterministic local quote (L5), never a model, and a0000000-0000-4000-8000-000000000005 is the Ask Claude answer from the native model login.
+        /// Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent covers two service-owned principals: a0000000-0000-4000-8000-000000000004 is the deterministic local quote (L5), never a model, and a0000000-0000-4000-8000-000000000005 is reserved for a future Ask Claude answer from the native model login, which no service posts yet.
         ///
         /// - Remark: Generated from `#/components/schemas/RoomAuthor`.
         public struct RoomAuthor: Codable, Hashable, Sendable {

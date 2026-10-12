@@ -185,7 +185,7 @@ Status | `running`, `answered` (with the committed message ID and the model the 
 Not delivered | The center has no `/ask` route, no provider, no answer principal and no panel. Those arrive as a separate service slice and a dependent panel slice.
 ```
 
-The [schema](repo:contracts/schemas/local-room.schema.json) and [operation list](repo:contracts/openapi.json) hold the contract. The [local-room contract test](repo:contracts/test/local-room.test.ts) checks every bound with both consumers, and [verify-agora](repo:.agents/skills/verify-agora/SKILL.md) holds the literal commands, including a request to a disposable instance that proves the route is absent. The generated Swift and TypeScript clients now carry two operations that no server answers, so a caller that uses them today gets a 404. The decision behind the staged delivery is D121 in [docs/decisions.tsv](repo:docs/decisions.tsv).
+The [schema](repo:contracts/schemas/local-room.schema.json) and [operation list](repo:contracts/openapi.json) hold the contract. The [local-room contract test](repo:contracts/test/local-room.test.ts) checks every bound through the TypeScript validator only. Both the TypeScript and Swift consumers run the three ask vectors, none of which crosses a length or count bound. [verify-agora](repo:.agents/skills/verify-agora/SKILL.md) holds the literal commands, including a request to a disposable instance that proves the route is absent. The generated Swift and TypeScript clients now carry two operations that no server answers, so a caller that uses them today gets a 404. The decision behind the staged delivery is D121 in [docs/decisions.tsv](repo:docs/decisions.tsv).
 
 ## Implementation status
 
