@@ -1002,6 +1002,510 @@ public enum Operations {
             }
         }
     }
+    /// Read the progress of one ask by command_id
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/ask`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/ask/get(getLocalAskStatus)`.
+    public enum getLocalAskStatus {
+        public static let id: Swift.String = "getLocalAskStatus"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/api/v1/local-room/ask/GET/query`.
+            public struct Query: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/ask/GET/query/command_id`.
+                public var command_id: Components.Schemas.Uuid
+                /// Creates a new `Query`.
+                ///
+                /// - Parameters:
+                ///   - command_id:
+                public init(command_id: Components.Schemas.Uuid) {
+                    self.command_id = command_id
+                }
+            }
+            public var query: Operations.getLocalAskStatus.Input.Query
+            /// - Remark: Generated from `#/paths/api/v1/local-room/ask/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getLocalAskStatus.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getLocalAskStatus.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.getLocalAskStatus.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - query:
+            ///   - headers:
+            public init(
+                query: Operations.getLocalAskStatus.Input.Query,
+                headers: Operations.getLocalAskStatus.Input.Headers = .init()
+            ) {
+                self.query = query
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/ask/GET/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/ask/GET/responses/200/content/application\/json`.
+                    case json(Components.Schemas.LocalAskStatus)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.LocalAskStatus {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.getLocalAskStatus.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.getLocalAskStatus.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// Status
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/ask/get(getLocalAskStatus)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.getLocalAskStatus.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.getLocalAskStatus.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/ask/GET/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/ask/GET/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ErrorReport)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ErrorReport {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.getLocalAskStatus.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.getLocalAskStatus.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// No such ask in this process
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/ask/get(getLocalAskStatus)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.getLocalAskStatus.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.getLocalAskStatus.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// Start one human-triggered, read-only model answer over a question and selected persisted messages; the answer is posted to the room when it finishes
+    ///
+    /// - Remark: HTTP `POST /api/v1/local-room/ask`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/ask/post(postLocalAsk)`.
+    public enum postLocalAsk {
+        public static let id: Swift.String = "postLocalAsk"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.postLocalAsk.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.postLocalAsk.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.postLocalAsk.Input.Headers
+            /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.LocalAskCommand)
+            }
+            public var body: Operations.postLocalAsk.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            ///   - body:
+            public init(
+                headers: Operations.postLocalAsk.Input.Headers = .init(),
+                body: Operations.postLocalAsk.Input.Body
+            ) {
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Accepted: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/202/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/202/content/application\/json`.
+                    case json(Components.Schemas.LocalAskStatus)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.LocalAskStatus {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.postLocalAsk.Output.Accepted.Body
+                /// Creates a new `Accepted`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.postLocalAsk.Output.Accepted.Body) {
+                    self.body = body
+                }
+            }
+            /// Ask running, or its recorded outcome on a repeat of the same command
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/ask/post(postLocalAsk)/responses/202`.
+            ///
+            /// HTTP response code: `202 accepted`.
+            case accepted(Operations.postLocalAsk.Output.Accepted)
+            /// The associated value of the enum case if `self` is `.accepted`.
+            ///
+            /// - Throws: An error if `self` is not `.accepted`.
+            /// - SeeAlso: `.accepted`.
+            public var accepted: Operations.postLocalAsk.Output.Accepted {
+                get throws {
+                    switch self {
+                    case let .accepted(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "accepted",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ErrorReport)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ErrorReport {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.postLocalAsk.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.postLocalAsk.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Malformed ask
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/ask/post(postLocalAsk)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.postLocalAsk.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.postLocalAsk.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ErrorReport)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ErrorReport {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.postLocalAsk.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.postLocalAsk.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Scope mismatch or no model provider composed
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/ask/post(postLocalAsk)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.postLocalAsk.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.postLocalAsk.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ErrorReport)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ErrorReport {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.postLocalAsk.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.postLocalAsk.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Command identity reused for a different ask
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/ask/post(postLocalAsk)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.postLocalAsk.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.postLocalAsk.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct TooManyRequests: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/429/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/api/v1/local-room/ask/POST/responses/429/content/application\/json`.
+                    case json(Components.Schemas.ErrorReport)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ErrorReport {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.postLocalAsk.Output.TooManyRequests.Body
+                /// Creates a new `TooManyRequests`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.postLocalAsk.Output.TooManyRequests.Body) {
+                    self.body = body
+                }
+            }
+            /// Another ask is already running
+            ///
+            /// - Remark: Generated from `#/paths//api/v1/local-room/ask/post(postLocalAsk)/responses/429`.
+            ///
+            /// HTTP response code: `429 tooManyRequests`.
+            case tooManyRequests(Operations.postLocalAsk.Output.TooManyRequests)
+            /// The associated value of the enum case if `self` is `.tooManyRequests`.
+            ///
+            /// - Throws: An error if `self` is not `.tooManyRequests`.
+            /// - SeeAlso: `.tooManyRequests`.
+            public var tooManyRequests: Operations.postLocalAsk.Output.TooManyRequests {
+                get throws {
+                    switch self {
+                    case let .tooManyRequests(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "tooManyRequests",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
     /// Read up to 50 committed events strictly after a room cursor; repeat to resume
     ///
     /// - Remark: HTTP `GET /api/v1/local-room/events`.
