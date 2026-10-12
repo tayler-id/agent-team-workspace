@@ -64,6 +64,15 @@
 			"fixtures": ["one fixed local room; selected persisted message IDs only; no model provider"], "platforms": ["node24", "postgresql18"]
 		},
 		{
+			"id": "local-room-ask-contract", "documentation": "docs/site/local-room.md", "owner": "local-room L5 read-only ask, wire contract preparation only",
+			"paths": ["contracts/schemas/local-room.schema.json", "contracts/openapi.json", "contracts/fixtures/vectors.json", "contracts/swift/Sources/AgoraContractsConform/main.swift", "contracts/test/local-room.test.ts", "evidence/local-room/ask-contract"],
+			"public": ["LocalAskCommand and LocalAskStatus in agora.local-room/v1", "openapi operations postLocalAsk and getLocalAskStatus on /api/v1/local-room/ask, defined with no server route"],
+			"contracts": ["contracts/schemas/local-room.schema.json"],
+			"scenarios": ["contracts/test/local-room.test.ts", "closed command refuses a tools field", "question bounded to 1 to 1000 characters", "selection bounded to ten UUIDs", "status state and failure enums closed", "Swift and TypeScript agree on all three ask vectors", "a disposable instance answers the ask routes with the generic 404 and posts nothing"],
+			"fixtures": ["contracts/fixtures/vectors.json local-ask-selected, local-ask-tools-field, local-ask-answered", "disposable local-room instance owned by the run, removed by reset"], "platforms": ["node24", "swift6-macos"],
+			"invalidation": "Any change to the four wire sources requires pnpm contracts:generate, the contract test and the endpoint-absence drive again. When the answer service lands, replace the absence drive with the service's own proof and name the service files in this entry."
+		},
+		{
 			"id": "skill-source-ownership", "documentation": "docs/site/skill-ownership.md", "owner": "Agora operator verification",
 			"paths": [".agents/skills/verify-agora/SKILL.md", ".claude/skills", "skills-lock.json", "packages/verification/test/skills-layout.test.ts"],
 			"public": [".agents/skills/verify-agora/SKILL.md", "pnpm exec vitest run --project unit packages/verification/test/skills-layout.test.ts"],

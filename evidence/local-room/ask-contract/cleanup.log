@@ -1,0 +1,11 @@
+# stop
+{"schema_version":"agora.local-runtime/v1","command":"stop","outcome":"pass","detail":"owned listeners stopped; data retained","root":"<worktree>/.scratch/local-room-verify-askc-1791780677","launch":"86149549-c124-45c3-95f0-d8d1b9b419d2","url":"http://127.0.0.1:56819","center_pid":5592,"postgres_pid":5653,"postgres_port":56820}
+
+# status
+{"schema_version":"agora.local-runtime/v1","command":"status","outcome":"pass","detail":"stopped; data retained","root":"<worktree>/.scratch/local-room-verify-askc-1791780677","launch":"86149549-c124-45c3-95f0-d8d1b9b419d2","url":"http://127.0.0.1:56819","center_pid":5592,"postgres_pid":5653,"postgres_port":56820}
+
+# reset
+{"schema_version":"agora.local-runtime/v1","command":"reset","outcome":"pass","detail":"owned disposable data removed; listeners absent","root":"<worktree>/.scratch/local-room-verify-askc-1791780677","launch":"86149549-c124-45c3-95f0-d8d1b9b419d2","url":"http://127.0.0.1:56819","center_pid":5592,"postgres_pid":5653,"postgres_port":56820}
+
+# status after reset
+{"schema_version":"agora.local-runtime/v1","command":"status","outcome":"blocked","detail":"Error: ENOENT: no such file or directory, lstat '<worktree>/.scratch/local-room-verify-askc-1791780677'"}

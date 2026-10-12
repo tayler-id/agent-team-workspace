@@ -170,6 +170,22 @@
       ]
     },
     {
+      "id": "local-room-ask-contract",
+      "title": "Ask contract preparation, read-only",
+      "status": "In progress",
+      "why": "LocalAskCommand and LocalAskStatus, the postLocalAsk and getLocalAskStatus operations and their generated TypeScript and Swift clients are defined and tested. No endpoint, provider, answer principal or question panel exists, and a disposable room still answers /api/v1/local-room/ask with a generic 404. This is not the answer service, not a chat claim and not U04 qualification.",
+      "page": "local-room.md",
+      "proof": [
+        "repo:contracts/schemas/local-room.schema.json",
+        "repo:contracts/test/local-room.test.ts",
+        "repo:evidence/local-room/ask-contract/README.md",
+        "repo:evidence/local-room/ask-contract/red.log",
+        "repo:evidence/local-room/ask-contract/green.log",
+        "repo:evidence/local-room/ask-contract/guard-negatives.log",
+        "repo:evidence/local-room/ask-contract/absence-drive.log"
+      ]
+    },
+    {
       "id": "documentation",
       "title": "Living documentation and progress atlas",
       "status": "In progress",

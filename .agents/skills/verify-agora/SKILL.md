@@ -16,6 +16,7 @@ Run the common pinned Doctor and candidate checks, then select the relevant serv
 | Skill layout, CLI discovery and recorder links | `pnpm exec vitest run --project unit packages/verification/test/skills-layout.test.ts packages/verification/test/project-help.test.ts packages/verification/test/record-source-bytes.test.ts` | Canonical pointers, retired roots, side-effect-free help, usage denials and Git link bytes; no service Launch |
 | Project fixture controls | `pnpm -s agora project --help`, then the project-controls Launch/Drive/Evidence/Cleanup below | PostgreSQL policy effects plus independent Python/SQLite; not production authorization |
 | Local room | `node scripts/local-room.ts doctor`, then the owned L3 recipe | One fixed human/room and deterministic quoted response; not multi-user identity or model inference |
+| Local ask contract | The Local ask contract preparation recipe below | Wire shapes, generated clients and proof that no `/ask` route exists; not an answer service, provider or panel |
 | Built browser | Production build recipe below | Actual browser render under unchanged CSP; not the full React/accessibility milestone |
 | Backup | Encrypted backup recipe below | Second database in one owned cluster; not separate-host/WAL recovery |
 | Contracts and guards | Common Doctor/Drive and `pnpm boundaries` | Wire agreement, import/state ownership and guard negatives; not future feature implementation |
@@ -572,6 +573,93 @@ The behavioral parent is the committed harness `d9c06b3`, where `policy` works a
 ```sh
 node scripts/record-red-green.mjs --parent d9c06b3 --head HEAD --out evidence/U01b/agora-s1-qualify-trusted-checks/slice-1 -- pnpm exec vitest run --project unit packages/verification/test/trusted-checks.test.ts
 ```
+
+## Local ask contract preparation
+
+Scope: `LocalAskCommand`, `LocalAskStatus`, the `postLocalAsk` and `getLocalAskStatus` operations, their three vectors and the generated clients. The runtime has no `/ask` route, provider, answer principal or question panel, so this recipe never starts a model and a pass is not a chat claim. Use the pinned Node 24.21.0 and pnpm 10.34.1 on `PATH`, plus a Python 3 with the locked `packages/verification/fixture/requirements.txt`. Keep `OUT` under `.scratch/`.
+
+### Local ask contract Doctor
+
+```sh
+OUT=.scratch/ask-contract; mkdir -p "$OUT"
+node --version && pnpm --version
+node scripts/ci-doctor.mjs --json
+node scripts/local-room.ts doctor
+```
+
+Pass: `v24.21.0`, `10.34.1`, both doctors `outcome: pass`. Any other Node, a missing Swift or PostgreSQL 18, or a missing Python validator is `blocked`, never a pass.
+
+### Local ask contract Launch
+
+Only the absence drive needs a service. Keep `INSTANCE` for Cleanup and use a name no other run owns:
+
+```sh
+INSTANCE=verify-askc-$(date +%s)
+node scripts/local-room.ts start --instance "$INSTANCE" | tee "$OUT/start.json"
+```
+
+Pass: `outcome: pass` with a fresh `launch` UUID, a loopback `url` and the owned PIDs. Read `project_id` and `room_id` from `GET $URL/api/v1/local-room/snapshot` rather than copying them.
+
+### Local ask contract Drive
+
+```sh
+pnpm contracts:generate && git diff --exit-code -- contracts
+pnpm contracts:check
+pnpm contracts:conform -- --json > "$OUT/conform.json"
+pnpm exec vitest run --project contracts contracts/test/local-room.test.ts
+```
+
+Pass: no diff after regeneration, `contracts:check` exits 0 with `drift: []`, `conform.json` has `outcome: pass` and no disagreement for `local-ask-selected`, `local-ask-tools-field` or `local-ask-answered`, and all five tests pass. Deny: `local-ask-tools-field` rejects in both consumers, and a question of 0 or 1001 characters, eleven selected IDs, a non-UUID selected ID, a scope without `room_id`, an unknown `state`, an unknown `failure` and a 513-character `detail` each reject with the exact message the test asserts.
+
+Guard negatives: with the work committed, back up `contracts/schemas/local-room.schema.json` or `contracts/openapi.json`, weaken one guard (open `LocalAskCommand` to extra properties, raise `selected_ids` to 11, raise `question` to 2000, add a seventh `failure`, rename `getLocalAskStatus`), run `pnpm exec vitest run --project contracts contracts/test/local-room.test.ts -t 'ask contract'`, require it red, restore from the backup and compare SHA-256 before and after. Edit the schema without regenerating and `pnpm contracts:check` must exit 1 with drift.
+
+Endpoint absence. The room has no key to withhold, so a denial proves nothing until a control request to the same instance succeeds. With `URL` from Launch and the IDs from the snapshot:
+
+```sh
+curl -si -X POST "$URL/api/v1/local-room/messages" -H 'content-type: application/json' -d '{"schema_version":"agora.local-room.send-message/v1","command_id":"77777777-7777-4777-8777-777777777771","scope":{"project_id":"'"$PROJECT"'","room_id":"'"$ROOM"'"},"body":"control","citations":[]}'
+curl -si -X POST "$URL/api/v1/local-room/ask" -H 'content-type: application/json' -d '{"schema_version":"agora.local-ask.command/v1","command_id":"77777777-7777-4777-8777-777777777772","scope":{"project_id":"'"$PROJECT"'","room_id":"'"$ROOM"'"},"question":"What did we decide?","selected_ids":["'"$MESSAGE"'"]}'
+curl -si "$URL/api/v1/local-room/ask?command_id=77777777-7777-4777-8777-777777777772"
+curl -si -X POST "$URL/api/v1/local-room/ask-never-existed" -H 'content-type: application/json' -d '{}'
+curl -s "$URL/api/v1/local-room/snapshot"
+git grep -n -e 'local-room/ask' -e 'claude-provider' -e 'postLocalAsk' -- apps packages scripts ':!contracts'
+```
+
+Pass: the first call is 201, the ask, the status read and the never-existed path are each 404 with exactly `{"reason_code":"not_found",...}`, the snapshot holds only the control message, and `git grep` prints nothing (exit 1). Fail: any 202, 200, 400 or 429, an `unavailable_capability` body or an added message means a route exists, so stop and report rather than extending this recipe. Never invoke a model here.
+
+Browser baseline with a session you name yourself:
+
+```sh
+export CHROME_DEVTOOLS_AXI_SESSION=askc-$$
+chrome-devtools-axi open "$URL"
+chrome-devtools-axi eval "() => ({ header: document.querySelector('[role=banner]').textContent.slice(0, 160), ask: [...document.querySelectorAll('button,a,[role=tab]')].map((x) => x.textContent.trim()).filter((t) => /ask|claude|question/i.test(t)) })"
+chrome-devtools-axi screenshot "$OUT/baseline-smoke-desktop.png"
+```
+
+Pass: the page loads, the header says `local runtime, no model provider`, `ask` is an empty list, a sent message appears, **Quote locally** posts a row labelled `local agent (fixture)`, and the only console error is the documented font content security policy block. An Ask control or Claude label is a fail.
+
+### Local ask contract Evidence
+
+```sh
+node scripts/record-red-green.mjs --parent 6091fa12063987f0cadc320047804ff4049befba --head 7d8fb9997283b5e5874a787a36b1c587f953f27b --out evidence/local-room/ask-contract -- pnpm exec vitest run --project contracts contracts/test/local-room.test.ts -t 'ask contract'
+node scripts/validate-evidence.mjs --dir evidence/local-room/ask-contract --head 7d8fb9997283b5e5874a787a36b1c587f953f27b --base 6091fa12063987f0cadc320047804ff4049befba
+node scripts/local-checks.mjs run
+node scripts/local-checks.mjs verify HEAD
+```
+
+Pass: `red_exit` 1 on an assertion about `local-ask-selected` rather than a missing import, `green_exit` 0, and the receipt for the exact head. Keep the drive log, guard log, cleanup log and screenshot beside the recorder output. Historical native or 390 px captures from the combined change are not evidence for this candidate.
+
+### Local ask contract Cleanup
+
+```sh
+export CHROME_DEVTOOLS_AXI_SESSION=askc-$$   # the same name used above
+chrome-devtools-axi stop
+node scripts/local-room.ts stop --instance "$INSTANCE"
+node scripts/local-room.ts status --instance "$INSTANCE"
+node scripts/local-room.ts reset --instance "$INSTANCE" --confirm-disposable
+node scripts/local-room.ts status --instance "$INSTANCE"
+```
+
+Pass: stop says `owned listeners stopped; data retained`, the first status says `stopped`, reset says `owned disposable data removed; listeners absent`, and the last status is `blocked` because the instance root is gone. Remove only `.scratch/local-room-$INSTANCE` leftovers you created. Never touch another instance, the retained preview or a reference copy.
 
 ## Feature discovery (U21.B01)
 
