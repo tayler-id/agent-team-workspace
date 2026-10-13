@@ -46,7 +46,7 @@ Moving a capability into a Feature folder relocates its consumer wiring, not its
 ```text
 contracts/schemas/local-room.schema.json   stays in Contracts; a Feature imports only its generated types
 packages/domain/src/local-room/port.ts     stays in Domain; the browser Feature never imports it directly
-apps/center/src/features/local-room/       built (U23.B01 construction): the server Entrypoint that owns the adapter selection main.ts used to inline
+apps/center/src/features/local-room/       built (U23.B01 construction): the server Entrypoint holding the apps/center adapter selection main.ts used to inline
 apps/web/src/features/local-room/          new: the renderer, rewritten onto the Client and Host, not just moved
 ```
 
@@ -59,6 +59,8 @@ Center main.ts | Opens the existing non-owner database and imports selectLocalRo
 Local-room Entrypoint | Selects the unchanged PostgreSQL adapter for the unchanged fixed LOCAL_ROOM scope.
 Center app.ts | Receives that adapter through createApp; its existing HTTP routes and assertions stay unchanged.
 ```
+
+Only the `apps/center` process takes this path. The live local-room runtime in `scripts/local-room-service.ts` still composes its own adapter inline and never loads the Entrypoint, so its browser drive is compatibility proof for the unchanged runtime. `apps/center/test/local-room.pg.test.ts`, which spawns `main.ts`, is the test that runs the moved selection.
 
 ## Implementation status
 
