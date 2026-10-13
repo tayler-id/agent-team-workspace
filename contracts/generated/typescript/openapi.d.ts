@@ -85,6 +85,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/local-room/ask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read the progress of one ask by command_id */
+        get: operations["getLocalAskStatus"];
+        put?: never;
+        /** Start one human-triggered, read-only model answer over a question and selected persisted messages; the answer is posted to the room when it finishes */
+        post: operations["postLocalAsk"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/local-room/events": {
         parameters: {
             query?: never;
@@ -365,6 +383,28 @@ export interface components {
             scope: components["schemas"]["LocalRoomScope"];
             selected_ids: components["schemas"]["Uuid"][];
         };
+        /** @description Body of POST /api/v1/local-room/ask: a free-text question and up to ten explicitly selected persisted messages, sent as data to a native model login that has no tools. The service derives authorship and accepts no instructions, files or paths. */
+        LocalAskCommand: {
+            /** @enum {string} */
+            schema_version: "agora.local-ask.command/v1";
+            command_id: components["schemas"]["Uuid"];
+            scope: components["schemas"]["LocalRoomScope"];
+            question: string;
+            selected_ids: components["schemas"]["Uuid"][];
+        };
+        /** @description Progress of one ask in this service process. running has no result yet; answered names the committed room message and the model the native response reported; failed names why nothing was posted. A restart forgets a running or failed ask, never a committed answer. */
+        LocalAskStatus: {
+            /** @enum {string} */
+            schema_version: "agora.local-ask.status/v1";
+            command_id: components["schemas"]["Uuid"];
+            /** @enum {string} */
+            state: "running" | "answered" | "failed";
+            message_id?: components["schemas"]["Uuid"];
+            model?: string;
+            /** @enum {string} */
+            failure?: "provider_unavailable" | "provider_error" | "timeout" | "unsafe_configuration" | "context_refused" | "post_refused";
+            detail?: string;
+        };
         /** @description Project and room identity of one local room. Both are opaque UUIDs fixed by the local development service (L2), never chosen from a hosted workspace. */
         LocalRoomScope: {
             project_id: components["schemas"]["Uuid"];
@@ -450,7 +490,7 @@ export interface components {
         };
         /** @description Nonnegative 64-bit integer as a decimal string without sign, leading zeros or exponent; the pattern is the exact bound 18446744073709551615. */
         Revision: string;
-        /** @description Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent is the bounded local center response (L5), labelled explicitly and never a live model provider. */
+        /** @description Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent covers two service-owned principals: a0000000-0000-4000-8000-000000000004 is the deterministic local quote (L5), never a model, and a0000000-0000-4000-8000-000000000005 is reserved for a future Ask Claude answer from the native model login, which no service posts yet. */
         RoomAuthor: {
             /** @enum {string} */
             kind: "human" | "local_agent";
@@ -708,6 +748,97 @@ export interface operations {
             };
             /** @description Command identity reused for a different selection */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+        };
+    };
+    getLocalAskStatus: {
+        parameters: {
+            query: {
+                command_id: components["schemas"]["Uuid"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Status */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LocalAskStatus"];
+                };
+            };
+            /** @description No such ask in this process */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+        };
+    };
+    postLocalAsk: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LocalAskCommand"];
+            };
+        };
+        responses: {
+            /** @description Ask running, or its recorded outcome on a repeat of the same command */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LocalAskStatus"];
+                };
+            };
+            /** @description Malformed ask */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+            /** @description Scope mismatch or no model provider composed */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+            /** @description Command identity reused for a different ask */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorReport"];
+                };
+            };
+            /** @description Another ask is already running */
+            429: {
                 headers: {
                     [name: string]: unknown;
                 };

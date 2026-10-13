@@ -1,0 +1,47 @@
+diff --git a/contracts/fixtures/vectors.json b/contracts/fixtures/vectors.json
+index c4635cf..d32defe 100644
+--- a/contracts/fixtures/vectors.json
++++ b/contracts/fixtures/vectors.json
+@@ -11,6 +11,9 @@
+ 		{"id":"project-instance-foreign-field","component":"CliInstance","wire":"{\"override\":true}","expect":"reject","reason":"missing ownership fields and unknown override"},
+ 		{"id":"local-answer-selected","component":"LocalAnswerCommand","wire":"{\"schema_version\":\"agora.local-answer.command/v1\",\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"selected_ids\":[\"44444444-4444-4444-8444-444444444444\"]}","expect":"accept","canonical":"{\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"schema_version\":\"agora.local-answer.command/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"selected_ids\":[\"44444444-4444-4444-8444-444444444444\"]}","digest":"sha256:241015ee3afc11007180cb7402039e3be6b4feaaec7289592c8bdf6b9a6612b4"},
+ 		{"id":"local-answer-unknown-field","component":"LocalAnswerCommand","wire":"{\"schema_version\":\"agora.local-answer.command/v1\",\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"selected_ids\":[\"44444444-4444-4444-8444-444444444444\"],\"override\":true}","expect":"reject","reason":"closed selection"},
++		{"id":"local-ask-selected","component":"LocalAskCommand","wire":"{\"schema_version\":\"agora.local-ask.command/v1\",\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"question\":\"What did we decide?\",\"selected_ids\":[\"44444444-4444-4444-8444-444444444444\"]}","expect":"accept","canonical":"{\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"question\":\"What did we decide?\",\"schema_version\":\"agora.local-ask.command/v1\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"selected_ids\":[\"44444444-4444-4444-8444-444444444444\"]}","digest":"sha256:dcafcc99ed6683607068daddc948df26f49c5bba1ae79b4f8330a8072724b9c1"},
++		{"id":"local-ask-tools-field","component":"LocalAskCommand","wire":"{\"schema_version\":\"agora.local-ask.command/v1\",\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"scope\":{\"project_id\":\"11111111-1111-4111-8111-111111111111\",\"room_id\":\"22222222-2222-4222-8222-222222222222\"},\"question\":\"What did we decide?\",\"selected_ids\":[\"44444444-4444-4444-8444-444444444444\"],\"tools\":[\"Bash\"]}","expect":"reject","reason":"closed command: no tools or instructions"},
++		{"id":"local-ask-answered","component":"LocalAskStatus","wire":"{\"schema_version\":\"agora.local-ask.status/v1\",\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"state\":\"answered\",\"message_id\":\"55555555-5555-4555-8555-555555555555\",\"model\":\"claude-sonnet-5-5\"}","expect":"accept","canonical":"{\"command_id\":\"77777777-7777-4777-8777-777777777777\",\"message_id\":\"55555555-5555-4555-8555-555555555555\",\"model\":\"claude-sonnet-5-5\",\"schema_version\":\"agora.local-ask.status/v1\",\"state\":\"answered\"}","digest":"sha256:084b92eeff63258454253b0bc71a51ac149e073f1a58c32d9cc6ea6723b20e97"},
+ 		{
+ 			"id": "local-room-runtime-ok",
+ 			"component": "LocalRuntimeReport",
+diff --git a/contracts/test/local-room.test.ts b/contracts/test/local-room.test.ts
+index 77ceef3..6f1345f 100644
+--- a/contracts/test/local-room.test.ts
++++ b/contracts/test/local-room.test.ts
+@@ -74,3 +74,28 @@ test('removing the authorship, event-kind or unknown-field guard makes its denia
+ 		expect(() => { expect(check(payload)).toBe(false); }).toThrow('expected true to be false');
+ 	}
+ });
++
++test('the ask contract is closed and bounded, the operation pair is published, and Swift refuses what TypeScript refuses', () => {
++	const ask = file.vectors.filter((v) => v.id.startsWith('local-ask-'));
++	expect(ask.map((v) => v.id)).toEqual(['local-ask-selected', 'local-ask-tools-field', 'local-ask-answered']);
++	for (const v of ask) expect({ id: v.id, accepted: validate(v.component, v.wire).ok }).toEqual({ id: v.id, accepted: v.expect === 'accept' });
++	const command = JSON.parse(ask[0]?.wire ?? '{}') as Record<string, unknown>;
++	const status = JSON.parse(ask[2]?.wire ?? '{}') as Record<string, unknown>;
++	const wire = (base: Record<string, unknown>, change: Record<string, unknown>) => JSON.stringify({ ...base, ...change });
++	const ids = (n: number) => Array.from({ length: n }, (_, i) => `44444444-4444-4444-8444-${String(i).padStart(12, '0')}`);
++	expect(details('LocalAskCommand', ask[1]?.wire ?? '')).toEqual(['$ must NOT have additional properties']);
++	expect(details('LocalAskCommand', wire(command, { question: '' }))).toEqual(['/question must NOT have fewer than 1 characters']);
++	expect(details('LocalAskCommand', wire(command, { question: 'x'.repeat(1001) }))).toEqual(['/question must NOT have more than 1000 characters']);
++	expect(validate('LocalAskCommand', wire(command, { selected_ids: ids(10) })).ok).toBe(true);
++	expect(details('LocalAskCommand', wire(command, { selected_ids: ids(11) }))).toEqual(['/selected_ids must NOT have more than 10 items']);
++	expect(details('LocalAskCommand', wire(command, { selected_ids: ['44444444-4444-4444-8444-44444444444G'] }))[0]).toMatch(/^\/selected_ids\/0 must match pattern/);
++	expect(details('LocalAskCommand', wire(command, { scope: { project_id: command['command_id'] } }))).toEqual(["/scope must have required property 'room_id'"]);
++	expect(details('LocalAskStatus', wire(status, { state: 'cancelled' }))).toEqual(['/state must be equal to one of the allowed values']);
++	expect(details('LocalAskStatus', wire(status, { failure: 'rate_limited' }))).toEqual(['/failure must be equal to one of the allowed values']);
++	expect(details('LocalAskStatus', wire(status, { detail: 'x'.repeat(513) }))).toEqual(['/detail must NOT have more than 512 characters']);
++	const operations = JSON.parse(readFileSync(new URL('../openapi.json', import.meta.url), 'utf8')) as { paths: Record<string, Record<string, { operationId: string }>> };
++	expect(Object.entries(operations.paths['/api/v1/local-room/ask'] ?? {}).map(([method, op]) => `${method} ${op.operationId}`)).toEqual(['post postLocalAsk', 'get getLocalAskStatus']);
++	const swift = runSwiftConsumer();
++	if (!swift.report) throw new Error('Swift did not return a report');
++	expect(swift.report.vectors.filter((v) => v.id.startsWith('local-ask-')).map((v) => `${v.id}: ${v.generated_decode?.split(':')[0]}`)).toEqual(['local-ask-selected: ok', 'local-ask-tools-field: refused', 'local-ask-answered: ok']);
++});

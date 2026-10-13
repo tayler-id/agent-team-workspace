@@ -2044,6 +2044,197 @@ extension Components {
                 ])
             }
         }
+        /// Body of POST /api/v1/local-room/ask: a free-text question and up to ten explicitly selected persisted messages, sent as data to a native model login that has no tools. The service derives authorship and accepts no instructions, files or paths.
+        ///
+        /// - Remark: Generated from `#/components/schemas/LocalAskCommand`.
+        public struct LocalAskCommand: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/LocalAskCommand/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_local_hyphen_ask_period_command_sol_v1 = "agora.local-ask.command/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/LocalAskCommand/schema_version`.
+            public var schema_version: Components.Schemas.LocalAskCommand.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/LocalAskCommand/command_id`.
+            public var command_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/LocalAskCommand/scope`.
+            public var scope: Components.Schemas.LocalRoomScope
+            /// - Remark: Generated from `#/components/schemas/LocalAskCommand/question`.
+            public var question: Swift.String
+            /// - Remark: Generated from `#/components/schemas/LocalAskCommand/selected_ids`.
+            public var selected_ids: [Components.Schemas.Uuid]
+            /// Creates a new `LocalAskCommand`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - command_id:
+            ///   - scope:
+            ///   - question:
+            ///   - selected_ids:
+            public init(
+                schema_version: Components.Schemas.LocalAskCommand.schema_versionPayload,
+                command_id: Components.Schemas.Uuid,
+                scope: Components.Schemas.LocalRoomScope,
+                question: Swift.String,
+                selected_ids: [Components.Schemas.Uuid]
+            ) {
+                self.schema_version = schema_version
+                self.command_id = command_id
+                self.scope = scope
+                self.question = question
+                self.selected_ids = selected_ids
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case command_id
+                case scope
+                case question
+                case selected_ids
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.LocalAskCommand.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.command_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .command_id
+                )
+                self.scope = try container.decode(
+                    Components.Schemas.LocalRoomScope.self,
+                    forKey: .scope
+                )
+                self.question = try container.decode(
+                    Swift.String.self,
+                    forKey: .question
+                )
+                self.selected_ids = try container.decode(
+                    [Components.Schemas.Uuid].self,
+                    forKey: .selected_ids
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "command_id",
+                    "scope",
+                    "question",
+                    "selected_ids"
+                ])
+            }
+        }
+        /// Progress of one ask in this service process. running has no result yet; answered names the committed room message and the model the native response reported; failed names why nothing was posted. A restart forgets a running or failed ask, never a committed answer.
+        ///
+        /// - Remark: Generated from `#/components/schemas/LocalAskStatus`.
+        public struct LocalAskStatus: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/schema_version`.
+            @frozen public enum schema_versionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case agora_period_local_hyphen_ask_period_status_sol_v1 = "agora.local-ask.status/v1"
+            }
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/schema_version`.
+            public var schema_version: Components.Schemas.LocalAskStatus.schema_versionPayload
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/command_id`.
+            public var command_id: Components.Schemas.Uuid
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/state`.
+            @frozen public enum statePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case running = "running"
+                case answered = "answered"
+                case failed = "failed"
+            }
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/state`.
+            public var state: Components.Schemas.LocalAskStatus.statePayload
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/message_id`.
+            public var message_id: Components.Schemas.Uuid?
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/model`.
+            public var model: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/failure`.
+            @frozen public enum failurePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case provider_unavailable = "provider_unavailable"
+                case provider_error = "provider_error"
+                case timeout = "timeout"
+                case unsafe_configuration = "unsafe_configuration"
+                case context_refused = "context_refused"
+                case post_refused = "post_refused"
+            }
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/failure`.
+            public var failure: Components.Schemas.LocalAskStatus.failurePayload?
+            /// - Remark: Generated from `#/components/schemas/LocalAskStatus/detail`.
+            public var detail: Swift.String?
+            /// Creates a new `LocalAskStatus`.
+            ///
+            /// - Parameters:
+            ///   - schema_version:
+            ///   - command_id:
+            ///   - state:
+            ///   - message_id:
+            ///   - model:
+            ///   - failure:
+            ///   - detail:
+            public init(
+                schema_version: Components.Schemas.LocalAskStatus.schema_versionPayload,
+                command_id: Components.Schemas.Uuid,
+                state: Components.Schemas.LocalAskStatus.statePayload,
+                message_id: Components.Schemas.Uuid? = nil,
+                model: Swift.String? = nil,
+                failure: Components.Schemas.LocalAskStatus.failurePayload? = nil,
+                detail: Swift.String? = nil
+            ) {
+                self.schema_version = schema_version
+                self.command_id = command_id
+                self.state = state
+                self.message_id = message_id
+                self.model = model
+                self.failure = failure
+                self.detail = detail
+            }
+            public enum CodingKeys: String, CodingKey {
+                case schema_version
+                case command_id
+                case state
+                case message_id
+                case model
+                case failure
+                case detail
+            }
+            public init(from decoder: any Swift.Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.schema_version = try container.decode(
+                    Components.Schemas.LocalAskStatus.schema_versionPayload.self,
+                    forKey: .schema_version
+                )
+                self.command_id = try container.decode(
+                    Components.Schemas.Uuid.self,
+                    forKey: .command_id
+                )
+                self.state = try container.decode(
+                    Components.Schemas.LocalAskStatus.statePayload.self,
+                    forKey: .state
+                )
+                self.message_id = try container.decodeIfPresent(
+                    Components.Schemas.Uuid.self,
+                    forKey: .message_id
+                )
+                self.model = try container.decodeIfPresent(
+                    Swift.String.self,
+                    forKey: .model
+                )
+                self.failure = try container.decodeIfPresent(
+                    Components.Schemas.LocalAskStatus.failurePayload.self,
+                    forKey: .failure
+                )
+                self.detail = try container.decodeIfPresent(
+                    Swift.String.self,
+                    forKey: .detail
+                )
+                try decoder.ensureNoAdditionalProperties(knownKeys: [
+                    "schema_version",
+                    "command_id",
+                    "state",
+                    "message_id",
+                    "model",
+                    "failure",
+                    "detail"
+                ])
+            }
+        }
         /// Project and room identity of one local room. Both are opaque UUIDs fixed by the local development service (L2), never chosen from a hosted workspace.
         ///
         /// - Remark: Generated from `#/components/schemas/LocalRoomScope`.
@@ -2833,7 +3024,7 @@ extension Components {
         ///
         /// - Remark: Generated from `#/components/schemas/Revision`.
         public typealias Revision = Swift.String
-        /// Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent is the bounded local center response (L5), labelled explicitly and never a live model provider.
+        /// Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent covers two service-owned principals: a0000000-0000-4000-8000-000000000004 is the deterministic local quote (L5), never a model, and a0000000-0000-4000-8000-000000000005 is reserved for a future Ask Claude answer from the native model login, which no service posts yet.
         ///
         /// - Remark: Generated from `#/components/schemas/RoomAuthor`.
         public struct RoomAuthor: Codable, Hashable, Sendable {

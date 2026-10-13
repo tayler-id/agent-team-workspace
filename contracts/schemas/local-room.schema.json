@@ -2,7 +2,7 @@
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://agora.invalid/schemas/local-room.schema.json",
 	"title": "agora.local-room/v1",
-	"description": "Conversation contracts of the explicit opt-in, loopback-only local-development room (local-room L1). One project room: command identity, human or explicitly local-agent authorship, immutable messages, an ordered per-room sequence, citations to persisted records, snapshots and receipts. Cursors and the base receipt reuse sync.schema.json; errors reuse errors.schema.json. Nothing here defines production identity, transport authority, search, uploads, task authority or a model provider, and nothing here authorizes a hosted operation.",
+	"description": "Conversation contracts of the explicit opt-in, loopback-only local-development room (local-room L1). One project room: command identity, human or explicitly local-agent authorship, immutable messages, an ordered per-room sequence, citations to persisted records, snapshots and receipts, and the wire shapes of one human-triggered ask that a later service will answer through its own no-tool native model login; no service answers it yet. Cursors and the base receipt reuse sync.schema.json; errors reuse errors.schema.json. Nothing here defines production identity, transport authority, search, uploads, task authority, model choice or a second model provider, and nothing here authorizes a hosted operation.",
 	"$defs": {
 		"LocalRoomScope": {
 			"description": "Project and room identity of one local room. Both are opaque UUIDs fixed by the local development service (L2), never chosen from a hosted workspace.",
@@ -14,7 +14,7 @@
 			}
 		},
 		"RoomAuthor": {
-			"description": "Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent is the bounded local center response (L5), labelled explicitly and never a live model provider.",
+			"description": "Who wrote a persisted message. The service derives it from the caller; a command never carries it. local_agent covers two service-owned principals: a0000000-0000-4000-8000-000000000004 is the deterministic local quote (L5), never a model, and a0000000-0000-4000-8000-000000000005 is reserved for a future Ask Claude answer from the native model login, which no service posts yet.",
 			"type": "object", "additionalProperties": false,
 			"required": ["kind", "principal_id"],
 			"properties": {
@@ -57,6 +57,32 @@
 				"command_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
 				"scope": { "$ref": "#/$defs/LocalRoomScope" },
 				"selected_ids": { "type": "array", "minItems": 1, "maxItems": 10, "items": { "$ref": "primitives.schema.json#/$defs/Uuid" } }
+			}
+		},
+		"LocalAskCommand": {
+			"description": "Body of POST /api/v1/local-room/ask: a free-text question and up to ten explicitly selected persisted messages, sent as data to a native model login that has no tools. The service derives authorship and accepts no instructions, files or paths.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "command_id", "scope", "question", "selected_ids"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.local-ask.command/v1"] },
+				"command_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"scope": { "$ref": "#/$defs/LocalRoomScope" },
+				"question": { "type": "string", "minLength": 1, "maxLength": 1000 },
+				"selected_ids": { "type": "array", "maxItems": 10, "items": { "$ref": "primitives.schema.json#/$defs/Uuid" } }
+			}
+		},
+		"LocalAskStatus": {
+			"description": "Progress of one ask in this service process. running has no result yet; answered names the committed room message and the model the native response reported; failed names why nothing was posted. A restart forgets a running or failed ask, never a committed answer.",
+			"type": "object", "additionalProperties": false,
+			"required": ["schema_version", "command_id", "state"],
+			"properties": {
+				"schema_version": { "type": "string", "enum": ["agora.local-ask.status/v1"] },
+				"command_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"state": { "type": "string", "enum": ["running", "answered", "failed"] },
+				"message_id": { "$ref": "primitives.schema.json#/$defs/Uuid" },
+				"model": { "type": "string", "maxLength": 128 },
+				"failure": { "type": "string", "enum": ["provider_unavailable", "provider_error", "timeout", "unsafe_configuration", "context_refused", "post_refused"] },
+				"detail": { "type": "string", "maxLength": 512 }
 			}
 		},
 		"CommandIdentity": {

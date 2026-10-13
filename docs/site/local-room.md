@@ -173,6 +173,20 @@ Posting boundary | The SQL adapter calls the pure core after loading selected ro
 
 The [context compiler](repo:packages/domain/src/local-answer/context.ts), [citation constructor](repo:packages/domain/src/local-answer/citations.ts), [proposal function](repo:packages/domain/src/local-answer/proposal.ts) and [future posting port](repo:packages/domain/src/local-answer/posting.ts) are separate files. The adapter adds the closed [LocalAnswerCommand](repo:contracts/schemas/local-room.schema.json) wire shape; the pure core still uses domain values and has no posting authority. The [developer guide](repo:docs/runbooks/development.md) explains validation, digests and typed denials; the [driver reference](cli.md#local-answer-pure-core) gives the exact test command.
 
+### Ask contract preparation
+
+This slice defines the wire shapes for a future read-only question to a model. It delivers no endpoint, no model call and no question panel. A running local room still answers `POST /api/v1/local-room/ask` with the generic `not_found` 404, and the browser room still offers only the deterministic quote. Nothing here is a chat claim.
+
+```flow
+Wire sources | `local-room.schema.json` adds `LocalAskCommand` and `LocalAskStatus`; `openapi.json` adds `postLocalAsk` and `getLocalAskStatus` on `/api/v1/local-room/ask`; `vectors.json` adds three literal vectors; the Swift conformance driver lists both shapes.
+Generated consumers | `pnpm contracts:generate` rewrites the TypeScript and Swift clients. A hand edit to generated output shows up as drift in `pnpm contracts:check`.
+Bounded command | One question of 1 to 1000 characters, a scope of project and room UUIDs, and 0 to 10 selected message UUIDs. The command is closed, so a `tools`, instruction, file or path field is refused.
+Status | `running`, `answered` (with the committed message ID and the model the response reported) or `failed` (with one of six reasons and a short detail).
+Not delivered | The center has no `/ask` route, no provider, no answer principal and no panel. Those arrive as a separate service slice and a dependent panel slice.
+```
+
+The [schema](repo:contracts/schemas/local-room.schema.json) and [operation list](repo:contracts/openapi.json) hold the contract. The [local-room contract test](repo:contracts/test/local-room.test.ts) checks these bounds through the TypeScript validator only: the closed command, a question of 1 to 1000 characters, at most ten selected IDs, the selected-ID UUID format, a scope that requires `room_id`, the closed `state` and `failure` enums and a `detail` of at most 512 characters. No test exercises the 128-character limit on `model`. Both the TypeScript and Swift consumers run the three ask vectors, none of which crosses a length or count bound. [verify-agora](repo:.agents/skills/verify-agora/SKILL.md) holds the literal commands, including a request to a disposable instance that proves the route is absent. The generated Swift and TypeScript clients now carry two operations that no server answers, so a caller that uses them today gets a 404. The decision behind the staged delivery is D121 in [docs/decisions.tsv](repo:docs/decisions.tsv).
+
 ## Implementation status
 
 **In progress: L1-L3 landed, L4 first slice landed, L5 selected-quote posting slice implemented; remaining L4 and L5 scope open.** Snapshot history is bounded to the latest 1000 messages. Older immutable records remain readable through event replay in pages of 50; this disposable runtime has no event compaction or retention expiry. CLI replay prints one page; continue with the last event's `seq`. The client drains at most 200 pages per call, then reports the bound and can resume again.

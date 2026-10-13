@@ -36,6 +36,16 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `POST /api/v1/local-room/answer`.
     /// - Remark: Generated from `#/paths//api/v1/local-room/answer/post(postLocalAnswer)`.
     func postLocalAnswer(_ input: Operations.postLocalAnswer.Input) async throws -> Operations.postLocalAnswer.Output
+    /// Read the progress of one ask by command_id
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/ask`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/ask/get(getLocalAskStatus)`.
+    func getLocalAskStatus(_ input: Operations.getLocalAskStatus.Input) async throws -> Operations.getLocalAskStatus.Output
+    /// Start one human-triggered, read-only model answer over a question and selected persisted messages; the answer is posted to the room when it finishes
+    ///
+    /// - Remark: HTTP `POST /api/v1/local-room/ask`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/ask/post(postLocalAsk)`.
+    func postLocalAsk(_ input: Operations.postLocalAsk.Input) async throws -> Operations.postLocalAsk.Output
     /// Read up to 50 committed events strictly after a room cursor; repeat to resume
     ///
     /// - Remark: HTTP `GET /api/v1/local-room/events`.
@@ -99,6 +109,32 @@ extension APIProtocol {
         body: Operations.postLocalAnswer.Input.Body
     ) async throws -> Operations.postLocalAnswer.Output {
         try await postLocalAnswer(Operations.postLocalAnswer.Input(
+            headers: headers,
+            body: body
+        ))
+    }
+    /// Read the progress of one ask by command_id
+    ///
+    /// - Remark: HTTP `GET /api/v1/local-room/ask`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/ask/get(getLocalAskStatus)`.
+    public func getLocalAskStatus(
+        query: Operations.getLocalAskStatus.Input.Query,
+        headers: Operations.getLocalAskStatus.Input.Headers = .init()
+    ) async throws -> Operations.getLocalAskStatus.Output {
+        try await getLocalAskStatus(Operations.getLocalAskStatus.Input(
+            query: query,
+            headers: headers
+        ))
+    }
+    /// Start one human-triggered, read-only model answer over a question and selected persisted messages; the answer is posted to the room when it finishes
+    ///
+    /// - Remark: HTTP `POST /api/v1/local-room/ask`.
+    /// - Remark: Generated from `#/paths//api/v1/local-room/ask/post(postLocalAsk)`.
+    public func postLocalAsk(
+        headers: Operations.postLocalAsk.Input.Headers = .init(),
+        body: Operations.postLocalAsk.Input.Body
+    ) async throws -> Operations.postLocalAsk.Output {
+        try await postLocalAsk(Operations.postLocalAsk.Input(
             headers: headers,
             body: body
         ))

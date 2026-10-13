@@ -1,0 +1,44 @@
+### control: an authorized, well-formed send to this instance succeeds (same host, origin and content type as the ask requests below)
+--- -X POST http://127.0.0.1:56819/api/v1/local-room/messages -H content-type: application/json -d {"schema_version":"agora.local-room.send-message/v1","command_id":"77777777-7777-4777-8777-777777777771","scope":{"project_id":"a0000000-0000-4000-8000-000000000001","room_id":"a0000000-0000-4000-8000-000000000002"},"body":"ask contract drive message","citations":[]}
+HTTP/1.1 201 Created
+content-type: application/json
+
+{"schema_version":"agora.local-room.receipt/v1","identity":{"command_id":"77777777-7777-4777-8777-777777777771","request_digest":"sha256:35ee0c77768afb02e07c1cfcb43587c53e5ead39fd5a00a4f35f0903f8cc1464"},"receipt":{"command_id":"77777777-7777-4777-8777-777777777771","aggregate_id":"a0000000-0000-4000-8000-000000000002","revision":"1","event_cursors":[{"stream_id":"a0000000-0000-4000-8000-000000000002","committed_seq":"1"}],"receipt_id":"05986762-1469-4829-81d0-130ac822696c"},"message_id":"6fd177a8-135e-48b8-b28e-08ae2ff7c081","replayed":false}
+
+### well-formed ask over that message: scope ids and selected id are real, so only the route can refuse it
+--- -X POST http://127.0.0.1:56819/api/v1/local-room/ask -H content-type: application/json -d {"schema_version":"agora.local-ask.command/v1","command_id":"77777777-7777-4777-8777-777777777772","scope":{"project_id":"a0000000-0000-4000-8000-000000000001","room_id":"a0000000-0000-4000-8000-000000000002"},"question":"What did we decide?","selected_ids":["6fd177a8-135e-48b8-b28e-08ae2ff7c081"]}
+HTTP/1.1 404 Not Found
+content-type: application/json
+
+{"reason_code":"not_found","correlation_id":"<uuid>"}
+
+### malformed ask (a forbidden tools field): the missing route answers before any validation
+--- -X POST http://127.0.0.1:56819/api/v1/local-room/ask -H content-type: application/json -d {"schema_version":"agora.local-ask.command/v1","command_id":"77777777-7777-4777-8777-777777777773","scope":{"project_id":"a0000000-0000-4000-8000-000000000001","room_id":"a0000000-0000-4000-8000-000000000002"},"question":"x","selected_ids":["6fd177a8-135e-48b8-b28e-08ae2ff7c081"],"tools":["Bash"]}
+HTTP/1.1 404 Not Found
+content-type: application/json
+
+{"reason_code":"not_found","correlation_id":"<uuid>"}
+
+### status read
+--- http://127.0.0.1:56819/api/v1/local-room/ask?command_id=77777777-7777-4777-8777-777777777772
+HTTP/1.1 404 Not Found
+content-type: application/json
+
+{"reason_code":"not_found","correlation_id":"<uuid>"}
+
+### control: a path that never existed answers the same way
+--- -X POST http://127.0.0.1:56819/api/v1/local-room/ask-never-existed -H content-type: application/json -d {}
+HTTP/1.1 404 Not Found
+content-type: application/json
+
+{"reason_code":"not_found","correlation_id":"<uuid>"}
+
+### final snapshot: one message, no answer posted
+--- http://127.0.0.1:56819/api/v1/local-room/snapshot
+HTTP/1.1 200 OK
+content-type: application/json
+
+{"schema_version":"agora.local-room.snapshot/v1","scope":{"project_id":"a0000000-0000-4000-8000-000000000001","room_id":"a0000000-0000-4000-8000-000000000002"},"cursor":{"stream_id":"a0000000-0000-4000-8000-000000000002","committed_seq":"1"},"messages":[{"schema_version":"agora.local-room.message/v1","message_id":"6fd177a8-135e-48b8-b28e-08ae2ff7c081","scope":{"project_id":"a0000000-0000-4000-8000-000000000001","room_id":"a0000000-0000-4000-8000-000000000002"},"room_seq":"1","author":{"kind":"human","principal_id":"a0000000-0000-4000-8000-000000000003"},"command_id":"77777777-7777-4777-8777-777777777771","body":"ask contract drive message","citations":[],"created_at":"2026-10-12T04:51:40.009Z"}]}
+
+### source scan: no ask route, provider or principal in the runtime
+(git grep exit 1, no match)

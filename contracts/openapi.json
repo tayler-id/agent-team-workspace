@@ -64,6 +64,29 @@
 				}
 			}
 		},
+		"/api/v1/local-room/ask": {
+			"post": {
+				"operationId": "postLocalAsk",
+				"summary": "Start one human-triggered, read-only model answer over a question and selected persisted messages; the answer is posted to the room when it finishes",
+				"requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LocalAskCommand" } } } },
+				"responses": {
+					"202": { "description": "Ask running, or its recorded outcome on a repeat of the same command", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LocalAskStatus" } } } },
+					"400": { "description": "Malformed ask", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } },
+					"404": { "description": "Scope mismatch or no model provider composed", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } },
+					"409": { "description": "Command identity reused for a different ask", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } },
+					"429": { "description": "Another ask is already running", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } }
+				}
+			},
+			"get": {
+				"operationId": "getLocalAskStatus",
+				"summary": "Read the progress of one ask by command_id",
+				"parameters": [{ "name": "command_id", "in": "query", "required": true, "schema": { "$ref": "#/components/schemas/Uuid" } }],
+				"responses": {
+					"200": { "description": "Status", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LocalAskStatus" } } } },
+					"404": { "description": "No such ask in this process", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorReport" } } } }
+				}
+			}
+		},
 		"/api/v1/local-room/events": {
 			"get": {
 				"operationId": "replayLocalRoom",

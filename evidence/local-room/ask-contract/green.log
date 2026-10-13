@@ -1,0 +1,23 @@
+# green.log (agora.red-green/v1)
+recorded_at: 2026-10-12T04:50:45.436Z
+parent: 6091fa12063987f0cadc320047804ff4049befba
+head: 7d8fb9997283b5e5874a787a36b1c587f953f27b
+subject_revision: 7d8fb9997283b5e5874a787a36b1c587f953f27b
+test_patch_applied_to_subject: false
+test_patch_files: contracts/fixtures/vectors.json, contracts/test/local-room.test.ts
+test_patch_digest: sha256:97c03d2509246af37887a8a797d88c468f1daa87f9f73cf4b25748c46aebe0e0
+fixture: {"migration_journal":"sha256:c81ac02eac53b31827f59aa21f61473e674738a0e305bc3611ca006cfa66ae18","migration_sql":[],"contract_schemas":[{"file":"contracts/fixtures/vectors.json","digest":"sha256:46be84b18a779d8fe3e09f8e349a3d5ecc476bcc83047a7c9dbfa3ca2f306026"},{"file":"contracts/openapi.json","digest":"sha256:e16401257b0bb7f9053724aa598432c36fc5d2651b08f81196a15869e74912cf"},{"file":"contracts/schemas/local-room.schema.json","digest":"sha256:6573f48a0e01638935d67bdce1dc062f6b6745b52ecaec87d4471bac4500717a"},{"file":"contracts/swift/Sources/AgoraContractsConform/main.swift","digest":"sha256:432136bddfd09ab9dbdc84584ed2d2fdd398a86902682cc6c0ec271097becfab"},{"file":"contracts/test/local-room.test.ts","digest":"sha256:7d3d0d5e21d2a83620b6dba18ef27ce8efc26816efb46c7f4be85d8b9b96715a"}]}
+configuration: {"command":"pnpm exec vitest run --project contracts contracts/test/local-room.test.ts -t ask contract","vitest_config":"sha256:d506299446d07625453923b279a3539a5d86cbef9133d13e5c9c470d35a80622","tsconfig_base":"sha256:7b65bfd90052e2e12de0b336a9910a914e6a6dc32a373d02146519b09e940078","lockfile":"sha256:6295f917c30ae59fccdef791de7fbbcffb55c1512bf14d3c54e92486a38f136e"}
+toolchain: {"node":"v24.21.0","pnpm":"10.34.1","postgres":"pg_ctl (PostgreSQL) 18.4 (Homebrew)","host":"darwin 25.5.0 arm64"}
+expected: every assertion passes at the head (exit 0)
+observed_exit: 0
+
+
+ RUN  v5.0.1 /private/var/folders/h7/09tw5cfs5m102pwjgg7sxdz80000gn/T/agora-green-o0YJbf
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 4 skipped (5)
+   Start at  00:50:32
+   Duration  10.71s (tests 99%, import 1%)
+

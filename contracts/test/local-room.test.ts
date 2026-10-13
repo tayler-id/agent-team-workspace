@@ -74,3 +74,28 @@ test('removing the authorship, event-kind or unknown-field guard makes its denia
 		expect(() => { expect(check(payload)).toBe(false); }).toThrow('expected true to be false');
 	}
 });
+
+test('the ask contract is closed and bounded, the operation pair is published, and Swift refuses what TypeScript refuses', () => {
+	const ask = file.vectors.filter((v) => v.id.startsWith('local-ask-'));
+	expect(ask.map((v) => v.id)).toEqual(['local-ask-selected', 'local-ask-tools-field', 'local-ask-answered']);
+	for (const v of ask) expect({ id: v.id, accepted: validate(v.component, v.wire).ok }).toEqual({ id: v.id, accepted: v.expect === 'accept' });
+	const command = JSON.parse(ask[0]?.wire ?? '{}') as Record<string, unknown>;
+	const status = JSON.parse(ask[2]?.wire ?? '{}') as Record<string, unknown>;
+	const wire = (base: Record<string, unknown>, change: Record<string, unknown>) => JSON.stringify({ ...base, ...change });
+	const ids = (n: number) => Array.from({ length: n }, (_, i) => `44444444-4444-4444-8444-${String(i).padStart(12, '0')}`);
+	expect(details('LocalAskCommand', ask[1]?.wire ?? '')).toEqual(['$ must NOT have additional properties']);
+	expect(details('LocalAskCommand', wire(command, { question: '' }))).toEqual(['/question must NOT have fewer than 1 characters']);
+	expect(details('LocalAskCommand', wire(command, { question: 'x'.repeat(1001) }))).toEqual(['/question must NOT have more than 1000 characters']);
+	expect(validate('LocalAskCommand', wire(command, { selected_ids: ids(10) })).ok).toBe(true);
+	expect(details('LocalAskCommand', wire(command, { selected_ids: ids(11) }))).toEqual(['/selected_ids must NOT have more than 10 items']);
+	expect(details('LocalAskCommand', wire(command, { selected_ids: ['44444444-4444-4444-8444-44444444444G'] }))[0]).toMatch(/^\/selected_ids\/0 must match pattern/);
+	expect(details('LocalAskCommand', wire(command, { scope: { project_id: command['command_id'] } }))).toEqual(["/scope must have required property 'room_id'"]);
+	expect(details('LocalAskStatus', wire(status, { state: 'cancelled' }))).toEqual(['/state must be equal to one of the allowed values']);
+	expect(details('LocalAskStatus', wire(status, { failure: 'rate_limited' }))).toEqual(['/failure must be equal to one of the allowed values']);
+	expect(details('LocalAskStatus', wire(status, { detail: 'x'.repeat(513) }))).toEqual(['/detail must NOT have more than 512 characters']);
+	const operations = JSON.parse(readFileSync(new URL('../openapi.json', import.meta.url), 'utf8')) as { paths: Record<string, Record<string, { operationId: string }>> };
+	expect(Object.entries(operations.paths['/api/v1/local-room/ask'] ?? {}).map(([method, op]) => `${method} ${op.operationId}`)).toEqual(['post postLocalAsk', 'get getLocalAskStatus']);
+	const swift = runSwiftConsumer();
+	if (!swift.report) throw new Error('Swift did not return a report');
+	expect(swift.report.vectors.filter((v) => v.id.startsWith('local-ask-')).map((v) => `${v.id}: ${v.generated_decode?.split(':')[0]}`)).toEqual(['local-ask-selected: ok', 'local-ask-tools-field: refused', 'local-ask-answered: ok']);
+});

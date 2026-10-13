@@ -1,0 +1,37 @@
+== open-command (contracts/schemas/local-room.schema.json)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+exit=1
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected { id: 'local-ask-tools-field', …(1) } to deeply equal { id: 'local-ask-tools-field', …(1) }
+restored byte for byte (6573f48a0e01638935d67bdce1dc062f6b6745b52ecaec87d4471bac4500717a)
+== ten-to-eleven (contracts/schemas/local-room.schema.json)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+exit=1
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected [] to deeply equal [ Array(1) ]
+restored byte for byte (6573f48a0e01638935d67bdce1dc062f6b6745b52ecaec87d4471bac4500717a)
+== question-bound (contracts/schemas/local-room.schema.json)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+exit=1
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected [] to deeply equal [ Array(1) ]
+restored byte for byte (6573f48a0e01638935d67bdce1dc062f6b6745b52ecaec87d4471bac4500717a)
+== failure-enum (contracts/schemas/local-room.schema.json)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+exit=1
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected [] to deeply equal [ Array(1) ]
+restored byte for byte (6573f48a0e01638935d67bdce1dc062f6b6745b52ecaec87d4471bac4500717a)
+== drop-status (contracts/openapi.json)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+exit=1
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected [ 'post postLocalAsk', …(1) ] to deeply equal [ 'post postLocalAsk', …(1) ]
+restored byte for byte (e16401257b0bb7f9053724aa598432c36fc5d2651b08f81196a15869e74912cf)
+== generated-drift: schema edited without regenerating
+contracts:check exit=1
+"drift":[{"file":"contracts/generated/openapi.bundled.json","expected":"sha256:7ca36e3a5f9a3be567d3d4a797232d7106eba7a00114ae972dff6f92f6c1377a","observed":"sha256:18388dcd0b33f6942d551db2c74e1ab2fe0c
+restored byte for byte (6573f48a0e01638935d67bdce1dc062f6b6745b52ecaec87d4471bac4500717a)
+== after restore
+      Tests  5 passed (5)
+contracts:check exit=0
