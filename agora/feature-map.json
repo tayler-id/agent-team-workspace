@@ -142,7 +142,7 @@
 			"id": "client-state-owner-boundary", "documentation": "docs/site/client-state-boundary.md", "owner": "U22.B01 client-state slice",
 			"paths": ["scripts/client-owner-policy.ts", "scripts/renderer-policy.ts", "eslint.config.js", "packages/client-core/test/client-state-owner.test.ts", "packages/web-framework/src/client.ts", "apps/web/src/components/App.tsx"],
 			"public": ["pnpm lint", "pnpm boundaries", "agora/client-owner"],
-			"scenarios": ["packages/client-core/test/client-state-owner.test.ts", "durable state in useState/useRef/useReducer rejected", "alias of a durable type rejected", "ephemeral UI state accepted", "client-core runtime and createRoomClient imports rejected", "direct transport command and destructuring rejected", "guard-disabled negative"],
+			"scenarios": ["packages/client-core/test/client-state-owner.test.ts", "durable state in useState/useRef/useReducer rejected", "alias of a durable type rejected", "ephemeral UI state accepted", "client-core runtime and createRoomClient imports rejected", "direct transport command and destructuring rejected", "guard-disabled negative", "typed-lint project startup paid in beforeAll, not in the first test"],
 			"fixtures": ["in-memory ESLint text linted against existing owner files, nothing written to disk"],
 			"platforms": ["node24"],
 			"invalidation": "Data flow through primitives (useState(room.id)) is not tracked; only the held type is. A new durable Client type must be added to the client-core or projection allow-list in scripts/client-owner-policy.ts."
@@ -152,7 +152,7 @@
 			"documentation": "docs/site/app-architecture.md",
 			"paths": ["eslint.config.js", "scripts/boundary-policy.ts", "scripts/renderer-policy.ts", "scripts/architecture-exceptions.ts", "agora/architecture-exceptions.json", "apps/web", "apps/web/tsconfig.json", "packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/feature-dependencies.test.ts", "package.json", "tsconfig.json"],
 			"public": ["pnpm lint", "pnpm typecheck", "pnpm boundaries"],
-			"scenarios": ["packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/feature-dependencies.test.ts", "packages/client-core/test/boundaries.test.ts", "packages/verification/test/u20-lanes.test.ts"],
+			"scenarios": ["packages/client-core/test/app-architecture.test.ts", "packages/client-core/test/feature-dependencies.test.ts", "packages/client-core/test/boundaries.test.ts", "packages/verification/test/u20-lanes.test.ts", "renderer bypass diagnostics name the existing EnvironmentPort method and invent none for unmapped globals"],
 			"fixtures": ["per-Feature dependencies.json declared/undeclared/malformed/framework-denial probes in uniquely named throwaway Features; runtime owner paths; extension matrix ts/tsx/mts/cts/js/jsx/mjs/cjs; contracts js/cjs; apps/web non-src relocation; un-owned src two-hop relay; exact-row exceptions; string-literal effect import; declare/computed/mixed-union DOM; load-time fail-closed; guard-weakening; JSDoc import() comment edges; innerHTML/outerHTML/textContent/style property and setAttribute-family method mutation; untyped mjs/cjs ambiguous-mutator name trust; type-cast receiver evasion; react/jsx-runtime namespace allowance"],
 			"platforms": ["node24"],
 			"owner": "U20.B01"

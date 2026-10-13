@@ -20,6 +20,7 @@ Load | eslint.config.js validates agora/architecture-exceptions.json before any 
 Lint | ESLint runs agora/import-boundary and agora/renderer-footgun on .ts/.tsx/.mts/.cts/.js/.jsx/.mjs/.cjs under guarded roots.
 Dependency | A Feature may import another Feature only if its own dependencies.json names it, and then only through that Feature's index.ts. Framework, Client and Host never import any Feature, declared or not.
 Diagnostic | A rejection names the supported owner or public entrypoint, not only a rule id.
+Host method | When a Feature or Client bypasses a browser global that the Host already wraps, the rejection also names the `EnvironmentPort` method to call through `useEnvironment()`: `window.matchMedia` to `matchesMediaQuery` or `subscribeMediaQuery`, `document.getElementById` to `scheduleFocus`, `setTimeout` and `clearTimeout` to `defer`, `crypto` to `createId` or `digestText`. A global with no equal-purpose method, such as `window.name` or `fetch`, gets the owner path only. The hint is text; the predicate that rejects the code is unchanged.
 Exception | Only a reviewed agora/architecture-exceptions.json row can allow a named path and symbol.
 Proof | packages/client-core/test/app-architecture.test.ts keeps positive, negative and guard-weakening fixtures.
 Hardening | B3 reproduces each reported bypass through the public CLI first, then closes it: JSDoc import() comments, DOM property/setAttribute mutation, untyped .mjs/.cjs mutators and cast evasion, while allowing the react/jsx-runtime namespace.

@@ -14,6 +14,21 @@ const directMutationProps = new Set(['innerHTML', 'outerHTML', 'textContent', 's
 /** The compiler-emitted JSX runtime carries no effect surface; a default/namespace import of it is not a React-effect bypass. */
 const jsxRuntimeSources = new Set(['react/jsx-runtime', 'react/jsx-dev-runtime']);
 
+/** Existing EnvironmentPort methods (packages/web-framework/src/environment.ts) that replace a bypassed browser global; a global with no equal-purpose method gets no hint. */
+const hostMethodFor = (name: string, property: string | undefined): string | undefined => {
+	if (name === 'window' && property === 'matchMedia') return 'matchesMediaQuery or EnvironmentPort.subscribeMediaQuery';
+	if (name === 'document' && property === 'getElementById') return 'scheduleFocus';
+	if (name === 'setTimeout' || name === 'clearTimeout') return 'defer';
+	if (name === 'crypto') return 'createId or EnvironmentPort.digestText';
+	return undefined;
+};
+const hostMethodHint = (node: TSESTree.Identifier): string => {
+	const parent = node.parent;
+	const property = parent.type === AST_NODE_TYPES.MemberExpression && parent.object === node ? staticPropertyName(parent) : undefined;
+	const method = hostMethodFor(node.name, property);
+	return method ? `; use the Host method EnvironmentPort.${method}, read with useEnvironment() (@agora/web-framework)` : '';
+};
+
 const hostOrFramework = (file: string): boolean => { const l = webLayer(file); return l?.kind === 'host' || l?.kind === 'framework'; };
 const isFramework = (file: string): boolean => webLayer(file)?.kind === 'framework';
 // @agora/web-framework is the portable Client/hooks layer outside apps/web: it may use raw React effects to
@@ -275,7 +290,7 @@ export const rendererFootgunRule: TSESLint.RuleModule<'forbidden'> = {
 				if (!reference?.isValueReference) return;
 				const defs = reference.resolved?.defs ?? [];
 				if (defs.length > 0 && !defsAreOnlyAmbient(defs)) return;
-				report(context, node, node.name, `direct ${node.name} is allowed only in Host/framework adapters (${WEB_OWNERS.host}, ${WEB_OWNERS.framework}); Features and Client use Host ports`);
+				report(context, node, node.name, `direct ${node.name} is allowed only in Host/framework adapters (${WEB_OWNERS.host}, ${WEB_OWNERS.framework}); Features and Client use Host ports${hostMethodHint(node)}`);
 			},
 			MemberExpression(node) {
 				if (hostOrFramework(file)) return;

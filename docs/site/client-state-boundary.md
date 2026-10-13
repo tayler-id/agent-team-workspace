@@ -35,7 +35,7 @@ Diagnostic | The message names the hook or Host owner to use instead. No excepti
 
 ## Verification and proof
 
-Inspect [the rule](repo:scripts/client-owner-policy.ts) and [its fixtures](repo:packages/client-core/test/client-state-owner.test.ts). The fixtures lint in-memory text against existing owner files, so nothing is written and parallel runs cannot delete each other. Run `pnpm boundaries` or `pnpm exec vitest run --project unit packages/client-core/test/client-state-owner.test.ts`. The retained red and green receipts, and the guard-disabled run, are under `evidence/U22/client-state-boundary/`.
+Inspect [the rule](repo:scripts/client-owner-policy.ts) and [its fixtures](repo:packages/client-core/test/client-state-owner.test.ts). The fixtures lint in-memory text against existing owner files, so nothing is written and parallel runs cannot delete each other. Run `pnpm boundaries` or `pnpm exec vitest run --project unit packages/client-core/test/client-state-owner.test.ts`. The retained red and green receipts, and the guard-disabled run, are under `evidence/U22/client-state-boundary/`. A `beforeAll` lints one empty file first, so the typed-lint project startup (about 0.8s idle, 4 to 5.4s on a loaded CI runner) is not charged to the first test's 5000ms limit; see `evidence/U22/host-method-diagnostic/ci-cold-lint/`.
 
 ## Client and Host qualification lanes 5, 7 and 8
 
