@@ -46,18 +46,26 @@ Moving a capability into a Feature folder relocates its consumer wiring, not its
 ```text
 contracts/schemas/local-room.schema.json   stays in Contracts; a Feature imports only its generated types
 packages/domain/src/local-room/port.ts     stays in Domain; the browser Feature never imports it directly
-apps/center/src/features/local-room/       new: the server Entrypoint that replaces one hand-wired route line
+apps/center/src/features/local-room/       built (U23.B01 construction): the server Entrypoint that owns the adapter selection main.ts used to inline
 apps/web/src/features/local-room/          new: the renderer, rewritten onto the Client and Host, not just moved
 ```
 
 [The technical specification](repo:docs/technical-spec.md) fixes this ownership map (R25, "Ownership map for existing work") as authoritative for this table.
 
+The built center construction slice follows this narrower path, without generated-inventory route mounting:
+
+```flow
+Center main.ts | Opens the existing non-owner database and imports selectLocalRoom directly.
+Local-room Entrypoint | Selects the unchanged PostgreSQL adapter for the unchanged fixed LOCAL_ROOM scope.
+Center app.ts | Receives that adapter through createApp; its existing HTTP routes and assertions stay unchanged.
+```
+
 ## Implementation status
 
-**U20 boundary lint is built, and the U21.B01 build-time discovery slice is built; the rest of U21, the Client/Host boundary, and migration are not.** `.ts` and `.tsx` import boundaries, the framework/package-never-imports-application rule, and renderer foot-guns are enforced today across `apps/web` under U20 (B1 import ownership, B2a the exception registry, B2b renderer foot-guns); see [Application architecture boundaries](app-architecture.md) for that mechanism. Build-time Feature discovery (U21.B01, see [Feature discovery](feature-discovery.md)) generates `agora/feature-inventory.json`, but U21 is not qualified and no real product Feature has moved into the layout. U22, the Client's one-writer boundary and the typed Host interface, is open; its `agora/client-owner` rule and qualification lanes 5, 7 and 8 are built, see [Client state boundary](client-state-boundary.md). Moving existing local-room work into the new layout (U23) does not exist yet. [The implementation plan](repo:docs/implementation-plan.md) sequences these four migration units, each independently reviewable.
+**U20 boundary lint and the U21.B01 build-time discovery slice are built; U21, U22 and U23 remain unqualified.** `.ts` and `.tsx` import boundaries, the framework/package-never-imports-application rule, and renderer foot-guns are enforced today across `apps/web` under U20 (B1 import ownership, B2a the exception registry, B2b renderer foot-guns); see [Application architecture boundaries](app-architecture.md). Build-time Feature discovery (U21.B01, see [Feature discovery](feature-discovery.md)) generates `agora/feature-inventory.json`. One construction slice of U23.B01 has moved the local-room adapter selection that `apps/center/src/main.ts` inlined into `apps/center/src/features/local-room/entrypoint.ts`; the web renderer has not moved, and generated-inventory route mounting remains open. U22, the Client's one-writer boundary and the typed Host interface, is open; its `agora/client-owner` rule and qualification lanes 5, 7 and 8 are built, see [Client state boundary](client-state-boundary.md). [The implementation plan](repo:docs/implementation-plan.md) sequences these four migration units, each independently reviewable.
 
 This architecture also governs where a future [created agent](authorization.md#created-agents) and the built-in [Bug Agent](authorization.md#created-agents) would render their own room-facing surfaces, once R26's own milestone lands; neither exists yet, and neither depends on R25 to be specified.
 
 ## Verification and proof
 
-Run `pnpm lint` and `pnpm boundaries` for U20's landed `.ts`/`.tsx` import-boundary and renderer-footgun checks (evidence under `evidence/U20/`); run `pnpm features:check` for U21.B01 discovery; [Client state boundary](client-state-boundary.md) names the commands for the U22 checks built so far. Each remaining migration unit registers its own guard-negative fixture before its rule is enforced, the same discipline the [test-first foundation](test-first.md) already requires. Record screenshots, observed assertions, and limits under `evidence/U21/`, `evidence/U22/`, and `evidence/U23/` as each lands. [Research and decisions](research.md#provenance) records where the five-noun shape came from and why nothing here is named after it.
+Run `pnpm lint` and `pnpm boundaries` for U20's landed `.ts`/`.tsx` import-boundary and renderer-footgun checks (evidence under `evidence/U20/`); run `pnpm features:check` for U21.B01 discovery; [the U23.B01 center Entrypoint receipts](repo:evidence/U23/center-feature-entrypoint/README.md) name the test that runs the moved selection and what that slice does not claim. [Client state boundary](client-state-boundary.md) names the commands for the U22 checks built so far. Each remaining migration unit registers its own guard-negative fixture before its rule is enforced, the same discipline the [test-first foundation](test-first.md) already requires. Record screenshots, observed assertions, and limits under `evidence/U21/`, `evidence/U22/`, and `evidence/U23/` as each lands. [Research and decisions](research.md#provenance) records where the five-noun shape came from and why nothing here is named after it.
