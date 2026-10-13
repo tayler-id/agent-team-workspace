@@ -1,7 +1,15 @@
 {
 	"schema_version": "agora.feature-inventory/v1",
-	"digest": "sha256:a1e450fd9750df0ba40ca7cf48452356e9a8558d0c4c1fc6016539e9fcf5e0ad",
+	"digest": "sha256:a363b6052161dcd997a780f0fc1ddeb8c4800f5bac08df2c5cdc0f2236ea6a6d",
 	"features": [
+		{
+			"package": "apps/center",
+			"name": "local-room",
+			"root": "apps/center/src/features/local-room",
+			"entrypoint": "apps/center/src/features/local-room/entrypoint.ts",
+			"timelineCard": null,
+			"dependencies": []
+		},
 		{
 			"package": "apps/web",
 			"name": "notes",
