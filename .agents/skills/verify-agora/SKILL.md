@@ -587,14 +587,15 @@ node scripts/feature-inventory.ts
 node scripts/feature-inventory.ts --check
 ```
 
-Disposable negative. Copy the tree into a namespaced temp directory, break it there, and expect `--check` to exit 1 with a message naming the owner and conventional path.
+Disposable negative. Copy every package that has a row in the inventory into a namespaced temp directory. The unbroken copy must pass `--check` with exit 0; a missing package fails it as drift and makes the negative prove nothing. Then break the copy and expect `--check` to exit 1 with a message naming the owner and conventional path.
 
 ```sh
 D="$(mktemp -d "${TMPDIR:-/tmp}/agora-u21-XXXXXX")"
 mkdir -p "$D/scripts" "$D/agora" "$D/apps"
 cp scripts/feature-discovery.ts scripts/feature-inventory.ts "$D/scripts/"
 cp agora/feature-inventory.json "$D/agora/"
-cp -R apps/web "$D/apps/web"
+cp -R apps/web apps/center "$D/apps/"
+(cd "$D" && node scripts/feature-inventory.ts --check; echo "baseline exit $?")
 rm "$D/apps/web/src/features/room/entrypoint.ts"
 (cd "$D" && node scripts/feature-inventory.ts --check; echo "exit $?")
 ```
@@ -610,6 +611,16 @@ U21 lanes 1 to 10. `pnpm -s agora project lanes --unit U21 --task agora-u21-lane
 - Lane 5 passes when `--check` exits 1 on an edited row. Lane 6 passes when the same edit exits 0 after the drift comparison is replaced with `if (false)` in a copy.
 - Lane 7 passes when a removed Feature leaves the inventory only after regenerate. Lane 10 passes when the second generate prints `unchanged`, leaves the mtime alone and keeps the digest.
 - Lane 8 drives real `Room` and `room` directories only on a case-sensitive volume. On the default macOS volume the second directory lands in the first, so the test feeds the generator's file-list entry the same two paths and records that substitution in its transcript.
+
+The U23.B01 center construction slice adds the discovered `apps/center` local-room Entrypoint, which `main.ts` imports directly; it does not mount routes from the inventory or qualify U23. Only the `apps/center` process loads it. `apps/center/test/local-room.pg.test.ts` spawns `main.ts` for its HTTP and process-restart checks, so that test is the one that runs the moved selection. `scripts/local-room-service.ts` still composes its own adapter inline, so the owned local-runtime browser/CLI send-and-reload Drive above is separate compatibility proof and would still pass with `selectLocalRoom` broken. Run the discovery assertion and the unchanged pg test, keep the original center test assertions, and verify the wire/domain owners did not move:
+
+```sh
+pnpm exec vitest run --project unit packages/verification/test/feature-discovery.test.ts
+node scripts/with-test-postgres.mjs pnpm exec vitest run --project pg apps/center/test/local-room.pg.test.ts
+git diff --stat "$(git merge-base origin/main HEAD)" HEAD -- contracts packages/domain/src/local-room/port.ts
+```
+
+The final diff must print nothing. Retained task evidence is under `evidence/U23/center-feature-entrypoint/`; whole-unit lanes and performance remain separate gates.
 
 Cleanup removes only the directory this run created.
 

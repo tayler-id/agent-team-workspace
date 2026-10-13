@@ -1,6 +1,6 @@
 {
-  "revision": "173c75f4f93b97268396c252c55682088d88a513",
-  "date": "2026-09-23",
+  "revision": "ec922b508750c85f2d65531c6f320439a1999ebc",
+  "date": "2026-10-13",
   "features": [
     {
       "id": "postgres-socket",
@@ -272,12 +272,15 @@
     {
       "id": "agora-application-architecture",
       "title": "Agora application architecture",
-      "status": "Planned",
-      "why": "Give every product Feature an owned folder, discovered rather than registered, behind a one-writer Client and a typed Host; U20 boundary lint is already Built and tracked separately as app-architecture, U21-U23 (discovery, Client/Host, migration) remain planned.",
+      "status": "In progress",
+      "why": "Give every product Feature an owned folder, discovered rather than registered, behind a one-writer Client and a typed Host. U20 boundary lint is Built and tracked separately as app-architecture, and U21.B01 discovery as feature-discovery. One U23.B01 construction slice moved the center's local-room adapter selection from apps/center/src/main.ts into its Feature Entrypoint; U23 is not qualified, the web renderer has not moved, and U22 remains open with its client-owner rule and qualification lanes 5, 7 and 8 built.",
       "page": "agora-application-architecture.md",
       "proof": [
         "repo:docs/technical-spec.md",
-        "repo:docs/research-basis.md"
+        "repo:docs/research-basis.md",
+        "repo:apps/center/src/features/local-room/entrypoint.ts",
+        "repo:apps/center/test/local-room.pg.test.ts",
+        "repo:evidence/U23/center-feature-entrypoint/README.md"
       ]
     },
     {
@@ -449,7 +452,7 @@
       "id": "U21",
       "title": "Establish Feature and Entrypoint discovery",
       "stage": "S1",
-      "status": "Not started",
+      "status": "In progress",
       "outcome": "Adding a Feature with its reserved files makes it appear in the generated inventory automatically, and hand-editing that inventory instead of adding the reserved file fails the same way schema drift already fails."
     },
     {
@@ -463,7 +466,7 @@
       "id": "U23",
       "title": "Migrate existing work into the Agora application architecture",
       "stage": "S1",
-      "status": "Not started",
+      "status": "In progress",
       "outcome": "The local-room feature's server entrypoint now lives in one discovered Feature folder, its generated inventory entry replaces the old hand-edited route registration, and every test that passed before the move still passes after it with an unchanged assertion."
     },
     {

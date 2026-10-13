@@ -1,7 +1,7 @@
 import { serve } from '@hono/node-server';
-import { LOCAL_ROOM } from '@agora/domain';
-import { createPostgresLocalRoom, openDatabase } from '@agora/storage';
+import { openDatabase } from '@agora/storage';
 import { createApp } from './app.ts';
+import { selectLocalRoom } from './features/local-room/entrypoint.ts';
 
 const connectionString = process.env['AGORA_DATABASE_URL'];
 if (!connectionString) {
@@ -10,8 +10,7 @@ if (!connectionString) {
 }
 const database = openDatabase(connectionString);
 const port = Number(process.env['PORT'] ?? 3000);
-// The only composition of this process: the fixed local-development room over PostgreSQL, as the non-owner service role.
-const app = createApp({ probeDatabase: () => database.reachable(), localRoom: createPostgresLocalRoom(database, LOCAL_ROOM) });
+const app = createApp({ probeDatabase: () => database.reachable(), localRoom: selectLocalRoom(database) });
 serve({ fetch: app.fetch, port, hostname: '127.0.0.1' }, (address) => {
 	process.stdout.write(`${JSON.stringify({ schema_version: 'agora.center-start/v1', address: `http://127.0.0.1:${address.port}` })}\n`);
 });
